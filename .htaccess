@@ -1,0 +1,14 @@
+RewriteEngine on
+
+#prevent directory browsing
+Options All -Indexes
+#prevent folder listing
+indexIgnore *
+
+#RewriteCond $1 !^(index\.php|images|js|css|favicon\.png)
+RewriteCond $1 !^(index\.php|asset)
+RewriteCond %(REQUEST_FILENAME) !-f
+RewriteCond %(REQUEST_FILENAME) !-d
+RewriteRule ^(.*)$ ./index.php/$1 [L]
+php_value post_max_size 20M
+php_value upload_max_filesize 15M

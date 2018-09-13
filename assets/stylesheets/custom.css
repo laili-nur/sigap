@@ -1,0 +1,4 @@
+/* put your own styles to customize and override the theme */
+th {
+	white-space: nowrap;
+}
