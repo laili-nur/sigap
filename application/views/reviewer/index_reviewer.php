@@ -46,7 +46,7 @@
               <!-- .card-header-control -->
               <div class="card-header-control">
                 <!-- .tombol add -->
-                <a href="<?=base_url('reviewer/add') ?>" class="btn btn-primary btn-sm">Tambah Penulis</a>
+                <a href="<?=base_url('reviewer/add') ?>" class="btn btn-primary btn-sm">Tambah Reviewer</a>
                 <!-- /.tombol add -->
               </div>
               <!-- /.card-header-control -->
@@ -114,7 +114,7 @@
               <!-- /.table -->
             </div>
             <?php else: ?>
-                <p>Author data were not available</p>
+                <p class="text-center">Data tidak tersedia</p>
             <?php endif ?>
             <!-- /.table-responsive -->
              <!-- Pagination -->

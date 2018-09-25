@@ -1921,7 +1921,8 @@ a.list-group-item-subtitle:focus,
 }
 
 .card-header {
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 1rem;
 }
 
 .card-header-fluid {
@@ -4996,6 +4997,7 @@ div.dt-button-info h2 {
 }
 
 .select2-container--default .select2-selection--single .select2-selection__clear {
+  top : -2px;
   color: #686F76;
   z-index: 2;
 }
@@ -5058,12 +5060,12 @@ div.dt-button-info h2 {
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
   margin-right: auto;
-  margin-left: .5rem;
+  margin-left: .42rem;
   position: relative;
-  top: 4px;
+  top: 5px;
   width: 0.875rem;
   height: 0.875rem;
-  line-height: 0.875rem;
+  line-height: 0.70rem;
   float: right;
   color: #ffffff;
   background-color: #A9ACB0;

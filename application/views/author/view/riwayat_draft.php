@@ -27,7 +27,7 @@
               <tr>
                 <td class="align-middle"><?= $i++ ?></td>
                 <td class="align-middle"><?= $draft->author_name ?></td>
-                <td class="align-middle"><a href="<?= base_url('draft/edit/'.$draft->draft_id) ?>"><?= $draft->draft_title ?></a></td>
+                <td class="align-middle"><a href="<?= base_url('draft/view/'.$draft->draft_id) ?>"><?= $draft->draft_title ?></a></td>
                 <td class="align-middle"><?= $draft->category_name ?></td>
                 <td class="align-middle"><?= $draft->theme_name ?></td>
               </tr>

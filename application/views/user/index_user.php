@@ -87,16 +87,18 @@
                       <tr>
                         <td class="align-middle pl-4"><?= ++$i ?></td>
                         <td class="align-middle"><?= $user->username ?></td>
-                        <td class="align-middle"><?= $user->level ?></td>
+                        <td class="align-middle"><?= ucwords(str_replace('_', ' ', $user->level)) ?></td>
                         <td class="align-middle"><?= $user->is_blocked == 'n' ? 'Not Blocked' : 'Blocked' ?></td>
                         <td class="align-middle text-right">
                           <a href="<?= base_url('user/edit/'.$user->user_id.'') ?>" class="btn btn-sm btn-secondary">
                             <i class="fa fa-pencil-alt"></i>
                             <span class="sr-only">Edit</span>
                           </a>
+                          <?php if($user->username != 'superadmin') : ?>
                           <a href="<?= base_url('user/delete/'.$user->user_id.'') ?>" class="btn btn-sm btn-danger">
                             <i class="fa fa-trash-alt"></i>
-                            <span class="sr-only">Edit</span>
+                            <span class="sr-only">Delete</span>
+                          <?php endif ?>
                           </a>
                         </td>
                       </tr>
@@ -111,6 +113,13 @@
                     <p>Author data were not available</p>
                 <?php endif ?>
                 <!-- /.table-responsive -->
+                <!-- Pagination -->
+                <?php if ($pagination): ?>          
+                  <?= $pagination ?>
+                <?php else: ?>
+                    &nbsp;
+                <?php endif ?>
+            <!-- .pagination -->
               </div>
               </div>
           <!-- /.card-body -->

@@ -6,7 +6,7 @@ Options All -Indexes
 indexIgnore *
 
 #RewriteCond $1 !^(index\.php|images|js|css|favicon\.png)
-RewriteCond $1 !^(index\.php|asset)
+RewriteCond $1 !^(index\.php|asset|authorktp|draftfile|cover|bookfile)
 RewriteCond %(REQUEST_FILENAME) !-f
 RewriteCond %(REQUEST_FILENAME) !-d
 RewriteRule ^(.*)$ ./index.php/$1 [L]

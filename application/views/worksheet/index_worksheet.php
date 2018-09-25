@@ -80,6 +80,7 @@
                     <th scope="col">Draft Title</th>
                     <th scope="col">Worksheet Number</th>
                     <th scope="col">Reprint Status</th>
+                    <th scope="col">Status</th>
                     <th style="width:100px; min-width:100px;"> &nbsp; </th>
                   </tr>
                 </thead>
@@ -90,10 +91,34 @@
                   <!-- tr -->
                   <tr>
                     <td class="align-middle pl-4"><?= ++$i ?></td>
-                    <td class="align-middle"><?= $worksheet->draft_title ?></td>
+                    <td class="align-middle"><a href="<?= base_url('draft/view/'.$worksheet->draft_id) ?>"><?= $worksheet->draft_title ?></a></td>
                     <td class="align-middle"><?= $worksheet->worksheet_num ?></td>
                     <td class="align-middle"><?= $worksheet->is_reprint == 'y' ? 'Reprint' : 'Not Reprint' ?></td>
+                    <td class="align-middle"><?=
+                            $status = "";
+                            if ($worksheet->worksheet_status > 0) {
+                                if ($worksheet->worksheet_status == 1) {
+                                    $status = "Approved";
+                                } elseif ($worksheet->worksheet_status == 2) {
+                                    $status = "Rejected";
+                                } else{}
+                            } else {
+                                $status = "Waiting";
+                            }
+                            echo $status;
+                            ?>        
+                    </td>
                     <td class="align-middle text-right">
+
+                      <a href="<?= base_url('worksheet/action/'.$worksheet->worksheet_id.'/1') ?>" class="btn btn-sm btn-success">
+                        <i class="fa fa-check"></i>
+                        <span class="sr-only">Setuju</span>
+                      </a>
+                       <a href="<?= base_url('worksheet/action/'.$worksheet->worksheet_id.'/2') ?>" class="btn btn-sm btn-danger">
+                        <i class="fa fa-ban"></i>
+                        <span class="sr-only">Setuju</span>
+                      </a>
+                      <span>-</span>
                       <a href="<?= base_url('worksheet/edit/'.$worksheet->worksheet_id.'') ?>" class="btn btn-sm btn-secondary">
                         <i class="fa fa-pencil-alt"></i>
                         <span class="sr-only">Edit</span>
@@ -112,7 +137,7 @@
               <!-- /.table -->
             </div>
             <?php else: ?>
-                <p>Worksheet data were not available</p>
+                <p class="text-center">Data tidak tersedia</p>
             <?php endif ?>
             <!-- /.table-responsive -->
              <!-- Pagination -->

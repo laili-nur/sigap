@@ -46,7 +46,7 @@
                   <i class="fa fa-times-circle"></i>
                 </span>
               </button>
-            <?= form_input('theme_name', $input->theme_name, 'class="form-control" id="theme_name"') ?>
+            <?= form_input('theme_name', $input->theme_name, 'class="form-control" id="theme_name" autofocus') ?>
             </div>
             <div class="invalid-feedback">erot</div>
             <?= form_error('theme_name') ?>

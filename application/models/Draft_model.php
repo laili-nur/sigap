@@ -23,6 +23,11 @@ class Draft_model extends MY_Model
                 'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_draft_title'
             ],
             [
+                'field' => 'author_id[]',
+                'label' => 'Author ID',
+                'rules' => 'trim'
+            ],
+            [
                 'field' => 'proposed_fund',
                 'label' => 'Proposed Fund',
                 'rules' => 'trim|required|numeric|min_length[3]|max_length[13]'
@@ -78,13 +83,13 @@ class Draft_model extends MY_Model
                 'rules' => 'trim'
             ],
             [
-                'field' => 'is_revised',
-                'label' => 'Is Revised',
+                'field' => 'review_is_revised',
+                'label' => 'Review Is Revised',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'revise_notes',
-                'label' => 'Revise Notes',
+                'field' => 'review_revise_notes',
+                'label' => 'Review Revise Notes',
                 'rules' => 'trim'
             ],
             [
@@ -117,7 +122,17 @@ class Draft_model extends MY_Model
                 'field' => 'edit_end_deadline',
                 'label' => 'Edit End Deadline',
                 'rules' => 'trim'
-            ],            
+            ],
+            [
+                'field' => 'edit_is_revised',
+                'label' => 'Edit Is Revised',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'edit_revise_notes',
+                'label' => 'Edit Revise Notes',
+                'rules' => 'trim'
+            ],
             [
                 'field' => 'is_layouted',
                 'label' => 'Is Layouted',
@@ -146,6 +161,16 @@ class Draft_model extends MY_Model
             [
                 'field' => 'layout_end_deadline',
                 'label' => 'Layout End Deadline',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'layout_is_revised',
+                'label' => 'Layout Is Revised',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'edit_revise_notes',
+                'label' => 'Edit Revise Notes',
                 'rules' => 'trim'
             ],
             [
@@ -182,6 +207,16 @@ class Draft_model extends MY_Model
                 'field' => 'proofread_end_deadline',
                 'label' => 'Proofread End Deadline',
                 'rules' => 'trim'
+            ],
+            [
+                'field' => 'proofread_is_revised',
+                'label' => 'Proofread Is Revised',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'proofread_revise_notes',
+                'label' => 'Proofread Revise Notes',
+                'rules' => 'trim'
             ]
             
         ];
@@ -195,6 +230,7 @@ class Draft_model extends MY_Model
             'category_id'                   => '',
             'theme_id'                      => '',
             'draft_title'                   => '',
+            'author_id'                   => '',
 //            'draft_file'                    => '',
             'proposed_fund'                 => '',
             'approved_fund'                 => '',
@@ -207,27 +243,33 @@ class Draft_model extends MY_Model
             'review_start_deadline'             => '',
             'review_upload_date'          => '',
             'review_end_deadline'               => '',
-            'is_revised'                    => '',
-            'revise_notes'                  => '',
+            'review_is_revised'                    => '',
+            'review_revise_notes'                  => '',
             'is_edited'                     => '',
             'edit_notes'                    => '',
             'author_edit_notes'             => '',
             'edit_start_deadline'               => '',
             'edit_upload_date'          => '',
             'edit_end_deadline'                 => '',
+            'edit_is_revised'                    => '',
+            'edit_revise_notes'                  => '',
             'is_layouted'                   => '',
             'layout_notes'                  => '',
             'author_layout_notes'           => '',
             'layout_start_deadline'             => '',
             'layout_upload_date'          => '',
             'layout_end_deadline'               => '',
+            'layout_is_revised'                    => '',
+            'layout_revise_notes'                  => '',
             'is_reprint'                    => '',
             'draft_notes'                   => '',
             'proofread_notes'               => '',
             'author_proofread_notes'        => '',
             'proofread_start_deadline'          => '',
             'proofread_upload_date'          => '',
-            'proofread_end_deadline'            => ''
+            'proofread_end_deadline'            => '',
+            'proofread_is_revised'                    => '',
+            'proofread_revise_notes'                  => '',
         ];
     }
    

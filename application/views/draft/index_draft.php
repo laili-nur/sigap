@@ -1,3 +1,4 @@
+<?php $ceklevel = $this->session->userdata('level'); ?>
 <?php
     $perPage = 10;
     $keywords = $this->input->get('keywords');
@@ -25,7 +26,8 @@
           <a class="text-muted">Draft</a>
         </li>
       </ol>
-    </nav> 
+    </nav>
+    <h1 class="page-title"> Draft </h1> 
   </header>
   <!-- /.page-title-bar -->
   <!-- .page-section -->
@@ -43,9 +45,11 @@
               <span class="mr-auto">Tabel Draft <span class="text-muted">(<?=$total ?>)</span></span>
               <!-- .card-header-control -->
               <div class="card-header-control">
+                <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
                 <!-- .tombol add -->
                 <a href="<?=base_url('draft/add') ?>" class="btn btn-primary btn-sm">Tambah Draft</a>
                 <!-- /.tombol add -->
+              <?php endif ?>
               </div>
               <!-- /.card-header-control -->
             </div>
@@ -79,7 +83,10 @@
                     <th scope="col">Theme Name</th>
                     <th scope="col">Draft Title</th>
                     <th scope="col">Entry Date</th>
+                    <th scope="col">Status</th>
+                    <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
                     <th style="width:100px; min-width:100px;"> &nbsp; </th>
+                    <?php endif ?>
                   </tr>
                 </thead>
                 <!-- /thead -->
@@ -93,6 +100,8 @@
                     <td class="align-middle"><?= $draft->theme_name ?></td>
                     <td class="align-middle"><a href="<?= base_url('draft/view/'.$draft->draft_id) ?>"><?= $draft->draft_title ?></a></td>
                     <td class="align-middle"><?= $draft->entry_date ?></td>
+                    <td class="align-middle"><?= $draft->draft_status ?></td>
+                    <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
                     <td class="align-middle text-right">
                       <a href="<?= base_url('draft/edit/'.$draft->draft_id.'') ?>" class="btn btn-sm btn-secondary">
                         <i class="fa fa-pencil-alt"></i>
@@ -103,6 +112,7 @@
                         <span class="sr-only">Edit</span>
                       </a>
                     </td>
+                  <?php endif ?>
                   </tr>
                   <!-- /tr -->
                   <?php endforeach ?>
@@ -112,7 +122,7 @@
               <!-- /.table -->
             </div>
             <?php else: ?>
-                <p>Draft data were not available</p>
+                <p class="text-center">Data tidak tersedia</p>
             <?php endif ?>
             <!-- /.table-responsive -->
              <!-- Pagination -->
@@ -124,6 +134,7 @@
             <!-- .pagination -->
           </div>
           <!-- /.card-body -->
+          <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
           <!-- .card-footer -->
             <footer class="card-footer bg-light">
               <div class="card-footer-content">
@@ -132,6 +143,7 @@
               </div>
             </footer>
           <!-- /.card-footer -->
+          <?php endif ?>
         </section>
         <!-- /.card -->
       </div>

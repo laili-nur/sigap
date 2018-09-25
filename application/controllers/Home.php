@@ -12,6 +12,7 @@ class Home extends MY_Controller
             redirect(base_url('login'));
             return;
         }
+
     }
 
 	public function index($page = null)

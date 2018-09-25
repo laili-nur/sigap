@@ -35,7 +35,7 @@
           <?= isset($input->faculty_id) ? form_hidden('faculty_id', $input->faculty_id) : '' ?>
           <!-- .form-group -->
           <div class="form-group">
-            <label for="faculty_name">NIP
+            <label for="faculty_name">Fakultas
               <abbr title="Required">*</abbr>
             </label>
             <div class="has-clearable">
@@ -44,7 +44,7 @@
                   <i class="fa fa-times-circle"></i>
                 </span>
               </button>
-            <?= form_input('faculty_name', $input->faculty_name, 'class="form-control" id="faculty_name"') ?>
+            <?= form_input('faculty_name', $input->faculty_name, 'class="form-control" id="faculty_name" autofocus') ?>
             </div>
             <div class="invalid-feedback">erot</div>
             <?= form_error('faculty_name') ?>

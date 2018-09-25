@@ -22,9 +22,14 @@
 <?php if ($success || $warning || $error): ?>
     <div class="row">
         <div class="col-12">
-            <div class="alert <?= $message_status ?>">
+            <div class="alert <?= $message_status ?>" id="flashmessage">
                 <?= $message ?>
             </div>
         </div>
     </div>
 <?php endif ?>
+<script>
+    $(document).ready(function(){
+        $('#flashmessage').delay(2000).hide(0);
+    })
+</script>

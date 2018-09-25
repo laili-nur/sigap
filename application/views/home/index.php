@@ -1,7 +1,7 @@
 <?php
     $username = $this->session->userdata('username');
     $is_login = $this->session->userdata('is_login');
-    $level    = $this->session->userdata('level');
+    $ceklevel    = $this->session->userdata('level');
 ?>
 <!-- .page-title-bar -->
   <header class="page-title-bar">
@@ -19,8 +19,10 @@
     </p>
   </header>
   <!-- /.page-title-bar -->
+  
   <!-- .page-section -->
   <div class="page-section">
+    <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
     <!-- .section-block -->
     <div class="section-block">
       <!-- metric row -->
@@ -327,5 +329,6 @@
       <!-- /grid column -->
     </div>
     <!-- /grid row -->
+    <?php endif ?>
   </div>
   <!-- /.page-section -->

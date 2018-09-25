@@ -28,9 +28,14 @@ class Author_model extends MY_Model
                 'rules' => 'trim|required|min_length[1]|max_length[256]'
             ],
             [
-                'field' => 'author_degree',
-                'label' => 'Author Degree',
-                'rules' => 'trim|required|min_length[2]|max_length[256]'
+                'field' => 'author_degree_front',
+                'label' => 'Author Degree Front',
+                'rules' => 'trim|min_length[2]|max_length[256]'
+            ],
+            [
+                'field' => 'author_degree_back',
+                'label' => 'Author Degree Back',
+                'rules' => 'trim|min_length[2]|max_length[256]'
             ],
             [
                 'field' => 'author_address',
@@ -81,14 +86,46 @@ class Author_model extends MY_Model
             'institute_id'              => '',
             'author_nip'              => '',
             'author_name'           => '',
-            'author_degree'              => '',
+            'author_degree_front'              => '',
+            'author_degree_back'              => '',
             'author_address'           => '',
             'author_contact'              => '',
             'author_email'           => '',
             'bank_id'              => '',
             'author_saving_num'           => '',
             'heir_name'              => '',
-            'user_id'              => ''
+            'user_id'              => '',
+            //'author_ktp'              => '',
         ];
+    }
+    
+    
+    public function uploadAuthorKTP($ktpfieldname, $authorKTP)
+    {
+        $config = [
+            'upload_path'      => './authorktp/',
+            'file_name'        => $authorKTP,
+            'allowed_types'    => 'jpg|png|jpeg|pdf',    // file types allowed
+            'max_size'         => 15360,     // 15MB
+            'overwrite'        => true,
+            'file_ext_tolower' => true,
+        ];
+
+        $this->load->library('upload', $config);
+        if ($this->upload->do_upload($ktpfieldname)) {
+            // Upload OK, return uploaded file info.
+            return $this->upload->data();
+        } else {
+            // Add error to $_error_array
+            $this->form_validation->add_to_error_array($ktpfieldname, $this->upload->display_errors('', ''));
+            return false;
+        }
+    }
+
+    public function deleteAuthorKTP($authorKTP)
+    {
+        if (file_exists("./authorktp/$authorKTP")) {
+            unlink("./authorktp/$authorKTP");
+        }
     }
 }

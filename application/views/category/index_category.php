@@ -44,7 +44,7 @@
           </header>
             <!-- /.card-header -->
            <!-- .card-body -->
-          <div class="card-body p-0">
+          <div class="card-body">
             <!-- .table-responsive -->
                 <?php if ($categories):?>
                 <div class="table-responsive">
@@ -93,7 +93,7 @@
                   <!-- /.table -->
                 </div>
                 <?php else: ?>
-                    <p>Draft data were not available</p>
+                    <p class="text-center">Data tidak tersedia</p>
                 <?php endif ?>
                 <!-- /.table-responsive -->
           </div>

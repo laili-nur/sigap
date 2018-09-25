@@ -43,7 +43,7 @@
                   <i class="fa fa-times-circle"></i>
                 </span>
               </button>
-            <?= form_input('work_unit_name', $input->work_unit_name, 'class="form-control" id="work_unit_name"') ?>
+            <?= form_input('work_unit_name', $input->work_unit_name, 'class="form-control" id="work_unit_name" autofocus') ?>
             </div>
             <div class="invalid-feedback">erot</div>
             <?= form_error('work_unit_name') ?>

@@ -20,48 +20,74 @@ class Draft_author extends Operator_Controller
 		$this->load->view('template', compact('pages', 'main_view', 'draft_authors', 'pagination', 'total'));
 	}
 
-    public function addmulti()
+    public function addmulti($draft_id = null)
     {
-        $i=0;
-        $inputs = $this->input->post(null, true);
+        $input = $this->input->post(null, true);
 
-        $data =array();
-        foreach ($inputs as $input) {
-             $data[$i] = array(
-               'author_id' => $input['author_id'],
-               'draft_id' => $input['draft_id'], 
-            );
-         }
-        $this->db->insert_batch('draft_author', $data);
+        // $data =array();
+        // foreach ($inputs as $input) {
+        //      $data[$i] = array(
+        //        'author_id' => $input['author_id'],
+        //        'draft_id' => $input['draft_id'], 
+        //     );
+        //  }
+        // $this->db->insert_batch('draft_author', $data);
+        $isSuccess = true;
+
+        foreach ($input->author_id as $key => $value) {
+            $data_author = array('author_id' => $value, 'draft_id' => $draft_id);
+
+            $draft_author_id = $this->draft->insert($data_author, 'draft_author');
+
+            if ($draft_author_id < 1 ) {
+                $isSuccess = false;
+                break;
+            } else {
+                $isSuccess = true;
+            }
+        }
+
+        if ($isSuccess) {
+            $this->session->set_flashdata('success', 'Data saved');
+        } else {
+            $this->session->set_flashdata('error', 'Data author failed to save');
+        }
+
+        redirect('draft/view/'.$input->draft_id);
 
     }
         
     
-        public function add($draft_id = null)
+        public function add()
 	{
+        $data = array();
         if (!$_POST) {
             $input = (object) $this->draft_author->getDefaultValues();
-            $input->draft_id = $draft_id; 
         } else {
             $input = (object) $this->input->post(null, true);
         }
 
         if (!$this->draft_author->validate()) {
-            $pages     = $this->pages;
-            $main_view   = 'draftauthor/form_draft_author';
-            $form_action = 'draftauthor/add';
-
-            $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
+            $data['validasi'] = false;
+            echo json_encode($data);
+            // $pages     = $this->pages;
+            // $main_view   = 'draftauthor/form_draft_author';
+            // $form_action = 'draftauthor/add';
+            // $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
 
         if ($this->draft_author->insert($input)) {
+            $data['validasi'] = true;
+            $data['status'] = true;
             $this->session->set_flashdata('success', 'Data saved');
         } else {
+            $data['validasi'] = true;
+            $data['status'] = false;
             $this->session->set_flashdata('error', 'Data failed to save');
         }
-
-        redirect('draft/view/'.$input->draft_id);
+        echo json_encode($data);
+        
 	}
         
         public function edit($id = null)
@@ -98,19 +124,26 @@ class Draft_author extends Operator_Controller
         
         public function delete($id = null)
 	{
-	$draft_author = $this->draft_author->where('draft_author_id', $id)->get();
+        $data = array();
+        $draft_author = $this->draft_author->where('draft_author_id', $id)->get();
         if (!$draft_author) {
+            $data['cek'] = false;
             $this->session->set_flashdata('warning', 'Draft Author data were not available');
-            redirect('draftauthor');
+            //redirect('draftauthor');
         }
-
         if ($this->draft_author->where('draft_author_id', $id)->delete()) {
+            $data['cek'] = true;
+            $data['status'] = true;
             $this->session->set_flashdata('success', 'Data deleted');
 		} else {
+            $data['cek'] = true;
+            $data['status'] = false;
             $this->session->set_flashdata('error', 'Data failed to delete');
         }
 
-		redirect('draftauthor');
+        echo json_encode($data);
+
+
 	}
         
         public function search($page = null)

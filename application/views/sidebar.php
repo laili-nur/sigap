@@ -1,6 +1,7 @@
 <?php
     $username = ucwords($this->session->userdata('username'));
     $level = ucwords(str_replace('_', ' ', $this->session->userdata('level')));
+    $ceklevel = $this->session->userdata('level');
 ?>
 
 <!-- .app-aside -->
@@ -59,13 +60,14 @@
               <a href="#" class="menu-link">
                 <span class="menu-icon oi oi-puzzle-piece"></span>
                 <span class="menu-text">Draft</span>
-                
               </a>
               <!-- child menu -->
               <ul class="menu">
                 <li class="menu-item">
                   <a href="<?= base_url('draft') ?>" class="menu-link">Data Draft</a>
                 </li>
+                <!-- jika bukan superadmin / admin penerbitan maka tampil draft sama buku doang -->
+                <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
                 <li class="menu-item">
                   <a href="<?= base_url('category') ?>" class="menu-link">Data Kategori</a>
                 </li>
@@ -76,6 +78,7 @@
               <!-- /child menu -->
             </li>
             <!-- /.menu-item -->
+            
             <!-- .menu-item -->
             <li class="menu-item has-child">
               <a href="#" class="menu-link">
@@ -109,13 +112,18 @@
               
             </li>
             <!-- /.menu-item -->
+          <?php else: ?>
+            </ul>
+          </li>
+          <?php endif ?>
             <!-- .menu-item -->
             <li class="menu-item">
               <a href="#" class="menu-link">
                 <span class="menu-icon oi oi-book"></span>
                 <span class="menu-text">Buku</span>
               </a>
-
+            <!-- jika bukan superadmin / admin penerbitan maka tampil draft sama buku doang -->
+          <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
             </li>
             <!-- /.menu-item -->
             <!-- .menu-item -->
@@ -127,6 +135,18 @@
             </li>
             <!-- /.menu-item -->
             <!-- .menu-header -->
+            <li class="menu-header">Reporting </li>
+            <!-- /.menu-header -->
+            <!-- .menu-item -->
+            <li class="menu-item">
+              <a href="<?=base_url('reporting') ?>" class="menu-link">
+                <span class="menu-icon oi oi-puzzle-piece"></span>
+                <span class="menu-text">Reporting</span>    
+              </a>
+            </li>
+            <!-- /.menu-item -->
+            <?php if ($ceklevel == 'superadmin'): ?>
+            <!-- .menu-header -->
             <li class="menu-header">Akun </li>
             <!-- /.menu-header -->
             <!-- .menu-item -->
@@ -136,7 +156,9 @@
                 <span class="menu-text">User</span>    
               </a>
             </li>
+          <?php endif ?>
             <!-- /.menu-item -->
+          <?php endif ?>
           </ul>
           <!-- /.menu -->
         </nav>

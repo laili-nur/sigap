@@ -36,7 +36,7 @@ class User_model extends MY_Model
         return [
             'username'  => '',
             'password'  => '',
-            'level'     => '',
+            'level'     => 'author',
             'is_blocked' => 'n'
         ];
     }

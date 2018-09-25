@@ -22,7 +22,8 @@ class Responsibility extends Operator_Controller
         
         
         public function add()
-	{
+	{   
+        $data = array();
         if (!$_POST) {
             $input = (object) $this->responsibility->getDefaultValues();
         } else {
@@ -30,21 +31,26 @@ class Responsibility extends Operator_Controller
         }
 
         if (!$this->responsibility->validate()) {
-            $pages     = $this->pages;
-            $main_view   = 'responsibility/form_responsibility';
-            $form_action = 'responsibility/add';
-
-            $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
+            $data['validasi'] = false;
+            echo json_encode($data);
+            // $pages     = $this->pages;
+            // $main_view   = 'responsibility/form_responsibility';
+            // $form_action = 'responsibility/add';
+            // $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
 
         if ($this->responsibility->insert($input)) {
+            $data['validasi'] = true;
+            $data['status'] = true;
             $this->session->set_flashdata('success', 'Data saved');
         } else {
+            $data['validasi'] = true;
+            $data['status'] = false;
             $this->session->set_flashdata('error', 'Data failed to save');
         }
 
-        redirect('responsibility');
+        echo json_encode($data);
 	}
         
         public function edit($id = null)
@@ -81,19 +87,25 @@ class Responsibility extends Operator_Controller
         
         public function delete($id = null)
 	{
-	$responsibility = $this->responsibility->where('responsibility_id', $id)->get();
+        $data = array();
+	   $responsibility = $this->responsibility->where('responsibility_id', $id)->get();
         if (!$responsibility) {
+            $data['cek'] = false;
             $this->session->set_flashdata('warning', 'Responsibility data were not available');
-            redirect('responsibility');
+            //redirect('responsibility');
         }
 
         if ($this->responsibility->where('responsibility_id', $id)->delete()) {
+            $data['cek'] = true;
+            $data['status'] = true;
             $this->session->set_flashdata('success', 'Data deleted');
 		} else {
+            $data['cek'] = true;
+            $data['status'] = false;
             $this->session->set_flashdata('error', 'Data failed to delete');
         }
 
-		redirect('responsibility');
+		echo json_encode($data);
 	}
         
         public function search($page = null)

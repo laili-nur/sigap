@@ -62,19 +62,36 @@
             <!-- /.form-group -->
             <!-- .form-group -->
             <div class="form-group">
-              <label>Level</label>
+              <label for="worksheet_notes">Catatan Desk Screening
+                <abbr title="Required">*</abbr>
+              </label>
+              <div class="has-clearable">
+                <button type="button" class="close" aria-label="Close">
+                  <span aria-hidden="true">
+                    <i class="fa fa-times-circle"></i>
+                  </span>
+                </button>
+              <?= form_textarea('worksheet_notes', $input->worksheet_notes, 'class="form-control" id="worksheet_notes"') ?>
+              </div>
+              <div class="invalid-feedback">erot</div>
+              <?= form_error('worksheet_notes') ?>
+            </div>
+            <!-- /.form-group -->
+            <!-- .form-group -->
+            <div class="form-group">
+              <label>Jenis Naskah</label>
               <div class="mb-1">
                 <label>
                 <?= form_radio('is_reprint', 'y',
                     isset($input->is_reprint) && ($input->is_reprint == 'y') ? true : false)
-                ?> Reprint
+                ?> Cetak Ulang
                 </label>
               </div>
               <div class="mb-1">
                 <label>
                 <?= form_radio('is_reprint', 'y',
                     isset($input->is_reprint) && ($input->is_reprint == 'n') ? true : false)
-                ?> Not Reprint
+                ?> Naskah Baru
                 </label>
               </div>
                <?= form_error('is_reprint') ?>

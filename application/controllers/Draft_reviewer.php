@@ -21,33 +21,36 @@ class Draft_reviewer extends Operator_Controller
 	}
         
 // -- add --        
-        public function add($draft_id = null)
+        public function add()
 	{
+        $data = array();
         if (!$_POST) {
             $input = (object) $this->draft_reviewer->getDefaultValues();
-            $input->draft_id = $draft_id;
         } else {
             $input = (object) $this->input->post(null, true);
         }
 
         if (!$this->draft_reviewer->validate()) {
-            $pages     = $this->pages;
-            $main_view   = 'draftreviewer/form_draft_reviewer';
-            $form_action = 'draftreviewer/add';
-
-            $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
+            $data['validasi'] = false;
+            echo json_encode($data);
+            // $pages     = $this->pages;
+            // $main_view   = 'draftreviewer/form_draft_reviewer';
+            // $form_action = 'draftreviewer/add';
+            // $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
         
-//        unset($input->search_reviewer);
-
         if ($this->draft_reviewer->insert($input)) {
+            $data['validasi'] = true;
+            $data['status'] = true;
             $this->session->set_flashdata('success', 'Data saved');
         } else {
+            $data['validasi'] = true;
+            $data['status'] = false;
             $this->session->set_flashdata('error', 'Data failed to save');
         }
+        echo json_encode($data);
 
-        redirect('draft/view/'.$input->draft_id);
 	}
 
 
@@ -90,7 +93,7 @@ class Draft_reviewer extends Operator_Controller
 // -- delete --        
         public function delete($id = null)
 	{
-	$draft_reviewer = $this->draft_reviewer->where('draft_reviewer_id', $id)->get();
+	   $draft_reviewer = $this->draft_reviewer->where('draft_reviewer_id', $id)->get();
         if (!$draft_reviewer) {
             $this->session->set_flashdata('warning', 'Draft Reviewer data were not available');
             redirect('draftreviewer');

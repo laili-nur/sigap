@@ -40,52 +40,50 @@
           <!-- /.card-header -->
          <!-- .card-body -->
         <div class="card-body">
-          <div class="tab-pane fade active show" id="card-tabel1">
-              <!-- .table-responsive -->
-              <?php if ($faculties):?>
-              <div class="table-responsive">
-                <!-- .table -->
-                <table class="table">
-                  <!-- thead -->
-                  <thead>
-                    <tr>
-                      <th scope="col">No</th>
-                      <th scope="col">Fakultas</th>
-                      <th style="width:100px; min-width:100px;"> &nbsp; </th>
-                    </tr>
-                  </thead>
-                  <!-- /thead -->
-                  <!-- tbody -->
-                  <tbody>
-                    <?php foreach($faculties as $faculty): ?>
-                    <!-- tr -->
-                    <tr>
-                      <td class="align-middle"><?= ++$i ?></td>
-                      <td class="align-middle"><?= $faculty->faculty_name ?></td>
-                      <td class="align-middle text-right">
-                        <a href="<?= base_url('faculty/edit/'.$faculty->faculty_id.'') ?>" class="btn btn-sm btn-secondary">
-                          <i class="fa fa-pencil-alt"></i>
-                          <span class="sr-only">Edit</span>
-                        </a>
-                        <a href="<?= base_url('faculty/delete/'.$faculty->faculty_id.'') ?>" class="btn btn-sm btn-danger">
-                          <i class="fa fa-trash-alt"></i>
-                          <span class="sr-only">Delete</span>
-                        </a>
-                      </td>
-                    </tr>
-                    <!-- /tr -->
-                    <?php endforeach ?>
-                  </tbody>
-                  <!-- /tbody -->
-                </table>
-                <!-- /.table -->
-              </div>
-              <?php else: ?>
-                  <p>Author data were not available</p>
-              <?php endif ?>
-              <!-- /.table-responsive -->
-            </div>
-            </div>
+          <!-- .table-responsive -->
+          <?php if ($faculties):?>
+          <div class="table-responsive">
+            <!-- .table -->
+            <table class="table">
+              <!-- thead -->
+              <thead>
+                <tr>
+                  <th scope="col">No</th>
+                  <th scope="col">Fakultas</th>
+                  <th style="width:100px; min-width:100px;"> &nbsp; </th>
+                </tr>
+              </thead>
+              <!-- /thead -->
+              <!-- tbody -->
+              <tbody>
+                <?php foreach($faculties as $faculty): ?>
+                <!-- tr -->
+                <tr>
+                  <td class="align-middle"><?= ++$i ?></td>
+                  <td class="align-middle"><?= $faculty->faculty_name ?></td>
+                  <td class="align-middle text-right">
+                    <a href="<?= base_url('faculty/edit/'.$faculty->faculty_id.'') ?>" class="btn btn-sm btn-secondary">
+                      <i class="fa fa-pencil-alt"></i>
+                      <span class="sr-only">Edit</span>
+                    </a>
+                    <a href="<?= base_url('faculty/delete/'.$faculty->faculty_id.'') ?>" class="btn btn-sm btn-danger">
+                      <i class="fa fa-trash-alt"></i>
+                      <span class="sr-only">Delete</span>
+                    </a>
+                  </td>
+                </tr>
+                <!-- /tr -->
+                <?php endforeach ?>
+              </tbody>
+              <!-- /tbody -->
+            </table>
+            <!-- /.table -->
+          </div>
+          <?php else: ?>
+              <p class="text-center">Data tidak tersedia</p>
+          <?php endif ?>
+          <!-- /.table-responsive -->
+        </div>
         <!-- /.card-body -->
       </section>
       <!-- /.card -->

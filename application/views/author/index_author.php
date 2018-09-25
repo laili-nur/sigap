@@ -26,7 +26,8 @@
           <a class="text-muted">Penulis</a>
         </li>
       </ol>
-    </nav> 
+    </nav>
+    <h1 class="page-title"> Penulis </h1> 
   </header>
   <!-- /.page-title-bar -->
   <!-- .page-section -->
@@ -79,7 +80,6 @@
                         <th scope="col" class="pl-4">No</th>
                         <th scope="col">NIP</th>
                         <th scope="col">Nama</th>
-                        <th scope="col">Gelar</th>
                         <th scope="col">Unit Kerja</th>
                         <th scope="col">Institusi</th>
                         <th style="width:100px; min-width:100px;"> &nbsp; </th>
@@ -93,8 +93,7 @@
                       <tr>
                         <td class="align-middle pl-4"><?= ++$i ?></td>
                         <td class="align-middle"><?= $author->author_nip ?></td>
-                        <td class="align-middle"><a href="<?= base_url('author/profil/'.$author->author_id) ?>"><?= $author->author_name ?></a></td>
-                        <td class="align-middle"><?= $author->author_degree ?></td>
+                        <td class="align-middle"><a href="<?= base_url('author/profil/'.$author->author_id) ?>"><?= $author->author_degree_front ?> <?= ucwords($author->author_name) ?> <?= $author->author_degree_back ?></a></td>
                         <td class="align-middle"><?= $author->work_unit_name ?></td>
                         <td class="align-middle"><?= $author->institute_name ?></td>
                         <td class="align-middle text-right">
@@ -116,7 +115,7 @@
                   <!-- /.table -->
                 </div>
                 <?php else: ?>
-                    <p>Author data were not available</p>
+                    <p class="text-center">Data tidak tersedia</p>
                 <?php endif ?>
                 <!-- /.table-responsive -->
                  <!-- Pagination -->

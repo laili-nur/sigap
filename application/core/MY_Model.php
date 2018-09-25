@@ -13,21 +13,47 @@ class MY_Model extends CI_Model
         }
     }
 
+    public function checkTable($table) {
+        if ($table == "") {
+            $table = $this->table;
+        }
+
+        return $table;
+    }
+
     public function query($sql)
     {
         return $this->db->query($sql);
     }
 
-    public function get()
+    public function get($table = "")
     {
-        return $this->db->get($this->table)->row();
+        $table = $this->checkTable($table);
+        return $this->db->get($table)->row();
     }
 
-    public function getAll()
-    {
-        return $this->db->get($this->table)->result();
+    public function getRowArray($table = "") {
+        $table = $this->checkTable($table);
+        return $this->db->get($table)->row_array();
     }
-    
+
+    public function getAll($table = "")
+    {
+        $table = $this->checkTable($table);
+        return $this->db->get($table)->result();
+    }
+
+    public function getWhere($data, $table = "") {
+        $table = $this->checkTable($table);
+        return $this->db->get_where($table, $data)->row();
+    }
+
+    public function getAllWhere($data, $table = "") {
+        $table = $this->checkTable($table);
+        $this->db->get_where($table, $data);
+        return $this->db->result();
+    }
+
     public function paginate($page)
     {
         $this->db->limit($this->perPage, $this->calculateRealOffset($page));
@@ -51,9 +77,22 @@ class MY_Model extends CI_Model
         return $this;
     }
 
+    public function from($table)
+    {
+        $this->db->from($table);
+        return $this;
+    }
+
     public function where($column, $condition)
     {
         $this->db->where($column, $condition);
+        return $this;
+    }
+
+    public function whereRelation($table_middle, $condition, $table_from = "")
+    {
+        $table = $this->checkTable($table_from);
+        $this->db->where("$table_middle.{$table}_id", $condition);
         return $this;
     }
     
@@ -76,22 +115,27 @@ class MY_Model extends CI_Model
         $validationRules = $this->getValidationRules();
         $this->form_validation->set_rules($validationRules);
         return $this->form_validation->run();
+
+        // return false;
     }
 
-    public function insert($data)
+    public function insert($data, $table = "")
     {
-        $this->db->insert($this->table, $data);
+        $table = $this->checkTable($table);
+        $this->db->insert($table, $data);
         return $this->db->insert_id();
     }
 
-    public function update($data)
+    public function update($data, $table = "")
     {
-        return $this->db->update($this->table, $data);
+        $table = $this->checkTable($table);
+        return $this->db->update($table, $data);
     }
 
-    public function delete()
+    public function delete($table = "")
     {
-        $this->db->delete($this->table);
+        $table = $this->checkTable($table);
+        $this->db->delete($table);
         return $this->db->affected_rows();
     }
 
@@ -101,12 +145,21 @@ class MY_Model extends CI_Model
         return $this;
     }
 
-        public function join3($table1, $table2, $column, $type = 'left')
+    public function join3($table1, $table2, $column, $type = 'left')
     {
         $this->db->join($table1, "$table1.{$column}_id = $table2.{$column}_id", $type);
         return $this;
     }
 
+    public function joinRelationMiddle($table_dest, $table_middle) {
+        $this->db->join($table_middle, "$table_dest.{$table_dest}_id = $table_middle.{$table_dest}_id", "left");
+        return $this;
+    }
+
+    public function joinRelationDest($table_dest, $table_middle) {
+        $this->db->join($table_dest, "$table_middle.{$table_dest}_id = $table_dest.{$table_dest}_id", "left");
+        return $this;
+    }
 
     public function orderBy($column_name, $order = 'asc')
     {
@@ -158,5 +211,39 @@ class MY_Model extends CI_Model
 
         $this->pagination->initialize($config);
         return $this->pagination->create_links();
+    }
+
+    public function getIdAndName($table_dest, $table_middle, $id_table_middle, $table_from = "") {
+        $table = $this->checkTable($table_from);
+        return $this->select("$table_dest.{$table_dest}_id")
+                    ->select("$table_dest.{$table_dest}_name")
+                    ->joinRelationMiddle($table_dest, $table_middle)
+                    ->whereRelation($table_middle, $id_table_middle, $table)
+                    ->getAll($table_dest);
+    }
+
+    public function updateDraftStatus($draft_id, $status) {
+        $this->where('draft_id', $draft_id)
+             ->update($status, 'draft');
+    }
+
+    public function getDraftFromRelation($table_dest, $table_middle) {
+        return $this->joinRelationMiddle('draft', $table_middle)
+                    ->joinRelationDest($table_dest, $table_middle);
+    }
+
+    public function getPKTableId($table_dest, $table_from, $table_middle, $id_table_dest, $id_table_from) {
+        $query = $this->select("{$table_middle}_id")
+                      ->where("{$table_dest}_id", $id_table_dest)
+                      ->where("{$table_from}_id", $id_table_from)
+                      ->getRowArray($table_middle);
+
+        if ($query) {
+            $data = $query;
+
+            return $data["{$table_middle}_id"];
+        } else {
+            return 0;
+        }
     }
 }

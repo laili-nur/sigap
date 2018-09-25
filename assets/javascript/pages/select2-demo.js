@@ -22,7 +22,7 @@ var select2Demo = {
   },
   getStates: function getStates() {
     return $('#select2-source-states').html();
-  },
+  }, 
   singleSelect: function singleSelect() {
     $('#select2-basic-single').append(this.getStates());
     $('#select2-basic-single').select2({

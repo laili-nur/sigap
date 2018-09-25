@@ -44,7 +44,7 @@
         </header>
           <!-- /.card-header -->
          <!-- .card-body -->
-        <div class="card-body p-0">
+        <div class="card-body">
           <!-- .table-responsive -->
             <?php if ($themes):?>
             <div class="table-responsive">
@@ -85,7 +85,7 @@
               <!-- /.table -->
             </div>
             <?php else: ?>
-                <p>Author data were not available</p>
+                <p class="text-center">Data tidak tersedia</p>
             <?php endif ?>
             <!-- /.table-responsive -->
         </div>

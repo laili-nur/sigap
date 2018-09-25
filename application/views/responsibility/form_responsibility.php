@@ -14,7 +14,7 @@
             <?= form_label('User Name', 'user_id', ['class' => 'label']) ?>
         </div>
         <div class="col-4">
-            <?= form_dropdown('user_id', getDropdownReviewerList('user', ['user_id', 'username']), $input->user_id, 'id="user"') ?>
+            <?= form_dropdown('user_id', getDropdownListStaff('user', ['user_id', 'username']), $input->user_id, 'id="user"') ?>
         </div>
         <div class="col-4">
             <?= form_error('user_id') ?>

@@ -30,7 +30,7 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> Gelar </td>
-                <td>: <?= $input->author_degree ?> </td>
+                <td>: <?= $input->author_degree_front ?>, <?= $input->author_degree_front ?></td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
@@ -69,6 +69,11 @@
                 <td> : <?= $input->heir_name ?>  </td>
               </tr>
               <!-- /tr -->
+              <!-- tr -->
+              <tr>
+                <td width="200px"> KTP </td>
+                <td> : <img src="<?=base_url('authorktp/'.$input->author_ktp); ?>" alt="" width="30%"> </td>
+              </tr>
               <!-- /tr -->
             </tbody>
             <!-- /tbody -->

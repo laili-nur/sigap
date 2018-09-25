@@ -12,10 +12,12 @@ class User extends Admin_Controller
 	public function index($page = null)
 	{
         $users      = $this->user->paginate($page)->orderBy('user_id')->getAll();
-        $total    = count($users);
+        $tot = $this->user->orderBy('user_id')->getAll();
+        $total    = count($tot);
         $pages   = $this->pages;
         $main_view  = 'user/index_user';
-		$this->load->view('template', compact('pages', 'main_view', 'users', 'total'));
+        $pagination = $this->user->makePagination(site_url('user'), 2, $total);
+		$this->load->view('template', compact('pagination','pages', 'main_view', 'users', 'total'));
 	}
  
 //--add--        
@@ -94,6 +96,10 @@ class User extends Admin_Controller
 		$user = $this->user->where('user_id', $id)->get();
         if (!$user) {
             $this->session->set_flashdata('warning', 'User data were not available');
+            redirect('user');
+        }
+        //prevent delete superadmin
+        if ($user->level == 'superadmin' && $user->username == 'superadmin'){
             redirect('user');
         }
 

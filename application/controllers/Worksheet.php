@@ -50,6 +50,11 @@ class Worksheet extends Operator_Controller
         public function edit($id = null)
 	{
         $worksheet = $this->worksheet->where('worksheet_id', $id)->get();
+        $data = array('draft_id' => $worksheet->draft_id);
+        $draft_title = $this->worksheet->getWhere($data, 'draft');
+
+        $worksheet->draft_title = $draft_title->draft_title;
+
         if (!$worksheet) {
             $this->session->set_flashdata('warning', 'Worksheet data were not available');
             redirect('worksheet');
@@ -78,6 +83,39 @@ class Worksheet extends Operator_Controller
 
         redirect('worksheet');
 	}
+
+    public function action($id, $action)
+    {
+        $worksheet = $this->worksheet->where('worksheet_id', $id)->get();
+
+        if (!$worksheet) {
+            $this->session->set_flashdata('warning', 'Worksheet data were not available');
+            redirect('worksheet');
+        }
+
+        $data = array('worksheet_status' => $action);
+
+        if ($this->worksheet->where('worksheet_id', $id)->update($data)) {
+            $status = array('draft_status' => 2);
+            $this->worksheet->updateDraftStatus($worksheet->draft_id, $status);
+
+            $affected_rows = $this->db->affected_rows();
+
+            if ($affected_rows > 0) {
+                $actionMessage = 'Approved';
+                if ($action == '2') {
+                    $actionMessage = 'Rejected';
+                }
+                $this->session->set_flashdata('success', "Worksheet $actionMessage");
+            } else {
+                $this->session->set_flashdata('success', "Status Worksheet diubah");
+            }
+        } else {
+            $this->session->set_flashdata('warning', 'Worksheet Failed Update');
+        }
+
+        redirect('worksheet');
+    }
         
         public function delete($id = null)
 	{

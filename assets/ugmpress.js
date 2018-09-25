@@ -1,15 +1,14 @@
-// Datepicker
-
-$(".date").datepicker({
-    changeMonth: true,
-    changeYear: true,
-    yearRange: '1970:+5',
-    dateFormat: "yy-mm-dd",
-    firstDay: 1
-});
 
 
+// // Datepicker
 
+// $(".date").datepicker({
+//     changeMonth: true,
+//     changeYear: true,
+//     yearRange: '1970:+5',
+//     dateFormat: "yy-mm-dd",
+//     firstDay: 1
+// });
 
 
 // siswaAutocomplete (Ajax)
