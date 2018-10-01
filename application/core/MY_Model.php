@@ -43,6 +43,12 @@ class MY_Model extends CI_Model
         return $this->db->get($table)->result();
     }
 
+    public function getAllArray($table = "")
+    {
+        $table = $this->checkTable($table);
+        return $this->db->get($table)->result_array();
+    }
+
     public function getWhere($data, $table = "") {
         $table = $this->checkTable($table);
         return $this->db->get_where($table, $data)->row();
@@ -50,8 +56,7 @@ class MY_Model extends CI_Model
 
     public function getAllWhere($data, $table = "") {
         $table = $this->checkTable($table);
-        $this->db->get_where($table, $data);
-        return $this->db->result();
+        return $this->db->get_where($table, $data)->result();
     }
 
     public function paginate($page)
@@ -245,5 +250,11 @@ class MY_Model extends CI_Model
         } else {
             return 0;
         }
+    }
+
+    public function editDraftDate($id, $column) {
+        $data = array($column => date('Y-m-d H:i:s'));
+        $this->where('draft_id', $id)
+             ->update($data, 'draft');
     }
 }

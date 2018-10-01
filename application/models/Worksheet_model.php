@@ -18,6 +18,11 @@ class Worksheet_model extends MY_Model
                 'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_worksheet_num'
             ],
             [
+                'field' => 'worksheet_notes',
+                'label' => 'Worksheet Number',
+                'rules' => 'trim'
+            ],
+            [
                 'field' => 'is_reprint',
                 'label' => 'Reprint Status',
                 'rules' => 'trim|required'
@@ -33,6 +38,7 @@ class Worksheet_model extends MY_Model
         return [
             'draft_id'           => '',
             'worksheet_num'           => '',
+            'worksheet_notes'           => '',
             'is_reprint'              => 'n'
         ];
     }

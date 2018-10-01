@@ -5,16 +5,17 @@ class Admin_Controller extends MY_Controller
     {
         parent::__construct();
 
-        $username = $this->session->userdata('username');
-        $level    = $this->session->userdata('level');
-        $is_login = $this->session->userdata('is_login');
+        $this->username = $this->session->userdata('username');
+        $this->level    = $this->session->userdata('level');
+        $this->is_login = $this->session->userdata('is_login');
+        $this->user_id = $this->session->userdata('user_id');
 
-        if (!$is_login) {
+        if (!$this->is_login) {
             redirect(base_url());
             return;
         }
 
-        if ($level !== 'superadmin') {
+        if ($this->level !== 'superadmin') {
             redirect(base_url());
             return;
         }

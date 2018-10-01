@@ -42,7 +42,7 @@
           <header class="card-header bg-light">
             <!-- .d-flex -->
             <div class="d-flex align-items-center">
-              <span class="mr-auto">Tabel Penulis <span class="text-muted">(<?=$total ?>)</span></span>
+              <span class="mr-auto">Tabel Penulis <span class="badge badge-info"><?=$total ?></span></span>
               <!-- .card-header-control -->
               <div class="card-header-control">
                 <!-- .tombol add -->

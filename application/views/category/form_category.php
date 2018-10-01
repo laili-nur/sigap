@@ -48,7 +48,7 @@
                     </button>
                   <?= form_input('category_name', $input->category_name, 'class="form-control" id="category_name" autofocus') ?>
                   </div>
-                  <div class="invalid-feedback">erot</div>
+                  <div class="invalid-feedback">Field is Required</div>
                   <?= form_error('category_name') ?>
                 </div>
               </fieldset>
@@ -102,7 +102,7 @@
                       </span>
                     </button>
                     <?= form_input('date_close', $input->date_close, 'class="form-control" id="flatpickr03" required=""') ?>
-                    <div class="invalid-feedback"> erot </div>
+                    <div class="invalid-feedback"> Field is Required </div>
                     <?= form_error('date_close') ?>
                 </div>
                 </div>
@@ -118,30 +118,26 @@
                     </button>
                     <?= form_textarea('category_note', $input->category_note, 'class="form-control"') ?>
                      </div>
-                  <div class="invalid-feedback"> erot </div>
+                  <div class="invalid-feedback"> Field is Required </div>
                   <?= form_error('category_note') ?>
                 </div>
                 <!-- /.form-group -->
                 <!-- .form-group -->
                 <div class="form-group">
                   <label>Status</label>
-                  <div class="mb-3">
-                    <label>
-                    <?= form_radio('category_status', 'y',
-                        isset($input->category_status) && ($input->category_status == 'y') ? true : false)
-                    ?> Active
-                    </label>
-                    <div class="text-muted"> Kategori aktif dan bisa untuk didaftarkan </div>
+                  <div>
+                    <!-- button radio -->
+                  <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary <?=($input->category_status == 'y') ? 'active' : '' ?>">
+                      <?= form_radio('category_status', 'y',
+                      isset($input->category_status) && ($input->category_status == 'y') ? true : false,'required class="custom-control-input" id="blocked1"')?> Aktif</label>
+                    <label class="btn btn-secondary <?=($input->category_status == 'n') ? 'active' : '' ?>">
+                      <?= form_radio('category_status', 'n',
+                      isset($input->category_status) && ($input->category_status == 'n') ? true : false,' class="custom-control-input" id="blocked2"')?> Tidak Aktif</label>
                   </div>
-                  <div class="mb-1">
-                    <label>
-                    <?= form_radio('category_status', 'n',
-                        isset($input->category_status) && ($input->category_status == 'n') ? true : false)
-                    ?> Not Active
-                    </label>
-                    <div class="text-muted"> Kategori nonaktif dan pendaftaran ditutup </div>
+                  <!-- /button radio -->
                   </div>
-                   <?= form_error('category_status') ?>
+                  <?= form_error('category_status') ?>
                 </div>
                 <!-- /.form-group -->
               </fieldset>

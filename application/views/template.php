@@ -21,8 +21,10 @@
     <link rel="stylesheet" href="<?= base_url('assets/vendor/font-awesome/css/fontawesome-all.min.css')?>">
     <!-- END BASE STYLES -->
     <!-- BEGIN PLUGINS STYLES -->
-    <link rel="stylesheet" href="<?= base_url('assets/vendor/flatpickr/flatpickr.min.css')?>">
+    <!-- <link rel="stylesheet" href="<?= base_url('assets/vendor/flatpickr/flatpickr.min.css')?>"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="<?= base_url('assets/vendor/select2/css/select2.min.css')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/vendor/toastr/toastr.min.css')?>">
     <!-- END PLUGINS STYLES -->
     <!-- BEGIN THEME STYLES -->
     <link rel="stylesheet" href="<?= base_url('assets/stylesheets/main.css')?>">
@@ -70,13 +72,15 @@
     <!-- BEGIN PLUGINS JS -->
     <script src="<?= base_url('assets/vendor/stacked-menu/stacked-menu.min.js');?>"></script>
     <script src="<?= base_url('assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js')?>"></script>
-    <script src="<?= base_url('assets/vendor/flatpickr/flatpickr.min.js')?>"></script>
+    <!-- <script src="<?= base_url('assets/vendor/flatpickr/flatpickr.min.js')?>"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="<?= base_url('assets/vendor/handlebars/handlebars.min.js')?>"></script>
     <script src="<?= base_url('assets/vendor/typeahead.js/typeahead.bundle.min.js')?>"></script>
     <script src="<?= base_url('assets/vendor/select2/js/select2.min.js')?>"></script>
     <script src="<?= base_url('assets/vendor/tribute/tribute.min.js')?>"></script>
     <script src="<?= base_url('assets/vendor/Caret/jquery.caret.min.js')?>"></script>
     <script src="<?= base_url('assets/vendor/At.js/js/jquery.atwho.min.js')?>"></script>
+    <script src="<?= base_url('assets/vendor/toastr/toastr.min.js')?>"></script>
     <!-- END PLUGINS JS -->
     <!-- BEGIN THEME JS -->
     <script src="<?= base_url('assets/javascript/main.min.js')?>"></script>

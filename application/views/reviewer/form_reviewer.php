@@ -86,6 +86,21 @@
             <?= form_error('user_id') ?>
           </div>
           <!-- /.form-group -->
+          <!-- .form-group -->
+          <div class="form-group">
+            <label for="expert">Kepakaran</label>
+            <div class="has-clearable">
+              <button type="button" class="close" aria-label="Close">
+                <span aria-hidden="true">
+                  <i class="fa fa-times-circle"></i>
+                </span>
+              </button>
+              <?= form_textarea('expert', $input->expert, 'class="form-control"') ?>
+               </div>
+            <div class="invalid-feedback"> erot </div>
+            <?= form_error('expert') ?>
+          </div>
+          <!-- /.form-group -->
         </fieldset>
         <!-- /.fieldset -->
         <hr>

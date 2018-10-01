@@ -8,13 +8,13 @@
     <!-- Begin SEO tag -->
     <title> SIIP LOGIN</title>
     <meta property="og:title" content="Sign In">
-    <meta name="author" content="Beni Arisandi">
+    <meta name="author" content="bagaskara">
     <meta property="og:locale" content="en_US">
-    <meta name="description" content="Responsive admin theme build on top of Bootstrap 4">
-    <meta property="og:description" content="Responsive admin theme build on top of Bootstrap 4">
-    <link rel="canonical" href="//uselooper.com">
+    <meta name="description" content="Sistem Informasi Penerbitan UGM PRESS">
+    <meta property="og:description" content="Sistem Informasi Penerbitan UGM PRESS">
+    <link rel="canonical" href="">
     <meta property="og:url" content="//uselooper.com">
-    <meta property="og:site_name" content="Looper - Bootstrap 4 Admin Theme">
+    <meta property="og:site_name" content="SIIP UGMPRESS">
     <!-- Favicons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/apple-touch-icon.png">
     <link rel="shortcut icon" href="assets/favicon.ico">
@@ -71,7 +71,8 @@
       <?= form_close() ?>
       <!-- /.auth-form -->
       <!-- copyright -->
-      <footer class="auth-footer"> IT Team
+      <footer class="auth-footer">
+        <p><strong>last update : 1 oktober 2018</strong></p>
       </footer>
     </main>
     <!-- /.auth -->

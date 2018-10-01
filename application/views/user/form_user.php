@@ -106,16 +106,19 @@
                 <!-- .form-group -->
                 <div class="form-group">
                   <label>Status</label>
-                  <div class="custom-control custom-radio">
-                    <?= form_radio('is_blocked', 'y',
-                      isset($input->is_blocked) && ($input->is_blocked == 'y') ? true : false,'required class="custom-control-input" id="blocked1"')?>
-                    <label class="custom-control-label" for="blocked1">Blocked</label>
+                  <div>
+                    <!-- button radio -->
+                  <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary <?=($input->is_blocked == 'y') ? 'active' : '' ?>">
+                      <?= form_radio('is_blocked', 'y',
+                      isset($input->is_blocked) && ($input->is_blocked == 'y') ? true : false,'required class="custom-control-input" id="blocked1"')?> Blocked</label>
+                    <label class="btn btn-secondary <?=($input->is_blocked == 'n') ? 'active' : '' ?>">
+                      <?= form_radio('is_blocked', 'n',
+                      isset($input->is_blocked) && ($input->is_blocked == 'n') ? true : false,' class="custom-control-input" id="blocked2"')?> Not Blocked</label>
                   </div>
-                  <div class="custom-control custom-radio">
-                    <?= form_radio('is_blocked', 'n',
-                      isset($input->is_blocked) && ($input->is_blocked == 'n') ? true : false,' class="custom-control-input" id="blocked2"')?>
-                    <label class="custom-control-label" for="blocked2">Not Blocked</label>
+                  <!-- /button radio -->
                   </div>
+                  
                    <?= form_error('is_blocked') ?>
                 </div>
                 <!-- /.form-group -->

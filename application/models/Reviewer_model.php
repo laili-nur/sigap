@@ -26,6 +26,11 @@ class Reviewer_model extends MY_Model
                 'field' => 'user_id',
                 'label' => 'User ID',
                 'rules' => 'trim|required|callback_unique_reviewer_username'
+            ],
+            [
+                'field' => 'expert',
+                'label' => 'Expert',
+                'rules' => 'trim'
             ]
         ];
 
@@ -38,7 +43,8 @@ class Reviewer_model extends MY_Model
             'reviewer_nip'           => '',
             'reviewer_name'           => '',
             'faculty_id'              => '',
-            'user_id'              => ''
+            'user_id'              => '',
+            'expert'              => ''
         ];
     }
 }

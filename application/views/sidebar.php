@@ -118,7 +118,7 @@
           <?php endif ?>
             <!-- .menu-item -->
             <li class="menu-item">
-              <a href="#" class="menu-link">
+              <a href="<?= base_url('book') ?>" class="menu-link">
                 <span class="menu-icon oi oi-book"></span>
                 <span class="menu-text">Buku</span>
               </a>

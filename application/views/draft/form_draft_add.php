@@ -83,7 +83,7 @@
           </div>
           <!-- .form-group -->
           <div class="form-group">
-            <label for="draft_title">File Draft
+            <label for="draft_file">File Draft
               <abbr title="Required">*</abbr>
             </label>
             <div class="custom-file">

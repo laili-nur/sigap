@@ -141,7 +141,24 @@
                 <!-- /.form-group -->
               </div>
             </div>
-            
+            <!-- .form-group -->
+            <div class="form-group">
+              <label for="institute_id">Pendidikan Terakhir
+                <abbr title="Required">*</abbr>
+              </label>
+              <?php 
+              $options = array(
+                'S1'         => 'S1',
+                'S2'         => 'S2',
+                'S3'         => 'S3',
+                'other'      => 'Other',
+              );
+              echo form_dropdown('author_latest_education', $options,$input->author_latest_education,'id="author_latest_education" class="form-control custom-select d-block" required' )
+              ?>
+              <div class="invalid-feedback">Field is required</div>
+               <?= form_error('author_latest_education') ?>
+            </div>
+            <!-- /.form-group -->           
             <hr class="my-2">
             <!-- .form-group -->
             <div class="form-group">

@@ -32,13 +32,14 @@
           <fieldset>
             <legend>Data Lembar Kerja</legend>
             <?= isset($input->worksheet_id) ? form_hidden('worksheet_id', $input->worksheet_id) : '' ?>
+            <div class="alert alert-info">Last edited by : <strong><?= isset($input->worksheet_pic) ?$input->worksheet_pic : '' ?></strong> on <strong><?= isset($input->worksheet_ts) ? $input->worksheet_ts : '' ?></strong></div>
             <!-- .form-group -->
             <div class="form-group">
               <label for="draft_id">Draft
                 <abbr title="Required">*</abbr>
               </label>
               <?= form_dropdown('draft_id', getDropdownList('draft', ['draft_id', 'draft_title']), $input->draft_id, 'id="draft_id" class="form-control custom-select d-block"') ?>
-              <div class="invalid-feedback">erot</div>
+              <div class="invalid-feedback">Field is required</div>
               <?= form_error('draft_id') ?>
             </div>
             <!-- /.form-group -->
@@ -56,7 +57,7 @@
                 </button>
               <?= form_input('worksheet_num', $input->worksheet_num, 'class="form-control" id="worksheet_num"') ?>
               </div>
-              <div class="invalid-feedback">erot</div>
+              <div class="invalid-feedback">Field is required</div>
               <?= form_error('worksheet_num') ?>
             </div>
             <!-- /.form-group -->
@@ -73,32 +74,50 @@
                 </button>
               <?= form_textarea('worksheet_notes', $input->worksheet_notes, 'class="form-control" id="worksheet_notes"') ?>
               </div>
-              <div class="invalid-feedback">erot</div>
+              <div class="invalid-feedback">Field is required</div>
               <?= form_error('worksheet_notes') ?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
             <div class="form-group">
               <label>Jenis Naskah</label>
-              <div class="mb-1">
-                <label>
-                <?= form_radio('is_reprint', 'y',
-                    isset($input->is_reprint) && ($input->is_reprint == 'y') ? true : false)
-                ?> Cetak Ulang
-                </label>
-              </div>
-              <div class="mb-1">
-                <label>
-                <?= form_radio('is_reprint', 'y',
-                    isset($input->is_reprint) && ($input->is_reprint == 'n') ? true : false)
-                ?> Naskah Baru
-                </label>
-              </div>
+                <div class="custom-control custom-radio mb-1">
+                  <?= form_radio('is_reprint', 'y',
+                    isset($input->is_reprint) && ($input->is_reprint == 'y') ? true : false,'required class="custom-control-input" id="cetakulang"')?>
+                  <label class="custom-control-label" for="cetakulang">Cetak Ulang</label>
+                </div>
+                <div class="custom-control custom-radio mb-1">
+                  <?= form_radio('is_reprint', 'n',
+                    isset($input->is_reprint) && ($input->is_reprint == 'n') ? true : false,'required class="custom-control-input" id="naskahbaru"')?>
+                  <label class="custom-control-label" for="naskahbaru">Naskah Baru</label>
+                </div>
                <?= form_error('is_reprint') ?>
             </div>
             <!-- /.form-group -->
           </fieldset>
           <!-- /.fieldset -->
+          <hr>
+          <!-- .form-group -->
+            <div class="form-group">
+              <label>Status</label>
+                <div class="custom-control custom-radio mb-1">
+                  <?= form_radio('worksheet_status', '0',
+                    isset($input->worksheet_status) && ($input->worksheet_status == '0') ? true : false,'required class="custom-control-input" id="belum"')?>
+                  <label class="custom-control-label" for="belum">-</label>
+                </div>
+                <div class="custom-control custom-radio mb-1">
+                  <?= form_radio('worksheet_status', '1',
+                    isset($input->worksheet_status) && ($input->worksheet_status == '1') ? true : false,'required class="custom-control-input" id="approve"')?>
+                  <label class="custom-control-label" for="approve">Approve</label>
+                </div>
+                <div class="custom-control custom-radio mb-1">
+                  <?= form_radio('worksheet_status', '2',
+                    isset($input->worksheet_status) && ($input->worksheet_status == '2') ? true : false,'required class="custom-control-input" id="reject"')?>
+                  <label class="custom-control-label" for="reject">Reject</label>
+                </div>
+               <?= form_error('worksheet_status') ?>
+            </div>
+            <!-- /.form-group -->
           <hr>
           <!-- .form-actions -->
           <div class="form-actions">
@@ -115,5 +134,18 @@
   </div>
 </div>
 <!-- /.page-section -->
+
+<script>
+  $(document).ready(function() {
+    $("#draft_id").select2({
+      placeholder: '-- Choose --',
+      allowClear: true
+    });
+
+    // });
+    
+
+ });
+</script>
 
 

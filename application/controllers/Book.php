@@ -85,7 +85,7 @@ class Book extends Operator_Controller
         } else {
             $input = (object) $this->input->post(null, true);
             $input->book_file = $book->book_file; // Set book file for preview.
-            $input->cover = $book->cover; // Set cover untuk preview.
+            //$input->cover = $book->cover; // Set cover untuk preview.
         }
 
 //         //Upload new cover (if any)

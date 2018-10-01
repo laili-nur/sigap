@@ -52,49 +52,96 @@ class Draft_model extends MY_Model
                 'label' => 'Print Date',
                 'rules' => 'trim'
             ],
+            //review
             [
-                'field' => 'is_reviewed',
-                'label' => 'Is Reviewed',
+                'field' => 'is_review',
+                'label' => 'Is Review',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'review_notes',
-                'label' => 'Review Notes',
+                'field' => 'review_start_date',
+                'label' => 'Review Start Date',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'author_review_notes',
-                'label' => 'Author Review Notes',
+                'field' => 'review_end_date',
+                'label' => 'Review End Date',
+                'rules' => 'trim'
+            ],
+            // [
+            //     'field' => 'review1_file',
+            //     'label' => 'Review 1 File',
+            //     'rules' => 'trim'
+            // ],
+            [
+                'field' => 'review1_upload_date',
+                'label' => 'Review 1 Upload Date',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'review_start_deadline',
-                'label' => 'Review Start Deadline',
+                'field' => 'review1_notes',
+                'label' => 'Review 1 Notes',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'review_upload_date',
-                'label' => 'Review Upload Date',
+                'field' => 'review1_notes_author',
+                'label' => 'Author Review 1 Notes',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'review_end_deadline',
-                'label' => 'Review End Deadline',
+                'field' => 'review1_deadline',
+                'label' => 'Review 1 Deadline',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'review_is_revised',
-                'label' => 'Review Is Revised',
+                'field' => 'review2_file',
+                'label' => 'Review 2 File',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'review_revise_notes',
-                'label' => 'Review Revise Notes',
+                'field' => 'review2_upload_date',
+                'label' => 'Review 2 Upload Date',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'is_edited',
-                'label' => 'Is Edited',
+                'field' => 'review2_notes',
+                'label' => 'Review 2 Notes',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'review2_notes_author',
+                'label' => 'Author Review 2 Notes',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'review2_deadline',
+                'label' => 'Review 2 Deadline',
+                'rules' => 'trim'
+            ],
+            //edit
+            [
+                'field' => 'is_edit',
+                'label' => 'Is Edit',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'edit_start_date',
+                'label' => 'Edit Start Date',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'edit_end_date',
+                'label' => 'Edit End Date',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'edit_file',
+                'label' => 'Edit File',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'edit_upload_date',
+                'label' => 'Edit Upload Date',
                 'rules' => 'trim'
             ],
             [
@@ -103,54 +150,29 @@ class Draft_model extends MY_Model
                 'rules' => 'trim'
             ],
             [
-                'field' => 'author_edit_notes',
+                'field' => 'edit_notes_author',
                 'label' => 'Author Edit Notes',
                 'rules' => 'trim'
             ],
-
+            //layout
             [
-                'field' => 'edit_start_deadline',
-                'label' => 'Edit Start Deadline',
+                'field' => 'is_layout',
+                'label' => 'Is Layout',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'author_upload_date',
-                'label' => 'Author Upload Date',
-                'rules' => 'trim'
-            ],            
-            [
-                'field' => 'edit_end_deadline',
-                'label' => 'Edit End Deadline',
+                'field' => 'layout_start_date',
+                'label' => 'Layout Start Date',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'edit_is_revised',
-                'label' => 'Edit Is Revised',
+                'field' => 'layout_end_date',
+                'label' => 'Layout End Date',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'edit_revise_notes',
-                'label' => 'Edit Revise Notes',
-                'rules' => 'trim'
-            ],
-            [
-                'field' => 'is_layouted',
-                'label' => 'Is Layouted',
-                'rules' => 'trim'
-            ],
-            [
-                'field' => 'layout_notes',
-                'label' => 'Layout Notes',
-                'rules' => 'trim'
-            ],
-            [
-                'field' => 'author_layout_notes',
-                'label' => 'Author Layout Notes',
-                'rules' => 'trim'
-            ],
-            [
-                'field' => 'layout_start_deadline',
-                'label' => 'Layout Start Deadline',
+                'field' => 'layout_file',
+                'label' => 'Layout File',
                 'rules' => 'trim'
             ],
             [
@@ -159,43 +181,55 @@ class Draft_model extends MY_Model
                 'rules' => 'trim'
             ],
             [
-                'field' => 'layout_end_deadline',
-                'label' => 'Layout End Deadline',
+                'field' => 'layout_notes',
+                'label' => 'Layout Notes',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'layout_is_revised',
-                'label' => 'Layout Is Revised',
+                'field' => 'layout_notes_author',
+                'label' => 'Author Layout Notes',
+                'rules' => 'trim'
+            ],
+            //cover
+            [
+                'field' => 'cover_file',
+                'label' => 'Cover File',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'edit_revise_notes',
-                'label' => 'Edit Revise Notes',
+                'field' => 'cover_upload_date',
+                'label' => 'Cover Upload Date',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'is_reprint',
-                'label' => 'Is Reprint',
+                'field' => 'cover_notes',
+                'label' => 'Cover Notes',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'draft_notes',
-                'label' => 'Draft Notes',
+                'field' => 'cover_notes_author',
+                'label' => 'Author Cover Notes',
+                'rules' => 'trim'
+            ],
+            //proofread
+            [
+                'field' => 'is_proofread',
+                'label' => 'Is Proofread',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'proofread_notes',
-                'label' => 'Proofread Notes',
+                'field' => 'proofread_start_date',
+                'label' => 'Proofread Start Date',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'author_proofread_notes',
-                'label' => 'Author Proofread Notes',
+                'field' => 'proofread_end_date',
+                'label' => 'Proofread End Date',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'proofread_start_deadline',
-                'label' => 'Proofread Start Deadline',
+                'field' => 'proofread_file',
+                'label' => 'Proofread File',
                 'rules' => 'trim'
             ],
             [
@@ -204,20 +238,26 @@ class Draft_model extends MY_Model
                 'rules' => 'trim'
             ],
             [
-                'field' => 'proofread_end_deadline',
-                'label' => 'Proofread End Deadline',
+                'field' => 'proofread_notes',
+                'label' => 'Proofread Notes',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'proofread_is_revised',
-                'label' => 'Proofread Is Revised',
+                'field' => 'proofread_notes_author',
+                'label' => 'Author Proofread Notes',
                 'rules' => 'trim'
             ],
             [
-                'field' => 'proofread_revise_notes',
-                'label' => 'Proofread Revise Notes',
+                'field' => 'draft_status',
+                'label' => 'Draft Status',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'draft_notes',
+                'label' => 'Draft Notes',
                 'rules' => 'trim'
             ]
+            
             
         ];
 
@@ -230,46 +270,54 @@ class Draft_model extends MY_Model
             'category_id'                   => '',
             'theme_id'                      => '',
             'draft_title'                   => '',
-            'author_id'                   => '',
-//            'draft_file'                    => '',
+            'author_id'                     => '',
+            'draft_file'                    => '',
             'proposed_fund'                 => '',
             'approved_fund'                 => '',
             'entry_date'                    => '',
             'finish_date'                   => '',
             'print_date'                    => '',
-            'is_reviewed'                   => '',
-            'review_notes'                  => '',
-            'author_review_notes'           => '',
-            'review_start_deadline'             => '',
-            'review_upload_date'          => '',
-            'review_end_deadline'               => '',
-            'review_is_revised'                    => '',
-            'review_revise_notes'                  => '',
-            'is_edited'                     => '',
+            'is_review'                     => '',
+            'review_start_date'             => '',
+            'review_end_date'               => '',
+            'review1_file'                  => '',
+            'review1_upload_date'           => '',
+            'review1_notes'                 => '',
+            'review1_notes_author'          => '',
+            'review1_deadline'              => '',
+            'review2_file'                  => '',
+            'review2_upload_date'           => '',
+            'review2_notes'                 => '',
+            'review2_notes_author'          => '',
+            'review2_deadline'              => '',
+            'is_edit'                       => '',
+            'edit_start_date'               => '',
+            'edit_end_date'                 => '',
+            'edit_file'                     => '',
+            'edit_upload_date'              => '',
             'edit_notes'                    => '',
-            'author_edit_notes'             => '',
-            'edit_start_deadline'               => '',
-            'edit_upload_date'          => '',
-            'edit_end_deadline'                 => '',
-            'edit_is_revised'                    => '',
-            'edit_revise_notes'                  => '',
-            'is_layouted'                   => '',
+            'edit_notes_author'             => '',
+            'is_layout'                     => '',
+            'layout_start_date'             => '',
+            'layout_end_date'               => '',
+            'layout_file'                   => '',
+            'layout_upload_date'            => '',
             'layout_notes'                  => '',
-            'author_layout_notes'           => '',
-            'layout_start_deadline'             => '',
-            'layout_upload_date'          => '',
-            'layout_end_deadline'               => '',
-            'layout_is_revised'                    => '',
-            'layout_revise_notes'                  => '',
-            'is_reprint'                    => '',
-            'draft_notes'                   => '',
+            'layout_notes_author'           => '',
+            'cover_file'                    => '',
+            'cover_upload_date'             => '',
+            'cover_notes'                   => '',
+            'cover_notes_author'            => '',
+            'is_proofread'                  => '',
+            'proofread_start_date'          => '',
+            'proofread_end_date'            => '',
+            'proofread_file'                => '',
+            'proofread_upload_date'         => '',
             'proofread_notes'               => '',
-            'author_proofread_notes'        => '',
-            'proofread_start_deadline'          => '',
-            'proofread_upload_date'          => '',
-            'proofread_end_deadline'            => '',
-            'proofread_is_revised'                    => '',
-            'proofread_revise_notes'                  => '',
+            'proofread_notes_author'        => '',
+            'draft_status'                  => '',
+            'draft_notes'                   => '',
+
         ];
     }
    
@@ -301,6 +349,36 @@ class Draft_model extends MY_Model
             unlink("./draftfile/$draftFile");
         }
     }
+
+    public function uploadProgress($fieldname, $draftFileName)
+    {
+        $config = [
+            'upload_path'      => './draftfile/',
+            'file_name'        => $draftFileName,
+            'allowed_types'    => 'docx|doc',    // docx only
+            'max_size'         => 15360,     // 15MB
+            'overwrite'        => true,
+            'file_ext_tolower' => true,
+        ];
+
+        $this->load->library('upload', $config);
+        if ($this->upload->do_upload($fieldname)) {
+            // Upload OK, return uploaded file info.
+            return $this->upload->data();
+        } else {
+            // Add error to $_error_array
+            $this->form_validation->add_to_error_array($fieldname, $this->upload->display_errors('', ''));
+            return false;
+        }
+    }
+
+    public function deleteProgress($draftFile)
+    {
+        if (file_exists("./draftfile/$draftFile")) {
+            unlink("./draftfile/$draftFile");
+        }
+    }
+
 
 
 }

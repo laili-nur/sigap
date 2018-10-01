@@ -38,6 +38,11 @@ class Author_model extends MY_Model
                 'rules' => 'trim|min_length[2]|max_length[256]'
             ],
             [
+                'field' => 'author_latest_education',
+                'label' => 'Author Latest Education',
+                'rules' => 'trim|required'
+            ],
+            [
                 'field' => 'author_address',
                 'label' => 'Author Address',
                 'rules' => 'trim|required|min_length[1]|max_length[256]'
@@ -88,6 +93,7 @@ class Author_model extends MY_Model
             'author_name'           => '',
             'author_degree_front'              => '',
             'author_degree_back'              => '',
+            'author_latest_education'              => '',
             'author_address'           => '',
             'author_contact'              => '',
             'author_email'           => '',

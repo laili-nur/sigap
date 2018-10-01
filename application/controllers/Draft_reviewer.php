@@ -39,15 +39,27 @@ class Draft_reviewer extends Operator_Controller
             // $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
+        //$data['draft'] =array();
+        $datax = array('draft_id' => $input->draft_id);
+        $data['jmlreviewer'] = count($this->draft_reviewer->getAllWhere($datax));
+
+        if($data['jmlreviewer'] >1){
+            $data['validasi'] = 'max';
+            echo json_encode($data);
+            return;
+        }
         
         if ($this->draft_reviewer->insert($input)) {
+            $status = array('draft_status' => 4);
+            $this->draft_reviewer->editDraftDate($input->draft_id, 'review_start_date');
+            $this->draft_reviewer->updateDraftStatus($input->draft_id, $status);
             $data['validasi'] = true;
             $data['status'] = true;
-            $this->session->set_flashdata('success', 'Data saved');
+            //$this->session->set_flashdata('success', 'Data saved');
         } else {
             $data['validasi'] = true;
             $data['status'] = false;
-            $this->session->set_flashdata('error', 'Data failed to save');
+            //$this->session->set_flashdata('error', 'Data failed to save');
         }
         echo json_encode($data);
 

@@ -127,7 +127,7 @@
           <div class="dropdown-arrow dropdown-arrow-left"></div>
           <!-- .dropdown-menu -->
           <div class="dropdown-menu">
-            <h6 class="dropdown-header d-none d-md-block d-lg-none"> Bagaskara </h6>
+            <h6 class="dropdown-header d-none d-md-block d-lg-none"><?=$username ?></h6>
             <a class="dropdown-item" href="#">
               <span class="dropdown-icon oi oi-person"></span> Profile</a>
             <a class="dropdown-item" href="<?=base_url('login/logout') ?>">

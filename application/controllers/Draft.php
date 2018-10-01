@@ -12,6 +12,7 @@ class Draft extends Operator_Controller
 	{  
         $ceklevel = $this->session->userdata('level');
         $cekusername = $this->session->userdata('username');
+
         //get id user
         
         if ($ceklevel == 'author'){
@@ -24,18 +25,18 @@ class Draft extends Operator_Controller
             $drafts = $this->draft->join('category')->join('theme')->join3('draft_reviewer','draft','draft')->join3('reviewer','draft_reviewer','reviewer')->join3('user','reviewer','user')->where('user.username',$cekusername)->paginate($page)->getAll();
             $tot = $this->draft->join('category')->join('theme')->join3('draft_reviewer','draft','draft')->join3('reviewer','draft_reviewer','reviewer')->join3('user','reviewer','user')->where('user.username',$cekusername)->getAll();
         }else{
-            $drafts     = $this->draft->join('category')->join('theme')->orderBy('category.category_id')->orderBy('theme.theme_id')->orderBy('draft_id')->paginate($page)->getAll();
-            $tot        = $this->draft->join('category')->join('theme')->orderBy('category.category_id')->orderBy('theme.theme_id')->orderBy('draft_id')->getAll();
+            $drafts     = $this->draft->join('category')->join('theme')->orderBy('draft_title')->orderBy('category.category_id')->orderBy('theme.theme_id')->paginate($page)->getAll();
+            $tot        = $this->draft->join('category')->join('theme')->orderBy('draft_title')->orderBy('category.category_id')->orderBy('theme.theme_id')->getAll();
         }
         
-
+        //tampilkan author dan status draft
         foreach ($drafts as $key => $value) {
             $authors = $this->draft->getIdAndName('author', 'draft_author', $value->draft_id);
             $value->author = $authors;
             $value->draft_status = $this->checkStatus($value->draft_status);
-            
         }
         
+
         $total     = count($tot);
         $pages    = $this->pages;
         $main_view  = 'draft/index_draft';
@@ -55,15 +56,6 @@ class Draft extends Operator_Controller
             $input = (object) $this->input->post(null, true);
         }
 
-        if (!empty($_FILES) && $_FILES['draft_file']['size'] > 0) {
-            $getextension=explode(".",$_FILES['draft_file']['name']);            
-            $draftFileName  = str_replace(" ","_",$input->draft_title . '_' . date('YmdHis').".".$getextension[1]) ; // draft file name
-            $upload = $this->draft->uploadDraftfile('draft_file', $draftFileName);
-
-            if ($upload) {
-                $input->draft_file =  "$draftFileName"; // Data for column "draft".
-            }
-        }        
 
         if (!$this->draft->validate() || $this->form_validation->error_array()) {
             $pages     = $this->pages;
@@ -72,6 +64,16 @@ class Draft extends Operator_Controller
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
+
+        if (!empty($_FILES) && $_FILES['draft_file']['size'] > 0) {
+            $getextension=explode(".",$_FILES['draft_file']['name']);            
+            $draftFileName  = str_replace(" ","_",$input->draft_title . '_' . date('YmdHis').".".$getextension[1]) ; // draft file name
+            $upload = $this->draft->uploadDraftfile('draft_file', $draftFileName);
+
+            if ($upload) {
+                $input->draft_file =  "$draftFileName"; // Data for column "draft".
+            }
+        }   
         
         $draft_id = $this->draft->insert($input);
 
@@ -93,7 +95,9 @@ class Draft extends Operator_Controller
         }
 
         if ($isSuccess) {
-            $data_worksheet = array('draft_id' => $draft_id);
+            $worksheet_num = $this->generateWorksheetNumber();
+
+            $data_worksheet = array('draft_id' => $draft_id, 'worksheet_num' => $worksheet_num);
             $worksheet_id = $this->draft->insert($data_worksheet, 'worksheet');
 
             if ($worksheet_id < 1) {
@@ -113,6 +117,7 @@ class Draft extends Operator_Controller
 // -- view --
       public function view($id = null)
     {
+
         $draft = $this->draft->where('draft_id', $id)->get();
         $draft->draft_status = $this->checkStatus($draft->draft_status);
         
@@ -138,7 +143,14 @@ class Draft extends Operator_Controller
         
 
         // tabel reviewer
-        $reviewers =  $this->draft->select(['draft_reviewer.reviewer_id','draft_reviewer_id','reviewer_name','reviewer_nip','faculty_name'])->join3('draft_reviewer','draft','draft')->join3('reviewer','draft_reviewer','reviewer')->join3('faculty','reviewer','faculty')->where('draft_reviewer.draft_id',$id)->getAll();
+        $reviewers =  $this->draft->select(['draft_reviewer.reviewer_id','draft_reviewer_id','reviewer_name','reviewer_nip','faculty_name','username'])->join3('draft_reviewer','draft','draft')->join3('reviewer','draft_reviewer','reviewer')->join3('faculty','reviewer','faculty')->join3('user','reviewer','user')->where('draft_reviewer.draft_id',$id)->getAll();
+
+        $reviewer_order = key(array_filter(
+            $reviewers,
+            function ($e) {
+                return $e->username == $this->session->userdata('username');
+            }
+        ));
 
         // tampilkan editor
         $editors = $this->draft->select(['username','level','responsibility_id'])->join3('responsibility','draft','draft')->join3('user','responsibility','user')->where('responsibility.draft_id',$id)->where('level','editor')->getAll();
@@ -154,7 +166,7 @@ class Draft extends Operator_Controller
             $main_view   = 'draft/view/view';
             $form_action = "draft/edit/$id";
 
-            $this->load->view('template', compact('desk','pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers','editors','layouters'));
+            $this->load->view('template', compact('reviewer_order','desk','pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers','editors','layouters'));
             return;
         }
         
@@ -168,11 +180,94 @@ class Draft extends Operator_Controller
         redirect('draft');
     }
 
+    public function upload_progress($id = null,$column){
+        $draft = $this->draft->where('draft_id', $id)->get();
+        $datatitle = ['draft_id'=>$id];
+        $title = $this->draft->getWhere($datatitle);
+        if (!$draft) {
+            $this->session->set_flashdata('warning', 'Draft data were not available');
+            redirect('draft');
+        }
 
-// -- edit --
+        if (!$_POST) {
+            $input = (object) $draft;
+        } else {
+            $input = (object) $this->input->post(null, true);
+            $input->$column = $draft->$column; // Set draft file for preview.
+        }
+
+        
+        if (!empty($_FILES) && $_FILES[$column]['size'] > 0) {
+            // Upload new draft (if any)
+            $getextension=explode(".",$_FILES[$column]['name']);            
+            $draftFileName  = str_replace(" ","_",$title->draft_title.'_'.$column . '_' . date('YmdHis').".".$getextension[1]); // draft file name
+            $upload = $this->draft->uploadProgress($column, $draftFileName);
+
+            if ($upload) {
+                $input->$column =  "$draftFileName";
+                // Delete old draft file
+                if ($draft->$column) {
+                    $this->draft->deleteProgress($draft->$column);
+                }
+            }
+        }
+
+        //If something wrong
+        // if (!$this->draft->validate() || $this->form_validation->error_array()) {
+        //     $pages    = $this->pages;
+        //     $main_view   = 'draft/view/view';
+        //     $form_action = "draft/edit/$id";
+
+        //     $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
+        //     return;
+        // }
+
+        if ($this->draft->where('draft_id', $id)->update($input)) {
+            $this->session->set_flashdata('success', 'Data updated');
+        } else {
+            $this->session->set_flashdata('error', 'Data failed to update');
+        }
+
+        redirect('draft/view/'.$id);
+
+    }
+
+// -- ubah notes --
       
-      public function edit($id = null)
+      public function ubahnotes($id = null)
 	{
+        $data = array();
+        $draft = $this->draft->where('draft_id', $id)->get();
+        if (!$draft) {
+            $this->session->set_flashdata('warning', 'Draft data were not available');
+            redirect('draft');
+        }
+
+        if (!$_POST) {
+            $input = (object) $draft;
+        } else {
+            $input = (object) $this->input->post(null, true);
+        }
+        
+        // If something wrong
+        // if (!$this->draft->validate() || $this->form_validation->error_array()) {
+        //     return;
+        // }
+
+        if ($this->draft->where('draft_id', $id)->update($input)) {
+            //$this->session->set_flashdata('success', 'Data updated');
+            $data['status'] = true;
+        } else {
+            $data['status'] = false;
+            //$this->session->set_flashdata('error', 'Data failed to update');
+        }
+
+        echo json_encode($data);
+        //redirect('draft/view/'.$id);
+	}
+
+    public function edit($id = null)
+    {
         $draft = $this->draft->where('draft_id', $id)->get();
         if (!$draft) {
             $this->session->set_flashdata('warning', 'Draft data were not available');
@@ -219,7 +314,7 @@ class Draft extends Operator_Controller
         }
 
         redirect('draft');
-	}
+    }
 
 // -- delete --        
         public function delete($id = null)
@@ -295,23 +390,45 @@ class Draft extends Operator_Controller
     }
 
 
+    public function generateWorksheetNumber() {
+        $date = date('Y-m');
+
+        $this->db->limit(1);
+        $query = $this->draft->like('worksheet_num', $date, 'after')
+                             ->orderBy('draft_id', 'desc')
+                             ->get('worksheet');
+
+        if ($query) {
+            $worksheet_num = $query->worksheet_num;
+            $worksheet_num = explode("-", $worksheet_num);
+            $num = (int) $worksheet_num[2];
+            $num++;
+
+            $num = str_pad($num, 2, '0', STR_PAD_LEFT);
+        } else {
+            $num = '01';
+        }
+
+        return $date . '-' . $num;
+    }
+
     public function checkStatus($code) {
         $status = "";
         switch ($code) {
             case 0:
                 $status = 'Waiting for Worksheet/Desk Screening';
                 break;
-            case 1:
+            case 2:
                 $status = 'Worksheet Rejected';
                 break;
-            case 2:
+            case 1:
                 $status = 'Choosing Reviewer';
                 break;
             case 3:
                 $status = 'Reviewer Rejected';
                 break;
             case 4:
-                $status = 'Process Review';
+                $status = 'Review on Progress';
                 break;
             case 5:
                 $status = 'Review Done';
@@ -320,7 +437,7 @@ class Draft extends Operator_Controller
                 $status = 'Choosing Editor';
                 break;
             case 7:
-                $status = 'Process Editor';
+                $status = 'Edit on Progress';
                 break;
             case 8:
                 $status = 'Edit Done';
@@ -329,28 +446,28 @@ class Draft extends Operator_Controller
                 $status = 'Choosing Layouter';
                 break;
             case 10:
-                $status = 'Process Layouter';
+                $status = 'Layout on Progress';
                 break;
             case 11:
                 $status = 'Layout Done';
                 break;
             case 12:
-                $status = 'Choosing Proofread';
+                $status = 'Choosing Cover';
                 break;
             case 13:
-                $status = 'Process Proofread';
+                $status = 'Cover on Progress';
                 break;
             case 14:
-                $status = 'Proofread Done';
+                $status = 'Cover Done';
                 break;
             case 15:
-                $status = 'Choosing Layouter';
+                $status = 'Choosing Proofread';
                 break;
             case 16:
-                $status = 'Process Layouter';
+                $status = 'Proofread on Progress';
                 break;
             case 17:
-                $status = 'Layout Done';
+                $status = 'Proofread Done';
                 break;
             
             default:

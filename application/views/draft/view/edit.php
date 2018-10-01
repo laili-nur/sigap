@@ -5,12 +5,13 @@
     <header class="card-header">
       <!-- .d-flex -->
       <div class="d-flex align-items-center">
-        <span class="mr-auto">Edit</span>
+        <span class="mr-auto">Editorial</span>
         <!-- .card-header-control -->
         <div class="card-header-control">
           <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
           <!-- .tombol add -->
           <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#piliheditor">Pilih Editor</button>
+          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#edit_deadline">Atur Deadline</button>
           <!-- /.tombol add -->
           <?php endif ?>
         </div>
@@ -18,17 +19,21 @@
       </div>
       <!-- /.d-flex -->
     </header>
-    <div class="list-group list-group-flush list-group-bordered" id="label-editor">
+    <div class="list-group list-group-flush list-group-bordered" id="list-group-edit">
       <div class="list-group-item justify-content-between">
         <span class="text-muted">Tanggal masuk</span>
-        <strong><?= konversiTanggal($input->edit_start_deadline) ?></strong>
+        <strong><?= konversiTanggal($input->edit_start_date) ?></strong>
       </div>
       <div class="list-group-item justify-content-between">
         <span class="text-muted">Tanggal jadi</span>
-        <strong><?= konversiTanggal($input->edit_end_deadline) ?></strong>
+        <strong><?= konversiTanggal($input->edit_end_date) ?></strong>
+      </div>
+      <div class="list-group-item justify-content-between">
+        <span class="text-muted">Deadline</span>
+        <strong><?= konversiTanggal($input->edit_deadline) ?></strong>
       </div>
       <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer' ): ?>
-      <div class="list-group-item justify-content-between">
+      <div class="list-group-item justify-content-between" id="reloadeditor">
         <span class="text-muted">Editor</span>
         <div>
           <?php if ($editors) {
@@ -50,9 +55,11 @@
     <div class="card-body">
       <div class="el-example">
         <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
-        <button class="btn btn-success"><i class="fa fa-check"></i></button>
+        <button class="btn btn-success" style="width:50px"><i class="fa fa-check"></i></button>
+        <button class="btn btn-danger" style="width:50px"><i class="fa fa-times"></i></button>
         <?php endif ?>   
-        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#edit">Lihat Detail</button>
+        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#edit">Edit dan Tanggapan</button>
+      </div>
         <!-- modal -->
         <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <!-- .modal-dialog -->
@@ -66,11 +73,32 @@
               <!-- /.modal-header -->
               <!-- .modal-body -->
               <div class="modal-body">
-                <button type="button" class="btn btn-secondary"><i class="fa fa-download"></i> Download File</button>
-                <button type="button" class="btn btn-secondary"><i class="fa fa-upload"></i> Upload File</button>
-                <hr>
+                <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/edit_file', 'novalidate'); ?>
+                  <p class="font-weight-bold">UPLOAD</p>
+                  <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
+                  <!-- .form-group -->
+                    <div class="form-group">
+                      <label for="edit_file">File Review</label>
+                      <!-- .input-group -->
+                      <div class="input-group input-group-alt">
+                        <div class="custom-file">
+                          <?= form_upload('edit_file','','class="custom-file-input"') ?> 
+                          <label class="custom-file-label" for="edit_file">Choose file</label>
+                          <div class="invalid-feedback">Field is required</div>
+                        </div>
+                        <div class="input-group-append">
+                          <button class="btn btn-primary" type="submit" value="Submit" id="btn-upload-edit"><i class="fa fa-upload"></i> Upload</button>
+                        </div>
+                      </div>
+                      <!-- /.input-group -->
+                    </div>
+                    <!-- /.form-group -->
+                <?= form_close(); ?>
+                <hr class="my-3">
+                <?=(!empty($input->edit_file))? '<a href="'.base_url('draftfile/'.$input->edit_file).'" class="btn btn-success"><i class="fa fa-download"></i> '.$input->edit_file.'</a>' : '' ?>
+                <hr class="my-3">
                 <!-- .form -->
-                <form>
+                <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formedit"') ?>
                   <!-- .fieldset -->
                   <fieldset>
                     <!-- .form-group -->
@@ -78,7 +106,7 @@
                       <label for="ce" class="font-weight-bold">Catatan Editor</label>
                       <?php 
                       $optionsce = array(
-                          'name' => 'review_notes',
+                          'name' => 'edit_notes',
                           'class'=> 'form-control',
                           'id'  => 'ce',
                           'rows' => '6',
@@ -98,14 +126,14 @@
                       <label for="cep" class="font-weight-bold">Catatan Penulis</label>
                       <?php 
                       $optionscep = array(
-                          'name' => 'author_review_notes',
+                          'name' => 'edit_notes_author',
                           'class'=> 'form-control',
                           'id'  => 'cep',
                           'rows' => '6',
-                          'value'=> $input->author_edit_notes
+                          'value'=> $input->edit_notes_author
                       );
                       if($ceklevel!='author'){
-                        echo '<div class="font-italic">'.nl2br($input->author_edit_notes).'</div>';
+                        echo '<div class="font-italic">'.nl2br($input->edit_notes_author).'</div>';
                       }else{
                         echo form_textarea($optionscep);
                       }
@@ -118,8 +146,8 @@
               <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
-                <button class="btn btn-primary">Simpan</button>
-                <form>
+                <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-edit">Submit</button>
+                <?= form_close(); ?>
                 <!-- /.form -->
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>
@@ -144,7 +172,7 @@
               <!-- .modal-body -->
               <div class="modal-body">
                 <!-- .form -->
-                <form>
+                <?=form_open('', ''); ?>
                   <!-- .fieldset -->
                   <fieldset>
                      <!-- .form-group -->
@@ -158,7 +186,6 @@
                   <div class="d-flex">
                     <button class="btn btn-primary ml-auto" type="submit" id="btn-pilih-editor">Pilih</button>
                   </div>
-                  
                   <hr>
                   <div id="reload-editor">
                     <?php if ($editors):?>
@@ -195,20 +222,97 @@
               <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
-                
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>
               <!-- /.modal-footer -->
-              </form>
-              <!-- /.form -->
+              <?= form_close(); ?>
             </div>
             <!-- /.modal-content -->
           </div>
           <!-- /.modal-dialog -->
         </div>
       <!-- /.modal -->
-      </div>
+      <!-- modal deadline -->
+          <div class="modal fade" id="edit_deadline" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <!-- .modal-dialog -->
+            <div class="modal-dialog" role="document">
+              <!-- .modal-content -->
+              <div class="modal-content">
+                <!-- .modal-header -->
+                <div class="modal-header">
+                  <h5 class="modal-title">Deadline Editorial</h5>
+                </div>
+                <!-- /.modal-header -->
+                <!-- .modal-body -->
+                <div class="modal-body">
+                  <!-- .form -->
+                  <?= form_open('draft/ubahnotes/'.$input->draft_id) ?>
+                    <!-- .fieldset -->
+                    <fieldset>
+                    <!-- .form-group -->
+                    <div class="form-group">
+                      <label for="edit_deadline">Deadline Edit</label>
+                      <div>
+                        <?= form_input('edit_deadline', $input->edit_deadline, 'class="form-control mydate" id="edit_deadline" required=""') ?>
+                      </div>
+                        <div class="invalid-feedback">Harap diisi</div>
+                        <?= form_error('edit_deadline') ?>
+                    </div>
+                    <!-- /.form-group -->
+                    </fieldset>
+                    <!-- /.fieldset -->
+                </div>
+                <!-- /.modal-body -->
+                <!-- .modal-footer -->
+                <div class="modal-footer">
+                  <button class="btn btn-primary" type="submit" id="btn-edit-deadline">Pilih</button>
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                </div>
+                <!-- /.modal-footer -->
+                <?=form_close(); ?>
+                  <!-- /.form -->
+              </div>
+              <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+          </div>
+        <!-- /.modal -->
     </div>
     <!-- /.card-body -->
   </section>
   <!-- /.card -->
+
+  <script>
+    $(document).ready(function(){
+      $('#btn-submit-edit').on('click',function(){
+        var $this = $(this);
+        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+        let id=$('[name=draft_id]').val();
+        let ce=$('#ce').val();
+        let cep=$('#cep').val();
+        $.ajax({
+          type : "POST",
+          url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
+          datatype : "JSON",
+          data : {
+            edit_notes : ce,
+            edit_notes_author : cep
+          },
+          success :function(data){
+            let datax = JSON.parse(data);
+            console.log(datax)
+            $this.removeAttr("disabled").html("Submit");
+            if(datax.status == true){
+            toastr_view('111');
+            }else{
+            toastr_view('000');
+          }
+          }
+        });
+        return false;
+      });
+
+      
+
+    })
+  </script>

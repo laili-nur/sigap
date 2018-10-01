@@ -1,4 +1,53 @@
-
+function toastr_view(param){
+  toastr.options = {
+      "closeButton": true,
+      "debug": false,
+      "newestOnTop": true,
+      "progressBar": false,
+      "positionClass": "toast-top-right",
+      "preventDuplicates": false,
+      "onclick": null,
+      "showDuration": "500",
+      "hideDuration": "500",
+      "timeOut": "2000",
+      "extendedTimeOut": "1000",
+      "showEasing": "linear",
+      "hideEasing": "linear",
+      "showMethod": "fadeIn",
+      "hideMethod": "fadeOut"
+  };
+  if(param == '1'){
+    toastr.success('Penulis berhasil dipilih');
+  }else if(param == '2'){
+    toastr.success('Penulis dihapus');
+  }else if(param == '3'){
+    toastr.success('Reviewer berhasil dipilih');
+  }else if(param == '4'){
+    toastr.success('Reviewer dihapus');
+  }else if(param == '5'){
+    toastr.success('Editor berhasil dipilih');
+  }else if(param == '6'){
+    toastr.success('Editor dihapus');
+  }else if(param == '7'){
+    toastr.success('Layouter berhasil dipilih');
+  }else if(param == '8'){
+    toastr.success('Layouter dihapus');
+  }else if(param == '11'){
+    toastr.error('Penulis sudah terpilih');
+  }else if(param == '22'){
+    toastr.error('Reviewer sudah terpilih');
+  }else if(param == '33'){
+    toastr.error('Editor sudah terpilih');
+  }else if(param == '44'){
+    toastr.error('Layouter sudah terpilih');
+  }else if(param == '99'){
+    toastr.error('Reviewer max 2');
+  }else if(param == '111'){
+    toastr.success('Data Saved');
+  }else if(param == '000'){
+    toastr.error('Failed to Save');
+  }
+}
 
 // // Datepicker
 

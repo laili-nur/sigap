@@ -10,9 +10,18 @@
             <?= form_open('draftreviewer/add/'.$input->draft_id) ?>
               <!-- .fieldset -->
               <fieldset>
-                <legend>Pilih Reviewer untuk draft <strong><?= konversiID('draft','draft_id',$input->draft_id)->draft_title ?></strong></legend>
+                <legend>Pilih Reviewer untuk draft </legend>
                 <?= isset($input->draft_reviewer_id) ? form_hidden('draft_reviewer_id', $input->draft_reviewer_id) : '' ?>
-                <?= form_hidden('draft_id', $input->draft_id, 'class="form-control" id="draft_id" readonly=""') ?>
+                <!-- .form-group -->
+                <div class="form-group">
+                  <label for="user_id">Nama Draft
+                    <abbr title="Required">*</abbr>
+                  </label>
+                  <?= form_dropdown('draft_id', getDropdownList('draft', ['draft_id', 'draft_title']), $input->draft_id, 'id="draft_id" class="form-control custom-select d-block"') ?>
+                  <div class="invalid-feedback">erot</div>
+                  <?= form_error('draft_id') ?>
+                </div>  
+                <!-- /.form-group -->
                 <!-- .form-group -->
                 <div class="form-group">
                   <label for="user_id">Nama Reviewer

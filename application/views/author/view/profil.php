@@ -30,7 +30,13 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> Gelar </td>
-                <td>: <?= $input->author_degree_front ?>, <?= $input->author_degree_front ?></td>
+                <td>: <?= $input->author_degree_front ?>, <?= $input->author_degree_back ?></td>
+              </tr>
+              <!-- /tr -->
+              <!-- tr -->
+              <tr>
+                <td width="200px"> Pendidikan Terakhir </td>
+                <td>: <?= ucwords($input->author_latest_education) ?></td>
               </tr>
               <!-- /tr -->
               <!-- tr -->

@@ -77,10 +77,11 @@
                 <thead>
                   <tr>
                     <th scope="col" class="pl-4">No</th>
-                    <th scope="col">Draft Title</th>
-                    <th scope="col">Worksheet Number</th>
-                    <th scope="col">Reprint Status</th>
+                    <th scope="col">Judul Draft</th>
+                    <th scope="col">Nomor Lembar Kerja</th>
+                    <th scope="col">Jenis</th>
                     <th scope="col">Status</th>
+                    <th scope="col">PIC</th>
                     <th style="width:100px; min-width:100px;"> &nbsp; </th>
                   </tr>
                 </thead>
@@ -93,21 +94,22 @@
                     <td class="align-middle pl-4"><?= ++$i ?></td>
                     <td class="align-middle"><a href="<?= base_url('draft/view/'.$worksheet->draft_id) ?>"><?= $worksheet->draft_title ?></a></td>
                     <td class="align-middle"><?= $worksheet->worksheet_num ?></td>
-                    <td class="align-middle"><?= $worksheet->is_reprint == 'y' ? 'Reprint' : 'Not Reprint' ?></td>
+                    <td class="align-middle"><?= $worksheet->is_reprint == 'y' ? 'Cetak Ulang' : 'Baru' ?></td>
                     <td class="align-middle"><?=
                             $status = "";
                             if ($worksheet->worksheet_status > 0) {
                                 if ($worksheet->worksheet_status == 1) {
                                     $status = "Approved";
-                                } elseif ($worksheet->worksheet_status == 2) {
+                                } else {
                                     $status = "Rejected";
-                                } else{}
+                                }
                             } else {
                                 $status = "Waiting";
                             }
                             echo $status;
                             ?>        
                     </td>
+                    <td class="align-middle"><?= $worksheet->worksheet_pic ?></td>
                     <td class="align-middle text-right">
 
                       <a href="<?= base_url('worksheet/action/'.$worksheet->worksheet_id.'/1') ?>" class="btn btn-sm btn-success">

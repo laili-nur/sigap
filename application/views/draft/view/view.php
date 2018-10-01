@@ -1,3 +1,4 @@
+
 <?php $ceklevel = $this->session->userdata('level'); ?>
 <!-- .page-title-bar -->
   <header class="page-title-bar">
@@ -28,7 +29,6 @@
   </div>
   <!-- .card -->
   <section id="data-draft" class="card">
-    
     <!-- .card-header -->
     <header class="card-header">
       <ul class="nav nav-tabs card-header-tabs">
@@ -44,7 +44,6 @@
         <?php endif ?>
         <!-- if hilangkan tab data reviewer -->
         <?php if($ceklevel != 'author' and $ceklevel != 'reviewer'): ?>
-          
         <li class="nav-item">
           <a class="nav-link" data-toggle="tab" href="#data-reviewer">Data Reviewer <span><?=(!$reviewers)?'<label class="badge badge-warning">Required</label>':'' ?></span></a>
         </li>
@@ -142,7 +141,6 @@
             <button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#pilihauthor">Pilih Penulis</button>
           </div>
           <?php endif ?>
-          <div class="alert alert-success" style="display: none" id="penulisberhasil">Sukses Memilih Penulis</div>
           <div id="reload-author">
           <?php if ($authors):?>
           <?php $i=1; ?>
@@ -208,7 +206,6 @@
             <button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#pilihreviewer">Pilih Reviewer</button>
           </div>
           <?php endif ?>
-          <div class="alert alert-success" style="display: none" id="reviewerberhasil">Sukses Memilih Reviewer</div>
           <div id="reload-reviewer">
           <?php if ($reviewers):?>
           <?php $ii=1; ?>
@@ -287,10 +284,8 @@
             <fieldset>
             <!-- .form-group -->
             <div class="form-group" id="form-author">
-              <label for="user_id">Nama Penulis
-                <abbr title="Required">*</abbr>
-              </label>
-              <?= form_dropdown('author', getDropdownList('author', ['author_id', 'author_name']), '', 'id="pilih_author" class="form-control custom-select d-block" required') ?>
+              <label for="user_id">Nama Penulis</label>
+              <?= form_dropdown('author', getDropdownList('author', ['author_id', 'author_name']), '', 'id="pilih_author" class="form-control custom-select d-block"') ?>
             </div>
             <!-- /.form-group -->
             </fieldset>
@@ -332,10 +327,8 @@
             <fieldset>
             <!-- .form-group -->
             <div class="form-group" id="form-reviewer">
-              <label for="user_id">Nama Reviewer
-                <abbr title="Required">*</abbr>
-              </label>
-              <?= form_dropdown('reviewer', getDropdownList('reviewer', ['reviewer_id', 'reviewer_name']), '', 'id="pilih_reviewer" class="form-control custom-select d-block" required') ?>
+              <label for="user_id">Nama Reviewer</label>
+              <?= form_dropdown('reviewer', getDropdownList('reviewer', ['reviewer_id', 'reviewer_name']), '', 'id="pilih_reviewer" class="form-control custom-select d-block"') ?>
             </div>
             <!-- /.form-group -->
             </fieldset>
@@ -348,7 +341,7 @@
           <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
         </div>
         <!-- /.modal-footer -->
-        <form>
+        </form>
           <!-- /.form -->
       </div>
       <!-- /.modal-content -->
@@ -356,18 +349,21 @@
     <!-- /.modal-dialog -->
   </div>
 <!-- /.modal -->
-<?php if($ceklevel != 'reviewer'): ?>
-  <?php $this->load->view('draft/view/desk_screening'); ?>
-<?php endif ?>
+<?php if($ceklevel != 'reviewer'){
+  $this->load->view('draft/view/desk_screening');
+}?>
   
 <!-- jika desk screening ditolak, maka progress tidak ditampilkan -->
 <?php if ($desk->worksheet_status == 1): ?>
+  <!-- reviewer tidak bisa melihat progress draft -->
   <?php if($ceklevel != 'reviewer'): ?>
     <!-- panel-progress -->
     <?php $this->load->view('draft/view/progress'); ?>
   <?php endif ?>
+  <!-- endif reviewer tidak bisa melihat progress draft -->
   <!-- progress-review -->
   <?php $this->load->view('draft/view/review'); ?>
+  <!-- reviewer tidak bisa melihat progress draft -->
   <?php if($ceklevel != 'reviewer'): ?>
     <!-- progress-edit -->
     <?php $this->load->view('draft/view/edit'); ?>
@@ -434,9 +430,10 @@
           console.log(datapenulis);
           if(!datapenulis.validasi){
             $('#form-author').append('<div class="text-danger help-block">Penulis sudah dipilih</div>');
+            toastr_view('11');
           }else{
             $('#pilihauthor').modal('hide');
-            $('#penulisberhasil').show(0).delay(2000).hide(0);
+            toastr_view('1');
           }
           $('[name=author]').val("");
           $('#reload-author').load(' #reload-author');
@@ -466,9 +463,12 @@
           console.log(datareviewer);
           if(!datareviewer.validasi){
             $('#form-reviewer').append('<div class="text-danger help-block">reviewer sudah dipilih</div>');
+            toastr_view('22');
+          }else if(datareviewer.validasi == 'max'){
+            toastr_view('99');
           }else{
             $('#pilihreviewer').modal('hide');
-            $('#reviewerberhasil').show(0).delay(2000).hide(0);
+            toastr_view('3');
           }
           $('[name=reviewer]').val("");
           $('#reload-reviewer').load(' #reload-reviewer');
@@ -489,6 +489,7 @@
         type : "POST",
         url : "<?php echo base_url('responsibility/add') ?>",
         datatype : "JSON",
+        cache:false,
         data : {
           draft_id : draft,
           user_id : editor
@@ -498,10 +499,13 @@
           console.log(dataeditor);
           if(!dataeditor.validasi){
             $('#form-editor').append('<div class="text-danger help-block">editor sudah dipilih</div>');
+            toastr_view('33');
+          }else{
+            toastr_view('5');
           }
           $('[name=editor]').val("");
           $('#reload-editor').load(' #reload-editor');
-          //lambat $('#label-editor').load(' #label-editor');
+          //$('#list-group-edit').load(' #list-group-edit');
           $this.removeAttr("disabled").html("Pilih");
         }
 
@@ -530,10 +534,13 @@
           console.log(datalayouter);
           if(!datalayouter.validasi){
             $('#form-layouter').append('<div class="text-danger help-block">layouter sudah dipilih</div>');
+            toastr_view('44');
+          }else{
+            toastr_view('7');
           }
           $('[name=layouter]').val("");
           $('#reload-layouter').load(' #reload-layouter');
-          //lambat $('#label-layouter').load(' #label-layouter');
+          //$('#list-group-layout').load(' #list-group-layout');
           $this.removeAttr("disabled").html("Pilih");
         }
 
@@ -552,6 +559,8 @@
           url : "<?php echo base_url('draftauthor/delete/') ?>"+id,
           success : function(data){
             $('#reload-author').load(' #reload-author');
+
+            toastr_view('2');
           }
 
         })
@@ -566,6 +575,7 @@
           url : "<?php echo base_url('draftreviewer/delete/') ?>"+id,
           success : function(data){
             $('#reload-reviewer').load(' #reload-reviewer');
+            toastr_view('4');
           }
 
         })
@@ -581,7 +591,8 @@
           success : function(data){
             console.log(data);
             $('#reload-editor').load(' #reload-editor');
-            //lambat $('#label-editor').load(' #label-editor');
+            toastr_view('6');
+            //$('#list-group-edit').load(' #list-group-edit');
           }
 
         })
@@ -597,12 +608,108 @@
           success : function(data){
             console.log(data);
             $('#reload-layouter').load(' #reload-layouter');
+            toastr_view('8');
             //lambat $('#label-editor').load(' #label-editor');
           }
 
         })
     });
 
+    //review deadline
+    $('#btn-review-deadline').on('click',function(){
+        var $this = $(this);
+        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+        let id=$('[name=draft_id]').val();
+        let rd1=$('[name=review1_deadline]').val();
+        let rd2=$('[name=review2_deadline]').val();
+        $.ajax({
+          type : "POST",
+          url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
+          datatype : "JSON",
+          data : {
+            review1_deadline : rd1,
+            review2_deadline : rd2,
+          },
+          success :function(data){
+            let datax = JSON.parse(data);
+            console.log(datax)
+            $this.removeAttr("disabled").html("Submit");
+            if(datax.status == true){
+              toastr_view('111');
+            }else{
+              toastr_view('000');
+            }
+             $('#list-group-review').load(' #list-group-review');
+          }
+        });
+        return false;
+      });
+
+    //edit deadline
+    $('#btn-edit-deadline').on('click',function(){
+        var $this = $(this);
+        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+        let id=$('[name=draft_id]').val();
+        let ed=$('[name=edit_deadline]').val();
+        $.ajax({
+          type : "POST",
+          url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
+          datatype : "JSON",
+          data : {
+            edit_deadline : ed
+          },
+          success :function(data){
+            let datax = JSON.parse(data);
+            console.log(datax)
+            $this.removeAttr("disabled").html("Submit");
+            if(datax.status == true){
+              toastr_view('111');
+            }else{
+              toastr_view('000');
+            }
+             $('#list-group-edit').load(' #list-group-edit');
+          }
+        });
+        return false;
+      });
+
+    //layout deadline
+    $('#btn-layout-deadline').on('click',function(){
+        var $this = $(this);
+        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+        let id=$('[name=draft_id]').val();
+        let ld=$('[name=layout_deadline]').val();
+        $.ajax({
+          type : "POST",
+          url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
+          datatype : "JSON",
+          data : {
+            layout_deadline : ld
+          },
+          success :function(data){
+            let datax = JSON.parse(data);
+            console.log(datax)
+            $this.removeAttr("disabled").html("Submit");
+            if(datax.status == true){
+              toastr_view('111');
+            }else{
+              toastr_view('000');
+            }
+             $('#list-group-layout').load(' #list-group-layout');
+          }
+        });
+        return false;
+      });
+
+    //pilih waktu di modal
+    flatpickr('.mydate',{
+        disableMobile: true,
+        altInput: true,
+        minDate: 'today',
+        altFormat: 'j F Y',
+        dateFormat: 'Y-m-d',
+        static: true
+      });
   
   });
 </script>

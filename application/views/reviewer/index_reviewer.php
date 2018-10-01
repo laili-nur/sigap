@@ -78,9 +78,9 @@
                   <tr>
                     <th scope="col" class="pl-4">No</th>
                     <th scope="col">User Name</th>
-                    <th scope="col">Reviewer NIP</th>
-                    <th scope="col">Reviewer Name</th>
-                    <th scope="col">Faculty Name</th> 
+                    <th scope="col">NIP</th>
+                    <th scope="col">Nama</th>
+                    <th scope="col">Fakultas</th> 
                     <th style="width:100px; min-width:100px;"> &nbsp; </th>
                   </tr>
                 </thead>
