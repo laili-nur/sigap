@@ -28,6 +28,7 @@ class Reviewer extends Operator_Controller
         } else {
             $input = (object) $this->input->post(null, true);
         }
+        $input->expert = implode(",",$input->expert);
 
         if (!$this->reviewer->validate()) {
             $pages     = $this->pages;
@@ -50,6 +51,20 @@ class Reviewer extends Operator_Controller
         public function edit($id = null)
 	{
         $reviewer = $this->reviewer->where('reviewer_id', $id)->get();
+
+        // untuk select2 tags sumber
+        $allexpert = $this->reviewer->select('expert')->getAll();
+        foreach ($allexpert as $value) {
+            $pecah = explode(",",$value->expert);
+            foreach ($pecah as $key => $value) {        
+                $reviewer->sumber[$value] = $value;
+            }
+        }
+        
+        // untuk select2 tags pilihan
+        $reviewer->pilih = explode(",",$reviewer->expert);
+        
+
         if (!$reviewer) {
             $this->session->set_flashdata('warning', 'Reviewer data were not available');
             redirect('reviewer');
@@ -66,9 +81,12 @@ class Reviewer extends Operator_Controller
             $main_view   = 'reviewer/form_reviewer';
             $form_action = "reviewer/edit/$id";
 
-            $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
+            $this->load->view('template', compact('siap','pages', 'main_view', 'form_action', 'input'));
             return;
         }
+
+        //gabungkan array masuk ke db
+        $input->expert = implode(",",$input->expert);
 
         if ($this->reviewer->where('reviewer_id', $id)->update($input)) {
             $this->session->set_flashdata('success', 'Data updated');
@@ -102,6 +120,7 @@ class Reviewer extends Operator_Controller
         $reviewers     = $this->reviewer->like('reviewer_nip', $keywords)
                                   ->orLike('reviewer_name', $keywords)
                                   ->orLike('faculty_name', $keywords)
+                                  ->orLike('expert', $keywords)
                                   ->orLike('username', $keywords)
                                   ->join('faculty')
                                   ->join('user')
@@ -111,6 +130,7 @@ class Reviewer extends Operator_Controller
                                   ->getAll();
         $tot        = $this->reviewer->like('reviewer_id', $keywords)
                                   ->orLike('reviewer_name', $keywords)
+                                  ->orLike('expert', $keywords)
                                   ->join('faculty')
                                   ->orderBy('faculty.faculty_id')
                                   ->orderBy('reviewer_name')

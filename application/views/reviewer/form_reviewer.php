@@ -83,21 +83,15 @@
             </label>
             <?= form_dropdown('faculty_id', getDropdownList('faculty', ['faculty_id', 'faculty_name']), $input->faculty_id, 'id="faculty_id" class="form-control custom-select d-block" required') ?>
             <div class="invalid-feedback">Field is required</div>
-            <?= form_error('user_id') ?>
+            <?= form_error('faculty_id') ?>
           </div>
           <!-- /.form-group -->
           <!-- .form-group -->
           <div class="form-group">
-            <label for="expert">Kepakaran</label>
-            <div class="has-clearable">
-              <button type="button" class="close" aria-label="Close">
-                <span aria-hidden="true">
-                  <i class="fa fa-times-circle"></i>
-                </span>
-              </button>
-              <?= form_textarea('expert', $input->expert, 'class="form-control"') ?>
-               </div>
-            <div class="invalid-feedback"> erot </div>
+            <label for="expert">Bidang</label>
+              <?= form_dropdown('expert[]',$input->sumber,$input->pilih, 'id="expert" class="form-control custom-select d-block" multiple="multiple" required') ?> 
+              <small class="form-text text-muted">Pilih bidang yang telah ada, atau tambahkan bidang baru</small>
+            <div class="invalid-feedback"> Field is required </div>
             <?= form_error('expert') ?>
           </div>
           <!-- /.form-group -->
@@ -128,6 +122,11 @@
       $("#faculty_id").select2({
         placeholder: '-- Choose --',
         allowClear: true
+      });
+      $("#expert").select2({
+        tags:true,
+        placeholder: '-- Multiple --',
+        tokenSeparators: [',', ' ']
       });
 
     })

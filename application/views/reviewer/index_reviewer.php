@@ -81,6 +81,7 @@
                     <th scope="col">NIP</th>
                     <th scope="col">Nama</th>
                     <th scope="col">Fakultas</th> 
+                    <th scope="col">Bidang</th> 
                     <th style="width:100px; min-width:100px;"> &nbsp; </th>
                   </tr>
                 </thead>
@@ -95,6 +96,7 @@
                     <td class="align-middle"><?= $reviewer->reviewer_nip ?></td>
                     <td class="align-middle"><?= $reviewer->reviewer_name ?></td>
                     <td class="align-middle"><?= $reviewer->faculty_name  ?></td>
+                    <td class="align-middle"><?= $reviewer->expert  ?></td>
                     <td class="align-middle text-right">
                       <a href="<?= base_url('reviewer/edit/'.$reviewer->reviewer_id.'') ?>" class="btn btn-sm btn-secondary">
                         <i class="fa fa-pencil-alt"></i>
