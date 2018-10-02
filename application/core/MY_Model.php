@@ -94,10 +94,23 @@ class MY_Model extends CI_Model
         return $this;
     }
 
+    public function orWhere($column, $condition)
+    {
+        $this->db->or_where($column, $condition);
+        return $this;
+    }
+
     public function whereRelation($table_middle, $condition, $table_from = "")
     {
         $table = $this->checkTable($table_from);
         $this->db->where("$table_middle.{$table}_id", $condition);
+        return $this;
+    }
+
+    public function orWhereRelation($table_middle, $condition, $table_from = "")
+    {
+        $table = $this->checkTable($table_from);
+        $this->db->or_where("$table_middle.{$table}_id", $condition);
         return $this;
     }
     
@@ -252,9 +265,28 @@ class MY_Model extends CI_Model
         }
     }
 
-    public function editDraftDate($id, $column) {
-        $data = array($column => date('Y-m-d H:i:s'));
+    public function editDraftDate($id, $column, $date = '') {
+        if ($date == "") {
+            $date = date('Y-m-d H:i:s');
+        }
+
+        $data = array($column => $date);
         $this->where('draft_id', $id)
              ->update($data, 'draft');
+    }
+
+    public function getIdRoleFromUserId($user_id, $role) {
+        $id = 0;
+
+        $data =  $this->select($role . '_id')
+                      ->joinRelationDest('user', $role)
+                      ->whereRelation($role, $user_id, 'user')
+                      ->getRowArray($role);
+
+        if ($data) {
+            $id = $data[$role . '_id'];
+        }
+
+        return $id;
     }
 }

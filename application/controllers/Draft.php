@@ -32,7 +32,7 @@ class Draft extends Operator_Controller
         //tampilkan author dan status draft
         foreach ($drafts as $key => $value) {
             $authors = $this->draft->getIdAndName('author', 'draft_author', $value->draft_id);
-            $value->author = $authors;
+            $value->authors = $authors;
             $value->draft_status = $this->checkStatus($value->draft_status);
         }
         
@@ -119,6 +119,12 @@ class Draft extends Operator_Controller
     {
 
         $draft = $this->draft->where('draft_id', $id)->get();
+        if (!$draft) {
+            $this->session->set_flashdata('warning', 'Draft data were not available');
+            redirect('draft');
+        }
+
+        //status draft
         $draft->draft_status = $this->checkStatus($draft->draft_status);
         
         // ambil tabel worksheet
@@ -126,10 +132,6 @@ class Draft extends Operator_Controller
         $ambil_worksheet = ['draft_id' => $id];
         $desk = $this->worksheet->getWhere($ambil_worksheet, 'worksheet');
 
-        if (!$draft) {
-            $this->session->set_flashdata('warning', 'Draft data were not available');
-            redirect('draft');
-        }
 
         if (!$_POST) {
             $input = (object) $draft;
@@ -145,6 +147,7 @@ class Draft extends Operator_Controller
         // tabel reviewer
         $reviewers =  $this->draft->select(['draft_reviewer.reviewer_id','draft_reviewer_id','reviewer_name','reviewer_nip','faculty_name','username'])->join3('draft_reviewer','draft','draft')->join3('reviewer','draft_reviewer','reviewer')->join3('faculty','reviewer','faculty')->join3('user','reviewer','user')->where('draft_reviewer.draft_id',$id)->getAll();
 
+        //cari reviewer 1 dan 2
         $reviewer_order = key(array_filter(
             $reviewers,
             function ($e) {
@@ -158,6 +161,29 @@ class Draft extends Operator_Controller
         // tampilkan layouter
         $layouters = $this->draft->select(['username','level','responsibility_id'])->join3('responsibility','draft','draft')->join3('user','responsibility','user')->where('responsibility.draft_id',$id)->where('level','layouter')->getAll();
 
+        //prevent ganti link
+        if ($this->level == "reviewer") {
+            $prevent = count(array_filter(
+                    $reviewers,
+                    function ($e) {
+                        return $e->reviewer_id == $this->role_id;
+                    }
+                ));
+            if($prevent==0){
+                redirect('draft');
+            };
+        }
+        if ($this->level == "author") {
+            $prevent = count(array_filter(
+                    $authors,
+                    function ($e) {
+                        return $e->author_id == $this->role_id;
+                    }
+                ));
+            if($prevent==0){
+                redirect('draft');
+            };
+        }
 
 
         // If something wrong
@@ -166,7 +192,7 @@ class Draft extends Operator_Controller
             $main_view   = 'draft/view/view';
             $form_action = "draft/edit/$id";
 
-            $this->load->view('template', compact('reviewer_order','desk','pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers','editors','layouters'));
+            $this->load->view('template', compact('draft','reviewer_order','desk','pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers','editors','layouters'));
             return;
         }
         
@@ -180,6 +206,7 @@ class Draft extends Operator_Controller
         redirect('draft');
     }
 
+    //upload file tiap tahap
     public function upload_progress($id = null,$column){
         $draft = $this->draft->where('draft_id', $id)->get();
         $datatitle = ['draft_id'=>$id];
@@ -232,8 +259,7 @@ class Draft extends Operator_Controller
 
     }
 
-// -- ubah notes --
-      
+// -- ubah notes - buat ubah deadline juga  
       public function ubahnotes($id = null)
 	{
         $data = array();
@@ -263,7 +289,6 @@ class Draft extends Operator_Controller
         }
 
         echo json_encode($data);
-        //redirect('draft/view/'.$id);
 	}
 
     public function edit($id = null)
@@ -356,11 +381,15 @@ class Draft extends Operator_Controller
         public function search($page = null)
         {
         $keywords   = $this->input->get('keywords', true);
+        $this->db->group_by('draft.draft_id');
         $drafts     = $this->draft->like('category_name', $keywords)
                                   ->orLike('draft_title', $keywords)
                                   ->orLike('theme_name', $keywords)
+                                  ->orLike('author_name', $keywords)
                                   ->join('category')
                                   ->join('theme')
+                                  ->joinRelationMiddle('draft', 'draft_author')
+                                  ->joinRelationDest('author', 'draft_author')
                                   ->orderBy('category.category_id')
                                   ->orderBy('theme.theme_id')                
                                   ->orderBy('draft_title')
@@ -371,8 +400,8 @@ class Draft extends Operator_Controller
                                   ->orLike('theme_name', $keywords)
                                   ->join('category')
                                   ->join('theme')
-                                  ->orderBy('category.category_name')
-                                  ->orderBy('theme.theme_name')                
+                                  ->orderBy('category.category_id')
+                                  ->orderBy('theme.theme_id')                
                                   ->orderBy('draft_title')
                                   ->getAll();
         $total = count($tot);
@@ -381,12 +410,36 @@ class Draft extends Operator_Controller
 
         if (!$drafts) {
             $this->session->set_flashdata('warning', 'Data were not found');
-            redirect('draft');
+            redirect($this->pages);
+        } else {
+            foreach ($drafts as $key => $value) {
+                $authors = $this->draft->getIdAndName('author', 'draft_author', $value->draft_id);
+                $value->authors = $authors;
+                $value->draft_status = $this->checkStatus($value->draft_status);
+            }
         }
 
         $pages    = $this->pages;
         $main_view  = 'draft/index_draft';
         $this->load->view('template', compact('pages', 'main_view', 'drafts', 'pagination', 'total'));
+    }
+
+    public function endProgress($id, $status) {
+        $this->draft->updateDraftStatus($id, array('draft_status' => $status + 1));
+
+        switch ($status) {
+            case '4':
+                $column = 'review_end_date';
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+
+        $this->draft->editDraftDate($id, $column);
+
+        $this->detail($id);
     }
 
 
@@ -431,43 +484,28 @@ class Draft extends Operator_Controller
                 $status = 'Review on Progress';
                 break;
             case 5:
-                $status = 'Review Done';
-                break;
-            case 6:
                 $status = 'Choosing Editor';
                 break;
-            case 7:
+            case 6:
                 $status = 'Edit on Progress';
                 break;
-            case 8:
-                $status = 'Edit Done';
-                break;
-            case 9:
+            case 7:
                 $status = 'Choosing Layouter';
                 break;
-            case 10:
+            case 8:
                 $status = 'Layout on Progress';
                 break;
-            case 11:
-                $status = 'Layout Done';
-                break;
-            case 12:
+            case 9:
                 $status = 'Choosing Cover';
                 break;
-            case 13:
+            case 10:
                 $status = 'Cover on Progress';
                 break;
-            case 14:
-                $status = 'Cover Done';
-                break;
-            case 15:
+            case 11:
                 $status = 'Choosing Proofread';
                 break;
-            case 16:
+            case 12:
                 $status = 'Proofread on Progress';
-                break;
-            case 17:
-                $status = 'Proofread Done';
                 break;
             
             default:

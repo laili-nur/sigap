@@ -53,6 +53,11 @@ class Draft_reviewer extends Operator_Controller
             $status = array('draft_status' => 4);
             $this->draft_reviewer->editDraftDate($input->draft_id, 'review_start_date');
             $this->draft_reviewer->updateDraftStatus($input->draft_id, $status);
+            $current_date = strtotime(date('Y-m-d H:i:s'));
+            $end_date = 60 * 24 * 60 * 60;
+            $deadline = date('Y-m-d H:i:s', ($current_date + $end_date));
+            $this->draft_reviewer->editDraftDate($input->draft_id, 'review1_deadline', $deadline);
+            $this->draft_reviewer->editDraftDate($input->draft_id, 'review2_deadline', $deadline);
             $data['validasi'] = true;
             $data['status'] = true;
             //$this->session->set_flashdata('success', 'Data saved');

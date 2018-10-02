@@ -9,6 +9,7 @@ class Admin_Controller extends MY_Controller
         $this->level    = $this->session->userdata('level');
         $this->is_login = $this->session->userdata('is_login');
         $this->user_id = $this->session->userdata('user_id');
+        $this->role_id = $this->session->userdata('role_id');
 
         if (!$this->is_login) {
             redirect(base_url());

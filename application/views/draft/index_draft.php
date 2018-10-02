@@ -92,13 +92,22 @@
                 <!-- /thead -->
                 <!-- tbody -->
                 <tbody>
-                  <?php foreach($drafts as $draft): ?>
+                  <?php foreach($drafts as $draft): 
+                    $authors = '';
+                    foreach ($draft->authors as $key => $value) {
+                        $authors .= $value->author_name;
+                        $authors .= '<br>';
+                    }
+                    $authors = substr($authors, 0, -2);
+                  ?>
                   <!-- tr -->
                   <tr>
                     <td class="align-middle pl-4"><?= ++$i ?></td>
                     <td class="align-middle"><?= $draft->category_name ?></td>
                     <td class="align-middle"><?= $draft->theme_name ?></td>
-                    <td class="align-middle"><a href="<?= base_url('draft/view/'.$draft->draft_id) ?>"><?= $draft->draft_title ?></a></td>
+                    <td class="align-middle">
+                      <a data-toggle="popover" data-placement="right" data-container="body" auto right data-html="true" title="Penulis" data-trigger="hover" data-content="<?php echo empty($authors) ? "Data not found" : $authors;?>" href="<?= base_url('draft/view/'.$draft->draft_id) ?>"><?= $draft->draft_title ?></a>
+                    </td>
                     <td class="align-middle"><?= $draft->entry_date ?></td>
                     <td class="align-middle"><?= $draft->draft_status ?></td>
                     <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
