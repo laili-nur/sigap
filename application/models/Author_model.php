@@ -75,7 +75,7 @@ class Author_model extends MY_Model
             [
                 'field' => 'user_id',
                 'label' => 'User ID',
-                'rules' => 'trim|required|callback_unique_author_username'
+                'rules' => 'trim|callback_unique_author_username'
             ]
             
             

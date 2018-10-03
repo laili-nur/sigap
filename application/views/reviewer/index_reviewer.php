@@ -81,7 +81,7 @@
                     <th scope="col">NIP</th>
                     <th scope="col">Nama</th>
                     <th scope="col">Fakultas</th> 
-                    <th scope="col">Bidang</th> 
+                    <th scope="col">Kepakaran</th> 
                     <th style="width:100px; min-width:100px;"> &nbsp; </th>
                   </tr>
                 </thead>

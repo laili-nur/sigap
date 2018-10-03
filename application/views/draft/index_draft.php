@@ -79,10 +79,12 @@
                 <thead>
                   <tr>
                     <th scope="col" class="pl-4">No</th>
-                    <th scope="col">Category Name</th>
-                    <th scope="col">Theme Name</th>
-                    <th scope="col">Draft Title</th>
-                    <th scope="col">Entry Date</th>
+                    <th scope="col">Kategori</th>
+                    <?php if($ceklevel!='reviewer'): ?>
+                    <th scope="col">Penulis</th>
+                    <?php endif ?>
+                    <th scope="col">Judul</th>
+                    <th scope="col">Tanggal Masuk</th>
                     <th scope="col">Status</th>
                     <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
                     <th style="width:100px; min-width:100px;"> &nbsp; </th>
@@ -104,9 +106,11 @@
                   <tr>
                     <td class="align-middle pl-4"><?= ++$i ?></td>
                     <td class="align-middle"><?= $draft->category_name ?></td>
-                    <td class="align-middle"><?= $draft->theme_name ?></td>
+                    <?php if($ceklevel!='reviewer'): ?>
+                    <td class="align-middle"><?= $draft->authors[0]->author_name ?></td>
+                    <?php endif ?>
                     <td class="align-middle">
-                      <a data-toggle="popover" data-placement="right" data-container="body" auto right data-html="true" title="Penulis" data-trigger="hover" data-content="<?php echo empty($authors) ? "Data not found" : $authors;?>" href="<?= base_url('draft/view/'.$draft->draft_id) ?>"><?= $draft->draft_title ?></a>
+                      <a href="<?= base_url('draft/view/'.$draft->draft_id) ?>"><?= $draft->draft_title ?></a>
                     </td>
                     <td class="align-middle"><?= $draft->entry_date ?></td>
                     <td class="align-middle"><?= $draft->draft_status ?></td>

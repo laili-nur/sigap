@@ -7,6 +7,7 @@ class Operator_Controller extends MY_Controller
 
         $this->username = $this->session->userdata('username');
         $this->level    = $this->session->userdata('level');
+        $this->level_asli    = $this->session->userdata('level_asli');
         $this->is_login = $this->session->userdata('is_login');
         $this->user_id = $this->session->userdata('user_id');
         $this->role_id = $this->session->userdata('role_id');

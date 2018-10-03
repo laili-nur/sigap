@@ -47,6 +47,27 @@
               ?>
             </div>
           </div>
+          <div class="list-group-item justify-content-between">
+            <span class="text-muted">Rekomendasi Reviewer</span>
+            <div>
+              <?php 
+              if($input->review1_flag != ''){
+                if($input->review1_flag == 'y'){
+                  echo '<span class="badge badge-success p-1">1. Setuju</span> ';
+                }else{
+                  echo '<span class="badge badge-danger p-1">1. Menolak</span> ';
+                }
+              }
+              if($input->review2_flag != ''){
+                if($input->review2_flag == 'y'){
+                  echo '<span class="badge badge-success p-1">2. Setuju</span> ';
+                }else{
+                  echo '<span class="badge badge-danger p-1">2. Menolak</span> ';
+                }
+              }
+               ?>
+            </div>
+          </div>
           <?php endif ?>
           <div class="list-group-item justify-content-between">
             <span class="text-muted">Status</span>
@@ -58,8 +79,8 @@
     <div class="card-body">
       <div class="el-example ">
         <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
-        <button class="btn btn-success" style="width:50px"><i class="fa fa-check"></i></button>
-        <button class="btn btn-danger" style="width:50px"><i class="fa fa-times"></i></button>
+        <button class="btn btn-secondary" style="width:50px" data-toggle="modal" data-target="#review_aksi"><i class="fa fa-thumbs-up"></i></button>
+        <!-- <button class="btn btn-danger" style="width:50px"><i class="fa fa-times"></i></button> -->
         <?php endif ?>
         <?php if($reviewer_order=='0'): ?>       
           <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#review1">Review dan Tanggapan 1</button>
@@ -105,7 +126,8 @@
                     <!-- /.form-group -->
                 <?= form_close(); ?>
                 <hr class="my-3">
-                <?=(!empty($input->review1_file))? '<a href="'.base_url('draftfile/'.$input->review1_file).'" class="btn btn-success"><i class="fa fa-download"></i> '.$input->review1_file.'</a>' : '' ?>
+                <p>Last Upload: <?=konversiTanggal($input->review1_upload_date) ?></p>
+                <?=(!empty($input->review1_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review1_file.'" href="'.base_url('draftfile/'.$input->review1_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
                 <hr class="my-3">
                 <!-- .form -->
                 <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formreview1"') ?>
@@ -117,7 +139,7 @@
                       <?php 
                       $optionscr1 = array(
                           'name' => 'review1_notes',
-                          'class'=> 'form-control',
+                          'class'=> 'form-control summernote-basic',
                           'id'  => 'cr1',
                           'rows' => '6',
                           'value'=> $input->review1_notes
@@ -137,7 +159,7 @@
                       <?php 
                       $optionscrp1 = array(
                           'name' => 'review1_notes_author',
-                          'class'=> 'form-control',
+                          'class'=> 'form-control summernote-basic',
                           'id'  => 'crp1',
                           'rows' => '6',
                           'value'=> $input->review1_notes_author
@@ -156,6 +178,16 @@
               <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
+                <div class="custom-control custom-control-inline custom-radio">
+                  <?= form_radio('review1_flag', 'y', isset($input->review1_flag) && ($input->review1_flag == 'y') ? true : false,'required class="custom-control-input" id="review1_flagy"')?>
+                  <label class="custom-control-label" for="review1_flagy">Setuju</label>
+                </div>
+                <div class="custom-control custom-control-inline custom-radio">
+                  <?= form_radio('review1_flag', 'n', isset($input->review1_flag) && ($input->review1_flag == 'n') ? true : false,'required class="custom-control-input" id="review1_flagn"')?>
+                  <label class="custom-control-label" for="review1_flagn">Tidak</label>
+                </div>
+  
+
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-review1">Submit</button>
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>
@@ -202,7 +234,8 @@
                     <!-- /.form-group -->
                 <?= form_close(); ?>
                 <hr class="my-3">
-                <?=(!empty($input->review2_file))? '<a href="'.base_url('draftfile/'.$input->review2_file).'" class="btn btn-success"><i class="fa fa-download"></i> '.$input->review2_file.'</a>' : '' ?>
+                <p>Last Upload: <?=konversiTanggal($input->review2_upload_date) ?></p>
+                <?=(!empty($input->review2_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review2_file.'" href="'.base_url('draftfile/'.$input->review2_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
                 <hr class="my-3">
                 <!-- .form -->
                 <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formreview2"') ?>
@@ -214,7 +247,7 @@
                       <?php 
                       $optionscr2 = array(
                           'name' => 'review2_notes',
-                          'class'=> 'form-control',
+                          'class'=> 'form-control summernote-basic',
                           'id'  => 'cr2',
                           'rows' => '6',
                           'value'=> $input->review2_notes
@@ -233,8 +266,8 @@
                       <label for="crp2" class="font-weight-bold">Catatan Penulis</label>
                       <?php 
                       $optionscrp2 = array(
-                          'name' => 'review2_notes_author',
-                          'class'=> 'form-control',
+                          'name' => 'review2_notes_author ',
+                          'class'=> 'form-control summernote-basic',
                           'id'  => 'crp2',
                           'rows' => '6',
                           'value'=> $input->review2_notes_author
@@ -253,6 +286,15 @@
               <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
+                <div class="custom-control custom-control-inline custom-radio">
+                  <?= form_radio('review2_flag', 'y', isset($input->review2_flag) && ($input->review2_flag == 'y') ? true : false,'required class="custom-control-input" id="review2_flagy"')?>
+                  <label class="custom-control-label" for="review2_flagy">Setuju</label>
+                </div>
+                <div class="custom-control custom-control-inline custom-radio">
+                  <?= form_radio('review2_flag', 'n', isset($input->review2_flag) && ($input->review2_flag == 'n') ? true : false,'required class="custom-control-input" id="review2_flagn"')?>
+                  <label class="custom-control-label" for="review2_flagn">Tidak</label>
+                </div>
+     
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-review2">Submit</button>
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>
@@ -285,8 +327,9 @@
                   <div class="form-group">
                     <label for="review1_deadline">Deadline Reviewer 1</label>
                     <div>
-                      <?= form_input('review1_deadline', $input->review1_deadline, 'class="form-control mydate" id="review1_deadline" required=""') ?>
+                      <?= form_input('review1_deadline', $input->review1_deadline, 'class="form-control mydate_modal d-none" id="review1_deadline" required=""') ?>
                     </div>
+                    
                       <div class="invalid-feedback">Harap diisi</div>
                       <?= form_error('review1_deadline') ?>
                   </div>
@@ -295,7 +338,7 @@
                   <div class="form-group">
                     <label for="review2_deadline">Deadline Reviewer 2</label>
                     <div>
-                      <?= form_input('review2_deadline', $input->review2_deadline, 'class="form-control mydate" id="review2_deadline" required=""') ?>
+                      <?= form_input('review2_deadline', $input->review2_deadline, 'class="form-control mydate_modal d-none" id="review2_deadline" required="" ') ?>
                     </div>
                       <div class="invalid-feedback">Harap diisi</div>
                       <?= form_error('review2_deadline') ?>
@@ -308,6 +351,62 @@
               <!-- .modal-footer -->
               <div class="modal-footer">
                 <button class="btn btn-primary" type="submit" id="btn-review-deadline">Pilih</button>
+                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+              </div>
+              <!-- /.modal-footer -->
+              <?=form_close(); ?>
+                <!-- /.form -->
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+      <!-- /.modal -->
+      <!-- modal deadline -->
+        <div class="modal fade" id="review_aksi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <!-- .modal-dialog -->
+          <div class="modal-dialog" role="document">
+            <!-- .modal-content -->
+            <div class="modal-content">
+              <!-- .modal-header -->
+              <div class="modal-header">
+                <h5 class="modal-title">Aksi</h5>
+              </div>
+              <!-- /.modal-header -->
+              <!-- .modal-body -->
+              <div class="modal-body">
+                <!-- .form -->
+                <?= form_open('draft/ubahnotes/'.$input->draft_id) ?>
+                  <!-- .fieldset -->
+                  <fieldset>
+                  <!-- .form-group -->
+                    <div class="form-group">
+                      <label for="review_status" class="font-weight-bold">Catatan Admin</label>
+                      <?php 
+                      $review_status = array(
+                          'name' => 'review_status',
+                          'class'=> 'form-control summernote-basic',
+                          'id'  => 'crp2',
+                          'rows' => '6',
+                          'value'=> $input->review_status
+                      );
+                      if($ceklevel!='superadmin'){
+                        echo '<div class="font-italic">'.nl2br($input->review_status).'</div>';
+                      }else{
+                        echo form_textarea($review_status);
+                      }
+                       ?>
+                    </div>
+                    <!-- /.form-group -->
+                  
+                  </fieldset>
+                  <!-- /.fieldset -->
+              </div>
+              <!-- /.modal-body -->
+              <!-- .modal-footer -->
+              <div class="modal-footer">
+                <button class="btn btn-success" type="submit" id="review-setuju">Setuju</button>
+                <button class="btn btn-danger" type="submit" id="review-tolak">Tolak</button>
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>
               <!-- /.modal-footer -->
@@ -333,13 +432,15 @@
         let id=$('[name=draft_id]').val();
         let cr1=$('#cr1').val();
         let crp1=$('#crp1').val();
+        let rev1_flag=$('[name=review1_flag]:checked').val();
         $.ajax({
           type : "POST",
           url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
           datatype : "JSON",
           data : {
             review1_notes : cr1,
-            review1_notes_author : crp1
+            review1_notes_author : crp1,
+            review1_flag : rev1_flag,
           },
           success :function(data){
             let datax = JSON.parse(data);
@@ -361,13 +462,17 @@
         let id=$('[name=draft_id]').val();
         let cr2=$('#cr2').val();
         let crp2=$('#crp2').val();
+        let rev2_flag=$('[name=review2_flag]:checked').val();
+        console.log(rev2_flag);
         $.ajax({
           type : "POST",
           url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
           datatype : "JSON",
           data : {
             review2_notes : cr2,
-            review2_notes_author : crp2
+            review2_notes_author : crp2,
+            review2_flag : rev2_flag,
+
           },
           success :function(data){
             let datax = JSON.parse(data);
@@ -383,6 +488,20 @@
         return false;
       });
 
+    //   $('#cr2').summernote({
+    //   placeholder: 'Write here...',
+    //   height: 200,
+    //   disableDragAndDrop: true,
+    //   toolbar: [
+    //     ['style', ['bold', 'italic', 'underline', 'clear']],
+    //     ['font', ['strikethrough']],
+    //     ['fontsize', ['fontsize','height']],
+    //     ['para', ['ul', 'ol', 'paragraph']],
+    //     ['height', ['height']],
+    //     ['view', ['codeview']],
+    //   ],
+      
+    // });
 
     })
   </script>

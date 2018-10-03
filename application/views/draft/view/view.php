@@ -700,16 +700,6 @@
         });
         return false;
       });
-
-    //pilih waktu di modal
-    flatpickr('.mydate',{
-        disableMobile: true,
-        altInput: true,
-        minDate: 'today',
-        altFormat: 'j F Y',
-        dateFormat: 'Y-m-d',
-        static: true
-      });
   
   });
 </script>

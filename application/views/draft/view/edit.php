@@ -55,8 +55,7 @@
     <div class="card-body">
       <div class="el-example">
         <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
-        <button class="btn btn-success" style="width:50px"><i class="fa fa-check"></i></button>
-        <button class="btn btn-danger" style="width:50px"><i class="fa fa-times"></i></button>
+        <button class="btn btn-secondary" style="width:50px" data-toggle="modal" data-target="#edit_aksi"><i class="fa fa-thumbs-up"></i></button>
         <?php endif ?>   
         <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#edit">Edit dan Tanggapan</button>
       </div>
@@ -95,7 +94,8 @@
                     <!-- /.form-group -->
                 <?= form_close(); ?>
                 <hr class="my-3">
-                <?=(!empty($input->edit_file))? '<a href="'.base_url('draftfile/'.$input->edit_file).'" class="btn btn-success"><i class="fa fa-download"></i> '.$input->edit_file.'</a>' : '' ?>
+                <p>Last Upload: <?=konversiTanggal($input->edit_upload_date) ?></p>
+                <?=(!empty($input->edit_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->edit_file.'" href="'.base_url('draftfile/'.$input->edit_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
                 <hr class="my-3">
                 <!-- .form -->
                 <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formedit"') ?>
@@ -107,7 +107,7 @@
                       <?php 
                       $optionsce = array(
                           'name' => 'edit_notes',
-                          'class'=> 'form-control',
+                          'class'=> 'form-control summernote-basic',
                           'id'  => 'ce',
                           'rows' => '6',
                           'value'=> $input->edit_notes
@@ -127,7 +127,7 @@
                       <?php 
                       $optionscep = array(
                           'name' => 'edit_notes_author',
-                          'class'=> 'form-control',
+                          'class'=> 'form-control summernote-basic',
                           'id'  => 'cep',
                           'rows' => '6',
                           'value'=> $input->edit_notes_author
@@ -187,6 +187,7 @@
                     <button class="btn btn-primary ml-auto" type="submit" id="btn-pilih-editor">Pilih</button>
                   </div>
                   <hr>
+                  <p class="font-weight-bold">Editor Terpilih</p>
                   <div id="reload-editor">
                     <?php if ($editors):?>
                     <!-- .table-responsive -->
@@ -251,9 +252,9 @@
                     <fieldset>
                     <!-- .form-group -->
                     <div class="form-group">
-                      <label for="edit_deadline">Deadline Edit</label>
+                      <!-- <label for="edit_deadline">Deadline Edit</label> -->
                       <div>
-                        <?= form_input('edit_deadline', $input->edit_deadline, 'class="form-control mydate" id="edit_deadline" required=""') ?>
+                        <?= form_input('edit_deadline', $input->edit_deadline, 'class="form-control mydate_modal d-none" id="edit_deadline" required=""') ?>
                       </div>
                         <div class="invalid-feedback">Harap diisi</div>
                         <?= form_error('edit_deadline') ?>
@@ -277,6 +278,62 @@
             <!-- /.modal-dialog -->
           </div>
         <!-- /.modal -->
+        <!-- modal deadline -->
+        <div class="modal fade" id="edit_aksi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <!-- .modal-dialog -->
+          <div class="modal-dialog" role="document">
+            <!-- .modal-content -->
+            <div class="modal-content">
+              <!-- .modal-header -->
+              <div class="modal-header">
+                <h5 class="modal-title">Aksi</h5>
+              </div>
+              <!-- /.modal-header -->
+              <!-- .modal-body -->
+              <div class="modal-body">
+                <!-- .form -->
+                <?= form_open('draft/ubahnotes/'.$input->draft_id) ?>
+                  <!-- .fieldset -->
+                  <fieldset>
+                  <!-- .form-group -->
+                    <div class="form-group">
+                      <label for="review_status" class="font-weight-bold">Catatan Admin</label>
+                      <?php 
+                      $review_status = array(
+                          'name' => 'review_status',
+                          'class'=> 'form-control summernote-basic',
+                          'id'  => 'crp2',
+                          'rows' => '6',
+                          'value'=> $input->review_status
+                      );
+                      if($ceklevel!='superadmin'){
+                        echo '<div class="font-italic">'.nl2br($input->review_status).'</div>';
+                      }else{
+                        echo form_textarea($review_status);
+                      }
+                       ?>
+                    </div>
+                    <!-- /.form-group -->
+                  
+                  </fieldset>
+                  <!-- /.fieldset -->
+              </div>
+              <!-- /.modal-body -->
+              <!-- .modal-footer -->
+              <div class="modal-footer">
+                <button class="btn btn-success" type="submit" id="review-setuju">Setuju</button>
+                <button class="btn btn-danger" type="submit" id="review-tolak">Tolak</button>
+                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+              </div>
+              <!-- /.modal-footer -->
+              <?=form_close(); ?>
+                <!-- /.form -->
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+      <!-- /.modal -->
     </div>
     <!-- /.card-body -->
   </section>

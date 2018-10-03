@@ -28,7 +28,18 @@ class Reviewer extends Operator_Controller
         } else {
             $input = (object) $this->input->post(null, true);
         }
-        $input->expert = implode(",",$input->expert);
+
+        // untuk select2 tags sumber
+        $allexpert = $this->reviewer->select('expert')->getAll();
+        foreach ($allexpert as $value) {
+            $pecah = explode(",",$value->expert);
+            foreach ($pecah as $key => $value) {        
+                $input->sumber[$value] = $value;
+            }
+        }
+        // untuk select2 tags pilihan
+        $input->pilih = [];
+
 
         if (!$this->reviewer->validate()) {
             $pages     = $this->pages;
@@ -38,6 +49,9 @@ class Reviewer extends Operator_Controller
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
+
+        //gabungkan array masuk ke db
+        $input->expert = implode(",",$input->expert);
 
         if ($this->reviewer->insert($input)) {
             $this->session->set_flashdata('success', 'Data saved');
@@ -60,7 +74,6 @@ class Reviewer extends Operator_Controller
                 $reviewer->sumber[$value] = $value;
             }
         }
-        
         // untuk select2 tags pilihan
         $reviewer->pilih = explode(",",$reviewer->expert);
         
@@ -81,7 +94,7 @@ class Reviewer extends Operator_Controller
             $main_view   = 'reviewer/form_reviewer';
             $form_action = "reviewer/edit/$id";
 
-            $this->load->view('template', compact('siap','pages', 'main_view', 'form_action', 'input'));
+            $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
 

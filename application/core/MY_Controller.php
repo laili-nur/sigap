@@ -5,6 +5,7 @@ class MY_Controller extends CI_Controller
 
     protected $username = '';
     protected $level = '';
+    protected $level_asli = '';
     protected $is_login = '';
     protected $user_id = '';
     protected $role_id = '';

@@ -1,6 +1,8 @@
 <?php 
     $username = ucwords($this->session->userdata('username'));
-    $level = ucwords(str_replace('_', ' ', $this->session->userdata('level')));
+    $ceklevel = $this->session->userdata('level');
+    $level = ucwords(str_replace('_', ' ', $ceklevel));
+    $ceklevelasli = $this->session->userdata('level_asli');
 ?>
 <header class="app-header">
   <!-- .top-bar -->
@@ -128,8 +130,20 @@
           <!-- .dropdown-menu -->
           <div class="dropdown-menu">
             <h6 class="dropdown-header d-none d-md-block d-lg-none"><?=$username ?></h6>
-            <a class="dropdown-item" href="#">
-              <span class="dropdown-icon oi oi-person"></span> Profile</a>
+
+              <?php if($ceklevelasli=='author_reviewer'): ?>
+                <?php if($ceklevel=='author'): ?>
+                  <a class="dropdown-item" href="<?=base_url('login/multilevel/reviewer') ?>">
+                    <span class="dropdown-icon fa fa-sign-in-alt"></span> Masuk sebagai Reviewer</a>
+                <?php else: ?>
+                  <a class="dropdown-item" href="<?=base_url('login/multilevel/author') ?>">
+                    <span class="dropdown-icon fa fa-sign-in-alt"></span> Masuk sebagai Author</a>
+                <?php endif ?>
+                <hr>
+              <?php endif ?>
+              
+            <a class="dropdown-item" href="">
+              <span class="dropdown-icon oi oi-person"></span> Profil</a>
             <a class="dropdown-item" href="<?=base_url('login/logout') ?>">
               <span class="dropdown-icon oi oi-account-logout"></span> Logout</a>
           </div>

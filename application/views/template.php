@@ -21,10 +21,10 @@
     <link rel="stylesheet" href="<?= base_url('assets/vendor/font-awesome/css/fontawesome-all.min.css')?>">
     <!-- END BASE STYLES -->
     <!-- BEGIN PLUGINS STYLES -->
-    <!-- <link rel="stylesheet" href="<?= base_url('assets/vendor/flatpickr/flatpickr.min.css')?>"> -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="<?= base_url('assets/vendor/flatpickr/flatpickr_new.min.css')?>">
     <link rel="stylesheet" href="<?= base_url('assets/vendor/select2/css/select2.min.css')?>">
     <link rel="stylesheet" href="<?= base_url('assets/vendor/toastr/toastr.min.css')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/vendor/summernote/summernote-bs4.css')?>">
     <!-- END PLUGINS STYLES -->
     <!-- BEGIN THEME STYLES -->
     <link rel="stylesheet" href="<?= base_url('assets/stylesheets/main.css')?>">
@@ -72,8 +72,7 @@
     <!-- BEGIN PLUGINS JS -->
     <script src="<?= base_url('assets/vendor/stacked-menu/stacked-menu.min.js');?>"></script>
     <script src="<?= base_url('assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js')?>"></script>
-    <!-- <script src="<?= base_url('assets/vendor/flatpickr/flatpickr.min.js')?>"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="<?= base_url('assets/vendor/flatpickr/flatpickr_new.min.js')?>"></script> 
     <script src="<?= base_url('assets/vendor/handlebars/handlebars.min.js')?>"></script>
     <script src="<?= base_url('assets/vendor/typeahead.js/typeahead.bundle.min.js')?>"></script>
     <script src="<?= base_url('assets/vendor/select2/js/select2.min.js')?>"></script>
@@ -81,6 +80,7 @@
     <script src="<?= base_url('assets/vendor/Caret/jquery.caret.min.js')?>"></script>
     <script src="<?= base_url('assets/vendor/At.js/js/jquery.atwho.min.js')?>"></script>
     <script src="<?= base_url('assets/vendor/toastr/toastr.min.js')?>"></script>
+    <script src="<?= base_url('assets/vendor/summernote/summernote-bs4.js')?>"></script> 
     <!-- END PLUGINS JS -->
     <!-- BEGIN THEME JS -->
     <script src="<?= base_url('assets/javascript/main.min.js')?>"></script>
@@ -91,6 +91,8 @@
     <script src="<?= base_url('assets/javascript/pages/select2-demo.js')?>"></script>
     <script src="<?= base_url('assets/javascript/pages/easypiechart-demo.js')?>"></script>
     <script src="<?= base_url('assets/javascript/pages/table-demo.js')?>"></script>
+    <script src="<?= base_url('assets/javascript/pages/summernote-demo.js')?>"></script>
+    
     <!-- END PAGE LEVEL JS -->
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-116692175-1"></script>

@@ -29,7 +29,7 @@
       <?= form_open($form_action,'class="needs-validation" novalidate=""') ?>
         <!-- .fieldset -->
         <fieldset>
-          <legend>Data Penulis</legend>
+          <legend>Data Reviewer</legend>
           <?= isset($input->reviewer_id) ? form_hidden('reviewer_id', $input->reviewer_id) : '' ?>
           <!-- .form-group -->
           <div class="form-group">
@@ -88,9 +88,9 @@
           <!-- /.form-group -->
           <!-- .form-group -->
           <div class="form-group">
-            <label for="expert">Bidang</label>
+            <label for="expert">Kepakaran</label>
               <?= form_dropdown('expert[]',$input->sumber,$input->pilih, 'id="expert" class="form-control custom-select d-block" multiple="multiple" required') ?> 
-              <small class="form-text text-muted">Pilih bidang yang telah ada, atau tambahkan bidang baru</small>
+              <small class="form-text text-muted">Pilih kepakaran yang telah ada, atau tambahkan kepakaran baru</small>
             <div class="invalid-feedback"> Field is required </div>
             <?= form_error('expert') ?>
           </div>
@@ -123,6 +123,7 @@
         placeholder: '-- Choose --',
         allowClear: true
       });
+      $('#expert option[value=""]').detach();
       $("#expert").select2({
         tags:true,
         placeholder: '-- Multiple --',

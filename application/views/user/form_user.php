@@ -97,6 +97,11 @@
                           isset($input->level) && ($input->level == 'reviewer') ? true : false,' class="custom-control-input" id="level6"')?>
                         <label class="custom-control-label" for="level6">Reviewer</label>
                       </div>
+                      <div class="custom-control custom-radio">
+                        <?= form_radio('level', 'author_reviewer',
+                          isset($input->level) && ($input->level == 'author_reviewer') ? true : false,' class="custom-control-input" id="level7"')?>
+                        <label class="custom-control-label" for="level7">Author dan Reviewer</label>
+                      </div>
                       <div class="invalid-feedback">Field is required</div>
                      <?= form_error('level') ?>
                   </div>

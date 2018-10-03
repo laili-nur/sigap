@@ -22,8 +22,7 @@
     <div class="card-body">
       <div class="el-example">
         <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
-        <button class="btn btn-success" style="width:50px"><i class="fa fa-check"></i></button>
-        <button class="btn btn-danger" style="width:50px"><i class="fa fa-times"></i></button>    
+        <button class="btn btn-secondary" style="width:50px" data-toggle="modal" data-target="#proofread_aksi"><i class="fa fa-thumbs-up"></i></button>    
         <?php endif ?>
         <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#proofread">Proofread dan Tanggapan</button>
         <!-- modal -->
@@ -61,7 +60,8 @@
                     <!-- /.form-group -->
                 <?= form_close(); ?>
                 <hr class="my-3">
-                <?=(!empty($input->proofread_file))? '<a href="'.base_url('draftfile/'.$input->proofread_file).'" class="btn btn-success"><i class="fa fa-download"></i> '.$input->proofread_file.'</a>' : '' ?>
+                <p>Last Upload: <?=konversiTanggal($input->proofread_upload_date) ?></p>
+                <?=(!empty($input->proofread_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->proofread_file.'" href="'.base_url('draftfile/'.$input->proofread_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
                 <hr class="my-3">
                 <!-- .form -->
                 <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formproofread"') ?>
@@ -73,7 +73,7 @@
                       <?php 
                       $optionscpr = array(
                           'name' => 'proofread_notes',
-                          'class'=> 'form-control',
+                          'class'=> 'form-control summernote-basic',
                           'id'  => 'cpr',
                           'rows' => '6',
                           'value'=> $input->proofread_notes
@@ -93,7 +93,7 @@
                       <?php 
                       $optionscprp = array(
                           'name' => 'proofread_notes_author',
-                          'class'=> 'form-control',
+                          'class'=> 'form-control summernote-basic',
                           'id'  => 'cprp',
                           'rows' => '6',
                           'value'=> $input->proofread_notes_author
@@ -118,6 +118,62 @@
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>
               <!-- /.modal-footer -->
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+      <!-- /.modal -->
+      <!-- modal deadline -->
+        <div class="modal fade" id="proofread_aksi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <!-- .modal-dialog -->
+          <div class="modal-dialog" role="document">
+            <!-- .modal-content -->
+            <div class="modal-content">
+              <!-- .modal-header -->
+              <div class="modal-header">
+                <h5 class="modal-title">Aksi</h5>
+              </div>
+              <!-- /.modal-header -->
+              <!-- .modal-body -->
+              <div class="modal-body">
+                <!-- .form -->
+                <?= form_open('draft/ubahnotes/'.$input->draft_id) ?>
+                  <!-- .fieldset -->
+                  <fieldset>
+                  <!-- .form-group -->
+                    <div class="form-group">
+                      <label for="review_status" class="font-weight-bold">Catatan Admin</label>
+                      <?php 
+                      $review_status = array(
+                          'name' => 'review_status',
+                          'class'=> 'form-control summernote-basic',
+                          'id'  => 'crp2',
+                          'rows' => '6',
+                          'value'=> $input->review_status
+                      );
+                      if($ceklevel!='superadmin'){
+                        echo '<div class="font-italic">'.nl2br($input->review_status).'</div>';
+                      }else{
+                        echo form_textarea($review_status);
+                      }
+                       ?>
+                    </div>
+                    <!-- /.form-group -->
+                  
+                  </fieldset>
+                  <!-- /.fieldset -->
+              </div>
+              <!-- /.modal-body -->
+              <!-- .modal-footer -->
+              <div class="modal-footer">
+                <button class="btn btn-success" type="submit" id="review-setuju">Setuju</button>
+                <button class="btn btn-danger" type="submit" id="review-tolak">Tolak</button>
+                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+              </div>
+              <!-- /.modal-footer -->
+              <?=form_close(); ?>
+                <!-- /.form -->
             </div>
             <!-- /.modal-content -->
           </div>

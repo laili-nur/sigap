@@ -83,7 +83,7 @@
                         <i class="fa fa-times-circle"></i>
                       </span>
                     </button>
-                    <?= form_input('date_open', $input->date_open, 'class="form-control" id="flatpickr03" required=""') ?>
+                    <?= form_input('date_open', $input->date_open, 'class="form-control mydate" id="date_open" required=""') ?>
                      </div>
                     <div class="invalid-feedback">Harap diisi</div>
                     <?= form_error('date_open') ?>
@@ -101,7 +101,7 @@
                         <i class="fa fa-times-circle"></i>
                       </span>
                     </button>
-                    <?= form_input('date_close', $input->date_close, 'class="form-control" id="flatpickr03" required=""') ?>
+                    <?= form_input('date_close', $input->date_close, 'class="form-control mydate" id="date_close" required=""') ?>
                     <div class="invalid-feedback"> Field is Required </div>
                     <?= form_error('date_close') ?>
                 </div>

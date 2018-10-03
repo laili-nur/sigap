@@ -55,8 +55,7 @@
     <div class="card-body">
       <div class="el-example">
         <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
-        <button class="btn btn-success" style="width:50px"><i class="fa fa-check"></i></button>
-        <button class="btn btn-danger" style="width:50px"><i class="fa fa-times"></i></button> 
+        <button class="btn btn-secondary" style="width:50px" data-toggle="modal" data-target="#layout_aksi"><i class="fa fa-thumbs-up"></i></button>
         <?php endif ?>
         <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#layout">Layout dan Tanggapan</button>
         <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#cover">Cover dan Tanggapan</button>
@@ -96,7 +95,8 @@
                     <!-- /.form-group -->
                 <?= form_close(); ?>
                 <hr class="my-3">
-                <?=(!empty($input->layout_file))? '<a href="'.base_url('draftfile/'.$input->layout_file).'" class="btn btn-success"><i class="fa fa-download"></i> '.$input->layout_file.'</a>' : '' ?>
+                <p>Last Upload: <?=konversiTanggal($input->layout_upload_date) ?></p>
+                <?=(!empty($input->layout_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->layout_file.'" href="'.base_url('draftfile/'.$input->layout_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
                 <hr class="my-3">
                 <!-- .form -->
                 <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formlayout"') ?>
@@ -108,7 +108,7 @@
                       <?php 
                       $optionscl = array(
                           'name' => 'layout_notes',
-                          'class'=> 'form-control',
+                          'class'=> 'form-control summernote-basic',
                           'id'  => 'cl',
                           'rows' => '6',
                           'value'=> $input->layout_notes
@@ -128,7 +128,7 @@
                       <?php 
                       $optionsclp = array(
                           'name' => 'layout_notes_author',
-                          'class'=> 'form-control',
+                          'class'=> 'form-control summernote-basic',
                           'id'  => 'clp',
                           'rows' => '6',
                           'value'=> $input->layout_notes_author
@@ -194,7 +194,8 @@
                     <!-- /.form-group -->
                 <?= form_close(); ?>
                 <hr class="my-3">
-                <?=(!empty($input->cover_file))? '<a href="'.base_url('draftfile/'.$input->cover_file).'" class="btn btn-success"><i class="fa fa-download"></i> '.$input->cover_file.'</a>' : '' ?>
+                <p>Last Upload: <?=konversiTanggal($input->cover_upload_date) ?></p>
+                <?=(!empty($input->cover_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->cover_file.'" href="'.base_url('draftfile/'.$input->cover_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
                 <hr class="my-3">
                 <!-- .form -->
                 <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formcover"') ?>
@@ -206,7 +207,7 @@
                       <?php 
                       $optionscc = array(
                           'name' => 'cover_notes',
-                          'class'=> 'form-control',
+                          'class'=> 'form-control summernote-basic',
                           'id'  => 'cc',
                           'rows' => '6',
                           'value'=> $input->cover_notes
@@ -226,7 +227,7 @@
                       <?php 
                       $optionsccp = array(
                           'name' => 'cover_notes_author',
-                          'class'=> 'form-control',
+                          'class'=> 'form-control summernote-basic',
                           'id'  => 'ccp',
                           'rows' => '6',
                           'value'=> $input->cover_notes_author
@@ -286,6 +287,7 @@
                     <button class="btn btn-primary ml-auto" type="submit" id="btn-pilih-layouter">Pilih</button>
                   </div>
                   <hr>
+                  <p class="font-weight-bold">Layouter Terpilih</p>
                   <div id="reload-layouter">
                     <?php if ($layouters):?>
                     <!-- .table-responsive -->
@@ -351,9 +353,9 @@
                   <fieldset>
                   <!-- .form-group -->
                   <div class="form-group">
-                    <label for="layout_deadline">Deadline Layout</label>
+                    <!-- <label for="layout_deadline">Deadline Layout</label> -->
                     <div>
-                      <?= form_input('layout_deadline', $input->layout_deadline, 'class="form-control mydate" id="layout_deadline" required=""') ?>
+                      <?= form_input('layout_deadline', $input->layout_deadline, 'class="form-control mydate_modal d-none" id="layout_deadline" required=""') ?>
                     </div>
                       <div class="invalid-feedback">Harap diisi</div>
                       <?= form_error('layout_deadline') ?>
@@ -366,6 +368,62 @@
               <!-- .modal-footer -->
               <div class="modal-footer">
                 <button class="btn btn-primary" type="submit" id="btn-layout-deadline">Pilih</button>
+                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+              </div>
+              <!-- /.modal-footer -->
+              <?=form_close(); ?>
+                <!-- /.form -->
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+      <!-- /.modal -->
+      <!-- modal deadline -->
+        <div class="modal fade" id="layout_aksi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <!-- .modal-dialog -->
+          <div class="modal-dialog" role="document">
+            <!-- .modal-content -->
+            <div class="modal-content">
+              <!-- .modal-header -->
+              <div class="modal-header">
+                <h5 class="modal-title">Aksi</h5>
+              </div>
+              <!-- /.modal-header -->
+              <!-- .modal-body -->
+              <div class="modal-body">
+                <!-- .form -->
+                <?= form_open('draft/ubahnotes/'.$input->draft_id) ?>
+                  <!-- .fieldset -->
+                  <fieldset>
+                  <!-- .form-group -->
+                    <div class="form-group">
+                      <label for="review_status" class="font-weight-bold">Catatan Admin</label>
+                      <?php 
+                      $review_status = array(
+                          'name' => 'review_status',
+                          'class'=> 'form-control summernote-basic',
+                          'id'  => 'crp2',
+                          'rows' => '6',
+                          'value'=> $input->review_status
+                      );
+                      if($ceklevel!='superadmin'){
+                        echo '<div class="font-italic">'.nl2br($input->review_status).'</div>';
+                      }else{
+                        echo form_textarea($review_status);
+                      }
+                       ?>
+                    </div>
+                    <!-- /.form-group -->
+                  
+                  </fieldset>
+                  <!-- /.fieldset -->
+              </div>
+              <!-- /.modal-body -->
+              <!-- .modal-footer -->
+              <div class="modal-footer">
+                <button class="btn btn-success" type="submit" id="review-setuju">Setuju</button>
+                <button class="btn btn-danger" type="submit" id="review-tolak">Tolak</button>
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>
               <!-- /.modal-footer -->

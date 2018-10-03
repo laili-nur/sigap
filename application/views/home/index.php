@@ -2,6 +2,7 @@
     $username = $this->session->userdata('username');
     $is_login = $this->session->userdata('is_login');
     $ceklevel    = $this->session->userdata('level');
+    $semua    = $this->session->userdata();
 ?>
 <!-- .page-title-bar -->
   <header class="page-title-bar">
@@ -27,7 +28,7 @@
     <div class="section-block">
       <!-- metric row -->
       <div class="metric-row">
-        <div class="col-lg-9">
+        <div class="col-12">
           <div class="metric-row metric-flush">
             <!-- metric column -->
             <div class="col">
@@ -36,9 +37,9 @@
                 <h2 class="metric-label"> Kategori </h2>
                 <p class="metric-value h3">
                   <sub>
-                    <i class="oi oi-people"></i>
+                    <i class="fa fa-list-alt"></i>
                   </sub>
-                  <span class="value">8</span>
+                  <span class="value"><?=$tot_category ?></span>
                 </p>
               </a>
               <!-- /.metric -->
@@ -51,9 +52,24 @@
                 <h2 class="metric-label"> Draft </h2>
                 <p class="metric-value h3">
                   <sub>
-                    <i class="oi oi-fork"></i>
+                    <i class="fa fa-paperclip"></i>
                   </sub>
-                  <span class="value">12</span>
+                  <span class="value"><?=$tot_draft ?></span>
+                </p>
+              </a>
+              <!-- /.metric -->
+            </div>
+            <!-- /metric column -->
+            <!-- metric column -->
+            <div class="col">
+              <!-- .metric -->
+              <a href="<?=base_url('book') ?>" class="metric metric-bordered align-items-center">
+                <h2 class="metric-label"> Buku </h2>
+                <p class="metric-value h3">
+                  <sub>
+                    <i class="fa fa-book"></i>
+                  </sub>
+                  <span class="value"><?=$tot_book ?></span>
                 </p>
               </a>
               <!-- /.metric -->
@@ -66,9 +82,24 @@
                 <h2 class="metric-label"> Penulis </h2>
                 <p class="metric-value h3">
                   <sub>
-                    <i class="fa fa-tasks"></i>
+                    <i class="fa fa-users"></i>
                   </sub>
-                  <span class="value">64</span>
+                  <span class="value"><?=$tot_author ?></span>
+                </p>
+              </a>
+              <!-- /.metric -->
+            </div>
+            <!-- /metric column -->
+            <!-- metric column -->
+            <div class="col">
+              <!-- .metric -->
+              <a href="<?=base_url('reviewer') ?>" class="metric metric-bordered align-items-center">
+                <h2 class="metric-label"> Reviewer </h2>
+                <p class="metric-value h3">
+                  <sub>
+                    <i class="fa fa-university"></i>
+                  </sub>
+                  <span class="value"><?=$tot_reviewer ?></span>
                 </p>
               </a>
               <!-- /.metric -->
@@ -76,24 +107,87 @@
             <!-- /metric column -->
           </div>
         </div>
-        <!-- metric column -->
-        <div class="col-lg-3">
-          <!-- .metric -->
-          <a href="user-tasks.html" class="metric metric-bordered">
-            <div class="metric-badge">
-              <span class="badge badge-lg badge-success">
-                <span class="oi oi-media-record pulse mr-1"></span> DALAM PROSES</span>
+      </div>
+      <!-- /metric row -->
+      <!-- metric row -->
+      <div class="metric-row">
+        <div class="col-12">
+          <div class="metric-row metric-flush">
+            <!-- metric column -->
+            <div class="col">
+              <!-- .metric -->
+              <a href="#" class="metric metric-bordered align-items-center">
+                <div class="metric-badge">
+                  <span class="badge badge-lg badge-success">
+                    <span class="oi oi-media-record pulse mr-1"></span> REVIEW</span>
+                </div>
+                <p class="metric-value h3">
+                  <sub>
+                    <i class="fa fa-tasks"></i>
+                  </sub>
+                  <span class="value"><?=$tot_draft ?></span>
+                </p>
+              </a>
+              <!-- /.metric -->
             </div>
-            <p class="metric-value h3">
-              <sub>
-                <i class="oi oi-timer"></i>
-              </sub>
-              <span class="value">8</span>
-            </p>
-          </a>
-          <!-- /.metric -->
+            <!-- /metric column -->
+            <!-- metric column -->
+            <div class="col">
+              <!-- .metric -->
+              <a href="#" class="metric metric-bordered align-items-center">
+                <div class="metric-badge">
+                  <span class="badge badge-lg badge-success">
+                    <span class="oi oi-media-record pulse mr-1"></span> EDITORIAL</span>
+                </div>
+                <p class="metric-value h3">
+                  <sub>
+                    <i class="fa fa-tasks"></i>
+                  </sub>
+                  <span class="value"><?=$tot_author ?></span>
+                </p>
+              </a>
+              <!-- /.metric -->
+            </div>
+            <!-- /metric column -->
+            <!-- metric column -->
+            <div class="col">
+              <!-- .metric -->
+              <a href="#" class="metric metric-bordered align-items-center">
+                <div class="metric-badge">
+                  <span class="badge badge-lg badge-success">
+                    <span class="oi oi-media-record pulse mr-1"></span> LAYOUT</span>
+                </div>
+                <p class="metric-value h3">
+                  <sub>
+                    <i class="fa fa-tasks"></i>
+                  </sub>
+                  <span class="value"><?=$tot_reviewer ?></span>
+                </p>
+              </a>
+              <!-- /.metric -->
+            </div>
+            <!-- /metric column -->
+            <!-- metric column -->
+            <div class="col">
+              <!-- .metric -->
+              <a href="#" class="metric metric-bordered align-items-center">
+                <div class="metric-badge">
+                  <span class="badge badge-lg badge-success">
+                    <span class="oi oi-media-record pulse mr-1"></span> PROOFREAD</span>
+                </div>
+                <p class="metric-value h3">
+                  <sub>
+                    <i class="fa fa-tasks"></i>
+                  </sub>
+                  <span class="value"><?=$tot_category ?></span>
+                </p>
+              </a>
+              <!-- /.metric -->
+            </div>
+            <!-- /metric column -->
+
+          </div>
         </div>
-        <!-- /metric column -->
       </div>
       <!-- /metric row -->
     </div>
