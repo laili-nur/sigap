@@ -1,29 +1,28 @@
 <?php
-    $username = $this->session->userdata('username');
-    $is_login = $this->session->userdata('is_login');
-    $ceklevel    = $this->session->userdata('level');
-    $semua    = $this->session->userdata();
+$username = $this->session->userdata('username');
+$is_login = $this->session->userdata('is_login');
+$ceklevel    = $this->session->userdata('level');
+$semua    = $this->session->userdata();
 ?>
 <!-- .page-title-bar -->
-  <header class="page-title-bar">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item active">
-          <a class="text-muted"><span class="fa fa-home"></span> Admin Panel</a>
-        </li>
-      </ol>
-    </nav>
-    <h1 class="page-title"> Dashboard </h1>
-    <p class="lead">
-      <span class="font-weight-bold">Hi, <?=$username ?>.</span>
-      <span class="d-block text-muted">Selamat bekerja dan semoga harimu menyenangkan.</span>
-    </p>
-  </header>
-  <!-- /.page-title-bar -->
-  
-  <!-- .page-section -->
-  <div class="page-section">
-    <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
+<header class="page-title-bar">
+  <!-- <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active">
+        <a class="text-muted"><span class="fa fa-home"></span> Admin Panel</a>
+      </li>
+    </ol>
+  </nav> -->
+  <h1 class="page-title"> Dashboard </h1>
+  <p class="lead">
+    <span class="font-weight-bold">Hi, <?=$username ?>.</span>
+    <span class="d-block text-muted">Selamat bekerja dan semoga harimu menyenangkan.</span>
+  </p>
+</header>
+<!-- /.page-title-bar -->
+<!-- .page-section -->
+<div class="page-section">
+  <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
     <!-- .section-block -->
     <div class="section-block">
       <!-- metric row -->
@@ -120,309 +119,417 @@
                 <div class="metric-badge">
                   <span class="badge badge-lg badge-success">
                     <span class="oi oi-media-record pulse mr-1"></span> REVIEW</span>
+                  </div>
+                  <p class="metric-value h3">
+                    <sub>
+                      <i class="fa fa-tasks"></i>
+                    </sub>
+                    <span class="value"><?=$tot_draft ?></span>
+                  </p>
+                </a>
+                <!-- /.metric -->
+              </div>
+              <!-- /metric column -->
+              <!-- metric column -->
+              <div class="col">
+                <!-- .metric -->
+                <a href="#" class="metric metric-bordered align-items-center">
+                  <div class="metric-badge">
+                    <span class="badge badge-lg badge-success">
+                      <span class="oi oi-media-record pulse mr-1"></span> EDITORIAL</span>
+                    </div>
+                    <p class="metric-value h3">
+                      <sub>
+                        <i class="fa fa-tasks"></i>
+                      </sub>
+                      <span class="value"><?=$tot_author ?></span>
+                    </p>
+                  </a>
+                  <!-- /.metric -->
                 </div>
-                <p class="metric-value h3">
-                  <sub>
-                    <i class="fa fa-tasks"></i>
-                  </sub>
-                  <span class="value"><?=$tot_draft ?></span>
-                </p>
-              </a>
-              <!-- /.metric -->
-            </div>
-            <!-- /metric column -->
-            <!-- metric column -->
-            <div class="col">
-              <!-- .metric -->
-              <a href="#" class="metric metric-bordered align-items-center">
-                <div class="metric-badge">
-                  <span class="badge badge-lg badge-success">
-                    <span class="oi oi-media-record pulse mr-1"></span> EDITORIAL</span>
+                <!-- /metric column -->
+                <!-- metric column -->
+                <div class="col">
+                  <!-- .metric -->
+                  <a href="#" class="metric metric-bordered align-items-center">
+                    <div class="metric-badge">
+                      <span class="badge badge-lg badge-success">
+                        <span class="oi oi-media-record pulse mr-1"></span> LAYOUT</span>
+                      </div>
+                      <p class="metric-value h3">
+                        <sub>
+                          <i class="fa fa-tasks"></i>
+                        </sub>
+                        <span class="value"><?=$tot_reviewer ?></span>
+                      </p>
+                    </a>
+                    <!-- /.metric -->
+                  </div>
+                  <!-- /metric column -->
+                  <!-- metric column -->
+                  <div class="col">
+                    <!-- .metric -->
+                    <a href="#" class="metric metric-bordered align-items-center">
+                      <div class="metric-badge">
+                        <span class="badge badge-lg badge-success">
+                          <span class="oi oi-media-record pulse mr-1"></span> PROOFREAD</span>
+                        </div>
+                        <p class="metric-value h3">
+                          <sub>
+                            <i class="fa fa-tasks"></i>
+                          </sub>
+                          <span class="value"><?=$tot_category ?></span>
+                        </p>
+                      </a>
+                      <!-- /.metric -->
+                    </div>
+                    <!-- /metric column -->
+                  </div>
                 </div>
-                <p class="metric-value h3">
-                  <sub>
-                    <i class="fa fa-tasks"></i>
-                  </sub>
-                  <span class="value"><?=$tot_author ?></span>
-                </p>
-              </a>
-              <!-- /.metric -->
+              </div>
+              <!-- /metric row -->
             </div>
-            <!-- /metric column -->
-            <!-- metric column -->
-            <div class="col">
-              <!-- .metric -->
-              <a href="#" class="metric metric-bordered align-items-center">
-                <div class="metric-badge">
-                  <span class="badge badge-lg badge-success">
-                    <span class="oi oi-media-record pulse mr-1"></span> LAYOUT</span>
+            <!-- /.section-block -->
+            <!-- grid row -->
+            <div class="row">
+              <!-- grid column -->
+              <div class="col-12 col-lg-12 col-xl-4">
+                <!-- .card -->
+                <section class="card card-fluid">
+                  <!-- .card-body -->
+                  <div class="card-body">
+                    <!-- .d-flex -->
+                    <div class="d-flex align-items-center mb-3">
+                      <h3 class="card-title mr-auto"> Data 1 </h3>
+                    </div>
+                    <!-- /.d-flex -->
+                  </div>
+                  <!-- /.card-body -->
+                </section>
+                <!-- /.card -->
+              </div>
+              <!-- /grid column -->
+            </div>
+            <!-- /grid row -->
+          <?php endif ?>
+          <!-- untuk level reviewer -->
+          <?php if ($ceklevel == 'reviewer'): ?>
+            <!-- .section-block -->
+            <div class="section-block">
+              <!-- metric row -->
+              <div class="metric-row">
+                <!-- metric column -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                  <!-- .metric -->
+                  <div class="card-metric">
+                    <div class="metric">
+                      <div class="metric-badge">
+                        <span class="badge badge-lg badge-info">TOTAL REVIEW</span>
+                        </div>
+                        <p class="metric-value h3">
+                          <sub>
+                            <i class="fa fa-tasks"></i>
+                          </sub>
+                          <span class="value"><?=$count['count_total'] ?></span>
+                        </p>
+                      </div>
+                    </div>
+                    <!-- /.metric -->
+                  </div>
+                  <!-- /metric column -->
+                  <!-- metric column -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                  <!-- .metric -->
+                  <div class="card-metric">
+                    <div class="metric">
+                      <div class="metric-badge">
+                        <span class="badge badge-lg badge-success">SUDAH DIREVIEW</span>
+                        </div>
+                        <p class="metric-value h3">
+                          <sub>
+                            <i class="fa fa-tasks"></i>
+                          </sub>
+                          <span class="value"><?=$count['count_sudah'] ?></span>
+                        </p>
+                      </div>
+                    </div>
+                    <!-- /.metric -->
+                  </div>
+                  <!-- /metric column -->
+                  <!-- metric column -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                  <!-- .metric -->
+                  <div class="card-metric">
+                    <div class="metric">
+                      <div class="metric-badge">
+                        <span class="badge badge-lg badge-danger">BELUM REVIEW</span>
+                        </div>
+                        <p class="metric-value h3">
+                          <sub>
+                            <i class="fa fa-tasks"></i>
+                          </sub>
+                          <span class="value"><?=$count['count_belum'] ?></span>
+                        </p>
+                      </div>
+                    </div>
+                    <!-- /.metric -->
+                  </div>
+                  <!-- /metric column -->
+                  <!-- metric column -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                  <!-- .metric -->
+                  <div class="card-metric">
+                    <div class="metric">
+                      <div class="metric-badge">
+                        <span class="badge badge-lg badge-warning">SEDANG REVIEW</span>
+                        </div>
+                        <p class="metric-value h3">
+                          <sub>
+                            <i class="fa fa-tasks"></i>
+                          </sub>
+                          <span class="value"><?=$count['count_sedang'] ?></span>
+                        </p>
+                      </div>
+                    </div>
+                    <!-- /.metric -->
+                  </div>
+                  <!-- /metric column -->
                 </div>
-                <p class="metric-value h3">
-                  <sub>
-                    <i class="fa fa-tasks"></i>
-                  </sub>
-                  <span class="value"><?=$tot_reviewer ?></span>
-                </p>
-              </a>
-              <!-- /.metric -->
+                <!-- /metric row -->
+                <!-- grid row -->
+            <div class="row">
+              <!-- grid column -->
+              <div class="col-12">
+                <!-- .card -->
+                <section class="card card-fluid">
+                  <!-- .card-header -->
+                    <header class="card-header border-0">
+                      <!-- .d-flex -->
+                      <div class="d-flex align-items-center">
+                        <span class="mr-auto">Draft Terbaru Untuk Direview</span>
+                      </div>
+                      <!-- /.d-flex -->
+                    </header>
+                    <!-- /.card-header -->
+                  <!-- .table-responsive -->
+                  <?php if ($drafts_newest):?>
+                  <div class="table-responsive table-striped">
+                    <!-- .table -->
+                    <table class="table">
+                      <!-- thead -->
+                      <thead>
+                        <tr>
+                          <th scope="col">Judul</th>
+                          <th scope="col">Tanggal masuk</th>
+                          <th scope="col">Deadline Review</th>
+                          <th scope="col">Sisa Waktu</th>
+                        </tr>
+                      </thead>
+                      <!-- /thead -->
+                      <!-- tbody -->
+                      <tbody>
+                        <?php foreach($drafts_newest as $draft):?>
+                        <!-- tr -->
+                        <tr>
+                          <td class="align-middle"><?= $draft->draft_title ?></td>
+                          <td class="align-middle"><?= $draft->entry_date ?></td>
+                          <td class="align-middle"><?= $draft->deadline ?></td>
+                          <td class="align-middle">
+                            <?php
+                            $sisa_waktu = round((strtotime($draft->deadline)-strtotime(date('Y-m-d H:i:s')))/86400);
+                            if($sisa_waktu <= 0){
+                              echo '<span class="font-weight-bold" style="color:red">Melebihi Deadline!</span>';
+                            }else{
+                              echo $sisa_waktu.' hari';
+                            }
+                            ?>
+                          </td>
+                        </tr>
+                        <!-- /tr -->
+                        <?php endforeach ?>
+                      </tbody>
+                      <!-- /tbody -->
+                    </table>
+                    <!-- /.table -->
+                  </div>
+                  <?php else: ?>
+                  <p class="text-center">Data tidak tersedia</p>
+                  <?php endif ?>
+                  <!-- /.table-responsive -->
+                  <!-- .card-footer -->
+                  <footer class="card-footer">
+                    <a href="<?= base_url('draft') ?>" class="card-footer-item">Lihat selengkapnya
+                      <i class="fa fa-fw fa-angle-right"></i>
+                    </a>
+                  </footer>
+                  <!-- /.card-footer -->
+                </section>
+                <!-- /.card -->
+              </div>
+              <!-- /grid column -->
             </div>
-            <!-- /metric column -->
-            <!-- metric column -->
-            <div class="col">
-              <!-- .metric -->
-              <a href="#" class="metric metric-bordered align-items-center">
-                <div class="metric-badge">
-                  <span class="badge badge-lg badge-success">
-                    <span class="oi oi-media-record pulse mr-1"></span> PROOFREAD</span>
+            <!-- /grid row -->
+              </div>
+              <!-- /.section-block -->
+            <?php endif ?>
+          <!-- untuk level reviewer -->
+          <?php if ($ceklevel == 'author'): ?>
+            <!-- .section-block -->
+            <div class="section-block">
+              <!-- metric row -->
+              <div class="metric-row">
+                <!-- metric column -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                  <!-- .metric -->
+                  <div class="card-metric">
+                    <div class="metric">
+                      <div class="metric-badge">
+                        <span class="badge badge-lg badge-info">TOTAL REVIEW</span>
+                        </div>
+                        <p class="metric-value h3">
+                          <sub>
+                            <i class="fa fa-tasks"></i>
+                          </sub>
+                          <span class="value">99</span>
+                        </p>
+                      </div>
+                    </div>
+                    <!-- /.metric -->
+                  </div>
+                  <!-- /metric column -->
+                  <!-- metric column -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                  <!-- .metric -->
+                  <div class="card-metric">
+                    <div class="metric">
+                      <div class="metric-badge">
+                        <span class="badge badge-lg badge-success">SUDAH DIREVIEW</span>
+                        </div>
+                        <p class="metric-value h3">
+                          <sub>
+                            <i class="fa fa-tasks"></i>
+                          </sub>
+                          <span class="value">99</span>
+                        </p>
+                      </div>
+                    </div>
+                    <!-- /.metric -->
+                  </div>
+                  <!-- /metric column -->
+                  <!-- metric column -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                  <!-- .metric -->
+                  <div class="card-metric">
+                    <div class="metric">
+                      <div class="metric-badge">
+                        <span class="badge badge-lg badge-danger">BELUM REVIEW</span>
+                        </div>
+                        <p class="metric-value h3">
+                          <sub>
+                            <i class="fa fa-tasks"></i>
+                          </sub>
+                          <span class="value">99</span>
+                        </p>
+                      </div>
+                    </div>
+                    <!-- /.metric -->
+                  </div>
+                  <!-- /metric column -->
+                  <!-- metric column -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                  <!-- .metric -->
+                  <div class="card-metric">
+                    <div class="metric">
+                      <div class="metric-badge">
+                        <span class="badge badge-lg badge-warning">SEDANG REVIEW</span>
+                        </div>
+                        <p class="metric-value h3">
+                          <sub>
+                            <i class="fa fa-tasks"></i>
+                          </sub>
+                          <span class="value">99</span>
+                        </p>
+                      </div>
+                    </div>
+                    <!-- /.metric -->
+                  </div>
+                  <!-- /metric column -->
                 </div>
-                <p class="metric-value h3">
-                  <sub>
-                    <i class="fa fa-tasks"></i>
-                  </sub>
-                  <span class="value"><?=$tot_category ?></span>
-                </p>
-              </a>
-              <!-- /.metric -->
+                <!-- /metric row -->
+                <!-- grid row -->
+            <div class="row">
+              <!-- grid column -->
+              <div class="col-12">
+                <!-- .card -->
+                <section class="card card-fluid">
+                  <!-- .card-header -->
+                    <header class="card-header border-0">
+                      <!-- .d-flex -->
+                      <div class="d-flex align-items-center">
+                        <span class="mr-auto">Daftar Kategori</span>
+                      </div>
+                      <!-- /.d-flex -->
+                    </header>
+                    <!-- /.card-header -->
+                  <!-- .table-responsive -->
+                  <?php if ($categories):?>
+                  <div class="table-responsive table-striped">
+                    <!-- .table -->
+                    <table class="table">
+                      <!-- thead -->
+                      <thead>
+                        <tr>
+                          <th scope="col" style="min-width: 150px;max-width: 150px">Kategori</th>
+                          <th scope="col" style="min-width: 250px;max-width: 400px">Keterangan</th>
+                          <th scope="col" style="min-width: 120px;max-width: 150px">Tanggal Buka</th>
+                          <th scope="col" style="min-width: 120px;max-width: 150px">Tanggal tutup</th>
+                          <th scope="col" style="min-width: 100px;max-width: 100px">Sisa Waktu</th>
+                          <th scope="col">Aksi</th>
+                        </tr>
+                      </thead>
+                      <!-- /thead -->
+                      <!-- tbody -->
+                      <tbody>
+                        <?php foreach($categories as $category):?>
+                        <!-- tr -->
+                        <tr>
+                          <td class="align-middle"><?= $category->category_name ?></td>
+                          <td class="align-middle"><?= $category->category_note ?></td>
+                          <td class="align-middle"><?= $category->date_open ?></td>
+                          <td class="align-middle"><?= $category->date_close ?></td>
+                          <td class="align-middle">
+                            <?php
+                            $sisa_waktu = round((strtotime($category->date_close)-strtotime(date('Y-m-d H:i:s')))/86400);
+                            if($sisa_waktu <= 0){
+                              echo '<span style="color:red">Berakhir</span>';
+                            }else{
+                              echo $sisa_waktu.' hari';
+                            }
+                            ?>
+                          </td>
+                          <td class="align-middle"><?= ($category->category_status == 'y')? '<a class="btn btn-success btn-xs" href="'.base_url('draft/add/'.$category->category_id).'">Daftar</a>' : '' ?></td>
+                        </tr>
+                        <!-- /tr -->
+                        <?php endforeach ?>
+                      </tbody>
+                      <!-- /tbody -->
+                    </table>
+                    <!-- /.table -->
+                  </div>
+                  <?php else: ?>
+                  <p class="text-center">Data tidak tersedia</p>
+                  <?php endif ?>
+                  <!-- /.table-responsive -->
+                </section>
+                <!-- /.card -->
+              </div>
+              <!-- /grid column -->
             </div>
-            <!-- /metric column -->
+            <!-- /grid row -->
+              </div>
+              <!-- /.section-block -->
 
+    
+          <?php endif ?>
           </div>
-        </div>
-      </div>
-      <!-- /metric row -->
-    </div>
-    <!-- /.section-block -->
-    <!-- grid row -->
-    <div class="row">
-      <!-- grid column -->
-      <div class="col-12 col-lg-12 col-xl-4">
-        <!-- .card -->
-        <section class="card card-fluid">
-          <!-- .card-body -->
-          <div class="card-body">
-            <!-- .d-flex -->
-            <div class="d-flex align-items-center mb-3">
-              <h3 class="card-title mr-auto"> Data 1 </h3>
-            </div>
-            <!-- /.d-flex -->
-            <div class="chartjs" style="height: 283px">
-              <canvas id="completion-tasks"></canvas>
-            </div>
-          </div>
-          <!-- /.card-body -->
-        </section>
-        <!-- /.card -->
-      </div>
-      <!-- /grid column -->
-      <!-- grid column -->
-      <div class="col-12 col-lg-6 col-xl-4">
-        <!-- .card -->
-        <section class="card card-fluid">
-          <!-- .card-body -->
-          <div class="card-body">
-            <h3 class="card-title"> Performa </h3>
-            <!-- easy-pie-chart -->
-            <div class="text-center pt-3">
-              <div class="chart-inline-group" style="height:214px">
-                <div class="easyPieChart" data-percent="60" data-size="214" data-barcolor="#346CB0" data-trackcolor="false" data-scalecolor="false" data-rotate="225"></div>
-                <div class="easyPieChart" data-percent="50" data-size="174" data-barcolor="#00A28A" data-trackcolor="false" data-scalecolor="false" data-rotate="225"></div>
-                <div class="easyPieChart" data-percent="75" data-size="134" data-barcolor="#5F4B8B" data-trackcolor="false" data-scalecolor="false" data-rotate="225"></div>
-              </div>
-            </div>
-            <!-- /easy-pie-chart -->
-          </div>
-          <!-- /.card-body -->
-          <!-- .card-footer -->
-          <div class="card-footer">
-            <div class="card-footer-item">
-              <i class="fa fa-fw fa-circle text-indigo"></i> 100%
-              <div class="text-muted small"> Assigned </div>
-            </div>
-            <div class="card-footer-item">
-              <i class="fa fa-fw fa-circle text-purple"></i> 75%
-              <div class="text-muted small"> Completed </div>
-            </div>
-            <div class="card-footer-item">
-              <i class="fa fa-fw fa-circle text-teal"></i> 60%
-              <div class="text-muted small"> Active </div>
-            </div>
-          </div>
-          <!-- /.card-footer -->
-        </section>
-        <!-- /.card -->
-      </div>
-      <!-- /grid column -->
-      <!-- grid column -->
-      <div class="col-12 col-lg-6 col-xl-4">
-        <!-- .card -->
-        <section class="card card-fluid">
-          <!-- .card-body -->
-          <div class="card-body pb-0">
-            <h3 class="card-title"> User </h3>
-            <!-- legend -->
-            <ul class="list-inline small">
-              <li class="list-inline-item">
-                <i class="fa fa-fw fa-circle text-light"></i> Tasks </li>
-              <li class="list-inline-item">
-                <i class="fa fa-fw fa-circle text-purple"></i> Completed </li>
-              <li class="list-inline-item">
-                <i class="fa fa-fw fa-circle text-teal"></i> Active </li>
-              <li class="list-inline-item">
-                <i class="fa fa-fw fa-circle text-red"></i> Overdue </li>
-            </ul>
-            <!-- /legend -->
-          </div>
-          <!-- /.card-body -->
-          <!-- .list-group -->
-          <div class="list-group list-group-flush">
-            <!-- .list-group-item -->
-            <div class="list-group-item">
-              <!-- .list-group-item-figure -->
-              <div class="list-group-item-figure">
-                <a href="user-profile.html" class="user-avatar" data-toggle="tooltip" title="Martha Myers">
-                  <img src="assets/images/avatars/uifaces15.jpg" alt="">
-                </a>
-              </div>
-              <!-- /.list-group-item-figure -->
-              <!-- .list-group-item-body -->
-              <div class="list-group-item-body">
-                <!-- .progress -->
-                <div class="progress bg-white rounded-0" data-toggle="tooltip" data-html="true" title='&lt;div class="text-left small"&gt;&lt;i class="fa fa-fw fa-circle text-purple"&gt;&lt;/i&gt; 2065&lt;br&gt;&lt;i class="fa fa-fw fa-circle text-teal"&gt;&lt;/i&gt; 231&lt;br&gt;&lt;i class="fa fa-fw fa-circle text-red"&gt;&lt;/i&gt; 54&lt;/div&gt;'>
-                  <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="73.46140163642832" aria-valuemin="0" aria-valuemax="100" style="width: 73.46140163642832%">
-                    <span class="sr-only">73.46140163642832% Complete</span>
-                  </div>
-                  <div class="progress-bar bg-teal" role="progressbar" aria-valuenow="8.217716115261473" aria-valuemin="0" aria-valuemax="100" style="width: 8.217716115261473%">
-                    <span class="sr-only">8.217716115261473% Complete</span>
-                  </div>
-                  <div class="progress-bar bg-red" role="progressbar" aria-valuenow="1.92102454642476" aria-valuemin="0" aria-valuemax="100" style="width: 1.92102454642476%">
-                    <span class="sr-only">1.92102454642476% Complete</span>
-                  </div>
-                </div>
-                <!-- /.progress -->
-              </div>
-              <!-- /.list-group-item-body -->
-            </div>
-            <!-- /.list-group-item -->
-            <!-- .list-group-item -->
-            <div class="list-group-item">
-              <!-- .list-group-item-figure -->
-              <div class="list-group-item-figure">
-                <a href="user-profile.html" class="user-avatar" data-toggle="tooltip" title="Tammy Beck">
-                  <img src="assets/images/avatars/uifaces16.jpg" alt="">
-                </a>
-              </div>
-              <!-- /.list-group-item-figure -->
-              <!-- .list-group-item-body -->
-              <div class="list-group-item-body">
-                <!-- .progress -->
-                <div class="progress bg-white rounded-0" data-toggle="tooltip" data-html="true" title='&lt;div class="text-left small"&gt;&lt;i class="fa fa-fw fa-circle text-purple"&gt;&lt;/i&gt; 1432&lt;br&gt;&lt;i class="fa fa-fw fa-circle text-teal"&gt;&lt;/i&gt; 406&lt;br&gt;&lt;i class="fa fa-fw fa-circle text-red"&gt;&lt;/i&gt; 49&lt;/div&gt;'>
-                  <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="54.180855088914115" aria-valuemin="0" aria-valuemax="100" style="width: 54.180855088914115%">
-                    <span class="sr-only">54.180855088914115% Complete</span>
-                  </div>
-                  <div class="progress-bar bg-teal" role="progressbar" aria-valuenow="15.361331819901627" aria-valuemin="0" aria-valuemax="100" style="width: 15.361331819901627%">
-                    <span class="sr-only">15.361331819901627% Complete</span>
-                  </div>
-                  <div class="progress-bar bg-red" role="progressbar" aria-valuenow="1.853953840332955" aria-valuemin="0" aria-valuemax="100" style="width: 1.853953840332955%">
-                    <span class="sr-only">1.853953840332955% Complete</span>
-                  </div>
-                </div>
-                <!-- /.progress -->
-              </div>
-              <!-- /.list-group-item-body -->
-            </div>
-            <!-- /.list-group-item -->
-            <!-- .list-group-item -->
-            <div class="list-group-item">
-              <!-- .list-group-item-figure -->
-              <div class="list-group-item-figure">
-                <a href="user-profile.html" class="user-avatar" data-toggle="tooltip" title="Susan Kelley">
-                  <img src="assets/images/avatars/uifaces17.jpg" alt="">
-                </a>
-              </div>
-              <!-- /.list-group-item-figure -->
-              <!-- .list-group-item-body -->
-              <div class="list-group-item-body">
-                <!-- .progress -->
-                <div class="progress bg-white rounded-0" data-toggle="tooltip" data-html="true" title='&lt;div class="text-left small"&gt;&lt;i class="fa fa-fw fa-circle text-purple"&gt;&lt;/i&gt; 1271&lt;br&gt;&lt;i class="fa fa-fw fa-circle text-teal"&gt;&lt;/i&gt; 87&lt;br&gt;&lt;i class="fa fa-fw fa-circle text-red"&gt;&lt;/i&gt; 82&lt;/div&gt;'>
-                  <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="52.13289581624282" aria-valuemin="0" aria-valuemax="100" style="width: 52.13289581624282%">
-                    <span class="sr-only">52.13289581624282% Complete</span>
-                  </div>
-                  <div class="progress-bar bg-teal" role="progressbar" aria-valuenow="3.568498769483183" aria-valuemin="0" aria-valuemax="100" style="width: 3.568498769483183%">
-                    <span class="sr-only">3.568498769483183% Complete</span>
-                  </div>
-                  <div class="progress-bar bg-red" role="progressbar" aria-valuenow="3.3634126333059884" aria-valuemin="0" aria-valuemax="100" style="width: 3.3634126333059884%">
-                    <span class="sr-only">3.3634126333059884% Complete</span>
-                  </div>
-                </div>
-                <!-- /.progress -->
-              </div>
-              <!-- /.list-group-item-body -->
-            </div>
-            <!-- /.list-group-item -->
-            <!-- .list-group-item -->
-            <div class="list-group-item">
-              <!-- .list-group-item-figure -->
-              <div class="list-group-item-figure">
-                <a href="user-profile.html" class="user-avatar" data-toggle="tooltip" title="Albert Newman">
-                  <img src="assets/images/avatars/uifaces18.jpg" alt="">
-                </a>
-              </div>
-              <!-- /.list-group-item-figure -->
-              <!-- .list-group-item-body -->
-              <div class="list-group-item-body">
-                <!-- .progress -->
-                <div class="progress bg-white rounded-0" data-toggle="tooltip" data-html="true" title='&lt;div class="text-left small"&gt;&lt;i class="fa fa-fw fa-circle text-purple"&gt;&lt;/i&gt; 1527&lt;br&gt;&lt;i class="fa fa-fw fa-circle text-teal"&gt;&lt;/i&gt; 205&lt;br&gt;&lt;i class="fa fa-fw fa-circle text-red"&gt;&lt;/i&gt; 151&lt;/div&gt;'>
-                  <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="75.18463810930577" aria-valuemin="0" aria-valuemax="100" style="width: 75.18463810930577%">
-                    <span class="sr-only">75.18463810930577% Complete</span>
-                  </div>
-                  <div class="progress-bar bg-teal" role="progressbar" aria-valuenow="10.093549975381585" aria-valuemin="0" aria-valuemax="100" style="width: 10.093549975381585%">
-                    <span class="sr-only">10.093549975381585% Complete</span>
-                  </div>
-                  <div class="progress-bar bg-red" role="progressbar" aria-valuenow="7.434761201378631" aria-valuemin="0" aria-valuemax="100" style="width: 7.434761201378631%">
-                    <span class="sr-only">7.434761201378631% Complete</span>
-                  </div>
-                </div>
-                <!-- /.progress -->
-              </div>
-              <!-- /.list-group-item-body -->
-            </div>
-            <!-- /.list-group-item -->
-            <!-- .list-group-item -->
-            <div class="list-group-item">
-              <!-- .list-group-item-figure -->
-              <div class="list-group-item-figure">
-                <a href="user-profile.html" class="user-avatar" data-toggle="tooltip" title="Kyle Grant">
-                  <img src="assets/images/avatars/uifaces19.jpg" alt="">
-                </a>
-              </div>
-              <!-- /.list-group-item-figure -->
-              <!-- .list-group-item-body -->
-              <div class="list-group-item-body">
-                <!-- .progress -->
-                <div class="progress bg-white rounded-0" data-toggle="tooltip" data-html="true" title='&lt;div class="text-left small"&gt;&lt;i class="fa fa-fw fa-circle text-purple"&gt;&lt;/i&gt; 643&lt;br&gt;&lt;i class="fa fa-fw fa-circle text-teal"&gt;&lt;/i&gt; 265&lt;br&gt;&lt;i class="fa fa-fw fa-circle text-red"&gt;&lt;/i&gt; 127&lt;/div&gt;'>
-                  <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="36.89041881812966" aria-valuemin="0" aria-valuemax="100" style="width: 36.89041881812966%">
-                    <span class="sr-only">36.89041881812966% Complete</span>
-                  </div>
-                  <div class="progress-bar bg-teal" role="progressbar" aria-valuenow="15.203671830177854" aria-valuemin="0" aria-valuemax="100" style="width: 15.203671830177854%">
-                    <span class="sr-only">15.203671830177854% Complete</span>
-                  </div>
-                  <div class="progress-bar bg-red" role="progressbar" aria-valuenow="7.286288009179575" aria-valuemin="0" aria-valuemax="100" style="width: 7.286288009179575%">
-                    <span class="sr-only">7.286288009179575% Complete</span>
-                  </div>
-                </div>
-                <!-- /.progress -->
-              </div>
-              <!-- /.list-group-item-body -->
-            </div>
-            <!-- /.list-group-item -->
-          </div>
-          <!-- /.list-group -->
-        </section>
-        <!-- /.card -->
-      </div>
-      <!-- /grid column -->
-    </div>
-    <!-- /grid row -->
-    <?php endif ?>
-  </div>
-  <!-- /.page-section -->
+          <!-- /.page-section -->

@@ -45,7 +45,6 @@
           <!-- .form-group -->
           <div class="form-group">
             <label for="book_code">Kode Buku
-              <abbr title="Required">*</abbr>
             </label>
             <div class="has-clearable">
               <button type="button" class="close" aria-label="Close">
@@ -79,7 +78,6 @@
           <!-- .form-group -->
           <div class="form-group">
             <label for="book_edition">Edisi Buku
-              <abbr title="Required">*</abbr>
             </label>
             <div class="has-clearable">
               <button type="button" class="close" aria-label="Close">
@@ -96,7 +94,6 @@
           <!-- .form-group -->
           <div class="form-group">
             <label for="isbn">ISBN
-              <abbr title="Required">*</abbr>
             </label>
             <div class="has-clearable">
               <button type="button" class="close" aria-label="Close">
@@ -104,7 +101,7 @@
                   <i class="fa fa-times-circle"></i>
                 </span>
               </button>
-            <?= form_input('isbn', $input->isbn, 'class="form-control" id="isbn" required=""') ?>
+            <?= form_input('isbn', $input->isbn, 'class="form-control" id="isbn"') ?>
             <div class="invalid-feedback">Field is required</div>
             </div>
             <?= form_error('isbn') ?>
@@ -127,7 +124,6 @@
           <!-- .form-group -->
           <div class="form-group">
             <label for="published_date">Tanggal Terbit
-              <abbr title="Required">*</abbr>
             </label>
             <div class="has-clearable">
               <button type="button" class="close" aria-label="Close">
@@ -162,7 +158,6 @@
             <!-- .form-group -->
           <div class="form-group">
             <label for="serial_num">Serial Number Total
-              <abbr title="Required">*</abbr>
             </label>
             <div class="has-clearable">
               <button type="button" class="close" aria-label="Close">
@@ -179,7 +174,6 @@
           <!-- .form-group -->
           <div class="form-group">
             <label for="serial_num_per_year">Serial Number Per Tahun
-              <abbr title="Required">*</abbr>
             </label>
             <div class="has-clearable">
               <button type="button" class="close" aria-label="Close">
@@ -196,7 +190,6 @@
           <!-- .form-group -->
           <div class="form-group">
             <label for="copies_num">Jumlah Copy
-              <abbr title="Required">*</abbr>
             </label>
             <div class="has-clearable">
               <button type="button" class="close" aria-label="Close">

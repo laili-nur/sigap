@@ -72,7 +72,7 @@
             <?php if ($worksheets):?>
             <div class="table-responsive">
               <!-- .table -->
-              <table class="table">
+              <table class="table nowrap">
                 <!-- thead -->
                 <thead>
                   <tr>

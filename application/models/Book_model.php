@@ -15,7 +15,7 @@ class Book_model extends MY_Model
             [
                 'field' => 'book_code',
                 'label' => 'Book Code',
-                'rules' => 'trim|required'
+                'rules' => 'trim'
             ],
             [
                 'field' => 'book_title',
@@ -25,47 +25,47 @@ class Book_model extends MY_Model
             [
                 'field' => 'book_edition',
                 'label' => 'Book Edition',
-                'rules' => 'trim|required|min_length[1]|max_length[256]'
+                'rules' => 'trim|min_length[1]|max_length[256]'
             ],
             [
                 'field' => 'isbn',
                 'label' => 'ISBN',
-                'rules' => 'trim|min_length[1]|max_length[256]|required'
+                'rules' => 'trim|min_length[1]|max_length[256]'
             ],
             [
                 'field' => 'published_date',
                 'label' => 'Published Date',
-                'rules' => 'trim|required|callback_is_date_format_valid'
+                'rules' => 'trim|callback_is_date_format_valid'
             ],            
             [
                 'field' => 'printing_type',
                 'label' => 'Printing Type',
-                'rules' => 'trim|required'
+                'rules' => 'trim'
             ],
             [
                 'field' => 'serial_num',
                 'label' => 'Serial Number',
-                'rules' => 'trim|required|numeric'
+                'rules' => 'trim|numeric'
             ],
             [
                 'field' => 'serial_num_per_year',
                 'label' => 'Serial Number Per Year',
-                'rules' => 'trim|required|numeric'
+                'rules' => 'trim|numeric'
             ],
             [
                 'field' => 'copies_num',
                 'label' => 'Copies Number',
-                'rules' => 'trim|required|numeric'
+                'rules' => 'trim|numeric'
             ],
             [
                 'field' => 'book_notes',
                 'label' => 'Book Note',
-                'rules' => 'trim|required'
+                'rules' => 'trim'
             ],
             [
                 'field' => 'is_reprint',
                 'label' => 'Is Reprint',
-                'rules' => 'trim|required'
+                'rules' => 'trim'
             ]
             
             

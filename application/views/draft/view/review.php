@@ -27,14 +27,18 @@
             <span class="text-muted">Tanggal jadi</span>
             <strong><?= konversiTanggal($input->review_end_date) ?></strong>
           </div>
+          <?php if($reviewer_order=='0' or $reviewer_order!='1'): ?>
           <div class="list-group-item justify-content-between">
             <span class="text-muted">Deadline reviewer 1</span>
             <strong><?= konversiTanggal($input->review1_deadline) ?></strong>
           </div>
+          <?php endif ?>
+          <?php if($reviewer_order=='1' or $reviewer_order!='0'): ?>
           <div class="list-group-item justify-content-between">
             <span class="text-muted">Deadline reviewer 2</span>
             <strong><?= konversiTanggal($input->review2_deadline) ?></strong>
           </div>
+          <?php endif ?>
           <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer' ): ?>
           <div class="list-group-item justify-content-between">
             <span class="text-muted">Reviewer</span>
@@ -71,7 +75,7 @@
           <?php endif ?>
           <div class="list-group-item justify-content-between">
             <span class="text-muted">Status</span>
-            <strong><?= $input->review_status ?></strong>
+            <strong><?=($input->is_review == 'y')?'Review Selesai': '-' ?></strong>
           </div>
           <hr class="m-0">
       </div>
@@ -82,13 +86,11 @@
         <button class="btn btn-secondary" style="width:50px" data-toggle="modal" data-target="#review_aksi"><i class="fa fa-thumbs-up"></i></button>
         <!-- <button class="btn btn-danger" style="width:50px"><i class="fa fa-times"></i></button> -->
         <?php endif ?>
-        <?php if($reviewer_order=='0'): ?>       
-          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#review1">Review dan Tanggapan 1</button>
-        <?php elseif($reviewer_order=='1'): ?>
-          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#review2">Review dan Tanggapan 2</button>
-        <?php else: ?>
-          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#review1">Review dan Tanggapan 1</button>
-          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#review2">Review dan Tanggapan 2</button>
+        <?php if($reviewer_order=='0' or $reviewer_order!='1'): ?>       
+          <button type="button" class="btn <?=($input->review1_notes!='' || $input->review1_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#review1">Tanggapan Review 1 <?=($input->review1_notes!='' || $input->review1_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
+        <?php endif ?>
+        <?php if($reviewer_order=='1' or $reviewer_order!='0'): ?>
+          <button type="button" class="btn <?=($input->review2_notes!='' || $input->review2_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#review2">Tanggapan Review 2 <?=($input->review2_notes!='' || $input->review2_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
         <?php endif ?>
       </div>
         <!-- modal -->
@@ -178,16 +180,17 @@
               <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
-                <div class="custom-control custom-control-inline custom-radio">
-                  <?= form_radio('review1_flag', 'y', isset($input->review1_flag) && ($input->review1_flag == 'y') ? true : false,'required class="custom-control-input" id="review1_flagy"')?>
-                  <label class="custom-control-label" for="review1_flagy">Setuju</label>
+                <div class="card-footer-content text-muted p-0 m-0">
+                  <div class="mb-1 font-weight-bold">Rekomendasi (Pilih jika sudah final)</div> 
+                  <div class="custom-control custom-control-inline custom-radio">
+                    <?= form_radio('review1_flag', 'y', isset($input->review1_flag) && ($input->review1_flag == 'y') ? true : false,'required class="custom-control-input" id="review1_flagy"')?>
+                    <label class="custom-control-label" for="review1_flagy">Setuju</label>
+                  </div>
+                  <div class="custom-control custom-control-inline custom-radio">
+                    <?= form_radio('review1_flag', 'n', isset($input->review1_flag) && ($input->review1_flag == 'n') ? true : false,'required class="custom-control-input" id="review1_flagn"')?>
+                    <label class="custom-control-label" for="review1_flagn">Tidak</label>
+                  </div>
                 </div>
-                <div class="custom-control custom-control-inline custom-radio">
-                  <?= form_radio('review1_flag', 'n', isset($input->review1_flag) && ($input->review1_flag == 'n') ? true : false,'required class="custom-control-input" id="review1_flagn"')?>
-                  <label class="custom-control-label" for="review1_flagn">Tidak</label>
-                </div>
-  
-
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-review1">Submit</button>
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>
@@ -286,15 +289,17 @@
               <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
-                <div class="custom-control custom-control-inline custom-radio">
-                  <?= form_radio('review2_flag', 'y', isset($input->review2_flag) && ($input->review2_flag == 'y') ? true : false,'required class="custom-control-input" id="review2_flagy"')?>
-                  <label class="custom-control-label" for="review2_flagy">Setuju</label>
+                <div class="card-footer-content text-muted p-0 m-0">
+                  <div class="mb-1 font-weight-bold">Rekomendasi</div> 
+                  <div class="custom-control custom-control-inline custom-radio">
+                    <?= form_radio('review2_flag', 'y', isset($input->review2_flag) && ($input->review2_flag == 'y') ? true : false,'required class="custom-control-input" id="review2_flagy"')?>
+                    <label class="custom-control-label" for="review2_flagy">Setuju</label>
+                  </div>
+                  <div class="custom-control custom-control-inline custom-radio">
+                    <?= form_radio('review2_flag', 'n', isset($input->review2_flag) && ($input->review2_flag == 'n') ? true : false,'required class="custom-control-input" id="review2_flagn"')?>
+                    <label class="custom-control-label" for="review2_flagn">Tidak</label>
+                  </div>
                 </div>
-                <div class="custom-control custom-control-inline custom-radio">
-                  <?= form_radio('review2_flag', 'n', isset($input->review2_flag) && ($input->review2_flag == 'n') ? true : false,'required class="custom-control-input" id="review2_flagn"')?>
-                  <label class="custom-control-label" for="review2_flagn">Tidak</label>
-                </div>
-     
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-review2">Submit</button>
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>
@@ -495,6 +500,8 @@
       });
 
       $('#review-setuju').on('click', function() {
+        var $this = $(this);
+        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
         let id=$('[name=draft_id]').val();
         let review_status=$('[name=review_status]').val();
         let action=$('#review-setuju').val();
@@ -507,10 +514,12 @@
               review_status : review_status,
               draft_status : action,
               review_end_date : end_date,
+              is_review : 'y'
             },
             success :function(data){
               let datax = JSON.parse(data);
               console.log(datax)
+              $this.removeAttr("disabled").html("Setuju");
               if(datax.status == true){
                 toastr_view('111');
               }else{
@@ -519,12 +528,14 @@
             }
           });
 
-          $('#review_aksi').modal('hide');
-          location.reload();
+          // $('#review_aksi').modal('hide');
+          // location.reload();
           return false;
       });
 
       $('#review-tolak').on('click', function() {
+        var $this = $(this);
+        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
         let id=$('[name=draft_id]').val();
         let review_status=$('[name=review_status]').val();
         let action=$('#review-tolak').val();
@@ -542,7 +553,8 @@
             },
             success :function(data){
               let datax = JSON.parse(data);
-              console.log(datax)
+              console.log(datax);
+              $this.removeAttr("disabled").html("Tolak");
               if(datax.status == true){
                 toastr_view('111');
               }else{
@@ -551,8 +563,8 @@
             }
           });
 
-          $('#review_aksi').modal('hide');
-          location.reload();
+          // $('#review_aksi').modal('hide');
+          // location.reload();
           return false;
       });
 

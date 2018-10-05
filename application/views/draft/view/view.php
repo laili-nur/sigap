@@ -43,9 +43,9 @@
         <!-- endif hilangkan data penulis di reviewer -->
         <?php endif ?>
         <!-- if hilangkan tab data reviewer -->
-        <?php if($ceklevel != 'author' and $ceklevel != 'reviewer'): ?>
+        <?php if($ceklevel != 'author' and $ceklevel != 'reviewer' and $desk->worksheet_status=='1'): ?>
         <li class="nav-item">
-          <a class="nav-link" data-toggle="tab" href="#data-reviewer">Data Reviewer <span><?=(!$reviewers)?'<label class="badge badge-warning">Required</label>':'' ?></span></a>
+          <a class="nav-link" data-toggle="tab" href="#data-reviewer">Data Reviewer</a>
         </li>
         <!-- endif hilangkan tab data reviewer -->
         <?php endif ?>
@@ -90,18 +90,6 @@
               </tr>
               <!-- /tr -->
               <?php if($ceklevel != 'reviewer'): ?>
-              <!-- tr -->
-              <tr>
-                <td width="200px"> Dana yang diajukan </td>
-                <td>: <?= $input->proposed_fund ?>  </td>
-              </tr>
-              <!-- /tr -->
-              <!-- tr -->
-              <tr>
-                <td width="200px"> Dana yang disetujui </td>
-                <td>: <?= $input->approved_fund ?>  </td>
-              </tr>
-              <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Tanggal Masuk </td>

@@ -1,3 +1,5 @@
+<?php $ceklevel = $this->session->userdata('level'); ?>
+<?php $cekrole = $this->session->userdata('role_id'); ?>
 <!-- .page-title-bar -->
   <header class="page-title-bar">
     <nav aria-label="breadcrumb">
@@ -34,10 +36,10 @@
           <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
           <!-- .form-group -->
           <div class="form-group">
-            <label for="category">Jenis Kategori ID
+            <label for="category">Jenis Kategori
               <abbr title="Required">*</abbr>
             </label>
-            <?= form_dropdown('category_id', getDropdownList('category', ['category_id', 'category_name']), $input->category_id, 'id="category" class="form-control custom-select d-block" required') ?>
+            <?= form_dropdown('category_id', getDropdownListCategory('category', ['category_id', 'category_name']), $input->category_id, 'id="category" class="form-control custom-select d-block" required') ?>
             <div class="invalid-feedback">Field is required</div>
             <?= form_error('category_id') ?>
           </div>
@@ -70,6 +72,16 @@
             <?= form_error('draft_title') ?>
           </div>
           <!-- /.form-group -->
+          <?php if($ceklevel == 'author'): ?>
+            <div class="form-group d-none">
+            <label for="draft_title">Penulis
+              <abbr title="Required">*</abbr>
+            </label>
+            <?= form_dropdown('author_id[]', getDropdownList('author', ['author_id', 'author_name']),$cekrole, 'id="author" class="form-control custom-select" required="" multiple="multiple"') ?>
+            <div class="invalid-feedback">Field is required</div>
+            <?= form_error('author_id[]') ?>
+          </div>
+          <?php else: ?>
           <!-- .form-group -->
           <div class="form-group" id="cek">
             <label for="author_id">Pilih Penulis
@@ -81,6 +93,7 @@
           <!-- /.form-group -->
           <!-- <a id="callback" class="btn btn-secondary btn-xs mt-2">Reload Penulis</a> -->
           </div>
+          <?php endif ?>
           <!-- .form-group -->
           <div class="form-group">
             <label for="draft_file">File Draft
@@ -93,23 +106,6 @@
             </div>
             <small class="form-text text-muted">Hanya menerima file bertype : docx dan doc</small>
             <?= fileFormError('draft_file', '<p class="text-danger">', '</p>'); ?>
-          </div>
-          <!-- /.form-group -->
-          <!-- .form-group -->
-          <div class="form-group">
-            <label for="proposed_fund">Dana yang diajukan
-              <abbr title="Required">*</abbr>
-            </label>
-            <div class="has-clearable">
-              <button type="button" class="close" aria-label="Close">
-                <span aria-hidden="true">
-                  <i class="fa fa-times-circle"></i>
-                </span>
-              </button>
-            <?= form_input('proposed_fund', $input->proposed_fund, 'class="form-control" id="proposed_fund" required=""') ?>
-            <div class="invalid-feedback">Field is required</div>
-            </div>
-            <?= form_error('proposed_fund') ?>
           </div>
           <!-- /.form-group -->
                   

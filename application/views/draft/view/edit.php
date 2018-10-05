@@ -47,7 +47,7 @@
       <?php endif ?>
       <div class="list-group-item justify-content-between">
         <span class="text-muted">Status</span>
-        <strong></strong>
+        <strong><?=($input->is_edit == 'y')?'Editorial Selesai': '-' ?></strong>
       </div>
       <hr class="m-0">
     </div>
@@ -57,7 +57,7 @@
         <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
         <button class="btn btn-secondary" style="width:50px" data-toggle="modal" data-target="#edit_aksi"><i class="fa fa-thumbs-up"></i></button>
         <?php endif ?>   
-        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#edit">Edit dan Tanggapan</button>
+        <button type="button" class="btn <?=($input->edit_notes!='' || $input->edit_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#edit">Tanggapan Editorial <?=($input->edit_notes!='' || $input->edit_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
       </div>
         <!-- modal -->
         <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -376,6 +376,8 @@
       });
 
       $('#edit-setuju').on('click', function() {
+        var $this = $(this);
+        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
         let id=$('[name=draft_id]').val();
         let edit_status=$('[name=edit_status]').val();
         let action=$('#edit-setuju').val();
@@ -388,10 +390,12 @@
               edit_status : edit_status,
               draft_status : action,
               edit_end_date : end_date,
+              is_edit : 'y'
             },
             success :function(data){
               let datax = JSON.parse(data);
-              console.log(datax)
+              console.log(datax);
+              $this.removeAttr("disabled").html("Setuju");
               if(datax.status == true){
                 toastr_view('111');
               }else{
@@ -400,12 +404,14 @@
             }
           });
 
-          $('#edit_aksi').modal('hide');
-          location.reload();
+          // $('#edit_aksi').modal('hide');
+          // location.reload();
           return false;
       });
 
       $('#edit-tolak').on('click', function() {
+        var $this = $(this);
+        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
         let id=$('[name=draft_id]').val();
         let edit_status=$('[name=edit_status]').val();
         let action=$('#edit-tolak').val();
@@ -423,7 +429,8 @@
             },
             success :function(data){
               let datax = JSON.parse(data);
-              console.log(datax)
+              console.log(datax);
+              $this.removeAttr("disabled").html("Tolak");
               if(datax.status == true){
                 toastr_view('111');
               }else{
@@ -432,8 +439,8 @@
             }
           });
 
-          $('#edit_aksi').modal('hide');
-          location.reload();
+          // $('#edit_aksi').modal('hide');
+          // location.reload();
           return false;
       });
 

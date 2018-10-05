@@ -1,4 +1,8 @@
 /* put your own styles to customize and override the theme */
-th, td {
+.nowrap th, .nowrap td {
 	white-space: nowrap;
 }
+/*.lebar-fix {
+    width: 500px;
+    min-width: 500px;
+}*/

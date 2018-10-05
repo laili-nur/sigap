@@ -13,6 +13,7 @@ class Draft extends Operator_Controller
         $ceklevel = $this->session->userdata('level');
         $cekusername = $this->session->userdata('username');
 
+
         //get id user
         
         if ($ceklevel == 'author'){
@@ -28,12 +29,25 @@ class Draft extends Operator_Controller
             $drafts     = $this->draft->join('category')->join('theme')->orderBy('draft_title')->orderBy('category.category_id')->orderBy('theme.theme_id')->paginate($page)->getAll();
             $tot        = $this->draft->join('category')->join('theme')->orderBy('draft_title')->orderBy('category.category_id')->orderBy('theme.theme_id')->getAll();
         }
-        
+
+
+
         //tampilkan author dan status draft
         foreach ($drafts as $key => $value) {
             $authors = $this->draft->getIdAndName('author', 'draft_author', $value->draft_id);
-            $value->authors = $authors;
+            $value->author = $authors;
             $value->draft_status = $this->checkStatus($value->draft_status);
+        }
+
+        //cari tau rev 1 atau rev 2 yg sedang login
+        foreach ($drafts as $key => $value) {
+            $rev = $this->draft->getIdAndName('reviewer', 'draft_reviewer', $value->draft_id);
+            $value->rev = key(array_filter(
+                $rev,
+                function ($e) {
+                    return $e->reviewer_id == $this->session->userdata('role_id');
+                }
+            ));
         }
         
 
@@ -44,14 +58,114 @@ class Draft extends Operator_Controller
 
 		$this->load->view('template', compact('pages', 'main_view', 'drafts', 'pagination', 'total'));
 	}
+
+
+    public function filter($page = null)
+        {
+        $filter   = $this->input->get('filter', true);
+        $this->db->group_by('draft.draft_id');
+        if($filter == 'review'){
+            $drafts = $this->draft->join('category')
+                                  ->join('theme')
+                                  ->joinRelationMiddle('draft', 'draft_author')
+                                  ->joinRelationDest('author', 'draft_author')            
+                                  ->where('is_review','n')            
+                                  ->whereNot('review1_notes','')            
+                                  ->whereNot('review2_notes','')            
+                                  ->orderBy('draft_title')
+                                  ->paginate($page)
+                                  ->getAll();
+            $tot = $this->draft->join('category')
+                                ->join('theme')              
+                                ->orderBy('draft_title')
+                                ->getAll();
+            $total = count($tot);
+        }elseif($filter == 'edit'){
+            $drafts = $this->draft->join('category')
+                                  ->join('theme')
+                                  ->joinRelationMiddle('draft', 'draft_author')
+                                  ->joinRelationDest('author', 'draft_author')
+                                  ->where('is_review','y')            
+                                  ->where('is_edit','n')            
+                                  ->orderBy('draft_title')
+                                  ->paginate($page)
+                                  ->getAll();
+            $tot = $this->draft->join('category')
+                                ->join('theme')              
+                                ->orderBy('draft_title')
+                                ->getAll();
+            $total = count($tot);
+        }elseif($filter == 'layout'){
+            $drafts = $this->draft->join('category')
+                                  ->join('theme')
+                                  ->joinRelationMiddle('draft', 'draft_author')
+                                  ->joinRelationDest('author', 'draft_author')
+                                  ->where('is_edit','y')            
+                                  ->where('is_layout','n')            
+                                  ->orderBy('draft_title')
+                                  ->paginate($page)
+                                  ->getAll();
+            $tot = $this->draft->join('category')
+                                ->join('theme')              
+                                ->orderBy('draft_title')
+                                ->getAll();
+            $total = count($tot);
+        }elseif($filter == 'proofread'){
+            $drafts = $this->draft->join('category')
+                                  ->join('theme')
+                                  ->joinRelationMiddle('draft', 'draft_author')
+                                  ->joinRelationDest('author', 'draft_author')
+                                  ->where('is_proofread','n')            
+                                  ->where('is_layout','y')            
+                                  ->orderBy('draft_title')
+                                  ->paginate($page)
+                                  ->getAll();
+            $tot = $this->draft->join('category')
+                                ->join('theme')              
+                                ->orderBy('draft_title')
+                                ->getAll();
+            $total = count($tot);
+        }else{
+            $drafts = $this->draft->join('category')
+                                  ->join('theme')
+                                  ->joinRelationMiddle('draft', 'draft_author')
+                                  ->joinRelationDest('author', 'draft_author')        
+                                  ->orderBy('draft_title')
+                                  ->paginate($page)
+                                  ->getAll();
+            $tot = $this->draft->join('category')
+                                ->join('theme')              
+                                ->orderBy('draft_title')
+                                ->getAll();
+            $total = count($tot);
+        }
+        
+
+        $pagination = $this->draft->makePagination(site_url('draft/filter/'), 3, $total);
+
+        if (!$drafts) {
+            $this->session->set_flashdata('warning', 'Data were not found');
+            redirect($this->pages);
+        } else {
+            foreach ($drafts as $key => $value) {
+                $authors = $this->draft->getIdAndName('author', 'draft_author', $value->draft_id);
+                $value->author = $authors;
+                $value->draft_status = $this->checkStatus($value->draft_status);
+            }
+        }
+
+        $pages    = $this->pages;
+        $main_view  = 'draft/index_draft';
+        $this->load->view('template', compact('pages', 'main_view', 'drafts', 'pagination', 'total'));
+    }
         
         
 // --add--        
-        public function add()
+        public function add($category='')
 	{
-
         if (!$_POST) {
             $input = (object) $this->draft->getDefaultValues();
+            $input->category_id = $category;
         } else {
             $input = (object) $this->input->post(null, true);
         }
@@ -281,10 +395,6 @@ class Draft extends Operator_Controller
         if (empty($input->files)) {
             unset($input->files);
         }
-
-        // if (isset($input->draft_status) && !empty($input->draft_status)) {
-        //     $input->
-        // }
         
         // If something wrong
         // if (!$this->draft->validate() || $this->form_validation->error_array()) {
@@ -396,9 +506,9 @@ class Draft extends Operator_Controller
         $drafts     = $this->draft->like('category_name', $keywords)
                                   ->orLike('draft_title', $keywords)
                                   ->orLike('theme_name', $keywords)
-                                  ->orLike('author_name', $keywords)
                                   ->join('category')
                                   ->join('theme')
+                                  ->orLike('author_name', $keywords)
                                   ->joinRelationMiddle('draft', 'draft_author')
                                   ->joinRelationDest('author', 'draft_author')
                                   ->orderBy('category.category_id')
@@ -425,7 +535,7 @@ class Draft extends Operator_Controller
         } else {
             foreach ($drafts as $key => $value) {
                 $authors = $this->draft->getIdAndName('author', 'draft_author', $value->draft_id);
-                $value->authors = $authors;
+                $value->author = $authors;
                 $value->draft_status = $this->checkStatus($value->draft_status);
             }
         }
@@ -480,7 +590,7 @@ class Draft extends Operator_Controller
         $status = "";
         switch ($code) {
             case 0:
-                $status = 'Waiting for Worksheet/Desk Screening';
+                $status = 'Desk Screening';
                 break;
             case 2:
                 $status = 'Worksheet Rejected';

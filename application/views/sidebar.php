@@ -73,6 +73,7 @@
               </a>
             </li>
             <!-- /.menu-item -->
+            <?php if ($ceklevel != 'reviewer'): ?>
             <!-- .menu-item -->
             <li class="menu-item">
               <a href="<?= base_url('book') ?>" class="menu-link">
@@ -81,6 +82,7 @@
               </a>
             </li>
             <!-- /.menu-item -->
+            <?php endif ?>
             <!-- jika bukan superadmin / admin penerbitan maka tampil draft sama buku doang -->
             <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
             <!-- .menu-item -->

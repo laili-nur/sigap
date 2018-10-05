@@ -93,6 +93,11 @@ class MY_Model extends CI_Model
         $this->db->where($column, $condition);
         return $this;
     }
+    public function whereNot($column, $condition)
+    {
+        $this->db->where($column.' !=', $condition);
+        return $this;
+    }
 
     public function orWhere($column, $condition)
     {
@@ -182,6 +187,12 @@ class MY_Model extends CI_Model
     public function orderBy($column_name, $order = 'asc')
     {
         $this->db->order_by($column_name, $order);
+        return $this;
+    }
+
+    public function limit($limit)
+    {
+        $this->db->limit($limit);
         return $this;
     }
 

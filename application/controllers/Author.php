@@ -177,7 +177,8 @@ class Author extends Operator_Controller
 		redirect('author');
 	}
 
-    public function copyToReviewer($user_id, $nip, $name) {
+    public function copyToReviewer($user_id, $nip, $name) 
+    {
         $this->load->model('reviewer_model', 'reviewer', true);
         $reviewer_id = $this->reviewer->getIdRoleFromUserId($user_id, 'reviewer');
 
@@ -204,8 +205,8 @@ class Author extends Operator_Controller
         }
     }
         
-        public function search($page = null)
-        {
+    public function search($page = null)
+    {
         $keywords   = $this->input->get('keywords', true);
         $authors     = $this->author->like('work_unit_name', $keywords)
                                   ->orLike('institute_name', $keywords)

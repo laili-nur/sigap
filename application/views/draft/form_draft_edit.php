@@ -83,40 +83,6 @@
                   <?= fileFormError('draft_file', '<p class="text-danger">', '</p>'); ?>
                 </div>
                 <!-- /.form-group -->
-                <!-- .form-group -->
-                <div class="form-group">
-                  <label for="proposed_fund">Dana yang diajukan
-                    <abbr title="Required">*</abbr>
-                  </label>
-                  <div class="has-clearable">
-                    <button type="button" class="close" aria-label="Close">
-                      <span aria-hidden="true">
-                        <i class="fa fa-times-circle"></i>
-                      </span>
-                    </button>
-                  <?= form_input('proposed_fund', $input->proposed_fund, 'class="form-control" id="proposed_fund"') ?>
-                  </div>
-                  <div class="invalid-feedback">Field is required</div>
-                  <?= form_error('proposed_fund') ?>
-                </div>
-                <!-- /.form-group -->
-                <!-- .form-group -->
-                <div class="form-group">
-                  <label for="approved_fund">Dana yang disetujui
-                    <abbr title="Required">*</abbr>
-                  </label>
-                  <div class="has-clearable">
-                    <button type="button" class="close" aria-label="Close">
-                      <span aria-hidden="true">
-                        <i class="fa fa-times-circle"></i>
-                      </span>
-                    </button>
-                  <?= form_input('approved_fund', $input->approved_fund, 'class="form-control" id="approved_fund"') ?>
-                  </div>
-                  <div class="invalid-feedback">Field is required</div>
-                  <?= form_error('approved_fund') ?>
-                </div>
-                <!-- /.form-group -->
                 <hr>
                 <h5 class="card-title">Review</h5>
                 <!-- .form-group -->

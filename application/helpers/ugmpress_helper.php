@@ -48,6 +48,22 @@ function getDropdownListLayouter($table, $columns)
     return $options = ['' => '- Empty -'];
 }
 
+// Khusus untuk category, mengambil yang aktif saja
+function getDropdownListCategory($table, $columns)
+{
+    $CI =& get_instance();
+    $query = $CI->db->select($columns)->from($table)->where('category_status','y')->get();
+
+    if ($query->num_rows() >= 1) {
+        $options1 = ['' => '-- Choose --'];
+        $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
+        $options = $options1 + $options2;
+        return $options;
+    }
+
+    return $options = ['' => '- Empty -'];
+}
+
 // Get list of option for dropdown.
 function getDropdownList($table, $columns)
 {
