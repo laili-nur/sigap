@@ -277,6 +277,14 @@ class Draft extends Operator_Controller
         } else {
             $input = (object) $this->input->post(null, false);
         }
+
+        if (empty($input->files)) {
+            unset($input->files);
+        }
+
+        // if (isset($input->draft_status) && !empty($input->draft_status)) {
+        //     $input->
+        // }
         
         // If something wrong
         // if (!$this->draft->validate() || $this->form_validation->error_array()) {
@@ -509,6 +517,12 @@ class Draft extends Operator_Controller
                 break;
             case 12:
                 $status = 'Proofread on Progress';
+                break;
+            case 13:
+                $status = 'Confirm to Book';
+                break;
+            case 99:
+                $status = 'Draft Ditolak';
                 break;
             
             default:

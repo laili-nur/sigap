@@ -176,6 +176,33 @@ class Author extends Operator_Controller
 
 		redirect('author');
 	}
+
+    public function copyToReviewer($user_id, $nip, $name) {
+        $this->load->model('reviewer_model', 'reviewer', true);
+        $reviewer_id = $this->reviewer->getIdRoleFromUserId($user_id, 'reviewer');
+
+        if ($reviewer_id == 0) {
+            $data = array(
+                'user_id' => $user_id,
+                'reviewer_nip' => $nip,
+                'reviewer_name' => urldecode($name)
+            );
+
+            if ($this->reviewer->insert($data)) {
+                $reviewer_id = $this->db->insert_id();
+
+                if ($reviewer_id != 0) {
+                    $data_level = array(
+                        'level' => 'author_reviewer'
+                    );
+                    $this->reviewer->where('user_id', $user_id)->update($data_level, 'user');
+                    redirect('reviewer/edit/' . $reviewer_id);
+                }
+            }
+        } else {
+            redirect('author');
+        }
+    }
         
         public function search($page = null)
         {

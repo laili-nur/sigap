@@ -71,7 +71,7 @@
           <?php endif ?>
           <div class="list-group-item justify-content-between">
             <span class="text-muted">Status</span>
-            <strong></strong>
+            <strong><?= $input->review_status ?></strong>
           </div>
           <hr class="m-0">
       </div>
@@ -383,6 +383,12 @@
                     <div class="form-group">
                       <label for="review_status" class="font-weight-bold">Catatan Admin</label>
                       <?php 
+                      $hidden_date = array(
+                          'type'  => 'hidden',
+                          'id'    => 'review_end_date',
+                          'value' => date('Y-m-d H:i:s')
+                      );
+                      echo form_input($hidden_date);
                       $review_status = array(
                           'name' => 'review_status',
                           'class'=> 'form-control summernote-basic',
@@ -405,8 +411,8 @@
               <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
-                <button class="btn btn-success" type="submit" id="review-setuju">Setuju</button>
-                <button class="btn btn-danger" type="submit" id="review-tolak">Tolak</button>
+                <button class="btn btn-success" type="submit" id="review-setuju" value="5">Setuju</button>
+                <button class="btn btn-danger" type="submit" id="review-tolak" value="99">Tolak</button>
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>
               <!-- /.modal-footer -->
@@ -486,6 +492,68 @@
           }
         });
         return false;
+      });
+
+      $('#review-setuju').on('click', function() {
+        let id=$('[name=draft_id]').val();
+        let review_status=$('[name=review_status]').val();
+        let action=$('#review-setuju').val();
+        let end_date=$('#review_end_date').val();
+        $.ajax({
+            type : "POST",
+            url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
+            datatype : "JSON",
+            data : {
+              review_status : review_status,
+              draft_status : action,
+              review_end_date : end_date,
+            },
+            success :function(data){
+              let datax = JSON.parse(data);
+              console.log(datax)
+              if(datax.status == true){
+                toastr_view('111');
+              }else{
+                toastr_view('000');
+              }
+            }
+          });
+
+          $('#review_aksi').modal('hide');
+          location.reload();
+          return false;
+      });
+
+      $('#review-tolak').on('click', function() {
+        let id=$('[name=draft_id]').val();
+        let review_status=$('[name=review_status]').val();
+        let action=$('#review-tolak').val();
+        let end_date=$('#review_end_date').val();
+
+              console.log(end_date);
+        $.ajax({
+            type : "POST",
+            url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
+            datatype : "JSON",
+            data : {
+              review_status : review_status,
+              draft_status : action,
+              review_end_date : end_date,
+            },
+            success :function(data){
+              let datax = JSON.parse(data);
+              console.log(datax)
+              if(datax.status == true){
+                toastr_view('111');
+              }else{
+                toastr_view('000');
+              }
+            }
+          });
+
+          $('#review_aksi').modal('hide');
+          location.reload();
+          return false;
       });
 
     //   $('#cr2').summernote({

@@ -27,23 +27,20 @@ var flatpickrDemo = {
   },
   _fp3: function _fp3() {
     // Human-friendly Dates
-    return flatpickr('.mydate', {
+    return flatpickr('#flatpickr03', {
       disableMobile: true,
       altInput: true,
       minDate: 'today',
       altFormat: 'j F Y',
-      dateFormat: 'Y-m-d',
+      dateFormat: 'Y-m-d'
     });
   },
   _fp4: function _fp4() {
     // minDate and maxDate
-    return flatpickr('.mydate_modal', {
+    return flatpickr('#flatpickr04', {
       disableMobile: true,
-      altInput: true,
       minDate: 'today',
-      altFormat: 'j F Y',
-      dateFormat: 'Y-m-d',
-      inline: true
+      maxDate: new Date().fp_incr(14)
     });
   },
   _fp5: function _fp5() {

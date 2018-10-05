@@ -398,19 +398,25 @@
                   <fieldset>
                   <!-- .form-group -->
                     <div class="form-group">
-                      <label for="review_status" class="font-weight-bold">Catatan Admin</label>
+                      <label for="layout_status" class="font-weight-bold">Catatan Admin</label>
                       <?php 
-                      $review_status = array(
-                          'name' => 'review_status',
+                      $hidden_date = array(
+                          'type'  => 'hidden',
+                          'id'    => 'layout_end_date',
+                          'value' => date('Y-m-d H:i:s')
+                      );
+                      echo form_input($hidden_date);
+                      $layout_status = array(
+                          'name' => 'layout_status',
                           'class'=> 'form-control summernote-basic',
                           'id'  => 'crp2',
                           'rows' => '6',
-                          'value'=> $input->review_status
+                          'value'=> $input->layout_status
                       );
                       if($ceklevel!='superadmin'){
-                        echo '<div class="font-italic">'.nl2br($input->review_status).'</div>';
+                        echo '<div class="font-italic">'.nl2br($input->layout_status).'</div>';
                       }else{
-                        echo form_textarea($review_status);
+                        echo form_textarea($layout_status);
                       }
                        ?>
                     </div>
@@ -422,8 +428,8 @@
               <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
-                <button class="btn btn-success" type="submit" id="review-setuju">Setuju</button>
-                <button class="btn btn-danger" type="submit" id="review-tolak">Tolak</button>
+                <button class="btn btn-success" type="submit" id="layout-setuju" value="9">Setuju</button>
+                <button class="btn btn-danger" type="submit" id="layout-tolak" value="99">Tolak</button>
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>
               <!-- /.modal-footer -->
@@ -496,6 +502,68 @@
           }
         });
         return false;
+      });
+
+      $('#layout-setuju').on('click', function() {
+        let id=$('[name=draft_id]').val();
+        let layout_status=$('[name=layout_status]').val();
+        let action=$('#layout-setuju').val();
+        let end_date=$('#layout_end_date').val();
+        $.ajax({
+            type : "POST",
+            url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
+            datatype : "JSON",
+            data : {
+              layout_status : layout_status,
+              draft_status : action,
+              layout_end_date : end_date,
+            },
+            success :function(data){
+              let datax = JSON.parse(data);
+              console.log(datax)
+              if(datax.status == true){
+                toastr_view('111');
+              }else{
+                toastr_view('000');
+              }
+            }
+          });
+
+          $('#layout_aksi').modal('hide');
+          location.reload();
+          return false;
+      });
+
+      $('#layout-tolak').on('click', function() {
+        let id=$('[name=draft_id]').val();
+        let layout_status=$('[name=layout_status]').val();
+        let action=$('#layout-tolak').val();
+        let end_date=$('#layout_end_date').val();
+
+              console.log(end_date);
+        $.ajax({
+            type : "POST",
+            url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
+            datatype : "JSON",
+            data : {
+              layout_status : layout_status,
+              draft_status : action,
+              layout_end_date : end_date,
+            },
+            success :function(data){
+              let datax = JSON.parse(data);
+              console.log(datax)
+              if(datax.status == true){
+                toastr_view('111');
+              }else{
+                toastr_view('000');
+              }
+            }
+          });
+
+          $('#layout_aksi').modal('hide');
+          location.reload();
+          return false;
       });
 
     })

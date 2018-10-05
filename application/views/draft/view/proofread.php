@@ -143,19 +143,25 @@
                   <fieldset>
                   <!-- .form-group -->
                     <div class="form-group">
-                      <label for="review_status" class="font-weight-bold">Catatan Admin</label>
+                      <label for="proofread_status" class="font-weight-bold">Catatan Admin</label>
                       <?php 
-                      $review_status = array(
-                          'name' => 'review_status',
+                      $hidden_date = array(
+                          'type'  => 'hidden',
+                          'id'    => 'proofread_end_date',
+                          'value' => date('Y-m-d H:i:s')
+                      );
+                      echo form_input($hidden_date);
+                      $proofread_status = array(
+                          'name' => 'proofread_status',
                           'class'=> 'form-control summernote-basic',
                           'id'  => 'crp2',
                           'rows' => '6',
-                          'value'=> $input->review_status
+                          'value'=> $input->proofread_status
                       );
                       if($ceklevel!='superadmin'){
-                        echo '<div class="font-italic">'.nl2br($input->review_status).'</div>';
+                        echo '<div class="font-italic">'.nl2br($input->proofread_status).'</div>';
                       }else{
-                        echo form_textarea($review_status);
+                        echo form_textarea($proofread_status);
                       }
                        ?>
                     </div>
@@ -167,8 +173,8 @@
               <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
-                <button class="btn btn-success" type="submit" id="review-setuju">Setuju</button>
-                <button class="btn btn-danger" type="submit" id="review-tolak">Tolak</button>
+                <button class="btn btn-success" type="submit" id="proofread-setuju" value="13">Setuju</button>
+                <button class="btn btn-danger" type="submit" id="proofread-tolak" value="99">Tolak</button>
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>
               <!-- /.modal-footer -->
@@ -214,6 +220,68 @@
           }
         });
         return false;
+      });
+
+      $('#proofread-setuju').on('click', function() {
+        let id=$('[name=draft_id]').val();
+        let proofread_status=$('[name=proofread_status]').val();
+        let action=$('#proofread-setuju').val();
+        let end_date=$('#proofread_end_date').val();
+        $.ajax({
+            type : "POST",
+            url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
+            datatype : "JSON",
+            data : {
+              proofread_status : proofread_status,
+              draft_status : action,
+              proofread_end_date : end_date,
+            },
+            success :function(data){
+              let datax = JSON.parse(data);
+              console.log(datax)
+              if(datax.status == true){
+                toastr_view('111');
+              }else{
+                toastr_view('000');
+              }
+            }
+          });
+
+          $('#proofread_aksi').modal('hide');
+          location.reload();
+          return false;
+      });
+
+      $('#proofread-tolak').on('click', function() {
+        let id=$('[name=draft_id]').val();
+        let proofread_status=$('[name=proofread_status]').val();
+        let action=$('#proofread-tolak').val();
+        let end_date=$('#proofread_end_date').val();
+
+              console.log(end_date);
+        $.ajax({
+            type : "POST",
+            url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
+            datatype : "JSON",
+            data : {
+              proofread_status : proofread_status,
+              draft_status : action,
+              proofread_end_date : end_date,
+            },
+            success :function(data){
+              let datax = JSON.parse(data);
+              console.log(datax)
+              if(datax.status == true){
+                toastr_view('111');
+              }else{
+                toastr_view('000');
+              }
+            }
+          });
+
+          $('#proofread_aksi').modal('hide');
+          location.reload();
+          return false;
       });
 
     })

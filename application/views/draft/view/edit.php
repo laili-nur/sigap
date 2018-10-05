@@ -297,19 +297,25 @@
                   <fieldset>
                   <!-- .form-group -->
                     <div class="form-group">
-                      <label for="review_status" class="font-weight-bold">Catatan Admin</label>
+                      <label for="edit_status" class="font-weight-bold">Catatan Admin</label>
                       <?php 
-                      $review_status = array(
-                          'name' => 'review_status',
+                      $hidden_date = array(
+                          'type'  => 'hidden',
+                          'id'    => 'edit_end_date',
+                          'value' => date('Y-m-d H:i:s')
+                      );
+                      echo form_input($hidden_date);
+                      $edit_status = array(
+                          'name' => 'edit_status',
                           'class'=> 'form-control summernote-basic',
                           'id'  => 'crp2',
                           'rows' => '6',
-                          'value'=> $input->review_status
+                          'value'=> $input->edit_status
                       );
                       if($ceklevel!='superadmin'){
-                        echo '<div class="font-italic">'.nl2br($input->review_status).'</div>';
+                        echo '<div class="font-italic">'.nl2br($input->edit_status).'</div>';
                       }else{
-                        echo form_textarea($review_status);
+                        echo form_textarea($edit_status);
                       }
                        ?>
                     </div>
@@ -321,8 +327,8 @@
               <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
-                <button class="btn btn-success" type="submit" id="review-setuju">Setuju</button>
-                <button class="btn btn-danger" type="submit" id="review-tolak">Tolak</button>
+                <button class="btn btn-success" type="submit" id="edit-setuju" value="7">Setuju</button>
+                <button class="btn btn-danger" type="submit" id="edit-tolak" value="99">Tolak</button>
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>
               <!-- /.modal-footer -->
@@ -367,6 +373,68 @@
           }
         });
         return false;
+      });
+
+      $('#edit-setuju').on('click', function() {
+        let id=$('[name=draft_id]').val();
+        let edit_status=$('[name=edit_status]').val();
+        let action=$('#edit-setuju').val();
+        let end_date=$('#edit_end_date').val();
+        $.ajax({
+            type : "POST",
+            url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
+            datatype : "JSON",
+            data : {
+              edit_status : edit_status,
+              draft_status : action,
+              edit_end_date : end_date,
+            },
+            success :function(data){
+              let datax = JSON.parse(data);
+              console.log(datax)
+              if(datax.status == true){
+                toastr_view('111');
+              }else{
+                toastr_view('000');
+              }
+            }
+          });
+
+          $('#edit_aksi').modal('hide');
+          location.reload();
+          return false;
+      });
+
+      $('#edit-tolak').on('click', function() {
+        let id=$('[name=draft_id]').val();
+        let edit_status=$('[name=edit_status]').val();
+        let action=$('#edit-tolak').val();
+        let end_date=$('#edit_end_date').val();
+
+              console.log(end_date);
+        $.ajax({
+            type : "POST",
+            url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
+            datatype : "JSON",
+            data : {
+              edit_status : edit_status,
+              draft_status : action,
+              edit_end_date : end_date,
+            },
+            success :function(data){
+              let datax = JSON.parse(data);
+              console.log(datax)
+              if(datax.status == true){
+                toastr_view('111');
+              }else{
+                toastr_view('000');
+              }
+            }
+          });
+
+          $('#edit_aksi').modal('hide');
+          location.reload();
+          return false;
       });
 
       
