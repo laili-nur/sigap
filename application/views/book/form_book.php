@@ -3,7 +3,7 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="<?=base_url()?>"><span class="fa fa-home"></span> Admin Panel</a>
+          <a href="<?=base_url()?>"><span class="fa fa-home"></span></a>
         </li>
         <li class="breadcrumb-item">
           <a href="<?=base_url()?>">Penerbitan</a>
@@ -30,7 +30,7 @@
       <?= form_open_multipart($form_action,'class="needs-validation" novalidate="" id="formdraft"') ?>
         <!-- .fieldset -->
         <fieldset>
-          <legend>Data Draft</legend>
+          <legend>Data Buku</legend>
           <?= isset($input->book_id) ? form_hidden('book_id', $input->book_id) : '' ?>
           <!-- .form-group -->
           <div class="form-group">
@@ -52,7 +52,7 @@
                   <i class="fa fa-times-circle"></i>
                 </span>
               </button>
-            <?= form_input('book_code', $input->book_code, 'class="form-control" id="book_code" required=""') ?>
+            <?= form_input('book_code', $input->book_code, 'class="form-control" id="book_code"') ?>
             <div class="invalid-feedback">Field is required</div>
             </div>
             <?= form_error('book_code') ?>
@@ -85,7 +85,7 @@
                   <i class="fa fa-times-circle"></i>
                 </span>
               </button>
-            <?= form_input('book_edition', $input->book_edition, 'class="form-control" id="book_edition" required=""') ?>
+            <?= form_input('book_edition', $input->book_edition, 'class="form-control" id="book_edition" ') ?>
             <div class="invalid-feedback">Field is required</div>
             </div>
             <?= form_error('book_edition') ?>
@@ -112,6 +112,7 @@
             <label for="book_file">File Buku
               <abbr title="Required">*</abbr>
             </label>
+            <p><?= isset($input->book_file)? '<a href="'.base_url('draftfile/'.$input->book_file).'">'.$input->book_file.'</a>' : ''  ?></p>
             <div class="custom-file">
               <?= form_upload('book_file','','class="custom-file-input" ') ?> 
               <label class="custom-file-label" for="tf3">Choose file</label>
@@ -131,7 +132,7 @@
                   <i class="fa fa-times-circle"></i>
                 </span>
               </button>
-            <?= form_input('published_date', $input->published_date, 'class="form-control" id="published_date" required=""') ?>
+            <?= form_input('published_date', $input->published_date, 'class="form-control mydate" id="published_date"') ?>
             <div class="invalid-feedback">Field is required</div>
             </div>
             <?= form_error('published_date') ?>
@@ -197,7 +198,7 @@
                   <i class="fa fa-times-circle"></i>
                 </span>
               </button>
-            <?= form_input('copies_num', $input->copies_num, 'class="form-control" id="copies_num" required=""') ?>
+            <?= form_input('copies_num', $input->copies_num, 'class="form-control" id="copies_num"') ?>
             <div class="invalid-feedback">Field is required</div>
             </div>
             <?= form_error('copies_num') ?>

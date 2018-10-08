@@ -47,7 +47,13 @@
       <?php endif ?>
       <div class="list-group-item justify-content-between">
         <span class="text-muted">Status</span>
-        <strong><?=($input->is_edit == 'y')?'Editorial Selesai': '-' ?></strong>
+        <?php if($input->is_edit == 'y'): ?>
+        <strong>Editorial Selesai</strong>
+        <?php elseif($input->is_edit == 'n' and $input->draft_status == 'Draft Ditolak'): ?>
+        <strong>Draft Ditolak</strong>
+        <?php else: ?>
+          -
+        <?php endif ?>
       </div>
       <hr class="m-0">
     </div>
@@ -366,10 +372,11 @@
             console.log(datax)
             $this.removeAttr("disabled").html("Submit");
             if(datax.status == true){
-            toastr_view('111');
+              toastr_view('111');
             }else{
-            toastr_view('000');
-          }
+              toastr_view('000');
+            }
+            $('#list-group-edit').load(' #list-group-edit');
           }
         });
         return false;
@@ -401,6 +408,7 @@
               }else{
                 toastr_view('000');
               }
+              $('#list-group-edit').load(' #list-group-edit');
             }
           });
 
@@ -426,6 +434,7 @@
               edit_status : edit_status,
               draft_status : action,
               edit_end_date : end_date,
+              is_edit : 'n'
             },
             success :function(data){
               let datax = JSON.parse(data);
@@ -436,6 +445,7 @@
               }else{
                 toastr_view('000');
               }
+              $('#list-group-edit').load(' #list-group-edit');
             }
           });
 

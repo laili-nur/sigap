@@ -47,7 +47,13 @@
       <?php endif ?>
       <div class="list-group-item justify-content-between">
         <span class="text-muted">Status</span>
-        <strong><?=($input->is_layout == 'y')?'Layout Selesai': '-' ?></strong>
+        <?php if($input->is_layout == 'y'): ?>
+        <strong>Layout Selesai</strong>
+        <?php elseif($input->is_layout == 'n' and $input->draft_status == 'Draft Ditolak'): ?>
+        <strong>Draft Ditolak</strong>
+        <?php else: ?>
+          -
+        <?php endif ?>
       </div>
       <hr class="m-0">
     </div>
@@ -428,7 +434,7 @@
               <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
-                <button class="btn btn-success" type="submit" id="layout-setuju" value="9">Setuju</button>
+                <button class="btn btn-success" type="submit" id="layout-setuju" value="12">Setuju</button>
                 <button class="btn btn-danger" type="submit" id="layout-tolak" value="99">Tolak</button>
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>
@@ -467,10 +473,11 @@
             console.log(datax)
             $this.removeAttr("disabled").html("Submit");
             if(datax.status == true){
-            toastr_view('111');
+              toastr_view('111');
             }else{
-            toastr_view('000');
-          }
+              toastr_view('000');
+            }
+            $('#list-group-layout').load(' #list-group-layout');
           }
         });
         return false;
@@ -488,17 +495,19 @@
           datatype : "JSON",
           data : {
             cover_notes : cc,
-            cover_notes_author : ccp
+            cover_notes_author : ccp,
+            draft_status : 10,
           },
           success :function(data){
             let datax = JSON.parse(data);
             console.log(datax)
             $this.removeAttr("disabled").html("Submit");
             if(datax.status == true){
-            toastr_view('111');
+              toastr_view('111');
             }else{
-            toastr_view('000');
-          }
+              toastr_view('000');
+            }
+            $('#list-group-layout').load(' #list-group-layout');
           }
         });
         return false;
@@ -519,7 +528,8 @@
               layout_status : layout_status,
               draft_status : action,
               layout_end_date : end_date,
-              is_layout : 'y'
+              proofread_start_date : end_date,
+              is_layout : 'y',
             },
             success :function(data){
               let datax = JSON.parse(data);
@@ -530,6 +540,7 @@
               }else{
                 toastr_view('000');
               }
+              $('#list-group-layout').load(' #list-group-layout');
             }
           });
 
@@ -555,6 +566,7 @@
               layout_status : layout_status,
               draft_status : action,
               layout_end_date : end_date,
+              is_layout : 'n'
             },
             success :function(data){
               let datax = JSON.parse(data);
@@ -565,6 +577,7 @@
               }else{
                 toastr_view('000');
               }
+              $('#list-group-layout').load(' #list-group-layout');
             }
           });
 

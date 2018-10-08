@@ -55,7 +55,7 @@
           <!-- .menu -->
           <ul class="menu">
             <!-- .menu-item -->
-            <li class="menu-item has-active">
+            <li class="menu-item <?=($pages=='home')?'has-active':'' ?>">
               <a href="<?= base_url() ?>" class="menu-link">
                 <span class="menu-icon oi oi-dashboard"></span>
                 <span class="menu-text">Dashboard</span>
@@ -66,7 +66,7 @@
             <li class="menu-header">Penerbitan </li>
             <!-- /.menu-header -->
             <!-- .menu-item -->
-            <li class="menu-item">
+            <li class="menu-item <?=($pages=='draft')?'has-active':'' ?>">
               <a href="<?= base_url('draft') ?>" class="menu-link">
                 <span class="menu-icon fa fa-paperclip"></span>
                 <span class="menu-text">Draft Usulan</span>
@@ -75,7 +75,7 @@
             <!-- /.menu-item -->
             <?php if ($ceklevel != 'reviewer'): ?>
             <!-- .menu-item -->
-            <li class="menu-item">
+            <li class="menu-item <?=($pages=='book')?'has-active':'' ?>">
               <a href="<?= base_url('book') ?>" class="menu-link">
                 <span class="menu-icon fa fa-book"></span>
                 <span class="menu-text">Buku</span>
@@ -86,7 +86,7 @@
             <!-- jika bukan superadmin / admin penerbitan maka tampil draft sama buku doang -->
             <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
             <!-- .menu-item -->
-            <li class="menu-item">
+            <li class="menu-item <?=($pages=='author')?'has-active':'' ?>">
               <a href="<?= base_url('author') ?>" class="menu-link">
                 <span class="menu-icon fa fa-user-tie"></span>
                 <span class="menu-text">Penulis</span>
@@ -94,15 +94,15 @@
             </li>
             <!-- /.menu-item -->
             <!-- .menu-item -->
-            <li class="menu-item">
-              <a href="<?= base_url('reviewer') ?>" class="menu-link">
+            <li class="menu-item <?=($pages=='reviewer')?'has-active':'' ?>">
+              <a href="<?= base_url('reviewer') ?>" class="menu-link ">
                 <span class="menu-icon fa fa-user-graduate"></span>
                 <span class="menu-text">Reviewer</span>
               </a>
             </li>
             <!-- /.menu-item -->
             <!-- .menu-item -->
-            <li class="menu-item">
+            <li class="menu-item <?=($pages=='worksheet')?'has-active':'' ?>">
               <a href="<?= base_url('worksheet') ?>" class="menu-link">
                 <span class="menu-icon oi oi-pencil"></span>
                 <span class="menu-text">Lembar Kerja</span>
@@ -110,26 +110,26 @@
             </li>
             <!-- /.menu-item -->
             <!-- .menu-item -->
-            <li class="menu-item has-child">
-              <a href="#" class="menu-link">
+            <li class="menu-item has-child <?=($pages=='category' || $pages=='work_unit' || $pages=='theme' || $pages=='faculty' || $pages=='work_unit' || $pages=='institute')?'has-active':'' ?>">
+              <a href="#" class="menu-link ">
                 <span class="menu-icon oi oi-puzzle-piece"></span>
                 <span class="menu-text">Data Pendukung</span>
               </a>
               <!-- child menu -->
               <ul class="menu">
-                <li class="menu-item">
+                <li class="menu-item <?=($pages=='category')?'has-active':'' ?>">
                   <a href="<?= base_url('category') ?>" class="menu-link">Data Kategori</a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item <?=($pages=='theme')?'has-active':'' ?>">
                   <a href="<?= base_url('theme') ?>" class="menu-link">Data Tema</a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item <?=($pages=='faculty')?'has-active':'' ?>">
                   <a href="<?= base_url('faculty') ?>" class="menu-link">Data Fakultas</a>
                 </li>
-                <li class="menu-item">
-                  <a href="<?= base_url('work_unit') ?>" class="menu-link">Data Unit Kerja</a>
+                <li class="menu-item <?=($pages=='work_unit')?'has-active':'' ?>">
+                  <a href="<?= base_url('work_unit') ?>" class="menu-link">Data Unit Kerja </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item <?=($pages=='institute')?'has-active':'' ?>">
                   <a href="<?= base_url('institute') ?>" class="menu-link">Data Institusi</a>
                 </li>
               </ul>
@@ -140,7 +140,7 @@
             <li class="menu-header">LAPORAN </li>
             <!-- /.menu-header -->
             <!-- .menu-item -->
-            <li class="menu-item">
+            <li class="menu-item <?=($pages=='reporting')?'has-active':'' ?>">
               <a href="<?=base_url('reporting') ?>" class="menu-link">
                 <span class="menu-icon fa fa-chart-bar"></span>
                 <span class="menu-text">Laporan</span>    
@@ -153,7 +153,7 @@
             <li class="menu-header">Akun </li>
             <!-- /.menu-header -->
             <!-- .menu-item -->
-            <li class="menu-item">
+            <li class="menu-item <?=($pages=='user')?'has-active':'' ?>">
               <a href="<?=base_url('user') ?>" class="menu-link">
                 <span class="menu-icon fa fa-users"></span>
                 <span class="menu-text">User</span>    

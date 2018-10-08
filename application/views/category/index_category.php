@@ -4,7 +4,7 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="<?=base_url()?>"><span class="fa fa-home"></span> Admin Panel</a>
+        <a href="<?=base_url()?>"><span class="fa fa-home"></span></a>
       </li>
       <li class="breadcrumb-item">
         <a href="<?=base_url()?>">Penerbitan</a>
@@ -79,13 +79,39 @@
                             <i class="fa fa-pencil-alt"></i>
                             <span class="sr-only">Edit</span>
                           </a>
-                           <a href="<?= base_url('category/delete/'.$category->category_id.'') ?>" class="btn btn-sm btn-danger">
-                            <i class="fa fa-trash-alt"></i>
-                            <span class="sr-only">Edit</span>
-                          </a>
+                          <button type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modalhapus-<?= $category->category_id ?>" ><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
                         </td>
                       </tr>
                       <!-- /tr -->
+                      <!-- Alert Danger Modal -->
+                      <div class="modal modal-alert fade" id="modalhapus-<?= $category->category_id ?>" tabindex="-1" role="dialog" aria-labelledby="modalhapus" aria-hidden="true">
+                        <!-- .modal-dialog -->
+                        <div class="modal-dialog" role="document">
+                          <!-- .modal-content -->
+                          <div class="modal-content">
+                            <!-- .modal-header -->
+                            <div class="modal-header">
+                              <h5 class="modal-title">
+                                <i class="fa fa-exclamation-triangle text-red mr-1"></i> Konfirmasi Hapus</h5>
+                            </div>
+                            <!-- /.modal-header -->
+                            <!-- .modal-body -->
+                            <div class="modal-body">
+                              <p>Apakah anda yakin akan menghapus kategori <span class="font-weight-bold"><?= $category->category_name ?></span>?</p>
+                            </div>
+                            <!-- /.modal-body -->
+                            <!-- .modal-footer -->
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-danger" onclick="location.href='<?= base_url('category/delete/'.$category->category_id.'') ?>'" data-dismiss="modal">Hapus</button>
+                              <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                            </div>
+                            <!-- /.modal-footer -->
+                          </div>
+                          <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                      </div>
+                      <!-- /.modal -->
                       <?php endforeach ?>
                     </tbody>
                     <!-- /tbody -->

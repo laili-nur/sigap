@@ -7,7 +7,9 @@
     <div class="card-body">
       <!-- .progress-list -->
         <ol class="progress-list mb-0 mb-sm-4">
-          <li class="<?= ($reviewers) ? 'active' : '' ?>
+          <li class="
+          <?= ($input->is_review == 'n' and $input->draft_status == 'Draft Ditolak')? 'error':'' ?>
+          <?= ($reviewers) ? 'active' : '' ?>
           <?= ($input->is_review == 'y') ? 'success' : '' ?>">
             <button type="button" data-toggle="tooltip" title="Step 1">
               <!-- progress indicator -->
@@ -15,29 +17,45 @@
             </button>
             <span class="progress-label d-none d-sm-inline-block">Review</span>
           </li>
-          <li class="<?= ($input->is_edit == 'y') ? 'success' : '' ?>
-                    <?= ($input->is_review == 'y') ? 'active' : '' ?>">
+          <li class="
+          <?= ($input->is_edit == 'n' and $input->draft_status == 'Draft Ditolak')? 'error':'' ?>
+          <?= ($input->is_edit == 'y') ? 'success' : '' ?>
+          <?= ($input->is_review == 'y') ? 'active' : '' ?>">
             <button type="button" data-toggle="tooltip" title="Step 2">
               <!-- progress indicator -->
               <span class="progress-indicator"></span>
             </button>
             <span class="progress-label d-none d-sm-inline-block">Edit</span>
           </li>
-          <li class="<?= ($input->is_layout == 'y') ? 'success' : '' ?>
-                    <?= ($input->is_edit == 'y') ? 'active' : '' ?>">
+          <li class="
+          <?= ($input->is_layout == 'n' and $input->draft_status == 'Draft Ditolak')? 'error':'' ?>
+          <?= ($input->is_layout == 'y') ? 'success' : '' ?>
+          <?= ($input->is_edit == 'y') ? 'active' : '' ?>">
             <button type="button" data-toggle="tooltip" title="Step 3">
               <!-- progress indicator -->
               <span class="progress-indicator"></span>
             </button>
             <span class="progress-label d-none d-sm-inline-block">Layout</span>
           </li>
-          <li class="<?= ($input->is_proofread == 'y') ? 'success' : '' ?>
-                    <?= ($input->is_layout == 'y') ? 'active' : '' ?>">
+          <li class="
+          <?= ($input->is_proofread == 'n' and $input->draft_status == 'Draft Ditolak')? 'error':'' ?>
+          <?= ($input->is_proofread == 'y') ? 'success' : '' ?>
+          <?= ($input->is_layout == 'y') ? 'active' : '' ?>">
             <button type="button" data-toggle="tooltip" title="Step 4">
               <!-- progress indicator -->
               <span class="progress-indicator"></span>
             </button>
             <span class="progress-label d-none d-sm-inline-block">Proofread</span>
+          </li>
+          <li class="
+          <?= ($input->is_proofread == 'y' and $input->draft_status == 'Draft Ditolak')? 'error':'' ?>
+          <?= ($input->draft_status == 'Draft Final') ? 'success' : '' ?>
+          <?= ($input->is_proofread == 'y') ? 'active' : '' ?>">
+            <button type="button" data-toggle="tooltip" title="Step 4">
+              <!-- progress indicator -->
+              <span class="progress-indicator"></span>
+            </button>
+            <span class="progress-label d-none d-sm-inline-block">Final</span>
           </li>
         </ol>
         <!-- /.progress-list -->

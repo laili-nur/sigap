@@ -19,15 +19,22 @@ class Home extends MY_Controller
 	{
         $cekusername = $this->session->userdata('username');
         $ceklevel = $this->session->userdata('level');
-
-        $tot_category     = count($this->home->getAll('category'));
-        $tot_draft     = count($this->home->getAll('book'));
-        $tot_book     = count($this->home->getAll('draft'));
-        $tot_author     = count($this->home->getAll('author'));
-        $tot_reviewer     = count($this->home->getAll('reviewer'));
-
         $drafts = array();
         $count = array();
+
+        $drafts['tot_category']     = count($this->home->getAll('category'));
+        $drafts['tot_draft']     = count($this->home->getAll('book'));
+        $drafts['tot_book']     = count($this->home->getAll('draft'));
+        $drafts['tot_author']     = count($this->home->getAll('author'));
+        $drafts['tot_reviewer']     = count($this->home->getAll('reviewer'));
+
+        $drafts['tot_desk_phase'] = count($tot = $this->home->where('draft_status','0')->getAll('draft'));
+        $drafts['tot_review_phase'] = count($tot = $this->home->where('is_review','n')->whereNot('review1_notes','')->whereNot('review2_notes','')->getAll('draft'));
+        $drafts['tot_edit_phase'] = count($tot = $this->home->where('is_review','y')->where('is_edit','n')->getAll('draft'));
+        $drafts['tot_layout_phase'] = count($tot = $this->home->where('is_edit','y')->where('is_layout','n')->getAll('draft'));
+        $drafts['tot_proofread_phase'] = count($tot = $this->home->where('is_proofread','n')->where('is_layout','y')->getAll('draft'));
+
+
 
         if($ceklevel == 'reviewer'){
             $drafts = $this->home->join3('draft_reviewer','draft','draft')->join3('reviewer','draft_reviewer','reviewer')->join3('user','reviewer','user')->where('user.username',$cekusername)->getAll('draft');
@@ -93,11 +100,30 @@ class Home extends MY_Controller
             $count['count_total'] = $count_total;
         }elseif($ceklevel == 'author'){
             $categories = $this->home->orderBy('category_name')->getAll('category');
-        }
+
+            $drafts = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->getAll('draft');
+            $draft_review = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('draft_status','4')->getAll('draft');
+            $draft_edit = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('is_review','y')->where('is_edit','n')->getAll('draft');
+            $draft_layout = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('is_edit','y')->where('is_layout','n')->getAll('draft');
+            $draft_proofread = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('is_layout','y')->where('is_proofread','n')->getAll('draft');
+
+            $drafts_approved = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->whereNot('draft_status','99')->where('user.username',$cekusername)->getAll('draft');
+            $drafts_rejected = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('draft_status','99')->where('user.username',$cekusername)->getAll('draft');
+            $drafts_book = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('draft_status','15')->where('user.username',$cekusername)->getAll('draft');
+
+            $count['draft_total'] = count($drafts);
+            $count['draft_approved'] = count($drafts_approved);
+            $count['draft_rejected'] = count($drafts_rejected);
+            $count['draft_book'] = count($drafts_book);
+            $count['draft_review'] = count($draft_review);
+            $count['draft_edit'] = count($draft_edit);
+            $count['draft_layout'] = count($draft_layout);
+            $count['draft_proofread'] = count($draft_proofread);
+        }else{}
 
 
         $pages    = $this->pages;
         $main_view  = 'home/index';
-	$this->load->view('template', compact('categories','count','drafts_newest','drafts','tot_category','tot_draft','tot_book','tot_author','tot_reviewer','pages', 'main_view'));        
+	$this->load->view('template', compact('categories','count','drafts_newest','drafts','pages', 'main_view'));        
 	}
 }

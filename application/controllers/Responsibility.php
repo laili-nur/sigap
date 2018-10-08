@@ -41,6 +41,19 @@ class Responsibility extends Operator_Controller
         }
 
         if ($this->responsibility->insert($input)) {
+            $ambil_level = $this->responsibility->join('user')->where('user.user_id',$input->user_id)->get();
+            $data['level'] = $ambil_level->level;
+            if($ambil_level->level == 'editor'){
+                $status = array('draft_status' => 6);
+                $this->responsibility->editDraftDate($input->draft_id, 'edit_start_date');
+                $this->responsibility->updateDraftStatus($input->draft_id, $status);
+            }
+            if($ambil_level->level == 'layouter'){
+                $status = array('draft_status' => 8);
+                $this->responsibility->editDraftDate($input->draft_id, 'layout_start_date');
+                $this->responsibility->updateDraftStatus($input->draft_id, $status);
+            }
+            
             $data['validasi'] = true;
             $data['status'] = true;
             $this->session->set_flashdata('success', 'Data saved');

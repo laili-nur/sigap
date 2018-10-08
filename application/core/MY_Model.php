@@ -300,8 +300,8 @@ class MY_Model extends CI_Model
 
         return $id;
     }
-    
-        public function getIdDraftFromDraftId($draft_id, $role) {
+
+    public function getIdDraftFromDraftId($draft_id, $role) {
         $id = 0;
 
         $data =  $this->select($role . '_id')

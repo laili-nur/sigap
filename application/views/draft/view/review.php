@@ -75,7 +75,14 @@
           <?php endif ?>
           <div class="list-group-item justify-content-between">
             <span class="text-muted">Status</span>
-            <strong><?=($input->is_review == 'y')?'Review Selesai': '-' ?></strong>
+            <?php if($input->is_review == 'y'): ?>
+            <strong>Review Selesai</strong>
+            <?php elseif($input->is_review == 'n' and $input->draft_status == 'Draft Ditolak'): ?>
+            <strong>Draft Ditolak</strong>
+            <?php else: ?>
+              -
+            <?php endif ?>
+
           </div>
           <hr class="m-0">
       </div>
@@ -180,6 +187,7 @@
               <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
+                <?php if($ceklevel=='reviewer'): ?>
                 <div class="card-footer-content text-muted p-0 m-0">
                   <div class="mb-1 font-weight-bold">Rekomendasi (Pilih jika sudah final)</div> 
                   <div class="custom-control custom-control-inline custom-radio">
@@ -191,6 +199,7 @@
                     <label class="custom-control-label" for="review1_flagn">Tidak</label>
                   </div>
                 </div>
+                <?php endif ?>
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-review1">Submit</button>
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>
@@ -289,8 +298,9 @@
               <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
+                <?php if($ceklevel=='reviewer'): ?>
                 <div class="card-footer-content text-muted p-0 m-0">
-                  <div class="mb-1 font-weight-bold">Rekomendasi</div> 
+                  <div class="mb-1 font-weight-bold">Rekomendasi (Pilih jika sudah final)</div> 
                   <div class="custom-control custom-control-inline custom-radio">
                     <?= form_radio('review2_flag', 'y', isset($input->review2_flag) && ($input->review2_flag == 'y') ? true : false,'required class="custom-control-input" id="review2_flagy"')?>
                     <label class="custom-control-label" for="review2_flagy">Setuju</label>
@@ -300,6 +310,7 @@
                     <label class="custom-control-label" for="review2_flagn">Tidak</label>
                   </div>
                 </div>
+                <?php endif ?>
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-review2">Submit</button>
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>
@@ -458,10 +469,11 @@
             console.log(datax)
             $this.removeAttr("disabled").html("Submit");
             if(datax.status == true){
-            toastr_view('111');
+              toastr_view('111');
             }else{
-            toastr_view('000');
-          }
+              toastr_view('000');
+            }
+            $('#list-group-review').load(' #list-group-review');
           }
         });
         return false;
@@ -490,10 +502,11 @@
             console.log(datax)
             $this.removeAttr("disabled").html("Submit");
             if(datax.status == true){
-            toastr_view('111');
+              toastr_view('111');
             }else{
-            toastr_view('000');
-          }
+              toastr_view('000');
+            }
+            $('#list-group-review').load(' #list-group-review');
           }
         });
         return false;
@@ -525,6 +538,7 @@
               }else{
                 toastr_view('000');
               }
+                $('#list-group-review').load(' #list-group-review');
             }
           });
 
@@ -550,6 +564,7 @@
               review_status : review_status,
               draft_status : action,
               review_end_date : end_date,
+              is_review : 'n'
             },
             success :function(data){
               let datax = JSON.parse(data);
@@ -560,6 +575,7 @@
               }else{
                 toastr_view('000');
               }
+              $('#list-group-review').load(' #list-group-review');
             }
           });
 

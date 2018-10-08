@@ -6,13 +6,15 @@ class Book extends Operator_Controller
     {
         parent::__construct();
         $this->pages = 'book';
+        //khusus admin
+        $ceklevel = $this->session->userdata('level');
+        if ($ceklevel == 'author' || $ceklevel == 'reviewer' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
+            redirect('home');
+        }
     }
 
 	public function index($page = null)
 	{
-            $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
-            
         $books     = $this->book->join('draft')->orderBy('draft.draft_id')->orderBy('book_id')->paginate($page)->getAll();
         $tot        = $this->book->join('draft')->orderBy('draft.draft_id')->orderBy('book_id')->getAll();
         $total     = count($tot);
@@ -21,20 +23,12 @@ class Book extends Operator_Controller
         $pagination = $this->book->makePagination(site_url('book'), 2, $total);
 
 		$this->load->view('template', compact('pages', 'main_view', 'books', 'pagination', 'total'));
-	
-                }
-            else{
-                redirect('home');
-            }
-            }
+	}
         
 // -- add --        
         public function add()
 	{
-        
-            $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
-            if (!$_POST) {
+        if (!$_POST) {
             $input = (object) $this->book->getDefaultValues();
         } else {
             $input = (object) $this->input->post(null, true);
@@ -79,20 +73,13 @@ class Book extends Operator_Controller
         }
 
         redirect('book');
-        }
-            else{
-                redirect('home');
-            }
 	}
  
         
 // -- edit --         
         public function edit($id = null)
 	{
-        
-            $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
-            $book = $this->book->where('book_id', $id)->get();
+        $book = $this->book->where('book_id', $id)->get();
         if (!$book) {
             $this->session->set_flashdata('warning', 'Book data were not available');
             redirect('book');
@@ -156,19 +143,12 @@ class Book extends Operator_Controller
         }
 
         redirect('book');
-        }
-            else{
-                redirect('home');
-            }
 	}
 
 // -- delete --         
         public function delete($id = null)
 	{
-	$ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
-            
-            $book = $this->book->where('book_id', $id)->get();
+	$book = $this->book->where('book_id', $id)->get();
         if (!$book) {
             $this->session->set_flashdata('warning', 'Book data were not available');
             redirect('book');
@@ -185,19 +165,12 @@ class Book extends Operator_Controller
         }
 
 		redirect('book');
-                }
-            else{
-                redirect('home');
-            }
 	}
  
 // -- search --        
         public function search($page = null)
         {
-        $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
-            
-            $keywords   = $this->input->get('keywords', true);
+        $keywords   = $this->input->get('keywords', true);
         $books     = $this->book->like('book_code', $keywords)
                                   ->orLike('draft_title', $keywords)
                                   ->orLike('book_title', $keywords)
@@ -233,13 +206,7 @@ class Book extends Operator_Controller
         $pages    = $this->pages;
         $main_view  = 'book/index_book';
         $this->load->view('template', compact('pages', 'main_view', 'books', 'pagination', 'total'));
-    
-            }
-            else{
-                redirect('home');
-            }
-        
-        }
+    }
         
         /*
     |-----------------------------------------------------------------

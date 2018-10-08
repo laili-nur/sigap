@@ -11,9 +11,14 @@ function konversiTanggal($input=null){
 // konversi id ke nama
 function konversiID($table,$vars,$id)
 {
-    $CI =& get_instance();
-    $query = $CI->db->from($table)->where($vars, $id)->get();
-    return $query->row();
+    if($id==''){
+        return "";
+    }else{
+        $CI =& get_instance();
+        $query = $CI->db->from($table)->where($vars, $id)->get();
+        return $query->row();
+    }
+    
 }
 
 // Get list of editor

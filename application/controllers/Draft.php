@@ -64,21 +64,32 @@ class Draft extends Operator_Controller
         {
         $filter   = $this->input->get('filter', true);
         $this->db->group_by('draft.draft_id');
-        if($filter == 'review'){
+        if($filter == 'desk-screening'){
             $drafts = $this->draft->join('category')
                                   ->join('theme')
                                   ->joinRelationMiddle('draft', 'draft_author')
                                   ->joinRelationDest('author', 'draft_author')            
-                                  ->where('is_review','n')            
-                                  ->whereNot('review1_notes','')            
-                                  ->whereNot('review2_notes','')            
+                                  ->where('draft_status','0')                      
                                   ->orderBy('draft_title')
                                   ->paginate($page)
                                   ->getAll();
-            $tot = $this->draft->join('category')
-                                ->join('theme')              
-                                ->orderBy('draft_title')
-                                ->getAll();
+            $tot = $this->draft->where('draft_status','0')                      
+                                  ->getAll();
+            $total = count($tot);
+        }elseif($filter == 'review'){
+            $drafts = $this->draft->join('category')
+                                  ->join('theme')
+                                  ->joinRelationMiddle('draft', 'draft_author')
+                                  ->joinRelationDest('author', 'draft_author')            
+                                  ->where('is_review','n')                        
+                                  ->where('draft_status','4')                        
+                                  ->orderBy('draft_title')
+                                  ->paginate($page)
+                                  ->getAll();
+            $tot = $this->draft->where('is_review','n')            
+                                  ->whereNot('review1_notes','')            
+                                  ->whereNot('review2_notes','')            
+                                  ->getAll();
             $total = count($tot);
         }elseif($filter == 'edit'){
             $drafts = $this->draft->join('category')
@@ -90,10 +101,9 @@ class Draft extends Operator_Controller
                                   ->orderBy('draft_title')
                                   ->paginate($page)
                                   ->getAll();
-            $tot = $this->draft->join('category')
-                                ->join('theme')              
-                                ->orderBy('draft_title')
-                                ->getAll();
+            $tot = $this->draft->where('is_review','y')            
+                                  ->where('is_edit','n')            
+                                  ->getAll();
             $total = count($tot);
         }elseif($filter == 'layout'){
             $drafts = $this->draft->join('category')
@@ -105,10 +115,9 @@ class Draft extends Operator_Controller
                                   ->orderBy('draft_title')
                                   ->paginate($page)
                                   ->getAll();
-            $tot = $this->draft->join('category')
-                                ->join('theme')              
-                                ->orderBy('draft_title')
-                                ->getAll();
+            $tot = $this->draft->where('is_edit','y')            
+                                  ->where('is_layout','n')            
+                                  ->getAll();
             $total = count($tot);
         }elseif($filter == 'proofread'){
             $drafts = $this->draft->join('category')
@@ -120,10 +129,9 @@ class Draft extends Operator_Controller
                                   ->orderBy('draft_title')
                                   ->paginate($page)
                                   ->getAll();
-            $tot = $this->draft->join('category')
-                                ->join('theme')              
-                                ->orderBy('draft_title')
-                                ->getAll();
+            $tot = $this->draft->where('is_proofread','n')            
+                                  ->where('is_layout','y')            
+                                  ->getAll();
             $total = count($tot);
         }else{
             $drafts = $this->draft->join('category')
@@ -135,7 +143,6 @@ class Draft extends Operator_Controller
                                   ->getAll();
             $tot = $this->draft->join('category')
                                 ->join('theme')              
-                                ->orderBy('draft_title')
                                 ->getAll();
             $total = count($tot);
         }
@@ -163,10 +170,12 @@ class Draft extends Operator_Controller
 // --add--        
         public function add($category='')
 	{
-            
-            $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'author' || $ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
-            
+        //khusus admin dan author
+        $ceklevel = $this->session->userdata('level');
+        if ($ceklevel != 'author' and $ceklevel != 'admin_penerbitan' and $ceklevel != 'superadmin'){
+            redirect('home');
+        }
+
         if (!$_POST) {
             $input = (object) $this->draft->getDefaultValues();
             $input->category_id = $category;
@@ -215,7 +224,7 @@ class Draft extends Operator_Controller
         if ($isSuccess) {
             $worksheet_num = $this->generateWorksheetNumber();
 
-            $data_worksheet = array('draft_id' => $draft_id, 'worksheet_num' => $worksheet_num);
+            $data_worksheet = array('draft_id' => $draft_id, 'worksheet_num' => $worksheet_num, 'worksheet_status' => 0);
             $worksheet_id = $this->draft->insert($data_worksheet, 'worksheet');
 
             if ($worksheet_id < 1) {
@@ -231,11 +240,6 @@ class Draft extends Operator_Controller
 
         redirect('draft/view/'.$draft_id);
       }
-      else{
-            redirect('draft');
-        }
-        }
-        
 
 // -- view --
       public function view($id = null)
@@ -423,9 +427,12 @@ class Draft extends Operator_Controller
 
     public function edit($id = null)
     {
+        //khusus admin
         $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
-        
+        if ($ceklevel != 'superadmin' and $ceklevel != 'admin_penerbitan'){
+            redirect('draft');
+        }
+
         $draft = $this->draft->where('draft_id', $id)->get();
         if (!$draft) {
             $this->session->set_flashdata('warning', 'Draft data were not available');
@@ -472,19 +479,18 @@ class Draft extends Operator_Controller
         }
 
         redirect('draft');
-            }
-            else{
-                redirect('draft');
-            }
     }
 
 // -- delete --        
-        public function delete($id = null)
+    public function delete($id = null)
 	{
-            $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
-            
-	$draft = $this->draft->where('draft_id', $id)->get();
+        //khusus admin
+        $ceklevel = $this->session->userdata('level');
+        if ($ceklevel != 'superadmin' and $ceklevel != 'admin_penerbitan'){
+            redirect('draft');
+        }
+        
+        $draft = $this->draft->where('draft_id', $id)->get();
         if (!$draft) {
             $this->session->set_flashdata('warning', 'Draft data were not available');
             redirect('draft');
@@ -515,13 +521,8 @@ class Draft extends Operator_Controller
         }
 
         redirect('draft');
-            }
-            else{
-                redirect('draft');
-            }
 	}
 
-        
     public function copyToBook($draft_id, $title, $file) 
     {
         
@@ -532,7 +533,8 @@ class Draft extends Operator_Controller
             $data = array(
                 'draft_id' => $draft_id,
                 'book_title' => urldecode($title),
-                'book_file' => urldecode($file)
+                'book_file' => urldecode($file),
+                'published_date' => date('Y-m-d H:i:s')
             );
 
             if ($this->book->insert($data)) {
@@ -543,13 +545,12 @@ class Draft extends Operator_Controller
                 }
             }
         } else {
+            $this->session->set_flashdata('error', 'Book has been created');
             redirect('book');
         }
         
     }
-        
-        
-        
+
 // -- search --        
         public function search($page = null)
         {
@@ -644,50 +645,50 @@ class Draft extends Operator_Controller
             case 0:
                 $status = 'Desk Screening';
                 break;
-            case 2:
-                $status = 'Worksheet Rejected';
-                break;
             case 1:
-                $status = 'Choosing Reviewer';
+                $status = 'Lolos Desk Screening';
+                break;
+            case 2:
+                $status = 'Tidak Lolos Desk Screening';
                 break;
             case 3:
                 $status = 'Reviewer Rejected';
                 break;
             case 4:
-                $status = 'Review on Progress';
+                $status = 'Reviewing...';
                 break;
             case 5:
-                $status = 'Choosing Editor';
+                $status = 'Review Selesai';
                 break;
             case 6:
-                $status = 'Edit on Progress';
+                $status = 'Editing...';
                 break;
             case 7:
-                $status = 'Choosing Layouter';
+                $status = 'Editorial Selesai';
                 break;
             case 8:
-                $status = 'Layout on Progress';
+                $status = 'Layouting...';
                 break;
             case 9:
-                $status = 'Choosing Cover';
+                $status = 'Layout selesai';
                 break;
             case 10:
-                $status = 'Cover on Progress';
+                $status = 'Desain Cover';
                 break;
             case 11:
-                $status = 'Choosing Proofread';
+                $status = 'Cover Selesai';
                 break;
             case 12:
-                $status = 'Proofread on Progress';
+                $status = 'Proofreading...';
                 break;
             case 13:
-                $status = 'Confirm to Book';
+                $status = 'Proofread Selesai';
                 break;
             case 14:
-                $status = 'Draft Published into Book';
+                $status = 'Draft Final';
                 break;
             case 99:
-                $status = 'Draft Rejected';
+                $status = 'Draft Ditolak';
                 break;
             
             default:

@@ -37,7 +37,7 @@ class Author extends Operator_Controller
         if (!$this->author->validate()) {
             $main_view   = 'author/view_author';
             $form_action = "author/edit/$id";
-
+            $pages    = $this->pages;
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
@@ -68,7 +68,8 @@ class Author extends Operator_Controller
         $drafts =  $this->author->select(['draft_author.author_id','author_name','draft_author.draft_id','draft_title','category_name','theme_name'])->join3('draft_author','author','author')->join3('draft','draft_author','draft')->join3('category','draft','category')->join3('theme','draft','theme')->where('draft_author.author_id',$id)->getAll();
 
         $main_view   = 'author/view_author';
-        $this->load->view('template', compact('main_view', 'drafts', 'input'));
+        $pages    = $this->pages;
+        $this->load->view('template', compact('pages','main_view', 'drafts', 'input'));
     
     }
         

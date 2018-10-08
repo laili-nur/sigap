@@ -14,7 +14,13 @@
           </div>
           <div class="list-group-item justify-content-between">
             <span class="text-muted">Status</span>
-            <strong><?=($input->is_proofread == 'y')?'Proofread Selesai': '-' ?></strong>
+            <?php if($input->is_proofread == 'y'): ?>
+            <strong>Proofread Selesai</strong>
+            <?php elseif($input->is_proofread == 'n' and $input->draft_status == 'Draft Ditolak'): ?>
+            <strong>Draft Ditolak</strong>
+            <?php else: ?>
+              -
+            <?php endif ?>
           </div>
           <hr class="m-0">
       </div>
@@ -273,6 +279,7 @@
               proofread_status : proofread_status,
               draft_status : action,
               proofread_end_date : end_date,
+              is_proofread : 'n'
             },
             success :function(data){
               let datax = JSON.parse(data);

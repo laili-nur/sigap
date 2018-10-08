@@ -6,6 +6,11 @@ class Faculty extends Operator_Controller
     {
         parent::__construct();
         $this->pages = 'faculty';
+        //khusus admin
+        $ceklevel = $this->session->userdata('level');
+        if ($ceklevel == 'author' || $ceklevel == 'reviewer' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
+            redirect('home');
+        }
     }
 //--index--
 	public function index($page = null)
@@ -19,9 +24,7 @@ class Faculty extends Operator_Controller
         
 //--add--
         public function add()
-	{                   
-            $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
+	{                     
         if (!$_POST) {
             $input = (object) $this->faculty->getDefaultValues();
         } else {
@@ -44,18 +47,11 @@ class Faculty extends Operator_Controller
         }
 
         redirect('faculty');
-        }
-        else{
-            redirect('faculty');
-        }
 	}
         
 //--edit--        
         public function edit($id = null)
 	{
-            $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
-        
         $faculty = $this->faculty->where('faculty_id', $id)->get();
         if (!$this) {
             $this->session->set_flashdata('warning', 'Faculty data were not available');
@@ -84,18 +80,11 @@ class Faculty extends Operator_Controller
         }
 
         redirect('faculty');
-        }
-        else{
-            redirect('faculty');
-        }
 	}
         
 //--delete--        
         	public function delete($id = null)
 	{
-                    $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
-                
 		$faculty = $this->faculty->where('faculty_id', $id)->get();
         if (!$faculty) {
             $this->session->set_flashdata('warning', 'Faculty data were not available');
@@ -109,10 +98,6 @@ class Faculty extends Operator_Controller
         }
 
         redirect('faculty');
-        }
-        else{
-            redirect('faculty');
-        }
 	}
         
 

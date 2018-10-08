@@ -3,54 +3,60 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Reporting extends Admin_Controller {
 
+	public function __construct()
+    {
+        parent::__construct();
+        $this->pages = 'reporting';
+    }
+
 
 	/*Controller for fetching data to the table*/
 
 	public function index()
 	{
 		$drafts     = $this->reporting->fetch_data();
-
+		$pages		= $this->pages;
 		$main_view  = 'report/report_draft';
 
-		$this->load->view('template', compact('main_view', 'drafts'));
+		$this->load->view('template', compact('pages','main_view', 'drafts'));
 	}
 
 	public function index_books()
 	{
 		$books     = $this->reporting->fetch_data_book();
-
+		$pages		= $this->pages;
 		$main_view  = 'report/report_book';
 
-		$this->load->view('template', compact('main_view', 'books'));
+		$this->load->view('template', compact('pages','main_view', 'books'));
 	}
 
 	public function index_author()
 	{
 		$author     = $this->reporting->fetch_data_author();
-
+		$pages		= $this->pages;
 		$main_view  = 'report/report_author';
 
-		$this->load->view('template', compact('main_view', 'author'));
+		$this->load->view('template', compact('pages','main_view', 'author'));
 	}
 
 	public function performa_editor()
 	{
 
 		$performance_editor = $this->reporting->select(['draft_title','username','edit_start_date','edit_deadline','edit_end_date'])->join3('responsibility','draft','draft')->join3('user','responsibility','user')->where('level', 'editor')->getAll('draft');
-
+		$pages		= $this->pages;
 		$main_view = 'report/performance_editor';
 
-		$this->load->view('template', compact('main_view', 'performance_editor'));
+		$this->load->view('template', compact('pages','main_view', 'performance_editor'));
 
 	}
 
 	public function performa_layouter()
 	{
 		$performance_layouter = $this->reporting->select(['draft_title','username','layout_start_date','layout_deadline','layout_end_date'])->join3('responsibility','draft','draft')->join3('user','responsibility','user')->where('level', 'layouter')->getAll('draft');
-
+		$pages		= $this->pages;
 		$main_view = 'report/performance_layouter';
 
-		$this->load->view('template', compact('main_view', 'performance_layouter'));
+		$this->load->view('template', compact('pages','main_view', 'performance_layouter'));
 	}
 
 	public function getDraft()

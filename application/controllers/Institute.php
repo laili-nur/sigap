@@ -6,6 +6,11 @@ class Institute extends Operator_Controller
     {
         parent::__construct();
         $this->pages = 'institute';
+        //khusus admin
+        $ceklevel = $this->session->userdata('level');
+        if ($ceklevel == 'author' || $ceklevel == 'reviewer' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
+            redirect('home');
+        }
     }
 //--index--
 	public function index($page = null)
@@ -20,9 +25,7 @@ class Institute extends Operator_Controller
 //--add--
         public function add()
 	{                     
-        $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
-            if (!$_POST) {
+        if (!$_POST) {
             $input = (object) $this->institute->getDefaultValues();
         } else {
             $input = (object) $this->input->post(null, true);
@@ -44,18 +47,12 @@ class Institute extends Operator_Controller
         }
 
         redirect('institute');
-        }
-            else{
-                redirect('institute');
-            }
 	}
         
 //--edit--        
         public function edit($id = null)
 	{
-        $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
-            $institute = $this->institute->where('institute_id', $id)->get();
+        $institute = $this->institute->where('institute_id', $id)->get();
         if (!$this) {
             $this->session->set_flashdata('warning', 'Institute data were not available');
             redirect('institute');
@@ -83,19 +80,12 @@ class Institute extends Operator_Controller
         }
 
         redirect('institute');
-        }
-            else{
-                redirect('institute');
-            }
 	}
         
 //--delete--        
         	public function delete($id = null)
 	{
-	$ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
-                    $institute = $this->institute->where('institute_id', $id)->get();
-                
+		$institute = $this->institute->where('institute_id', $id)->get();
         if (!$institute) {
             $this->session->set_flashdata('warning', 'Institute data were not available');
             redirect('institute');
@@ -108,10 +98,6 @@ class Institute extends Operator_Controller
         }
 
         redirect('institute');
-        }
-            else{
-                redirect('institute');
-            }
 	}
         
 

@@ -6,13 +6,15 @@ class Worksheet extends Operator_Controller
     {
         parent::__construct();
         $this->pages = 'worksheet';
+        //author dan reviewer tidak boleh akses halaman ini
+        $ceklevel = $this->session->userdata('level');
+        if ($ceklevel == 'author' || $ceklevel == 'reviewer'){
+            redirect('home');
+        }
     }
 
 	public function index($page = null)
 	{
-            $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
-            
         $worksheets     = $this->worksheet->join('draft')->orderBy('draft.draft_id')->orderBy('worksheet_id')->paginate($page)->getAll();
         $tot        = $this->worksheet->join('draft')->orderBy('draft.draft_id')->orderBy('worksheet_id')->getAll();
         $total     = count($tot);
@@ -21,18 +23,12 @@ class Worksheet extends Operator_Controller
         $pagination = $this->worksheet->makePagination(site_url('worksheet'), 2, $total);
 
 		$this->load->view('template', compact('pages', 'main_view', 'worksheets', 'pagination', 'total'));
-                }
-            else{
-                redirect('home');
-            }
 	}
         
         
         public function add()
 	{
-        $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
-            if (!$_POST) {
+        if (!$_POST) {
             $input = (object) $this->worksheet->getDefaultValues();
         } else {
             $input = (object) $this->input->post(null, true);
@@ -54,17 +50,11 @@ class Worksheet extends Operator_Controller
         }
 
         redirect('worksheet');
-        }
-            else{
-                redirect('home');
-            }
 	}
         
         public function edit($id = null)
 	{
-        $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
-            $worksheet = $this->worksheet->where('worksheet_id', $id)->get();
+        $worksheet = $this->worksheet->where('worksheet_id', $id)->get();
         $data = array('draft_id' => $worksheet->draft_id);
         $draft_title = $this->worksheet->getWhere($data, 'draft');
 
@@ -90,24 +80,27 @@ class Worksheet extends Operator_Controller
             return;
         }
 
+        $input->worksheet_pic = $this->username;
+        
         if ($this->worksheet->where('worksheet_id', $id)->update($input)) {
+            if($input->worksheet_status == 1){
+                $status = array('draft_status' => 1);
+            }elseif($input->worksheet_status == 2){
+                $status = array('draft_status' => 2);
+            }else{
+                $status = array('draft_status' => 0);
+            }
+            $this->worksheet->updateDraftStatus($worksheet->draft_id, $status);
             $this->session->set_flashdata('success', 'Data updated');
         } else {
             $this->session->set_flashdata('error', 'Data failed to update');
         }
 
         redirect('worksheet');
-        }
-            else{
-                redirect('home');
-            }
 	}
 
     public function action($id, $action)
     {
-        $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
-        
         $worksheet = $this->worksheet->where('worksheet_id', $id)->get();
 
         if (!$worksheet) {
@@ -130,26 +123,18 @@ class Worksheet extends Operator_Controller
                 }
                 $this->session->set_flashdata('success', "Worksheet $actionMessage");
             } else {
-                $this->session->set_flashdata('success', "Worksheet Failed Update");
+                $this->session->set_flashdata('warning', "Worksheet Failed Update");
             }
         } else {
             $this->session->set_flashdata('warning', 'Worksheet Failed Update');
         }
 
         redirect('worksheet');
-        }
-            else{
-                redirect('home');
-            }
-        
     }
         
         public function delete($id = null)
 	{
-	$ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
-            
-            $worksheet = $this->worksheet->where('worksheet_id', $id)->get();
+	$worksheet = $this->worksheet->where('worksheet_id', $id)->get();
         if (!$worksheet) {
             $this->session->set_flashdata('warning', 'Worksheet data were not available');
             redirect('worksheet');
@@ -162,18 +147,11 @@ class Worksheet extends Operator_Controller
         }
 
 		redirect('worksheet');
-                }
-            else{
-                redirect('home');
-            }
 	}
         
         public function search($page = null)
         {
-        $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
-            
-            $keywords       = $this->input->get('keywords', true);
+        $keywords       = $this->input->get('keywords', true);
         $worksheets     = $this->worksheet->like('worksheet_num', $keywords)
                                   ->orLike('draft_title', $keywords)
                                   ->join('draft')
@@ -201,11 +179,6 @@ class Worksheet extends Operator_Controller
         $pages    = $this->pages;
         $main_view  = 'worksheet/index_worksheet';
         $this->load->view('template', compact('pages', 'main_view', 'worksheets', 'pagination', 'total'));
-        
-            }
-            else{
-                redirect('home');
-            }
     }
         
         /*

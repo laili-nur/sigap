@@ -5,7 +5,7 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="<?=base_url()?>"><span class="fa fa-home"></span> Admin Panel</a>
+          <a href="<?=base_url()?>"><span class="fa fa-home"></span></a>
         </li>
         <li class="breadcrumb-item">
           <a href="<?=base_url()?>">Penerbitan</a>
@@ -73,13 +73,13 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> Kategori </td>
-                <td>: <?= konversiID('category','category_id', $input->category_id)->category_name;?> </td>
+                <td>: <?=isset($input->category_id)? konversiID('category','category_id', $input->category_id)->category_name : ''?> </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Tema </td>
-                <td>: <?= konversiID('theme','theme_id', $input->theme_id)->theme_name;?> </td>
+                <td>: <?=isset($input->theme_id)? konversiID('theme','theme_id', $input->theme_id)->theme_name : ''?> </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
@@ -111,7 +111,13 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> Status Draft </td>
-                <td>: <?= $input->draft_status ?>  </td>
+                <td>: <span class="font-weight-bold"><?= $input->draft_status ?></span>  </td>
+              </tr>
+              <!-- /tr -->
+              <!-- tr -->
+              <tr>
+                <td width="200px"> Catatan Draft </td>
+                <td>: <span class="font-weight-bold"><?= $input->draft_notes ?></span>  </td>
               </tr>
               <!-- /tr -->
               <!-- endif data yang dilihat reviewer -->
@@ -362,10 +368,67 @@
     <!-- if tampilan admin -->
     <?php if($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
      <div class="el-example">
-       <a href="<?= base_url('draft/copyToBook/' . $draft->draft_id . '/' . $draft->draft_title . '/' . $draft->draft_file) ?>" class="btn btn-primary" id="" value="14">Simpan jadi buku</a>
-       <button class="btn btn-danger" type="submit" id="draft-tolak" value="99">Tolak</button>
-       <button class="btn btn-light" type="submit">Kembali</button>
+       <button class="btn btn-primary" data-toggle="modal" data-target="#modalsimpan" <?=($input->is_proofread == 'y')? '':'disabled' ?>>Simpan jadi buku</button>
+       <button class="btn btn-danger" data-toggle="modal" data-target="#modaltolak">Tolak</button>
      </div>
+     <!-- Alert Danger Modal -->
+      <div class="modal modal-warning fade" id="modalsimpan" tabindex="-1" role="dialog" aria-labelledby="modalsimpan" aria-hidden="true">
+        <!-- .modal-dialog -->
+        <div class="modal-dialog" role="document">
+          <!-- .modal-content -->
+          <div class="modal-content">
+            <!-- .modal-header -->
+            <div class="modal-header">
+              <h5 class="modal-title">
+                <i class="fa fa-bullhorn text-yellow mr-1"></i> Konfirmasi Draft</h5>
+            </div>
+            <!-- /.modal-header -->
+            <!-- .modal-body -->
+            <div class="modal-body">
+              <p>Draft <span class="font-weight-bold"><?= $input->draft_title ?></span> sudah final dan akan disimpan jadi buku?</p>
+            </div>
+            <!-- /.modal-body -->
+            <!-- .modal-footer -->
+            <div class="modal-footer">
+              <button class="btn btn-primary" id="draft-setuju" draft-title="<?=$draft->draft_title ?>" draft-file="<?=$draft->draft_file ?>" value="14">Submit</button>
+              <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+            </div>
+            <!-- /.modal-footer -->
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+      <!-- Alert Danger Modal -->
+      <div class="modal modal-alert fade" id="modaltolak" tabindex="-1" role="dialog" aria-labelledby="modalsimpan" aria-hidden="true">
+        <!-- .modal-dialog -->
+        <div class="modal-dialog" role="document">
+          <!-- .modal-content -->
+          <div class="modal-content">
+            <!-- .modal-header -->
+            <div class="modal-header">
+              <h5 class="modal-title">
+                <i class="fa fa-exclamation-triangle text-red mr-1"></i> Tolak Draft</h5>
+            </div>
+            <!-- /.modal-header -->
+            <!-- .modal-body -->
+            <div class="modal-body">
+              <p>Draft <span class="font-weight-bold"><?= $input->draft_title ?></span> ditolak?</p>
+            </div>
+            <!-- /.modal-body -->
+            <!-- .modal-footer -->
+            <div class="modal-footer">
+              <button class="btn btn-danger" type="submit" id="draft-tolak" value="99">Tolak</button>
+              <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+            </div>
+            <!-- /.modal-footer -->
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
     <!-- endif tampilan admin -->
     <?php endif ?>
   <!-- endif tampilan reviewer -->
@@ -688,12 +751,16 @@
         });
         return false;
       });
-      
-      $('#draft-setuju').on('click', function() {
+
+    $('#draft-setuju').on('click', function() {
         var $this = $(this);
         $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
         let id=$('[name=draft_id]').val();
+        let draft_title=$this.attr('draft-title');
+        let draft_file=$this.attr('draft-file');
         let action=$('#draft-setuju').val();
+        let cek = '<?php echo base_url('draft/copyToBook/')?>'+id+'/'+draft_title+'/'+draft_file;
+        console.log(cek);
         $.ajax({
             type : "POST",
             url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
@@ -707,6 +774,7 @@
               $this.removeAttr("disabled").html("Simpan Jadi Buku");
               if(datax.status == true){
                 toastr_view('111');
+                location.href ='<?php echo base_url('draft/copyToBook/')?>'+id+'/'+draft_title+'/'+draft_file;
               }else{
                 toastr_view('000');
               }
@@ -723,8 +791,7 @@
         $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
         let id=$('[name=draft_id]').val();
         let action=$('#draft-tolak').val();
-
-              console.log(end_date);
+        console.log(action);
         $.ajax({
             type : "POST",
             url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
@@ -741,6 +808,7 @@
               }else{
                 toastr_view('000');
               }
+              location.href = '<?php echo base_url('draft/view/') ?>'+id;
             }
           });
 
@@ -748,6 +816,7 @@
           // location.reload();
           return false;
       });
+
   
   });
 </script>

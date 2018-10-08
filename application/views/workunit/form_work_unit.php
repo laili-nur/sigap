@@ -3,7 +3,7 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="<?=base_url()?>"><span class="fa fa-home"></span> Admin Panel</a>
+        <a href="<?=base_url()?>"><span class="fa fa-home"></span></a>
       </li>
       <li class="breadcrumb-item">
         <a href="<?=base_url()?>">Penerbitan</a>
@@ -12,7 +12,7 @@
         <a href="<?=base_url('workunit')?>">Unit Kerja</a>
       </li>
       <li class="breadcrumb-item">
-        <a class="text-muted">Tambah</a>
+        <a class="text-muted">Form</a>
       </li>
     </ol>
   </nav> 

@@ -38,7 +38,7 @@ $semua    = $this->session->userdata();
                   <sub>
                     <i class="fa fa-list-alt"></i>
                   </sub>
-                  <span class="value"><?=$tot_category ?></span>
+                  <span class="value"><?=$drafts['tot_category'] ?></span>
                 </p>
               </a>
               <!-- /.metric -->
@@ -53,7 +53,7 @@ $semua    = $this->session->userdata();
                   <sub>
                     <i class="fa fa-paperclip"></i>
                   </sub>
-                  <span class="value"><?=$tot_draft ?></span>
+                  <span class="value"><?=$drafts['tot_draft'] ?></span>
                 </p>
               </a>
               <!-- /.metric -->
@@ -68,7 +68,7 @@ $semua    = $this->session->userdata();
                   <sub>
                     <i class="fa fa-book"></i>
                   </sub>
-                  <span class="value"><?=$tot_book ?></span>
+                  <span class="value"><?=$drafts['tot_book'] ?></span>
                 </p>
               </a>
               <!-- /.metric -->
@@ -83,7 +83,7 @@ $semua    = $this->session->userdata();
                   <sub>
                     <i class="fa fa-users"></i>
                   </sub>
-                  <span class="value"><?=$tot_author ?></span>
+                  <span class="value"><?=$drafts['tot_author'] ?></span>
                 </p>
               </a>
               <!-- /.metric -->
@@ -98,7 +98,7 @@ $semua    = $this->session->userdata();
                   <sub>
                     <i class="fa fa-university"></i>
                   </sub>
-                  <span class="value"><?=$tot_reviewer ?></span>
+                  <span class="value"><?=$drafts['tot_reviewer'] ?></span>
                 </p>
               </a>
               <!-- /.metric -->
@@ -115,7 +115,25 @@ $semua    = $this->session->userdata();
             <!-- metric column -->
             <div class="col">
               <!-- .metric -->
-              <a href="#" class="metric metric-bordered align-items-center">
+              <a href="<?=base_url('draft/filter?filter=desk-screening') ?>" class="metric metric-bordered align-items-center">
+                <div class="metric-badge">
+                  <span class="badge badge-lg badge-success">
+                    <span class="oi oi-media-record pulse mr-1"></span> DESK SCREENING</span>
+                  </div>
+                  <p class="metric-value h3">
+                    <sub>
+                      <i class="fa fa-tasks"></i>
+                    </sub>
+                    <span class="value"><?=$drafts['tot_desk_phase'] ?></span>
+                  </p>
+                </a>
+                <!-- /.metric -->
+              </div>
+              <!-- /metric column -->
+            <!-- metric column -->
+            <div class="col">
+              <!-- .metric -->
+              <a href="<?=base_url('draft/filter?filter=review') ?>" class="metric metric-bordered align-items-center">
                 <div class="metric-badge">
                   <span class="badge badge-lg badge-success">
                     <span class="oi oi-media-record pulse mr-1"></span> REVIEW</span>
@@ -124,7 +142,7 @@ $semua    = $this->session->userdata();
                     <sub>
                       <i class="fa fa-tasks"></i>
                     </sub>
-                    <span class="value"><?=$tot_draft ?></span>
+                    <span class="value"><?=$drafts['tot_review_phase'] ?></span>
                   </p>
                 </a>
                 <!-- /.metric -->
@@ -133,7 +151,7 @@ $semua    = $this->session->userdata();
               <!-- metric column -->
               <div class="col">
                 <!-- .metric -->
-                <a href="#" class="metric metric-bordered align-items-center">
+                <a href="<?=base_url('draft/filter?filter=edit') ?>" class="metric metric-bordered align-items-center">
                   <div class="metric-badge">
                     <span class="badge badge-lg badge-success">
                       <span class="oi oi-media-record pulse mr-1"></span> EDITORIAL</span>
@@ -142,7 +160,7 @@ $semua    = $this->session->userdata();
                       <sub>
                         <i class="fa fa-tasks"></i>
                       </sub>
-                      <span class="value"><?=$tot_author ?></span>
+                      <span class="value"><?=$drafts['tot_edit_phase'] ?></span>
                     </p>
                   </a>
                   <!-- /.metric -->
@@ -151,7 +169,7 @@ $semua    = $this->session->userdata();
                 <!-- metric column -->
                 <div class="col">
                   <!-- .metric -->
-                  <a href="#" class="metric metric-bordered align-items-center">
+                  <a href="<?=base_url('draft/filter?filter=layout') ?>" class="metric metric-bordered align-items-center">
                     <div class="metric-badge">
                       <span class="badge badge-lg badge-success">
                         <span class="oi oi-media-record pulse mr-1"></span> LAYOUT</span>
@@ -160,7 +178,7 @@ $semua    = $this->session->userdata();
                         <sub>
                           <i class="fa fa-tasks"></i>
                         </sub>
-                        <span class="value"><?=$tot_reviewer ?></span>
+                        <span class="value"><?=$drafts['tot_layout_phase'] ?></span>
                       </p>
                     </a>
                     <!-- /.metric -->
@@ -169,7 +187,7 @@ $semua    = $this->session->userdata();
                   <!-- metric column -->
                   <div class="col">
                     <!-- .metric -->
-                    <a href="#" class="metric metric-bordered align-items-center">
+                    <a href="<?=base_url('draft/filter?filter=proofread') ?>" class="metric metric-bordered align-items-center">
                       <div class="metric-badge">
                         <span class="badge badge-lg badge-success">
                           <span class="oi oi-media-record pulse mr-1"></span> PROOFREAD</span>
@@ -178,7 +196,7 @@ $semua    = $this->session->userdata();
                           <sub>
                             <i class="fa fa-tasks"></i>
                           </sub>
-                          <span class="value"><?=$tot_category ?></span>
+                          <span class="value"><?=$drafts['tot_proofread_phase'] ?></span>
                         </p>
                       </a>
                       <!-- /.metric -->
@@ -200,7 +218,7 @@ $semua    = $this->session->userdata();
                   <div class="card-body">
                     <!-- .d-flex -->
                     <div class="d-flex align-items-center mb-3">
-                      <h3 class="card-title mr-auto"> Data 1 </h3>
+                      <h3 class="card-title mr-auto"> Data </h3>
                     </div>
                     <!-- /.d-flex -->
                   </div>
@@ -378,19 +396,75 @@ $semua    = $this->session->userdata();
             <div class="section-block">
               <!-- metric row -->
               <div class="metric-row">
-                <!-- metric column -->
+                <div class="col-12">
+                  <div class="metric-row metric-flush">
+                    <!-- metric column -->
+                    <div class="col">
+                      <!-- .metric -->
+                      <a href="<?=base_url('category') ?>" class="metric metric-bordered align-items-center">
+                        <h2 class="metric-label"><i class="fa fa-paperclip"></i> Total Draft </h2>
+                        <p class="metric-value h3">
+                          <span class="value"><?=$count['draft_total'] ?></span>
+                        </p>
+                      </a>
+                      <!-- /.metric -->
+                    </div>
+                    <!-- /metric column -->
+                    <!-- metric column -->
+                    <div class="col">
+                      <!-- .metric -->
+                      <a href="#" class="metric metric-bordered align-items-center">
+                        <h2 class="metric-label"><i class="fa fa-check"></i> Draft disetujui </h2>
+                        <p class="metric-value h3">
+                          <span class="value"><?=$count['draft_approved'] ?></span>
+                        </p>
+                      </a>
+                      <!-- /.metric -->
+                    </div>
+                    <!-- /metric column -->
+                    <!-- metric column -->
+                    <div class="col">
+                      <!-- .metric -->
+                      <a href="#" class="metric metric-bordered align-items-center">
+                        <h2 class="metric-label"><i class="fa fa-times"></i> Draft ditolak </h2>
+                        <p class="metric-value h3">
+                          <span class="value"><?=$count['draft_rejected'] ?></span>
+                        </p>
+                      </a>
+                      <!-- /.metric -->
+                    </div>
+                    <!-- /metric column -->
+                    <!-- metric column -->
+                    <div class="col">
+                      <!-- .metric -->
+                      <a href="<?=base_url('draft') ?>" class="metric metric-bordered align-items-center">
+                        <h2 class="metric-label"><i class="fa fa-book"></i> Total Buku </h2>
+                        <p class="metric-value h3">
+                          <span class="value"><?=$count['draft_book'] ?></span>
+                        </p>
+                      </a>
+                      <!-- /.metric -->
+                    </div>
+                    <!-- /metric column -->
+                  </div>
+                </div>
+              </div>
+              <!-- /metric row -->
+              <!-- metric row -->
+              <div class="metric-row">
+                  <!-- metric column -->
                 <div class="col-12 col-sm-6 col-lg-3">
                   <!-- .metric -->
                   <div class="card-metric">
                     <div class="metric">
                       <div class="metric-badge">
-                        <span class="badge badge-lg badge-info">TOTAL REVIEW</span>
+                        <span class="badge badge-lg badge-success">TAHAP REVIEW</span>
                         </div>
                         <p class="metric-value h3">
                           <sub>
                             <i class="fa fa-tasks"></i>
                           </sub>
-                          <span class="value">99</span>
+                          <span class="value"><?=$count['draft_review'] ?></span>
                         </p>
                       </div>
                     </div>
@@ -403,13 +477,13 @@ $semua    = $this->session->userdata();
                   <div class="card-metric">
                     <div class="metric">
                       <div class="metric-badge">
-                        <span class="badge badge-lg badge-success">SUDAH DIREVIEW</span>
+                        <span class="badge badge-lg badge-danger">EDITORIAL</span>
                         </div>
                         <p class="metric-value h3">
                           <sub>
                             <i class="fa fa-tasks"></i>
                           </sub>
-                          <span class="value">99</span>
+                          <span class="value"><?=$count['draft_edit'] ?></span>
                         </p>
                       </div>
                     </div>
@@ -422,13 +496,13 @@ $semua    = $this->session->userdata();
                   <div class="card-metric">
                     <div class="metric">
                       <div class="metric-badge">
-                        <span class="badge badge-lg badge-danger">BELUM REVIEW</span>
+                        <span class="badge badge-lg badge-warning">LAYOUT</span>
                         </div>
                         <p class="metric-value h3">
                           <sub>
                             <i class="fa fa-tasks"></i>
                           </sub>
-                          <span class="value">99</span>
+                          <span class="value"><?=$count['draft_layout'] ?></span>
                         </p>
                       </div>
                     </div>
@@ -441,13 +515,13 @@ $semua    = $this->session->userdata();
                   <div class="card-metric">
                     <div class="metric">
                       <div class="metric-badge">
-                        <span class="badge badge-lg badge-warning">SEDANG REVIEW</span>
+                        <span class="badge badge-lg badge-info">PROOFREAD</span>
                         </div>
                         <p class="metric-value h3">
                           <sub>
                             <i class="fa fa-tasks"></i>
                           </sub>
-                          <span class="value">99</span>
+                          <span class="value"><?=$count['draft_proofread'] ?></span>
                         </p>
                       </div>
                     </div>

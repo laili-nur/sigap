@@ -6,7 +6,11 @@ class Theme extends Operator_Controller
     {
         parent::__construct();
         $this->pages = 'theme';
-        //$this->load->model('theme_model');
+        //khusus admin
+        $ceklevel = $this->session->userdata('level');
+        if ($ceklevel == 'author' || $ceklevel == 'reviewer' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
+            redirect('home');
+        }
     }
 //--index--
 	public function index($page = null)
@@ -21,8 +25,6 @@ class Theme extends Operator_Controller
 //--add--
         public function add()
 	{                     
-            $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
         if (!$_POST) {
             $input = (object) $this->theme->getDefaultValues();
         } else {
@@ -45,17 +47,11 @@ class Theme extends Operator_Controller
         }
 
         redirect('theme');
-            }
-            else{
-                redirect('theme');
-            }
 	}
         
 //--edit--        
         public function edit($id = null)
 	{
-            $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
         $theme = $this->theme->where('theme_id', $id)->get();
         if (!$this) {
             $this->session->set_flashdata('warning', 'Theme data were not available');
@@ -84,17 +80,11 @@ class Theme extends Operator_Controller
         }
 
         redirect('theme');
-            }
-            else{
-                redirect('theme');
-            }
 	}
         
 //--delete--        
         	public function delete($id = null)
 	{
-                    $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
 		$theme = $this->theme->where('theme_id', $id)->get();
         if (!$theme) {
             $this->session->set_flashdata('warning', 'Theme data were not available');
@@ -108,10 +98,6 @@ class Theme extends Operator_Controller
         }
 
         redirect('theme');
-            }
-            else{
-                redirect('theme');
-            }
 	}
         
 
