@@ -300,4 +300,19 @@ class MY_Model extends CI_Model
 
         return $id;
     }
+    
+        public function getIdDraftFromDraftId($draft_id, $role) {
+        $id = 0;
+
+        $data =  $this->select($role . '_id')
+                      ->joinRelationDest('draft', $role)
+                      ->whereRelation($role, $draft_id, 'draft')
+                      ->getRowArray($role);
+
+        if ($data) {
+            $id = $data[$role . '_id'];
+        }
+
+        return $id;
+    }
 }

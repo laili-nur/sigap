@@ -10,6 +10,9 @@ class Worksheet extends Operator_Controller
 
 	public function index($page = null)
 	{
+            $ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
+            
         $worksheets     = $this->worksheet->join('draft')->orderBy('draft.draft_id')->orderBy('worksheet_id')->paginate($page)->getAll();
         $tot        = $this->worksheet->join('draft')->orderBy('draft.draft_id')->orderBy('worksheet_id')->getAll();
         $total     = count($tot);
@@ -18,12 +21,18 @@ class Worksheet extends Operator_Controller
         $pagination = $this->worksheet->makePagination(site_url('worksheet'), 2, $total);
 
 		$this->load->view('template', compact('pages', 'main_view', 'worksheets', 'pagination', 'total'));
+                }
+            else{
+                redirect('home');
+            }
 	}
         
         
         public function add()
 	{
-        if (!$_POST) {
+        $ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
+            if (!$_POST) {
             $input = (object) $this->worksheet->getDefaultValues();
         } else {
             $input = (object) $this->input->post(null, true);
@@ -45,11 +54,17 @@ class Worksheet extends Operator_Controller
         }
 
         redirect('worksheet');
+        }
+            else{
+                redirect('home');
+            }
 	}
         
         public function edit($id = null)
 	{
-        $worksheet = $this->worksheet->where('worksheet_id', $id)->get();
+        $ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
+            $worksheet = $this->worksheet->where('worksheet_id', $id)->get();
         $data = array('draft_id' => $worksheet->draft_id);
         $draft_title = $this->worksheet->getWhere($data, 'draft');
 
@@ -82,10 +97,17 @@ class Worksheet extends Operator_Controller
         }
 
         redirect('worksheet');
+        }
+            else{
+                redirect('home');
+            }
 	}
 
     public function action($id, $action)
     {
+        $ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
+        
         $worksheet = $this->worksheet->where('worksheet_id', $id)->get();
 
         if (!$worksheet) {
@@ -115,11 +137,19 @@ class Worksheet extends Operator_Controller
         }
 
         redirect('worksheet');
+        }
+            else{
+                redirect('home');
+            }
+        
     }
         
         public function delete($id = null)
 	{
-	$worksheet = $this->worksheet->where('worksheet_id', $id)->get();
+	$ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
+            
+            $worksheet = $this->worksheet->where('worksheet_id', $id)->get();
         if (!$worksheet) {
             $this->session->set_flashdata('warning', 'Worksheet data were not available');
             redirect('worksheet');
@@ -132,11 +162,18 @@ class Worksheet extends Operator_Controller
         }
 
 		redirect('worksheet');
+                }
+            else{
+                redirect('home');
+            }
 	}
         
         public function search($page = null)
         {
-        $keywords       = $this->input->get('keywords', true);
+        $ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
+            
+            $keywords       = $this->input->get('keywords', true);
         $worksheets     = $this->worksheet->like('worksheet_num', $keywords)
                                   ->orLike('draft_title', $keywords)
                                   ->join('draft')
@@ -164,6 +201,11 @@ class Worksheet extends Operator_Controller
         $pages    = $this->pages;
         $main_view  = 'worksheet/index_worksheet';
         $this->load->view('template', compact('pages', 'main_view', 'worksheets', 'pagination', 'total'));
+        
+            }
+            else{
+                redirect('home');
+            }
     }
         
         /*

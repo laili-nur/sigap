@@ -11,6 +11,9 @@ class User extends Admin_Controller
 
 	public function index($page = null)
 	{
+            
+            $ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
         $users      = $this->user->paginate($page)->orderBy('user_id')->getAll();
         $tot = $this->user->orderBy('user_id')->getAll();
         $total    = count($tot);
@@ -18,11 +21,19 @@ class User extends Admin_Controller
         $main_view  = 'user/index_user';
         $pagination = $this->user->makePagination(site_url('user'), 2, $total);
 		$this->load->view('template', compact('pagination','pages', 'main_view', 'users', 'total'));
-	}
+	
+                }
+            else{
+                redirect('home');
+            }
+            }
  
 //--add--        
         	public function add()
 	{
+                    $ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
+                
         if (!$_POST) {
             $input = (object) $this->user->getDefaultValues();
         } else {
@@ -48,11 +59,18 @@ class User extends Admin_Controller
         }
 
         redirect('user');
+        }
+            else{
+                redirect('home');
+            }
 	}
         
 //--edit--        
         public function edit($id = null)
 	{
+            $ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
+        
         $user = $this->user->where('user_id', $id)->get();
         if (!$user) {
             $this->session->set_flashdata('warning', 'User data were not available');
@@ -89,11 +107,18 @@ class User extends Admin_Controller
         }
 
         redirect('user');
+        }
+            else{
+                redirect('home');
+            }
 	}
 
 	public function delete($id = null)
 	{
-		$user = $this->user->where('user_id', $id)->get();
+	$ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
+            $user = $this->user->where('user_id', $id)->get();
+        
         if (!$user) {
             $this->session->set_flashdata('warning', 'User data were not available');
             redirect('user');
@@ -110,12 +135,18 @@ class User extends Admin_Controller
         }
 
 		redirect('user');
+                }
+            else{
+                redirect('home');
+            }
 	}        
 
 // -- search -- 
 
         public function search($page = null)
         {
+            $ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
         $keywords   = $this->input->get('keywords', true);
         $users     = $this->user->like('username', $keywords)
                                   ->orLike('level', $keywords)
@@ -142,7 +173,12 @@ class User extends Admin_Controller
         $pages    = $this->pages;
         $main_view  = 'user/index_user';
         $this->load->view('template', compact('pages', 'main_view', 'users', 'pagination', 'total'));
-    }        
+    
+        }
+            else{
+                redirect('home');
+            }
+        }        
         
     /*
     |-----------------------------------------------------------------

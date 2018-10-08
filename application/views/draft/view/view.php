@@ -362,8 +362,8 @@
     <!-- if tampilan admin -->
     <?php if($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
      <div class="el-example">
-       <a href="" class="btn btn-primary disabled">Simpan jadi buku</a>
-       <a href="" class="btn btn-danger">Tolak</a>
+       <a href="<?= base_url('draft/copyToBook/' . $draft->draft_id . '/' . $draft->draft_title . '/' . $draft->draft_file) ?>" class="btn btn-primary" id="" value="14">Simpan jadi buku</a>
+       <button class="btn btn-danger" type="submit" id="draft-tolak" value="99">Tolak</button>
        <button class="btn btn-light" type="submit">Kembali</button>
      </div>
     <!-- endif tampilan admin -->
@@ -687,6 +687,66 @@
           }
         });
         return false;
+      });
+      
+      $('#draft-setuju').on('click', function() {
+        var $this = $(this);
+        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+        let id=$('[name=draft_id]').val();
+        let action=$('#draft-setuju').val();
+        $.ajax({
+            type : "POST",
+            url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
+            datatype : "JSON",
+            data : {
+              draft_status : action,
+            },
+            success :function(data){
+              let datax = JSON.parse(data);
+              console.log(datax);
+              $this.removeAttr("disabled").html("Simpan Jadi Buku");
+              if(datax.status == true){
+                toastr_view('111');
+              }else{
+                toastr_view('000');
+              }
+            }
+          });
+
+          // $('#draft_aksi').modal('hide');
+          // location.reload();
+          return false;
+      });
+
+      $('#draft-tolak').on('click', function() {
+        var $this = $(this);
+        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+        let id=$('[name=draft_id]').val();
+        let action=$('#draft-tolak').val();
+
+              console.log(end_date);
+        $.ajax({
+            type : "POST",
+            url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
+            datatype : "JSON",
+            data : {
+              draft_status : action,
+            },
+            success :function(data){
+              let datax = JSON.parse(data);
+              console.log(datax);
+              $this.removeAttr("disabled").html("Tolak");
+              if(datax.status == true){
+                toastr_view('111');
+              }else{
+                toastr_view('000');
+              }
+            }
+          });
+
+          // $('#draft_aksi').modal('hide');
+          // location.reload();
+          return false;
       });
   
   });

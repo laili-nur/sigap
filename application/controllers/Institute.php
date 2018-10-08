@@ -20,7 +20,9 @@ class Institute extends Operator_Controller
 //--add--
         public function add()
 	{                     
-        if (!$_POST) {
+        $ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
+            if (!$_POST) {
             $input = (object) $this->institute->getDefaultValues();
         } else {
             $input = (object) $this->input->post(null, true);
@@ -42,12 +44,18 @@ class Institute extends Operator_Controller
         }
 
         redirect('institute');
+        }
+            else{
+                redirect('institute');
+            }
 	}
         
 //--edit--        
         public function edit($id = null)
 	{
-        $institute = $this->institute->where('institute_id', $id)->get();
+        $ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
+            $institute = $this->institute->where('institute_id', $id)->get();
         if (!$this) {
             $this->session->set_flashdata('warning', 'Institute data were not available');
             redirect('institute');
@@ -75,12 +83,19 @@ class Institute extends Operator_Controller
         }
 
         redirect('institute');
+        }
+            else{
+                redirect('institute');
+            }
 	}
         
 //--delete--        
         	public function delete($id = null)
 	{
-		$institute = $this->institute->where('institute_id', $id)->get();
+	$ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
+                    $institute = $this->institute->where('institute_id', $id)->get();
+                
         if (!$institute) {
             $this->session->set_flashdata('warning', 'Institute data were not available');
             redirect('institute');
@@ -93,6 +108,10 @@ class Institute extends Operator_Controller
         }
 
         redirect('institute');
+        }
+            else{
+                redirect('institute');
+            }
 	}
         
 

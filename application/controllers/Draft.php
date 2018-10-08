@@ -163,6 +163,10 @@ class Draft extends Operator_Controller
 // --add--        
         public function add($category='')
 	{
+            
+            $ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'author' || $ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
+            
         if (!$_POST) {
             $input = (object) $this->draft->getDefaultValues();
             $input->category_id = $category;
@@ -227,6 +231,11 @@ class Draft extends Operator_Controller
 
         redirect('draft/view/'.$draft_id);
       }
+      else{
+            redirect('draft');
+        }
+        }
+        
 
 // -- view --
       public function view($id = null)
@@ -414,6 +423,9 @@ class Draft extends Operator_Controller
 
     public function edit($id = null)
     {
+        $ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
+        
         $draft = $this->draft->where('draft_id', $id)->get();
         if (!$draft) {
             $this->session->set_flashdata('warning', 'Draft data were not available');
@@ -460,11 +472,18 @@ class Draft extends Operator_Controller
         }
 
         redirect('draft');
+            }
+            else{
+                redirect('draft');
+            }
     }
 
 // -- delete --        
         public function delete($id = null)
 	{
+            $ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
+            
 	$draft = $this->draft->where('draft_id', $id)->get();
         if (!$draft) {
             $this->session->set_flashdata('warning', 'Draft data were not available');
@@ -496,8 +515,41 @@ class Draft extends Operator_Controller
         }
 
         redirect('draft');
+            }
+            else{
+                redirect('draft');
+            }
 	}
 
+        
+    public function copyToBook($draft_id, $title, $file) 
+    {
+        
+        $this->load->model('book_model', 'book', true);
+        $book_id = $this->book->getIdDraftFromDraftId($draft_id, 'book');
+
+        if ($book_id == 0) {
+            $data = array(
+                'draft_id' => $draft_id,
+                'book_title' => urldecode($title),
+                'book_file' => urldecode($file)
+            );
+
+            if ($this->book->insert($data)) {
+                $book_id = $this->db->insert_id();
+
+                if ($book_id != 0) {
+                    redirect('book/edit/' . $book_id);
+                }
+            }
+        } else {
+            redirect('book');
+        }
+        
+    }
+        
+        
+        
 // -- search --        
         public function search($page = null)
         {
@@ -631,8 +683,11 @@ class Draft extends Operator_Controller
             case 13:
                 $status = 'Confirm to Book';
                 break;
+            case 14:
+                $status = 'Draft Published into Book';
+                break;
             case 99:
-                $status = 'Draft Ditolak';
+                $status = 'Draft Rejected';
                 break;
             
             default:

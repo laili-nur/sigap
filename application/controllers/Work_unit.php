@@ -19,7 +19,9 @@ class Work_unit extends Operator_Controller
         
 //--add--
         public function add()
-	{                     
+	{           
+            $ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
         if (!$_POST) {
             $input = (object) $this->work_unit->getDefaultValues();
         } else {
@@ -42,11 +44,18 @@ class Work_unit extends Operator_Controller
         }
 
         redirect('workunit');
+        }
+            else{
+                redirect('workunit');
+            }
 	}
         
 //--edit--        
         public function edit($id = null)
 	{
+            $ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
+        
         $work_unit = $this->work_unit->where('work_unit_id', $id)->get();
         if (!$this) {
             $this->session->set_flashdata('warning', 'Work Unit data were not available');
@@ -75,12 +84,18 @@ class Work_unit extends Operator_Controller
         }
 
         redirect('workunit');
+        }
+            else{
+                redirect('workunit');
+            }
 	}
         
 //--delete--        
         	public function delete($id = null)
 	{
-		$code = $this->work_unit->where('work_unit_id', $id)->get();
+		$ceklevel = $this->session->userdata('level');
+            if ($ceklevel == 'admin_penerbitan' || $ceklevel == 'superadmin'){
+                    $code = $this->work_unit->where('work_unit_id', $id)->get();
         if (!$code) {
             $this->session->set_flashdata('warning', 'Work Unit data were not available');
             redirect('workunit');
@@ -93,6 +108,10 @@ class Work_unit extends Operator_Controller
         }
 
         redirect('workunit');
+        }
+            else{
+                redirect('workunit');
+            }
 	}
         
 
