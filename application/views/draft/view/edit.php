@@ -48,9 +48,9 @@
       <div class="list-group-item justify-content-between">
         <span class="text-muted">Status</span>
         <?php if($input->is_edit == 'y'): ?>
-        <strong>Editorial Selesai</strong>
-        <?php elseif($input->is_edit == 'n' and $input->draft_status == 'Draft Ditolak'): ?>
-        <strong>Draft Ditolak</strong>
+        <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->edit_status ?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Editorial Selesai</a>
+        <?php elseif($input->is_edit == 'n' and $input->stts == 99): ?>
+        <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->edit_status ?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Draft ditolak</a>
         <?php else: ?>
           -
         <?php endif ?>

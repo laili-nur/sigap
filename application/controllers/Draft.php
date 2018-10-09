@@ -36,6 +36,7 @@ class Draft extends Operator_Controller
         foreach ($drafts as $key => $value) {
             $authors = $this->draft->getIdAndName('author', 'draft_author', $value->draft_id);
             $value->author = $authors;
+            $value->stts = $value->draft_status;
             $value->draft_status = $this->checkStatus($value->draft_status);
         }
 
@@ -97,12 +98,14 @@ class Draft extends Operator_Controller
                                   ->joinRelationMiddle('draft', 'draft_author')
                                   ->joinRelationDest('author', 'draft_author')
                                   ->where('is_review','y')            
-                                  ->where('is_edit','n')            
+                                  ->where('is_edit','n')
+                                  ->whereNot('draft_status','99')            
                                   ->orderBy('draft_title')
                                   ->paginate($page)
                                   ->getAll();
             $tot = $this->draft->where('is_review','y')            
-                                  ->where('is_edit','n')            
+                                  ->where('is_edit','n')
+                                  ->whereNot('draft_status','99')            
                                   ->getAll();
             $total = count($tot);
         }elseif($filter == 'layout'){
@@ -111,12 +114,14 @@ class Draft extends Operator_Controller
                                   ->joinRelationMiddle('draft', 'draft_author')
                                   ->joinRelationDest('author', 'draft_author')
                                   ->where('is_edit','y')            
-                                  ->where('is_layout','n')            
+                                  ->where('is_layout','n')
+                                  ->whereNot('draft_status','99')            
                                   ->orderBy('draft_title')
                                   ->paginate($page)
                                   ->getAll();
             $tot = $this->draft->where('is_edit','y')            
-                                  ->where('is_layout','n')            
+                                  ->where('is_layout','n')
+                                  ->whereNot('draft_status','99')            
                                   ->getAll();
             $total = count($tot);
         }elseif($filter == 'proofread'){
@@ -125,12 +130,38 @@ class Draft extends Operator_Controller
                                   ->joinRelationMiddle('draft', 'draft_author')
                                   ->joinRelationDest('author', 'draft_author')
                                   ->where('is_proofread','n')            
-                                  ->where('is_layout','y')            
+                                  ->where('is_layout','y')  
+                                  ->whereNot('draft_status','99')          
                                   ->orderBy('draft_title')
                                   ->paginate($page)
                                   ->getAll();
             $tot = $this->draft->where('is_proofread','n')            
-                                  ->where('is_layout','y')            
+                                  ->where('is_layout','y')
+                                  ->whereNot('draft_status','99')            
+                                  ->getAll();
+            $total = count($tot);
+        }elseif($filter == 'reject'){
+            $drafts = $this->draft->join('category')
+                                  ->join('theme')
+                                  ->joinRelationMiddle('draft', 'draft_author')
+                                  ->joinRelationDest('author', 'draft_author')
+                                  ->where('draft_status','99')          
+                                  ->orderBy('draft_title')
+                                  ->paginate($page)
+                                  ->getAll();
+            $tot = $this->draft->where('draft_status','99')           
+                                  ->getAll();
+            $total = count($tot);
+        }elseif($filter == 'final'){
+            $drafts = $this->draft->join('category')
+                                  ->join('theme')
+                                  ->joinRelationMiddle('draft', 'draft_author')
+                                  ->joinRelationDest('author', 'draft_author')
+                                  ->where('draft_status','14')          
+                                  ->orderBy('draft_title')
+                                  ->paginate($page)
+                                  ->getAll();
+            $tot = $this->draft->where('draft_status','14')           
                                   ->getAll();
             $total = count($tot);
         }else{
@@ -252,6 +283,7 @@ class Draft extends Operator_Controller
         }
 
         //status draft
+        $draft->stts = $draft->draft_status;
         $draft->draft_status = $this->checkStatus($draft->draft_status);
         
         // ambil tabel worksheet

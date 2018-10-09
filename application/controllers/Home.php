@@ -23,16 +23,18 @@ class Home extends MY_Controller
         $count = array();
 
         $drafts['tot_category']     = count($this->home->getAll('category'));
-        $drafts['tot_draft']     = count($this->home->getAll('book'));
-        $drafts['tot_book']     = count($this->home->getAll('draft'));
+        $drafts['tot_draft']     = count($this->home->getAll('draft'));
+        $drafts['tot_book']     = count($this->home->getAll('book'));
         $drafts['tot_author']     = count($this->home->getAll('author'));
         $drafts['tot_reviewer']     = count($this->home->getAll('reviewer'));
 
         $drafts['tot_desk_phase'] = count($tot = $this->home->where('draft_status','0')->getAll('draft'));
-        $drafts['tot_review_phase'] = count($tot = $this->home->where('is_review','n')->whereNot('review1_notes','')->whereNot('review2_notes','')->getAll('draft'));
-        $drafts['tot_edit_phase'] = count($tot = $this->home->where('is_review','y')->where('is_edit','n')->getAll('draft'));
-        $drafts['tot_layout_phase'] = count($tot = $this->home->where('is_edit','y')->where('is_layout','n')->getAll('draft'));
-        $drafts['tot_proofread_phase'] = count($tot = $this->home->where('is_proofread','n')->where('is_layout','y')->getAll('draft'));
+        $drafts['tot_review_phase'] = count($tot = $this->home->where('is_review','n')->where('draft_status','4')->getAll('draft'));
+        $drafts['tot_edit_phase'] = count($tot = $this->home->where('is_review','y')->where('is_edit','n')->whereNot('draft_status','99')->getAll('draft'));
+        $drafts['tot_layout_phase'] = count($tot = $this->home->where('is_edit','y')->where('is_layout','n')->whereNot('draft_status','99')->getAll('draft'));
+        $drafts['tot_proofread_phase'] = count($tot = $this->home->where('is_proofread','n')->where('is_layout','y')->whereNot('draft_status','99')->getAll('draft'));
+        $drafts['tot_approved'] = count($tot = $this->home->where('draft_status','14')->getAll('draft'));
+        $drafts['tot_rejected'] = count($tot = $this->home->where('draft_status','99')->getAll('draft'));
 
 
 
@@ -103,9 +105,9 @@ class Home extends MY_Controller
 
             $drafts = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->getAll('draft');
             $draft_review = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('draft_status','4')->getAll('draft');
-            $draft_edit = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('is_review','y')->where('is_edit','n')->getAll('draft');
-            $draft_layout = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('is_edit','y')->where('is_layout','n')->getAll('draft');
-            $draft_proofread = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('is_layout','y')->where('is_proofread','n')->getAll('draft');
+            $draft_edit = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('is_review','y')->where('is_edit','n')->whereNot('draft_status','99')->getAll('draft');
+            $draft_layout = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('is_edit','y')->where('is_layout','n')->whereNot('draft_status','99')->getAll('draft');
+            $draft_proofread = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('is_layout','y')->where('is_proofread','n')->whereNot('draft_status','99')->getAll('draft');
 
             $drafts_approved = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->whereNot('draft_status','99')->where('user.username',$cekusername)->getAll('draft');
             $drafts_rejected = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('draft_status','99')->where('user.username',$cekusername)->getAll('draft');

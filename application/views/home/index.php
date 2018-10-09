@@ -23,7 +23,6 @@ $semua    = $this->session->userdata();
 <!-- .page-section -->
 <div class="page-section">
   <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
-    <!-- .section-block -->
     <div class="section-block">
       <!-- metric row -->
       <div class="metric-row">
@@ -108,6 +107,11 @@ $semua    = $this->session->userdata();
         </div>
       </div>
       <!-- /metric row -->
+    </div>
+    <!-- .section-block -->
+    <div class="section-block card px-4 pt-3">
+      <h4 class="card-title m-0 p-0"> Ringkasan Draft </h4>
+      <hr>
       <!-- metric row -->
       <div class="metric-row">
         <div class="col-12">
@@ -197,6 +201,38 @@ $semua    = $this->session->userdata();
                             <i class="fa fa-tasks"></i>
                           </sub>
                           <span class="value"><?=$drafts['tot_proofread_phase'] ?></span>
+                        </p>
+                      </a>
+                      <!-- /.metric -->
+                    </div>
+                    <!-- /metric column -->
+                  </div>
+                </div>
+              </div>
+              <!-- /metric row -->
+              <!-- metric row -->
+              <div class="metric-row">
+                <div class="col-12">
+                  <div class="metric-row metric-flush">
+                    <!-- metric column -->
+                    <div class="col">
+                      <!-- .metric -->
+                      <a href="<?=base_url('draft/filter?filter=final') ?>" class="metric metric-bordered align-items-center">
+                        <h2 class="metric-label"><i class="fa fa-check"></i> Draft disetujui </h2>
+                        <p class="metric-value h3">
+                          <span class="value"><?=$drafts['tot_approved'] ?></span>
+                        </p>
+                      </a>
+                      <!-- /.metric -->
+                    </div>
+                    <!-- /metric column -->
+                    <!-- metric column -->
+                    <div class="col">
+                      <!-- .metric -->
+                      <a href="<?=base_url('draft/filter?filter=reject') ?>" class="metric metric-bordered align-items-center">
+                        <h2 class="metric-label"><i class="fa fa-times"></i> Draft ditolak </h2>
+                        <p class="metric-value h3">
+                          <span class="value"><?=$drafts['tot_rejected'] ?></span>
                         </p>
                       </a>
                       <!-- /.metric -->

@@ -63,6 +63,8 @@
           'edit' => 'Tahap Editorial',
           'layout' => 'Tahap Layout',
           'proofread' => 'Tahap Proofread',
+          'reject' => 'Draft Ditolak',
+          'final' => 'Draft Final',
         ]
          ?>
         <!-- .card-body -->
@@ -70,7 +72,7 @@
           <div class="p-3">
             <div class="row">
               <?php if($ceklevel=='superadmin'): ?>
-              <div class="col-12 col-md-3">
+              <div class="col-12 col-md-3 mb-3">
                 <?= form_open('draft/filter', ['method' => 'GET']) ?>
                   <?= form_dropdown('filter', $filter_status, $this->input->get('filter'), 'onchange="this.form.submit()" id="filter" class="form-control custom-select d-block"') ?>
                   <?= form_close() ?>
