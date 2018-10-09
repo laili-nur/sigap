@@ -74,6 +74,44 @@ class Book extends Operator_Controller
 
         redirect('book');
 	}
+
+    public function view($id = null)
+    {
+        $book = $this->book->join('draft')->where('book_id', $id)->get();
+        if (!$book) {
+            $this->session->set_flashdata('warning', 'Book data were not available');
+            redirect('book');
+        }
+
+        if (!$_POST) {
+            $input = (object) $book;
+        } else {
+            $input = (object) $this->input->post(null, true);
+            $input->book_file = $book->book_file; // Set book file for preview.
+        }
+
+        // tabel author
+        $authors =  $this->book->select(['draft_author.author_id','draft_author_id','author_name','author_nip','work_unit_name','institute_name','draft.draft_id'])->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('work_unit','author','work_unit')->join3('institute','author','institute')->where('draft_author.draft_id',$book->draft_id)->getAll('draft');
+
+        
+        // If something wrong
+        if (!$this->book->validate() || $this->form_validation->error_array()) {
+            $pages    = $this->pages;
+            $main_view   = 'book/view';
+            $form_action = "book/edit/$id";
+
+            $this->load->view('template', compact('authors','pages', 'main_view', 'form_action', 'input'));
+            return;
+        }
+
+        if ($this->book->where('book_id', $id)->update($input)) {
+            $this->session->set_flashdata('success', 'Data updated');
+        } else {
+            $this->session->set_flashdata('error', 'Data failed to update');
+        }
+
+        redirect('book');
+    }
  
         
 // -- edit --         

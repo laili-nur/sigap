@@ -104,6 +104,7 @@ class Home extends MY_Controller
             $categories = $this->home->orderBy('category_name')->getAll('category');
 
             $drafts = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->getAll('draft');
+            $draft_desk = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('draft_status','0')->getAll('draft');
             $draft_review = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('draft_status','4')->getAll('draft');
             $draft_edit = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('is_review','y')->where('is_edit','n')->whereNot('draft_status','99')->getAll('draft');
             $draft_layout = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('is_edit','y')->where('is_layout','n')->whereNot('draft_status','99')->getAll('draft');
@@ -111,12 +112,13 @@ class Home extends MY_Controller
 
             $drafts_approved = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->whereNot('draft_status','99')->where('user.username',$cekusername)->getAll('draft');
             $drafts_rejected = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('draft_status','99')->where('user.username',$cekusername)->getAll('draft');
-            $drafts_book = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('draft_status','15')->where('user.username',$cekusername)->getAll('draft');
+            $drafts_book = $this->home->join3('draft','book','draft')->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->getAll('book');
 
             $count['draft_total'] = count($drafts);
             $count['draft_approved'] = count($drafts_approved);
             $count['draft_rejected'] = count($drafts_rejected);
             $count['draft_book'] = count($drafts_book);
+            $count['draft_desk'] = count($draft_desk);
             $count['draft_review'] = count($draft_review);
             $count['draft_edit'] = count($draft_edit);
             $count['draft_layout'] = count($draft_layout);

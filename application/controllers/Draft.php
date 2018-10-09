@@ -26,8 +26,8 @@ class Draft extends Operator_Controller
             $drafts = $this->draft->join('category')->join('theme')->join3('draft_reviewer','draft','draft')->join3('reviewer','draft_reviewer','reviewer')->join3('user','reviewer','user')->where('user.username',$cekusername)->paginate($page)->getAll();
             $tot = $this->draft->join('category')->join('theme')->join3('draft_reviewer','draft','draft')->join3('reviewer','draft_reviewer','reviewer')->join3('user','reviewer','user')->where('user.username',$cekusername)->getAll();
         }else{
-            $drafts     = $this->draft->join('category')->join('theme')->orderBy('draft_title')->orderBy('category.category_id')->orderBy('theme.theme_id')->paginate($page)->getAll();
-            $tot        = $this->draft->join('category')->join('theme')->orderBy('draft_title')->orderBy('category.category_id')->orderBy('theme.theme_id')->getAll();
+            $drafts     = $this->draft->join('category')->join('theme')->orderBy('entry_date','desc')->paginate($page)->getAll();
+            $tot        = $this->draft->join('category')->join('theme')->getAll();
         }
 
 

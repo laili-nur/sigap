@@ -6,6 +6,11 @@ class Reviewer extends Operator_Controller
     {
         parent::__construct();
         $this->pages = 'reviewer';
+        //khusus admin
+        $ceklevel = $this->session->userdata('level');
+        if ($ceklevel == 'author' || $ceklevel == 'reviewer' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
+            redirect('home');
+        }
     }
 
 	public function index($page = null)

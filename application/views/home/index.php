@@ -121,7 +121,7 @@ $semua    = $this->session->userdata();
               <!-- .metric -->
               <a href="<?=base_url('draft/filter?filter=desk-screening') ?>" class="metric metric-bordered align-items-center">
                 <div class="metric-badge">
-                  <span class="badge badge-lg badge-success">
+                  <span class="badge badge-lg badge-secondary">
                     <span class="oi oi-media-record pulse mr-1"></span> DESK SCREENING</span>
                   </div>
                   <p class="metric-value h3">
@@ -157,7 +157,7 @@ $semua    = $this->session->userdata();
                 <!-- .metric -->
                 <a href="<?=base_url('draft/filter?filter=edit') ?>" class="metric metric-bordered align-items-center">
                   <div class="metric-badge">
-                    <span class="badge badge-lg badge-success">
+                    <span class="badge badge-lg badge-danger">
                       <span class="oi oi-media-record pulse mr-1"></span> EDITORIAL</span>
                     </div>
                     <p class="metric-value h3">
@@ -175,7 +175,7 @@ $semua    = $this->session->userdata();
                   <!-- .metric -->
                   <a href="<?=base_url('draft/filter?filter=layout') ?>" class="metric metric-bordered align-items-center">
                     <div class="metric-badge">
-                      <span class="badge badge-lg badge-success">
+                      <span class="badge badge-lg badge-warning">
                         <span class="oi oi-media-record pulse mr-1"></span> LAYOUT</span>
                       </div>
                       <p class="metric-value h3">
@@ -193,7 +193,7 @@ $semua    = $this->session->userdata();
                     <!-- .metric -->
                     <a href="<?=base_url('draft/filter?filter=proofread') ?>" class="metric metric-bordered align-items-center">
                       <div class="metric-badge">
-                        <span class="badge badge-lg badge-success">
+                        <span class="badge badge-lg badge-info">
                           <span class="oi oi-media-record pulse mr-1"></span> PROOFREAD</span>
                         </div>
                         <p class="metric-value h3">
@@ -473,7 +473,7 @@ $semua    = $this->session->userdata();
                     <!-- metric column -->
                     <div class="col">
                       <!-- .metric -->
-                      <a href="<?=base_url('draft') ?>" class="metric metric-bordered align-items-center">
+                      <a href="#" class="metric metric-bordered align-items-center">
                         <h2 class="metric-label"><i class="fa fa-book"></i> Total Buku </h2>
                         <p class="metric-value h3">
                           <span class="value"><?=$count['draft_book'] ?></span>
@@ -488,8 +488,27 @@ $semua    = $this->session->userdata();
               <!-- /metric row -->
               <!-- metric row -->
               <div class="metric-row">
+                <!-- metric column -->
+                <div class="col">
+                  <!-- .metric -->
+                  <div class="card-metric">
+                    <div class="metric">
+                      <div class="metric-badge">
+                        <span class="badge badge-lg badge-secondary">TAHAP DESK SCREENING</span>
+                        </div>
+                        <p class="metric-value h3">
+                          <sub>
+                            <i class="fa fa-tasks"></i>
+                          </sub>
+                          <span class="value"><?=$count['draft_desk'] ?></span>
+                        </p>
+                      </div>
+                    </div>
+                    <!-- /.metric -->
+                  </div>
+                  <!-- /metric column -->
                   <!-- metric column -->
-                <div class="col-12 col-sm-6 col-lg-3">
+                <div class="col">
                   <!-- .metric -->
                   <div class="card-metric">
                     <div class="metric">
@@ -508,7 +527,7 @@ $semua    = $this->session->userdata();
                   </div>
                   <!-- /metric column -->
                   <!-- metric column -->
-                <div class="col-12 col-sm-6 col-lg-3">
+                <div class="col">
                   <!-- .metric -->
                   <div class="card-metric">
                     <div class="metric">
@@ -527,7 +546,7 @@ $semua    = $this->session->userdata();
                   </div>
                   <!-- /metric column -->
                   <!-- metric column -->
-                <div class="col-12 col-sm-6 col-lg-3">
+                <div class="col">
                   <!-- .metric -->
                   <div class="card-metric">
                     <div class="metric">
@@ -546,7 +565,7 @@ $semua    = $this->session->userdata();
                   </div>
                   <!-- /metric column -->
                   <!-- metric column -->
-                <div class="col-12 col-sm-6 col-lg-3">
+                <div class="col">
                   <!-- .metric -->
                   <div class="card-metric">
                     <div class="metric">
