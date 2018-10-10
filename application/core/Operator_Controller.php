@@ -14,8 +14,13 @@ class Operator_Controller extends MY_Controller
 
 
         if (!$this->is_login) {
-            redirect(base_url());
+            redirect(base_url('login'));
             return;
+        }
+
+        //jika belum milih level,gabisa masuk sistem
+        if ($this->level == 'author_reviewer') {
+            redirect(base_url('login/multilevel'));
         }
     }
 }

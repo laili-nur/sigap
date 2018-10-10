@@ -71,9 +71,9 @@
       <?= form_close() ?>
       <!-- /.auth-form -->
       <!-- copyright -->
-      <footer class="auth-footer">
+      <!-- <footer class="auth-footer">
         <p><strong>last update : 1 oktober 2018</strong></p>
-      </footer>
+      </footer> -->
     </main>
     <!-- /.auth -->
     <!-- END PLUGINS JS -->

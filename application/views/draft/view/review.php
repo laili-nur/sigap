@@ -115,11 +115,11 @@
               <!-- .modal-body -->
               <div class="modal-body">
                 <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/review1_file', 'novalidate'); ?>
-                  <p class="font-weight-bold">UPLOAD</p>
+                  <p class="font-weight-bold">NASKAH</p>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                   <!-- .form-group -->
                     <div class="form-group">
-                      <label for="review1_file">File Review</label>
+                      <label for="review1_file">File Naskah</label>
                       <!-- .input-group -->
                       <div class="input-group input-group-alt">
                         <div class="custom-file">
@@ -135,9 +135,31 @@
                     </div>
                     <!-- /.form-group -->
                 <?= form_close(); ?>
-                <hr class="my-3">
                 <p>Last Upload: <?=konversiTanggal($input->review1_upload_date) ?></p>
                 <?=(!empty($input->review1_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review1_file.'" href="'.base_url('draftfile/'.$input->review1_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
+                <hr class="my-3">
+                <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/review1_template', 'novalidate'); ?>
+                  <p class="font-weight-bold">REVIEW</p>
+                  <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
+                  <!-- .form-group -->
+                    <div class="form-group">
+                      <label for="review1_template">File Review</label>
+                      <!-- .input-group -->
+                      <div class="input-group input-group-alt">
+                        <div class="custom-file">
+                          <?= form_upload('review1_template','','class="custom-file-input"') ?> 
+                          <label class="custom-file-label" for="tf3">Choose file</label>
+                          <div class="invalid-feedback">Field is required</div>
+                        </div>
+                        <div class="input-group-append">
+                          <button class="btn btn-primary" type="submit" value="Submit" id="btn-upload-review1-template"><i class="fa fa-upload"></i> Upload</button>
+                        </div>
+                      </div>
+                      <!-- /.input-group -->
+                    </div>
+                    <!-- /.form-group -->
+                <?= form_close(); ?>
+                <a href="#">Download file template review</a>
                 <hr class="my-3">
                 <!-- .form -->
                 <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formreview1"') ?>
@@ -226,11 +248,11 @@
               <!-- .modal-body -->
               <div class="modal-body">
                 <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/review2_file', 'novalidate'); ?>
-                  <p class="font-weight-bold">UPLOAD</p>
+                  <p class="font-weight-bold">NASKAH</p>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                   <!-- .form-group -->
                     <div class="form-group">
-                      <label for="review2_file">File Review</label>
+                      <label for="review2_file">File Naskah</label>
                       <!-- .input-group -->
                       <div class="input-group input-group-alt">
                         <div class="custom-file">
@@ -246,9 +268,31 @@
                     </div>
                     <!-- /.form-group -->
                 <?= form_close(); ?>
-                <hr class="my-3">
                 <p>Last Upload: <?=konversiTanggal($input->review2_upload_date) ?></p>
                 <?=(!empty($input->review2_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review2_file.'" href="'.base_url('draftfile/'.$input->review2_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
+                <hr class="my-3">
+                <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/review2_template', 'novalidate'); ?>
+                  <p class="font-weight-bold">REVIEW</p>
+                  <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
+                  <!-- .form-group -->
+                    <div class="form-group">
+                      <label for="review2_template">File Review</label>
+                      <!-- .input-group -->
+                      <div class="input-group input-group-alt">
+                        <div class="custom-file">
+                          <?= form_upload('review2_template','','class="custom-file-input"') ?> 
+                          <label class="custom-file-label" for="tf3">Choose file</label>
+                          <div class="invalid-feedback">Field is required</div>
+                        </div>
+                        <div class="input-group-append">
+                          <button class="btn btn-primary" type="submit" value="Submit" id="btn-upload-review2-template"><i class="fa fa-upload"></i> Upload</button>
+                        </div>
+                      </div>
+                      <!-- /.input-group -->
+                    </div>
+                    <!-- /.form-group -->
+                <?= form_close(); ?>
+                <a href="#">Download file template review</a>
                 <hr class="my-3">
                 <!-- .form -->
                 <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formreview2"') ?>

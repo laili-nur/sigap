@@ -9,13 +9,13 @@ class Draft extends Operator_Controller
     }
 
 	public function index($page = null)
-	{
+	{  
         $ceklevel = $this->session->userdata('level');
         $cekusername = $this->session->userdata('username');
 
 
         //get id user
-
+        
         if ($ceklevel == 'author'){
             $drafts = $this->draft->join('category')->join('theme')->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->paginate($page)->getAll();
             $tot = $this->draft->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->getAll();
@@ -26,8 +26,8 @@ class Draft extends Operator_Controller
             $drafts = $this->draft->join('category')->join('theme')->join3('draft_reviewer','draft','draft')->join3('reviewer','draft_reviewer','reviewer')->join3('user','reviewer','user')->where('user.username',$cekusername)->paginate($page)->getAll();
             $tot = $this->draft->join('category')->join('theme')->join3('draft_reviewer','draft','draft')->join3('reviewer','draft_reviewer','reviewer')->join3('user','reviewer','user')->where('user.username',$cekusername)->getAll();
         }else{
-            $drafts     = $this->draft->join('category')->join('theme')->orderBy('draft_title')->orderBy('category.category_id')->orderBy('theme.theme_id')->paginate($page)->getAll();
-            $tot        = $this->draft->join('category')->join('theme')->orderBy('draft_title')->orderBy('category.category_id')->orderBy('theme.theme_id')->getAll();
+            $drafts     = $this->draft->join('category')->join('theme')->orderBy('entry_date','desc')->paginate($page)->getAll();
+            $tot        = $this->draft->join('category')->join('theme')->getAll();
         }
 
 
@@ -50,7 +50,7 @@ class Draft extends Operator_Controller
                 }
             ));
         }
-
+        
 
         $total     = count($tot);
         $pages    = $this->pages;
@@ -69,27 +69,27 @@ class Draft extends Operator_Controller
             $drafts = $this->draft->join('category')
                                   ->join('theme')
                                   ->joinRelationMiddle('draft', 'draft_author')
-                                  ->joinRelationDest('author', 'draft_author')
-                                  ->where('draft_status','0')
+                                  ->joinRelationDest('author', 'draft_author')            
+                                  ->where('draft_status','0')                      
                                   ->orderBy('draft_title')
                                   ->paginate($page)
                                   ->getAll();
-            $tot = $this->draft->where('draft_status','0')
+            $tot = $this->draft->where('draft_status','0')                      
                                   ->getAll();
             $total = count($tot);
         }elseif($filter == 'review'){
             $drafts = $this->draft->join('category')
                                   ->join('theme')
                                   ->joinRelationMiddle('draft', 'draft_author')
-                                  ->joinRelationDest('author', 'draft_author')
-                                  ->where('is_review','n')
-                                  ->where('draft_status','4')
+                                  ->joinRelationDest('author', 'draft_author')            
+                                  ->where('is_review','n')                        
+                                  ->where('draft_status','4')                        
                                   ->orderBy('draft_title')
                                   ->paginate($page)
                                   ->getAll();
-            $tot = $this->draft->where('is_review','n')
-                                  ->whereNot('review1_notes','')
-                                  ->whereNot('review2_notes','')
+            $tot = $this->draft->where('is_review','n')            
+                                  ->whereNot('review1_notes','')            
+                                  ->whereNot('review2_notes','')            
                                   ->getAll();
             $total = count($tot);
         }elseif($filter == 'edit'){
@@ -97,15 +97,15 @@ class Draft extends Operator_Controller
                                   ->join('theme')
                                   ->joinRelationMiddle('draft', 'draft_author')
                                   ->joinRelationDest('author', 'draft_author')
-                                  ->where('is_review','y')
+                                  ->where('is_review','y')            
                                   ->where('is_edit','n')
-                                  ->whereNot('draft_status','99')
+                                  ->whereNot('draft_status','99')            
                                   ->orderBy('draft_title')
                                   ->paginate($page)
                                   ->getAll();
-            $tot = $this->draft->where('is_review','y')
+            $tot = $this->draft->where('is_review','y')            
                                   ->where('is_edit','n')
-                                  ->whereNot('draft_status','99')
+                                  ->whereNot('draft_status','99')            
                                   ->getAll();
             $total = count($tot);
         }elseif($filter == 'layout'){
@@ -113,15 +113,15 @@ class Draft extends Operator_Controller
                                   ->join('theme')
                                   ->joinRelationMiddle('draft', 'draft_author')
                                   ->joinRelationDest('author', 'draft_author')
-                                  ->where('is_edit','y')
+                                  ->where('is_edit','y')            
                                   ->where('is_layout','n')
-                                  ->whereNot('draft_status','99')
+                                  ->whereNot('draft_status','99')            
                                   ->orderBy('draft_title')
                                   ->paginate($page)
                                   ->getAll();
-            $tot = $this->draft->where('is_edit','y')
+            $tot = $this->draft->where('is_edit','y')            
                                   ->where('is_layout','n')
-                                  ->whereNot('draft_status','99')
+                                  ->whereNot('draft_status','99')            
                                   ->getAll();
             $total = count($tot);
         }elseif($filter == 'proofread'){
@@ -129,15 +129,15 @@ class Draft extends Operator_Controller
                                   ->join('theme')
                                   ->joinRelationMiddle('draft', 'draft_author')
                                   ->joinRelationDest('author', 'draft_author')
-                                  ->where('is_proofread','n')
-                                  ->where('is_layout','y')
-                                  ->whereNot('draft_status','99')
+                                  ->where('is_proofread','n')            
+                                  ->where('is_layout','y')  
+                                  ->whereNot('draft_status','99')          
                                   ->orderBy('draft_title')
                                   ->paginate($page)
                                   ->getAll();
-            $tot = $this->draft->where('is_proofread','n')
+            $tot = $this->draft->where('is_proofread','n')            
                                   ->where('is_layout','y')
-                                  ->whereNot('draft_status','99')
+                                  ->whereNot('draft_status','99')            
                                   ->getAll();
             $total = count($tot);
         }elseif($filter == 'reject'){
@@ -145,11 +145,11 @@ class Draft extends Operator_Controller
                                   ->join('theme')
                                   ->joinRelationMiddle('draft', 'draft_author')
                                   ->joinRelationDest('author', 'draft_author')
-                                  ->where('draft_status','99')
+                                  ->where('draft_status','99')          
                                   ->orderBy('draft_title')
                                   ->paginate($page)
                                   ->getAll();
-            $tot = $this->draft->where('draft_status','99')
+            $tot = $this->draft->where('draft_status','99')           
                                   ->getAll();
             $total = count($tot);
         }elseif($filter == 'final'){
@@ -157,27 +157,27 @@ class Draft extends Operator_Controller
                                   ->join('theme')
                                   ->joinRelationMiddle('draft', 'draft_author')
                                   ->joinRelationDest('author', 'draft_author')
-                                  ->where('draft_status','14')
+                                  ->where('draft_status','14')          
                                   ->orderBy('draft_title')
                                   ->paginate($page)
                                   ->getAll();
-            $tot = $this->draft->where('draft_status','14')
+            $tot = $this->draft->where('draft_status','14')           
                                   ->getAll();
             $total = count($tot);
         }else{
             $drafts = $this->draft->join('category')
                                   ->join('theme')
                                   ->joinRelationMiddle('draft', 'draft_author')
-                                  ->joinRelationDest('author', 'draft_author')
+                                  ->joinRelationDest('author', 'draft_author')        
                                   ->orderBy('draft_title')
                                   ->paginate($page)
                                   ->getAll();
             $tot = $this->draft->join('category')
-                                ->join('theme')
+                                ->join('theme')              
                                 ->getAll();
             $total = count($tot);
         }
-
+        
 
         $pagination = $this->draft->makePagination(site_url('draft/filter/'), 3, $total);
 
@@ -196,9 +196,9 @@ class Draft extends Operator_Controller
         $main_view  = 'draft/index_draft';
         $this->load->view('template', compact('pages', 'main_view', 'drafts', 'pagination', 'total'));
     }
-
-
-// --add--
+        
+        
+// --add--        
         public function add($category='')
 	{
         //khusus admin dan author
@@ -224,15 +224,15 @@ class Draft extends Operator_Controller
         }
 
         if (!empty($_FILES) && $_FILES['draft_file']['size'] > 0) {
-            $getextension=explode(".",$_FILES['draft_file']['name']);
+            $getextension=explode(".",$_FILES['draft_file']['name']);            
             $draftFileName  = str_replace(" ","_",$input->draft_title . '_' . date('YmdHis').".".$getextension[1]) ; // draft file name
             $upload = $this->draft->uploadDraftfile('draft_file', $draftFileName);
 
             if ($upload) {
                 $input->draft_file =  "$draftFileName"; // Data for column "draft".
             }
-        }
-
+        }   
+        
         $draft_id = $this->draft->insert($input);
 
         $isSuccess = true;
@@ -267,7 +267,7 @@ class Draft extends Operator_Controller
             $this->session->set_flashdata('success', 'Data saved');
         } else {
             $this->session->set_flashdata('error', 'Data author failed to save');
-        }
+        } 
 
         redirect('draft/view/'.$draft_id);
       }
@@ -285,7 +285,7 @@ class Draft extends Operator_Controller
         //status draft
         $draft->stts = $draft->draft_status;
         $draft->draft_status = $this->checkStatus($draft->draft_status);
-
+        
         // ambil tabel worksheet
         $this->load->model('Worksheet_model','worksheet',true);
         $ambil_worksheet = ['draft_id' => $id];
@@ -301,7 +301,7 @@ class Draft extends Operator_Controller
 
         // tabel author
         $authors =  $this->draft->select(['draft_author.author_id','draft_author_id','author_name','author_nip','work_unit_name','institute_name','draft.draft_id'])->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('work_unit','author','work_unit')->join3('institute','author','institute')->where('draft_author.draft_id',$id)->getAll();
-
+        
 
         // tabel reviewer
         $reviewers =  $this->draft->select(['draft_reviewer.reviewer_id','draft_reviewer_id','reviewer_name','reviewer_nip','faculty_name','username'])->join3('draft_reviewer','draft','draft')->join3('reviewer','draft_reviewer','reviewer')->join3('faculty','reviewer','faculty')->join3('user','reviewer','user')->where('draft_reviewer.draft_id',$id)->getAll();
@@ -354,7 +354,7 @@ class Draft extends Operator_Controller
             $this->load->view('template', compact('draft','reviewer_order','desk','pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers','editors','layouters'));
             return;
         }
-
+        
 
         if ($this->draft->where('draft_id', $id)->update($input)) {
             $this->session->set_flashdata('success', 'Data updated');
@@ -381,25 +381,45 @@ class Draft extends Operator_Controller
             $input = (object) $this->input->post(null, true);
             $input->$column = $draft->$column; // Set draft file for preview.
         }
+        
+        if($column == 'review1_template' || $column == 'review2_template'){
+          if (!empty($_FILES) && $_FILES[$column]['size'] > 0) {
+              // Upload new draft (if any)
+              $getextension=explode(".",$_FILES[$column]['name']);            
+              $draftFileName  = str_replace(" ","_",$title->draft_title.'_'.$column . '_' . date('YmdHis').".".$getextension[1]); // draft file name
+              $upload = $this->draft->uploadProgress($column, $draftFileName);
 
-        //tiap upload, update upload date
-        $tahap = explode('_', $column);
-        $this->draft->editDraftDate($id, $tahap[0].'_upload_date');
+              if ($upload) {
+                  $input->$column =  "$draftFileName";
+                  // Delete old draft file
+                  if ($draft->$column) {
+                      $this->draft->deleteProgress($draft->$column);
+                  }
+              }
+          }
+        }else{
+          //tiap upload, update upload date
+          $tahap = explode('_', $column);
+          $this->draft->editDraftDate($id, $tahap[0].'_upload_date');
+          
+          if (!empty($_FILES) && $_FILES[$column]['size'] > 0) {
+              // Upload new draft (if any)
+              $getextension=explode(".",$_FILES[$column]['name']);            
+              $draftFileName  = str_replace(" ","_",$title->draft_title.'_'.$column . '_' . date('YmdHis').".".$getextension[1]); // draft file name
+              $upload = $this->draft->uploadProgress($column, $draftFileName);
 
-        if (!empty($_FILES) && $_FILES[$column]['size'] > 0) {
-            // Upload new draft (if any)
-            $getextension=explode(".",$_FILES[$column]['name']);
-            $draftFileName  = str_replace(" ","_",$title->draft_title.'_'.$column . '_' . date('YmdHis').".".$getextension[1]); // draft file name
-            $upload = $this->draft->uploadProgress($column, $draftFileName);
-
-            if ($upload) {
-                $input->$column =  "$draftFileName";
-                // Delete old draft file
-                if ($draft->$column) {
-                    $this->draft->deleteProgress($draft->$column);
-                }
-            }
+              if ($upload) {
+                  $input->$column =  "$draftFileName";
+                  // Delete old draft file
+                  if ($draft->$column) {
+                      $this->draft->deleteProgress($draft->$column);
+                  }
+              }
+          }
         }
+        
+
+        
 
         //If something wrong
         // if (!$this->draft->validate() || $this->form_validation->error_array()) {
@@ -421,7 +441,7 @@ class Draft extends Operator_Controller
 
     }
 
-// -- ubah notes - buat ubah deadline juga
+// -- ubah notes - buat ubah deadline juga  
       public function ubahnotes($id = null)
 	{
         $data = array();
@@ -440,7 +460,7 @@ class Draft extends Operator_Controller
         if (empty($input->files)) {
             unset($input->files);
         }
-
+        
         // If something wrong
         // if (!$this->draft->validate() || $this->form_validation->error_array()) {
         //     return;
@@ -478,10 +498,10 @@ class Draft extends Operator_Controller
             $input->draft_file = $draft->draft_file; // Set draft file for preview.
         }
 
-
+        
         if (!empty($_FILES) && $_FILES['draft_file']['size'] > 0) {
             // Upload new draft (if any)
-            $getextension=explode(".",$_FILES['draft_file']['name']);
+            $getextension=explode(".",$_FILES['draft_file']['name']);            
             $draftFileName  = str_replace(" ","_",$input->draft_title . '_' . date('YmdHis').".".$getextension[1]); // draft file name
             $upload = $this->draft->uploadDraftfile('draft_file', $draftFileName);
 
@@ -492,8 +512,8 @@ class Draft extends Operator_Controller
                     $this->draft->deleteDraftfile($draft->draft_file);
                 }
             }
-        }
-
+        }   
+        
         // If something wrong
         if (!$this->draft->validate() || $this->form_validation->error_array()) {
             $pages    = $this->pages;
@@ -513,7 +533,7 @@ class Draft extends Operator_Controller
         redirect('draft');
     }
 
-// -- delete --
+// -- delete --        
     public function delete($id = null)
 	{
         //khusus admin
@@ -521,7 +541,7 @@ class Draft extends Operator_Controller
         if ($ceklevel != 'superadmin' and $ceklevel != 'admin_penerbitan'){
             redirect('draft');
         }
-
+        
         $draft = $this->draft->where('draft_id', $id)->get();
         if (!$draft) {
             $this->session->set_flashdata('warning', 'Draft data were not available');
@@ -555,9 +575,9 @@ class Draft extends Operator_Controller
         redirect('draft');
 	}
 
-    public function copyToBook($draft_id, $title, $file)
+    public function copyToBook($draft_id, $title, $file) 
     {
-
+        
         $this->load->model('book_model', 'book', true);
         $book_id = $this->book->getIdDraftFromDraftId($draft_id, 'book');
 
@@ -580,10 +600,10 @@ class Draft extends Operator_Controller
             $this->session->set_flashdata('error', 'Book has been created');
             redirect('book');
         }
-
+        
     }
 
-// -- search --
+// -- search --        
         public function search($page = null)
         {
         $keywords   = $this->input->get('keywords', true);
@@ -597,7 +617,7 @@ class Draft extends Operator_Controller
                                   ->joinRelationMiddle('draft', 'draft_author')
                                   ->joinRelationDest('author', 'draft_author')
                                   ->orderBy('category.category_id')
-                                  ->orderBy('theme.theme_id')
+                                  ->orderBy('theme.theme_id')                
                                   ->orderBy('draft_title')
                                   ->paginate($page)
                                   ->getAll();
@@ -607,7 +627,7 @@ class Draft extends Operator_Controller
                                   ->join('category')
                                   ->join('theme')
                                   ->orderBy('category.category_id')
-                                  ->orderBy('theme.theme_id')
+                                  ->orderBy('theme.theme_id')                
                                   ->orderBy('draft_title')
                                   ->getAll();
         $total = count($tot);
@@ -637,7 +657,7 @@ class Draft extends Operator_Controller
             case '4':
                 $column = 'review_end_date';
                 break;
-
+            
             default:
                 # code...
                 break;
@@ -722,7 +742,7 @@ class Draft extends Operator_Controller
             case 99:
                 $status = 'Draft Ditolak';
                 break;
-
+            
             default:
                 # code...
                 break;
@@ -762,7 +782,7 @@ class Draft extends Operator_Controller
         return true;
     }
 
+    
 
-
-
+    
 }

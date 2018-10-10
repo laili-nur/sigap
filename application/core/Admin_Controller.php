@@ -13,7 +13,7 @@ class Admin_Controller extends MY_Controller
         $this->role_id = $this->session->userdata('role_id');
 
         if (!$this->is_login) {
-            redirect(base_url());
+            redirect(base_url('login'));
             return;
         }
 

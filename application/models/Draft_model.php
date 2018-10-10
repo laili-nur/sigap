@@ -58,11 +58,16 @@ class Draft_model extends MY_Model
                 'label' => 'Review End Date',
                 'rules' => 'trim'
             ],
-            // [
-            //     'field' => 'review1_file',
-            //     'label' => 'Review 1 File',
-            //     'rules' => 'trim'
-            // ],
+            [
+                'field' => 'review1_file',
+                'label' => 'Review 1 File',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'review1_template',
+                'label' => 'Review 1 template',
+                'rules' => 'trim'
+            ],
             [
                 'field' => 'review1_upload_date',
                 'label' => 'Review 1 Upload Date',
@@ -86,6 +91,11 @@ class Draft_model extends MY_Model
             [
                 'field' => 'review2_file',
                 'label' => 'Review 2 File',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'review2_template',
+                'label' => 'Review 2 template',
                 'rules' => 'trim'
             ],
             [
