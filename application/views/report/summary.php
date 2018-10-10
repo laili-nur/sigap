@@ -10,7 +10,7 @@
           <a href="<?=base_url('reporting')?>">Report</a>
         </li>
         <li class="breadcrumb-item active">
-          <a class="text-muted">Reporting Buku</a>
+          <a class="text-muted">Summary</a>
         </li>
       </ol>
     </nav>
@@ -18,9 +18,9 @@
   </header>
   <!-- Reporting buku -->
   <ul nav class="nav nav-tabs">
-    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index') ?>">Summary</a></li>
+    <li class="nav-item"><a class="nav-link active" href="<?= base_url('reporting/index') ?>">Summary</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_draft') ?>">Reporting Draft</a></li>
-    <li class="nav-item"><a class="nav-link active" href="<?= base_url('reporting/index_books') ?>">Reporting Book</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_books') ?>">Reporting Book</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_author') ?>">Reporting Author</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/performa_editor') ?>">Performa Editor</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/performa_layouter') ?>">Performa Layouter</a></li>
@@ -28,7 +28,7 @@
   <!-- Reporting buku -->
   <!-- /.page-title-bar -->
   <br />
-  <h5>Report Book</h5>
+  <h5>Summary</h5>
   <br />
   <div class="container">
     <div class="table-responsive">
@@ -40,16 +40,16 @@
           <th>Year</th>
         </tr>
       <?php
-      if($books)
+      if($summaries)
       {
-        foreach ($books as $row)
+        foreach ($summaries as $row)
         {
       ?>
         <tr>
-          <td><?php echo $row->book_id; ?></td>
-          <td><?php echo $row->book_title; ?></td>
-          <td><?php echo konversiTanggal($row->published_date); ?></td>
-          <td><?php echo date("Y",strtotime($row->published_date)); ?></td>
+          <td><?php echo $row->draft_id; ?></td>
+          <td><?php echo $row->draft_title; ?></td>
+          <td><?php echo konversiTanggal($row->entry_date); ?></td>
+          <td><?php echo date("Y",strtotime($row->entry_date)); ?></td>
         </tr>
         <?php
         }
@@ -71,25 +71,25 @@
     <canvas id="myChart" width="300" height="90"></canvas>
     <script>
 
-    $.post("<?php echo base_url();?>Reporting/getBook",
+    $.post("<?php echo base_url();?>Reporting/getSummary",
         function(data){
           var obj = JSON.parse(data);
-          console.log(obj);
-          var tampil = [];
-          for(var i=1;i<=12;i++){
-            obj.count[i];
-            tampil.push(obj.count[i]);
-          };
+
+          var review = obj.count_review;
+          var disetujui = obj.count_disetujui;
+          var editor = obj.count_editor;
+          var layout = obj.count_layout;
+          var proofread = obj.count_proofread;
+          var book = obj.count_book;
 
           var ctx = $("#myChart");
           var myChart = new Chart(ctx, {
               type: 'bar',
               data: {
-                  labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli",
-                          "Agustus", "September", "Oktober", "November", "Desember"],
+                  labels: ["Review", "Disetujui", "Editor", "Layouter", "Proofread", "Buku"],
                   datasets: [{
-                      label: 'JUMLAH BUKU',
-                      data: tampil,
+                      label: 'SUMMARY',
+                      data: [review, disetujui, editor, layout, proofread, book],
                       backgroundColor: [
                           'rgba(255, 99, 132, 0.2)',
                           'rgba(54, 162, 235, 0.2)',
@@ -118,10 +118,26 @@
               options: {
                   scales: {
                       yAxes: [{
-                          ticks: {
-                              beginAtZero:true
-                          }
-                      }]
+                        gridLines :{
+                          display : false
+                        },
+                        ticks: {
+                          fontFamily :"'Helvetica'",
+                          fontSize : 13,
+                          beginAtZero:true
+                        }
+                    }],
+                      xAxes : [{
+                        gridLines : {
+                          display : false
+                        },
+                        ticks: {
+                          fontFamily :"'Helvetica'",
+                          fontSize : 13,
+                          beginAtZero:true
+                        }
+                      }],
+
                   }
               }
           });

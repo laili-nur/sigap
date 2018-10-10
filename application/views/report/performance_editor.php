@@ -10,7 +10,7 @@
           <a href="<?=base_url('reporting')?>">Report</a>
         </li>
         <li class="breadcrumb-item active">
-          <a class="text-muted">Performance</a>
+          <a class="text-muted">Editor Performance</a>
         </li>
       </ol>
     </nav>
@@ -18,7 +18,8 @@
   </header>
   <!-- Reporting buku -->
   <ul nav class="nav nav-tabs">
-    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index') ?>">Reporting Draft</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index') ?>">Summary</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_draft') ?>">Reporting Draft</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_books') ?>">Reporting Book</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_author') ?>">Reporting Author</a></li>
     <li class="nav-item"><a class="nav-link active" href="<?= base_url('reporting/performa_editor') ?>">Editor Performance</a></li>

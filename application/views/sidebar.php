@@ -73,17 +73,7 @@
               </a>
             </li>
             <!-- /.menu-item -->
-            <?php if($ceklevelasli=='editor'): ?>
-            <!-- .menu-item -->
-            <li class="menu-item <?=($pages=='worksheet')?'has-active':'' ?>">
-              <a href="<?= base_url('worksheet') ?>" class="menu-link">
-                <span class="menu-icon oi oi-pencil"></span>
-                <span class="menu-text">Lembar Kerja</span>
-              </a>
-            </li>
-            <!-- /.menu-item -->
-            <?php endif ?>
-            <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
+            <?php if ($ceklevel != 'reviewer'): ?>
             <!-- .menu-item -->
             <li class="menu-item <?=($pages=='book')?'has-active':'' ?>">
               <a href="<?= base_url('book') ?>" class="menu-link">
@@ -111,7 +101,6 @@
               </a>
             </li>
             <!-- /.menu-item -->
-            <?php if($ceklevelasli=='editor'): ?>
             <!-- .menu-item -->
             <li class="menu-item <?=($pages=='worksheet')?'has-active':'' ?>">
               <a href="<?= base_url('worksheet') ?>" class="menu-link">
@@ -120,7 +109,6 @@
               </a>
             </li>
             <!-- /.menu-item -->
-            <?php endif ?>
             <!-- .menu-item -->
             <li class="menu-item has-child <?=($pages=='category' || $pages=='work_unit' || $pages=='theme' || $pages=='faculty' || $pages=='work_unit' || $pages=='institute')?'has-active':'' ?>">
               <a href="#" class="menu-link ">

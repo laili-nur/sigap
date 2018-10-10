@@ -16,6 +16,12 @@ class Reporting_model extends MY_Model{
     return $query->result();
   }
 
+  public function fetch_data_draft()
+  {
+    $query = $this->db->query("SELECT * FROM draft ORDER BY entry_date ASC");
+    return $query->result();
+  }
+
   public function fetch_data_book()
   {
     $query = $this->db->query("SELECT * FROM book ORDER BY published_date DESC LIMIT 5");
@@ -44,6 +50,8 @@ class Reporting_model extends MY_Model{
     return $query->result();
   }
 
+  /*model for graph*/
+
   public function getDraft($month)
   {
     $query = $this->db->query("SELECT draft_id, draft_title, entry_date FROM draft WHERE Month(entry_date) = $month");
@@ -67,7 +75,7 @@ class Reporting_model extends MY_Model{
   public function apiDraft($draft_id = NULL)
   {
     if($draft_id == FALSE){
-			$result = $this->db->select('draft_id, category_id, theme_id, draft_title, entry_date, review_start_deadline, review_end_deadline, draft_status')->get('draft')->result();
+			$result = $this->db->select('draft_id, category_id, theme_id, draft_title, entry_date, review_start_date, review_end_date, draft_status')->get('draft')->result();
 		} else{
 			$this->db->select('draft_id, category_id, theme_id, draft_title, entry_date, review_start_deadline, review_end_deadline, draft_status')->where('draft_id', $draft_id);
 			$result = $this->db->get('draft')->result();

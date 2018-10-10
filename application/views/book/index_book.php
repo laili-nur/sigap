@@ -79,6 +79,7 @@
                 <thead>
                   <tr>
                     <th scope="col" class="pl-4">No</th>
+                    <th scope="col">Draft</th>
                     <th scope="col">Judul</th>
                     <th scope="col">Edisi</th>
                     <th scope="col">Copy</th>
@@ -95,7 +96,8 @@
                   <!-- tr -->
                   <tr>
                     <td class="align-middle pl-4"><?= ++$i ?></td>
-                    <td class="align-middle"><a href="<?= base_url('book/view/'.$book->book_id) ?>"><?= $book->book_title ?></a></td>
+                    <td class="align-middle"><a href="<?= base_url('draft/view/'.$book->draft_id) ?>"><?= $book->draft_title ?></a></td>
+                    <td class="align-middle"><?= $book->book_title ?></td>
                     <td class="align-middle"><?= $book->book_edition ?></td>
                     <td class="align-middle"><?= $book->copies_num ?></td>
                     <td class="align-middle"><?= $book->is_reprint == 'y' ? 'Cetak Ulang' : 'Baru' ?></td>

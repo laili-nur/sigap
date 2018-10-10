@@ -7,7 +7,7 @@
           <a href="<?=base_url()?>"><span class="fa fa-home"></span> Admin Panel</a>
         </li>
         <li class="breadcrumb-item active">
-          <a class="text-muted">Report</a>
+          <a class="text-muted">Reporting Draft</a>
         </li>
       </ol>
     </nav>
@@ -15,7 +15,8 @@
   </header>
   <!-- Reporting buku -->
   <ul nav class="nav nav-tabs">
-    <li class="nav-item"><a class="nav-link active" href="<?= base_url('reporting/index') ?>">Reporting Draft</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index') ?>">Summary</a></li>
+    <li class="nav-item"><a class="nav-link active" href="<?= base_url('reporting/index_draft') ?>">Reporting Draft</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_books') ?>">Reporting Book</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_author') ?>">Reporting Author</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/performa_editor') ?>">Performa Editor</a></li>
@@ -84,7 +85,7 @@
                   labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli",
                           "Agustus", "September", "Oktober", "November", "Desember"],
                   datasets: [{
-                      label: 'Jumlah draft',
+                      label: 'JUMLAH DRAFT',
                       data: tampil,
                       backgroundColor: [
                           'rgba(255, 99, 132, 0.2)',

@@ -368,13 +368,6 @@
     <!-- if tampilan admin -->
     <?php if($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
      <div class="el-example">
-      <?php 
-        $hidden_date = array(
-            'type'  => 'hidden',
-            'id'    => 'finish_date',
-            'value' => date('Y-m-d H:i:s')
-        );
-        echo form_input($hidden_date);?>
        <button class="btn btn-primary" data-toggle="modal" data-target="#modalsimpan" <?=($input->is_proofread == 'y')? '':'disabled' ?>>Simpan jadi buku</button>
        <button class="btn btn-danger" data-toggle="modal" data-target="#modaltolak">Tolak</button>
      </div>
@@ -397,7 +390,7 @@
             <!-- /.modal-body -->
             <!-- .modal-footer -->
             <div class="modal-footer">
-              <button class="btn btn-primary" id="draft-setuju" draft-title="<?=$draft->draft_title ?>" draft-file="<?=$draft->proofread_file ?>" value="14">Submit</button>
+              <button class="btn btn-primary" id="draft-setuju" draft-title="<?=$draft->draft_title ?>" draft-file="<?=$draft->draft_file ?>" value="14">Submit</button>
               <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
             </div>
             <!-- /.modal-footer -->
@@ -766,7 +759,6 @@
         let draft_title=$this.attr('draft-title');
         let draft_file=$this.attr('draft-file');
         let action=$('#draft-setuju').val();
-        let finish_date=$('#finish_date').val();
         let cek = '<?php echo base_url('draft/copyToBook/')?>'+id+'/'+draft_title+'/'+draft_file;
         console.log(cek);
         $.ajax({
@@ -775,7 +767,6 @@
             datatype : "JSON",
             data : {
               draft_status : action,
-              finish_date : finish_date,
             },
             success :function(data){
               let datax = JSON.parse(data);

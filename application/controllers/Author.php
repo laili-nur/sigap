@@ -6,11 +6,6 @@ class Author extends Operator_Controller
     {
         parent::__construct();
         $this->pages = 'author';
-        //khusus admin
-        $ceklevel = $this->session->userdata('level');
-        if ($ceklevel == 'author' || $ceklevel == 'reviewer' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
-            redirect('home');
-        }
     }
 
 	public function index($page = null)

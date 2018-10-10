@@ -166,7 +166,7 @@
                   <i class="fa fa-times-circle"></i>
                 </span>
               </button>
-            <?= form_input('serial_num', $input->serial_num, 'class="form-control" id="serial_num"') ?>
+            <?= form_input('serial_num', $input->serial_num, 'class="form-control" id="serial_num" required=""') ?>
             <div class="invalid-feedback">Field is required</div>
             </div>
             <?= form_error('serial_num') ?>
@@ -182,7 +182,7 @@
                   <i class="fa fa-times-circle"></i>
                 </span>
               </button>
-            <?= form_input('serial_num_per_year', $input->serial_num_per_year, 'class="form-control" id="serial_num_per_year" ') ?>
+            <?= form_input('serial_num_per_year', $input->serial_num_per_year, 'class="form-control" id="serial_num_per_year" required=""') ?>
             <div class="invalid-feedback">Field is required</div>
             </div>
             <?= form_error('serial_num_per_year') ?>
