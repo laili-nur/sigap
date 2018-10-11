@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 10, 2018 at 03:31 PM
+-- Generation Time: Oct 11, 2018 at 07:30 PM
 -- Server version: 5.6.26
 -- PHP Version: 5.6.12
 
@@ -344,12 +344,12 @@ CREATE TABLE IF NOT EXISTS `draft` (
 --
 
 INSERT INTO `draft` (`draft_id`, `category_id`, `theme_id`, `draft_title`, `draft_file`, `entry_date`, `finish_date`, `print_date`, `is_review`, `review_start_date`, `review_end_date`, `review1_file`, `review1_template`, `review1_upload_date`, `review1_notes`, `review1_notes_author`, `review1_deadline`, `review1_flag`, `review2_file`, `review2_template`, `review2_upload_date`, `review2_notes`, `review2_notes_author`, `review2_deadline`, `review2_flag`, `review_status`, `is_edit`, `edit_start_date`, `edit_end_date`, `edit_file`, `edit_upload_date`, `edit_notes`, `edit_notes_author`, `edit_deadline`, `edit_status`, `is_layout`, `layout_start_date`, `layout_end_date`, `layout_file`, `layout_upload_date`, `layout_notes`, `layout_notes_author`, `layout_deadline`, `cover_file`, `cover_upload_date`, `cover_notes`, `cover_notes_author`, `layout_status`, `is_proofread`, `proofread_start_date`, `proofread_end_date`, `proofread_file`, `proofread_upload_date`, `proofread_notes`, `proofread_notes_author`, `proofread_status`, `draft_status`, `draft_notes`, `kriteria1_reviewer1`, `kriteria2_reviewer1`, `kriteria3_reviewer1`, `kriteria4_reviewer1`, `nilai_reviewer1`, `kriteria1_reviewer2`, `kriteria2_reviewer2`, `kriteria3_reviewer2`, `kriteria4_reviewer2`, `nilai_reviewer2`) VALUES
-(40, 13, 18, 'cara memelihara lele', 'cara_memelihara_lele_20181009110800.docx', '2018-10-09 04:08:00', '2018-10-09 06:09:09', NULL, 'y', '2018-10-09 11:18:17', '2018-10-09 11:25:08', 'cara_memelihara_lele_review1_file_20181009112258.docx', '', '2018-10-09 04:22:58', '<p>sudah mantap, ada beberapa yang saya tandai</p>', '<p>oke siap pak saya benearkan...</p>', '2018-12-08 11:18:17', 'y', '', '', NULL, '', '', '2018-12-08 11:18:17', NULL, '<p>saya setujui draftnya. silakan koreksi sesuai masukan reviewer</p>', 'y', '2018-10-09 11:27:56', '2018-10-09 11:32:49', '', NULL, '<p>saya edit dulu yaa</p><p><br></p><p>-----</p><p><span style="font-size: 24px; color: rgb(255, 0, 0); font-weight: bold;">revisi mayor</span></p><ol><li>penulisan kata salah</li><li>kata asing cetak miring</li></ol>', '<p>oke&nbsp;</p>', '0000-00-00 00:00:00', '<p>oke saya setujui</p>', 'y', '2018-10-09 11:34:32', '2018-10-09 11:37:29', '', NULL, '<p>mantap jiwaa</p>', '', '0000-00-00 00:00:00', '', NULL, '', '', '<p>layout kurang bagus, ulangi ya</p><p><br></p><p>---</p><p>oke saya setujui lagi</p>', 'y', '2018-10-09 11:37:29', '2018-10-09 11:40:06', '', NULL, '', '', '<p>oke stujui</p>', 14, '', '', '', '', '', '', '', '', '', '', ''),
-(41, 13, 17, 'cara database', 'cara_database_20181009140208.docx', '2018-10-09 07:02:08', '2018-10-10 06:48:10', NULL, 'y', '2018-10-09 14:10:18', '2018-10-09 14:18:36', '', 'cara_database_review1_template_20181009150703.docx', NULL, '', '', '2018-12-08 14:10:18', NULL, '', 'cara_database_review2_template_20181009151637.docx', NULL, '<p>sudah bagus</p>', '', '2018-12-08 14:10:18', 'y', '<p>review selesai</p><p>disetujui</p>', 'y', '2018-10-09 14:20:38', '2018-10-09 14:21:46', '', NULL, '<p>editan in progressss</p>', '', '2018-10-25 00:00:00', '<p>editorial selesai fix</p>', 'y', '2018-10-09 14:36:27', '2018-10-09 14:22:22', '', NULL, '<p>okkeee</p><p>9 okt = revisiasd asd</p>', '', '0000-00-00 00:00:00', '', NULL, '', '', '', 'y', '2018-10-09 14:22:22', '2018-10-10 13:48:10', '', NULL, '', '', '', 14, '', '', '', '', '', '', '', '', '', '', ''),
+(40, 13, 18, 'cara memelihara lele', 'cara_memelihara_lele_20181009110800.docx', '2018-10-09 04:08:00', '2018-10-09 06:09:09', NULL, 'y', '2018-10-11 23:45:00', '2018-10-09 11:25:08', 'cara_memelihara_lele_review1_file_20181009112258.docx', '', '2018-10-09 04:22:58', '<p>jelekkk</p>', '<p><b style="background-color: rgb(255, 255, 0);">makasih ya pak, semangattas hehehee</b></p>', '2018-12-10 23:45:00', 'y', '', '', NULL, '<p>baguss tapi jelek wowkowkowk</p>', '<p>hehe siapp MAKASIH!</p>', '2018-12-10 23:45:00', 'n', '<p>saya setujui draftnya. silakan koreksi sesuai masukan reviewer</p>', 'y', '2018-10-09 11:27:56', '2018-10-09 11:32:49', '', NULL, '<p>saya edit dulu yaa</p><p><br></p><p>-----</p><p><span style="font-size: 24px; color: rgb(255, 0, 0); font-weight: bold;">revisi mayor</span></p><ol><li>penulisan kata salah</li><li>kata asing cetak miring</li></ol>', '<p>oke siapp</p>', '0000-00-00 00:00:00', '<p>oke saya setujui</p>', 'y', '2018-10-09 11:34:32', '2018-10-09 11:37:29', '', NULL, '<p>mantap jiwaa</p>', '', '0000-00-00 00:00:00', '', NULL, '', '', '<p>layout kurang bagus, ulangi ya</p><p><br></p><p>---</p><p>oke saya setujui lagi</p>', 'y', '2018-10-09 11:37:29', '2018-10-09 11:40:06', '', NULL, '', '', '<p>oke stujui</p>', 4, '', '<p>qqqqqqq</p>', '<p>www</p>', '<p>eee</p>', '<p style="line-height: 1;">rrrr</p>', '1,1,1,1', '<p>fgdfg</p>', '<p>dgdfg</p>', '<p>dfgdf</p>', '<p>dfgdfg</p>', '5,5,5,5'),
+(41, 13, 17, 'cara database', 'cara_database_20181009140208.docx', '2018-10-09 07:02:08', '2018-10-11 07:58:19', NULL, 'y', '2018-10-09 14:10:18', '2018-10-11 14:58:19', '', 'cara_database_review1_template_20181009150703.docx', NULL, '<p>yesdfgg</p>', '', '2018-12-08 14:10:18', 'n', '', 'cara_database_review2_template_20181009151637.docx', NULL, '<p>sudah bagus</p>', '', '2018-12-08 14:10:18', 'y', '<p>review selesai</p><p>disetujui</p>', 'y', '2018-10-09 14:20:38', '2018-10-09 14:21:46', '', NULL, '<p>editan in progressss</p>', '', '2018-10-25 00:00:00', '<p>editorial selesai fix</p>', 'y', '2018-10-09 14:36:27', '2018-10-09 14:22:22', '', NULL, '<p>okkeee</p><p>9 okt = revisiasd asd</p>', '', '0000-00-00 00:00:00', '', NULL, '', '', '', 'y', '2018-10-09 14:22:22', '2018-10-10 13:48:10', '', NULL, '', '', '', 14, '', '<p>okee</p>', '<p>fdfg</p>', '<p>dfgdfg</p>', '<p>dfgdfg</p>', '3,3,3,3', '', '', '', '', ''),
 (42, 15, 18, 'perawatan ikan lohan', 'perawatan_ikan_lohan_20181010134553.docx', '2018-10-10 06:45:53', NULL, NULL, 'y', '2018-10-10 17:04:42', '2018-10-10 17:22:31', '', '', NULL, '<p><br></p>', '', '2018-12-09 17:04:42', 'n', '', '', NULL, '<p>saya review dulu</p>', '', '2018-12-09 17:04:42', 'y', '<p>admin setuju</p>', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', 5, '', '', '', '', '', '', '', '', '', '', ''),
-(43, 13, 20, 'hukum perdata indonesia', 'hukum_perdata_indonesia_20181010134935.docx', '2018-10-10 06:49:35', NULL, NULL, 'n', '2018-10-10 13:50:07', '0000-00-00 00:00:00', '', '', NULL, '', '', '2018-12-09 13:50:07', NULL, '', '', NULL, '', '', '2018-12-09 13:50:07', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', 4, '', '', '', '', '', '', '', '', '', '', ''),
-(44, 13, 22, 'batuan sulawesi', 'batuan_sulawesi_20181010135034.docx', '2018-10-10 06:50:34', NULL, NULL, 'n', '2018-10-10 14:33:36', '0000-00-00 00:00:00', '', '', NULL, '', '', '2018-12-09 14:33:36', NULL, '', '', NULL, '', '', '2018-12-09 14:33:36', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', 4, '', '', '', '', '', '', '', '', '', '', ''),
-(45, 15, 21, 'Spesies Ikan Tuna', 'Spesies_Ikan_Tuna_20181010142919.docx', '2018-10-10 07:29:19', NULL, NULL, 'y', '2018-10-10 14:30:31', '2018-10-10 14:30:40', '', '', NULL, '', '', '2018-12-09 14:30:31', NULL, '', '', NULL, '', '', '2018-12-09 14:30:31', NULL, '', 'y', '2018-10-10 14:31:00', '2018-10-10 14:30:40', '', NULL, '', '', '0000-00-00 00:00:00', '', 'n', '2018-10-10 14:31:13', '0000-00-00 00:00:00', '', NULL, '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', 8, '', '', '', '', '', '', '', '', '', '', ''),
+(43, 13, 20, 'hukum perdata indonesia', 'hukum_perdata_indonesia_20181010134935.docx', '2018-10-10 06:49:35', NULL, NULL, 'n', '2018-10-10 13:50:07', '0000-00-00 00:00:00', '', '', NULL, '<p>sudah bagus sih mas hehehe</p>', '<p>oke siap pakkk, makasihh</p>', '2018-12-09 13:50:07', 'y', '', '', NULL, '', '', '2018-12-09 13:50:07', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', 4, '', '<p>satuuuu</p>', '<p>duaaa</p>', '<p>tigaa</p>', '<p>empatt</p>', '1,2,3,4', '<p>empattt</p>', '<p>tiggaaa</p>', '<p>duaaa</p>', '<p>dsatuu</p>', '4,3,2,1'),
+(44, 13, 22, 'batuan sulawesi', 'batuan_sulawesi_20181010135034.docx', '2018-10-10 06:50:34', NULL, NULL, 'n', '2018-10-12 00:19:56', '0000-00-00 00:00:00', '', '', NULL, '', '<p>siap saya mantap</p>', '2018-12-11 00:19:56', NULL, '', '', NULL, '', '<p>opop haloo</p>', '2018-12-11 00:19:56', 'y', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', 4, '', '<p>satuu</p>', '<p>duaa</p>', '<p>tgaa</p>', '<p>empstt</p>', '5,,,,,,', '', '', '', '', '3,2,5,5'),
+(45, 15, 21, 'Spesies Ikan Tuna', 'Spesies_Ikan_Tuna_20181010142919.docx', '2018-10-10 07:29:19', NULL, NULL, 'y', '2018-10-11 23:58:36', '2018-10-12 00:28:19', '', '', NULL, '', '<p>eheheh sipp</p>', '2018-12-10 23:58:36', 'y', '', '', NULL, '<p>lumayan sih</p>', '<p>heheheh</p><p>ntap</p>', '2018-12-10 23:58:36', 'y', '<p>keren</p>', 'y', '2018-10-10 14:31:00', '2018-10-10 14:30:40', '', NULL, '', '', '0000-00-00 00:00:00', '', 'n', '2018-10-10 14:31:13', '0000-00-00 00:00:00', '', NULL, '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', 5, '', 'c1', '<p>v2</p>', '<p>b3</p>', '<p>n4</p>', '2,3,4,5', '<p>sudah keren</p>', '<p>baguss</p>', '<p>termantap</p>', '<p>cihuy</p>', '5,3,4,5'),
 (46, 15, 18, 'ikan paus', 'ikan_paus_20181010172020.docx', '2018-10-10 10:20:20', NULL, NULL, 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', 0, '', '', '', '', '', '', '', '', '', '', '');
 
 -- --------------------------------------------------------
@@ -362,21 +362,21 @@ CREATE TABLE IF NOT EXISTS `draft_author` (
   `draft_author_id` mediumint(9) NOT NULL,
   `draft_id` mediumint(9) DEFAULT NULL,
   `author_id` mediumint(9) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `draft_author`
 --
 
 INSERT INTO `draft_author` (`draft_author_id`, `draft_id`, `author_id`) VALUES
-(82, 40, 16),
 (83, 41, 16),
 (84, 42, 18),
 (85, 43, 18),
 (86, 44, 19),
 (87, 43, 20),
 (88, 45, 19),
-(89, 46, 19);
+(89, 46, 19),
+(90, 40, 18);
 
 -- --------------------------------------------------------
 
@@ -389,7 +389,7 @@ CREATE TABLE IF NOT EXISTS `draft_reviewer` (
   `draft_id` mediumint(9) DEFAULT NULL,
   `reviewer_id` mediumint(9) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT '0' COMMENT '1 = Accept, 2 = Reject'
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `draft_reviewer`
@@ -403,7 +403,10 @@ INSERT INTO `draft_reviewer` (`draft_reviewer_id`, `draft_id`, `reviewer_id`, `s
 (26, 43, 27, 0),
 (27, 45, 28, 0),
 (28, 44, 26, 0),
-(29, 42, 30, 0);
+(29, 42, 30, 0),
+(30, 40, 35, 0),
+(31, 45, 34, 0),
+(32, 44, 28, 0);
 
 -- --------------------------------------------------------
 
@@ -500,7 +503,7 @@ CREATE TABLE IF NOT EXISTS `reviewer` (
   `faculty_id` mediumint(9) DEFAULT NULL,
   `user_id` mediumint(9) DEFAULT NULL,
   `expert` text NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `reviewer`
@@ -511,7 +514,8 @@ INSERT INTO `reviewer` (`reviewer_id`, `reviewer_nip`, `reviewer_name`, `faculty
 (27, '35667768689', 'bahri sulaiman', 9, 24, 'Kesehatan'),
 (28, '546897654', 'agus sitohang', 7, 23, 'Kesehatan, Dokter'),
 (30, '12345767', 'luthfii rev', 5, 29, 'Kesehatan, Dokter,teknik'),
-(34, '23454678', 'syuhada sipayung', 5, 21, 'Kesehatan, Dokter,teknik');
+(34, '23454678', 'syuhada sipayung', 5, 21, 'Kesehatan, Dokter,teknik'),
+(35, '9988776655', 'bagaskara luthfi', 8, 19, 'teknik');
 
 -- --------------------------------------------------------
 
@@ -763,12 +767,12 @@ ALTER TABLE `draft`
 -- AUTO_INCREMENT for table `draft_author`
 --
 ALTER TABLE `draft_author`
-  MODIFY `draft_author_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=90;
+  MODIFY `draft_author_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=91;
 --
 -- AUTO_INCREMENT for table `draft_reviewer`
 --
 ALTER TABLE `draft_reviewer`
-  MODIFY `draft_reviewer_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=30;
+  MODIFY `draft_reviewer_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
 --
 -- AUTO_INCREMENT for table `faculty`
 --
@@ -788,7 +792,7 @@ ALTER TABLE `responsibility`
 -- AUTO_INCREMENT for table `reviewer`
 --
 ALTER TABLE `reviewer`
-  MODIFY `reviewer_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=35;
+  MODIFY `reviewer_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=36;
 --
 -- AUTO_INCREMENT for table `theme`
 --

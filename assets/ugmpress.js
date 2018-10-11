@@ -46,6 +46,10 @@ function toastr_view(param){
     toastr.success('Data Saved');
   }else if(param == '000'){
     toastr.error('Failed to Save');
+  }else if(param == 'penilaian'){
+    toastr.error('Lengkapi nilai review');
+  }else if(param == 'flag'){
+    toastr.error('Rekomendasi dibutuhkan');
   }
 }
 

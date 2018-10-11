@@ -273,7 +273,7 @@ $semua    = $this->session->userdata();
               <!-- metric row -->
               <div class="metric-row">
                 <!-- metric column -->
-                <div class="col-12 col-sm-6 col-lg-3">
+                <div class="col-12 col-md-4">
                   <!-- .metric -->
                   <div class="card-metric">
                     <div class="metric">
@@ -292,7 +292,7 @@ $semua    = $this->session->userdata();
                   </div>
                   <!-- /metric column -->
                   <!-- metric column -->
-                <div class="col-12 col-sm-6 col-lg-3">
+                <div class="col-12 col-md-4">
                   <!-- .metric -->
                   <div class="card-metric">
                     <div class="metric">
@@ -311,7 +311,7 @@ $semua    = $this->session->userdata();
                   </div>
                   <!-- /metric column -->
                   <!-- metric column -->
-                <div class="col-12 col-sm-6 col-lg-3">
+                <div class="col-12 col-md-4">
                   <!-- .metric -->
                   <div class="card-metric">
                     <div class="metric">
@@ -323,25 +323,6 @@ $semua    = $this->session->userdata();
                             <i class="fa fa-tasks"></i>
                           </sub>
                           <span class="value"><?=$count['count_belum'] ?></span>
-                        </p>
-                      </div>
-                    </div>
-                    <!-- /.metric -->
-                  </div>
-                  <!-- /metric column -->
-                  <!-- metric column -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                  <!-- .metric -->
-                  <div class="card-metric">
-                    <div class="metric">
-                      <div class="metric-badge">
-                        <span class="badge badge-lg badge-warning">SEDANG REVIEW</span>
-                        </div>
-                        <p class="metric-value h3">
-                          <sub>
-                            <i class="fa fa-tasks"></i>
-                          </sub>
-                          <span class="value"><?=$count['count_sedang'] ?></span>
                         </p>
                       </div>
                     </div>
@@ -377,12 +358,14 @@ $semua    = $this->session->userdata();
                           <th scope="col">Tanggal masuk</th>
                           <th scope="col">Deadline Review</th>
                           <th scope="col">Sisa Waktu</th>
+                          <th scope="col">Aksi</th>
                         </tr>
                       </thead>
                       <!-- /thead -->
                       <!-- tbody -->
                       <tbody>
                         <?php foreach($drafts_newest as $draft):?>
+                        <?php if($draft->flag == ''): ?>
                         <!-- tr -->
                         <tr>
                           <td class="align-middle"><?= $draft->draft_title ?></td>
@@ -398,8 +381,15 @@ $semua    = $this->session->userdata();
                             }
                             ?>
                           </td>
+                          <td class="align-middle">
+                            <a href="<?= base_url('draft/view/'.$draft->draft_id.'') ?>" class="btn btn-sm btn-secondary">
+                              <i class="fa fa-eye"></i> View
+                              <span class="sr-only">View</span>
+                            </a>
+                          </td>
                         </tr>
                         <!-- /tr -->
+                        <?php endif ?>
                         <?php endforeach ?>
                       </tbody>
                       <!-- /tbody -->

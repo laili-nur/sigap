@@ -291,7 +291,11 @@ class Draft extends Operator_Controller
         $ambil_worksheet = ['draft_id' => $id];
         $desk = $this->worksheet->getWhere($ambil_worksheet, 'worksheet');
 
-
+        //pecah data csv jadi array
+        $draft->nilai_reviewer1 = explode(",",$draft->nilai_reviewer1);
+        $draft->nilai_reviewer2 = explode(",",$draft->nilai_reviewer2);
+        // $arrayapa = array($draft->nilai_reviewer1[0],$draft->nilai_reviewer1[1],$draft->nilai_reviewer1[2]);
+        // $draft->apa = implode(",",$arrayapa);
         if (!$_POST) {
             $input = (object) $draft;
         } else {
@@ -442,7 +446,7 @@ class Draft extends Operator_Controller
     }
 
 // -- ubah notes - buat ubah deadline juga  
-      public function ubahnotes($id = null)
+      public function ubahnotes($id = null, $rev = null)
 	{
         $data = array();
         $draft = $this->draft->where('draft_id', $id)->get();
@@ -465,6 +469,17 @@ class Draft extends Operator_Controller
         // if (!$this->draft->validate() || $this->form_validation->error_array()) {
         //     return;
         // }
+
+        //gabungkan array menjadi csv
+        if($rev == 1){
+          $input->nilai_reviewer1 = implode(",",$input->nilai_reviewer1);
+        }elseif($rev == 2){
+          $input->nilai_reviewer2 = implode(",",$input->nilai_reviewer2);
+        }else{
+          unset($input->nilai_reviewer1);
+          unset($input->nilai_reviewer2);
+        }
+        
 
         if ($this->draft->where('draft_id', $id)->update($input)) {
             //$this->session->set_flashdata('success', 'Data updated');

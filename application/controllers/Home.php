@@ -54,10 +54,12 @@ class Home extends Operator_Controller
                 if($value->rev == 0){
                     if(!empty($value->review1_deadline)){
                         $value->deadline = $value->review1_deadline;
+                        $value->flag = $value->review1_flag;
                     }
                 }elseif($value->rev == 1){
                     if(!empty($value->review2_deadline)){
                         $value->deadline = $value->review2_deadline;
+                        $value->flag = $value->review2_flag;
                     }
                 }   
             }

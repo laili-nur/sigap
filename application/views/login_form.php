@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- End Required meta tags -->
     <!-- Begin SEO tag -->
-    <title> SIIP LOGIN</title>
+    <title> SIGAP LOGIN</title>
     <meta property="og:title" content="Sign In">
     <meta name="author" content="bagaskara">
     <meta property="og:locale" content="en_US">
@@ -33,7 +33,7 @@
     <main class="auth">
       <header id="auth-header" class="auth-header">
         <h1>
-          SIIP UGMPRESS
+          SIGAP
           <span class="sr-only">Sign In</span>
         </h1>
         <p> Tidak punya akun?

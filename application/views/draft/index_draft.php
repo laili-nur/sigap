@@ -144,21 +144,13 @@
                         if($draft->review1_flag!=''){
                           echo '<span class="badge badge-success">Sudah direview</span>';
                         }else{
-                          if($draft->review1_notes==''){
-                            echo '<span class="badge badge-danger">Belum direview</span>';
-                          }else{
-                            echo '<span class="badge badge-warning">Sedang direview</span>';
-                          }
+                          echo '<span class="badge badge-danger">Belum direview</span>';
                         }
                       }elseif($draft->rev == 1){
                         if($draft->review2_flag!=''){
                           echo '<span class="badge badge-success">Sudah direview</span>';
                         }else{
-                          if($draft->review2_notes==''){
-                            echo '<span class="badge badge-danger">Belum direview</span>';
-                          }else{
-                            echo '<span class="badge badge-warning">Sedang direview</span>';
-                          }
+                          echo '<span class="badge badge-danger">Belum direview</span>';
                         }
                       }
                     }else{

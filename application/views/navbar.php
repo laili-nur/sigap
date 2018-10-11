@@ -10,7 +10,7 @@
     <!-- .top-bar-brand -->
     <div class="top-bar-brand">
       <a href="<?php echo base_url(); ?>">
-        <img src="<?= base_url('') ?>" height="32" alt=""> SIIP UGMPRESS
+        <img src="<?= base_url('') ?>" height="32" alt=""> SIGAP
       </a>
     </div>
     <!-- /.top-bar-brand -->

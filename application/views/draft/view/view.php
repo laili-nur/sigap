@@ -22,11 +22,12 @@
   <!-- /.page-title-bar -->
 <!-- .page-section -->
 <div class="page-section">
-  <div class="d-xl-none">
+
+  <!-- <div class="d-xl-none">
     <button class="btn btn-danger btn-floated" type="button" data-toggle="sidebar">
       <i class="fa fa-th-list"></i>
     </button>
-  </div>
+  </div> -->
   <!-- .card -->
   <section id="data-draft" class="card">
     <!-- .card-header -->
