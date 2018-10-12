@@ -360,12 +360,18 @@
   <?php $this->load->view('draft/view/review'); ?>
   <!-- reviewer tidak bisa melihat progress draft -->
   <?php if($ceklevel != 'reviewer'): ?>
-    <!-- progress-edit -->
-    <?php $this->load->view('draft/view/edit'); ?>
-    <!-- progress-layout -->
-    <?php $this->load->view('draft/view/layout'); ?>
-    <!-- progress-proofread -->
-    <?php $this->load->view('draft/view/proofread'); ?>
+    <?php if($input->is_review == 'y'): ?>
+      <!-- progress-edit -->
+      <?php $this->load->view('draft/view/edit'); ?>
+    <?php endif ?>
+    <?php if($input->is_edit == 'y'): ?>
+      <!-- progress-layout -->
+      <?php $this->load->view('draft/view/layout'); ?>
+    <?php endif ?>
+    <?php if($input->is_layout == 'y'): ?>
+      <!-- progress-proofread -->
+      <?php $this->load->view('draft/view/proofread'); ?>
+    <?php endif ?>
     <!-- if tampilan admin -->
     <?php if($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
      <div class="el-example">
@@ -599,7 +605,7 @@
           }
           $('[name=layouter]').val("");
           $('#reload-layouter').load(' #reload-layouter');
-          //$('#list-group-layout').load(' #list-group-layout');
+          $('#list-group-layout').load(' #list-group-layout');
           $this.removeAttr("disabled").html("Pilih");
         }
 

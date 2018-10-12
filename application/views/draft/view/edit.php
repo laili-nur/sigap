@@ -76,80 +76,85 @@
                 <h5 class="modal-title"> Progress Edit</h5>
               </div>
               <!-- /.modal-header -->
-              <!-- .modal-body -->
-              <div class="modal-body">
-                <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/edit_file', 'novalidate'); ?>
-                  <p class="font-weight-bold">UPLOAD</p>
-                  <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
-                  <!-- .form-group -->
-                    <div class="form-group">
-                      <label for="edit_file">File Review</label>
-                      <!-- .input-group -->
-                      <div class="input-group input-group-alt">
-                        <div class="custom-file">
-                          <?= form_upload('edit_file','','class="custom-file-input"') ?> 
-                          <label class="custom-file-label" for="edit_file">Choose file</label>
-                          <div class="invalid-feedback">Field is required</div>
+                <!-- .modal-body -->
+                <div class="modal-body">
+                  <div id="modal-edit">
+                  <p class="font-weight-bold">NASKAH</p>
+                  <!-- if upload ditampilkan di level tertentu -->
+                  <?php if($ceklevel=='editor' or $ceklevel == 'author' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+                  <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/edit_file', 'id="editform"'); ?>
+                    <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
+                    <!-- .form-group -->
+                      <div class="form-group">
+                        <label for="edit_file">File Naskah</label>
+                        <!-- .input-group -->
+                        <div class="input-group input-group-alt">
+                          <div class="custom-file">
+                            <?= form_upload('edit_file','','class="custom-file-input" id="edit_file" required') ?> 
+                            <label class="custom-file-label" for="edit_file">Choose file</label>
+                            <div class="invalid-feedback">Field is required</div>
+                          </div>
+                          <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit" value="Submit" id="btn-upload-edit"><i class="fa fa-upload"></i> Upload</button>
+                          </div>
                         </div>
-                        <div class="input-group-append">
-                          <button class="btn btn-primary" type="submit" value="Submit" id="btn-upload-edit"><i class="fa fa-upload"></i> Upload</button>
-                        </div>
+                        <!-- /.input-group -->
+                        <small class="form-text text-muted">Last Upload : <?=konversiTanggal($input->edit_upload_date) ?>, by : <?=$input->edit_last_upload ?></small>
                       </div>
-                      <!-- /.input-group -->
-                    </div>
-                    <!-- /.form-group -->
-                <?= form_close(); ?>
-                <hr class="my-3">
-                <p>Last Upload: <?=konversiTanggal($input->edit_upload_date) ?></p>
-                <?=(!empty($input->edit_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->edit_file.'" href="'.base_url('draftfile/'.$input->edit_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
-                <hr class="my-3">
-                <!-- .form -->
-                <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formedit"') ?>
-                  <!-- .fieldset -->
-                  <fieldset>
-                    <!-- .form-group -->
-                    <div class="form-group">
-                      <label for="ce" class="font-weight-bold">Catatan Editor</label>
-                      <?php 
-                      $optionsce = array(
-                          'name' => 'edit_notes',
-                          'class'=> 'form-control summernote-basic',
-                          'id'  => 'ce',
-                          'rows' => '6',
-                          'value'=> $input->edit_notes
-                      );
-                      if($ceklevel!='editor'){
-                        echo '<div class="font-italic">'.nl2br($input->edit_notes).'</div>';
-                      }else{
-                        echo form_textarea($optionsce);
-                      }
-                      ?>
-                    </div>
-                    <!-- /.form-group -->
-                    <hr>
-                    <!-- .form-group -->
-                    <div class="form-group">
-                      <label for="cep" class="font-weight-bold">Catatan Penulis</label>
-                      <?php 
-                      $optionscep = array(
-                          'name' => 'edit_notes_author',
-                          'class'=> 'form-control summernote-basic',
-                          'id'  => 'cep',
-                          'rows' => '6',
-                          'value'=> $input->edit_notes_author
-                      );
-                      if($ceklevel!='author'){
-                        echo '<div class="font-italic">'.nl2br($input->edit_notes_author).'</div>';
-                      }else{
-                        echo form_textarea($optionscep);
-                      }
-                      ?>
-                    </div>
-                    <!-- /.form-group -->
-                  </fieldset>
-                  <!-- /.fieldset -->
-              </div>
-              <!-- /.modal-body -->
+                      <!-- /.form-group -->
+                  <?= form_close(); ?>
+                  <?php endif ?>
+                  <!-- endif upload ditampilkan di level tertentu -->
+                  <?=(!empty($input->edit_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->edit_file.'" href="'.base_url('draftfile/'.$input->edit_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : 'No data' ?>
+                  </div>
+                  <hr class="my-3">
+                  <!-- .form -->
+                  <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formedit"') ?>
+                    <!-- .fieldset -->
+                    <fieldset>
+                      <!-- .form-group -->
+                      <div class="form-group">
+                        <label for="ce" class="font-weight-bold">Catatan Editor</label>
+                        <?php 
+                        $optionsce = array(
+                            'name' => 'edit_notes',
+                            'class'=> 'form-control summernote-basic',
+                            'id'  => 'ce',
+                            'rows' => '6',
+                            'value'=> $input->edit_notes
+                        );
+                        if($ceklevel!='editor'){
+                          echo '<div class="font-italic">'.nl2br($input->edit_notes).'</div>';
+                        }else{
+                          echo form_textarea($optionsce);
+                        }
+                        ?>
+                      </div>
+                      <!-- /.form-group -->
+                      <hr>
+                      <!-- .form-group -->
+                      <div class="form-group">
+                        <label for="cep" class="font-weight-bold">Catatan Penulis</label>
+                        <?php 
+                        $optionscep = array(
+                            'name' => 'edit_notes_author',
+                            'class'=> 'form-control summernote-basic',
+                            'id'  => 'cep',
+                            'rows' => '6',
+                            'value'=> $input->edit_notes_author
+                        );
+                        if($ceklevel!='author'){
+                          echo '<div class="font-italic">'.nl2br($input->edit_notes_author).'</div>';
+                        }else{
+                          echo form_textarea($optionscep);
+                        }
+                        ?>
+                      </div>
+                      <!-- /.form-group -->
+                    </fieldset>
+                    <!-- /.fieldset -->
+                </div>
+                <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-edit">Submit</button>
@@ -382,6 +387,32 @@
         return false;
       });
 
+      $('#editform').submit(function() {
+        var $this = $('#btn-upload-edit');
+        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Uploading ");
+        let id=$('[name=draft_id]').val();
+        $.ajax({
+            url : "<?php echo base_url('draft/upload_progress/') ?>"+id+"/edit_file",
+            type:"post",
+             data:new FormData(this),
+             processData:false,
+             contentType:false,
+             cache:false,
+            success :function(data){
+              let datax = JSON.parse(data);
+              console.log(datax);
+              $this.removeAttr("disabled").html("Upload");
+              if(datax.status == true){
+                toastr_view('111');
+              }else{
+                toastr_view('000');
+              }
+              $('#modal-edit').load(' #modal-edit');
+            }
+          });
+          return false;
+      });
+
       $('#edit-setuju').on('click', function() {
         var $this = $(this);
         $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
@@ -409,11 +440,11 @@
                 toastr_view('000');
               }
               $('#list-group-edit').load(' #list-group-edit');
+              location.reload();
             }
           });
 
           // $('#edit_aksi').modal('hide');
-          // location.reload();
           return false;
       });
 
@@ -446,11 +477,11 @@
                 toastr_view('000');
               }
               $('#list-group-edit').load(' #list-group-edit');
+              location.reload();
             }
           });
 
           // $('#edit_aksi').modal('hide');
-          // location.reload();
           return false;
       });
 

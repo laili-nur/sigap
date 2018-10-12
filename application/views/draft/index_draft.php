@@ -57,7 +57,7 @@
         <!-- /.card-header -->
         <?php 
         $filter_status = [
-          'all' => '- Filter Tahapan -',
+          '' => '- Filter Tahapan -',
           'desk-screening' => ' Tahap Desk Screening',
           'review' => ' Tahap Review',
           'edit' => 'Tahap Editorial',
@@ -71,14 +71,14 @@
         <div class="card-body p-0">
           <div class="p-3">
             <div class="row">
-              <?php if($ceklevel=='superadmin'): ?>
+              <?php if($ceklevel=='superadmin' or $ceklevel=='author'): ?>
               <div class="col-12 col-md-3 mb-3">
                 <?= form_open('draft/filter', ['method' => 'GET']) ?>
                   <?= form_dropdown('filter', $filter_status, $this->input->get('filter'), 'onchange="this.form.submit()" id="filter" class="form-control custom-select d-block"') ?>
                   <?= form_close() ?>
               </div>
               <?php endif ?>
-              <div class="col-12 <?=($ceklevel=='superadmin')?'col-md-9':'' ?> ">
+              <div class="col-12 <?=($ceklevel=='superadmin' or $ceklevel=='author')?'col-md-9':'' ?> ">
                 <?= form_open('draft/search', ['method' => 'GET']) ?>
                 <!-- .input-group -->
                 <div class="input-group input-group-alt">

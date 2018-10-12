@@ -114,8 +114,11 @@
               <!-- /.modal-header -->
               <!-- .modal-body -->
               <div class="modal-body">
-                <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/review1_file', 'novalidate'); ?>
-                  <p class="font-weight-bold">NASKAH</p>
+                <div id="modal-review1">
+                <p class="font-weight-bold">NASKAH</p>
+                <!-- if upload ditampilkan di level tertentu -->
+                <?php if($ceklevel=='reviewer' or $ceklevel == 'author' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+                <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/review1_file', 'id="rev1form"'); ?>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                   <!-- .form-group -->
                     <div class="form-group">
@@ -123,8 +126,8 @@
                       <!-- .input-group -->
                       <div class="input-group input-group-alt">
                         <div class="custom-file">
-                          <?= form_upload('review1_file','','class="custom-file-input"') ?> 
-                          <label class="custom-file-label" for="tf3">Choose file</label>
+                          <?= form_upload('review1_file','','class="custom-file-input" id="review1_file" required') ?> 
+                          <label class="custom-file-label" for="review1_file">Choose file</label>
                           <div class="invalid-feedback">Field is required</div>
                         </div>
                         <div class="input-group-append">
@@ -132,11 +135,14 @@
                         </div>
                       </div>
                       <!-- /.input-group -->
+                      <small class="form-text text-muted">Last Upload : <?=konversiTanggal($input->review1_upload_date) ?>, by : <?=$input->review1_last_upload ?></small>
                     </div>
                     <!-- /.form-group -->
                 <?= form_close(); ?>
-                <p>Last Upload: <?=konversiTanggal($input->review1_upload_date) ?></p>
-                <?=(!empty($input->review1_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review1_file.'" href="'.base_url('draftfile/'.$input->review1_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
+                <?php endif ?>
+                <!-- endif upload ditampilkan di level tertentu -->
+                <?=(!empty($input->review1_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review1_file.'" href="'.base_url('draftfile/'.$input->review1_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : 'No data' ?>
+                </div>
                 <hr class="my-3">
                 <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formreview1_krit" novalidate=""'); ?>
                   <!-- review dari reviewer hanya bisa dibaca admin dan staff ugmpress -->
@@ -423,16 +429,19 @@
               <!-- /.modal-header -->
               <!-- .modal-body -->
               <div class="modal-body">
-                <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/review2_file', 'novalidate'); ?>
-                  <p class="font-weight-bold">NASKAH</p>
-                  <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
+                <div id="modal-review2">
+                <!-- if upload ditampilkan di level tertentu -->
+                <p class="font-weight-bold">NASKAH</p>
+                <?php if($ceklevel=='reviewer' or $ceklevel == 'author' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+                <?= form_open('draft/upload_progress/'.$input->draft_id.'/review2_file', 'id="rev2form"'); ?>
+                  <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : 'No data' ?>
                   <!-- .form-group -->
                     <div class="form-group">
                       <label for="review2_file">File Naskah</label>
                       <!-- .input-group -->
                       <div class="input-group input-group-alt">
                         <div class="custom-file">
-                          <?= form_upload('review2_file','','class="custom-file-input"') ?> 
+                          <?= form_upload('review2_file','','class="custom-file-input" id="review2_file" required') ?> 
                           <label class="custom-file-label" for="review2_file">Choose file</label>
                           <div class="invalid-feedback">Field is required</div>
                         </div>
@@ -441,11 +450,14 @@
                         </div>
                       </div>
                       <!-- /.input-group -->
+                      <small class="form-text text-muted">Last Upload : <?=konversiTanggal($input->review2_upload_date) ?>, by : <?=$input->review2_last_upload ?></small>
                     </div>
                     <!-- /.form-group -->
                 <?= form_close(); ?>
-                <p>Last Upload: <?=konversiTanggal($input->review2_upload_date) ?></p>
+                <?php endif ?>
+                <!-- endif upload ditampilkan di level tertentu -->
                 <?=(!empty($input->review2_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review2_file.'" href="'.base_url('draftfile/'.$input->review2_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
+                </div>
                 <hr class="my-3">
                 <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formreview2_krit" novalidate=""'); ?>
                   <!-- review dari reviewer hanya bisa dibaca admin dan staff ugmpress -->
@@ -644,7 +656,6 @@
                 <!-- endif review dari reviewer hanya bisa dibaca admin dan staff ugmpress -->
                 <?php endif ?>
                 <!-- <?= form_close(); ?> -->
-                <hr class="my-3">
                 <!-- .form -->
                 <!-- <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formreview2"') ?> -->
                   <!-- .fieldset -->
@@ -1024,6 +1035,66 @@
         return false;
       });
 
+      $('#rev1form').submit(function() {
+        var $this = $('#btn-upload-review1');
+        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Uploading ");
+        let id=$('[name=draft_id]').val();
+        // var file_data = $('#review2_file').prop('files')[0];
+        // var form_data = new FormData();
+        // form_data.append('review2_file', file_data);
+        // console.log(form_data);
+        $.ajax({
+            url : "<?php echo base_url('draft/upload_progress/') ?>"+id+"/review1_file",
+            type:"post",
+             data:new FormData(this),
+             processData:false,
+             contentType:false,
+             cache:false,
+            success :function(data){
+              let datax = JSON.parse(data);
+              console.log(datax);
+              $this.removeAttr("disabled").html("Upload");
+              if(datax.status == true){
+                toastr_view('111');
+              }else{
+                toastr_view('000');
+              }
+              $('#modal-review1').load(' #modal-review1');
+            }
+          });
+          return false;
+      });
+
+      $('#rev2form').submit(function() {
+        var $this = $('#btn-upload-review2');
+        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Uploading ");
+        let id=$('[name=draft_id]').val();
+        // var file_data = $('#review2_file').prop('files')[0];
+        // var form_data = new FormData();
+        // form_data.append('review2_file', file_data);
+        // console.log(form_data);
+        $.ajax({
+            url : "<?php echo base_url('draft/upload_progress/') ?>"+id+"/review2_file",
+            type:"post",
+             data:new FormData(this),
+             processData:false,
+             contentType:false,
+             cache:false,
+            success :function(data){
+              let datax = JSON.parse(data);
+              console.log(datax);
+              $this.removeAttr("disabled").html("Upload");
+              if(datax.status == true){
+                toastr_view('111');
+              }else{
+                toastr_view('000');
+              }
+              $('#modal-review2').load(' #modal-review2');
+            }
+          });
+          return false;
+      });
+
 
 
       $('#review-setuju').on('click', function() {
@@ -1053,11 +1124,12 @@
                 toastr_view('000');
               }
                 $('#list-group-review').load(' #list-group-review');
+                location.reload();
             }
           });
 
           // $('#review_aksi').modal('hide');
-          // location.reload();
+          
           return false;
       });
 
@@ -1090,11 +1162,11 @@
                 toastr_view('000');
               }
               $('#list-group-review').load(' #list-group-review');
+              location.reload();
             }
           });
 
           // $('#review_aksi').modal('hide');
-          // location.reload();
           return false;
       });
 

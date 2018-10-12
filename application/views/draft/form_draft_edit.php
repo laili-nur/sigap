@@ -158,14 +158,7 @@
                     <!-- .form-group -->
                     <div class="form-group">
                       <label for="review1_notes">Keterangan Review 1</label>
-                      <div class="has-clearable">
-                        <button type="button" class="close" aria-label="Close">
-                          <span aria-hidden="true">
-                            <i class="fa fa-times-circle"></i>
-                          </span>
-                        </button>
-                        <?= form_textarea('review1_notes', $input->review1_notes, 'class="form-control"') ?>
-                         </div>
+                        <?= form_textarea('review1_notes', $input->review1_notes, 'class="form-control summernote-basic"') ?>
                       <div class="invalid-feedback"> Field is required </div>
                       <?= form_error('review1_notes') ?>
                     </div>
@@ -173,14 +166,7 @@
                     <!-- .form-group -->
                     <div class="form-group">
                       <label for="review1_notes_author">Keterangan Review 1 (Penulis)</label>
-                      <div class="has-clearable">
-                        <button type="button" class="close" aria-label="Close">
-                          <span aria-hidden="true">
-                            <i class="fa fa-times-circle"></i>
-                          </span>
-                        </button>
-                        <?= form_textarea('review1_notes_author', $input->review1_notes_author, 'class="form-control"') ?>
-                         </div>
+                        <?= form_textarea('review1_notes_author', $input->review1_notes_author, 'class="form-control summernote-basic"') ?>
                       <div class="invalid-feedback"> Field is required </div>
                       <?= form_error('review1_notes_author') ?>
                     </div>
@@ -221,14 +207,7 @@
                     <!-- .form-group -->
                     <div class="form-group">
                       <label for="review2_notes">Keterangan Review 2</label>
-                      <div class="has-clearable">
-                        <button type="button" class="close" aria-label="Close">
-                          <span aria-hidden="true">
-                            <i class="fa fa-times-circle"></i>
-                          </span>
-                        </button>
-                        <?= form_textarea('review2_notes', $input->review2_notes, 'class="form-control"') ?>
-                         </div>
+                        <?= form_textarea('review2_notes', $input->review2_notes, 'class="form-control summernote-basic"') ?>
                       <div class="invalid-feedback"> Field is required </div>
                       <?= form_error('review2_notes') ?>
                     </div>
@@ -236,14 +215,7 @@
                     <!-- .form-group -->
                     <div class="form-group">
                       <label for="review2_notes_author">Keterangan Review 2 (Penulis)</label>
-                      <div class="has-clearable">
-                        <button type="button" class="close" aria-label="Close">
-                          <span aria-hidden="true">
-                            <i class="fa fa-times-circle"></i>
-                          </span>
-                        </button>
-                        <?= form_textarea('review2_notes_author', $input->review2_notes_author, 'class="form-control"') ?>
-                         </div>
+                        <?= form_textarea('review2_notes_author', $input->review2_notes_author, 'class="form-control summernote-basic"') ?>
                       <div class="invalid-feedback"> Field is required </div>
                       <?= form_error('review2_notes_author') ?>
                     </div>
@@ -341,14 +313,7 @@
                 <!-- .form-group -->
                 <div class="form-group">
                   <label for="edit_notes">Keterangan Edit</label>
-                  <div class="has-clearable">
-                    <button type="button" class="close" aria-label="Close">
-                      <span aria-hidden="true">
-                        <i class="fa fa-times-circle"></i>
-                      </span>
-                    </button>
-                    <?= form_textarea('edit_notes', $input->edit_notes, 'class="form-control"') ?>
-                     </div>
+                    <?= form_textarea('edit_notes', $input->edit_notes, 'class="form-control summernote-basic"') ?>
                   <div class="invalid-feedback"> Field is required </div>
                   <?= form_error('edit_notes') ?>
                 </div>
@@ -356,14 +321,7 @@
                 <!-- .form-group -->
                 <div class="form-group">
                   <label for="edit_notes_author">Keterangan Edit (Penulis)</label>
-                  <div class="has-clearable">
-                    <button type="button" class="close" aria-label="Close">
-                      <span aria-hidden="true">
-                        <i class="fa fa-times-circle"></i>
-                      </span>
-                    </button>
-                    <?= form_textarea('edit_notes_author', $input->edit_notes_author, 'class="form-control"') ?>
-                     </div>
+                    <?= form_textarea('edit_notes_author', $input->edit_notes_author, 'class="form-control summernote-basic"') ?>
                   <div class="invalid-feedback"> Field is required </div>
                   <?= form_error('edit_notes_author') ?>
                 </div>
@@ -443,14 +401,7 @@
                     <!-- .form-group -->
                     <div class="form-group">
                       <label for="layout_notes">Keterangan layout</label>
-                      <div class="has-clearable">
-                        <button type="button" class="close" aria-label="Close">
-                          <span aria-hidden="true">
-                            <i class="fa fa-times-circle"></i>
-                          </span>
-                        </button>
-                        <?= form_textarea('layout_notes', $input->layout_notes, 'class="form-control"') ?>
-                         </div>
+                        <?= form_textarea('layout_notes', $input->layout_notes, 'class="form-control summernote-basic"') ?>
                       <div class="invalid-feedback"> Field is required </div>
                       <?= form_error('layout_notes') ?>
                     </div>
@@ -458,14 +409,7 @@
                     <!-- .form-group -->
                     <div class="form-group">
                       <label for="layout_notes_author">Keterangan layout (Penulis)</label>
-                      <div class="has-clearable">
-                        <button type="button" class="close" aria-label="Close">
-                          <span aria-hidden="true">
-                            <i class="fa fa-times-circle"></i>
-                          </span>
-                        </button>
-                        <?= form_textarea('layout_notes_author', $input->layout_notes_author, 'class="form-control"') ?>
-                         </div>
+                        <?= form_textarea('layout_notes_author', $input->layout_notes_author, 'class="form-control summernote-basic"') ?>
                       <div class="invalid-feedback"> Field is required </div>
                       <?= form_error('layout_notes_author') ?>
                     </div>
@@ -488,14 +432,7 @@
                     <!-- .form-group -->
                     <div class="form-group">
                       <label for="cover_notes">Keterangan Cover</label>
-                      <div class="has-clearable">
-                        <button type="button" class="close" aria-label="Close">
-                          <span aria-hidden="true">
-                            <i class="fa fa-times-circle"></i>
-                          </span>
-                        </button>
-                        <?= form_textarea('cover_notes', $input->cover_notes, 'class="form-control"') ?>
-                         </div>
+                        <?= form_textarea('cover_notes', $input->cover_notes, 'class="form-control summernote-basic"') ?>
                       <div class="invalid-feedback"> Field is required </div>
                       <?= form_error('cover_notes') ?>
                     </div>
@@ -503,14 +440,7 @@
                     <!-- .form-group -->
                     <div class="form-group">
                       <label for="cover_notes_author">Keterangan Cover (Penulis)</label>
-                      <div class="has-clearable">
-                        <button type="button" class="close" aria-label="Close">
-                          <span aria-hidden="true">
-                            <i class="fa fa-times-circle"></i>
-                          </span>
-                        </button>
-                        <?= form_textarea('cover_notes_author', $input->cover_notes_author, 'class="form-control"') ?>
-                         </div>
+                        <?= form_textarea('cover_notes_author', $input->cover_notes_author, 'class="form-control summernote-basic"') ?>
                       <div class="invalid-feedback"> Field is required </div>
                       <?= form_error('cover_notes_author') ?>
                     </div>
@@ -590,14 +520,7 @@
                 <!-- .form-group -->
                 <div class="form-group">
                   <label for="proofread_notes">Keterangan proofread</label>
-                  <div class="has-clearable">
-                    <button type="button" class="close" aria-label="Close">
-                      <span aria-hidden="true">
-                        <i class="fa fa-times-circle"></i>
-                      </span>
-                    </button>
-                    <?= form_textarea('proofread_notes', $input->proofread_notes, 'class="form-control"') ?>
-                     </div>
+                    <?= form_textarea('proofread_notes', $input->proofread_notes, 'class="form-control summernote-basic"') ?>
                   <div class="invalid-feedback"> Field is required </div>
                   <?= form_error('proofread_notes') ?>
                 </div>
@@ -605,14 +528,7 @@
                 <!-- .form-group -->
                 <div class="form-group">
                   <label for="proofread_notes_author">Keterangan proofread (Penulis)</label>
-                  <div class="has-clearable">
-                    <button type="button" class="close" aria-label="Close">
-                      <span aria-hidden="true">
-                        <i class="fa fa-times-circle"></i>
-                      </span>
-                    </button>
-                    <?= form_textarea('proofread_notes_author', $input->proofread_notes_author, 'class="form-control"') ?>
-                     </div>
+                    <?= form_textarea('proofread_notes_author', $input->proofread_notes_author, 'class="form-control summernote-basic"') ?>
                   <div class="invalid-feedback"> Field is required </div>
                   <?= form_error('proofread_notes_author') ?>
                 </div>
