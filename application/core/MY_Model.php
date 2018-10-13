@@ -93,6 +93,7 @@ class MY_Model extends CI_Model
         $this->db->where($column, $condition);
         return $this;
     }
+    
     public function whereNot($column, $condition)
     {
         $this->db->where($column.' !=', $condition);

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 12, 2018 at 05:40 PM
+-- Generation Time: Oct 13, 2018 at 11:34 PM
 -- Server version: 5.6.26
 -- PHP Version: 5.6.12
 
@@ -342,7 +342,7 @@ CREATE TABLE IF NOT EXISTS `draft` (
   `kriteria4_reviewer2` text NOT NULL,
   `nilai_reviewer2` text NOT NULL,
   `review2_last_upload` varchar(255) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `draft`
@@ -358,7 +358,8 @@ INSERT INTO `draft` (`draft_id`, `category_id`, `theme_id`, `draft_title`, `draf
 (49, 15, 20, 'revieww selalu', 'revieww_selalu_20181012212700.docx', '2018-10-12 14:27:00', NULL, NULL, 'y', '2018-10-12 21:27:17', '2018-10-12 22:18:44', '', NULL, '', '', '', '2018-12-11 21:27:17', NULL, '', NULL, '', '', '2018-12-11 21:27:17', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 5, '', '', '', '', '', '', '', '', '', '', '', ''),
 (50, 13, 18, 'powerbank', 'powerbank_20181012213549.docx', '2018-10-12 14:35:49', NULL, NULL, 'y', '0000-00-00 00:00:00', '2018-10-12 21:36:41', '', NULL, '', '', '', '0000-00-00 00:00:00', NULL, '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'y', '0000-00-00 00:00:00', '2018-10-12 21:36:48', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'y', '0000-00-00 00:00:00', '2018-10-12 21:36:52', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '2018-10-12 21:36:52', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 12, '', '', '', '', '', '', '', '', '', '', '', ''),
 (51, 13, 17, 'delcell', 'delcell_20181012213612.docx', '2018-10-12 14:36:12', NULL, NULL, 'y', '0000-00-00 00:00:00', '2018-10-12 21:36:21', '', NULL, '', '', '', '0000-00-00 00:00:00', NULL, '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'y', '0000-00-00 00:00:00', '2018-10-12 21:36:27', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'y', '0000-00-00 00:00:00', '2018-10-12 21:36:31', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '2018-10-12 21:36:31', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 12, '', '', '', '', '', '', '', '', '', '', '', ''),
-(52, 15, 17, 'desk scr', 'desk_scr_20181012214015.docx', '2018-10-12 14:40:15', NULL, NULL, 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', NULL, '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', '', '');
+(52, 15, 17, 'desk scr', 'desk_scr_20181012214015.docx', '2018-10-12 14:40:15', NULL, NULL, 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', NULL, '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', '', ''),
+(53, 15, 21, 'Laut Jogja', 'Laut_Jogja_20181013220922.docx', '2018-10-13 15:09:22', NULL, NULL, 'n', '2018-10-14 02:35:25', '0000-00-00 00:00:00', '', NULL, '', '', '', '2018-12-13 02:35:25', NULL, '', NULL, '', '', '2018-12-13 02:35:25', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 4, '', '', '', '', '', '', '', '', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -370,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `draft_author` (
   `draft_author_id` mediumint(9) NOT NULL,
   `draft_id` mediumint(9) DEFAULT NULL,
   `author_id` mediumint(9) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `draft_author`
@@ -387,7 +388,8 @@ INSERT INTO `draft_author` (`draft_author_id`, `draft_id`, `author_id`) VALUES
 (93, 49, 18),
 (94, 50, 18),
 (95, 51, 19),
-(96, 52, 18);
+(96, 52, 18),
+(97, 53, 20);
 
 -- --------------------------------------------------------
 
@@ -400,7 +402,7 @@ CREATE TABLE IF NOT EXISTS `draft_reviewer` (
   `draft_id` mediumint(9) DEFAULT NULL,
   `reviewer_id` mediumint(9) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT '0' COMMENT '1 = Accept, 2 = Reject'
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `draft_reviewer`
@@ -415,7 +417,9 @@ INSERT INTO `draft_reviewer` (`draft_reviewer_id`, `draft_id`, `reviewer_id`, `s
 (30, 40, 35, 0),
 (31, 45, 34, 0),
 (34, 47, 26, 0),
-(35, 49, 27, 0);
+(35, 49, 27, 0),
+(36, 53, 26, 0),
+(37, 53, 27, 0);
 
 -- --------------------------------------------------------
 
@@ -602,7 +606,7 @@ CREATE TABLE IF NOT EXISTS `worksheet` (
   `worksheet_notes` text NOT NULL,
   `worksheet_pic` varchar(256) NOT NULL,
   `worksheet_ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `worksheet`
@@ -618,7 +622,8 @@ INSERT INTO `worksheet` (`worksheet_id`, `draft_id`, `worksheet_num`, `is_reprin
 (31, 49, '2018-10-09', 'n', 1, '', 'superadmin', '2018-10-12 14:27:07'),
 (32, 50, '2018-10-10', 'n', 1, '', 'superadmin', '2018-10-12 14:35:54'),
 (33, 51, '2018-10-11', 'n', 1, '', 'superadmin', '2018-10-12 14:36:17'),
-(34, 52, '2018-10-12', 'n', 0, '', '', '2018-10-12 14:40:15');
+(34, 52, '2018-10-12', 'n', 0, '', '', '2018-10-12 14:40:15'),
+(35, 53, '2018-10-13', 'n', 1, '', 'superadmin', '2018-10-13 19:34:52');
 
 -- --------------------------------------------------------
 
@@ -778,17 +783,17 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `draft`
 --
 ALTER TABLE `draft`
-  MODIFY `draft_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=53;
+  MODIFY `draft_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=54;
 --
 -- AUTO_INCREMENT for table `draft_author`
 --
 ALTER TABLE `draft_author`
-  MODIFY `draft_author_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=97;
+  MODIFY `draft_author_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=98;
 --
 -- AUTO_INCREMENT for table `draft_reviewer`
 --
 ALTER TABLE `draft_reviewer`
-  MODIFY `draft_reviewer_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=36;
+  MODIFY `draft_reviewer_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=38;
 --
 -- AUTO_INCREMENT for table `faculty`
 --
@@ -823,7 +828,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `worksheet`
 --
 ALTER TABLE `worksheet`
-  MODIFY `worksheet_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=35;
+  MODIFY `worksheet_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=36;
 --
 -- AUTO_INCREMENT for table `work_unit`
 --

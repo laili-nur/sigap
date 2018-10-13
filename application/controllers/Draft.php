@@ -342,6 +342,10 @@ class Draft extends Operator_Controller
             redirect('home');
         }
 
+        if ($ceklevel != 'author'){
+            
+        }
+        
         if (!$_POST) {
             $input = (object) $this->draft->getDefaultValues();
             $input->category_id = $category;
@@ -766,14 +770,15 @@ class Draft extends Operator_Controller
 // -- search --        
         public function search($page = null)
         {
+            $cekusername = $this->session->userdata('username');
         $keywords   = $this->input->get('keywords', true);
         $this->db->group_by('draft.draft_id');
+        if($this->level == 'superadmin' || $this->level == 'admin_penerbitan'){
         $drafts     = $this->draft->like('category_name', $keywords)
                                   ->orLike('draft_title', $keywords)
-                                  ->orLike('theme_name', $keywords)
+                                  ->orLike('author_name', $keywords)
                                   ->join('category')
                                   ->join('theme')
-                                  ->orLike('author_name', $keywords)
                                   ->joinRelationMiddle('draft', 'draft_author')
                                   ->joinRelationDest('author', 'draft_author')
                                   ->orderBy('category.category_id')
@@ -783,15 +788,106 @@ class Draft extends Operator_Controller
                                   ->getAll();
         $tot        = $this->draft->like('category_name', $keywords)
                                   ->orLike('draft_title', $keywords)
-                                  ->orLike('theme_name', $keywords)
+                                  ->orLike('author_name', $keywords)
                                   ->join('category')
                                   ->join('theme')
+                                  ->joinRelationMiddle('draft', 'draft_author')
+                                  ->joinRelationDest('author', 'draft_author')
                                   ->orderBy('category.category_id')
                                   ->orderBy('theme.theme_id')                
                                   ->orderBy('draft_title')
                                   ->getAll();
         $total = count($tot);
-
+        }
+        elseif($this->level == 'author'){
+            $drafts     = $this->draft->join('category')
+                                       ->join('theme')
+                                       ->join3('draft_author','draft','draft')
+                                       ->join3('author','draft_author','author')
+                                       ->join3('user','author','user')
+                                       ->where('user.username',$cekusername)
+                                       ->like('draft_title', $keywords)
+                                       ->orderBy('author.author_name')
+                                       ->orderBy('draft_title')
+                                       ->orderBy('category.category_id')
+                                       ->paginate($page)
+                                       ->getAll();
+        $tot        = $this->draft->join('category')
+                                       ->join('theme')
+                                       ->join3('draft_author','draft','draft')
+                                       ->join3('author','draft_author','author')
+                                       ->join3('user','author','user')
+                                       ->where('user.username',$cekusername)
+                                       ->like('draft_title', $keywords)
+                                       ->orderBy('author.author_name')
+                                       ->orderBy('draft_title')
+                                       ->orderBy('category.category_id')
+                                  ->getAll();
+        $total = count($tot);
+        }
+        elseif($this->level == 'reviewer'){
+            $drafts     = $this->draft->join('category')
+                                       ->join('theme')
+                                       ->join3('draft_reviewer','draft','draft')
+                                       ->join3('reviewer','draft_reviewer','reviewer')
+                                       ->join3('user','reviewer','user')
+                                       ->where('user.username',$cekusername)
+                                       ->like('draft_title', $keywords)
+                                       ->orderBy('draft_title')
+                                       ->orderBy('category.category_id')
+                                       ->paginate($page)
+                                       ->getAll();
+        $tot        = $this->draft->join('category')
+                                       ->join('theme')
+                                       ->join3('draft_reviewer','draft','draft')
+                                       ->join3('reviewer','draft_reviewer','reviewer')
+                                       ->join3('user','reviewer','user')
+                                       ->where('user.username',$cekusername)
+                                       ->like('draft_title', $keywords)
+                                       ->orderBy('draft_title')
+                                       ->orderBy('category.category_id')
+                                  ->getAll();
+        $total = count($tot);
+        //cari tau rev 1 atau rev 2 yg sedang login
+        foreach ($drafts as $key => $value) {
+            $rev = $this->draft->getIdAndName('reviewer', 'draft_reviewer', $value->draft_id);
+            $value->rev = key(array_filter(
+                $rev,
+                function ($e) {
+                    return $e->reviewer_id == $this->session->userdata('role_id');
+                }
+            ));
+        }
+        }
+        else{
+            $drafts     = $this->draft->join('category')
+                                       ->join('theme')
+                                       ->join3('responsibility','draft','draft')
+                                       ->join3('user','responsibility','user')
+                                       ->join3('draft_author','draft','draft')
+                                       ->join3('author','draft_author','author')
+                                       ->where('user.username',$cekusername)
+                                       ->like('draft_title', $keywords)
+                                       ->orderBy('author.author_name')
+                                       ->orderBy('draft_title')
+                                       ->orderBy('category.category_id')
+                                       ->paginate($page)
+                                       ->getAll();
+        $tot        = $this->draft->join('category')
+                                       ->join('theme')
+                                       ->join3('responsibility','draft','draft')
+                                       ->join3('user','responsibility','user')
+                                       ->join3('draft_author','draft','draft')
+                                       ->join3('author','draft_author','author')
+                                       ->where('user.username',$cekusername)
+                                       ->like('draft_title', $keywords)
+                                       ->orderBy('author.author_name')
+                                       ->orderBy('draft_title')
+                                       ->orderBy('category.category_id')
+                                  ->getAll();
+        $total = count($tot);
+        }
+      
         $pagination = $this->draft->makePagination(site_url('draft/search/'), 3, $total);
 
         if (!$drafts) {

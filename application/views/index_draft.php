@@ -62,7 +62,7 @@
               <!-- .input-group -->
               <?= form_open('draft/search', ['method' => 'GET']) ?>
               <div class="input-group input-group-alt">
-                <?= form_input('keywords', $this->input->get('keywords'), ['placeholder' => 'Enter Category, Theme, or Title', 'class' => 'form-control']) ?>
+                <?= form_input('keywords', $this->input->get('keywords'), ['placeholder' => 'Search Category, Writer, or Title', 'class' => 'form-control']) ?>
                 <div class="input-group-append">
                    <?= form_button(['type' => 'submit', 'content' => 'Search', 'class' => 'btn btn-secondary']) ?>
                 </div>
