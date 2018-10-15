@@ -55,34 +55,59 @@
           <!-- /.d-flex -->
         </header>
         <!-- /.card-header -->
-        <?php 
-        $filter_status = [
-          '' => '- Filter Tahapan -',
-          'desk-screening' => ' Tahap Desk Screening',
-          'review' => ' Tahap Review',
-          'edit' => 'Tahap Editorial',
-          'layout' => 'Tahap Layout',
-          'proofread' => 'Tahap Proofread',
-          'reject' => 'Draft Ditolak',
-          'final' => 'Draft Final',
-        ]
+        <?php
+        if($ceklevel == 'reviewer'){
+          $filter_status = [
+            '' => '- Filter Review -',
+            'belum' => ' Belum Direview',
+            'sudah' => ' Sudah direview',
+          ];
+        }elseif($ceklevel == 'editor'){
+          $filter_status = [
+            '' => '- Filter Edit -',
+            'belum' => ' Belum Diedit',
+            'sudah' => ' Sudah Diedit',
+            'approve' => ' Edit Diterima',
+            'reject' => ' Edit Dtolak',
+          ];
+        }elseif($ceklevel == 'layouter'){
+          $filter_status = [
+            '' => '- Filter Layout -',
+            'belum' => ' Belum Dilayout',
+            'sudah' => ' Sudah Dilayout',
+            'approve' => ' Layout Diterima',
+            'reject' => ' Layout Dtolak',
+          ];
+        }else{
+          $filter_status = [
+            '' => '- Filter Tahapan -',
+            'desk-screening' => ' Tahap Desk Screening',
+            'review' => ' Tahap Review',
+            'edit' => 'Tahap Editorial',
+            'layout' => 'Tahap Layout',
+            'proofread' => 'Tahap Proofread',
+            'reject' => 'Draft Ditolak',
+            'final' => 'Draft Final',
+          ];
+        }
          ?>
         <!-- .card-body -->
         <div class="card-body p-0">
           <div class="p-3">
             <div class="row">
-              <?php if($ceklevel=='superadmin' or $ceklevel=='author'): ?>
+              <?php if(true): ?>
               <div class="col-12 col-md-3 mb-3">
                 <?= form_open('draft/filter', ['method' => 'GET']) ?>
                   <?= form_dropdown('filter', $filter_status, $this->input->get('filter'), 'onchange="this.form.submit()" id="filter" class="form-control custom-select d-block"') ?>
                   <?= form_close() ?>
               </div>
               <?php endif ?>
-              <div class="col-12 <?=($ceklevel=='superadmin' or $ceklevel=='author')?'col-md-9':'' ?> ">
+              <div class="col-12 <?=(true)?'col-md-9':'' ?> ">
                 <?= form_open('draft/search', ['method' => 'GET']) ?>
                 <!-- .input-group -->
+                <?php $placeholder = ($ceklevel=='superadmin')? 'placeholder="Enter Category, Theme, or Title" class="form-control"':'placeholder="Enter Title" class="form-control"' ?>
                 <div class="input-group input-group-alt">
-                  <?= form_input('keywords', $this->input->get('keywords'), ['placeholder' => 'Enter Category, Theme, or Title', 'class' => 'form-control']) ?>
+                  <?= form_input('keywords', $this->input->get('keywords'), $placeholder) ?>
                   <div class="input-group-append">
                     <?= form_button(['type' => 'submit', 'content' => 'Search', 'class' => 'btn btn-secondary']) ?>
                   </div>
@@ -140,19 +165,25 @@
                   <td class="align-middle">
                     <?php 
                     if ($ceklevel == 'reviewer'){
-                      if($draft->rev == 0){
-                        if($draft->review1_flag!=''){
+                      // if($draft->rev == 0){
+                      //   if($draft->review1_flag!=''){
+                      //     echo '<span class="badge badge-success">Sudah direview</span>';
+                      //   }else{
+                      //     echo '<span class="badge badge-danger">Belum direview</span>';
+                      //   }
+                      // }elseif($draft->rev == 1){
+                      //   if($draft->review2_flag!=''){
+                      //     echo '<span class="badge badge-success">Sudah direview</span>';
+                      //   }else{
+                      //     echo '<span class="badge badge-danger">Belum direview</span>';
+                      //   }
+                      // }
+
+                      if($draft->review_flag!=''){
                           echo '<span class="badge badge-success">Sudah direview</span>';
                         }else{
                           echo '<span class="badge badge-danger">Belum direview</span>';
                         }
-                      }elseif($draft->rev == 1){
-                        if($draft->review2_flag!=''){
-                          echo '<span class="badge badge-success">Sudah direview</span>';
-                        }else{
-                          echo '<span class="badge badge-danger">Belum direview</span>';
-                        }
-                      }
                     }else{
                       echo $draft->draft_status;
                     } 

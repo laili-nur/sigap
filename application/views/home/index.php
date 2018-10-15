@@ -9,7 +9,7 @@
   <!-- <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item active"><a class="text-muted"><span class="fa fa-home"></span> Admin Panel</a></li></ol></nav> -->
   <h1 class="page-title"> Dashboard </h1>
   <p class="lead">
-    <span class="font-weight-bold">Hi, 
+    <span class="font-weight-bold">Hai, 
       <?=$username ?>.
     </span>
     <span class="d-block text-muted">Selamat bekerja dan semoga harimu menyenangkan.</span>
@@ -311,73 +311,84 @@
     <?php if ($ceklevel == 'reviewer'): ?>
     <!-- .section-block -->
     <div class="section-block">
-      <!-- metric row -->
-      <div class="metric-row">
-        <!-- metric column -->
-        <div class="col-12 col-md-4">
-          <!-- .metric -->
-          <div class="card-metric">
-            <div class="metric">
-              <div class="metric-badge">
-                <span class="badge badge-lg badge-info">TOTAL REVIEW</span>
+      <!-- .section-card -->
+      <div class="card">
+          <!-- metric row -->
+          <div class="metric-row px-4 pt-3">
+            <div class="col-12">
+              <div class="metric-row metric-flush">
+                <!-- metric column -->
+                <div class="col">
+                  <!-- .metric -->
+                  <a href="
+                    <?=base_url('draft') ?>" class="metric metric-bordered align-items-center">
+                    <div class="metric-badge">
+                      <span class="badge badge-lg badge-info">
+                        <span class="oi oi-media-record pulse mr-1"></span> TOTAL REVIEW
+                      </span>
+                    </div>
+                    <p class="metric-value h3">
+                      <sub>
+                        <i class="fa fa-tasks"></i>
+                      </sub>
+                      <span class="value">
+                        <?=$count['count_total'] ?>
+                      </span>
+                    </p>
+                  </a>
+                  <!-- /.metric -->
+                </div>
+                <!-- /metric column -->
+                <!-- metric column -->
+                <div class="col">
+                  <!-- .metric -->
+                  <a href="
+                    <?=base_url('draft/filter?filter=sudah') ?>" class="metric metric-bordered align-items-center">
+                    <div class="metric-badge">
+                      <span class="badge badge-lg badge-success">
+                        <span class="oi oi-media-record pulse mr-1"></span> SUDAH DIREVIEW
+                      </span>
+                    </div>
+                    <p class="metric-value h3">
+                      <sub>
+                        <i class="fa fa-tasks"></i>
+                      </sub>
+                      <span class="value">
+                        <?=$count['count_sudah'] ?>
+                      </span>
+                    </p>
+                  </a>
+                  <!-- /.metric -->
+                </div>
+                <!-- /metric column -->
+                <!-- metric column -->
+                <div class="col">
+                  <!-- .metric -->
+                  <a href="
+                    <?=base_url('draft/filter?filter=belum') ?>" class="metric metric-bordered align-items-center">
+                    <div class="metric-badge">
+                      <span class="badge badge-lg badge-danger">
+                        <span class="oi oi-media-record pulse mr-1"></span> BELUM DIREVIEW
+                      </span>
+                    </div>
+                    <p class="metric-value h3">
+                      <sub>
+                        <i class="fa fa-tasks"></i>
+                      </sub>
+                      <span class="value">
+                        <?=$count['count_belum'] ?>
+                      </span>
+                    </p>
+                  </a>
+                  <!-- /.metric -->
+                </div>
+                <!-- /metric column -->
               </div>
-              <p class="metric-value h3">
-                <sub>
-                  <i class="fa fa-tasks"></i>
-                </sub>
-                <span class="value">
-                  <?=$count['count_total'] ?>
-                </span>
-              </p>
             </div>
           </div>
-          <!-- /.metric -->
+          <!-- /metric row -->
         </div>
-        <!-- /metric column -->
-        <!-- metric column -->
-        <div class="col-12 col-md-4">
-          <!-- .metric -->
-          <div class="card-metric">
-            <div class="metric">
-              <div class="metric-badge">
-                <span class="badge badge-lg badge-success">SUDAH DIREVIEW</span>
-              </div>
-              <p class="metric-value h3">
-                <sub>
-                  <i class="fa fa-tasks"></i>
-                </sub>
-                <span class="value">
-                  <?=$count['count_sudah'] ?>
-                </span>
-              </p>
-            </div>
-          </div>
-          <!-- /.metric -->
-        </div>
-        <!-- /metric column -->
-        <!-- metric column -->
-        <div class="col-12 col-md-4">
-          <!-- .metric -->
-          <div class="card-metric">
-            <div class="metric">
-              <div class="metric-badge">
-                <span class="badge badge-lg badge-danger">BELUM REVIEW</span>
-              </div>
-              <p class="metric-value h3">
-                <sub>
-                  <i class="fa fa-tasks"></i>
-                </sub>
-                <span class="value">
-                  <?=$count['count_belum'] ?>
-                </span>
-              </p>
-            </div>
-          </div>
-          <!-- /.metric -->
-        </div>
-        <!-- /metric column -->
-      </div>
-      <!-- /metric row -->
+        <!-- /.section-card -->
       <!-- grid row -->
       <div class="row">
         <!-- grid column -->
@@ -385,7 +396,7 @@
           <!-- .card -->
           <section class="card card-fluid">
             <!-- .card-header -->
-            <header class="card-header border-0">
+            <header class="card-header">
               <!-- .d-flex -->
               <div class="d-flex align-items-center">
                 <span class="mr-auto">Draft Terbaru Untuk Direview</span>
@@ -397,7 +408,7 @@
             <?php if ($drafts_newest):?>
             <div class="table-responsive table-striped">
               <!-- .table -->
-              <table class="table">
+              <table class="table nowrap">
                 <!-- thead -->
                 <thead>
                   <tr>
@@ -474,7 +485,7 @@
     </div>
     <!-- /.section-block -->
     <?php endif ?>
-    <!-- untuk level reviewer -->
+    <!-- untuk level author -->
     <?php if ($ceklevel == 'author'): ?>
     <!-- .section-block -->
     <div class="section-block">
@@ -554,14 +565,14 @@
       <!-- .section-card -->
       <div class="card">
         <!-- .card-header -->
-              <header class="card-header">
-                <!-- .d-flex -->
-                <div class="d-flex align-items-center">
-                  <span class="mr-auto">Progress Draft</span>
-                </div>
-                <!-- /.d-flex -->
-              </header>
-              <!-- /.card-header -->
+        <header class="card-header">
+          <!-- .d-flex -->
+          <div class="d-flex align-items-center">
+            <span class="mr-auto">Progress Draft</span>
+          </div>
+          <!-- /.d-flex -->
+        </header>
+        <!-- /.card-header -->
           <!-- metric row -->
           <div class="metric-row px-4 pt-3">
             <div class="col-12">
@@ -767,5 +778,303 @@
       </div>
       <!-- /.section-block -->
       <?php endif ?>
+      <!-- untuk level editor -->
+    <?php if ($ceklevel == 'editor'): ?>
+    <!-- .section-block -->
+    <div class="section-block">
+      <!-- .section-card -->
+      <div class="card">
+          <!-- metric row -->
+          <div class="metric-row px-4 pt-3">
+            <div class="col-12">
+              <div class="metric-row metric-flush">
+                <!-- metric column -->
+                <div class="col">
+                  <!-- .metric -->
+                  <a href="
+                    <?=base_url('draft') ?>" class="metric metric-bordered align-items-center">
+                    <div class="metric-badge">
+                      <span class="badge badge-lg badge-info">
+                        <span class="oi oi-media-record pulse mr-1"></span> TOTAL DRAFT
+                      </span>
+                    </div>
+                    <p class="metric-value h3">
+                      <sub>
+                        <i class="fa fa-tasks"></i>
+                      </sub>
+                      <span class="value">
+                        <?=$count['draft_total'] ?>
+                      </span>
+                    </p>
+                  </a>
+                  <!-- /.metric -->
+                </div>
+                <!-- /metric column -->
+                 <!-- metric column -->
+                <div class="col">
+                  <!-- .metric -->
+                  <a href="
+                    <?=base_url('worksheet') ?>" class="metric metric-bordered align-items-center">
+                    <div class="metric-badge">
+                      <span class="badge badge-lg badge-secondary">
+                        <span class="oi oi-media-record pulse mr-1"></span> MENUNGGU DESK SCREENING
+                      </span>
+                    </div>
+                    <p class="metric-value h3">
+                      <sub>
+                        <i class="fa fa-tasks"></i>
+                      </sub>
+                      <span class="value">
+                        <?=$count['draft_desk'] ?>
+                      </span>
+                    </p>
+                  </a>
+                  <!-- /.metric -->
+                </div>
+                <!-- /metric column -->
+                <!-- metric column -->
+                <div class="col">
+                  <!-- .metric -->
+                  <a href="
+                    <?=base_url('draft/filter?filter=sudah') ?>" class="metric metric-bordered align-items-center">
+                    <div class="metric-badge">
+                      <span class="badge badge-lg badge-success">
+                        <span class="oi oi-media-record pulse mr-1"></span> SUDAH DIPROSES
+                      </span>
+                    </div>
+                    <p class="metric-value h3">
+                      <sub>
+                        <i class="fa fa-tasks"></i>
+                      </sub>
+                      <span class="value">
+                        <?=$count['draft_sudah'] ?>
+                      </span>
+                    </p>
+                  </a>
+                  <!-- /.metric -->
+                </div>
+                <!-- /metric column -->
+                <!-- metric column -->
+                <div class="col">
+                  <!-- .metric -->
+                  <a href="
+                    <?=base_url('draft/filter?filter=belum') ?>" class="metric metric-bordered align-items-center">
+                    <div class="metric-badge">
+                      <span class="badge badge-lg badge-danger">
+                        <span class="oi oi-media-record pulse mr-1"></span> BELUM DIPROSES
+                      </span>
+                    </div>
+                    <p class="metric-value h3">
+                      <sub>
+                        <i class="fa fa-tasks"></i>
+                      </sub>
+                      <span class="value">
+                        <?=$count['draft_belum'] ?>
+                      </span>
+                    </p>
+                  </a>
+                  <!-- /.metric -->
+                </div>
+                <!-- /metric column -->
+              </div>
+            </div>
+          </div>
+          <!-- /metric row -->
+          <!-- metric row -->
+      <div class="metric-row px-4">
+        <div class="col-12">
+          <div class="metric-row metric-flush">
+            <!-- metric column -->
+            <div class="col">
+              <!-- .metric -->
+              <a href="
+                <?=base_url('draft/filter?filter=approve') ?>" class="metric metric-bordered align-items-center">
+                <h2 class="metric-label">
+                  <i class="fa fa-check"></i> Edit Disetujui 
+                </h2>
+                <p class="metric-value h3">
+                  <span class="value">
+                    <?=$count['draft_approved'] ?>
+                  </span>
+                </p>
+              </a>
+              <!-- /.metric -->
+            </div>
+            <!-- /metric column -->
+            <!-- metric column -->
+            <div class="col">
+              <!-- .metric -->
+              <a href="
+                <?=base_url('draft/filter?filter=reject') ?>" class="metric metric-bordered align-items-center">
+                <h2 class="metric-label">
+                  <i class="fa fa-times"></i> Edit Ditolak 
+                </h2>
+                <p class="metric-value h3">
+                  <span class="value">
+                    <?=$count['draft_rejected'] ?>
+                  </span>
+                </p>
+              </a>
+              <!-- /.metric -->
+            </div>
+            <!-- /metric column -->
+          </div>
+        </div>
+      </div>
+      <!-- /metric row -->
+        </div>
+        <!-- /.section-card -->
+    </div>
+    <!-- /.section-block -->
+    <?php endif ?>
+    <!-- untuk level layouter -->
+    <?php if ($ceklevel == 'layouter'): ?>
+    <!-- .section-block -->
+    <div class="section-block">
+      <!-- .section-card -->
+      <div class="card">
+          <!-- metric row -->
+          <div class="metric-row px-4 pt-3">
+            <div class="col-12">
+              <div class="metric-row metric-flush">
+                <!-- metric column -->
+                <div class="col">
+                  <!-- .metric -->
+                  <a href="
+                    <?=base_url('draft') ?>" class="metric metric-bordered align-items-center">
+                    <div class="metric-badge">
+                      <span class="badge badge-lg badge-info">
+                        <span class="oi oi-media-record pulse mr-1"></span> TOTAL DRAFT
+                      </span>
+                    </div>
+                    <p class="metric-value h3">
+                      <sub>
+                        <i class="fa fa-tasks"></i>
+                      </sub>
+                      <span class="value">
+                        <?=$count['draft_total'] ?>
+                      </span>
+                    </p>
+                  </a>
+                  <!-- /.metric -->
+                </div>
+                <!-- /metric column -->
+                 <!-- metric column -->
+                <div class="col">
+                  <!-- .metric -->
+                  <a href="
+                    <?=base_url('worksheet') ?>" class="metric metric-bordered align-items-center">
+                    <div class="metric-badge">
+                      <span class="badge badge-lg badge-secondary">
+                        <span class="oi oi-media-record pulse mr-1"></span> MENUNGGU DESK SCREENING
+                      </span>
+                    </div>
+                    <p class="metric-value h3">
+                      <sub>
+                        <i class="fa fa-tasks"></i>
+                      </sub>
+                      <span class="value">
+                        <?=$count['draft_desk'] ?>
+                      </span>
+                    </p>
+                  </a>
+                  <!-- /.metric -->
+                </div>
+                <!-- /metric column -->
+                <!-- metric column -->
+                <div class="col">
+                  <!-- .metric -->
+                  <a href="
+                    <?=base_url('draft/filter?filter=sudah') ?>" class="metric metric-bordered align-items-center">
+                    <div class="metric-badge">
+                      <span class="badge badge-lg badge-success">
+                        <span class="oi oi-media-record pulse mr-1"></span> SUDAH DIPROSES
+                      </span>
+                    </div>
+                    <p class="metric-value h3">
+                      <sub>
+                        <i class="fa fa-tasks"></i>
+                      </sub>
+                      <span class="value">
+                        <?=$count['draft_sudah'] ?>
+                      </span>
+                    </p>
+                  </a>
+                  <!-- /.metric -->
+                </div>
+                <!-- /metric column -->
+                <!-- metric column -->
+                <div class="col">
+                  <!-- .metric -->
+                  <a href="
+                    <?=base_url('draft/filter?filter=belum') ?>" class="metric metric-bordered align-items-center">
+                    <div class="metric-badge">
+                      <span class="badge badge-lg badge-danger">
+                        <span class="oi oi-media-record pulse mr-1"></span> BELUM DIPROSES
+                      </span>
+                    </div>
+                    <p class="metric-value h3">
+                      <sub>
+                        <i class="fa fa-tasks"></i>
+                      </sub>
+                      <span class="value">
+                        <?=$count['draft_belum'] ?>
+                      </span>
+                    </p>
+                  </a>
+                  <!-- /.metric -->
+                </div>
+                <!-- /metric column -->
+              </div>
+            </div>
+          </div>
+          <!-- /metric row -->
+          <!-- metric row -->
+      <div class="metric-row px-4">
+        <div class="col-12">
+          <div class="metric-row metric-flush">
+            <!-- metric column -->
+            <div class="col">
+              <!-- .metric -->
+              <a href="
+                <?=base_url('draft/filter?filter=approve') ?>" class="metric metric-bordered align-items-center">
+                <h2 class="metric-label">
+                  <i class="fa fa-check"></i> Layout Disetujui 
+                </h2>
+                <p class="metric-value h3">
+                  <span class="value">
+                    <?=$count['draft_approved'] ?>
+                  </span>
+                </p>
+              </a>
+              <!-- /.metric -->
+            </div>
+            <!-- /metric column -->
+            <!-- metric column -->
+            <div class="col">
+              <!-- .metric -->
+              <a href="
+                <?=base_url('draft/filter?filter=reject') ?>" class="metric metric-bordered align-items-center">
+                <h2 class="metric-label">
+                  <i class="fa fa-times"></i> Layout Ditolak 
+                </h2>
+                <p class="metric-value h3">
+                  <span class="value">
+                    <?=$count['draft_rejected'] ?>
+                  </span>
+                </p>
+              </a>
+              <!-- /.metric -->
+            </div>
+            <!-- /metric column -->
+          </div>
+        </div>
+      </div>
+      <!-- /metric row -->
+        </div>
+        <!-- /.section-card -->
+    </div>
+    <!-- /.section-block -->
+    <?php endif ?>
     </div>
     <!-- /.page-section -->

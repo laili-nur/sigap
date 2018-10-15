@@ -26,6 +26,12 @@ class MY_Model extends CI_Model
         return $this->db->query($sql);
     }
 
+    public function count($table = "")
+    {
+        $table = $this->checkTable($table);
+        return $this->db->count_all_results($table);
+    }
+
     public function get($table = "")
     {
         $table = $this->checkTable($table);

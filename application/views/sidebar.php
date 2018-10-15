@@ -38,9 +38,9 @@
                 <?php endif ?>
                 <hr>
               <?php endif ?>
-            <a class="dropdown-item" href="user-profile.html">
+            <a class="dropdown-item" href="#">
               <span class="dropdown-icon oi oi-person"></span> Profile</a>
-            <a class="dropdown-item" href="auth-signin-v1.html">
+            <a class="dropdown-item" href="#">
               <span class="dropdown-icon oi oi-account-logout"></span> Logout</a>
           </div>
           <!-- /dropdown-items -->
@@ -73,7 +73,7 @@
               </a>
             </li>
             <!-- /.menu-item -->
-            <?php if($ceklevel=='editor' || $ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
+            <?php if($ceklevel=='editor' || $ceklevel=='layouter' || $ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
             <!-- .menu-item -->
             <li class="menu-item <?=($pages=='worksheet')?'has-active':'' ?>">
               <a href="<?= base_url('worksheet') ?>" class="menu-link">

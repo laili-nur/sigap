@@ -60,7 +60,7 @@
               <!-- .input-group -->
               <?= form_open('worksheet/search', ['method' => 'GET']) ?>
               <div class="input-group input-group-alt">
-                <?= form_input('keywords', $this->input->get('keywords'), ['placeholder' => 'Enter Work Unit, Institute, NIP, Username, or Name', 'class' => 'form-control']) ?>
+                <?= form_input('keywords', $this->input->get('keywords'), ['placeholder' => 'Enter Worksheet number or Draft Title', 'class' => 'form-control']) ?>
                 <div class="input-group-append">
                    <?= form_button(['type' => 'submit', 'content' => 'Search', 'class' => 'btn btn-secondary']) ?>
                 </div>
@@ -99,12 +99,12 @@
                             $status = "";
                             if ($worksheet->worksheet_status > 0) {
                                 if ($worksheet->worksheet_status == 1) {
-                                    $status = "Approved";
+                                    $status = '<span class="badge badge-success">Approved</span>';
                                 } else {
-                                    $status = "Rejected";
+                                    $status = '<span class="badge badge-danger">Rejected</span>';
                                 }
                             } else {
-                                $status = "Waiting";
+                                $status = '<span class="badge badge-warning">Waiting</span>';
                             }
                             echo $status;
                             ?>        
@@ -112,14 +112,14 @@
                     <td class="align-middle"><?= $worksheet->worksheet_pic ?></td>
                     <td class="align-middle text-right">
 
-                      <a href="<?= base_url('worksheet/action/'.$worksheet->worksheet_id.'/1') ?>" class="btn btn-sm btn-success">
+                      <button onclick="location.href='<?= base_url('worksheet/action/'.$worksheet->worksheet_id.'/1') ?>'" title="Setuju Draft" class="btn btn-sm btn-success">
                         <i class="fa fa-check"></i>
                         <span class="sr-only">Setuju</span>
-                      </a>
-                       <a href="<?= base_url('worksheet/action/'.$worksheet->worksheet_id.'/2') ?>" class="btn btn-sm btn-danger">
+                      </button>
+                       <button onclick="location.href='<?= base_url('worksheet/action/'.$worksheet->worksheet_id.'/2') ?>'" title="Tolak Draft" class="btn btn-sm btn-danger">
                         <i class="fa fa-ban"></i>
                         <span class="sr-only">Tolak</span>
-                      </a>
+                      </button>
                       <span>-</span>
                       <a href="<?= base_url('worksheet/edit/'.$worksheet->worksheet_id.'') ?>" class="btn btn-sm btn-secondary">
                         <i class="fa fa-pencil-alt"></i>

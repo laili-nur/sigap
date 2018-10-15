@@ -49,6 +49,11 @@ class Draft extends Operator_Controller
                     return $e->reviewer_id == $this->session->userdata('role_id');
                 }
             ));
+            if($value->rev == 0){
+              $value->review_flag = $value->review1_flag;
+            }elseif($value->rev == 1){
+              $value->review_flag = $value->review2_flag;
+            }else{}
         }
         
 
@@ -65,8 +70,205 @@ class Draft extends Operator_Controller
   {
         $filter   = $this->input->get('filter', true);
         $this->db->group_by('draft.draft_id');
+        if($this->level == 'reviewer'){
+          if($filter == 'sudah'){
+            $drafts =array();
+            $drafts_source = $this->draft->join('category')
+                            ->join('theme')
+                            ->join3('draft_reviewer','draft','draft')
+                            ->join3('reviewer','draft_reviewer','reviewer')
+                            ->join3('user','reviewer','user')
+                            ->where('user.username',$this->username)
+                            ->orderBy('draft_title')
+                            ->paginate($page)
+                            ->getAll();
+            //cari tau rev 1 atau rev 2 yg sedang login
+            foreach ($drafts_source as $key => $value) {
+                $rev = $this->draft->getIdAndName('reviewer', 'draft_reviewer', $value->draft_id);
+                $value->rev = key(array_filter(
+                    $rev,
+                    function ($e) {
+                        return $e->reviewer_id == $this->session->userdata('role_id');
+                    }
+                ));
+                if($value->rev == 0){
+                  $value->review_flag = $value->review1_flag;
+                }elseif($value->rev == 1){
+                  $value->review_flag = $value->review2_flag;
+                }else{}
 
-        if($this->level == 'author'){
+                if($value->review_flag != ''){
+                  $drafts[] =$value;
+                }
+                $total = count($drafts);
+            }
+          }elseif($filter == 'belum'){
+            $drafts =array();
+            $drafts_source = $this->draft->join('category')
+                            ->join('theme')
+                            ->join3('draft_reviewer','draft','draft')
+                            ->join3('reviewer','draft_reviewer','reviewer')
+                            ->join3('user','reviewer','user')
+                            ->where('user.username',$this->username)
+                            ->orderBy('draft_title')
+                            ->paginate($page)
+                            ->getAll();
+            //cari tau rev 1 atau rev 2 yg sedang login
+            foreach ($drafts_source as $key => $value) {
+                $rev = $this->draft->getIdAndName('reviewer', 'draft_reviewer', $value->draft_id);
+                $value->rev = key(array_filter(
+                    $rev,
+                    function ($e) {
+                        return $e->reviewer_id == $this->session->userdata('role_id');
+                    }
+                ));
+                if($value->rev == 0){
+                  $value->review_flag = $value->review1_flag;
+                }elseif($value->rev == 1){
+                  $value->review_flag = $value->review2_flag;
+                }else{}
+
+                if($value->review_flag == ''){
+                  $drafts[] =$value;
+                }
+                $total = count($drafts);
+            }
+          }
+        }elseif($this->level == 'editor'){
+          if($filter == 'sudah'){
+            $drafts = $this->draft->join('category')
+                            ->join('theme')
+                            ->join3('responsibility','draft','draft')
+                            ->join3('user','responsibility','user')
+                            ->whereNot('edit_notes','')
+                            ->where('user.username',$this->username)
+                            ->orderBy('draft_title')
+                            ->paginate($page)
+                            ->getAll();
+            $total = $this->draft->join3('responsibility','draft','draft')
+                            ->join3('user','responsibility','user')
+                            ->whereNot('edit_notes','')
+                            ->where('user.username',$this->username)
+                            ->count();
+          }elseif($filter == 'belum'){
+            $drafts = $this->draft->join('category')
+                            ->join('theme')
+                            ->join3('responsibility','draft','draft')
+                            ->join3('user','responsibility','user')
+                            ->where('edit_notes','')
+                            ->whereNot('draft_status',99)
+                            ->where('user.username',$this->username)
+                            ->orderBy('draft_title')
+                            ->paginate($page)
+                            ->getAll();
+            $total = $this->draft->join3('responsibility','draft','draft')
+                            ->join3('user','responsibility','user')
+                            ->where('edit_notes','')
+                            ->whereNot('draft_status',99)
+                            ->where('user.username',$this->username)
+                            ->count();
+          }elseif($filter == 'approve'){
+            $drafts = $this->draft->join('category')
+                            ->join('theme')
+                            ->join3('responsibility','draft','draft')
+                            ->join3('user','responsibility','user')
+                            ->where('is_edit','y')
+                            ->where('user.username',$this->username)
+                            ->orderBy('draft_title')
+                            ->paginate($page)
+                            ->getAll();
+            $total = $this->draft->join3('responsibility','draft','draft')
+                            ->join3('user','responsibility','user')
+                            ->where('is_edit','y')
+                            ->where('user.username',$this->username)
+                            ->count();
+          }elseif($filter == 'reject'){
+            $drafts = $this->draft->join('category')
+                            ->join('theme')
+                            ->join3('responsibility','draft','draft')
+                            ->join3('user','responsibility','user')
+                            ->where('is_edit','n')
+                            ->where('draft_status',99)
+                            ->where('user.username',$this->username)
+                            ->orderBy('draft_title')
+                            ->paginate($page)
+                            ->getAll();
+            $tot = $this->draft->join3('responsibility','draft','draft')
+                            ->join3('user','responsibility','user')
+                            ->where('is_edit','n')
+                            ->where('draft_status',99)
+                            ->where('user.username',$this->username)
+                            ->getAll();
+            $total = count($tot);
+          }
+        }elseif($this->level == 'layouter'){
+          if($filter == 'sudah'){
+            $drafts = $this->draft->join('category')
+                            ->join('theme')
+                            ->join3('responsibility','draft','draft')
+                            ->join3('user','responsibility','user')
+                            ->whereNot('layout_notes','')
+                            ->where('user.username',$this->username)
+                            ->orderBy('draft_title')
+                            ->paginate($page)
+                            ->getAll();
+            $total = $this->draft->join3('responsibility','draft','draft')
+                            ->join3('user','responsibility','user')
+                            ->whereNot('layout_notes','')
+                            ->where('user.username',$this->username)
+                            ->count();
+          }elseif($filter == 'belum'){
+            $drafts = $this->draft->join('category')
+                            ->join('theme')
+                            ->join3('responsibility','draft','draft')
+                            ->join3('user','responsibility','user')
+                            ->where('layout_notes','')
+                            ->whereNot('draft_status',99)
+                            ->where('user.username',$this->username)
+                            ->orderBy('draft_title')
+                            ->paginate($page)
+                            ->getAll();
+            $total = $this->draft->join3('responsibility','draft','draft')
+                            ->join3('user','responsibility','user')
+                            ->where('layout_notes','')
+                            ->whereNot('draft_status',99)
+                            ->where('user.username',$this->username)
+                            ->count();
+          }elseif($filter == 'approve'){
+            $drafts = $this->draft->join('category')
+                            ->join('theme')
+                            ->join3('responsibility','draft','draft')
+                            ->join3('user','responsibility','user')
+                            ->where('is_layout','y')
+                            ->where('user.username',$this->username)
+                            ->orderBy('draft_title')
+                            ->paginate($page)
+                            ->getAll();
+            $total = $this->draft->join3('responsibility','draft','draft')
+                            ->join3('user','responsibility','user')
+                            ->where('is_layout','y')
+                            ->where('user.username',$this->username)
+                            ->count();
+          }elseif($filter == 'reject'){
+            $drafts = $this->draft->join('category')
+                            ->join('theme')
+                            ->join3('responsibility','draft','draft')
+                            ->join3('user','responsibility','user')
+                            ->where('is_layout','n')
+                            ->where('draft_status',99)
+                            ->where('user.username',$this->username)
+                            ->orderBy('draft_title')
+                            ->paginate($page)
+                            ->getAll();
+            $tot = $this->draft->join3('responsibility','draft','draft')
+                            ->join3('user','responsibility','user')
+                            ->where('is_layout','n')
+                            ->where('draft_status',99)
+                            ->where('user.username',$this->username)
+                            ->getAll();
+            $total = count($tot);
+          }
+        }elseif($this->level == 'author'){
           if($filter == 'desk-screening'){
             $drafts = $this->draft->join('category')
                             ->join('theme')
@@ -78,13 +280,12 @@ class Draft extends Operator_Controller
                             ->orderBy('draft_title')
                             ->paginate($page)
                             ->getAll();
-            $tot = $this->draft->join3('draft_author','draft','draft')
+            $total = $this->draft->join3('draft_author','draft','draft')
                             ->join3('author','draft_author','author')
                             ->join3('user','author','user')
                             ->where('draft_status','0')
                             ->where('user.username',$this->username)
-                            ->getAll();
-            $total = count($tot);
+                            ->count();
           }elseif($filter == 'review'){
             $drafts = $this->draft->join('category')
                             ->join('theme')
@@ -97,14 +298,13 @@ class Draft extends Operator_Controller
                             ->orderBy('draft_title')
                             ->paginate($page)
                             ->getAll();
-            $tot = $this->draft->join3('draft_author','draft','draft')
+            $total = $this->draft->join3('draft_author','draft','draft')
                             ->join3('author','draft_author','author')
                             ->join3('user','author','user')
                             ->where('is_review','n')
                             ->where('draft_status','4')
                             ->where('user.username',$this->username)
-                            ->getAll();
-            $total = count($tot);
+                            ->count();
           }elseif($filter == 'edit'){
             $drafts = $this->draft->join('category')
                             ->join('theme')
@@ -118,15 +318,14 @@ class Draft extends Operator_Controller
                             ->orderBy('draft_title')
                             ->paginate($page)
                             ->getAll();
-            $tot = $this->draft->join3('draft_author','draft','draft')
+            $total = $this->draft->join3('draft_author','draft','draft')
                             ->join3('author','draft_author','author')
                             ->join3('user','author','user')
                             ->where('is_review','y')            
                             ->where('is_edit','n')
                             ->whereNot('draft_status','99')            
                             ->where('user.username',$this->username)
-                            ->getAll();
-            $total = count($tot);
+                            ->count();
           }elseif($filter == 'layout'){
             $drafts = $this->draft->join('category')
                             ->join('theme')
@@ -140,15 +339,14 @@ class Draft extends Operator_Controller
                             ->orderBy('draft_title')
                             ->paginate($page)
                             ->getAll();
-            $tot = $this->draft->join3('draft_author','draft','draft')
+            $total = $this->draft->join3('draft_author','draft','draft')
                             ->join3('author','draft_author','author')
                             ->join3('user','author','user')
                             ->where('is_edit','y')            
                             ->where('is_layout','n')
                             ->whereNot('draft_status','99')        
                             ->where('user.username',$this->username)
-                            ->getAll();
-            $total = count($tot);
+                            ->count();
           }elseif($filter == 'proofread'){
             $drafts = $this->draft->join('category')
                             ->join('theme')
@@ -162,15 +360,14 @@ class Draft extends Operator_Controller
                             ->orderBy('draft_title')
                             ->paginate($page)
                             ->getAll();
-            $tot = $this->draft->join3('draft_author','draft','draft')
+            $total = $this->draft->join3('draft_author','draft','draft')
                             ->join3('author','draft_author','author')
                             ->join3('user','author','user')
                             ->where('is_proofread','n')            
                             ->where('is_layout','y')  
                             ->whereNot('draft_status','99')          
                             ->where('user.username',$this->username)
-                            ->getAll();
-            $total = count($tot);
+                            ->count();
           }elseif($filter == 'reject'){
             $drafts = $this->draft->join('category')
                             ->join('theme')
@@ -182,13 +379,12 @@ class Draft extends Operator_Controller
                             ->orderBy('draft_title')
                             ->paginate($page)
                             ->getAll();
-            $tot = $this->draft->join3('draft_author','draft','draft')
+            $total = $this->draft->join3('draft_author','draft','draft')
                             ->join3('author','draft_author','author')
                             ->join3('user','author','user')
                             ->where('draft_status','99')          
                             ->where('user.username',$this->username)
-                            ->getAll();
-            $total = count($tot);
+                            ->count();
           }elseif($filter == 'final'){
             $drafts = $this->draft->join('category')
                             ->join('theme')
@@ -200,14 +396,13 @@ class Draft extends Operator_Controller
                             ->orderBy('draft_title')
                             ->paginate($page)
                             ->getAll();
-            $tot = $this->draft->join3('draft_author','draft','draft')
+            $total = $this->draft->join3('draft_author','draft','draft')
                             ->join3('author','draft_author','author')
                             ->join3('user','author','user')
                             ->where('draft_status','14')          
                             ->where('user.username',$this->username)
-                            ->getAll();
-            $total = count($tot);
-          }else{}
+                            ->count();
+          }
         }else{
           if($filter == 'desk-screening'){
               $drafts = $this->draft->join('category')
@@ -218,9 +413,8 @@ class Draft extends Operator_Controller
                                     ->orderBy('draft_title')
                                     ->paginate($page)
                                     ->getAll();
-              $tot = $this->draft->where('draft_status','0')                      
-                                    ->getAll();
-              $total = count($tot);
+              $total = $this->draft->where('draft_status','0')                      
+                                    ->count();
           }elseif($filter == 'review'){
               $drafts = $this->draft->join('category')
                                     ->join('theme')
@@ -231,11 +425,10 @@ class Draft extends Operator_Controller
                                     ->orderBy('draft_title')
                                     ->paginate($page)
                                     ->getAll();
-              $tot = $this->draft->where('is_review','n')            
+              $total = $this->draft->where('is_review','n')            
                                     ->whereNot('review1_notes','')            
                                     ->whereNot('review2_notes','')            
-                                    ->getAll();
-              $total = count($tot);
+                                    ->count();
           }elseif($filter == 'edit'){
               $drafts = $this->draft->join('category')
                                     ->join('theme')
@@ -247,11 +440,10 @@ class Draft extends Operator_Controller
                                     ->orderBy('draft_title')
                                     ->paginate($page)
                                     ->getAll();
-              $tot = $this->draft->where('is_review','y')            
+              $total = $this->draft->where('is_review','y')            
                                     ->where('is_edit','n')
                                     ->whereNot('draft_status','99')            
-                                    ->getAll();
-              $total = count($tot);
+                                    ->count();
           }elseif($filter == 'layout'){
               $drafts = $this->draft->join('category')
                                     ->join('theme')
@@ -263,11 +455,10 @@ class Draft extends Operator_Controller
                                     ->orderBy('draft_title')
                                     ->paginate($page)
                                     ->getAll();
-              $tot = $this->draft->where('is_edit','y')            
+              $total = $this->draft->where('is_edit','y')            
                                     ->where('is_layout','n')
                                     ->whereNot('draft_status','99')            
-                                    ->getAll();
-              $total = count($tot);
+                                    ->count();
           }elseif($filter == 'proofread'){
               $drafts = $this->draft->join('category')
                                     ->join('theme')
@@ -279,11 +470,10 @@ class Draft extends Operator_Controller
                                     ->orderBy('draft_title')
                                     ->paginate($page)
                                     ->getAll();
-              $tot = $this->draft->where('is_proofread','n')            
+              $total = $this->draft->where('is_proofread','n')            
                                     ->where('is_layout','y')
                                     ->whereNot('draft_status','99')            
-                                    ->getAll();
-              $total = count($tot);
+                                    ->count();
           }elseif($filter == 'reject'){
               $drafts = $this->draft->join('category')
                                     ->join('theme')
@@ -293,9 +483,8 @@ class Draft extends Operator_Controller
                                     ->orderBy('draft_title')
                                     ->paginate($page)
                                     ->getAll();
-              $tot = $this->draft->where('draft_status','99')           
-                                    ->getAll();
-              $total = count($tot);
+              $total = $this->draft->where('draft_status','99')           
+                                    ->count();
           }elseif($filter == 'final'){
               $drafts = $this->draft->join('category')
                                     ->join('theme')
@@ -305,10 +494,9 @@ class Draft extends Operator_Controller
                                     ->orderBy('draft_title')
                                     ->paginate($page)
                                     ->getAll();
-              $tot = $this->draft->where('draft_status','14')           
-                                    ->getAll();
-              $total = count($tot);
-          }else{}
+              $total = $this->draft->where('draft_status','14')           
+                                    ->count();
+          }
         }
       
         
@@ -329,7 +517,7 @@ class Draft extends Operator_Controller
 
         $pages    = $this->pages;
         $main_view  = 'draft/index_draft';
-        $this->load->view('template', compact('pages', 'main_view', 'drafts', 'pagination', 'total'));
+        $this->load->view('template', compact('final','pages', 'main_view', 'drafts', 'pagination', 'total'));
     }
         
         
@@ -342,10 +530,6 @@ class Draft extends Operator_Controller
             redirect('home');
         }
 
-        if ($ceklevel != 'author'){
-            
-        }
-        
         if (!$_POST) {
             $input = (object) $this->draft->getDefaultValues();
             $input->category_id = $category;
