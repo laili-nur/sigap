@@ -73,38 +73,8 @@ class Reporting extends Admin_Controller {
 		$this->load->view('template', compact('main_view', 'pages', 'performance_layouter'));
 	}
 
-	public function getDraft()
-  {
-		for($i = 1; $i <= 12; $i++)
-		{
-			$result[$i] = $this->reporting->getDraft($i);
-			$result['count'][$i] = count($result[$i]);
-		}
-		echo json_encode($result);
-  }
-
-	public function getBook()
-  {
-		for($i = 1; $i <= 12; $i++)
-		{
-			$result[$i] = $this->reporting->getBook($i);
-			$result['count'][$i] = count($result[$i]);
-		}
-		echo json_encode($result);
-  }
-
-	public function getAuthor()
-  {
-		for($i = 1; $i <= 3; $i++)
-		{
-			$result[$i] = $this->reporting->getAuthor($i);
-			$result['count'][$i] = count($result[$i]);
-		}
-		echo json_encode($result);
-  }
-
 	public function getSummary()
-  {
+	{
 		$count_review = 0;
 		$count_disetujui = 0;
 		$count_editor = 0;
@@ -149,12 +119,56 @@ class Reporting extends Admin_Controller {
 		$result['count_proofread'] = $count_proofread;
 		$result['count_book'] = $count_book;
 
+		echo json_encode($result);
+	}
 
-		// for($i = 1; $i <= 6; $i++)
-		// {
-		// 	$result[$i] = $this->reporting->getDraft($i);
-		// 	$result['count'][$i] = count($result[$i]);
-		// }
+	public function getPie()
+	{
+		$count_ugm = 0;
+		$count_lain = 0;
+
+		$result_ugm = $this->reporting->select(['institute_id'])->getAll('author');
+		foreach ($result_ugm as $institute_ugm){
+			if ($institute_ugm->institute_id == 4) {
+					$count_ugm++;
+			}
+			else {
+				$count_lain++;
+			}
+		}
+		$result['count_ugm'] = $count_ugm;
+		$result['count_lain'] = $count_lain;
+
+		echo json_encode($result);
+	}
+
+	public function getDraft()
+  {
+		for($i = 1; $i <= 12; $i++)
+		{
+			$result[$i] = $this->reporting->getDraft($i);
+			$result['count'][$i] = count($result[$i]);
+		}
+		echo json_encode($result);
+  }
+
+	public function getBook()
+  {
+		for($i = 1; $i <= 12; $i++)
+		{
+			$result[$i] = $this->reporting->getBook($i);
+			$result['count'][$i] = count($result[$i]);
+		}
+		echo json_encode($result);
+  }
+
+	public function getAuthor()
+  {
+		for($i = 1; $i <= 3; $i++)
+		{
+			$result[$i] = $this->reporting->getAuthor($i);
+			$result['count'][$i] = count($result[$i]);
+		}
 		echo json_encode($result);
   }
 
