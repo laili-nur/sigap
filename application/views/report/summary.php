@@ -33,7 +33,7 @@
 
     <!-- graph for summary -->
 
-    <canvas id="myChart" width="5" height="1"></canvas>
+    <canvas id="myChart" width="500" height="100"></canvas>
     <script>
 
     $.post("<?php echo base_url();?>Reporting/getSummary",
@@ -140,8 +140,8 @@
                 label : 'Penulis',
                 data: [ugm, lain],
                 backgroundColor : [
-                  'rgba(255, 99, 132, 1)',
                   'rgba(54, 162, 235, 1)',
+                  'rgba(198, 198, 198, 1)'
                 ],
                 borderWidth : 1
               }]

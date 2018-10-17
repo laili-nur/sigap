@@ -33,7 +33,7 @@
 
     <!-- graph for book -->
 
-    <canvas id="myChart" width="300" height="90"></canvas>
+    <canvas id="myChart" width="500" height="100"></canvas>
     <script>
 
     $.post("<?php echo base_url();?>Reporting/getBook",
@@ -56,8 +56,8 @@
                       label: 'Laporan Buku',
                       data: tampil,
                       backgroundColor: [
-                          'rgba(255, 99, 132, 1)',
                           'rgba(54, 162, 235, 1)',
+                          'rgba(198, 198, 198, 1)',
                           'rgba(255, 206, 86, 1)',
                           'rgba(75, 192, 192, 1)',
                           'rgba(153, 102, 255, 1)',
@@ -70,8 +70,8 @@
                           'rgba(153, 102, 255, 1)'
                       ],
                       borderColor: [
-                          'rgba(255,99,132,1)',
                           'rgba(54, 162, 235, 1)',
+                          'rgba(198, 198, 198, 1)',
                           'rgba(255, 206, 86, 1)',
                           'rgba(75, 192, 192, 1)',
                           'rgba(153, 102, 255, 1)',
@@ -86,10 +86,26 @@
               options: {
                   scales: {
                       yAxes: [{
-                          ticks: {
-                              beginAtZero:true
-                          }
-                      }]
+                        gridLines :{
+                          display : true
+                        },
+                        ticks: {
+                          fontFamily :"'Helvetica'",
+                          fontSize : 13,
+                          beginAtZero:true
+                        }
+                    }],
+                      xAxes : [{
+                        gridLines : {
+                          display : false
+                        },
+                        ticks: {
+                          fontFamily :"'Helvetica'",
+                          fontSize : 13,
+                          beginAtZero:true
+                        }
+                      }],
+
                   }
               }
           });

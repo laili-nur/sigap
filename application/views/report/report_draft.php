@@ -30,7 +30,7 @@
 
     <!-- graph for draft -->
 
-    <canvas id="myChart" width="300" height="90"></canvas>
+    <canvas id="myChart" width="500" height="100"></canvas>
     <script>
 
     $.post("<?php echo base_url();?>Reporting/getDraft",
@@ -53,8 +53,8 @@
                       label: 'Laporan Draft',
                       data: tampil,
                       backgroundColor: [
-                          'rgba(255, 99, 132, 1)',
                           'rgba(54, 162, 235, 1)',
+                          'rgba(198, 198, 198, 1)',
                           'rgba(255, 206, 86, 1)',
                           'rgba(75, 192, 192, 1)',
                           'rgba(153, 102, 255, 1)',
@@ -67,8 +67,8 @@
                           'rgba(153, 102, 255, 1)'
                       ],
                       borderColor: [
-                          'rgba(255,99,132,1)',
                           'rgba(54, 162, 235, 1)',
+                          'rgba(198, 198, 198, 1)',
                           'rgba(255, 206, 86, 1)',
                           'rgba(75, 192, 192, 1)',
                           'rgba(153, 102, 255, 1)',
@@ -121,7 +121,7 @@
             <th>Draft ID</th>
             <th>Draft Title</th>
             <th>Entry Date</th>
-            <th>Month</th>
+            <!-- <th>Month</th> -->
           </tr>
         <?php
         if($drafts)
@@ -133,7 +133,7 @@
             <td><?php echo $row->draft_id; ?></td>
             <td><?php echo $row->draft_title; ?></td>
             <td><?php echo konversiTanggal($row->entry_date); ?></td>
-            <td><?php echo date("m",strtotime($row->entry_date)); ?></td>
+            <!-- <td><?php echo date("m",strtotime($row->entry_date)); ?></td> -->
           </tr>
           <?php
           }

@@ -18,7 +18,7 @@ class Reporting_model extends MY_Model{
 
   public function fetch_data_draft()
   {
-    $query = $this->db->query("SELECT * FROM draft ORDER BY entry_date ASC");
+    $query = $this->db->query("SELECT * FROM draft ORDER BY entry_date DESC LIMIT 5");
     return $query->result();
   }
 
