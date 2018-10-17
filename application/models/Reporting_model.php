@@ -30,15 +30,13 @@ class Reporting_model extends MY_Model{
 
   public function fetch_data_author()
   {
-    $query = $this->db->query("SELECT * FROM author ORDER BY author_id ASC");
+    $query = $this->db->query("SELECT * FROM author ORDER BY author_id DESC LIMIT 10");
     return $query->result();
   }
 
   public function fetch_performa_editor()
   {
-    $this->db->select('*');
-    $this->db->from('draft');
-    $query = $this->db->get();
+    $query = $this->db->query("SELECT * FROM draft ORDER BY edit_start_date DESC LIMIT 5");
     return $query->result();
   }
 
