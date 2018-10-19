@@ -6,6 +6,9 @@
         <li class="breadcrumb-item">
           <a href="<?=base_url()?>"><span class="fa fa-home"></span> Admin Panel</a>
         </li>
+        <li class="breadcrumb-item">
+          <a href="<?=base_url('reporting')?>">Laporan</a>
+        </li>
         <li class="breadcrumb-item active">
           <a class="text-muted">Laporan Draft</a>
         </li>
@@ -25,12 +28,14 @@
   <!-- Reporting buku -->
   <!-- /.page-title-bar -->
   <br />
-  <h5>Laporan Draft</h5>
-  <br />
+  <div align="center">
+    <h5>UGM Press</h5>
+    <h6>Grafik Jumlah Draft</h6>
+  </div>
 
     <!-- graph for draft -->
 
-    <canvas id="myChart" width="500" height="100"></canvas>
+    <canvas id="myChart" width="500" height="155"></canvas>
     <script>
 
     $.post("<?php echo base_url();?>Reporting/getDraft",
@@ -47,8 +52,8 @@
           var myChart = new Chart(ctx, {
               type: 'bar',
               data: {
-                  labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli",
-                          "Agustus", "September", "Oktober", "November", "Desember"],
+                  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+                          "Aug", "Sep", "Oct", "Nov", "Des"],
                   datasets: [{
                       label: 'Laporan Draft',
                       data: tampil,
@@ -81,6 +86,9 @@
                   }]
               },
               options: {
+                legend: {
+                  display : false,
+                },
                   scales: {
                       yAxes: [{
                         gridLines :{
@@ -114,6 +122,7 @@
     <br />
     <h5>Tabel Draft</h5>
     <br />
+
     <div class="container">
       <div class="table-responsive">
         <table class="table table-bordered">

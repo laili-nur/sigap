@@ -28,12 +28,14 @@
   <!-- Reporting buku -->
   <!-- /.page-title-bar -->
   <br />
-  <h5>Summary</h5>
-  <br />
+  <div align="center">
+    <h5>UGM Press</h5>
+    <h6>Grafik Ringkasan Pencetakan Buku</h6>
+  </div>
 
     <!-- graph for summary -->
 
-    <canvas id="myChart" width="500" height="100"></canvas>
+    <canvas id="myChart" width="500" height="155"></canvas>
     <script>
 
     $.post("<?php echo base_url();?>Reporting/getSummary",
@@ -53,7 +55,7 @@
               data: {
                   labels: ["Review", "Disetujui", "Editor", "Layouter", "Proofread", "Buku"],
                   datasets: [{
-                      label: ['Summary'],
+                      label: ['summary'],
                       data: [review, disetujui, editor, layout, proofread, book],
                       backgroundColor: [
                           'rgba(54, 162, 235, 1)',
@@ -87,6 +89,9 @@
                   }]
               },
               options: {
+                legend: {
+                  display : false,
+                },
                   scales: {
                       yAxes: [{
                         gridLines :{

@@ -28,12 +28,14 @@
   <!-- Reporting buku -->
   <!-- /.page-title-bar -->
   <br />
-  <h5>Laporan Buku</h5>
-  <br />
+  <div align="center">
+    <h5>UGM Press</h5>
+    <h6>Grafik Jumlah Buku</h6>
+  </div>
 
     <!-- graph for book -->
 
-    <canvas id="myChart" width="500" height="100"></canvas>
+    <canvas id="myChart" width="500" height="155"></canvas>
     <script>
 
     $.post("<?php echo base_url();?>Reporting/getBook",
@@ -50,8 +52,8 @@
           var myChart = new Chart(ctx, {
               type: 'bar',
               data: {
-                  labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli",
-                          "Agustus", "September", "Oktober", "November", "Desember"],
+                  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+                          "Aug", "Sep", "Oct", "Nov", "Des"],
                   datasets: [{
                       label: 'Laporan Buku',
                       data: tampil,
@@ -84,6 +86,9 @@
                   }]
               },
               options: {
+                legend: {
+                  display : false,
+                },
                   scales: {
                       yAxes: [{
                         gridLines :{

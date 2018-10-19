@@ -73,9 +73,9 @@ class Reporting_model extends MY_Model{
   public function apiDraft($draft_id = NULL)
   {
     if($draft_id == FALSE){
-			$result = $this->db->select('draft_id, category_id, theme_id, draft_title, entry_date, review_start_date, review_end_date, draft_status')->get('draft')->result();
+			$result = $this->db->select('draft_id, category_id, theme_id, draft_title, entry_date, finish_date, review_start_date, review_end_date, draft_status')->get('draft')->result();
 		} else{
-			$this->db->select('draft_id, category_id, theme_id, draft_title, entry_date, review_start_deadline, review_end_deadline, draft_status')->where('draft_id', $draft_id);
+			$this->db->select('draft_id, category_id, theme_id, draft_title, entry_date, finish_date, review_start_date, review_end_date, draft_status')->where('draft_id', $draft_id);
 			$result = $this->db->get('draft')->result();
 		}
     return $result;
@@ -95,9 +95,9 @@ class Reporting_model extends MY_Model{
   public function apiAuthor($author_id = NULL)
   {
     if($author_id == FALSE){
-      $result = $this->db->select('author_id, work_unit_id, author_name, author_latest_education, author_address, author_contact, author_email, author_saving_num, heir_name')->get('author')->result();
+      $result = $this->db->select('author_id, work_unit_id, author_name, author_nip, author_latest_education, author_address, author_contact, author_email, author_saving_num, heir_name')->get('author')->result();
     } else{
-      $this->db->select('author_id, work_unit_id, author_name, author_latest_education, author_address, author_contact, author_email, author_saving_num, heir_name')->where('author_id', $author_id);
+      $this->db->select('author_id, work_unit_id, author_name, author_nip, author_latest_education, author_address, author_contact, author_email, author_saving_num, heir_name')->where('author_id', $author_id);
       $result = $this->db->get('author')->result();
     }
     return $result;

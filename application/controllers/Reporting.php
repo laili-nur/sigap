@@ -195,5 +195,8 @@ class Reporting extends Admin_Controller {
 	}
 }
 
+/*search filter*/
+
+
 /* End of file Reporting.php */
 /* Location: ./application/controllers/Reporting.php */

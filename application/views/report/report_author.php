@@ -31,8 +31,10 @@
   <!-- Graph for Author -->
 
   <br />
-  <h5>Laporan Author</h5>
-  <br />
+  <div align="center">
+    <h5>UGM Press</h5>
+    <h6>Grafik Instansi Author</h6>
+  </div>
 
   <canvas id="myPieChart" width="380" height="100"></canvas>
   <script>
