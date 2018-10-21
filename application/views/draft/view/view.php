@@ -86,7 +86,7 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> File Draft </td>
-                <td>: <?=(!empty($input->draft_file))? '<a href="'.base_url('draftfile/'.$input->draft_file).'">'.$input->draft_file.'</a>' : '' ?>
+                <td>: <?=(!empty($input->draft_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->draft_file.'" class="btn btn-success btn-xs m-0" href="'.base_url('draftfile/'.$input->draft_file).'"><i class="fa fa-download"></i> Download</a>' : '' ?>
                    </td>
               </tr>
               <!-- /tr -->
@@ -552,7 +552,7 @@
       var editor = $('#pilih_editor').val();
       $.ajax({
         type : "POST",
-        url : "<?php echo base_url('responsibility/add') ?>",
+        url : "<?php echo base_url('responsibility/add/editor') ?>",
         datatype : "JSON",
         cache:false,
         data : {
@@ -565,6 +565,8 @@
           if(!dataeditor.validasi){
             $('#form-editor').append('<div class="text-danger help-block">editor sudah dipilih</div>');
             toastr_view('33');
+          }else if(dataeditor.validasi == 'max'){
+            toastr_view('98');
           }else{
             toastr_view('5');
           }
@@ -588,7 +590,7 @@
       var layouter = $('#pilih_layouter').val();
       $.ajax({
         type : "POST",
-        url : "<?php echo base_url('responsibility/add') ?>",
+        url : "<?php echo base_url('responsibility/add/layouter') ?>",
         datatype : "JSON",
         data : {
           draft_id : draft,
@@ -600,6 +602,8 @@
           if(!datalayouter.validasi){
             $('#form-layouter').append('<div class="text-danger help-block">layouter sudah dipilih</div>');
             toastr_view('44');
+          }else if(datalayouter.validasi == 'max'){
+            toastr_view('97');
           }else{
             toastr_view('7');
           }

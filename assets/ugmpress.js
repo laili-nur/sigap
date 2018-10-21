@@ -42,6 +42,10 @@ function toastr_view(param){
     toastr.error('Layouter sudah terpilih');
   }else if(param == '99'){
     toastr.error('Reviewer max 2');
+  }else if(param == '98'){
+    toastr.error('Editor max 1');
+  }else if(param == '97'){
+    toastr.error('Layouter max 2');
   }else if(param == '111'){
     toastr.success('Data Saved');
   }else if(param == '000'){

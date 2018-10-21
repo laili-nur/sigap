@@ -12,11 +12,26 @@ class Home extends Operator_Controller
         //     redirect(base_url('login'));
         //     return;
         // }
-
     }
 
 	public function index($page = null)
 	{
+        // handle untuk merubah category status yang udah expired
+        
+        $current_date = strtotime(date('Y-m-d'));
+
+        $all_categories = $this->home->orderBy('category_name')->getAllWhere("category_status = 'y'",'category');
+        foreach ($all_categories as $key) {
+            $close_date = $key->date_close;
+            $close_date = strtotime($close_date);
+
+            if ($current_date >= $close_date) {
+                $data = array('category_status' => 'n');
+
+                $this->home->where('category_id', $key->category_id)->update($data, 'category');
+            }
+        }
+
         $cekusername = $this->session->userdata('username');
         $ceklevel = $this->session->userdata('level');
         $drafts = array();
@@ -103,7 +118,7 @@ class Home extends Operator_Controller
             $count['count_belum'] = $count_belum;
             $count['count_total'] = $count_total;
         }elseif($ceklevel == 'author'){
-            $categories = $this->home->orderBy('category_name')->getAll('category');
+            $categories = $this->home->orderBy('category_name')->getAllWhere("category_status = 'y'",'category');
 
             $count['draft_total'] = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->count('draft');
             $count['draft_desk'] = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('draft_status','0')->count('draft');

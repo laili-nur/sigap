@@ -118,6 +118,7 @@
                 <p class="font-weight-bold">NASKAH</p>
                 <!-- if upload ditampilkan di level tertentu -->
                 <?php if($ceklevel=='reviewer' or $ceklevel == 'author' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+                <?php if($author_order==1): ?>
                 <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/review1_file', 'id="rev1form"'); ?>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                   <!-- .form-group -->
@@ -139,6 +140,7 @@
                     </div>
                     <!-- /.form-group -->
                 <?= form_close(); ?>
+                <?php endif ?>
                 <?php endif ?>
                 <!-- endif upload ditampilkan di level tertentu -->
                 <?=(!empty($input->review1_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review1_file.'" href="'.base_url('draftfile/'.$input->review1_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : 'No data' ?>
@@ -376,7 +378,7 @@
                           'rows' => '6',
                           'value'=> $input->review1_notes_author
                       );
-                      if($ceklevel!='author'){
+                      if($ceklevel!='author' or $author_order!=1){
                         echo '<div class="font-italic">'.nl2br($input->review1_notes_author).'</div>';
                       }else{
                         echo form_textarea($optionscrp1);
@@ -404,7 +406,9 @@
                 </div>
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-review1-rev">Submit</button>
                 <?php else: ?>
+                  <?php if($author_order==1): ?>
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-review1-other">Submit</button>
+                  <?php endif ?>
                 <?php endif ?>
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>
@@ -433,6 +437,7 @@
                 <!-- if upload ditampilkan di level tertentu -->
                 <p class="font-weight-bold">NASKAH</p>
                 <?php if($ceklevel=='reviewer' or $ceklevel == 'author' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+                <?php if($author_order==1): ?>
                 <?= form_open('draft/upload_progress/'.$input->draft_id.'/review2_file', 'id="rev2form"'); ?>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : 'No data' ?>
                   <!-- .form-group -->
@@ -454,6 +459,7 @@
                     </div>
                     <!-- /.form-group -->
                 <?= form_close(); ?>
+                <?php endif ?>
                 <?php endif ?>
                 <!-- endif upload ditampilkan di level tertentu -->
                 <?=(!empty($input->review2_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review2_file.'" href="'.base_url('draftfile/'.$input->review2_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
@@ -691,7 +697,7 @@
                           'rows' => '6',
                           'value'=> $input->review2_notes_author
                       );
-                      if($ceklevel!='author'){
+                      if($ceklevel!='author' or $author_order!=1){
                         echo '<div class="font-italic">'.nl2br($input->review2_notes_author).'</div>';
                       }else{
                         echo form_textarea($optionscrp2);
@@ -719,7 +725,9 @@
                 </div>
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-review2-rev">Submit</button>
                 <?php else: ?>
+                  <?php if($author_order==1): ?>
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-review2-other">Submit</button>
+                  <?php endif ?>
                 <?php endif ?>
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>

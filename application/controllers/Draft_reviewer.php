@@ -39,7 +39,6 @@ class Draft_reviewer extends Operator_Controller
             // $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
-        //$data['draft'] =array();
         $datax = array('draft_id' => $input->draft_id);
         $data['jmlreviewer'] = count($this->draft_reviewer->getAllWhere($datax));
 

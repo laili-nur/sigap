@@ -83,6 +83,7 @@
                   <p class="font-weight-bold">NASKAH</p>
                   <!-- if upload ditampilkan di level tertentu -->
                   <?php if($ceklevel=='layouter' or $ceklevel == 'author' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+                  <?php if($author_order==1): ?>
                   <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/layout_file', 'id="layoutform"'); ?>
                     <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                     <!-- .form-group -->
@@ -104,6 +105,7 @@
                       </div>
                       <!-- /.form-group -->
                   <?= form_close(); ?>
+                  <?php endif ?>
                   <?php endif ?>
                   <!-- endif upload ditampilkan di level tertentu -->
                   <?=(!empty($input->layout_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->layout_file.'" href="'.base_url('draftfile/'.$input->layout_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : 'No data' ?>
@@ -158,7 +160,9 @@
                 <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
+                <?php if($author_order==1): ?>
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-layout">Submit</button>
+                <?php endif ?>
                 <?=form_close(); ?>
                 <!-- /.form -->
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
@@ -187,6 +191,7 @@
                 <p class="font-weight-bold">NASKAH</p>
                 <!-- if upload ditampilkan di level tertentu -->
                 <?php if($ceklevel=='layout' or $ceklevel == 'author' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+                <?php if($author_order==1): ?>
                 <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/cover_file', 'id="coverform"'); ?>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                   <!-- .form-group -->
@@ -208,6 +213,7 @@
                     </div>
                     <!-- /.form-group -->
                 <?= form_close(); ?>
+                <?php endif ?>
                 <?php endif ?>
                 <!-- endif upload ditampilkan di level tertentu -->
                 <?=(!empty($input->cover_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->cover_file.'" href="'.base_url('draftfile/'.$input->cover_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : 'No data' ?>
@@ -262,7 +268,9 @@
               <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
+                <?php if($author_order==1): ?>
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-cover">Submit</button>
+                <?php endif ?>
                 <?= form_close(); ?>
                 <!-- /.form -->
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>

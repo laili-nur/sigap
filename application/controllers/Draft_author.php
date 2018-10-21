@@ -67,6 +67,11 @@ class Draft_author extends Operator_Controller
             $input = (object) $this->input->post(null, true);
         }
 
+        $draft_authors = $this->draft_author->where('draft_id', $input->draft_id)->get();
+        if (!$draft_authors) {
+            $input->draft_author_status = 1;
+        }
+
         if (!$this->draft_author->validate()) {
             $data['validasi'] = false;
             echo json_encode($data);

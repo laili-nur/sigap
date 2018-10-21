@@ -48,6 +48,7 @@
                 <p class="font-weight-bold">NASKAH</p>
                 <!-- if upload ditampilkan di level tertentu -->
                 <?php if($ceklevel!='reviewer'): ?>
+                  <?php if($author_order==1): ?>
                 <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/proofread_file', 'id="proofreadform"'); ?>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                   <!-- .form-group -->
@@ -69,6 +70,7 @@
                     </div>
                     <!-- /.form-group -->
                 <?= form_close(); ?>
+                <?php endif ?>
                 <?php endif ?>
                 <!-- endif upload ditampilkan di level tertentu -->
                 <?=(!empty($input->proofread_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->proofread_file.'" href="'.base_url('draftfile/'.$input->proofread_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : 'No data' ?>
@@ -109,7 +111,7 @@
                           'rows' => '6',
                           'value'=> $input->proofread_notes_author
                       );
-                      if($ceklevel!='author'){
+                      if($ceklevel!='author' or $author_order!=1){
                         echo '<div class="font-italic">'.nl2br($input->proofread_notes_author).'</div>';
                       }else{
                         echo form_textarea($optionscprp);
@@ -124,7 +126,9 @@
               <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
+                <?php if($author_order==1): ?>
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-proofread">Submit</button>
+                <?php endif ?>
                 <?=form_close(); ?>
                 <!-- /.form -->
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>

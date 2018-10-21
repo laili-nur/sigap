@@ -21,7 +21,7 @@ class Responsibility extends Operator_Controller
 	}
         
         
-        public function add()
+        public function add($jenis_staff)
 	{   
         $data = array();
         if (!$_POST) {
@@ -39,6 +39,23 @@ class Responsibility extends Operator_Controller
             // $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
+        //$datax = array('draft_id' => $input->draft_id);
+        if($jenis_staff == 'editor'){
+            $data['jmlstaff'] = count($this->responsibility->join('user')->where('user.level','editor')->where('responsibility.draft_id',$input->draft_id)->getAll());
+            if($data['jmlstaff'] >0){
+                $data['validasi'] = 'max';
+                echo json_encode($data);
+                return;
+            }
+        }elseif($jenis_staff == 'layouter'){
+            $data['jmlstaff'] = count($this->responsibility->join('user')->where('user.level','layouter')->where('responsibility.draft_id',$input->draft_id)->getAll());
+            if($data['jmlstaff'] >1){
+                $data['validasi'] = 'max';
+                echo json_encode($data);
+                return;
+            }
+        }
+        
 
         if ($this->responsibility->insert($input)) {
             $ambil_level = $this->responsibility->join('user')->where('user.user_id',$input->user_id)->get();
