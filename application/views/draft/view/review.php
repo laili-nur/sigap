@@ -117,8 +117,7 @@
                 <div id="modal-review1">
                 <p class="font-weight-bold">NASKAH</p>
                 <!-- if upload ditampilkan di level tertentu -->
-                <?php if($ceklevel=='reviewer' or $ceklevel == 'author' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
-                <?php if($author_order==1): ?>
+                <?php if($ceklevel=='reviewer' or ($ceklevel == 'author' and $author_order==1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
                 <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/review1_file', 'id="rev1form"'); ?>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                   <!-- .form-group -->
@@ -140,7 +139,6 @@
                     </div>
                     <!-- /.form-group -->
                 <?= form_close(); ?>
-                <?php endif ?>
                 <?php endif ?>
                 <!-- endif upload ditampilkan di level tertentu -->
                 <?=(!empty($input->review1_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review1_file.'" href="'.base_url('draftfile/'.$input->review1_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : 'No data' ?>
@@ -436,8 +434,7 @@
                 <div id="modal-review2">
                 <!-- if upload ditampilkan di level tertentu -->
                 <p class="font-weight-bold">NASKAH</p>
-                <?php if($ceklevel=='reviewer' or $ceklevel == 'author' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
-                <?php if($author_order==1): ?>
+                <?php if($ceklevel=='reviewer' or ($ceklevel == 'author' and $author_order==1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
                 <?= form_open('draft/upload_progress/'.$input->draft_id.'/review2_file', 'id="rev2form"'); ?>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : 'No data' ?>
                   <!-- .form-group -->
@@ -459,7 +456,6 @@
                     </div>
                     <!-- /.form-group -->
                 <?= form_close(); ?>
-                <?php endif ?>
                 <?php endif ?>
                 <!-- endif upload ditampilkan di level tertentu -->
                 <?=(!empty($input->review2_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review2_file.'" href="'.base_url('draftfile/'.$input->review2_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>

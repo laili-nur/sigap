@@ -20,6 +20,9 @@
     </nav> 
   </header>
   <!-- /.page-title-bar -->
+  <pre>
+    <?php print_r($author_order) ?>
+  </pre>
 <!-- .page-section -->
 <div class="page-section">
 

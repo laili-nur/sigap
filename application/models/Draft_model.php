@@ -343,9 +343,12 @@ class Draft_model extends MY_Model
 
     public function deleteDraftfile($draftFile)
     {
-        if (file_exists("./draftfile/$draftFile")) {
-            unlink("./draftfile/$draftFile");
+        if($draftFile != "") {
+            if (file_exists("./draftfile/$draftFile")) {
+                unlink("./draftfile/$draftFile");
+            }    
         }
+        
     }
 
     public function uploadProgress($fieldname, $draftFileName)
@@ -372,9 +375,12 @@ class Draft_model extends MY_Model
 
     public function deleteProgress($draftFile)
     {
-        if (file_exists("./draftfile/$draftFile")) {
-            unlink("./draftfile/$draftFile");
+        if($draftFile != "") {
+            if (file_exists("./draftfile/$draftFile")) {
+                unlink("./draftfile/$draftFile");
+            }    
         }
+        
     }
 
 

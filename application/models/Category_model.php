@@ -18,7 +18,7 @@ class Category_model extends MY_Model
             [
                 'field' => 'category_note',
                 'label' => 'Category Note',
-                'rules' => 'trim|required|min_length[1]'
+                'rules' => 'trim|min_length[1]'
             ],
             [
                 'field' => 'date_open',

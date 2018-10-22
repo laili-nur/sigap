@@ -81,8 +81,7 @@
                   <div id="modal-edit">
                   <p class="font-weight-bold">NASKAH</p>
                   <!-- if upload ditampilkan di level tertentu -->
-                  <?php if($ceklevel=='editor' or $ceklevel == 'author' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
-                  <?php if($author_order==1): ?>
+                  <?php if($ceklevel=='editor' or ($ceklevel == 'author' and $author_order==1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
                   <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/edit_file', 'id="editform"'); ?>
                     <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                     <!-- .form-group -->
@@ -104,7 +103,6 @@
                       </div>
                       <!-- /.form-group -->
                   <?= form_close(); ?>
-                  <?php endif ?>
                   <?php endif ?>
                   <!-- endif upload ditampilkan di level tertentu -->
                   <?=(!empty($input->edit_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->edit_file.'" href="'.base_url('draftfile/'.$input->edit_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : 'No data' ?>
@@ -159,7 +157,7 @@
                 <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
-                <?php if($author_order==1): ?>
+                <?php if($author_order!=0 or $ceklevel!='author'): ?>
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-edit">Submit</button>
                 <?php endif ?>
                 <?= form_close(); ?>
