@@ -77,8 +77,6 @@ class Author_model extends MY_Model
                 'label' => 'User ID',
                 'rules' => 'trim|callback_unique_author_username'
             ]
-            
-            
         ];
 
         return $validationRules;

@@ -718,9 +718,10 @@
                     <tr>
                       <th scope="col" style="min-width: 150px;max-width: 150px">Kategori</th>
                       <th scope="col" style="min-width: 250px;max-width: 400px">Keterangan</th>
-                      <th scope="col" style="min-width: 120px;max-width: 150px">Tanggal Buka</th>
-                      <th scope="col" style="min-width: 120px;max-width: 150px">Tanggal tutup</th>
-                      <th scope="col" style="min-width: 100px;max-width: 100px">Sisa Waktu</th>
+                      <th scope="col" style="min-width: 120px;max-width: 150px">Tanggal Buka<br>(yyyy-mm-dd)</th>
+                      <th scope="col" style="min-width: 100px;max-width: 100px">Sisa Waktu Buka</th>
+                      <th scope="col" style="min-width: 120px;max-width: 150px">Tanggal Tutup<br>(yyyy-mm-dd)</th>
+                      <th scope="col" style="min-width: 100px;max-width: 100px">Sisa Waktu Tutup</th>
                       <th scope="col">Aksi</th>
                     </tr>
                   </thead>
@@ -740,12 +741,27 @@
                         <?= $category->date_open ?>
                       </td>
                       <td class="align-middle">
+                       <?php 
+                                $sisa_waktu_buka = ceil((strtotime($category->date_open)-strtotime(date('Y-m-d H:i:s')))/86400);
+                                 if($sisa_waktu_buka >= 1){
+                                   echo $sisa_waktu_buka.' hari';
+                                 }
+                                 else{
+                                     echo '<span style="color:green">Sudah dibuka</span>';
+                                 }
+                                 ?>
+                      </td>
+                      
+                      <td class="align-middle">
                         <?= $category->date_close ?>
                       </td>
                       <td class="align-middle">
+                          
                         <?php $range_open_now = round((strtotime($category->date_open)-strtotime(date('Y-m-d H:i:s')))/86400) ?>
+                          <!-- coba cek lagi gas mending round apa ceil -->
+                          
                         <?php
-                         $sisa_waktu = round((strtotime($category->date_close)-strtotime(date('Y-m-d H:i:s')))/86400);
+                         $sisa_waktu = ceil((strtotime($category->date_close)-strtotime(date('Y-m-d H:i:s')))/86400);
                          if($range_open_now <= 0){
                             if($sisa_waktu <= 0){
                              echo '<span style="color:red">Berakhir</span>';
@@ -755,14 +771,17 @@
                          }else{
                           echo '<span style="color:#F7C46C">Belum dibuka</span>';
                          }
-                         ?>
+                                 ?>
                       </td>
                       <td class="align-middle">
+                          
                         <?php if($category->category_status == 'y' and  $range_open_now <= 0): ?>
                         <button class="btn btn-success btn-xs" onclick="location.href='<?=base_url('draft/add/'.$category->category_id) ?>'">Daftar</button>
                         <?php else: ?>
                           <button type="button" class="btn btn-success btn-xs disabled" disabled="" >Daftar</button>
                         <?php endif ?>
+                        <?= ($category->category_status == 'y')? '
+                        <a class="btn btn-success btn-xs" href="'.base_url('draft/add/'.$category->category_id).'">Daftar</a>' : '' ?>
                       </td>
                     </tr>
                     <!-- /tr -->

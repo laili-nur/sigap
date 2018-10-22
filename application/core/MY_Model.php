@@ -196,6 +196,12 @@ class MY_Model extends CI_Model
         $this->db->order_by($column_name, $order);
         return $this;
     }
+    
+    public function orderByDesc($column_name, $order = 'desc')
+    {
+        $this->db->order_by($column_name, $order);
+        return $this;
+    }
 
     public function limit($limit)
     {
@@ -322,4 +328,7 @@ class MY_Model extends CI_Model
 
         return $id;
     }
+    
+
+    
 }

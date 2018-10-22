@@ -15,8 +15,8 @@ class Author extends Operator_Controller
 
 	public function index($page = null)
 	{
-        $authors     = $this->author->join('work_unit')->join('institute')->join('bank')->join('user')->orderBy('work_unit.work_unit_id')->orderBy('institute.institute_id')->orderBy('author_id')->paginate($page)->getAll();
-        $tot        = $this->author->join('work_unit')->join('institute')->join('bank')->join('user')->orderBy('work_unit.work_unit_id')->orderBy('institute.institute_id')->orderBy('author_id')->getAll();
+        $authors     = $this->author->join('work_unit')->join('institute')->join('bank')->join('user')->orderBy('work_unit.work_unit_id')->orderBy('institute.institute_id')->orderBy('author_nip')->paginate($page)->getAll();
+        $tot        = $this->author->join('work_unit')->join('institute')->join('bank')->join('user')->orderBy('work_unit.work_unit_id')->orderBy('institute.institute_id')->orderBy('author_nip')->getAll();
         $total     = count($tot);
         $pages    = $this->pages;
         $main_view  = 'author/index_author';
@@ -89,7 +89,7 @@ class Author extends Operator_Controller
 
         if (!empty($_FILES) && $_FILES['author_ktp']['size'] > 0) {
             $getextension=explode(".",$_FILES['author_ktp']['name']);            
-            $authorKTP  = str_replace(" ","_",$input->author_name . '_' . date('YmdHis').".".$getextension[1]) ; // author ktp name
+            $authorKTP  = str_replace(" ","_","KTP".'_'.$input->author_name . '_' . date('YmdHis').'.'.$getextension[1]) ; // author ktp name
             $upload = $this->author->uploadAuthorKTP('author_ktp', $authorKTP);
 
             if ($upload) {

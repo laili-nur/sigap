@@ -20,8 +20,12 @@
     </nav> 
   </header>
   <!-- /.page-title-bar -->
+  <pre>
+    <?php print_r($author_order) ?>
+  </pre>
 <!-- .page-section -->
 <div class="page-section">
+
   <!-- <div class="d-xl-none">
     <button class="btn btn-danger btn-floated" type="button" data-toggle="sidebar">
       <i class="fa fa-th-list"></i>

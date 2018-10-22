@@ -262,13 +262,15 @@
             <script></script>
             <!-- .form-group -->
             <div class="form-group">
-              <label for="author_ktp">KTP</label>
+              <label for="author_ktp">KTP
+                <abbr title="Required">*</abbr>
+              </label>
               <div class="custom-file">
                 <?= form_upload('author_ktp','','class="custom-file-input" onchange="preview_image(event)"') ?> 
                 <label class="custom-file-label" for="author_ktp">Choose file</label>
                 <div class="invalid-feedback">Field is required</div>
               </div>
-              <small class="form-text text-muted">Hanya menerima file bertype : jpg dan png</small>
+              <small class="form-text text-muted">Hanya menerima file bertype : jpg, png, jpeg, pdf</small>
               <?= fileFormError('author_ktp', '<p class="text-danger">', '</p>'); ?>
               <div class="col-8 offset-2 mt-3"><img width="100%" id="output_image"/></div>
             </div>

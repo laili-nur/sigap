@@ -15,8 +15,8 @@ class Reviewer extends Operator_Controller
 
 	public function index($page = null)
 	{
-        $reviewers     = $this->reviewer->join('faculty')->join('user')->orderBy('faculty.faculty_id')->orderBy('reviewer_id')->paginate($page)->getAll();
-        $tot        = $this->reviewer->join('faculty')->join('user')->orderBy('faculty.faculty_id')->orderBy('reviewer_id')->getAll();
+        $reviewers     = $this->reviewer->join('faculty')->join('user')->orderBy('faculty.faculty_name')->orderBy('reviewer_nip')->paginate($page)->getAll();
+        $tot        = $this->reviewer->join('faculty')->join('user')->orderBy('faculty.faculty_name')->orderBy('reviewer_nip')->getAll();
         $total     = count($tot);
         $pages    = $this->pages;
         $main_view  = 'reviewer/index_reviewer';
@@ -35,7 +35,6 @@ class Reviewer extends Operator_Controller
         }
 
         // untuk select2 tags sumber
-        $allexpert = $this->reviewer->select('expert')->getAll();
         if($allexpert!=null){
             foreach ($allexpert as $value) {
                 $pecah = explode(",",$value->expert);
@@ -46,7 +45,6 @@ class Reviewer extends Operator_Controller
         }else{
             $input->sumber = '';
         }
-        
         // untuk select2 tags pilihan
         $input->pilih = [];
 
@@ -63,7 +61,7 @@ class Reviewer extends Operator_Controller
         //gabungkan array masuk ke db
         $input->expert = implode(",",$input->expert);
         unset($input->sumber);
-        
+
         if ($this->reviewer->insert($input)) {
             $this->session->set_flashdata('success', 'Data saved');
         } else {

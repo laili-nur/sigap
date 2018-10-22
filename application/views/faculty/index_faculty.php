@@ -30,7 +30,7 @@
             <!-- .card-header-control -->
             <div class="card-header-control">
               <!-- .tombol add -->
-              <a href="<?=base_url('faculty/add') ?>" class="btn btn-primary btn-sm">Tambah Faklultas</a>
+              <a href="<?=base_url('faculty/add') ?>" class="btn btn-primary btn-sm">Tambah Fakultas</a>
               <!-- /.tombol add -->
             </div>
             <!-- /.card-header-control -->

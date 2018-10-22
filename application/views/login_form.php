@@ -72,7 +72,7 @@
       <!-- /.auth-form -->
       <!-- copyright -->
       <footer class="auth-footer">
-        <p><strong>last update : 22 oktober 2018</strong></p>
+        <p><strong>last update : 12 oktober 2018</strong></p>
         <p class="text-center"><a href="#">About</a></p>
       </footer>
     </main>

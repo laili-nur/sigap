@@ -15,7 +15,7 @@ class Category extends Operator_Controller
 //--index--
 	public function index($page = null)
 	{
-        $categories     = $this->category->orderBy('category_id')->getAll();
+        $categories     = $this->category->orderByDesc('date_close')->orderBy('date_open')->getAll();
         $total    = count($categories);
         $pages    = $this->pages;
         $main_view  = 'category/index_category';
@@ -153,7 +153,7 @@ class Category extends Operator_Controller
         $dateTimestamp2 = strtotime($date_open);
         
         if($dateTimestamp1 < $dateTimestamp2){
-            $this->form_validation->set_message('check_date', 'Date close can not be before date open');   
+            $this->form_validation->set_message('check_date', 'Deadline can not be set before opening date');   
             return FALSE;
         }
         return TRUE;

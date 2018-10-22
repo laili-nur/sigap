@@ -15,7 +15,7 @@ class Institute extends Operator_Controller
 //--index--
 	public function index($page = null)
 	{
-        $institutes     = $this->institute->orderBy('institute_id')->getAll();
+        $institutes     = $this->institute->orderBy('institute_name')->getAll();
         $total    = count($institutes);
         $pages    = $this->pages;
         $main_view  = 'institute/index_institute';

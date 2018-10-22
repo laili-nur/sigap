@@ -16,8 +16,8 @@ class User extends Admin_Controller
 
 	public function index($page = null)
 	{
-        $users      = $this->user->paginate($page)->orderBy('user_id')->getAll();
-        $tot = $this->user->orderBy('user_id')->getAll();
+        $users      = $this->user->paginate($page)->orderBy('level')->orderBy('username')->getAll();
+        $tot = $this->user->orderBy('level')->orderBy('username')->getAll();
         $total    = count($tot);
         $pages   = $this->pages;
         $main_view  = 'user/index_user';

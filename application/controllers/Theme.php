@@ -15,7 +15,7 @@ class Theme extends Operator_Controller
 //--index--
 	public function index($page = null)
 	{
-        $themes     = $this->theme->orderBy('theme_id')->getAll();
+        $themes     = $this->theme->orderBy('theme_name')->getAll();
         $total    = count($themes);
         $pages    = $this->pages;
         $main_view  = 'theme/index_theme';

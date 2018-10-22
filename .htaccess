@@ -10,5 +10,5 @@ RewriteCond $1 !^(index\.php|asset|authorktp|draftfile|cover|bookfile)
 RewriteCond %(REQUEST_FILENAME) !-f
 RewriteCond %(REQUEST_FILENAME) !-d
 RewriteRule ^(.*)$ ./index.php/$1 [L]
-php_value post_max_size 20M
-php_value upload_max_filesize 15M
+php_value post_max_size 100M
+php_value upload_max_filesize 100M

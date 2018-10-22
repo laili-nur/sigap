@@ -56,8 +56,10 @@
                         <th scope="col" class="pl-4">No</th>
                         <th scope="col">Jenis Kategori</th>
                         <th scope="col">Tahun</th>
-                        <th scope="col">Tanggal Buka</th>
-                        <th scope="col">Tanggal Tutup</th>
+                        <th scope="col">Tanggal Buka<br>(yyyy-mm-dd)</th>
+                        <th scope="col">Sisa Waktu Buka</th>
+                        <th scope="col">Tanggal Tutup<br>(yyyy-mm-dd)</th>
+                        <th scope="col">Sisa Waktu Tutup</th>
                         <th scope="col">Status</th>
                         <th style="width:100px; min-width:100px;"> &nbsp; </th>
                       </tr>
@@ -72,7 +74,28 @@
                         <td class="align-middle"><?= $category->category_name ?></td>
                         <td class="align-middle"><?= $category->category_year ?></td>
                         <td class="align-middle"><?= $category->date_open ?></td>
+                        
+                        <td class="align-middle"><?php 
+                                $sisa_waktu_buka = ceil((strtotime($category->date_open)-strtotime(date('Y-m-d H:i:s')))/86400);
+                                 if($sisa_waktu_buka >= 1){
+                                   echo $sisa_waktu_buka.' hari';
+                                 }
+                                 else{
+                                     echo '<span style="color:green">Sudah dibuka</span>';
+                                 }
+                                 ?>
+                        </td>
+                        
                         <td class="align-middle"><?= $category->date_close ?></td>
+                        
+                        <td class="align-middle"><?php $sisa_waktu_tutup = ceil((strtotime($category->date_close)-strtotime(date('Y-m-d H:i:s')))/86400);
+                                 if($sisa_waktu_tutup <= 0){
+                                  echo '<span style="color:red">Berakhir</span>';
+                                 }else{
+                                   echo $sisa_waktu_tutup.' hari';
+                                 } ?>
+                        </td>
+                        
                         <td class="align-middle"><?= $category->category_status == 'y' ? 'Active' : 'Not Active' ?></td>
                         <td class="align-middle text-right">
                           <a href="<?= base_url('category/edit/'.$category->category_id.'') ?>" class="btn btn-sm btn-secondary">
