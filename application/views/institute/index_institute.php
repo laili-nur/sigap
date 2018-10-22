@@ -108,7 +108,7 @@
                 <!-- /.table -->
               </div>
               <?php else: ?>
-                  <p class="text-center">Institute data were not available</p>
+                  <p class="text-center">Data tidak tersedia</p>
               <?php endif ?>
               <!-- /.table-responsive -->
           </div>

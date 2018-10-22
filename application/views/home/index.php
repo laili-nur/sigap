@@ -743,19 +743,26 @@
                         <?= $category->date_close ?>
                       </td>
                       <td class="align-middle">
+                        <?php $range_open_now = round((strtotime($category->date_open)-strtotime(date('Y-m-d H:i:s')))/86400) ?>
                         <?php
-                                 $sisa_waktu = round((strtotime($category->date_close)-strtotime(date('Y-m-d H:i:s')))/86400);
-                                 if($sisa_waktu <= 0){
-                                   echo '
-                        <span style="color:red">Berakhir</span>';
-                                 }else{
-                                   echo $sisa_waktu.' hari';
-                                 }
-                                 ?>
+                         $sisa_waktu = round((strtotime($category->date_close)-strtotime(date('Y-m-d H:i:s')))/86400);
+                         if($range_open_now <= 0){
+                            if($sisa_waktu <= 0){
+                             echo '<span style="color:red">Berakhir</span>';
+                           }else{
+                             echo $sisa_waktu.' hari';
+                           }
+                         }else{
+                          echo '<span style="color:#F7C46C">Belum dibuka</span>';
+                         }
+                         ?>
                       </td>
                       <td class="align-middle">
-                        <?= ($category->category_status == 'y')? '
-                        <a class="btn btn-success btn-xs" href="'.base_url('draft/add/'.$category->category_id).'">Daftar</a>' : '' ?>
+                        <?php if($category->category_status == 'y' and  $range_open_now <= 0): ?>
+                        <button class="btn btn-success btn-xs" onclick="location.href='<?=base_url('draft/add/'.$category->category_id) ?>'">Daftar</button>
+                        <?php else: ?>
+                          <button type="button" class="btn btn-success btn-xs disabled" disabled="" >Daftar</button>
+                        <?php endif ?>
                       </td>
                     </tr>
                     <!-- /tr -->

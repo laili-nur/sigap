@@ -262,9 +262,7 @@
             <script></script>
             <!-- .form-group -->
             <div class="form-group">
-              <label for="author_ktp">KTP
-                <abbr title="Required">*</abbr>
-              </label>
+              <label for="author_ktp">KTP</label>
               <div class="custom-file">
                 <?= form_upload('author_ktp','','class="custom-file-input" onchange="preview_image(event)"') ?> 
                 <label class="custom-file-label" for="author_ktp">Choose file</label>

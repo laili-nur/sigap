@@ -36,12 +36,17 @@ class Reviewer extends Operator_Controller
 
         // untuk select2 tags sumber
         $allexpert = $this->reviewer->select('expert')->getAll();
-        foreach ($allexpert as $value) {
-            $pecah = explode(",",$value->expert);
-            foreach ($pecah as $key => $value) {        
-                $input->sumber[$value] = $value;
+        if($allexpert!=null){
+            foreach ($allexpert as $value) {
+                $pecah = explode(",",$value->expert);
+                foreach ($pecah as $key => $value) {        
+                    $input->sumber[$value] = $value;
+                }
             }
+        }else{
+            $input->sumber = '';
         }
+        
         // untuk select2 tags pilihan
         $input->pilih = [];
 
@@ -57,7 +62,8 @@ class Reviewer extends Operator_Controller
 
         //gabungkan array masuk ke db
         $input->expert = implode(",",$input->expert);
-
+        unset($input->sumber);
+        
         if ($this->reviewer->insert($input)) {
             $this->session->set_flashdata('success', 'Data saved');
         } else {

@@ -547,6 +547,18 @@ class Draft extends Operator_Controller
             $input = (object) $this->input->post(null, true);
         }
 
+        if($this->draft->validate()){
+            if (!empty($_FILES) && $_FILES['draft_file']['size'] > 0) {
+                $getextension=explode(".",$_FILES['draft_file']['name']);            
+                $draftFileName  = str_replace(" ","_",$input->draft_title . '_' . date('YmdHis').".".$getextension[1]) ; // draft file name
+                $upload = $this->draft->uploadDraftfile('draft_file', $draftFileName);
+
+                if ($upload) {
+                    $input->draft_file =  "$draftFileName"; // Data for column "draft".
+                }
+            }  
+        }
+         
 
         if (!$this->draft->validate() || $this->form_validation->error_array()) {
             $pages     = $this->pages;
@@ -556,15 +568,7 @@ class Draft extends Operator_Controller
             return;
         }
 
-        if (!empty($_FILES) && $_FILES['draft_file']['size'] > 0) {
-            $getextension=explode(".",$_FILES['draft_file']['name']);            
-            $draftFileName  = str_replace(" ","_",$input->draft_title . '_' . date('YmdHis').".".$getextension[1]) ; // draft file name
-            $upload = $this->draft->uploadDraftfile('draft_file', $draftFileName);
-
-            if ($upload) {
-                $input->draft_file =  "$draftFileName"; // Data for column "draft".
-            }
-        }   
+        
         
         $draft_id = $this->draft->insert($input);
 
