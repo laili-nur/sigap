@@ -9,14 +9,14 @@ class User extends Admin_Controller
         $this->pages = 'user';
         //khusus admin
         $ceklevel = $this->session->userdata('level');
-        if ($ceklevel != 'admin_penerbitan' and $ceklevel != 'superadmin'){
+        if ($ceklevel != 'superadmin'){
             redirect('home');
         }
     }
 
 	public function index($page = null)
     {
-        $users      = $this->user->paginate($page)->orderBy('user_id')->orderBy('level')->orderBy('username')->getAll();
+        $users      = $this->user->paginate($page)->orderBy('level')->orderBy('username')->getAll();
         $total      = $this->user->orderBy('level')->orderBy('username')->count();
         $pages      = $this->pages;
         $main_view  = 'user/index_user';

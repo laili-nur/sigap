@@ -531,16 +531,15 @@ class Draft extends Operator_Controller
             $data = array('category_id' => $category);
             $cekcategory = $this->draft->getWhere($data, 'category');
             $sisa_waktu_buka = ceil((strtotime($cekcategory->date_open)-strtotime(date('Y-m-d H:i:s')))/86400);
-            $date_open = $cekcategory->date_open; 
             if (!$cekcategory || $cekcategory->category_status == 'n') {
                 $this->session->set_flashdata('error', 'Failed, Category not found');
                 redirect('home');
-            }elseif($sisa_waktu_buka > 1){
+            }elseif($sisa_waktu_buka >= 1){
                 $this->session->set_flashdata('error', 'Failed, Category not yet opened');
                 redirect('home');
             }
         }
-
+           
         //khusus admin dan author
         $ceklevel = $this->session->userdata('level');
         if ($ceklevel != 'author' and $ceklevel != 'admin_penerbitan' and $ceklevel != 'superadmin'){
@@ -641,6 +640,7 @@ class Draft extends Operator_Controller
         //pecah data csv jadi array
         $draft->nilai_reviewer1 = explode(",",$draft->nilai_reviewer1);
         $draft->nilai_reviewer2 = explode(",",$draft->nilai_reviewer2);
+        
         // $arrayapa = array($draft->nilai_reviewer1[0],$draft->nilai_reviewer1[1],$draft->nilai_reviewer1[2]);
         // $draft->apa = implode(",",$arrayapa);
         if (!$_POST) {
@@ -703,8 +703,7 @@ class Draft extends Operator_Controller
                 redirect('draft');
             };
         }
-
-
+        
         // If something wrong
         if (!$this->draft->validate() || $this->form_validation->error_array()) {
             $pages    = $this->pages;

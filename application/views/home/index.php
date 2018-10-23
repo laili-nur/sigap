@@ -757,8 +757,7 @@
                       </td>
                       <td class="align-middle">
                           
-                        <?php $range_open_now = round((strtotime($category->date_open)-strtotime(date('Y-m-d H:i:s')))/86400) ?>
-                          <!-- coba cek lagi gas mending round apa ceil -->
+                        <?php $range_open_now = ceil((strtotime($category->date_open)-strtotime(date('Y-m-d H:i:s')))/86400) ?>
                           
                         <?php
                          $sisa_waktu = ceil((strtotime($category->date_close)-strtotime(date('Y-m-d H:i:s')))/86400);
