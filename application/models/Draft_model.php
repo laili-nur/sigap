@@ -319,68 +319,6 @@ class Draft_model extends MY_Model
         ];
     }
    
-    public function uploadDraftfile($fieldname, $draftFileName)
-    {
-        $config = [
-            'upload_path'      => './draftfile/',
-            'file_name'        => $draftFileName,
-            'allowed_types'    => 'docx|doc',    // docx only
-            'max_size'         => 51200,     // 50MB
-            'overwrite'        => true,
-            'file_ext_tolower' => true,
-        ];
-
-        $this->load->library('upload', $config);
-        if ($this->upload->do_upload($fieldname)) {
-            // Upload OK, return uploaded file info.
-            return $this->upload->data();
-        } else {
-            // Add error to $_error_array
-            $this->form_validation->add_to_error_array($fieldname, $this->upload->display_errors('', ''));
-            return false;
-        }
-    }
-    
-    
-        public function uploadCoverfile($fieldname, $coverFileName)
-    {
-        $config = [
-            'upload_path'      => './coverfile/',
-            'file_name'        => $coverFileName,
-            'allowed_types'    => 'pdf|jpg|jpeg',    // image only
-            'max_size'         => 20480,     // 20MB
-            'overwrite'        => true,
-            'file_ext_tolower' => true,
-        ];
-
-        $this->load->library('upload', $config);
-        if ($this->upload->do_upload($fieldname)) {
-            // Upload OK, return uploaded file info.
-            return $this->upload->data();
-        } else {
-            // Add error to $_error_array
-            $this->form_validation->add_to_error_array($fieldname, $this->upload->display_errors('', ''));
-            return false;
-        }
-    }
-
-    public function deleteDraftfile($draftFile)
-    {
-        if($draftFile != "") {
-            if (file_exists("./draftfile/$draftFile")) {
-                unlink("./draftfile/$draftFile");
-            }    
-        }
-    }
-    
-        public function deleteCoverfile($coverFile)
-    {
-        if($coverFile != "") {
-            if (file_exists("./coverfile/$coverFile")) {
-                unlink("./coverfile/$coverFile");
-            }    
-        }
-    }
 
     public function uploadProgress($fieldname, $draftFileName)
     {
@@ -409,7 +347,7 @@ class Draft_model extends MY_Model
         $config = [
             'upload_path'      => './coverfile/',
             'file_name'        => $draftFileName,
-            'allowed_types'    => 'pdf|jpg|jpeg',    // image only
+            'allowed_types'    => 'pdf|jpg|jpeg|png',    // image only
             'max_size'         => 20480,     // 20MB
             'overwrite'        => true,
             'file_ext_tolower' => true,

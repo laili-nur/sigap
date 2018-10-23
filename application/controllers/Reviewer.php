@@ -14,16 +14,15 @@ class Reviewer extends Operator_Controller
     }
 
 	public function index($page = null)
-	{
+    {
         $reviewers     = $this->reviewer->join('faculty')->join('user')->orderBy('faculty.faculty_name')->orderBy('reviewer_nip')->paginate($page)->getAll();
-        $tot        = $this->reviewer->join('faculty')->join('user')->orderBy('faculty.faculty_name')->orderBy('reviewer_nip')->getAll();
-        $total     = count($tot);
+        $total        = $this->reviewer->join('faculty')->join('user')->orderBy('faculty.faculty_name')->orderBy('reviewer_nip')->count();
         $pages    = $this->pages;
         $main_view  = 'reviewer/index_reviewer';
         $pagination = $this->reviewer->makePagination(site_url('reviewer'), 2, $total);
 
-		$this->load->view('template', compact('pages', 'main_view', 'reviewers', 'pagination', 'total'));
-	}
+        $this->load->view('template', compact('pages', 'main_view', 'reviewers', 'pagination', 'total'));
+    }
         
         
         public function add()
@@ -35,6 +34,7 @@ class Reviewer extends Operator_Controller
         }
 
         // untuk select2 tags sumber
+        $allexpert = $this->reviewer->select('expert')->getAll();
         if($allexpert!=null){
             foreach ($allexpert as $value) {
                 $pecah = explode(",",$value->expert);
@@ -45,6 +45,7 @@ class Reviewer extends Operator_Controller
         }else{
             $input->sumber = '';
         }
+        
         // untuk select2 tags pilihan
         $input->pilih = [];
 
@@ -61,7 +62,7 @@ class Reviewer extends Operator_Controller
         //gabungkan array masuk ke db
         $input->expert = implode(",",$input->expert);
         unset($input->sumber);
-
+        
         if ($this->reviewer->insert($input)) {
             $this->session->set_flashdata('success', 'Data saved');
         } else {
@@ -127,7 +128,16 @@ class Reviewer extends Operator_Controller
             redirect('reviewer');
         }
 
+        $get_user = array();
+        $get_user = $this->reviewer->select(['user.user_id','user.level'])->join('user')->where('reviewer_id', $id)->get();
         if ($this->reviewer->where('reviewer_id', $id)->delete()) {
+            //set ke level author, jika akun reviewer dihapus
+             if($get_user->level =='author_reviewer'){
+                $data_level = array(
+                    'level' => 'author'
+                );
+                $this->reviewer->where('user_id',$get_user->user_id)->update($data_level, 'user');
+             }
 			$this->session->set_flashdata('success', 'Data deleted');
 		} else {
             $this->session->set_flashdata('error', 'Data failed to delete');

@@ -39,10 +39,10 @@
         <!-- .card -->
         <section class="card card-fluid">
             <!-- .card-header -->
-          <header class="card-header bg-light">
+          <header class="card-header ">
             <!-- .d-flex -->
             <div class="d-flex align-items-center">
-              <span class="mr-auto">Tabel Reviewer <span class="text-muted">(<?=$total ?>)</span></span>
+              <span class="mr-auto">Tabel Reviewer <span class="badge badge-info"><?=$total ?></span></span>
               <!-- .card-header-control -->
               <div class="card-header-control">
                 <!-- .tombol add -->
@@ -77,9 +77,9 @@
                 <thead>
                   <tr>
                     <th scope="col" class="pl-4">No</th>
-                    <th scope="col">User Name</th>
-                    <th scope="col">NIP</th>
                     <th scope="col">Nama</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">NIP</th>
                     <th scope="col">Fakultas</th> 
                     <th scope="col">Kepakaran</th> 
                     <th style="width:100px; min-width:100px;"> &nbsp; </th>
@@ -92,9 +92,9 @@
                   <!-- tr -->
                   <tr>
                     <td class="align-middle pl-4"><?= ++$i ?></td>
+                    <td class="align-middle"><?= $reviewer->reviewer_name ?></td>
                     <td class="align-middle"><?= $reviewer->username ?></td>
                     <td class="align-middle"><?= $reviewer->reviewer_nip ?></td>
-                    <td class="align-middle"><?= $reviewer->reviewer_name ?></td>
                     <td class="align-middle"><?= $reviewer->faculty_name  ?></td>
                     <td class="align-middle"><?= $reviewer->expert  ?></td>
                     <td class="align-middle text-right">
@@ -155,7 +155,7 @@
           </div>
 
               <!-- .card-footer -->
-            <footer class="card-footer bg-light">
+            <footer class="card-footer ">
               <div class="card-footer-content text-muted">
                   <a href="<?=base_url('faculty') ?>" class="btn btn-secondary mr-2">Fakultas</a>
               </div>

@@ -10,7 +10,8 @@
     <!-- .top-bar-brand -->
     <div class="top-bar-brand">
       <a href="<?php echo base_url(); ?>">
-        <img src="<?= base_url('') ?>" height="32" alt=""> SIGAP
+        <img src="<?= base_url('') ?>" height="32" alt=""> 
+        <span class="badge badge-light" style="font-size: 1.3em">SIGAP <small>v0.31</small></span>
       </a>
     </div>
     <!-- /.top-bar-brand -->
@@ -64,46 +65,6 @@
                       <i class="oi oi-people"></i>
                     </span>
                     <span class="tile-peek">Teams</span>
-                  </a>
-                </div>
-                <!-- /.dropdown-sheet-item -->
-                <!-- .dropdown-sheet-item -->
-                <div class="dropdown-sheet-item">
-                  <a href="#" class="tile-wrapper">
-                    <span class="tile tile-lg bg-teal">
-                      <i class="oi oi-fork"></i>
-                    </span>
-                    <span class="tile-peek">Projects</span>
-                  </a>
-                </div>
-                <!-- /.dropdown-sheet-item -->
-                <!-- .dropdown-sheet-item -->
-                <div class="dropdown-sheet-item">
-                  <a href="#" class="tile-wrapper">
-                    <span class="tile tile-lg bg-pink">
-                      <i class="fa fa-tasks"></i>
-                    </span>
-                    <span class="tile-peek">Tasks</span>
-                  </a>
-                </div>
-                <!-- /.dropdown-sheet-item -->
-                <!-- .dropdown-sheet-item -->
-                <div class="dropdown-sheet-item">
-                  <a href="#" class="tile-wrapper">
-                    <span class="tile tile-lg bg-yellow">
-                      <i class="oi oi-fire"></i>
-                    </span>
-                    <span class="tile-peek">Feeds</span>
-                  </a>
-                </div>
-                <!-- /.dropdown-sheet-item -->
-                <!-- .dropdown-sheet-item -->
-                <div class="dropdown-sheet-item">
-                  <a href="#" class="tile-wrapper">
-                    <span class="tile tile-lg bg-cyan">
-                      <i class="oi oi-document"></i>
-                    </span>
-                    <span class="tile-peek">Files</span>
                   </a>
                 </div>
                 <!-- /.dropdown-sheet-item -->

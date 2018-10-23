@@ -15,7 +15,7 @@ class Category extends Operator_Controller
 //--index--
 	public function index($page = null)
 	{
-        $categories     = $this->category->orderByDesc('date_close')->orderBy('date_open')->getAll();
+        $categories     = $this->category->orderBy('date_close','desc')->orderBy('date_open')->getAll();
         $total    = count($categories);
         $pages    = $this->pages;
         $main_view  = 'category/index_category';

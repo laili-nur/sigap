@@ -32,6 +32,7 @@
   <!-- /.page-title-bar -->
   <!-- .page-section -->
   <div class="page-section">
+    <div class="row">
     <div class="col-md-6">
       <!-- .card -->
     <section id="data-author" class="card">
@@ -45,9 +46,12 @@
             <?= isset($input->author_id) ? form_hidden('author_id', $input->author_id) : '' ?>
             <!-- .form-group -->
             <div class="form-group">
-              <label for="user_id">Pilih User ID untuk Login </label>
-              <?= form_dropdown('user_id', getDropdownList('user', ['user_id', 'username']), $input->user_id, 'id="user_id" class="form-control custom-select d-block"') ?>
-              <small id="tf1Help" class="form-text text-muted">Kosongkan pilihan jika tidak menetapkan User ID</small>
+              <label for="user_id">Pilih User ID untuk Login
+              <abbr title="Required">*</abbr>
+            </label>
+              <?= form_dropdown('user_id', getDropdownListAuthor('user', ['user_id', 'username']), $input->user_id, 'id="user_id" class="form-control custom-select d-block" required') ?>
+              <div class="invalid-feedback">Field is required</div>
+              <!-- <small id="tf1Help" class="form-text text-muted">Kosongkan pilihan jika tidak menetapkan User ID</small> -->
               <?= form_error('user_id') ?>
             </div>
             <!-- /.form-group -->
@@ -262,9 +266,7 @@
             <script></script>
             <!-- .form-group -->
             <div class="form-group">
-              <label for="author_ktp">KTP
-                <abbr title="Required">*</abbr>
-              </label>
+              <label for="author_ktp">KTP</label>
               <div class="custom-file">
                 <?= form_upload('author_ktp','','class="custom-file-input" onchange="preview_image(event)"') ?> 
                 <label class="custom-file-label" for="author_ktp">Choose file</label>
@@ -289,6 +291,7 @@
       <!-- /.card-body -->
     </section>
     <!-- /.card -->
+    </div>
     </div>
   </div>
   <!-- /.page-section -->

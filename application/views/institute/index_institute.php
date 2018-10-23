@@ -28,7 +28,7 @@
           <header class="card-header">
             <!-- .d-flex -->
             <div class="d-flex align-items-center">
-              <span class="mr-auto">Tabel Institusi</span>
+              <span class="mr-auto">Institusi <span class="badge badge-info"><?=$total ?></span></span>
               <!-- .card-header-control -->
               <div class="card-header-control">
                 <!-- .tombol add -->
@@ -108,7 +108,7 @@
                 <!-- /.table -->
               </div>
               <?php else: ?>
-                  <p class="text-center">Institute data were not available</p>
+                  <p class="text-center">Data tidak tersedia</p>
               <?php endif ?>
               <!-- /.table-responsive -->
           </div>

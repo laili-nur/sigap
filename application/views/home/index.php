@@ -718,9 +718,9 @@
                     <tr>
                       <th scope="col" style="min-width: 150px;max-width: 150px">Kategori</th>
                       <th scope="col" style="min-width: 250px;max-width: 400px">Keterangan</th>
-                      <th scope="col" style="min-width: 120px;max-width: 150px">Tanggal Buka<br>(yyyy-mm-dd)</th>
+                      <th scope="col" style="min-width: 120px;max-width: 150px">Tanggal Buka</th>
                       <th scope="col" style="min-width: 100px;max-width: 100px">Sisa Waktu Buka</th>
-                      <th scope="col" style="min-width: 120px;max-width: 150px">Tanggal Tutup<br>(yyyy-mm-dd)</th>
+                      <th scope="col" style="min-width: 120px;max-width: 150px">Tanggal Tutup</th>
                       <th scope="col" style="min-width: 100px;max-width: 100px">Sisa Waktu Tutup</th>
                       <th scope="col">Aksi</th>
                     </tr>
@@ -738,7 +738,7 @@
                         <?= $category->category_note ?>
                       </td>
                       <td class="align-middle">
-                        <?= $category->date_open ?>
+                        <?= konversiTanggal($category->date_open,'dateonly') ?>
                       </td>
                       <td class="align-middle">
                        <?php 
@@ -753,7 +753,7 @@
                       </td>
                       
                       <td class="align-middle">
-                        <?= $category->date_close ?>
+                        <?= konversiTanggal($category->date_close,'dateonly') ?>
                       </td>
                       <td class="align-middle">
                           
@@ -778,10 +778,8 @@
                         <?php if($category->category_status == 'y' and  $range_open_now <= 0): ?>
                         <button class="btn btn-success btn-xs" onclick="location.href='<?=base_url('draft/add/'.$category->category_id) ?>'">Daftar</button>
                         <?php else: ?>
-                          <button type="button" class="btn btn-success btn-xs disabled" disabled="" >Daftar</button>
+                          <button type="button" class="btn btn-success btn-xs disabled" disabled="" style="cursor:not-allowed">Daftar</button>
                         <?php endif ?>
-                        <?= ($category->category_status == 'y')? '
-                        <a class="btn btn-success btn-xs" href="'.base_url('draft/add/'.$category->category_id).'">Daftar</a>' : '' ?>
                       </td>
                     </tr>
                     <!-- /tr -->

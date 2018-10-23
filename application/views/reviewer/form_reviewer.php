@@ -20,6 +20,7 @@
   <!-- /.page-title-bar -->
 <!-- .page-section -->
 <div class="page-section">
+  <div class="row">
   <div class="col-md-6">
     <!-- .card -->
   <section id="data-author" class="card">
@@ -33,10 +34,11 @@
           <?= isset($input->reviewer_id) ? form_hidden('reviewer_id', $input->reviewer_id) : '' ?>
           <!-- .form-group -->
           <div class="form-group">
-            <label for="user_id">User ID
+            <label for="user_id">Pilih User ID untuk Login
               <abbr title="Required">*</abbr>
             </label>
-            <?= form_dropdown('user_id', getDropdownList('user', ['user_id', 'username']), $input->user_id, 'id="user_id" class="form-control custom-select d-block" required') ?>
+            <?= form_dropdown('user_id', getDropdownListReviewer('user', ['user_id', 'username']), $input->user_id, 'id="user_id" class="form-control custom-select d-block" required') ?>
+
             <div class="invalid-feedback">Field is required</div>
             <?= form_error('user_id') ?>
           </div>
@@ -110,6 +112,7 @@
   </section>
   <!-- /.card --> 
   </div>
+  </div>
 </div>
 <!-- /.page-section -->
 
@@ -127,7 +130,7 @@
       $("#expert").select2({
         tags:true,
         placeholder: '-- Multiple --',
-        tokenSeparators: [',', ' ']
+        tokenSeparators: [',']
       });
 
     })

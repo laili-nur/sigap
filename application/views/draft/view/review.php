@@ -30,13 +30,15 @@
           <?php if($reviewer_order=='0' or $reviewer_order!='1'): ?>
           <div class="list-group-item justify-content-between">
             <span class="text-muted">Deadline reviewer 1</span>
-            <strong><?= konversiTanggal($input->review1_deadline) ?></strong>
+            <?php $sisa_waktu_rev1 = round((strtotime($input->review1_deadline)-strtotime(date('Y-m-d H:i:s')))/86400); ?>
+            <strong><?= ( $sisa_waktu_rev1 <= 0 and $input->review1_flag =='')? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">'.konversiTanggal($input->review1_deadline).'</span>' : konversiTanggal($input->review1_deadline) ?></strong>
           </div>
           <?php endif ?>
           <?php if($reviewer_order=='1' or $reviewer_order!='0'): ?>
           <div class="list-group-item justify-content-between">
             <span class="text-muted">Deadline reviewer 2</span>
-            <strong><?= konversiTanggal($input->review2_deadline) ?></strong>
+            <?php $sisa_waktu_rev2 = round((strtotime($input->review2_deadline)-strtotime(date('Y-m-d H:i:s')))/86400); ?>
+            <strong><?= ( $sisa_waktu_rev2 <= 0 and $input->review2_flag =='')? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">'.konversiTanggal($input->review2_deadline).'</span>' : konversiTanggal($input->review2_deadline) ?></strong>
           </div>
           <?php endif ?>
           <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer' ): ?>
@@ -91,7 +93,7 @@
     <div class="card-body">
       <div class="el-example ">
         <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
-        <button class="btn btn-secondary" style="width:50px" data-toggle="modal" data-target="#review_aksi"><i class="fa fa-thumbs-up"></i></button>
+        <button title="Aksi admin" class="btn btn-secondary" style="width:50px" data-toggle="modal" data-target="#review_aksi"><i class="fa fa-thumbs-up"></i></button>
         <!-- <button class="btn btn-danger" style="width:50px"><i class="fa fa-times"></i></button> -->
         <?php endif ?>
         <?php if($reviewer_order=='0' or $reviewer_order!='1'): ?>       

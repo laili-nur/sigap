@@ -26,7 +26,7 @@
         <header class="card-header">
           <!-- .d-flex -->
           <div class="d-flex align-items-center">
-            <span class="mr-auto">Tabel Fakultas</span>
+            <span class="mr-auto">Fakultas <span class="badge badge-info"><?=$total ?></span></span>
             <!-- .card-header-control -->
             <div class="card-header-control">
               <!-- .tombol add -->

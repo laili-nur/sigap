@@ -15,15 +15,14 @@ class User extends Admin_Controller
     }
 
 	public function index($page = null)
-	{
-        $users      = $this->user->paginate($page)->orderBy('level')->orderBy('username')->getAll();
-        $tot = $this->user->orderBy('level')->orderBy('username')->getAll();
-        $total    = count($tot);
-        $pages   = $this->pages;
+    {
+        $users      = $this->user->paginate($page)->orderBy('user_id')->orderBy('level')->orderBy('username')->getAll();
+        $total      = $this->user->orderBy('level')->orderBy('username')->count();
+        $pages      = $this->pages;
         $main_view  = 'user/index_user';
         $pagination = $this->user->makePagination(site_url('user'), 2, $total);
-		$this->load->view('template', compact('pagination','pages', 'main_view', 'users', 'total'));
-	}
+        $this->load->view('template', compact('pagination','pages', 'main_view', 'users', 'total'));
+    }
  
 //--add--        
         	public function add()

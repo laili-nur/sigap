@@ -39,7 +39,7 @@
         <!-- .card -->
         <section class="card card-fluid">
         <!-- .card-header -->
-          <header class="card-header bg-light">
+          <header class="card-header">
             <!-- .d-flex -->
             <div class="d-flex align-items-center">
               <span class="mr-auto">Tabel Buku <span class="badge badge-info"><?=$total ?></span></span>
@@ -101,11 +101,11 @@
                     <td class="align-middle"><?= $book->is_reprint == 'y' ? 'Cetak Ulang' : 'Baru' ?></td>
                     <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
                     <td class="align-middle text-right">
-                      <a href="<?= base_url('book/edit/'.$book->book_id.'') ?>" class="btn btn-sm btn-secondary">
+                      <a title="Edit" href="<?= base_url('book/edit/'.$book->book_id.'') ?>" class="btn btn-sm btn-secondary">
                         <i class="fa fa-pencil-alt"></i>
                         <span class="sr-only">Edit</span>
                       </a>
-                      <button type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modalhapus-<?= $book->book_id ?>"><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
+                      <button title="Delete" type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modalhapus-<?= $book->book_id ?>"><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
                     </td>
                     <?php endif ?>
                   </tr>

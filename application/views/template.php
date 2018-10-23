@@ -16,7 +16,8 @@
     <script src="<?= base_url('assets/vendor/pace/pace.min.js')?>"></script>
     <!-- BEGIN BASE STYLES -->
     <link rel="stylesheet" href="<?= base_url('assets/vendor/pace/pace.min.css')?>">
-    <link rel="stylesheet" href="<?= base_url('assets/vendor/bootstrap/css/bootstrap.min.css')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/vendor/bootstrap/css/bootstrap.css')?>">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">  -->
     <link rel="stylesheet" href="<?= base_url('assets/vendor/open-iconic/css/open-iconic-bootstrap.min.css')?>">
     <link rel="stylesheet" href="<?= base_url('assets/vendor/font-awesome/css/fontawesome-all.min.css')?>">
     <!-- END BASE STYLES -->
@@ -32,6 +33,7 @@
     <!-- END THEME STYLES -->
     <!-- JS -->
     <script src="<?= base_url('assets/vendor/jquery/jquery.min.js'); ?>"></script>
+    
 </head>
 <body>
     <!-- .app -->

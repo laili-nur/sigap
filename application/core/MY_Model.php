@@ -112,6 +112,12 @@ class MY_Model extends CI_Model
         return $this;
     }
 
+    public function orWhereNot($column, $condition)
+    {
+        $this->db->or_where($column.' !=', $condition);
+        return $this;
+    }
+
     public function whereRelation($table_middle, $condition, $table_from = "")
     {
         $table = $this->checkTable($table_from);
@@ -192,12 +198,6 @@ class MY_Model extends CI_Model
     }
 
     public function orderBy($column_name, $order = 'asc')
-    {
-        $this->db->order_by($column_name, $order);
-        return $this;
-    }
-    
-    public function orderByDesc($column_name, $order = 'desc')
     {
         $this->db->order_by($column_name, $order);
         return $this;
@@ -328,7 +328,4 @@ class MY_Model extends CI_Model
 
         return $id;
     }
-    
-
-    
 }

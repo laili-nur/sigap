@@ -6,7 +6,7 @@
       <!-- .table-responsive -->
         <div class="table-responsive">
           <!-- .table -->
-          <table class="table table-striped table-bordered mb-0">
+          <table class="table table-striped table-bordered mb-0 nowrap">
             <!-- tbody -->
             <tbody>
               <!-- tr -->

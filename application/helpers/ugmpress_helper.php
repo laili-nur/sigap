@@ -1,10 +1,14 @@
 <?php
-function konversiTanggal($input=null){
+function konversiTanggal($input=null,$opsi=''){
     if($input==null || $input=='0000-00-00 00:00:00'){
         return "-";
     }
     $timeStamp = $input;
-    return $timeStamp = date( "d/m/Y H:i:s", strtotime($timeStamp));
+    if(!$opsi){
+        return $timeStamp = date( "d/m/Y H:i:s", strtotime($timeStamp));
+    }elseif($opsi=='dateonly'){
+        return $timeStamp = date( "d/m/Y", strtotime($timeStamp));
+    }else{}
 }
 
 
@@ -19,6 +23,38 @@ function konversiID($table,$vars,$id)
         return $query->row();
     }
     
+}
+
+// Get list of editor
+function getDropdownListReviewer($table, $columns)
+{
+    $CI =& get_instance();
+    $query = $CI->db->select($columns)->where('level','reviewer')->or_where('level','author_reviewer')->from($table)->get();
+
+    if ($query->num_rows() >= 1) {
+        $options1 = ['' => '-- Choose --'];
+        $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
+        $options = $options1 + $options2;
+        return $options;
+    }
+
+    return $options = ['' => '- Empty -'];
+}
+
+// Get list of editor
+function getDropdownListAuthor($table, $columns)
+{
+    $CI =& get_instance();
+    $query = $CI->db->select($columns)->where('level','author')->or_where('level','author_reviewer')->from($table)->get();
+
+    if ($query->num_rows() >= 1) {
+        $options1 = ['' => '-- Choose --'];
+        $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
+        $options = $options1 + $options2;
+        return $options;
+    }
+
+    return $options = ['' => '- Empty -'];
 }
 
 // Get list of editor
@@ -85,20 +121,6 @@ function getDropdownList($table, $columns)
     return $options = ['' => '- Empty -'];
 }
 
-function getDropdownReviewerList($table, $columns)
-{
-    $CI =& get_instance();
-    $query = $CI->db->select($columns)->from($table)->where('level', 'reviewer')->get();
-
-    if ($query->num_rows() >= 1) {
-        $options1 = ['' => '- Choose -'];
-        $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
-        $options = $options1 + $options2;
-        return $options;
-    }
-
-    return $options = ['' => '- Choose -'];
-}
 
 function getDropdownBankList($table, $columns)
 {

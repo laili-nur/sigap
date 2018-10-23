@@ -61,7 +61,7 @@
     <div class="card-body">
       <div class="el-example">
         <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
-        <button class="btn btn-secondary" style="width:50px" data-toggle="modal" data-target="#edit_aksi"><i class="fa fa-thumbs-up"></i></button>
+        <button title="Aksi admin" class="btn btn-secondary" style="width:50px" data-toggle="modal" data-target="#edit_aksi"><i class="fa fa-thumbs-up"></i></button>
         <?php endif ?>   
         <button type="button" class="btn <?=($input->edit_notes!='' || $input->edit_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#edit">Tanggapan Editorial <?=($input->edit_notes!='' || $input->edit_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
       </div>
@@ -206,7 +206,7 @@
                     <!-- .table-responsive -->
                       <div class="table-responsive">
                         <!-- .table -->
-                        <table class="table table-bordered mb-0">
+                        <table class="table table-bordered mb-0 nowrap">
                           <!-- tbody -->
                           <tbody>
                             <?php foreach($editors as $editor): ?>
@@ -214,7 +214,7 @@
                             <tr>
                               <td class="align-middle"><?= $editor->username ?></td>
                               <td class="align-middle text-right" width="20px">
-                                <button href="javascript" class="btn btn-sm btn-danger delete-editor" data="<?= $editor->responsibility_id ?>">
+                                <button data-toggle="tooltip" data-placement="right" title="Hapus" href="javascript" class="btn btn-sm btn-danger delete-editor" data="<?= $editor->responsibility_id ?>">
                                   <i class="fa fa-trash-alt"></i>
                                   <span class="sr-only">Delete</span>
                                 </button>

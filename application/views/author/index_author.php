@@ -39,7 +39,7 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
       <!-- .card -->
       <section class="card card-fluid">
         <!-- .card-header -->
-        <header class="card-header bg-light">
+        <header class="card-header ">
           <!-- .d-flex -->
           <div class="d-flex align-items-center">
             <span class="mr-auto">Tabel Penulis <span class="badge badge-info"><?=$total ?></span></span>
@@ -78,8 +78,9 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
                 <thead>
                   <tr>
                     <th scope="col" class="pl-4">No</th>
-                    <th scope="col">NIP</th>
                     <th scope="col">Nama</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">NIP</th>
                     <th scope="col">Unit Kerja</th>
                     <th scope="col">Institusi</th>
                     <th style="width:100px; min-width:100px;"> &nbsp; </th>
@@ -92,20 +93,21 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
                     <!-- tr -->
                     <tr>
                       <td class="align-middle pl-4"><?= ++$i ?></td>
-                      <td class="align-middle"><?= $author->author_nip ?></td>
                       <td class="align-middle"><a href="<?= base_url('author/profil/'.$author->author_id) ?>"><?= $author->author_degree_front ?> <?= ucwords($author->author_name) ?> <?= $author->author_degree_back ?></a></td>
+                      <td class="align-middle"><?= $author->username ?></td>
+                      <td class="align-middle"><?= $author->author_nip ?></td>
                       <td class="align-middle"><?= $author->work_unit_name ?></td>
                       <td class="align-middle"><?= $author->institute_name ?></td>
                       <td class="align-middle text-right">
-                        <a href="<?= base_url('author/copyToReviewer/' . $author->user_id . '/' . $author->author_nip . '/' . $author->author_name) ?>" class="btn btn-sm btn-secondary">
+                        <button title="Jadikan Reviewer" onclick="location.href='<?= base_url('author/copyToReviewer/' . $author->user_id . '/' . $author->author_nip . '/' . $author->author_name) ?>'"  class="btn btn-sm btn-primary">
                           <i class="fa fa-user-plus"></i>
                           <span class="sr-only">Jadikan reviewer</span>
-                        </a>
-                        <a href="<?= base_url('author/edit/'.$author->author_id.'') ?>" class="btn btn-sm btn-secondary">
+                        </button>
+                        <a title="Edit" href="<?= base_url('author/edit/'.$author->author_id.'') ?>" class="btn btn-sm btn-secondary">
                           <i class="fa fa-pencil-alt"></i>
                           <span class="sr-only">Edit</span>
                         </a>
-                        <button type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modalhapus-<?= $author->author_id ?>"><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
+                        <button title="Delete" type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modalhapus-<?= $author->author_id ?>"><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
                       </td>
                     </tr>
                     <!-- /tr -->
@@ -158,7 +160,7 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
             </div>
           </div>
           <!-- .card-footer -->
-          <footer class="card-footer bg-light">
+          <footer class="card-footer ">
             <div class="card-footer-content">
               <a href="<?=base_url('workunit') ?>" class="btn btn-secondary mr-2">Unit Kerja</a>
               <a href="<?=base_url('institute') ?>" class="btn btn-secondary mr-2">Institusi</a>

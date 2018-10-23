@@ -61,7 +61,7 @@
     <div class="card-body">
       <div class="el-example">
         <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
-        <button class="btn btn-secondary" style="width:50px" data-toggle="modal" data-target="#layout_aksi"><i class="fa fa-thumbs-up"></i></button>
+        <button title="Aksi admin" class="btn btn-secondary" style="width:50px" data-toggle="modal" data-target="#layout_aksi"><i class="fa fa-thumbs-up"></i></button>
         <?php endif ?>
         <button type="button" class="btn <?=($input->layout_notes!='' || $input->layout_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#layout">Tanggapan Layout <?=($input->layout_notes!='' || $input->layout_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
         <button type="button" class="btn <?=($input->cover_notes!='' || $input->cover_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#cover">Tanggapan Cover <?=($input->cover_notes!='' || $input->cover_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
@@ -186,14 +186,14 @@
               <!-- .modal-body -->
               <div class="modal-body">
                 <div id="modal-cover">
-                <p class="font-weight-bold">NASKAH</p>
+                <p class="font-weight-bold">COVER</p>
                 <!-- if upload ditampilkan di level tertentu -->
-                <?php if($ceklevel=='layout' or ($ceklevel == 'author' and $author_order==1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+                <?php if($ceklevel=='layouter' or ($ceklevel == 'author' and $author_order==1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
                 <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/cover_file', 'id="coverform"'); ?>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                   <!-- .form-group -->
                     <div class="form-group">
-                      <label for="cover_file">File Naskah</label>
+                      <label for="cover_file">File Cover</label>
                       <!-- .input-group -->
                       <div class="input-group input-group-alt">
                         <div class="custom-file">
@@ -212,7 +212,39 @@
                 <?= form_close(); ?>
                 <?php endif ?>
                 <!-- endif upload ditampilkan di level tertentu -->
-                <?=(!empty($input->cover_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->cover_file.'" href="'.base_url('draftfile/'.$input->cover_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : 'No data' ?>
+                <?php if(!empty($input->cover_file)):?>
+                  <div class="row">
+                <!-- grid column -->
+                  <div class="col-12 col-sm-4">
+                    <!-- .card -->
+                    <section class="card card-figure">
+                      <!-- .card-figure -->
+                      <figure class="figure">
+                        <!-- .figure-img -->
+                        <div class="figure-img">
+                          <img class="img-fluid" src="<?=base_url('draft/download/'.$input->cover_file) ?>" alt="Card image cap">
+                          <div class="figure-action">
+                            <a href="<?=base_url('draft/download/'.urlencode($input->cover_file)) ?>" class="btn btn-block btn-sm btn-primary">Download Cover</a>
+                          </div>
+                        </div>
+                        <!-- /.figure-img -->
+                        <!-- .figure-caption -->
+                        <figcaption class="figure-caption">
+                          <h6 class="figure-title">
+                            <a href="<?=base_url('draft/download/'.urlencode($input->cover_file)) ?>"><?=$input->cover_file ?></a>
+                          </h6>
+                        </figcaption>
+                        <!-- /.figure-caption -->
+                      </figure>
+                      <!-- /.card-figure -->
+                    </section>
+                    <!-- /.card -->
+                  </div>
+                  <!-- /grid column -->
+                  </div>
+                  <?php else: ?>
+                    <p>no data</p>
+                <?php endif ?>
                 </div>
                 <hr class="my-3">
                 <!-- .form -->
@@ -299,6 +331,7 @@
                       <div class="form-group" id="form-layouter">
                         <label for="sel1">Layouter</label>
                         <?= form_dropdown('layouter', getDropdownListLayouter('user', ['user_id', 'username']), '', 'id="pilih_layouter" class="form-control custom-select d-block"') ?>
+                        <small class="form-text text-muted">1 untuk layouter dan 1 untuk desain cover</small>
                       </div>
                       <!-- /.form-group -->
                   </fieldset>
@@ -313,7 +346,7 @@
                     <!-- .table-responsive -->
                       <div class="table-responsive">
                         <!-- .table -->
-                        <table class="table table-bordered mb-0">
+                        <table class="table table-bordered mb-0 nowrap">
                           <!-- tbody -->
                           <tbody>
                             <?php foreach($layouters as $layouter): ?>
@@ -321,7 +354,7 @@
                             <tr>
                               <td class="align-middle"><?= $layouter->username ?></td>
                               <td class="align-middle text-right" width="20px">
-                                <button href="javascript" class="btn btn-sm btn-danger delete-layouter" data="<?= $layouter->responsibility_id ?>">
+                                <button data-toggle="tooltip" data-placement="right" title="Hapus" href="javascript" class="btn btn-sm btn-danger delete-layouter" data="<?= $layouter->responsibility_id ?>">
                                   <i class="fa fa-trash-alt"></i>
                                   <span class="sr-only">Delete</span>
                                 </button>
@@ -553,7 +586,8 @@
           return false;
       });
 
-      $('#coverform').submit(function() {
+      $('#coverform').submit(function(e) {
+        e.preventDefault();
         var $this = $('#btn-upload-cover');
         $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Uploading ");
         let id=$('[name=draft_id]').val();

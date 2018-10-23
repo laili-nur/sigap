@@ -87,15 +87,18 @@ class Author extends Operator_Controller
             $input = (object) $this->input->post(null, true);
         }
 
-        if (!empty($_FILES) && $_FILES['author_ktp']['size'] > 0) {
-            $getextension=explode(".",$_FILES['author_ktp']['name']);            
-            $authorKTP  = str_replace(" ","_","KTP".'_'.$input->author_name . '_' . date('YmdHis').'.'.$getextension[1]) ; // author ktp name
-            $upload = $this->author->uploadAuthorKTP('author_ktp', $authorKTP);
+        if (!$this->author->validate()){
+            if (!empty($_FILES) && $_FILES['author_ktp']['size'] > 0) {
+                $getextension=explode(".",$_FILES['author_ktp']['name']);            
+                $authorKTP  = str_replace(" ","_","KTP".'_'.$input->author_name . '_' . date('YmdHis').'.'.$getextension[1]) ; // author ktp name
+                $upload = $this->author->uploadAuthorKTP('author_ktp', $authorKTP);
 
-            if ($upload) {
-                $input->author_ktp =  "$authorKTP"; // Data for column "author".
+                if ($upload) {
+                    $input->author_ktp =  "$authorKTP"; // Data for column "author".
+                }
             }
         }
+        
 
         if (!$this->author->validate() || $this->form_validation->error_array()) {
             $pages     = $this->pages;
@@ -171,15 +174,26 @@ class Author extends Operator_Controller
             $this->session->set_flashdata('warning', 'Author data were not available');
             redirect('author');
         }
-
+        //
+        $get_user = array();
+        $get_user = $this->author->select(['user.user_id','user.level'])->join('user')->where('author_id', $id)->get();
         if ($this->author->where('author_id', $id)->delete()) {
             //deletektp
-            $this->author->deleteAuthorKTP($author->author_ktp);
+            if($author->author_ktp != ''){
+                $this->author->deleteAuthorKTP($author->author_ktp);
+            }
+            //set ke level reviewer, jika akun author dihapus
+             if($get_user->level =='author_reviewer'){
+                $data_level = array(
+                    'level' => 'reviewer'
+                );
+                $this->author->where('user_id',$get_user->user_id)->update($data_level, 'user');
+             }
+
 			$this->session->set_flashdata('success', 'Data deleted');
 		} else {
             $this->session->set_flashdata('error', 'Data failed to delete');
         }
-
 		redirect('author');
 	}
 

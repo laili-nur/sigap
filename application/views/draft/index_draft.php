@@ -38,7 +38,7 @@
       <!-- .card -->
       <section class="card card-fluid">
         <!-- .card-header -->
-        <header class="card-header bg-light">
+        <header class="card-header">
           <!-- .d-flex -->
           <div class="d-flex align-items-center">
             <span class="mr-auto">Tabel Draft <span class="badge badge-info"><?=$total ?></span></span>
@@ -133,6 +133,9 @@
                   <th scope="col">Judul</th>
                   <th scope="col">Tanggal Masuk</th>
                   <th scope="col">Status</th>
+                  <?php if ($ceklevel == 'reviewer'): ?>
+                  <th scope="col">Sisa Waktu</th>
+                  <?php endif ?>
                   <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
                   <th style="width:100px; min-width:100px;"> &nbsp; </th>
                   <?php else: ?>
@@ -156,29 +159,13 @@
                   <td class="align-middle pl-4"><?= ++$i ?></td>
                   <td class="align-middle"><?= $draft->category_name ?></td>
                   <?php if($ceklevel!='reviewer'): ?>
-                  <td class="align-middle"><?= $draft->author[0]->author_name ?></td>
+                  <td class="align-middle"><?= isset($draft->author[0]->author_name)?$draft->author[0]->author_name:'-' ?></td>
                   <?php endif ?>
-                  <td class="align-middle">
-                    <a href="<?= base_url('draft/view/'.$draft->draft_id) ?>"><?= $draft->draft_title ?></a>
-                  </td>
+                  <td class="align-middle"><strong><?= $draft->draft_title ?></strong></td>
                   <td class="align-middle"><?= $draft->entry_date ?></td>                  
                   <td class="align-middle">
                     <?php 
                     if ($ceklevel == 'reviewer'){
-                      // if($draft->rev == 0){
-                      //   if($draft->review1_flag!=''){
-                      //     echo '<span class="badge badge-success">Sudah direview</span>';
-                      //   }else{
-                      //     echo '<span class="badge badge-danger">Belum direview</span>';
-                      //   }
-                      // }elseif($draft->rev == 1){
-                      //   if($draft->review2_flag!=''){
-                      //     echo '<span class="badge badge-success">Sudah direview</span>';
-                      //   }else{
-                      //     echo '<span class="badge badge-danger">Belum direview</span>';
-                      //   }
-                      // }
-
                       if($draft->review_flag!=''){
                           echo '<span class="badge badge-success">Sudah direview</span>';
                         }else{
@@ -189,27 +176,45 @@
                     } 
                     ?>                      
                   </td>
+                  <?php if ($ceklevel == 'reviewer'): ?>
+                  <td class="align-middle">
+                    <?php
+                     $sisa_waktu = round((strtotime($draft->deadline)-strtotime(date('Y-m-d H:i:s')))/86400);
+                     if($sisa_waktu <= 0 and $draft->review_flag ==''){
+                       echo '<span class="font-weight-bold" style="color:red" data-toggle="tooltip" data-placement="bottom" title="Hubungi staff untuk membuka draft ini"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>';
+                     }elseif($sisa_waktu <= 0 and $draft->review_flag !=''){
+                        echo '-';
+                     }else{
+                       echo $sisa_waktu.' hari';
+                     }
+                     ?>
+                  </td>
+                  <?php else: ?>
+                  <!-- selain reviewer, di set default -->
+                  <?php $sisa_waktu = 1; $draft->review_flag=true; ?>                  
+                  <?php endif ?>
                   <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
                   <td class="align-middle text-right">
-                    <a href="<?= base_url('draft/view/'.$draft->draft_id.'') ?>" class="btn btn-sm btn-secondary">
+                    <a title="View" href="<?= base_url('draft/view/'.$draft->draft_id.'') ?>" class="btn btn-sm btn-secondary">
                       <i class="fa fa-eye"></i> View
                       <span class="sr-only">View</span>
                     </a>
-                    <a href="<?= base_url('draft/edit/'.$draft->draft_id.'') ?>" class="btn btn-sm btn-secondary">
+                    <a title="Edit" href="<?= base_url('draft/edit/'.$draft->draft_id.'') ?>" class="btn btn-sm btn-secondary">
                       <i class="fa fa-pencil-alt"></i>
                       <span class="sr-only">Edit</span>
                     </a>
-                    <button type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modalhapus-<?= $draft->draft_id ?>"><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
+                    <button title="Delete" type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modalhapus-<?= $draft->draft_id ?>"><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
                   </td>
                   <?php else: ?>
                   <td class="align-middle">
-                    <a href="<?= base_url('draft/view/'.$draft->draft_id.'') ?>" class="btn btn-sm btn-secondary">
-                      <i class="fa fa-eye"></i> View
+                    <button onclick="location.href='<?= base_url('draft/view/'.$draft->draft_id.'') ?>'" class="btn btn-sm btn-secondary <?=($sisa_waktu <= 0 and $draft->review_flag =='')? 'btn-disabled' : '' ?>" <?=($sisa_waktu <= 0 and $draft->review_flag =='')? 'disabled' : '' ?>><i class="fa fa-eye" ></i> View
                       <span class="sr-only">View</span>
-                    </a>
+                    </button>
+
                   </td>
                   <?php endif ?>
                 </tr>
+
                 <!-- /tr -->
                 <!-- Alert Danger Modal -->
                 <div class="modal modal-alert fade" id="modalhapus-<?= $draft->draft_id ?>" tabindex="-1" role="dialog" aria-labelledby="modalhapus" aria-hidden="true">
@@ -261,7 +266,7 @@
         <!-- /.card-body -->
         <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
         <!-- .card-footer -->
-        <footer class="card-footer bg-light">
+        <footer class="card-footer">
           <div class="card-footer-content">
             <a href="<?=base_url('category') ?>" class="btn btn-secondary mr-2">Kategori</a>
             <a href="<?=base_url('theme') ?>" class="btn btn-secondary mr-2">Tema</a>

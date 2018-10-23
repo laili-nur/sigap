@@ -533,7 +533,6 @@
                   <?= form_error('proofread_notes_author') ?>
                 </div>
                 <!-- /.form-group -->
-                <hr>
               </fieldset>
               <!-- /.fieldset -->
               <hr>

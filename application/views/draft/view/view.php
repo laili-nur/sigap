@@ -20,12 +20,8 @@
     </nav> 
   </header>
   <!-- /.page-title-bar -->
-  <pre>
-    <?php print_r($author_order) ?>
-  </pre>
 <!-- .page-section -->
 <div class="page-section">
-
   <!-- <div class="d-xl-none">
     <button class="btn btn-danger btn-floated" type="button" data-toggle="sidebar">
       <i class="fa fa-th-list"></i>
@@ -65,7 +61,7 @@
           <!-- .table-responsive -->
         <div class="table-responsive">
           <!-- .table -->
-          <table class="table table-striped table-bordered mb-0">
+          <table class="table table-striped table-bordered mb-0 nowrap">
             <!-- tbody -->
             <tbody>
               <!-- tr -->
@@ -89,7 +85,7 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> File Draft </td>
-                <td>: <?=(!empty($input->draft_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->draft_file.'" class="btn btn-success btn-xs m-0" href="'.base_url('draftfile/'.$input->draft_file).'"><i class="fa fa-download"></i> Download</a>' : '' ?>
+                <td>: <?=(!empty($input->draft_file))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->draft_file.'" class="btn btn-success btn-xs m-0" href="'.base_url('draftfile/'.$input->draft_file).'"><i class="fa fa-download"></i> Download</a>' : '' ?>
                    </td>
               </tr>
               <!-- /tr -->
@@ -145,7 +141,7 @@
           <!-- .table-responsive -->
             <div class="table-responsive" >
               <!-- .table -->
-              <table class="table table-striped table-bordered mb-0">
+              <table class="table table-striped table-bordered mb-0 nowrap">
                 <!-- thead -->
                   <thead>
                     <tr>
@@ -177,7 +173,7 @@
                     <td class="align-middle"><?= $author->institute_name ?></td>
                     <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
                     <td class="align-middle text-right">
-                      <button href="javascript" class="btn btn-sm btn-danger delete-author" data="<?= $author->draft_author_id ?>">
+                      <button data-toggle="tooltip" data-placement="right" title="Hapus" href="javascript" class="btn btn-sm btn-danger delete-author" data="<?= $author->draft_author_id ?>">
                         <i class="fa fa-trash-alt"></i>
                         <span class="sr-only">Delete</span>
                       </button>
@@ -210,7 +206,7 @@
           <!-- .table-responsive -->
             <div class="table-responsive">
               <!-- .table -->
-              <table class="table table-striped table-bordered mb-0">
+              <table class="table table-striped table-bordered mb-0 nowrap">
                 <!-- thead -->
                         <thead>
                           <tr>
@@ -235,7 +231,7 @@
                     <td class="align-middle"><?= $reviewer->faculty_name ?></td>
                     <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
                     <td class="align-middle text-right">
-                      <button href="javascript" class="btn btn-sm btn-danger delete-reviewer" data="<?= $reviewer->draft_reviewer_id ?>">
+                      <button data-toggle="tooltip" data-placement="right" title="Hapus" href="javascript" class="btn btn-sm btn-danger delete-reviewer" data="<?= $reviewer->draft_reviewer_id ?>">
                         <i class="fa fa-trash-alt"></i>
                         <span class="sr-only">Delete</span>
                       </button>
@@ -377,7 +373,7 @@
     <?php endif ?>
     <!-- if tampilan admin -->
     <?php if($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
-     <div class="el-example">
+     <div class="el-example mx-3 mx-md-0">
       <?php 
         $hidden_date = array(
             'type'  => 'hidden',
@@ -385,7 +381,9 @@
             'value' => date('Y-m-d H:i:s')
         );
         echo form_input($hidden_date);?>
-       <button class="btn btn-primary" data-toggle="modal" data-target="#modalsimpan" <?=($input->is_proofread == 'y')? '':'disabled' ?>>Simpan jadi buku</button>
+      <span class="d-inline-block" tabindex="0" data-trigger="focus" data-toggle="popover" <?=($input->is_proofread == 'n')? 'data-content="Proofread belum disetujui"':'' ?> data-placement="top">
+       <button class="btn btn-primary" style="pointer-events: none;" data-toggle="modal" data-target="#modalsimpan" <?=($input->is_proofread == 'y')? '':'disabled' ?>>Simpan jadi buku</button>
+      </span>
        <button class="btn btn-danger" data-toggle="modal" data-target="#modaltolak">Tolak</button>
      </div>
      <!-- Alert Danger Modal -->
@@ -540,6 +538,7 @@
           }
           $('[name=reviewer]').val("");
           $('#reload-reviewer').load(' #reload-reviewer');
+          $('#list-group-review').load(' #list-group-review');
           $this.removeAttr("disabled").html("Pilih");
         }
       });
@@ -575,7 +574,7 @@
           }
           $('[name=editor]').val("");
           $('#reload-editor').load(' #reload-editor');
-          //$('#list-group-edit').load(' #list-group-edit');
+          $('#list-group-edit').load(' #list-group-edit');
           $this.removeAttr("disabled").html("Pilih");
         }
 
@@ -664,7 +663,7 @@
             console.log(data);
             $('#reload-editor').load(' #reload-editor');
             toastr_view('6');
-            //$('#list-group-edit').load(' #list-group-edit');
+            $('#list-group-edit').load(' #list-group-edit');
           }
 
         })
@@ -681,7 +680,7 @@
             console.log(data);
             $('#reload-layouter').load(' #reload-layouter');
             toastr_view('8');
-            //lambat $('#label-editor').load(' #label-editor');
+            $('#list-group-layout').load(' #list-group-layout');
           }
 
         })

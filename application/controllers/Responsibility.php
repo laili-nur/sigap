@@ -64,11 +64,19 @@ class Responsibility extends Operator_Controller
                 $status = array('draft_status' => 6);
                 $this->responsibility->editDraftDate($input->draft_id, 'edit_start_date');
                 $this->responsibility->updateDraftStatus($input->draft_id, $status);
+                $current_date = strtotime(date('Y-m-d H:i:s'));
+                $end_date = 60 * 24 * 60 * 60;
+                $deadline_editor = date('Y-m-d H:i:s', ($current_date + $end_date));
+                $this->responsibility->editDraftDate($input->draft_id, 'edit_deadline', $deadline_editor);
             }
             if($ambil_level->level == 'layouter'){
                 $status = array('draft_status' => 8);
                 $this->responsibility->editDraftDate($input->draft_id, 'layout_start_date');
                 $this->responsibility->updateDraftStatus($input->draft_id, $status);
+                $current_date = strtotime(date('Y-m-d H:i:s'));
+                $end_date = 60 * 24 * 60 * 60;
+                $deadline_layouter = date('Y-m-d H:i:s', ($current_date + $end_date));
+                $this->responsibility->editDraftDate($input->draft_id, 'layout_deadline', $deadline_layouter);
             }
             
             $data['validasi'] = true;

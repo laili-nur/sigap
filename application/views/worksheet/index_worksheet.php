@@ -92,8 +92,8 @@
                   <!-- tr -->
                   <tr>
                     <td class="align-middle pl-4"><?= ++$i ?></td>
-                    <td class="align-middle"><a href="<?= base_url('draft/view/'.$worksheet->draft_id) ?>"><?= $worksheet->draft_title ?></a></td>
-                    <td class="align-middle"><?= $worksheet->worksheet_num ?></td>
+                    <td class="align-middle"><a title="Lihat detail draft" href="<?= base_url('draft/view/'.$worksheet->draft_id) ?>"><?= $worksheet->draft_title ?></a></td>
+                    <td class="align-middle"><a title="Lihat Desk Screening" href="<?= base_url('worksheet/edit/'.$worksheet->worksheet_id) ?>"><?= $worksheet->worksheet_num ?></a></td>
                     <td class="align-middle"><?= $worksheet->is_reprint == 'y' ? 'Cetak Ulang' : 'Baru' ?></td>
                     <td class="align-middle"><?=
                             $status = "";
@@ -111,21 +111,40 @@
                     </td>
                     <td class="align-middle"><?= $worksheet->worksheet_pic ?></td>
                     <td class="align-middle text-right">
+                      <button type="button" class="btn btn-sm btn-secondary" data-container="body" data-toggle="popover" data-placement="left" data-html="true" data-content="<?php echo html_escape('<div class="list-group list-group-bordered" style="margin: -9px -15px;border-radius:0;">
+                        <a href="'.base_url('worksheet/action/'.$worksheet->worksheet_id.'/1').'" class="list-group-item list-group-item-action p-2">
+                          <div class="list-group-item-figure">
+                            <div class="tile bg-success">
+                              <span class="fa fa-check"></span>
+                            </div>
+                          </div>
+                          <div class="list-group-item-body"> Setuju </div>
+                        </a>
+                        <a href="'.base_url('worksheet/action/'.$worksheet->worksheet_id.'/2').'" class="list-group-item list-group-item-action p-2">
+                          <div class="list-group-item-figure">
+                            <div class="tile bg-danger">
+                              <span class="fa fa-ban"></span>
+                            </div>
+                          </div>
+                          <div class="list-group-item-body"> Tolak </div>
+                        </a>
+                      </div>');?>" data-trigger="focus">
+                    <i class="fa fa-thumbs-up"></i>
+                  </button>
 
-                      <button onclick="location.href='<?= base_url('worksheet/action/'.$worksheet->worksheet_id.'/1') ?>'" title="Setuju Draft" class="btn btn-sm btn-success">
+                      <!-- <button onclick="location.href='<?= base_url('worksheet/action/'.$worksheet->worksheet_id.'/1') ?>'" title="Setuju Draft" class="btn btn-sm btn-success">
                         <i class="fa fa-check"></i>
                         <span class="sr-only">Setuju</span>
                       </button>
                        <button onclick="location.href='<?= base_url('worksheet/action/'.$worksheet->worksheet_id.'/2') ?>'" title="Tolak Draft" class="btn btn-sm btn-danger">
                         <i class="fa fa-ban"></i>
                         <span class="sr-only">Tolak</span>
-                      </button>
-                      <span>-</span>
-                      <a href="<?= base_url('worksheet/edit/'.$worksheet->worksheet_id.'') ?>" class="btn btn-sm btn-secondary">
+                      </button> -->
+                      <a title="Edit" href="<?= base_url('worksheet/edit/'.$worksheet->worksheet_id.'') ?>" class="btn btn-sm btn-secondary">
                         <i class="fa fa-pencil-alt"></i>
                         <span class="sr-only">Edit</span>
                       </a>
-                      <button type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modalhapus-<?= $worksheet->worksheet_id ?>"><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
+                      <button title="Delete" type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modalhapus-<?= $worksheet->worksheet_id ?>"><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
                     </td>
                   </tr>
                   <!-- /tr -->

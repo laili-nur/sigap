@@ -28,7 +28,7 @@
     <div class="card-body">
       <div class="el-example">
         <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
-        <button class="btn btn-secondary" style="width:50px" data-toggle="modal" data-target="#proofread_aksi"><i class="fa fa-thumbs-up"></i></button>    
+        <button title="Aksi admin" class="btn btn-secondary" style="width:50px" data-toggle="modal" data-target="#proofread_aksi"><i class="fa fa-thumbs-up"></i></button>    
         <?php endif ?>
         <button type="button" class="btn <?=($input->proofread_notes!='' || $input->proofread_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#proofread">Tanggapan Proofread <?=($input->proofread_notes!='' || $input->proofread_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
         <!-- modal -->

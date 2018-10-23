@@ -51,8 +51,10 @@ class Draft extends Operator_Controller
             ));
             if($value->rev == 0){
               $value->review_flag = $value->review1_flag;
+              $value->deadline = $value->review1_deadline;
             }elseif($value->rev == 1){
               $value->review_flag = $value->review2_flag;
+              $value->deadline = $value->review2_deadline;
             }else{}
         }
         
@@ -527,16 +529,17 @@ class Draft extends Operator_Controller
         // cek category tersedia dan aktif
         if ($category != '') {
             $data = array('category_id' => $category);
-            
-            $date_open = $category->date_open; 
             $cekcategory = $this->draft->getWhere($data, 'category');
-            if (!$cekcategory || $cekcategory->category_status == 'n' || new DateTime($date_open) <= new DateTime()) {
+            $sisa_waktu_buka = ceil((strtotime($cekcategory->date_open)-strtotime(date('Y-m-d H:i:s')))/86400);
+            $date_open = $cekcategory->date_open; 
+            if (!$cekcategory || $cekcategory->category_status == 'n') {
+                $this->session->set_flashdata('error', 'Failed, Category not found');
+                redirect('home');
+            }elseif($sisa_waktu_buka > 1){
+                $this->session->set_flashdata('error', 'Failed, Category not yet opened');
                 redirect('home');
             }
         }
-        
-        
-        
 
         //khusus admin dan author
         $ceklevel = $this->session->userdata('level');
@@ -551,6 +554,18 @@ class Draft extends Operator_Controller
             $input = (object) $this->input->post(null, true);
         }
 
+        if($this->draft->validate()){
+            if (!empty($_FILES) && $_FILES['draft_file']['size'] > 0) {
+                $getextension=explode(".",$_FILES['draft_file']['name']);            
+                $draftFileName  = str_replace(" ","_",$input->draft_title . '_' . date('YmdHis').".".$getextension[1]) ; // draft file name
+                $upload = $this->draft->uploadDraftfile('draft_file', $draftFileName);
+
+                if ($upload) {
+                    $input->draft_file =  "$draftFileName"; // Data for column "draft".
+                }
+            }  
+        }
+         
 
         if (!$this->draft->validate() || $this->form_validation->error_array()) {
             $pages     = $this->pages;
@@ -560,25 +575,7 @@ class Draft extends Operator_Controller
             return;
         }
 
-        if (!empty($_FILES) && $_FILES['draft_file']['size'] > 0) {
-            $getextension=explode(".",$_FILES['draft_file']['name']);            
-            $draftFileName  = str_replace(" ","_",$input->draft_title . '_' . date('YmdHis').".".$getextension[1]) ; // draft file name
-            $upload = $this->draft->uploadDraftfile('draft_file', $draftFileName);
-
-            if ($upload) {
-                $input->draft_file =  "$draftFileName"; // Data for column "draft".
-            }
-        }
         
-        if (!empty($_FILES) && $_FILES['cover_file']['size'] > 0) {
-            $getextension=explode(".",$_FILES['cover_file']['name']);            
-            $coverFileName  = str_replace(" ","_",$input->draft_title . '_' . date('YmdHis').".".$getextension[1]) ; // cover file name
-            $upload = $this->draft->uploadCoverfile('cover_file', $coverFileName);
-
-            if ($upload) {
-                $input->cover_file =  "$coverFileName"; // Data for column "cover".
-            }
-        }
         
         $draft_id = $this->draft->insert($input);
 
@@ -728,6 +725,12 @@ class Draft extends Operator_Controller
         redirect('draft');
     }
 
+    public function download($file){
+        $path = file_get_contents(base_url()."coverfile/".$file); // get file name
+        force_download($file,$path);
+    }
+
+
     //upload file tiap tahap
     public function upload_progress($id,$column){
         $draft = $this->draft->where('draft_id', $id)->get();
@@ -737,6 +740,7 @@ class Draft extends Operator_Controller
             $this->session->set_flashdata('warning', 'Draft data were not available');
             redirect('draft');
         }
+
         $isCanAccess = false;
 
         if ($this->level == 'author') {
@@ -759,35 +763,37 @@ class Draft extends Operator_Controller
                 $input->$column = $draft->$column; // Set draft file for preview.
             }
             
-            
-              //tiap upload, update upload date
-              $tahap = explode('_', $column);
-              $this->draft->editDraftDate($id, $tahap[0].'_upload_date');
-              $last_upload = $tahap[0].'_last_upload';
-              $input->$last_upload = $this->level;
-              
-              if (!empty($_FILES) && $_FILES[$column]['size'] > 0) {
-                  // Upload new draft (if any)
-                  $getextension=explode(".",$_FILES[$column]['name']);            
-                  $draftFileName  = str_replace(" ","_",$title->draft_title.'_'.$column . '_' . date('YmdHis').".".$getextension[1]); // draft file name
-                  if($column != 'cover_file'){$upload = $this->draft->uploadProgress($column, $draftFileName);}
-                  else{
-                      $upload = $this->draft->uploadProgressCover($column, $draftFileName);
-                  }
+        //tiap upload, update upload date
+          $tahap = explode('_', $column);
+          $this->draft->editDraftDate($id, $tahap[0].'_upload_date');
+          $last_upload = $tahap[0].'_last_upload';
+          $input->$last_upload = $this->level;
+          
+          if (!empty($_FILES) && $_FILES[$column]['size'] > 0) {
+              // Upload new draft (if any)
+              $getextension=explode(".",$_FILES[$column]['name']);            
+              $draftFileName  = str_replace(" ","_",$title->draft_title.'_'.$column . '_' . date('YmdHis').".".$getextension[1]); // draft file name
+              if($column == 'cover_file'){
+                  $upload = $this->draft->uploadProgressCover($column, $draftFileName);
+              }
+              else{
+                $upload = $this->draft->uploadProgress($column, $draftFileName);
+              }
 
-                  if ($upload) {
-                      $input->$column =  "$draftFileName";
-                      // Delete old draft file
-                      if ($draft->$column) {
-                      if($column != 'cover_file'){
-                          $this->draft->deleteProgress($draft->$column);
-                      }
-                      else{
+              if ($upload) {
+                  $input->$column =  "$draftFileName";
+                  // Delete old draft file
+                  if ($draft->$column) {
+                      if($column == 'cover_file'){
                           $this->draft->deleteProgressCover($draft->$column);
-                      }
+                      }else{
+                          $this->draft->deleteProgress($draft->$column);
                       }
                   }
               }
+          }
+            
+
 
             //If something wrong
             // if (!$this->draft->validate() || $this->form_validation->error_array()) {
@@ -814,8 +820,7 @@ class Draft extends Operator_Controller
     }
 
 // -- ubah notes - buat ubah deadline juga  
-      public function ubahnotes($id = null, $rev = null)
-	{
+    public function ubahnotes($id = null, $rev = null){
         $data = array();
         $draft = $this->draft->where('draft_id', $id)->get();
         if (!$draft) {
@@ -898,35 +903,39 @@ class Draft extends Operator_Controller
         }
 
         
-        if (!empty($_FILES) && $_FILES['draft_file']['size'] > 0) {
-            // Upload new draft (if any)
-            $getextension=explode(".",$_FILES['draft_file']['name']);            
-            $draftFileName  = str_replace(" ","_",$input->draft_title . '_' . date('YmdHis').".".$getextension[1]); // draft file name
-            $upload = $this->draft->uploadDraftfile('draft_file', $draftFileName);
+        if($this->draft->validate()){
+            if (!empty($_FILES) && $_FILES['draft_file']['size'] > 0) {
+                // Upload new draft (if any)
+                $getextension=explode(".",$_FILES['draft_file']['name']);            
+                $draftFileName  = str_replace(" ","_",$input->draft_title . '_' . date('YmdHis').".".$getextension[1]); // draft file name
+                $upload = $this->draft->uploadDraftfile('draft_file', $draftFileName);
 
-            if ($upload) {
-                $input->draft_file =  "$draftFileName";
-                // Delete old draft file
-                if ($draft->draft_file) {
-                    $this->draft->deleteDraftfile($draft->draft_file);
+                if ($upload) {
+                    $input->draft_file =  "$draftFileName";
+                    // Delete old draft file
+                    if ($draft->draft_file) {
+                        $this->draft->deleteDraftfile($draft->draft_file);
+                    }
                 }
             }
         }
-        
-        if (!empty($_FILES) && $_FILES['cover_file']['size'] > 0) {
-            // Upload new draft (if any)
-            $getextension=explode(".",$_FILES['cover_file']['name']);            
-            $coverFileName  = str_replace(" ","_",$input->draft_title . '_' . date('YmdHis').".".$getextension[1]); // cover file name
-            $upload = $this->draft->uploadCoverfile('cover_file', $coverFileName);
 
-            if ($upload) {
-                $input->cover_file =  "$coverFileName";
-                // Delete old draft file
-                if ($draft->cover_file) {
-                    $this->draft->deleteCoverfile($draft->cover_file);
+        if($this->draft->validate()){
+            if (!empty($_FILES) && $_FILES['cover_file']['size'] > 0) {
+                // Upload new draft (if any)
+                $getextension=explode(".",$_FILES['cover_file']['name']);            
+                $coverFileName  = str_replace(" ","_",$input->draft_title . '_' . date('YmdHis').".".$getextension[1]); // cover file name
+                $upload = $this->draft->uploadCoverfile('cover_file', $coverFileName);
+
+                if ($upload) {
+                    $input->cover_file =  "$coverFileName";
+                    // Delete old draft file
+                    if ($draft->cover_file) {
+                        $this->draft->deleteCoverfile($draft->cover_file);
+                    }
                 }
-            }
-        }   
+            }   
+        }
         
         // If something wrong
         if (!$this->draft->validate() || $this->form_validation->error_array()) {

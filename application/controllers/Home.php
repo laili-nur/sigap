@@ -127,8 +127,8 @@ class Home extends Operator_Controller
              $count['draft_layout'] = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('is_edit','y')->where('is_layout','n')->whereNot('draft_status','99')->count('draft');
             $count['draft_proofread'] = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('is_layout','y')->where('is_proofread','n')->whereNot('draft_status','99')->count('draft');
 
-            $count['draft_approved'] = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->whereNot('draft_status','99')->where('user.username',$cekusername)->count('draft');
-            $count['draft_rejected'] = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('draft_status','99')->where('user.username',$cekusername)->count('draft');
+            $count['draft_approved'] = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->whereNot('draft_status','99')->whereNot('draft_status','2')->where('user.username',$cekusername)->count('draft');
+            $count['draft_rejected'] = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('draft_status','99')->orWhere('draft_status','2')->where('user.username',$cekusername)->count('draft');
             $count['draft_book'] = $this->home->join3('draft','book','draft')->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->count('book');
 
         }elseif($ceklevel == 'editor'){

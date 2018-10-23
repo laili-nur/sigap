@@ -25,8 +25,9 @@
         <fieldset>
           <!-- .form-group -->
           <div class="form-group">
-            <label for="tf5">Catatan Editor</label>
-            <textarea class="form-control" id="tf5" rows="3" disabled=""><?=$desk->worksheet_notes ?></textarea>
+            <label><strong>Catatan Editor</strong></label>
+<!--             <textarea class="form-control" id="tf5" rows="3" disabled=""><?=$desk->worksheet_notes ?></textarea>
+ -->            <div class="font-italic"><?= nl2br($desk->worksheet_notes)?></div>
           </div>
           <!-- /.form-group -->
         </fieldset>
