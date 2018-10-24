@@ -2,7 +2,7 @@
 
 class Draft_model extends MY_Model
 {
-   protected $perPage = 10;
+   protected $perPage = 25;
    
    public function getValidationRules()
     {
@@ -349,7 +349,14 @@ class Draft_model extends MY_Model
             }    
         }
     }
-    
+        public function deleteCoverfile($draftFile)
+    {
+        if($draftFile != "") {
+            if (file_exists("./coverfile/$draftFile")) {
+                unlink("./coverfile/$draftFile");
+            }    
+        }
+    }
    
 
     public function uploadProgress($fieldname, $draftFileName)

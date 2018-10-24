@@ -55,7 +55,6 @@ class Responsibility extends Operator_Controller
                 return;
             }
         }
-        
 
         if ($this->responsibility->insert($input)) {
             $ambil_level = $this->responsibility->join('user')->where('user.user_id',$input->user_id)->get();

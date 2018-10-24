@@ -162,7 +162,7 @@
                   <td class="align-middle"><?= isset($draft->author[0]->author_name)?$draft->author[0]->author_name:'-' ?></td>
                   <?php endif ?>
                   <td class="align-middle"><strong><?= $draft->draft_title ?></strong></td>
-                  <td class="align-middle"><?= $draft->entry_date ?></td>                  
+                  <td class="align-middle"><?= konversiTanggal($draft->entry_date) ?></td>                  
                   <td class="align-middle">
                     <?php 
                     if ($ceklevel == 'reviewer'){

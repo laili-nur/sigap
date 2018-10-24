@@ -26,7 +26,7 @@ class Draft extends Operator_Controller
             $drafts = $this->draft->join('category')->join('theme')->join3('draft_reviewer','draft','draft')->join3('reviewer','draft_reviewer','reviewer')->join3('user','reviewer','user')->where('user.username',$cekusername)->paginate($page)->getAll();
             $tot = $this->draft->join('category')->join('theme')->join3('draft_reviewer','draft','draft')->join3('reviewer','draft_reviewer','reviewer')->join3('user','reviewer','user')->where('user.username',$cekusername)->getAll();
         }else{
-            $drafts     = $this->draft->join('category')->join('theme')->orderBy('entry_date','desc')->paginate($page)->getAll();
+            $drafts     = $this->draft->join('category')->join('theme')->orderBy('draft_status')->orderBy('entry_date','desc')->paginate($page)->getAll();
             $tot        = $this->draft->join('category')->join('theme')->getAll();
         }
 
@@ -564,7 +564,6 @@ class Draft extends Operator_Controller
                 }
             }  
         }
-         
 
         if (!$this->draft->validate() || $this->form_validation->error_array()) {
             $pages     = $this->pages;
@@ -573,8 +572,6 @@ class Draft extends Operator_Controller
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
-
-        
         
         $draft_id = $this->draft->insert($input);
 
@@ -703,6 +700,30 @@ class Draft extends Operator_Controller
                 redirect('draft');
             };
         }
+        
+//        if ($this->level == "editor") {
+//            $prevent = count(array_filter(
+//                    $editors,
+//                    function ($e) {
+//                        return $e->user_id == $this->role_id;
+//                    }
+//                ));
+//            if($prevent==0){
+//                print_r($prevent);
+//            };
+//        }
+//        
+//        if ($this->level == "layouter") {
+//            $prevent = count(array_filter(
+//                    $layouters,
+//                    function ($e) {
+//                        return $e->user_id == $this->role_id;
+//                    }
+//                ));
+//            if($prevent==0){
+//                print_r($prevent);
+//            };
+//        }
         
         // If something wrong
         if (!$this->draft->validate() || $this->form_validation->error_array()) {
@@ -928,7 +949,7 @@ class Draft extends Operator_Controller
 
                 if ($upload) {
                     $input->cover_file =  "$coverFileName";
-                    // Delete old draft file
+                    // Delete old cover file
                     if ($draft->cover_file) {
                         $this->draft->deleteCoverfile($draft->cover_file);
                     }
@@ -985,7 +1006,7 @@ class Draft extends Operator_Controller
                 $this->draft->deleteDraftfile($draft->review2_file);
                 $this->draft->deleteDraftfile($draft->edit_file);
                 $this->draft->deleteDraftfile($draft->layout_file);
-                $this->draft->deleteDraftfile($draft->cover_file);
+                $this->draft->deleteCoverfile($draft->cover_file);
                 $this->draft->deleteDraftfile($draft->proofread_file);
             } else {
                 $isSuccess = false;

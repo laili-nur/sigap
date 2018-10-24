@@ -144,39 +144,39 @@
                         <i class="fa fa-pencil-alt"></i>
                         <span class="sr-only">Edit</span>
                       </a>
-                      <button title="Delete" type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modalhapus-<?= $worksheet->worksheet_id ?>"><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
+<!--                      <button title="Delete" type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modalhapus-<?= $worksheet->worksheet_id ?>"><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
                     </td>
                   </tr>
-                  <!-- /tr -->
-                  <!-- Alert Danger Modal -->
+                   /tr 
+                   Alert Danger Modal 
                   <div class="modal modal-alert fade" id="modalhapus-<?= $worksheet->worksheet_id ?>" tabindex="-1" role="dialog" aria-labelledby="modalhapus" aria-hidden="true">
-                    <!-- .modal-dialog -->
+                     .modal-dialog 
                     <div class="modal-dialog" role="document">
-                      <!-- .modal-content -->
+                       .modal-content 
                       <div class="modal-content">
-                        <!-- .modal-header -->
+                         .modal-header 
                         <div class="modal-header">
                           <h5 class="modal-title">
                             <i class="fa fa-exclamation-triangle text-red mr-1"></i> Konfirmasi Hapus</h5>
                         </div>
-                        <!-- /.modal-header -->
-                        <!-- .modal-body -->
+                         /.modal-header 
+                         .modal-body 
                         <div class="modal-body">
                           <p>Apakah anda yakin akan menghapus lembar kerja <span class="font-weight-bold"><?= $worksheet->worksheet_num ?></span>?</p>
                         </div>
-                        <!-- /.modal-body -->
-                        <!-- .modal-footer -->
+                         /.modal-body 
+                         .modal-footer 
                         <div class="modal-footer">
                           <button type="button" class="btn btn-danger" onclick="location.href='<?= base_url('worksheet/delete/'.$worksheet->worksheet_id.'') ?>'" data-dismiss="modal">Hapus</button>
                           <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
                         </div>
-                        <!-- /.modal-footer -->
+                         /.modal-footer 
                       </div>
-                      <!-- /.modal-content -->
+                       /.modal-content 
                     </div>
-                    <!-- /.modal-dialog -->
+                     /.modal-dialog 
                   </div>
-                  <!-- /.modal -->
+                   /.modal -->
                   <?php endforeach ?>
                 </tbody>
                 <!-- /tbody -->

@@ -15,8 +15,8 @@ class Worksheet extends Operator_Controller
 
 	public function index($page = null)
 	{
-        $worksheets     = $this->worksheet->join('draft')->orderBy('draft.draft_id')->orderBy('worksheet_id')->paginate($page)->getAll();
-        $tot        = $this->worksheet->join('draft')->orderBy('draft.draft_id')->orderBy('worksheet_id')->getAll();
+        $worksheets     = $this->worksheet->join('draft')->orderBy('worksheet_status')->orderBy('worksheet_num')->paginate($page)->getAll();
+        $tot        = $this->worksheet->join('draft')->orderBy('worksheet_status')->orderBy('worksheet_num')->getAll();
         $total     = count($tot);
         $pages    = $this->pages;
         $main_view  = 'worksheet/index_worksheet';
@@ -132,22 +132,22 @@ class Worksheet extends Operator_Controller
         redirect('worksheet');
     }
         
-        public function delete($id = null)
-	{
-	$worksheet = $this->worksheet->where('worksheet_id', $id)->get();
-        if (!$worksheet) {
-            $this->session->set_flashdata('warning', 'Worksheet data were not available');
-            redirect('worksheet');
-        }
-
-        if ($this->worksheet->where('worksheet_id', $id)->delete()) {
-			$this->session->set_flashdata('success', 'Data deleted');
-		} else {
-            $this->session->set_flashdata('error', 'Data failed to delete');
-        }
-
-		redirect('worksheet');
-	}
+//        public function delete($id = null)
+//	{
+//	$worksheet = $this->worksheet->where('worksheet_id', $id)->get();
+//        if (!$worksheet) {
+//            $this->session->set_flashdata('warning', 'Worksheet data were not available');
+//            redirect('worksheet');
+//        }
+//
+//        if ($this->worksheet->where('worksheet_id', $id)->delete()) {
+//	$this->session->set_flashdata('success', 'Data deleted');
+//		} else {
+//            $this->session->set_flashdata('error', 'Data failed to delete');
+//        }
+//
+//		redirect('worksheet');
+//	}
         
         public function search($page = null)
         {
