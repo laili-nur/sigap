@@ -745,10 +745,16 @@ class Draft extends Operator_Controller
         redirect('draft');
     }
 
-    public function download($file){
-        $path = file_get_contents(base_url()."coverfile/".$file); // get file name
-        force_download($file,$path);
-    }
+//    public function download($file){
+//        $path = file_get_contents(base_url()."coverfile/".$file); // get file name
+//        force_download($file,$path);
+//    }
+    
+    function download($file_name)
+{
+    $this->load->helper('download');
+    force_download('./coverfile/'.$file_name, NULL);
+}
 
 
     //upload file tiap tahap

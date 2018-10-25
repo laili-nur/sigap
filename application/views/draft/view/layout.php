@@ -222,7 +222,9 @@
                       <figure class="figure">
                         <!-- .figure-img -->
                         <div class="figure-img">
-                          <img class="img-fluid" src="<?=base_url('draft/download/'.$input->cover_file) ?>" alt="Card image cap">
+<!--                          <img class="img-fluid" src="<?=base_url('draft/download/'.$input->cover_file) ?>" alt="Card image cap">-->
+                            <img class="img-fluid" src="<?php base_url('draft/download/'.$input->cover_file);?>" alt="Card image cap">
+                          
                           <div class="figure-action">
                             <a href="<?=base_url('draft/download/'.urlencode($input->cover_file)) ?>" class="btn btn-block btn-sm btn-primary">Download Cover</a>
                           </div>
