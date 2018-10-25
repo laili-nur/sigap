@@ -672,10 +672,10 @@ class Draft extends Operator_Controller
         ));
 
         // tampilkan editor
-        $editors = $this->draft->select(['username','level','responsibility_id'])->join3('responsibility','draft','draft')->join3('user','responsibility','user')->where('responsibility.draft_id',$id)->where('level','editor')->getAll();
+        $editors = $this->draft->select(['username','level','responsibility_id', 'responsibility.user_id'])->join3('responsibility','draft','draft')->join3('user','responsibility','user')->where('responsibility.draft_id',$id)->where('level','editor')->getAll();
 
         // tampilkan layouter
-        $layouters = $this->draft->select(['username','level','responsibility_id'])->join3('responsibility','draft','draft')->join3('user','responsibility','user')->where('responsibility.draft_id',$id)->where('level','layouter')->getAll();
+        $layouters = $this->draft->select(['username','level','responsibility_id','responsibility.user_id'])->join3('responsibility','draft','draft')->join3('user','responsibility','user')->where('responsibility.draft_id',$id)->where('level','layouter')->getAll();
 
         //prevent ganti link
         if ($this->level == "reviewer") {
@@ -686,6 +686,7 @@ class Draft extends Operator_Controller
                     }
                 ));
             if($prevent==0){
+                $this->session->set_flashdata('warning', 'Anda tidak memiliki akses ke draft ini');
                 redirect('draft');
             };
         }
@@ -697,33 +698,36 @@ class Draft extends Operator_Controller
                     }
                 ));
             if($prevent==0){
+                $this->session->set_flashdata('warning', 'Anda tidak memiliki akses ke draft ini');
                 redirect('draft');
             };
         }
         
-//        if ($this->level == "editor") {
-//            $prevent = count(array_filter(
-//                    $editors,
-//                    function ($e) {
-//                        return $e->user_id == $this->role_id;
-//                    }
-//                ));
-//            if($prevent==0){
-//                print_r($prevent);
-//            };
-//        }
-//        
-//        if ($this->level == "layouter") {
-//            $prevent = count(array_filter(
-//                    $layouters,
-//                    function ($e) {
-//                        return $e->user_id == $this->role_id;
-//                    }
-//                ));
-//            if($prevent==0){
-//                print_r($prevent);
-//            };
-//        }
+        if ($this->level == "editor") {
+            $prevent = count(array_filter(
+                    $editors,
+                    function ($e) {
+                        return $e->user_id == $this->role_id;
+                    }
+                ));
+            if($prevent==0){
+                $this->session->set_flashdata('warning', 'Anda tidak memiliki akses ke draft ini');
+                redirect('draft');
+            };
+        }
+        
+        if ($this->level == "layouter") {
+            $prevent = count(array_filter(
+                    $layouters,
+                    function ($e) {
+                $this->session->set_flashdata('warning', 'Anda tidak memiliki akses ke draft ini');
+                        return $e->user_id == $this->role_id;
+                    }
+                ));
+            if($prevent==0){
+                redirect('draft');
+            };
+        }
         
         // If something wrong
         if (!$this->draft->validate() || $this->form_validation->error_array()) {
