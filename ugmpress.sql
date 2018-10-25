@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 25, 2018 at 06:55 AM
+-- Generation Time: Oct 25, 2018 at 09:41 AM
 -- Server version: 5.6.26
 -- PHP Version: 5.6.12
 
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `author` (
   `heir_name` varchar(256) NOT NULL,
   `user_id` mediumint(9) DEFAULT NULL,
   `author_ktp` varchar(256) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `author`
@@ -335,7 +335,7 @@ CREATE TABLE IF NOT EXISTS `draft` (
   `kriteria4_reviewer2` text NOT NULL,
   `nilai_reviewer2` text NOT NULL,
   `review2_last_upload` varchar(255) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `draft`
@@ -352,7 +352,13 @@ INSERT INTO `draft` (`draft_id`, `category_id`, `theme_id`, `draft_title`, `draf
 (11, 3, 6, 'Edit Ditolak', 'Edit_Ditolak_20181024203743.docx', '2018-10-24 13:37:43', NULL, NULL, 'y', '2018-10-24 20:42:25', '2018-10-24 20:40:39', '', NULL, '', '', '', '2018-12-23 20:42:25', NULL, '', NULL, '', '', '2018-12-23 20:42:25', NULL, '<p>Review lanjut<br></p>', 'n', '2018-10-24 20:42:43', '2018-10-24 20:42:36', '', NULL, '', '', '', '2018-12-23 20:42:43', '<p>edit ditolak<br></p>', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 99, '', '', '', '', '', '', '', '', '', '', '', ''),
 (12, 1, 6, 'Edit Diterima', 'Edit_Diterima_20181024204356.docx', '2018-10-24 13:43:56', NULL, NULL, 'y', '2018-10-24 20:44:28', '2018-10-24 20:44:12', '', NULL, '', '', '', '2018-12-23 20:44:28', NULL, '', NULL, '', '', '2018-12-23 20:44:28', NULL, '<p>Review diterima<br></p>', 'y', '2018-10-24 20:44:48', '2018-10-24 20:51:31', 'Edit_Diterima_edit_file_20181024205100.docx', '2018-10-24 13:51:00', 'editor', '<p>mantab<br></p>', '<p>Baik<br></p>', '2018-12-23 20:44:48', '<p>Edit Diterima<br></p>', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 7, '', '', '', '', '', '', '', '', '', '', '', ''),
 (13, 1, 3, 'Proses Layout', 'Proses_Layout_20181024211202.docx', '2018-10-24 14:12:02', NULL, NULL, 'y', '2018-10-24 21:12:31', '2018-10-24 21:12:15', '', NULL, '', '', '', '2018-12-23 21:12:31', NULL, '', NULL, '', '', '2018-12-23 21:12:31', NULL, '', 'y', '2018-10-24 21:12:45', '2018-10-24 21:12:39', '', NULL, '', '<p>ok<br></p>', '', '2018-12-23 21:12:45', '<p>Edit Disetujui<br></p>', 'n', '2018-10-24 21:14:26', '0000-00-00 00:00:00', 'Proses_Layout_layout_file_20181024211537.docx', '2018-10-24 14:15:37', 'layouter', '<p>Baik<br></p>', '<p>Baik<br></p>', '2018-12-23 21:14:26', 'Proses_Layout_cover_file_20181024211754.pdf', '2018-10-24 14:19:06', 'layouter', '<p>Baik<br></p>', '<p>Baik<br></p>', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 10, '', '', '', '', '', '', '', '', '', '', '', ''),
-(15, 1, 5, 'Layout Ditolak', 'Layout_Ditolak_20181025115140.docx', '2018-10-25 04:51:40', NULL, NULL, 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', NULL, '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', '', '');
+(15, 1, 5, 'Layout Ditolak', 'Layout_Ditolak_20181025115140.docx', '2018-10-25 04:51:40', NULL, NULL, 'y', '2018-10-25 12:23:30', '2018-10-25 12:22:14', '', NULL, '', '', '', '2018-12-24 12:23:30', NULL, '', NULL, '', '', '2018-12-24 12:23:30', NULL, '', 'y', '2018-10-25 12:38:39', '2018-10-25 12:23:37', '', NULL, '', '', '', '2018-12-24 12:38:39', '', 'n', '2018-10-25 12:38:59', '2018-10-25 12:38:43', '', NULL, '', '', '', '2018-12-24 12:38:59', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 99, '', '', '', '', '', '', '', '', '', '', '', ''),
+(16, 1, 4, 'Layout Diterima', 'Layout_Diterima_20181025133231.docx', '2018-10-25 06:32:31', NULL, NULL, 'y', '2018-10-25 13:36:11', '2018-10-25 13:36:00', '', NULL, '', '', '', '2018-12-24 13:36:11', NULL, '', NULL, '', '', '2018-12-24 13:36:11', NULL, '', 'y', '2018-10-25 13:36:22', '2018-10-25 13:36:15', '', NULL, '', '', '', '2018-12-24 13:36:22', '', 'y', '2018-10-25 13:36:38', '2018-10-25 13:36:25', '', NULL, '', '', '', '2018-12-24 13:36:38', '', NULL, '', '', '', '<p>diterima<br></p>', 'n', '2018-10-25 13:36:25', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 12, '', '', '', '', '', '', '', '', '', '', '', ''),
+(17, 3, 6, 'Proofread Ditolak', 'Proofread_Ditolak_20181025134728.docx', '2018-10-25 06:47:28', NULL, NULL, 'y', '2018-10-25 13:50:27', '2018-10-25 13:50:15', '', NULL, '', '', '', '2018-12-24 13:50:27', NULL, '', NULL, '', '', '2018-12-24 13:50:27', NULL, '', 'y', '2018-10-25 13:50:42', '2018-10-25 13:50:33', '', NULL, '', '', '', '2018-12-24 13:50:42', '', 'y', '2018-10-25 13:50:54', '2018-10-25 13:50:46', '', NULL, '', '', '', '2018-12-24 13:50:54', '', NULL, '', '', '', '', 'n', '2018-10-25 13:50:46', '2018-10-25 13:50:57', '', NULL, '', '', '', '', 99, '', '', '', '', '', '', '', '', '', '', '', ''),
+(18, 2, 1, 'Proses Proofread', 'Proses_Proofread_20181025135552.docx', '2018-10-25 06:55:52', NULL, NULL, 'y', '2018-10-25 13:56:51', '2018-10-25 13:56:37', '', NULL, '', '', '', '2018-12-24 13:56:51', NULL, '', NULL, '', '', '2018-12-24 13:56:51', NULL, '', 'y', '2018-10-25 13:57:02', '2018-10-25 13:56:55', '', NULL, '', '', '', '2018-12-24 13:57:02', '', 'y', '2018-10-25 13:57:15', '2018-10-25 13:57:05', '', NULL, '', '', '', '2018-12-24 13:57:15', '', NULL, '', '', '', '', 'n', '2018-10-25 13:57:05', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 12, '', '', '', '', '', '', '', '', '', '', '', ''),
+(19, 2, 6, 'Proofread Diterima', 'Proofread_Diterima_20181025140159.docx', '2018-10-25 07:01:59', NULL, NULL, 'y', '2018-10-25 14:02:20', '2018-10-25 14:02:10', '', NULL, '', '', '', '2018-12-24 14:02:21', NULL, '', NULL, '', '', '2018-12-24 14:02:21', NULL, '', 'y', '2018-10-25 14:02:33', '2018-10-25 14:02:25', '', NULL, '', '', '', '2018-12-24 14:02:33', '', 'y', '2018-10-25 14:02:45', '2018-10-25 14:02:37', '', NULL, '', '', '', '2018-12-24 14:02:46', '', NULL, '', '', '', '', 'y', '2018-10-25 14:02:37', '2018-10-25 14:09:01', 'Proofread_Diterima_proofread_file_20181025140517.docx', '2018-10-25 14:05:17', 'author', '<p>baik<br></p>', '<p>baik<br></p>', '<p>setujui<br></p>', 13, '', '', '', '', '', '', '', '', '', '', '', ''),
+(21, 1, 1, 'Tolak Buku', 'Tolak_Buku_20181025142548.docx', '2018-10-25 07:25:48', NULL, NULL, 'y', '2018-10-25 14:26:35', '2018-10-25 14:26:15', '', NULL, '', '', '', '2018-12-24 14:26:35', NULL, '', NULL, '', '', '2018-12-24 14:26:35', NULL, '', 'y', '2018-10-25 14:26:45', '2018-10-25 14:26:39', '', NULL, '', '', '', '2018-12-24 14:26:45', '', 'y', '2018-10-25 14:26:57', '2018-10-25 14:26:49', '', NULL, '', '', '', '2018-12-24 14:26:57', '', NULL, '', '', '', '', 'y', '2018-10-25 14:26:49', '2018-10-25 14:27:00', '', NULL, '', '', '', '', 99, '', '', '', '', '', '', '', '', '', '', '', ''),
+(22, 1, 3, 'Terima Jadi Buku', 'Terima_Jadi_Buku_20181025142839.docx', '2018-10-25 07:28:39', NULL, NULL, 'y', '2018-10-25 14:29:00', '2018-10-25 14:28:49', '', NULL, '', '', '', '2018-12-24 14:29:00', NULL, '', NULL, '', '', '2018-12-24 14:29:00', NULL, '', 'y', '2018-10-25 14:31:42', '2018-10-25 14:31:35', '', NULL, '', '', '', '2018-12-24 14:31:42', '', 'y', '2018-10-25 14:31:55', '2018-10-25 14:31:45', '', NULL, '', '', '', '2018-12-24 14:31:55', '', NULL, '', '', '', '', 'y', '2018-10-25 14:31:45', '2018-10-25 14:31:58', 'Terima_Jadi_Buku_proofread_file_20181025143208.docx', '2018-10-25 14:32:08', 'superadmin', '', '', '<p>setujui<br></p>', 13, '', '', '', '', '', '', '', '', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -365,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `draft_author` (
   `draft_id` mediumint(9) DEFAULT NULL,
   `author_id` mediumint(9) DEFAULT NULL,
   `draft_author_status` int(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `draft_author`
@@ -386,7 +392,17 @@ INSERT INTO `draft_author` (`draft_author_id`, `draft_id`, `author_id`, `draft_a
 (15, 11, 8, 1),
 (16, 12, 8, 1),
 (17, 13, 1, 1),
-(19, 15, 1, 1);
+(19, 15, 1, 1),
+(20, 16, 1, 1),
+(21, 16, 2, 0),
+(22, 16, 8, 0),
+(23, 17, 9, 1),
+(24, 17, 10, 0),
+(25, 18, 8, 1),
+(26, 19, 1, 1),
+(27, 19, 2, 0),
+(29, 21, 9, 1),
+(30, 22, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -399,7 +415,7 @@ CREATE TABLE IF NOT EXISTS `draft_reviewer` (
   `draft_id` mediumint(9) DEFAULT NULL,
   `reviewer_id` mediumint(9) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT '0' COMMENT '1 = Accept, 2 = Reject'
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `draft_reviewer`
@@ -419,7 +435,21 @@ INSERT INTO `draft_reviewer` (`draft_reviewer_id`, `draft_id`, `reviewer_id`, `s
 (12, 12, 1, 0),
 (13, 12, 2, 0),
 (14, 13, 1, 0),
-(15, 13, 2, 0);
+(15, 13, 2, 0),
+(18, 15, 2, 0),
+(19, 15, 5, 0),
+(20, 16, 3, 0),
+(21, 16, 4, 0),
+(22, 17, 3, 0),
+(23, 17, 5, 0),
+(24, 18, 3, 0),
+(25, 18, 4, 0),
+(26, 19, 1, 0),
+(27, 19, 2, 0),
+(30, 21, 5, 0),
+(31, 21, 4, 0),
+(32, 22, 1, 0),
+(33, 22, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -475,7 +505,7 @@ CREATE TABLE IF NOT EXISTS `responsibility` (
   `responsibility_id` mediumint(9) NOT NULL,
   `user_id` mediumint(9) DEFAULT NULL,
   `draft_id` mediumint(9) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `responsibility`
@@ -487,7 +517,28 @@ INSERT INTO `responsibility` (`responsibility_id`, `user_id`, `draft_id`) VALUES
 (3, 2, 12),
 (4, 2, 13),
 (5, 4, 13),
-(6, 6, 13);
+(6, 6, 13),
+(10, 2, 15),
+(11, 4, 15),
+(12, 6, 15),
+(13, 12, 16),
+(14, 4, 16),
+(15, 6, 16),
+(16, 12, 17),
+(17, 4, 17),
+(18, 6, 17),
+(19, 12, 18),
+(20, 4, 18),
+(21, 6, 18),
+(22, 2, 19),
+(23, 4, 19),
+(24, 6, 19),
+(28, 12, 21),
+(29, 4, 21),
+(30, 6, 21),
+(31, 2, 22),
+(32, 4, 22),
+(33, 6, 22);
 
 -- --------------------------------------------------------
 
@@ -586,7 +637,7 @@ CREATE TABLE IF NOT EXISTS `worksheet` (
   `worksheet_notes` text NOT NULL,
   `worksheet_pic` varchar(256) NOT NULL,
   `worksheet_ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `worksheet`
@@ -596,14 +647,20 @@ INSERT INTO `worksheet` (`worksheet_id`, `draft_id`, `worksheet_num`, `is_reprin
 (1, 1, '2018-10-01', 'n', 2, 'Contoh persetujuan editor', 'editor1', '2018-10-23 04:39:09'),
 (2, 2, '2018-10-02', 'n', 1, 'Lembar kerja disetujui', 'superadmin', '2018-10-23 17:31:54'),
 (3, 3, '2018-10-03', 'n', 1, 'Lembar Kerja Diterima', 'superadmin', '2018-10-23 17:32:16'),
-(7, 7, '2018-10-04', 'n', 0, '', '', '2018-10-24 11:24:51'),
+(7, 7, '2018-10-04', 'n', 0, 'Menunggu Lembar Kerja', 'superadmin', '2018-10-25 06:56:26'),
 (9, 8, '2018-10-05', 'n', 1, '', 'superadmin', '2018-10-24 11:49:01'),
 (10, 9, '2018-10-06', 'n', 1, '', 'superadmin', '2018-10-24 12:03:04'),
 (11, 10, '2018-10-07', 'n', 1, '', 'superadmin', '2018-10-24 12:21:08'),
 (12, 11, '2018-10-08', 'n', 1, '', 'superadmin', '2018-10-24 13:37:57'),
 (13, 12, '2018-10-09', 'n', 1, '', 'superadmin', '2018-10-24 13:44:05'),
 (14, 13, '2018-10-10', 'n', 1, '', 'superadmin', '2018-10-24 14:12:12'),
-(16, 15, '2018-10-11', 'n', 0, '', '', '2018-10-25 04:51:40');
+(16, 15, '2018-10-11', 'n', 1, '', 'superadmin', '2018-10-25 05:22:09'),
+(17, 16, '2018-10-12', 'n', 1, '', 'superadmin', '2018-10-25 06:35:48'),
+(18, 17, '2018-10-13', 'n', 1, '', 'superadmin', '2018-10-25 06:49:47'),
+(19, 18, '2018-10-14', 'n', 1, '', 'superadmin', '2018-10-25 06:56:04'),
+(20, 19, '2018-10-15', 'n', 1, '', 'superadmin', '2018-10-25 07:02:07'),
+(22, 21, '2018-10-16', 'n', 1, '', 'superadmin', '2018-10-25 07:26:00'),
+(23, 22, '2018-10-17', 'n', 1, '', 'superadmin', '2018-10-25 07:28:47');
 
 -- --------------------------------------------------------
 
@@ -746,7 +803,7 @@ ALTER TABLE `work_unit`
 -- AUTO_INCREMENT for table `author`
 --
 ALTER TABLE `author`
-  MODIFY `author_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
+  MODIFY `author_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `book`
 --
@@ -761,17 +818,17 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `draft`
 --
 ALTER TABLE `draft`
-  MODIFY `draft_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=16;
+  MODIFY `draft_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
 --
 -- AUTO_INCREMENT for table `draft_author`
 --
 ALTER TABLE `draft_author`
-  MODIFY `draft_author_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=20;
+  MODIFY `draft_author_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=31;
 --
 -- AUTO_INCREMENT for table `draft_reviewer`
 --
 ALTER TABLE `draft_reviewer`
-  MODIFY `draft_reviewer_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
+  MODIFY `draft_reviewer_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=34;
 --
 -- AUTO_INCREMENT for table `faculty`
 --
@@ -786,7 +843,7 @@ ALTER TABLE `institute`
 -- AUTO_INCREMENT for table `responsibility`
 --
 ALTER TABLE `responsibility`
-  MODIFY `responsibility_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
+  MODIFY `responsibility_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=34;
 --
 -- AUTO_INCREMENT for table `reviewer`
 --
@@ -806,7 +863,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `worksheet`
 --
 ALTER TABLE `worksheet`
-  MODIFY `worksheet_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=17;
+  MODIFY `worksheet_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=24;
 --
 -- AUTO_INCREMENT for table `work_unit`
 --
@@ -822,8 +879,7 @@ ALTER TABLE `work_unit`
 ALTER TABLE `author`
   ADD CONSTRAINT `author_ibfk_1` FOREIGN KEY (`work_unit_id`) REFERENCES `work_unit` (`work_unit_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `author_ibfk_2` FOREIGN KEY (`institute_id`) REFERENCES `institute` (`institute_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `author_ibfk_3` FOREIGN KEY (`bank_id`) REFERENCES `bank` (`bank_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `author_ibfk_4` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `author_ibfk_3` FOREIGN KEY (`bank_id`) REFERENCES `bank` (`bank_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `book`
