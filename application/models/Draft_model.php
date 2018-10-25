@@ -25,7 +25,7 @@ class Draft_model extends MY_Model
             [
                 'field' => 'author_id[]',
                 'label' => 'Author ID',
-                'rules' => 'trim'
+                'rules' => 'trim|required'
             ],
             [
                 'field' => 'entry_date',
@@ -324,7 +324,7 @@ class Draft_model extends MY_Model
         $config = [
             'upload_path'      => './draftfile/',
             'file_name'        => $draftFileName,
-            'allowed_types'    => 'docx|doc',    // docx only
+            'allowed_types'    => 'docx|doc|pdf',    // docx only
             'max_size'         => 51200,     // 50MB
             'overwrite'        => true,
             'file_ext_tolower' => true,
@@ -364,7 +364,7 @@ class Draft_model extends MY_Model
         $config = [
             'upload_path'      => './draftfile/',
             'file_name'        => $draftFileName,
-            'allowed_types'    => 'docx|doc',    // docx only
+            'allowed_types'    => 'docx|doc|pdf',    // docx only
             'max_size'         => 151200,     // 50MB
             'overwrite'        => true,
             'file_ext_tolower' => true,

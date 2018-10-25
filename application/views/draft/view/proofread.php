@@ -47,7 +47,7 @@
                 <div id="modal-proofread">
                 <p class="font-weight-bold">NASKAH</p>
                 <!-- if upload ditampilkan di level tertentu -->
-                <?php if($ceklevel=='layout' or ($ceklevel == 'author' and $author_order==1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+                <?php if($ceklevel=='layouter' or $ceklevel=='editor' or ($ceklevel == 'author' and $author_order==1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
                 <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/proofread_file', 'id="proofreadform"'); ?>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                   <!-- .form-group -->

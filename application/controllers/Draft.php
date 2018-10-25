@@ -720,11 +720,11 @@ class Draft extends Operator_Controller
             $prevent = count(array_filter(
                     $layouters,
                     function ($e) {
-                $this->session->set_flashdata('warning', 'Anda tidak memiliki akses ke draft ini');
                         return $e->user_id == $this->role_id;
                     }
                 ));
             if($prevent==0){
+                $this->session->set_flashdata('warning', 'Anda tidak memiliki akses ke draft ini');
                 redirect('draft');
             };
         }
@@ -797,7 +797,7 @@ class Draft extends Operator_Controller
           $tahap = explode('_', $column);
           $this->draft->editDraftDate($id, $tahap[0].'_upload_date');
           $last_upload = $tahap[0].'_last_upload';
-          $input->$last_upload = $this->level;
+          $input->$last_upload = $this->username;
           
           if (!empty($_FILES) && $_FILES[$column]['size'] > 0) {
               // Upload new draft (if any)

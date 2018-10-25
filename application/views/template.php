@@ -33,6 +33,8 @@
     <!-- END THEME STYLES -->
     <!-- JS -->
     <script src="<?= base_url('assets/vendor/jquery/jquery.min.js'); ?>"></script>
+    <script src="<?= base_url('assets/vendor/jquery-validation/jquery.validate.min.js'); ?>"></script>
+    <script src="<?= base_url('assets/vendor/jquery-validation/additional-methods.min.js'); ?>"></script>
     
 </head>
 <body>

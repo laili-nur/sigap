@@ -382,9 +382,10 @@
         );
         echo form_input($hidden_date);?>
       <span class="d-inline-block" tabindex="0" data-trigger="focus" data-toggle="popover" <?=($input->is_proofread == 'n')? 'data-content="Proofread belum disetujui"':'' ?> data-placement="top">
-       <button class="btn btn-primary" style="pointer-events: none;" data-toggle="modal" data-target="#modalsimpan" <?=($input->is_proofread == 'y')? '':'disabled' ?>>Simpan jadi buku</button>
-      </span>
-       <button class="btn btn-danger" data-toggle="modal" data-target="#modaltolak">Tolak</button>
+       <button class="btn btn-primary"  data-toggle="modal" data-target="#modalsimpan" <?=($input->is_proofread == 'n' and $input->proofread_file == '')? 'disabled style="pointer-events: none;"':'' ?>>Simpan jadi buku</button>
+      
+       <button class="btn btn-danger" data-toggle="modal" data-target="#modaltolak" <?=($input->is_proofread == 'n' and $input->proofread_file == '')? 'disabled style="pointer-events: none;"':'' ?>>Tolak</button>
+       </span>
      </div>
      <!-- Alert Danger Modal -->
       <div class="modal modal-warning fade" id="modalsimpan" tabindex="-1" role="dialog" aria-labelledby="modalsimpan" aria-hidden="true">
