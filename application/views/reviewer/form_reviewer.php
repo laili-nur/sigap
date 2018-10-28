@@ -27,7 +27,7 @@
     <!-- .card-body -->
     <div class="card-body">
       <!-- .form -->
-      <?= form_open($form_action,'class="needs-validation" novalidate=""') ?>
+      <?= form_open($form_action,' novalidate="" id="formreviewer"') ?>
         <!-- .fieldset -->
         <fieldset>
           <legend>Data Reviewer</legend>
@@ -37,9 +37,8 @@
             <label for="user_id">Pilih User ID untuk Login
               <abbr title="Required">*</abbr>
             </label>
-            <?= form_dropdown('user_id', getDropdownListReviewer('user', ['user_id', 'username']), $input->user_id, 'id="user_id" class="form-control custom-select d-block" required') ?>
-
-            <div class="invalid-feedback">Field is required</div>
+            <?= form_dropdown('user_id', getDropdownListReviewer('user', ['user_id', 'username']), $input->user_id, 'id="user_id" class="form-control custom-select d-block"') ?>
+            <small class="form-text text-muted">Reviewer wajib memiliki akun. Jika belum ada, daftarkan akun di <a href="<?=base_url('user/add') ?>"><strong>sini</strong></a></small>
             <?= form_error('user_id') ?>
           </div>
           <!-- /.form-group -->
@@ -49,15 +48,7 @@
             <label for="reviewer_nip">NIP
               <abbr title="Required">*</abbr>
             </label>
-            <div class="has-clearable">
-              <button type="button" class="close" aria-label="Close">
-                <span aria-hidden="true">
-                  <i class="fa fa-times-circle"></i>
-                </span>
-              </button>
-            <?= form_input('reviewer_nip', $input->reviewer_nip, 'class="form-control" id="reviewer_nip" required') ?>
-            <div class="invalid-feedback">Field is required</div>
-            </div>
+            <?= form_input('reviewer_nip', $input->reviewer_nip, 'class="form-control" id="reviewer_nip"') ?>
             <?= form_error('reviewer_nip') ?>
           </div>
           <!-- /.form-group -->
@@ -66,15 +57,7 @@
             <label for="reviewer_name">Nama
               <abbr title="Required">*</abbr>
             </label>
-            <div class="has-clearable">
-              <button type="button" class="close" aria-label="Close">
-                <span aria-hidden="true">
-                  <i class="fa fa-times-circle"></i>
-                </span>
-              </button>
-            <?= form_input('reviewer_name', $input->reviewer_name, 'class="form-control" id="reviewer_name" required') ?>
-            <div class="invalid-feedback">Field is required</div>
-            </div>
+            <?= form_input('reviewer_name', $input->reviewer_name, 'class="form-control" id="reviewer_name"') ?>
             <?= form_error('reviewer_name') ?>
           </div>
           <!-- /.form-group -->
@@ -83,17 +66,17 @@
             <label for="user_id">Fakultas
               <abbr title="Required">*</abbr>
             </label>
-            <?= form_dropdown('faculty_id', getDropdownList('faculty', ['faculty_id', 'faculty_name']), $input->faculty_id, 'id="faculty_id" class="form-control custom-select d-block" required') ?>
-            <div class="invalid-feedback">Field is required</div>
+            <?= form_dropdown('faculty_id', getDropdownList('faculty', ['faculty_id', 'faculty_name']), $input->faculty_id, 'id="faculty_id" class="form-control custom-select d-block"') ?>
             <?= form_error('faculty_id') ?>
           </div>
           <!-- /.form-group -->
           <!-- .form-group -->
           <div class="form-group">
-            <label for="expert">Kepakaran</label>
-              <?= form_dropdown('expert[]',$input->sumber,$input->pilih, 'id="expert" class="form-control custom-select d-block" multiple="multiple" required') ?> 
-              <small class="form-text text-muted">Pilih kepakaran yang telah ada, atau tambahkan kepakaran baru</small>
-            <div class="invalid-feedback"> Field is required </div>
+            <label for="expert">Kepakaran
+              <abbr title="Required">*</abbr>
+            </label>
+              <?= form_dropdown('expert[]',$input->sumber,$input->pilih, 'id="expert" class="form-control custom-select d-block" multiple="multiple"') ?> 
+              <small class="form-text text-muted">Pilih kepakaran yang telah ada, atau tambahkan kepakaran baru (Ketik lalu tekan enter)</small>
             <?= form_error('expert') ?>
           </div>
           <!-- /.form-group -->
@@ -118,6 +101,41 @@
 
 <script>
     $(document).ready(function(){
+      setting_validasi();
+    $("#formreviewer").validate({
+        rules: {
+          user_id : "crequired",
+          reviewer_nip : {
+            crequired :true,
+            cminlength : 3,
+            cnumber : true
+          },
+          reviewer_name : {
+            crequired :true,
+            huruf :true
+          },
+          faculty_id : "crequired",
+          "expert[]" : "crequired",
+        },
+        errorElement: "span",
+        errorPlacement: function (error, element) {
+           error.addClass( "invalid-feedback" );
+            if (element.parent('.input-group').length) { 
+                error.insertAfter(element.next('span.select2'));      // input group
+            } else if (element.hasClass("select2-hidden-accessible")){
+                error.insertAfter(element.next('span.select2'));  // select2
+            } else if (element.hasClass("custom-file-input")){
+                error.insertAfter(element.next('label.custom-file-label'));  // fileinput custom
+            } else if (element.hasClass("custom-control-input")){
+                error.insertAfter($(".custom-radio").last());  // radio
+            }else {                                      
+                error.insertAfter(element);               // default
+            }
+        }
+      },
+      select2_validasi()
+     );
+
       $("#user_id").select2({
       placeholder: '-- Choose --',
       allowClear: true

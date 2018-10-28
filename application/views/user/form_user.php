@@ -24,7 +24,7 @@
       <!-- .card-body -->
       <div class="card-body">
         <!-- .form -->
-        <?= form_open($form_action,'class="needs-validation" novalidate=""') ?>
+        <?= form_open($form_action,'id="formuser" novalidate=""') ?>
           <!-- .fieldset -->
           <fieldset>
             <legend>Data User</legend>
@@ -34,15 +34,7 @@
               <label for="username">Username
                 <abbr title="Required">*</abbr>
               </label>
-              <div class="has-clearable">
-                <button type="button" class="close" aria-label="Close">
-                  <span aria-hidden="true">
-                    <i class="fa fa-times-circle"></i>
-                  </span>
-                </button>
-              <?= form_input('username', $input->username, 'class="form-control" id="username" required ') ?>
-              <div class="invalid-feedback">Field is required</div>
-              </div>
+              <?= form_input('username', $input->username, 'class="form-control" id="username"') ?>
               <?= form_error('username') ?>
             </div>
             <!-- /.form-group -->
@@ -51,14 +43,7 @@
               <label for="password">Password
                 <abbr title="Required">*</abbr>
               </label>
-              <div class="has-clearable">
-                <button type="button" class="close" aria-label="Close">
-                  <span aria-hidden="true">
-                    <i class="fa fa-times-circle"></i>
-                  </span>
-                </button>
              <?= form_password('password','' ,'class="form-control" id="password"') ?>
-              </div>
               <?= form_error('password') ?>
             </div>
             <!-- /.form-group -->
@@ -69,7 +54,7 @@
                     <label>Level</label>
                       <div class="custom-control custom-radio">
                         <?= form_radio('level', 'superadmin',
-                          isset($input->level) && ($input->level == 'superadmin') ? true : false,'required class="custom-control-input" id="level1"')?>
+                          isset($input->level) && ($input->level == 'superadmin') ? true : false,' class="custom-control-input" id="level1"')?>
                         <label class="custom-control-label" for="level1">Superadmin</label>
                       </div>
                       <div class="custom-control custom-radio">
@@ -102,7 +87,6 @@
                           isset($input->level) && ($input->level == 'author_reviewer') ? true : false,' class="custom-control-input" id="level7"')?>
                         <label class="custom-control-label" for="level7">Author dan Reviewer</label>
                       </div>
-                      <div class="invalid-feedback">Field is required</div>
                      <?= form_error('level') ?>
                   </div>
                   <!-- /.form-group -->
@@ -116,7 +100,7 @@
                   <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-secondary <?=($input->is_blocked == 'y') ? 'active' : '' ?>">
                       <?= form_radio('is_blocked', 'y',
-                      isset($input->is_blocked) && ($input->is_blocked == 'y') ? true : false,'required class="custom-control-input" id="blocked1"')?> Blocked</label>
+                      isset($input->is_blocked) && ($input->is_blocked == 'y') ? true : false,' class="custom-control-input" id="blocked1"')?> Blocked</label>
                     <label class="btn btn-secondary <?=($input->is_blocked == 'n') ? 'active' : '' ?>">
                       <?= form_radio('is_blocked', 'n',
                       isset($input->is_blocked) && ($input->is_blocked == 'n') ? true : false,' class="custom-control-input" id="blocked2"')?> Not Blocked</label>
@@ -129,9 +113,6 @@
                 <!-- /.form-group -->
               </div>
             </div>
-            
-            
-          
           </fieldset>
           <!-- /.fieldset -->
           <hr>
@@ -156,5 +137,40 @@
     $('#hilang').hide();
   </script>
 <?php endif ?>
+<script>
+  $(document).ready(function(){
+    setting_validasi();
+    $("#formuser").validate({
+        rules: {
+          username : {
+            crequired :true,
+            username : true,
+          },
+          password: {
+            crequired : true,
+            cminlength : 5
+          },
+          level : "crequired"
+        },
+        errorElement: "span",
+        errorPlacement: function (error, element) {
+           error.addClass( "invalid-feedback" );
+            if (element.parent('.input-group').length) { 
+                error.insertAfter(element.next('span.select2'));      // input group
+            } else if (element.hasClass("select2-hidden-accessible")){
+                error.insertAfter(element.next('span.select2'));  // select2
+            } else if (element.hasClass("custom-file-input")){
+                error.insertAfter(element.next('label.custom-file-label'));  // fileinput custom
+            } else if (element.hasClass("custom-control-input")){
+                error.insertAfter($(".custom-radio").last());  // radio
+            }else {                                      
+                error.insertAfter(element);               // default
+            }
+        }
+      },
+      select2_validasi()
+     );
+  })
+</script>
 
 

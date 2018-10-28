@@ -279,7 +279,7 @@
             <!-- .form-group -->
             <div class="form-group" id="form-author">
               <label for="user_id">Nama Penulis</label>
-              <?= form_dropdown('author', getDropdownList('author', ['author_id', 'author_name']), '', 'id="pilih_author" class="form-control custom-select d-block"') ?>
+              <?= form_dropdown('author', getDropdownList('author', ['author_id', 'author_name']), '', 'id="pilih_author" class="form-control custom-select d-block" required') ?>
             </div>
             <!-- /.form-group -->
             </fieldset>
@@ -356,7 +356,11 @@
   <?php endif ?>
   <!-- endif reviewer tidak bisa melihat progress draft -->
   <!-- progress-review -->
-  <?php $this->load->view('draft/view/review'); ?>
+  <?php if($reviewers == null): ?>
+    <div class="alert alert-warning"><strong>PERHATIAN!</strong> Pilih reviewer terlebih dahulu sebelum lanjut ke tahap selanjutnya.  Apabila progress belum terbuka maka lakukan reload <p class="m-0 p-0 mt-2"><button class="btn btn-warning btn-xs" type="button" id="pil-rev"><i class="fa fa-user-graduate"></i> Pilih reviewer</button> <button class="btn btn-warning btn-xs" type="button" onClick="window.location.reload()"><i class="fa fa-sync"></i> Reload</button></p></div>
+  <?php else: ?>
+    <?php $this->load->view('draft/view/review'); ?> 
+  <?php endif ?>
   <!-- reviewer tidak bisa melihat progress draft -->
   <?php if($ceklevel != 'reviewer'): ?>
     <?php if($input->is_review == 'y'): ?>
@@ -382,9 +386,8 @@
         );
         echo form_input($hidden_date);?>
       <span class="d-inline-block" tabindex="0" data-trigger="focus" data-toggle="popover" <?=($input->is_proofread == 'n')? 'data-content="Proofread belum disetujui"':'' ?> data-placement="top">
-       <button class="btn btn-primary"  data-toggle="modal" data-target="#modalsimpan" <?=($input->is_proofread == 'n' and $input->proofread_file == '')? 'disabled style="pointer-events: none;"':'' ?>>Simpan jadi buku</button>
-      
-       <button class="btn btn-danger" data-toggle="modal" data-target="#modaltolak" <?=($input->is_proofread == 'n' and $input->proofread_file == '')? 'disabled style="pointer-events: none;"':'' ?>>Tolak</button>
+       <button class="btn btn-primary"  data-toggle="modal" data-target="#modalsimpan" <?=($input->is_proofread == 'y' and $input->proofread_file != '')? '':'disabled style="pointer-events: none;"' ?>>Simpan jadi buku</button>
+       <button class="btn btn-danger" data-toggle="modal" data-target="#modaltolak" <?=($input->is_proofread == 'y' and $input->proofread_file != '')? '':'disabled style="pointer-events: none;"' ?>>Tolak</button>
        </span>
      </div>
      <!-- Alert Danger Modal -->
@@ -456,6 +459,18 @@
 
 <script>
   $(document).ready(function() {
+
+    //scroll to top dan ganti tab
+    function activaTab(tab){
+        $('.nav-tabs.card-header-tabs a[href="#' + tab + '"]').tab('show');
+    };
+    $('#pil-rev').click(function(){
+       $('html, body').animate({scrollTop: 1}, 400);
+       setTimeout(function() {activaTab('data-reviewer');}, 500);
+      return false;
+    });
+
+
     $("#pilih_author").select2({
       placeholder: '-- Pilih --',
       dropdownParent: $('#pilihauthor'),

@@ -79,35 +79,43 @@
               <!-- /.modal-header -->
                 <!-- .modal-body -->
                 <div class="modal-body">
-                  <div id="modal-layout">
                   <p class="font-weight-bold">NASKAH</p>
                   <!-- if upload ditampilkan di level tertentu -->
                   <?php if($ceklevel=='layouter' or $ceklevel=='editor' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
                   <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/layout_file', 'id="layoutform"'); ?>
                     <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                     <!-- .form-group -->
-                      <div class="form-group">
+                      <div class="form-group ">
                         <label for="layout_file">File Naskah</label>
                         <!-- .input-group -->
                         <div class="input-group input-group-alt">
                           <div class="custom-file">
-                            <?= form_upload('layout_file','','class="custom-file-input" id="layout_file" required') ?> 
+                            <?= form_upload('layout_file','','class="custom-file-input" id="layout_file"') ?> 
                             <label class="custom-file-label" for="layout_file">Choose file</label>
-                            <div class="invalid-feedback">Field is required</div>
                           </div>
                           <div class="input-group-append">
                             <button class="btn btn-primary" type="submit" value="Submit" id="btn-upload-layout"><i class="fa fa-upload"></i> Upload</button>
                           </div>
                         </div>
+                        <small class="form-text text-muted">Tipe file upload  bertype : docx, doc, dan pdf.</small>
                         <!-- /.input-group -->
-                        <small class="form-text text-muted">Last Upload : <?=konversiTanggal($input->layout_upload_date) ?>, by : <?=$input->layout_last_upload ?></small>
                       </div>
                       <!-- /.form-group -->
                   <?= form_close(); ?>
                   <?php endif ?>
                   <!-- endif upload ditampilkan di level tertentu -->
+                  
+                  <!-- keterangan last upload dan tombol download -->
+                  <div id="modal-layout">
+                  <p>Last Upload : <?=konversiTanggal($input->layout_upload_date) ?>, 
+                  <br> by : <?=konversi_username_level($input->layout_last_upload) ?>
+                  <?php  if($ceklevel !='author' and $ceklevel !='reviewer'):?>
+                    <em>(<?=$input->layout_last_upload ?>)</em>
+                  <?php endif ?>
+                  </p>
                   <?=(!empty($input->layout_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->layout_file.'" href="'.base_url('draftfile/'.$input->layout_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : 'No data' ?>
                   </div>
+
                   <hr class="my-3">
                   <!-- .form -->
                   <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formlayout"') ?>
@@ -185,7 +193,6 @@
               <!-- /.modal-header -->
               <!-- .modal-body -->
               <div class="modal-body">
-                <div id="modal-cover">
                 <p class="font-weight-bold">COVER</p>
                 <!-- if upload ditampilkan di level tertentu -->
                 <?php if($ceklevel=='layouter' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
@@ -197,21 +204,29 @@
                       <!-- .input-group -->
                       <div class="input-group input-group-alt">
                         <div class="custom-file">
-                          <?= form_upload('cover_file','','class="custom-file-input" id="cover_file" required') ?> 
+                          <?= form_upload('cover_file','','class="custom-file-input" id="cover_file"') ?> 
                           <label class="custom-file-label" for="cover_file">Choose file</label>
-                          <div class="invalid-feedback">Field is required</div>
                         </div>
                         <div class="input-group-append">
                           <button class="btn btn-primary" type="submit" value="Submit" id="btn-upload-cover"><i class="fa fa-upload"></i> Upload</button>
                         </div>
                       </div>
+                      <small class="form-text text-muted">Tipe file upload  bertype : jpg, jpeg, png, dan pdf.</small>
                       <!-- /.input-group -->
-                      <small class="form-text text-muted">Last Upload : <?=konversiTanggal($input->cover_upload_date) ?>, by : <?=$input->cover_last_upload ?></small>
                     </div>
                     <!-- /.form-group -->
                 <?= form_close(); ?>
                 <?php endif ?>
                 <!-- endif upload ditampilkan di level tertentu -->
+
+                <!-- keterangan last upload dan tombol download -->
+                <div id="modal-cover">
+                  <p>Last Upload : <?=konversiTanggal($input->cover_upload_date) ?>, 
+                  <br> by : <?=konversi_username_level($input->cover_last_upload) ?>
+                  <?php  if($ceklevel !='author' and $ceklevel !='reviewer'):?>
+                    <em>(<?=$input->cover_last_upload ?>)</em>
+                  <?php endif ?>
+                  </p>
                 <?php if(!empty($input->cover_file)):?>
                   <div class="row">
                 <!-- grid column -->
@@ -222,9 +237,7 @@
                       <figure class="figure">
                         <!-- .figure-img -->
                         <div class="figure-img">
-<!--                          <img class="img-fluid" src="<?=base_url('draft/download/'.$input->cover_file) ?>" alt="Card image cap">-->
-                            <img class="img-fluid" src="<?php base_url('draft/download/'.$input->cover_file);?>" alt="Card image cap">
-                          
+                            <img class="img-fluid" src="<?= base_url('coverfile/'.$input->cover_file);?>" alt="Card image cap">
                           <div class="figure-action">
                             <a href="<?=base_url('draft/download/'.urlencode($input->cover_file)) ?>" class="btn btn-block btn-sm btn-primary">Download Cover</a>
                           </div>
@@ -503,6 +516,131 @@
 
   <script>
     $(document).ready(function(){
+      //panggil setingan validasi di ugmpress js
+      setting_validasi();
+
+      //submit dan validasi
+      $("#layoutform").validate({
+          rules: {
+            layout_file: {
+              crequired :true,
+              dokumen: "docx|doc|pdf",
+              filesize50: 52428200
+            }
+          },
+          errorElement: "span",
+          errorClass : "none",
+          validClass : "none",
+          errorPlacement: function (error, element) {
+             error.addClass( "invalid-feedback" );
+              if (element.parent('.input-group').length) { 
+                  error.insertAfter(element.next('span.select2'));      // input group
+              } else if (element.hasClass("select2-hidden-accessible")){
+                  error.insertAfter(element.next('span.select2'));  // select2
+              } else if (element.parent().parent().hasClass('input-group')){
+                  error.insertAfter(element.closest('.input-group'));  // fileinput append
+              } else if (element.hasClass("custom-file-input")){
+                  error.insertAfter(element.next('label.custom-file-label'));  // fileinput custom
+              }else if (element.hasClass("custom-control-input")){
+                  error.insertAfter($(".custom-radio").last());  // radio
+              }else {                                      
+                  error.insertAfter(element);               // default
+              }
+          },
+          submitHandler: function (form) { 
+                var $this = $('#btn-upload-layout');
+                $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Uploading ");
+                let id=$('[name=draft_id]').val();
+                var formData = new FormData(form);
+                $.ajax({
+                    url : "<?php echo base_url('draft/upload_progress/') ?>"+id+"/layout_file",
+                    type:"post",
+                     data:formData,
+                     processData:false,
+                     contentType:false,
+                     cache:false,
+                    success :function(data){
+                      let datax = JSON.parse(data);
+                      console.log(datax);
+                      $this.removeAttr("disabled").html("Upload");
+                      if(datax.status == true){
+                        toastr_view('111');
+                      }else{
+                        toastr_view('000');
+                      }
+                      $('#modal-layout').load(' #modal-layout');
+                    }
+                  });
+                $resetform = $('#layout_file');
+                $resetform.val('');
+                $resetform.next('label.custom-file-label').html('');
+              return false;
+          }
+        },
+        select2_validasi()
+       );
+
+      //submit dan validasi
+      $("#coverform").validate({
+          rules: {
+            cover_file: {
+              crequired :true,
+              dokumen: "jpg|jpeg|png|pdf",
+              filesize50: 52428200
+            }
+          },
+          errorElement: "span",
+          errorClass : "none",
+          validClass : "none",
+          errorPlacement: function (error, element) {
+             error.addClass( "invalid-feedback" );
+              if (element.parent('.input-group').length) { 
+                  error.insertAfter(element.next('span.select2'));      // input group
+              } else if (element.hasClass("select2-hidden-accessible")){
+                  error.insertAfter(element.next('span.select2'));  // select2
+              } else if (element.parent().parent().hasClass('input-group')){
+                  error.insertAfter(element.closest('.input-group'));  // fileinput append
+              } else if (element.hasClass("custom-file-input")){
+                  error.insertAfter(element.next('label.custom-file-label'));  // fileinput custom
+              }else if (element.hasClass("custom-control-input")){
+                  error.insertAfter($(".custom-radio").last());  // radio
+              }else {                                      
+                  error.insertAfter(element);               // default
+              }
+          },
+          submitHandler: function (form) { 
+                var $this = $('#btn-upload-cover');
+                $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Uploading ");
+                let id=$('[name=draft_id]').val();
+                var formData = new FormData(form);
+                $.ajax({
+                    url : "<?php echo base_url('draft/upload_progress/') ?>"+id+"/cover_file",
+                    type:"post",
+                     data:formData,
+                     processData:false,
+                     contentType:false,
+                     cache:false,
+                    success :function(data){
+                      let datax = JSON.parse(data);
+                      console.log(datax);
+                      $this.removeAttr("disabled").html("Upload");
+                      if(datax.status == true){
+                        toastr_view('111');
+                      }else{
+                        toastr_view('000');
+                      }
+                      $('#modal-cover').load(' #modal-cover');
+                    }
+                  });
+                $resetform = $('#cover_file');
+                $resetform.val('');
+                $resetform.next('label.custom-file-label').html('');
+              return false;
+          }
+        },
+        select2_validasi()
+       );
+
       $('#btn-submit-layout').on('click',function(){
         var $this = $(this);
         $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
@@ -562,58 +700,6 @@
         return false;
       });
 
-      $('#layoutform').submit(function() {
-        var $this = $('#btn-upload-layout');
-        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Uploading ");
-        let id=$('[name=draft_id]').val();
-        $.ajax({
-            url : "<?php echo base_url('draft/upload_progress/') ?>"+id+"/layout_file",
-            type:"post",
-             data:new FormData(this),
-             processData:false,
-             contentType:false,
-             cache:false,
-            success :function(data){
-              let datax = JSON.parse(data);
-              console.log(datax);
-              $this.removeAttr("disabled").html("Upload");
-              if(datax.status == true){
-                toastr_view('111');
-              }else{
-                toastr_view('000');
-              }
-              $('#modal-layout').load(' #modal-layout');
-            }
-          });
-          return false;
-      });
-
-      $('#coverform').submit(function(e) {
-        e.preventDefault();
-        var $this = $('#btn-upload-cover');
-        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Uploading ");
-        let id=$('[name=draft_id]').val();
-        $.ajax({
-            url : "<?php echo base_url('draft/upload_progress/') ?>"+id+"/cover_file",
-            type:"post",
-             data:new FormData(this),
-             processData:false,
-             contentType:false,
-             cache:false,
-            success :function(data){
-              let datax = JSON.parse(data);
-              console.log(datax);
-              $this.removeAttr("disabled").html("Upload");
-              if(datax.status == true){
-                toastr_view('111');
-              }else{
-                toastr_view('000');
-              }
-              $('#modal-cover').load(' #modal-cover');
-            }
-          });
-          return false;
-      });
 
       $('#layout-setuju').on('click', function() {
         var $this = $(this);

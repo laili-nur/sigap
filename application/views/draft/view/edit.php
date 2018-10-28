@@ -78,7 +78,6 @@
               <!-- /.modal-header -->
                 <!-- .modal-body -->
                 <div class="modal-body">
-                  <div id="modal-edit">
                   <p class="font-weight-bold">NASKAH</p>
                   <!-- if upload ditampilkan di level tertentu -->
                   <?php if($ceklevel=='editor' or ($ceklevel == 'author' and $author_order==1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
@@ -90,23 +89,32 @@
                         <!-- .input-group -->
                         <div class="input-group input-group-alt">
                           <div class="custom-file">
-                            <?= form_upload('edit_file','','class="custom-file-input" id="edit_file" required') ?> 
+                            <?= form_upload('edit_file','','class="custom-file-input" id="edit_file"') ?> 
                             <label class="custom-file-label" for="edit_file">Choose file</label>
-                            <div class="invalid-feedback">Field is required</div>
                           </div>
                           <div class="input-group-append">
                             <button class="btn btn-primary" type="submit" value="Submit" id="btn-upload-edit"><i class="fa fa-upload"></i> Upload</button>
                           </div>
                         </div>
+                        <small class="form-text text-muted">Tipe file upload  bertype : docx, doc, dan pdf.</small>
                         <!-- /.input-group -->
-                        <small class="form-text text-muted">Last Upload : <?=konversiTanggal($input->edit_upload_date) ?>, by : <?=$input->edit_last_upload ?></small>
                       </div>
                       <!-- /.form-group -->
                   <?= form_close(); ?>
                   <?php endif ?>
                   <!-- endif upload ditampilkan di level tertentu -->
+                  
+                  <!-- keterangan last upload dan tombol download -->
+                  <div id="modal-edit">
+                  <p>Last Upload : <?=konversiTanggal($input->edit_upload_date) ?>, 
+                  <br> by : <?=konversi_username_level($input->edit_last_upload) ?>
+                  <?php  if($ceklevel !='author' and $ceklevel !='reviewer'):?>
+                    <em>(<?=$input->edit_last_upload ?>)</em>
+                  <?php endif ?>
+                  </p>
                   <?=(!empty($input->edit_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->edit_file.'" href="'.base_url('draftfile/'.$input->edit_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : 'No data' ?>
                   </div>
+  
                   <hr class="my-3">
                   <!-- .form -->
                   <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formedit"') ?>
@@ -360,6 +368,71 @@
 
   <script>
     $(document).ready(function(){
+
+      //panggil setingan validasi di ugmpress js
+      setting_validasi();
+
+      //submit dan validasi
+      $("#editform").validate({
+          rules: {
+            edit_file: {
+              crequired :true,
+              dokumen: "docx|doc|pdf",
+              filesize50: 52428200
+            }
+          },
+          errorElement: "span",
+          errorClass : "none",
+          validClass : "none",
+          errorPlacement: function (error, element) {
+             error.addClass( "invalid-feedback" );
+              if (element.parent('.input-group').length) { 
+                  error.insertAfter(element.next('span.select2'));      // input group
+              } else if (element.hasClass("select2-hidden-accessible")){
+                  error.insertAfter(element.next('span.select2'));  // select2
+              } else if (element.parent().parent().hasClass('input-group')){
+                  error.insertAfter(element.closest('.input-group'));  // fileinput append
+              } else if (element.hasClass("custom-file-input")){
+                  error.insertAfter(element.next('label.custom-file-label'));  // fileinput custom
+              }else if (element.hasClass("custom-control-input")){
+                  error.insertAfter($(".custom-radio").last());  // radio
+              }else {                                      
+                  error.insertAfter(element);               // default
+              }
+          },
+          submitHandler: function (form) { 
+                var $this = $('#btn-upload-edit');
+                $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Uploading ");
+                let id=$('[name=draft_id]').val();
+                var formData = new FormData(form);
+                $.ajax({
+                    url : "<?php echo base_url('draft/upload_progress/') ?>"+id+"/edit_file",
+                    type:"post",
+                     data:formData,
+                     processData:false,
+                     contentType:false,
+                     cache:false,
+                    success :function(data){
+                      let datax = JSON.parse(data);
+                      console.log(datax);
+                      $this.removeAttr("disabled").html("Upload");
+                      if(datax.status == true){
+                        toastr_view('111');
+                      }else{
+                        toastr_view('000');
+                      }
+                      $('#modal-edit').load(' #modal-edit');
+                    }
+                  });
+                $resetform = $('#edit_file');
+                $resetform.val('');
+                $resetform.next('label.custom-file-label').html('');
+              return false;
+          }
+        },
+        select2_validasi()
+       );
+
       $('#btn-submit-edit').on('click',function(){
         var $this = $(this);
         $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
@@ -389,31 +462,6 @@
         return false;
       });
 
-      $('#editform').submit(function() {
-        var $this = $('#btn-upload-edit');
-        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Uploading ");
-        let id=$('[name=draft_id]').val();
-        $.ajax({
-            url : "<?php echo base_url('draft/upload_progress/') ?>"+id+"/edit_file",
-            type:"post",
-             data:new FormData(this),
-             processData:false,
-             contentType:false,
-             cache:false,
-            success :function(data){
-              let datax = JSON.parse(data);
-              console.log(datax);
-              $this.removeAttr("disabled").html("Upload");
-              if(datax.status == true){
-                toastr_view('111');
-              }else{
-                toastr_view('000');
-              }
-              $('#modal-edit').load(' #modal-edit');
-            }
-          });
-          return false;
-      });
 
       $('#edit-setuju').on('click', function() {
         var $this = $(this);

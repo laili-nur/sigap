@@ -45,37 +45,37 @@ class Author_model extends MY_Model
             [
                 'field' => 'author_address',
                 'label' => 'Author Address',
-                'rules' => 'trim|required|min_length[1]|max_length[256]'
+                'rules' => 'trim|max_length[256]'
             ],
             [
                 'field' => 'author_contact',
                 'label' => 'Author Contact',
-                'rules' => 'required|min_length[1]|max_length[20]|callback_unique_author_contact'
+                'rules' => 'trim|max_length[20]|callback_unique_author_contact'
             ],
             [
                 'field' => 'author_email',
                 'label' => 'Author Email',
-                'rules' => 'trim|required|valid_email|callback_unique_author_email'
+                'rules' => 'trim|valid_email|callback_unique_author_email'
             ],
             [
                 'field' => 'bank_id',
                 'label' => 'Author Bank',
-                'rules' => 'trim|required|max_length[100]'
+                'rules' => 'trim|max_length[100]'
             ],
             [
                 'field' => 'author_saving_num',
                 'label' => 'Author Saving Number',
-                'rules' => 'trim|required|min_length[1]|max_length[30]|callback_unique_author_saving_num'
+                'rules' => 'trim|max_length[30]|callback_unique_author_saving_num'
             ],
             [
                 'field' => 'heir_name',
                 'label' => 'Heir Name',
-                'rules' => 'trim|required|min_length[1]|max_length[256]'
+                'rules' => 'trim|max_length[256]'
             ],
             [
                 'field' => 'user_id',
                 'label' => 'User ID',
-                'rules' => 'trim|callback_unique_author_username'
+                'rules' => 'trim'
             ]
             
             

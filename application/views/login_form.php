@@ -20,11 +20,11 @@
     <link rel="shortcut icon" href="assets/favicon.ico">
     <meta name="theme-color" content="#3063A0">
     <!-- BEGIN BASE STYLES -->
-    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="assets/vendor/font-awesome/css/fontawesome-all.min.css">
     <!-- END BASE STYLES -->
     <!-- BEGIN THEME STYLES -->
-    <link rel="stylesheet" href="assets/stylesheets/main.min.css">
+    <link rel="stylesheet" href="assets/stylesheets/main.css">
     <link rel="stylesheet" href="assets/stylesheets/custom.css">
     <!-- END THEME STYLES -->
   </head>
@@ -72,7 +72,7 @@
       <!-- /.auth-form -->
       <!-- copyright -->
       <footer class="auth-footer">
-        <p><strong>last update : 23 oktober 2018</strong></p>
+        <p><strong>last update : 28 oktober 2018</strong></p>
         <p class="text-center"><a href="#">About</a></p>
       </footer>
     </main>

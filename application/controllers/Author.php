@@ -199,6 +199,7 @@ class Author extends Operator_Controller
 
     public function copyToReviewer($user_id, $nip, $name) 
     {
+
         $this->load->model('reviewer_model', 'reviewer', true);
         $reviewer_id = $this->reviewer->getIdRoleFromUserId($user_id, 'reviewer');
 
@@ -221,7 +222,9 @@ class Author extends Operator_Controller
                 }
             }
         } else {
+            $this->session->set_flashdata('warning', 'User telah memiliki role Author dan Reviewer');
             redirect('author');
+
         }
     }
         

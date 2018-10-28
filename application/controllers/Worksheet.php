@@ -15,8 +15,8 @@ class Worksheet extends Operator_Controller
 
 	public function index($page = null)
 	{
-        $worksheets     = $this->worksheet->join('draft')->orderBy('worksheet_status')->orderBy('worksheet_num')->paginate($page)->getAll();
-        $tot        = $this->worksheet->join('draft')->orderBy('worksheet_status')->orderBy('worksheet_num')->getAll();
+        $worksheets     = $this->worksheet->join('draft')->orderBy('worksheet_id','desc')->orderBy('worksheet_status')->orderBy('worksheet_num')->paginate($page)->getAll();
+        $tot        = $this->worksheet->join('draft')->orderBy('worksheet_id','desc')->orderBy('worksheet_status')->orderBy('worksheet_num')->getAll();
         $total     = count($tot);
         $pages    = $this->pages;
         $main_view  = 'worksheet/index_worksheet';

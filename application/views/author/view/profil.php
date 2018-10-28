@@ -12,7 +12,7 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> User ID </td>
-                <td>: <?= konversiID('user','user_id', $input->user_id)->username;?> </td>
+                <td>: <?= ($input->user_id=='')? konversiID('user','user_id', $input->user_id)->username:'' ?> </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->

@@ -521,7 +521,18 @@ class Draft extends Operator_Controller
         $main_view  = 'draft/index_draft';
         $this->load->view('template', compact('final','pages', 'main_view', 'drafts', 'pagination', 'total'));
     }
-        
+
+    public function ajax_reload_author()
+{
+    $data = $this->draft->select(['author_id','author_name'])->getAll('author');
+    if ($data) {
+        foreach ($data as $key => $value) {
+            $datax[$value->author_id] = $value->author_name;
+        }
+        echo json_encode($datax);
+    }
+
+}    
         
 // --add--        
         public function add($category='')
@@ -630,9 +641,8 @@ class Draft extends Operator_Controller
         $draft->draft_status = $this->checkStatus($draft->draft_status);
         
         // ambil tabel worksheet
-        $this->load->model('Worksheet_model','worksheet',true);
         $ambil_worksheet = ['draft_id' => $id];
-        $desk = $this->worksheet->getWhere($ambil_worksheet, 'worksheet');
+        $desk = $this->draft->getWhere($ambil_worksheet, 'worksheet');
 
         //pecah data csv jadi array
         $draft->nilai_reviewer1 = explode(",",$draft->nilai_reviewer1);
@@ -702,7 +712,6 @@ class Draft extends Operator_Controller
                 redirect('draft');
             };
         }
-        
         if ($this->level == "editor") {
             $prevent = count(array_filter(
                     $editors,
@@ -715,7 +724,6 @@ class Draft extends Operator_Controller
                 redirect('draft');
             };
         }
-        
         if ($this->level == "layouter") {
             $prevent = count(array_filter(
                     $layouters,
@@ -836,10 +844,10 @@ class Draft extends Operator_Controller
             // }
 
             if ($this->draft->where('draft_id', $id)->update($input)) {
-                //$this->session->set_flashdata('success', 'Data updated');
+                //$this->session->set_flashdata('success', 'Upload Success');
                 $data['status'] = true;
             } else {
-                //$this->session->set_flashdata('error', 'Data failed to update');
+                //$this->session->set_flashdata('error', 'Upload Failed');
               $data['status'] = false;
             }
         }

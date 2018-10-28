@@ -1,3 +1,54 @@
+function preview_image(event) 
+  {
+   var reader = new FileReader();
+   reader.onload = function()
+   {
+    var output = document.getElementById('output_image');
+    output.src = reader.result;
+   }
+   reader.readAsDataURL(event.target.files[0]);
+  };
+
+function setting_validasi(){
+  $.validator.addMethod("alphanum", function(value, element) {
+        return this.optional(element) || /^[\w., ]+$/i.test(value);
+    }, "Hanya diperbolehkan menggunakan huruf, angka, underscore, titik, koma, dan spasi");
+  $.validator.addMethod("username", function(value, element) {
+        return this.optional(element) || /^[\w.]+$/i.test(value);
+    }, "Hanya diperbolehkan menggunakan huruf, angka, underscore dan titik");
+    $.validator.addMethod('filesize50', function (value, element, param) {
+        return this.optional(element) || (element.files[0].size <= param)
+    }, 'File harus kurang dari 50MB');
+    $.validator.addMethod('filesize15', function (value, element, param) {
+        return this.optional(element) || (element.files[0].size <= param)
+    }, 'File harus kurang dari 15MB');
+    $.validator.addMethod("huruf", function(value, element) {
+        return this.optional(element) || /^[a-z ]+$/i.test(value);
+    }, "Hanya diperbolehkan menggunakan huruf alfabet");
+    $.validator.addMethod("crequired", $.validator.methods.required,"Kolom tidak boleh kosong");
+    $.validator.addMethod("cminlength", $.validator.methods.minlength, $.validator.format("Minimal {0} karakter"));
+    $.validator.addMethod("cnumber", $.validator.methods.number, $.validator.format("Hanya diperbolehkan menggunakan angka"));
+    $.validator.addMethod("cemail", $.validator.methods.email, $.validator.format("Masukkan sesuai format email"));
+    $.validator.addMethod("crange", $.validator.methods.range, $.validator.format("Masukkan tahun antara {0} sampai {1}"));
+    $.validator.addMethod("dokumen", $.validator.methods.extension, "Format/Ekstensi file salah");
+}
+
+function select2_validasi(){
+  $("select").on("select2:close", function (e) {  
+      $(this).valid(); 
+  }) 
+}
+
+// $(".mantul").each(function() {
+//     $(this).rules('add', {
+//         crequired: true,
+//     });
+// });
+$.validator.addClassRules("req", {
+    crequired: true,
+});
+
+
 function toastr_view(param){
   toastr.options = {
       "closeButton": true,
@@ -54,6 +105,8 @@ function toastr_view(param){
     toastr.error('Lengkapi nilai review');
   }else if(param == 'flag'){
     toastr.error('Rekomendasi dibutuhkan');
+  }else if(param == 'update_author'){
+    toastr.success('List Penulis berhasil diupdate');
   }
 }
 

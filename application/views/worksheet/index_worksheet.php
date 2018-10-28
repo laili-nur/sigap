@@ -56,7 +56,17 @@
             <!-- /.card-header -->
            <!-- .card-body -->
           <div class="card-body p-0">
+
             <div class="p-3">
+              <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <h5>Info</h5> 
+                <p class="m-0">Klik tombol <button class="btn btn-sm btn-secondary"><i class="fa fa-thumbs-up"></i> Aksi</button> untuk menyetujui atau menolak draft sesuai dengan keputusan desk screening</p>
+                <p class="m-0">Klik link di kolom <em>Judul draft</em> untuk menuju draft yang terkait</p>
+                <p class="m-0">Klik link di kolom <em>Nomer lembar kerja</em> untuk memasukkan keterangan desk screening</p>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
               <!-- .input-group -->
               <?= form_open('worksheet/search', ['method' => 'GET']) ?>
               <div class="input-group input-group-alt">
@@ -129,17 +139,8 @@
                           <div class="list-group-item-body"> Tolak </div>
                         </a>
                       </div>');?>" data-trigger="focus">
-                    <i class="fa fa-thumbs-up"></i>
+                    <i class="fa fa-thumbs-up"></i> Aksi
                   </button>
-
-                      <!-- <button onclick="location.href='<?= base_url('worksheet/action/'.$worksheet->worksheet_id.'/1') ?>'" title="Setuju Draft" class="btn btn-sm btn-success">
-                        <i class="fa fa-check"></i>
-                        <span class="sr-only">Setuju</span>
-                      </button>
-                       <button onclick="location.href='<?= base_url('worksheet/action/'.$worksheet->worksheet_id.'/2') ?>'" title="Tolak Draft" class="btn btn-sm btn-danger">
-                        <i class="fa fa-ban"></i>
-                        <span class="sr-only">Tolak</span>
-                      </button> -->
                       <a title="Edit" href="<?= base_url('worksheet/edit/'.$worksheet->worksheet_id.'') ?>" class="btn btn-sm btn-secondary">
                         <i class="fa fa-pencil-alt"></i>
                         <span class="sr-only">Edit</span>

@@ -58,6 +58,13 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
         <div class="card-body p-0">
           <div class="tab-pane fade active show" id="card-tabel1">
             <div class="p-3">
+              <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <h5>Info</h5> 
+                <p class="m-0">Klik tombol <button class="btn btn-sm btn-primary"><i class="fa fa-user-plus"></i></button> untuk menyalin data penulis yang terpilih untuk dijadikan reviewer. <strong>Pastikan author memiliki akun agar dapat disalin.</strong></p>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
               <!-- .input-group -->
               <?= form_open('author/search', ['method' => 'GET']) ?>
               <div class="input-group input-group-alt">
@@ -98,8 +105,9 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
                       <td class="align-middle"><?= $author->author_nip ?></td>
                       <td class="align-middle"><?= $author->work_unit_name ?></td>
                       <td class="align-middle"><?= $author->institute_name ?></td>
-                      <td class="align-middle text-right">
-                        <button title="Jadikan Reviewer" onclick="location.href='<?= base_url('author/copyToReviewer/' . $author->user_id . '/' . $author->author_nip . '/' . $author->author_name) ?>'"  class="btn btn-sm btn-primary">
+                      <td class="align-middle text-right">    
+
+                        <button title="Jadikan Reviewer" onclick="location.href='<?= base_url('author/copyToReviewer/' . $author->user_id . '/' . $author->author_nip . '/' . $author->author_name) ?>'"  class="btn btn-sm btn-primary" <?=(!$author->user_id)? 'disabled' : '' ?>>
                           <i class="fa fa-user-plus"></i>
                           <span class="sr-only">Jadikan reviewer</span>
                         </button>

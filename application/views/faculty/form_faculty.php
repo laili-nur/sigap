@@ -28,7 +28,7 @@
     <!-- .card-body -->
     <div class="card-body">
       <!-- .form -->
-      <?= form_open($form_action,'class="needs-validation" novalidate=""') ?>
+      <?= form_open($form_action,'id="formfaculty" novalidate=""') ?>
         <!-- .fieldset -->
         <fieldset>
           <legend>Data Fakultas</legend>
@@ -38,15 +38,7 @@
             <label for="faculty_name">Fakultas
               <abbr title="Required">*</abbr>
             </label>
-            <div class="has-clearable">
-              <button type="button" class="close" aria-label="Close">
-                <span aria-hidden="true">
-                  <i class="fa fa-times-circle"></i>
-                </span>
-              </button>
             <?= form_input('faculty_name', $input->faculty_name, 'class="form-control" id="faculty_name" autofocus') ?>
-            </div>
-            <div class="invalid-feedback">erot</div>
             <?= form_error('faculty_name') ?>
           </div>
           <!-- /.form-group -->
@@ -68,3 +60,33 @@
   </div>
 </div>
 <!-- /.page-section -->
+<script>
+  $(document).ready(function(){
+    setting_validasi();
+    $("#formfaculty").validate({
+        rules: {
+          faculty_name : {
+            crequired :true,
+            alphanum : true,
+          }
+        },
+        errorElement: "span",
+        errorPlacement: function (error, element) {
+           error.addClass( "invalid-feedback" );
+            if (element.parent('.input-group').length) { 
+                error.insertAfter(element.next('span.select2'));      // input group
+            } else if (element.hasClass("select2-hidden-accessible")){
+                error.insertAfter(element.next('span.select2'));  // select2
+            } else if (element.hasClass("custom-file-input")){
+                error.insertAfter(element.next('label.custom-file-label'));  // fileinput custom
+            } else if (element.hasClass("custom-control-input")){
+                error.insertAfter($(".custom-radio").last());  // radio
+            }else {                                      
+                error.insertAfter(element);               // default
+            }
+        }
+      },
+      select2_validasi()
+     );
+  })
+</script>

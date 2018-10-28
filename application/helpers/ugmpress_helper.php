@@ -1,4 +1,20 @@
 <?php
+
+function konversi_username_level($username){
+    if($username=='' || $username == null){
+        return "-";
+    }else{
+        $CI =& get_instance();
+        $query = $CI->db->from('user')->where('username', $username)->get();
+        if($query){
+            return $query->row()->level;
+        }else{
+            return "-";
+        }
+    }
+    
+}
+
 function konversiTanggal($input=null,$opsi=''){
     if($input==null || $input=='0000-00-00 00:00:00'){
         return "-";
@@ -20,9 +36,29 @@ function konversiID($table,$vars,$id)
     }else{
         $CI =& get_instance();
         $query = $CI->db->from($table)->where($vars, $id)->get();
-        return $query->row();
+        if($query){
+            return $query->row();
+        }else{
+            return "";
+        }
     }
     
+}
+
+// Get list of option for dropdown.
+function getDropdownListBook($table, $columns)
+{
+    $CI =& get_instance();
+    $query = $CI->db->select($columns)->from($table)->where('draft_status','13')->get();
+
+    if ($query->num_rows() >= 1) {
+        $options1 = ['' => '-- Choose --'];
+        $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
+        $options = $options1 + $options2;
+        return $options;
+    }
+
+    return $options = ['' => '- Empty -'];
 }
 
 // Get list of editor

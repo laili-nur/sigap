@@ -39,7 +39,8 @@ class Worksheet_model extends MY_Model
             'draft_id'           => '',
             'worksheet_num'           => '',
             'worksheet_notes'           => '',
-            'is_reprint'              => 'n'
+            'is_reprint'              => 'n',
+            'worksheet_status'              => '0'
         ];
     }
 }

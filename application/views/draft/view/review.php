@@ -116,11 +116,10 @@
               <!-- /.modal-header -->
               <!-- .modal-body -->
               <div class="modal-body">
-                <div id="modal-review1">
                 <p class="font-weight-bold">NASKAH</p>
                 <!-- if upload ditampilkan di level tertentu -->
                 <?php if($ceklevel=='reviewer' or ($ceklevel == 'author' and $author_order==1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
-                <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/review1_file', 'id="rev1form"'); ?>
+                <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/review1_file', ' novalidate id="rev1form"'); ?>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                   <!-- .form-group -->
                     <div class="form-group">
@@ -128,23 +127,32 @@
                       <!-- .input-group -->
                       <div class="input-group input-group-alt">
                         <div class="custom-file">
-                          <?= form_upload('review1_file','','class="custom-file-input" id="review1_file" required') ?> 
+                          <?= form_upload('review1_file','','class="custom-file-input" id="review1_file"') ?> 
                           <label class="custom-file-label" for="review1_file">Choose file</label>
-                          <div class="invalid-feedback">Field is required</div>
                         </div>
                         <div class="input-group-append">
                           <button class="btn btn-primary" type="submit" value="Submit" id="btn-upload-review1"><i class="fa fa-upload"></i> Upload</button>
                         </div>
                       </div>
+                      <small class="form-text text-muted">Tipe file upload  bertype : docx, doc, dan pdf.</small>
                       <!-- /.input-group -->
-                      <small class="form-text text-muted">Last Upload : <?=konversiTanggal($input->review1_upload_date) ?>, by : <?=$input->review1_last_upload ?></small>
                     </div>
                     <!-- /.form-group -->
                 <?= form_close(); ?>
                 <?php endif ?>
                 <!-- endif upload ditampilkan di level tertentu -->
+                
+                <!-- keterangan last upload dan tombol download -->
+                <div id="modal-review1">
+                <p>Last Upload : <?=konversiTanggal($input->review1_upload_date) ?>, 
+                <br> by : <?=konversi_username_level($input->review1_last_upload) ?>
+                <?php  if($ceklevel !='author' and $ceklevel !='reviewer'):?>
+                  <em>(<?=$input->review1_last_upload ?>)</em>
+                <?php endif ?>
+                </p>
                 <?=(!empty($input->review1_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review1_file.'" href="'.base_url('draftfile/'.$input->review1_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : 'No data' ?>
                 </div>
+
                 <hr class="my-3">
                 <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formreview1_krit" novalidate=""'); ?>
                   <!-- review dari reviewer hanya bisa dibaca admin dan staff ugmpress -->
@@ -433,11 +441,10 @@
               <!-- /.modal-header -->
               <!-- .modal-body -->
               <div class="modal-body">
-                <div id="modal-review2">
                 <!-- if upload ditampilkan di level tertentu -->
                 <p class="font-weight-bold">NASKAH</p>
                 <?php if($ceklevel=='reviewer' or ($ceklevel == 'author' and $author_order==1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
-                <?= form_open('draft/upload_progress/'.$input->draft_id.'/review2_file', 'id="rev2form"'); ?>
+                <?= form_open('draft/upload_progress/'.$input->draft_id.'/review2_file', 'novalidate id="rev2form"'); ?>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : 'No data' ?>
                   <!-- .form-group -->
                     <div class="form-group">
@@ -445,23 +452,32 @@
                       <!-- .input-group -->
                       <div class="input-group input-group-alt">
                         <div class="custom-file">
-                          <?= form_upload('review2_file','','class="custom-file-input" id="review2_file" required') ?> 
+                          <?= form_upload('review2_file','','class="custom-file-input" id="review2_file"') ?> 
                           <label class="custom-file-label" for="review2_file">Choose file</label>
-                          <div class="invalid-feedback">Field is required</div>
                         </div>
                         <div class="input-group-append">
                           <button class="btn btn-primary" type="submit" value="Submit" id="btn-upload-review2"><i class="fa fa-upload"></i> Upload</button>
                         </div>
                       </div>
+                      <small class="form-text text-muted">Tipe file upload  bertype : docx, doc, dan pdf.</small>
                       <!-- /.input-group -->
-                      <small class="form-text text-muted">Last Upload : <?=konversiTanggal($input->review2_upload_date) ?>, by : <?=$input->review2_last_upload ?></small>
                     </div>
                     <!-- /.form-group -->
                 <?= form_close(); ?>
                 <?php endif ?>
                 <!-- endif upload ditampilkan di level tertentu -->
-                <?=(!empty($input->review2_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review2_file.'" href="'.base_url('draftfile/'.$input->review2_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
+                
+                <!-- keterangan last upload dan tombol download -->
+                <div id="modal-review2">
+                <p>Last Upload : <?=konversiTanggal($input->review2_upload_date) ?>, 
+                <br> by : <?=konversi_username_level($input->review2_last_upload) ?>
+                <?php  if($ceklevel !='author' and $ceklevel !='reviewer'):?>
+                  <em>(<?=$input->review2_last_upload ?>)</em>
+                <?php endif ?>
+                </p>
+                <?=(!empty($input->review2_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review2_file.'" href="'.base_url('draftfile/'.$input->review2_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : 'No data' ?>
                 </div>
+
                 <hr class="my-3">
                 <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formreview2_krit" novalidate=""'); ?>
                   <!-- review dari reviewer hanya bisa dibaca admin dan staff ugmpress -->
@@ -863,6 +879,133 @@
 
   <script>
     $(document).ready(function(){
+      //panggil setingan validasi di ugmpress js
+      setting_validasi();
+
+      //submit dan validasi
+      $("#rev1form").validate({
+          rules: {
+            review1_file: {
+              crequired :true,
+              dokumen: "docx|doc|pdf",
+              filesize50: 52428200
+            }
+          },
+          errorElement: "span",
+          errorClass : "none",
+          validClass : "none",
+          errorPlacement: function (error, element) {
+             error.addClass( "invalid-feedback" );
+              if (element.parent('.input-group').length) { 
+                  error.insertAfter(element.next('span.select2'));      // input group
+              } else if (element.hasClass("select2-hidden-accessible")){
+                  error.insertAfter(element.next('span.select2'));  // select2
+              } else if (element.parent().parent().hasClass('input-group')){
+                  error.insertAfter(element.closest('.input-group'));  // fileinput append
+              } else if (element.hasClass("custom-file-input")){
+                  error.insertAfter(element.next('label.custom-file-label'));  // fileinput custom
+              }else if (element.hasClass("custom-control-input")){
+                  error.insertAfter($(".custom-radio").last());  // radio
+              }else {                                      
+                  error.insertAfter(element);               // default
+              }
+          },
+          submitHandler: function (form) { 
+                var $this = $('#btn-upload-review1');
+                $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Uploading ");
+                let id=$('[name=draft_id]').val();
+                var formData = new FormData(form);
+                $.ajax({
+                    url : "<?php echo base_url('draft/upload_progress/') ?>"+id+"/review1_file",
+                    type:"post",
+                     data:formData,
+                     processData:false,
+                     contentType:false,
+                     cache:false,
+                    success :function(data){
+                      let datax = JSON.parse(data);
+                      console.log(datax);
+                      $this.removeAttr("disabled").html("Upload");
+                      if(datax.status == true){
+                        toastr_view('111');
+                      }else{
+                        toastr_view('000');
+                      }
+                      $('#modal-review1').load(' #modal-review1');
+                    }
+                  });
+                $resetform = $('#review1_file');
+                $resetform.val('');
+                $resetform.next('label.custom-file-label').html('');
+              return false;
+          }
+        },
+        select2_validasi()
+       );
+
+      //submit dan validasi
+      $("#rev2form").validate({
+          rules: {
+            review2_file: {
+              crequired :true,
+              dokumen: "docx|doc|pdf",
+              filesize50: 52428200
+            }
+          },
+          errorElement: "span",
+          errorClass : "none",
+          validClass : "none",
+          errorPlacement: function (error, element) {
+             error.addClass( "invalid-feedback" );
+              if (element.parent('.input-group').length) { 
+                  error.insertAfter(element.next('span.select2'));      // input group
+              } else if (element.hasClass("select2-hidden-accessible")){
+                  error.insertAfter(element.next('span.select2'));  // select2
+              } else if (element.parent().parent().hasClass('input-group')){
+                  error.insertAfter(element.closest('.input-group'));  // fileinput append
+              } else if (element.hasClass("custom-file-input")){
+                  error.insertAfter(element.next('label.custom-file-label'));  // fileinput custom
+              }else if (element.hasClass("custom-control-input")){
+                  error.insertAfter($(".custom-radio").last());  // radio
+              }else {                                      
+                  error.insertAfter(element);               // default
+              }
+          },
+          submitHandler: function (form) { 
+                var $this = $('#btn-upload-review2');
+                $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Uploading ");
+                let id=$('[name=draft_id]').val();
+                var formData = new FormData(form);
+                $.ajax({
+                    url : "<?php echo base_url('draft/upload_progress/') ?>"+id+"/review2_file",
+                    type:"post",
+                     data:formData,
+                     processData:false,
+                     contentType:false,
+                     cache:false,
+                    success :function(data){
+                      let datax = JSON.parse(data);
+                      console.log(datax);
+                      $this.removeAttr("disabled").html("Upload");
+                      if(datax.status == true){
+                        toastr_view('111');
+                      }else{
+                        toastr_view('000');
+                      }
+                      $('#modal-review2').load(' #modal-review2');
+                    }
+                  });
+                $resetform = $('#review2_file');
+                $resetform.val('');
+                $resetform.next('label.custom-file-label').html('');
+              return false;
+          }
+        },
+        select2_validasi()
+       );
+    
+    
+
       $('#btn-submit-review1-rev').on('click',function(){
         var $this = $(this);
         let id=$('[name=draft_id]').val();
@@ -1040,67 +1183,6 @@
         });
         return false;
       });
-
-      $('#rev1form').submit(function() {
-        var $this = $('#btn-upload-review1');
-        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Uploading ");
-        let id=$('[name=draft_id]').val();
-        // var file_data = $('#review2_file').prop('files')[0];
-        // var form_data = new FormData();
-        // form_data.append('review2_file', file_data);
-        // console.log(form_data);
-        $.ajax({
-            url : "<?php echo base_url('draft/upload_progress/') ?>"+id+"/review1_file",
-            type:"post",
-             data:new FormData(this),
-             processData:false,
-             contentType:false,
-             cache:false,
-            success :function(data){
-              let datax = JSON.parse(data);
-              console.log(datax);
-              $this.removeAttr("disabled").html("Upload");
-              if(datax.status == true){
-                toastr_view('111');
-              }else{
-                toastr_view('000');
-              }
-              $('#modal-review1').load(' #modal-review1');
-            }
-          });
-          return false;
-      });
-
-      $('#rev2form').submit(function() {
-        var $this = $('#btn-upload-review2');
-        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Uploading ");
-        let id=$('[name=draft_id]').val();
-        // var file_data = $('#review2_file').prop('files')[0];
-        // var form_data = new FormData();
-        // form_data.append('review2_file', file_data);
-        // console.log(form_data);
-        $.ajax({
-            url : "<?php echo base_url('draft/upload_progress/') ?>"+id+"/review2_file",
-            type:"post",
-             data:new FormData(this),
-             processData:false,
-             contentType:false,
-             cache:false,
-            success :function(data){
-              let datax = JSON.parse(data);
-              console.log(datax);
-              $this.removeAttr("disabled").html("Upload");
-              if(datax.status == true){
-                toastr_view('111');
-              }else{
-                toastr_view('000');
-              }
-              $('#modal-review2').load(' #modal-review2');
-            }
-          });
-          return false;
-      });
-
 
 
       $('#review-setuju').on('click', function() {
