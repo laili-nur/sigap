@@ -107,7 +107,7 @@
             <?= form_error('expert') ?>
           </div>
           <!-- /.form-group -->
-          <hr class="my-2">
+        <hr class="my-2">
             <!-- .form-group -->
             <div class="form-group">
               <label for="reviewer_contact">No HP</label>
@@ -158,13 +158,12 @@
           },
           faculty_id : "crequired",
           "expert[]" : "crequired",
-          reviewer_contact : {
+        reviewer_contact : {
             cnumber :true
           },
           reviewer_email : {
             cemail :true
           },
-        },
         errorElement: "span",
         errorPlacement: function (error, element) {
            error.addClass( "invalid-feedback" );

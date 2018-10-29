@@ -32,7 +32,7 @@ class Reviewer_model extends MY_Model
                 'label' => 'Reviewer ID',
                 'rules' => 'trim|required'
             ],
-             [
+            [
                 'field' => 'reviewer_contact',
                 'label' => 'Reviewer Contact',
                 'rules' => 'trim|max_length[20]|callback_unique_reviewer_contact'

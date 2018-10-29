@@ -75,14 +75,14 @@
           <!-- .form-group -->
           <div class="form-group">
             <label for="book_file">File Buku
-              <abbr title="Required">*</abbr>
+<!--              <abbr title="Required">*</abbr>-->
             </label>
            <?= isset($input->book_file)? ' <p><a href="'.base_url('draftfile/'.$input->book_file).'">'.$input->book_file.'</a></p>' : ''  ?>
             <div class="custom-file">
               <?= form_upload('book_file','','class="custom-file-input" ') ?> 
               <label class="custom-file-label" for="tf3">Choose file</label>
             </div>
-            <small class="form-text text-muted">Hanya menerima file bertype : docx dan doc</small>
+            <small class="form-text text-muted">Hanya menerima file bertype : pdf, docx, dan doc</small>
             <?= fileFormError('book_file', '<p class="text-danger">', '</p>'); ?>
           </div>
           <!-- /.form-group -->
@@ -159,6 +159,54 @@
                <?= form_error('is_reprint') ?>
             </div>
             <!-- /.form-group -->  
+            
+            <!-- .form-group -->
+          <div class="form-group">
+            <label for="nomor_hak_cipta">Nomor Hak Cipta</label>
+            <?= form_input('nomor_hak_cipta', $input->nomor_hak_cipta, 'class="form-control" id="nomor_hak_cipta" ') ?>
+            <?= form_error('nomor_hak_cipta') ?>
+          </div>
+          <!-- /.form-group -->
+            
+          <!-- .form-group -->
+          <div class="form-group">
+            <label for="file_hak_cipta">File Hak Cipta
+<!--              <abbr title="Required">*</abbr>-->
+            </label>
+           <?= isset($input->file_hak_cipta)? ' <p><a href="'.base_url('bookfile/'.$input->file_hak_cipta).'">'.$input->file_hak_cipta.'</a></p>' : ''  ?>
+            <div class="custom-file">
+              <?= form_upload('file_hak_cipta','','class="custom-file-input" ') ?> 
+              <label class="custom-file-label" for="tf3">Choose file</label>
+            </div>
+            <small class="form-text text-muted">Hanya menerima file bertype : jpg, png, jpeg, dan pdf</small>
+            <?= fileFormError('file_hak_cipta', '<p class="text-danger">', '</p>'); ?>
+          </div>
+          <!-- /.form-group -->
+          
+            <!-- .form-group -->
+            <div class="form-group">
+              <label>Status Hak Cipta</label>
+              <div>
+                <!-- button radio -->
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                  <label class="btn btn-secondary <?=($input->status_hak_cipta == '') ? 'active' : '' ?>">
+                    <?= form_radio('status_hak_cipta', '',
+                    isset($input->is_reprint) && ($input->status_hak_cipta == '') ? true : false,'required class="custom-control-input" id="status_hak_cipta0"')?> -</label>
+                  <label class="btn btn-secondary <?=($input->status_hak_cipta == '1') ? 'active' : '' ?>">
+                    <?= form_radio('status_hak_cipta', 'y',
+                    isset($input->is_reprint) && ($input->status_hak_cipta == '1') ? true : false,'required class="custom-control-input" id="status_hak_cipta1"')?> Dalam Proses</label>
+                    
+                    <label class="btn btn-secondary <?=($input->status_hak_cipta == '2') ? 'active' : '' ?>">
+                    <?= form_radio('status_hak_cipta', 'n',
+                    isset($input->is_reprint) && ($input->status_hak_cipta == '2') ? true : false,' class="custom-control-input" id="status_hak_cipta2"')?> Sudah Jadi</label>
+                </div>
+              <!-- /button radio -->
+              </div>
+               <?= form_error('status_hak_cipta') ?>
+            </div>
+            <!-- /.form-group --> 
+            
+            
         </fieldset>
         <!-- /.fieldset -->
         <hr>

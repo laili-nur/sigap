@@ -195,17 +195,14 @@ class Reviewer extends Operator_Controller
 //        }
 //    }
 //
-
-    public function unique_reviewer_contact()
+        public function unique_reviewer_contact()
     {
         $reviewer_contact      = $this->input->post('reviewer_contact');
         $reviewer_id = $this->input->post('reviewer_id');
         if($reviewer_contact==''){return true;}
-
         $this->reviewer->where('reviewer_contact', $reviewer_contact);
         !$reviewer_id || $this->reviewer->where('reviewer_id !=', $reviewer_id);
         $reviewer = $this->reviewer->get();
-
         if (count($reviewer)) {
             $this->form_validation->set_message('unique_reviewer_contact', '%s has been used');
             return false;
@@ -218,18 +215,16 @@ class Reviewer extends Operator_Controller
         $reviewer_email      = $this->input->post('reviewer_email');
         $reviewer_id = $this->input->post('reviewer_id');
         if($reviewer_email==''){return true;}
-
         $this->reviewer->where('reviewer_email', $reviewer_email);
         !$reviewer_id || $this->reviewer->where('reviewer_id !=', $reviewer_id);
         $reviewer = $this->reviewer->get();
-
         if (count($reviewer)) {
             $this->form_validation->set_message('unique_reviewer_email', '%s has been used');
             return false;
         }
         return true;
     }
-
+    
     public function unique_reviewer_nip()
     {
         $reviewer_nip      = $this->input->post('reviewer_nip');

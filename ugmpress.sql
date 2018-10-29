@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 29, 2018 at 03:44 AM
+-- Generation Time: Oct 29, 2018 at 04:27 AM
 -- Server version: 5.6.26
 -- PHP Version: 5.6.12
 
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `author` (
   `heir_name` varchar(256) NOT NULL,
   `user_id` mediumint(9) DEFAULT NULL,
   `author_ktp` varchar(256) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `author`
@@ -54,20 +54,7 @@ INSERT INTO `author` (`author_id`, `work_unit_id`, `institute_id`, `author_nip`,
 (2, 4, 5, '123452', 'Penulis Kedua', 'Drs.', '', 's1', 'Jakarta', '0815799965251', 'penulis2@gmail.com', '009', '7541242124', 'Anaknya Penulis 2', 8, 'KTP_Penulis_Kedua_20181023032951.jpg'),
 (8, 4, 3, '123453', 'Penulis Ketiga', '', 'S.H.', 's1', 'Bandung', '08754541212', 'penulis3@gmail.com', '061', '55521001212', 'Anaknya Penulis 3', 9, 'KTP_Penulis_Ketiga_20181023043740.jpg'),
 (9, 4, 2, '123454', 'Penulis Reviewer Pertama', '', '', 'other', 'Tegal', '0811445454545', 'penulisreviewer1@gmail.com', '121', '666894613332', 'Anaknya Penulis Reviewer 1', 15, ''),
-(10, 3, 6, '123455', 'Penulis Reviewer Kedua', 'Ir.', '', 's1', 'Yogyakarta', '087855512345', 'penulisreviewer2@gmail.com', '167', '7877854212', 'Anaknya Penulis Reviewer 2', 16, ''),
-(14, 4, 6, '23456', 'aaa', '', '', 's1', 'purworejo', '0856402762763', 'bgsbla33333@gdfmail.com', '531', 'Bagaskaraf', 'df', 0, ''),
-(15, 2, 5, 'q3435', 'bbb', '', '', 's1', 'purworejo', '085640276276sad', 'bgsbla33333@gemail.com', '494', 'Bagaskarads', 'asd', 0, ''),
-(17, 4, 3, '345678', 'okokkok', '', '', 's1', 'Kab. Slemanf', '+6285640276276d', 'bgsbla33333d@gmsail.com', '531', 'bagaskara laf', 'f', 0, ''),
-(18, 3, 5, '234567', 'zxcvbnm', '', '', 's1', 'purworedfjo', '085640df276276', 'bgsbla333df33@gmail.com', '531', 'Bagaskadfra', 'adfsdf', 0, ''),
-(19, 3, 3, 'sdsd', 'ayu itngitng', '', '', 's1', 'purworejods', '08564027627ds6', 'bgsbla33333as@gmail.com', '531', 'Bagaskarasd', 'asd', 0, ''),
-(20, 2, 6, '33452', 'anjas', '', '', 's1', 'Kab. Slemanaa', '+628564027asd6276', 'bgsbla33333@xcgmail.com', '061', 'bagaskara laasd', 'asd', 0, ''),
-(21, 3, 6, '134567', 'baru bangetttt', '', '', 's1', 'purworejofg', '08564027627645', 'bgsbla33333@gasdmail.com', '531', 'Bagasksadara', 'asdasd', 0, ''),
-(23, 4, 7, '1234536475', 'terbaru', '', '', 's1', 'Kab. Slemanf', '+62856402762746', 'bgsbla33333@gmadfil.com', '052', 'bagaskara lafd', 'sdf', 0, ''),
-(24, 4, 6, '4567', 'mau mandi', '', '', 's1', 'asdasd', '085640276d276', 'bgsbla33333@sdgmail.com', '494', 'Bagaskaradsds', 'asd', 0, ''),
-(25, 2, 5, 'cek', 'cek', '', '', 's1', 'purworejoss', '085640276276ss', 'bgsbla33333@gmail.comss', '531', 'Bagaskarass', 'sss', 0, ''),
-(26, 3, 3, '3456789', 'cekkkkjkjkj', '', '', 's1', 'dasfsdf', '45364', 'bgsbla33333@gmailfsdf.comsd', '494', 'Bagaskarasdf', 'sdfsf', 0, ''),
-(28, 3, 5, '34567', 'saddan', '', '', 's1', '', '', '', '052', '', '', 0, ''),
-(31, 2, 6, '4566', 'okokkok', '', '', 's1', '', '', '', '', '', '', 0, '');
+(10, 3, 6, '123455', 'Penulis Reviewer Kedua', 'Ir.', '', 's1', 'Yogyakarta', '087855512345', 'penulisreviewer2@gmail.com', '167', '7877854212', 'Anaknya Penulis Reviewer 2', 16, '');
 
 -- --------------------------------------------------------
 
@@ -241,16 +228,19 @@ CREATE TABLE IF NOT EXISTS `book` (
   `serial_num_per_year` mediumint(9) NOT NULL,
   `copies_num` varchar(256) NOT NULL,
   `book_notes` text NOT NULL,
-  `is_reprint` enum('y','n') NOT NULL DEFAULT 'n'
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+  `is_reprint` enum('y','n') NOT NULL DEFAULT 'n',
+  `nomor_hak_cipta` varchar(256) NOT NULL,
+  `file_hak_cipta` varchar(256) NOT NULL,
+  `status_hak_cipta` enum('1','2') NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `book`
 --
 
-INSERT INTO `book` (`book_id`, `draft_id`, `book_code`, `book_title`, `book_edition`, `isbn`, `book_file`, `published_date`, `printing_type`, `serial_num`, `serial_num_per_year`, `copies_num`, `book_notes`, `is_reprint`) VALUES
-(1, 8, '', 'cara codeigniter mantap', '', '', NULL, '2018-10-31', 'p', 0, 0, '', '', 'n'),
-(3, 22, '', 'Terima Jadi Buku', '', '', 'Terima_Jadi_Buku_proofread_file_20181025143208.docx', '2018-10-29', 'o', 0, 0, '', '', 'n');
+INSERT INTO `book` (`book_id`, `draft_id`, `book_code`, `book_title`, `book_edition`, `isbn`, `book_file`, `published_date`, `printing_type`, `serial_num`, `serial_num_per_year`, `copies_num`, `book_notes`, `is_reprint`, `nomor_hak_cipta`, `file_hak_cipta`, `status_hak_cipta`) VALUES
+(1, 22, '', 'Terima Jadi Buku', '', '', 'Terima_Jadi_Buku_proofread_file_20181025143208.docx', '2018-10-29', 'o', 0, 0, '', '', 'n', '0', '', '1'),
+(2, 24, '', 'Tes Buku', '', '', 'Tes_Buku_proofread_file_20181029091658.pdf', '2018-10-29', 'o', 0, 0, '', '', 'n', '0', '', '1');
 
 -- --------------------------------------------------------
 
@@ -266,7 +256,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   `date_open` date NOT NULL,
   `date_close` date NOT NULL,
   `category_status` enum('y','n') NOT NULL DEFAULT 'y'
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `category`
@@ -356,7 +346,7 @@ CREATE TABLE IF NOT EXISTS `draft` (
   `kriteria4_reviewer2` text NOT NULL,
   `nilai_reviewer2` text NOT NULL,
   `review2_last_upload` varchar(255) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `draft`
@@ -368,33 +358,19 @@ INSERT INTO `draft` (`draft_id`, `category_id`, `theme_id`, `draft_title`, `draf
 (3, 2, 6, 'Review Ditolak', 'Reviewer_Ditolak_20181024002020.docx', '2018-10-23 17:20:20', NULL, NULL, 'n', '2018-10-24 00:47:27', '2018-10-24 01:14:21', 'Review_Ditolak_review1_file_20181024005632.docx', '2018-10-23 17:56:32', 'author', '<p>Sudah baik</p>', '<p>Baik<br></p>', '2018-12-23 00:47:28', 'y', 'Review_Ditolak_review2_file_20181024011341.docx', '2018-10-23 18:13:41', '<p>Kurang baik<br></p>', '<p>Aduh<br></p>', '2018-12-23 00:47:28', 'n', '<p>Draft ditolak<br></p>', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 99, '', '<p>Sudah baik<br></p>', '<p>Sudah baik<br></p>', '<p>Sudah baik</p>', '<p>Sudah baik</p>', '4,5,4,5', '<p>Kurang baik<br></p>', '<p>Kurang baik<br></p>', '<p>Kurang baik<br></p>', '<p>Kurang baik<br></p>', '1,1,1,1', 'author'),
 (7, 1, 1, 'Proses Lembar Kerja', 'Proses_Lembar_Kerja_20181024182451.docx', '2018-10-24 11:24:51', NULL, NULL, 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', NULL, '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', '', ''),
 (8, 1, 1, 'Proses Review', 'Proses_Review_20181024182833.docx', '2018-10-24 11:28:33', NULL, NULL, 'n', '2018-10-24 18:49:41', '0000-00-00 00:00:00', '', NULL, '', '', '<p>baik<br></p>', '2018-12-23 18:49:41', 'y', '', NULL, '<p>baik<br></p>', '', '2018-12-23 18:49:41', 'y', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 4, '', '', '', '', '', '5,4,4,4', '', '', '', '', '4,4,4,5', ''),
-(9, 1, 3, 'Review Diterima', 'Review_Diterima_20181024190256.docx', '2018-10-24 12:02:56', NULL, NULL, 'y', '2018-10-24 19:05:43', '2018-10-24 19:05:25', 'Review_Diterima_review1_file_20181028172818.docx', '2018-10-28 10:28:18', 'superadmin', '', '', '2018-12-23 19:05:43', NULL, 'Review_Diterima_review2_file_20181028173224.docx', '2018-10-28 10:32:24', '', '', '2018-12-23 19:05:43', NULL, '<p>Review Disetujui<br></p>', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'Review_Diterima_edit_file_20181028173834.docx', '2018-10-28 10:38:34', 'superadmin', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 5, '', '', '', '', '', '', '', '', '', '', '', 'superadmin'),
-(10, 1, 4, 'Proses Edit', 'Proses_Edit_20181024192100.docx', '2018-10-24 12:21:01', NULL, NULL, 'y', '2018-10-24 19:26:07', '2018-10-24 19:25:58', 'Proses_Edit_review1_file_20181028130521.docx', '2018-10-28 06:05:21', 'superadmin', '', '', '2018-12-23 19:26:07', NULL, 'Proses_Edit_review2_file_20181028114814.docx', '2018-10-28 04:48:14', '', '', '2018-12-23 19:26:07', NULL, '<p>Review Disetujui<br></p>', 'n', '2018-10-24 19:26:39', '0000-00-00 00:00:00', 'Proses_Edit_edit_file_20181024192805.docx', '2018-10-24 12:28:05', 'editor', '<p>Mantab<br></p>', '<p>Oke<br></p>', '2018-12-23 19:26:39', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 6, '', '', '', '', '', '', '', '', '', '', '', 'superadmin'),
+(9, 1, 3, 'Review Diterima', 'Review_Diterima_20181024190256.docx', '2018-10-24 12:02:56', NULL, NULL, 'y', '2018-10-24 19:05:43', '2018-10-24 19:05:25', '', NULL, '', '', '', '2018-12-23 19:05:43', NULL, '', NULL, '', '', '2018-12-23 19:05:43', NULL, '<p>Review Disetujui<br></p>', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 5, '', '', '', '', '', '', '', '', '', '', '', ''),
+(10, 1, 4, 'Proses Edit', 'Proses_Edit_20181024192100.docx', '2018-10-24 12:21:01', NULL, NULL, 'y', '2018-10-24 19:26:07', '2018-10-24 19:25:58', '', NULL, '', '', '', '2018-12-23 19:26:07', NULL, '', NULL, '', '', '2018-12-23 19:26:07', NULL, '<p>Review Disetujui<br></p>', 'n', '2018-10-24 19:26:39', '0000-00-00 00:00:00', 'Proses_Edit_edit_file_20181024192805.docx', '2018-10-24 12:28:05', 'editor', '<p>Mantab<br></p>', '<p>Oke<br></p>', '2018-12-23 19:26:39', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 6, '', '', '', '', '', '', '', '', '', '', '', ''),
 (11, 3, 6, 'Edit Ditolak', 'Edit_Ditolak_20181024203743.docx', '2018-10-24 13:37:43', NULL, NULL, 'y', '2018-10-24 20:42:25', '2018-10-24 20:40:39', '', NULL, '', '', '', '2018-12-23 20:42:25', NULL, '', NULL, '', '', '2018-12-23 20:42:25', NULL, '<p>Review lanjut<br></p>', 'n', '2018-10-24 20:42:43', '2018-10-24 20:42:36', '', NULL, '', '', '', '2018-12-23 20:42:43', '<p>edit ditolak<br></p>', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 99, '', '', '', '', '', '', '', '', '', '', '', ''),
 (12, 1, 6, 'Edit Diterima', 'Edit_Diterima_20181024204356.docx', '2018-10-24 13:43:56', NULL, NULL, 'y', '2018-10-24 20:44:28', '2018-10-24 20:44:12', '', NULL, '', '', '', '2018-12-23 20:44:28', NULL, '', NULL, '', '', '2018-12-23 20:44:28', NULL, '<p>Review diterima<br></p>', 'y', '2018-10-24 20:44:48', '2018-10-24 20:51:31', 'Edit_Diterima_edit_file_20181024205100.docx', '2018-10-24 13:51:00', 'editor', '<p>mantab<br></p>', '<p>Baik<br></p>', '2018-12-23 20:44:48', '<p>Edit Diterima<br></p>', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 7, '', '', '', '', '', '', '', '', '', '', '', ''),
 (13, 1, 3, 'Proses Layout', 'Proses_Layout_20181024211202.docx', '2018-10-24 14:12:02', NULL, NULL, 'y', '2018-10-24 21:12:31', '2018-10-24 21:12:15', '', NULL, '', '', '', '2018-12-23 21:12:31', NULL, '', NULL, '', '', '2018-12-23 21:12:31', NULL, '', 'y', '2018-10-24 21:12:45', '2018-10-24 21:12:39', '', NULL, '', '<p>ok<br></p>', '', '2018-12-23 21:12:45', '<p>Edit Disetujui<br></p>', 'n', '2018-10-24 21:14:26', '0000-00-00 00:00:00', 'Proses_Layout_layout_file_20181024211537.docx', '2018-10-24 14:15:37', 'layouter', '<p>Baik<br></p>', '<p>Baik<br></p>', '2018-12-23 21:14:26', 'Proses_Layout_cover_file_20181024211754.pdf', '2018-10-24 14:19:06', 'layouter', '<p>Baik<br></p>', '<p>Baik<br></p>', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 10, '', '', '', '', '', '', '', '', '', '', '', ''),
 (15, 1, 5, 'Layout Ditolak', 'Layout_Ditolak_20181025115140.docx', '2018-10-25 04:51:40', NULL, NULL, 'y', '2018-10-25 12:23:30', '2018-10-25 12:22:14', '', NULL, '', '', '', '2018-12-24 12:23:30', NULL, '', NULL, '', '', '2018-12-24 12:23:30', NULL, '', 'y', '2018-10-25 12:38:39', '2018-10-25 12:23:37', '', NULL, '', '', '', '2018-12-24 12:38:39', '', 'n', '2018-10-25 12:38:59', '2018-10-25 12:38:43', '', NULL, '', '', '', '2018-12-24 12:38:59', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 99, '', '', '', '', '', '', '', '', '', '', '', ''),
 (16, 1, 4, 'Layout Diterima', 'Layout_Diterima_20181025133231.docx', '2018-10-25 06:32:31', NULL, NULL, 'y', '2018-10-25 13:36:11', '2018-10-25 13:36:00', '', NULL, '', '', '', '2018-12-24 13:36:11', NULL, '', NULL, '', '', '2018-12-24 13:36:11', NULL, '', 'y', '2018-10-25 13:36:22', '2018-10-25 13:36:15', '', NULL, '', '', '', '2018-12-24 13:36:22', '', 'y', '2018-10-25 13:36:38', '2018-10-25 13:36:25', '', NULL, '', '', '', '2018-12-24 13:36:38', '', NULL, '', '', '', '<p>diterima<br></p>', 'n', '2018-10-25 13:36:25', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 12, '', '', '', '', '', '', '', '', '', '', '', ''),
 (17, 3, 6, 'Proofread Ditolak', 'Proofread_Ditolak_20181025134728.docx', '2018-10-25 06:47:28', NULL, NULL, 'y', '2018-10-25 13:50:27', '2018-10-25 13:50:15', '', NULL, '', '', '', '2018-12-24 13:50:27', NULL, '', NULL, '', '', '2018-12-24 13:50:27', NULL, '', 'y', '2018-10-25 13:50:42', '2018-10-25 13:50:33', '', NULL, '', '', '', '2018-12-24 13:50:42', '', 'y', '2018-10-25 13:50:54', '2018-10-25 13:50:46', '', NULL, '', '', '', '2018-12-24 13:50:54', '', NULL, '', '', '', '', 'n', '2018-10-25 13:50:46', '2018-10-25 13:50:57', '', NULL, '', '', '', '', 99, '', '', '', '', '', '', '', '', '', '', '', ''),
-(18, 2, 1, 'Proses Proofread', 'Proses_Proofread_20181025135552.docx', '2018-10-25 06:55:52', NULL, NULL, 'y', '2018-10-25 13:56:51', '2018-10-25 13:56:37', 'Proses_Proofread_review1_file_20181028182715.docx', '2018-10-28 11:27:15', 'superadmin', '', '', '2018-12-24 13:56:51', NULL, 'Proses_Proofread_review2_file_20181028182850.docx', '2018-10-28 11:28:50', '', '', '2018-12-24 13:56:51', NULL, '', 'y', '2018-10-25 13:57:02', '2018-10-25 13:56:55', '', NULL, '', '', '', '2018-12-24 13:57:02', '', 'y', '2018-10-25 13:57:15', '2018-10-25 13:57:05', 'Proses_Proofread_layout_file_20181028180901.docx', '2018-10-28 11:09:01', 'superadmin', '', '', '2018-12-24 13:57:15', 'Proses_Proofread_cover_file_20181028181932.png', '2018-10-28 11:19:32', 'superadmin', '', '', '', 'n', '2018-10-25 13:57:05', '0000-00-00 00:00:00', 'Proses_Proofread_proofread_file_20181028182324.docx', '2018-10-28 18:23:24', 'superadmin', '', '', '', 12, '', '', '', '', '', '', '', '', '', '', '', 'superadmin'),
+(18, 2, 1, 'Proses Proofread', 'Proses_Proofread_20181025135552.docx', '2018-10-25 06:55:52', NULL, NULL, 'y', '2018-10-25 13:56:51', '2018-10-25 13:56:37', '', NULL, '', '', '', '2018-12-24 13:56:51', NULL, '', NULL, '', '', '2018-12-24 13:56:51', NULL, '', 'y', '2018-10-25 13:57:02', '2018-10-25 13:56:55', '', NULL, '', '', '', '2018-12-24 13:57:02', '', 'y', '2018-10-25 13:57:15', '2018-10-25 13:57:05', '', NULL, '', '', '', '2018-12-24 13:57:15', '', NULL, '', '', '', '', 'n', '2018-10-25 13:57:05', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 12, '', '', '', '', '', '', '', '', '', '', '', ''),
 (19, 2, 6, 'Proofread Diterima', 'Proofread_Diterima_20181025140159.docx', '2018-10-25 07:01:59', NULL, NULL, 'y', '2018-10-25 14:02:20', '2018-10-25 14:02:10', '', NULL, '', '', '', '2018-12-24 14:02:21', NULL, '', NULL, '', '', '2018-12-24 14:02:21', NULL, '', 'y', '2018-10-25 14:02:33', '2018-10-25 14:02:25', '', NULL, '', '', '', '2018-12-24 14:02:33', '', 'y', '2018-10-25 14:02:45', '2018-10-25 14:02:37', '', NULL, '', '', '', '2018-12-24 14:02:46', '', NULL, '', '', '', '', 'y', '2018-10-25 14:02:37', '2018-10-25 14:09:01', 'Proofread_Diterima_proofread_file_20181025140517.docx', '2018-10-25 14:05:17', 'author', '<p>baik<br></p>', '<p>baik<br></p>', '<p>setujui<br></p>', 13, '', '', '', '', '', '', '', '', '', '', '', ''),
 (21, 1, 1, 'Tolak Buku', 'Tolak_Buku_20181025142548.docx', '2018-10-25 07:25:48', NULL, NULL, 'y', '2018-10-25 14:26:35', '2018-10-25 14:26:15', '', NULL, '', '', '', '2018-12-24 14:26:35', NULL, '', NULL, '', '', '2018-12-24 14:26:35', NULL, '', 'y', '2018-10-25 14:26:45', '2018-10-25 14:26:39', '', NULL, '', '', '', '2018-12-24 14:26:45', '', 'y', '2018-10-25 14:26:57', '2018-10-25 14:26:49', '', NULL, '', '', '', '2018-12-24 14:26:57', '', NULL, '', '', '', '', 'y', '2018-10-25 14:26:49', '2018-10-25 14:27:00', '', NULL, '', '', '', '', 99, '', '', '', '', '', '', '', '', '', '', '', ''),
-(22, 1, 3, 'Terima Jadi Buku', 'Terima_Jadi_Buku_20181025142839.docx', '2018-10-25 07:28:39', '2018-10-29 02:33:15', NULL, 'y', '2018-10-25 14:29:00', '2018-10-25 14:28:49', 'Terima_Jadi_Buku_review1_file_20181027143855.docx', '2018-10-27 07:38:55', 'reviewer1', '<p>okesip</p>', '', '2018-12-24 14:29:00', 'y', '', NULL, '', '', '2018-12-24 14:29:00', NULL, '', 'y', '2018-10-25 14:31:42', '2018-10-25 14:31:35', '', NULL, '', '', '', '2018-12-24 14:31:42', '', 'y', '2018-10-25 14:31:55', '2018-10-25 14:31:45', '', NULL, '', '', '', '2018-12-24 14:31:55', '', NULL, '', '', '', '', 'y', '2018-10-25 14:31:45', '2018-10-25 14:31:58', 'Terima_Jadi_Buku_proofread_file_20181025143208.docx', '2018-10-25 14:32:08', 'superadmin', '', '', '<p>setujui<br></p>', 14, '', '', '', '', '', '3,4,2,1', '', '', '', '', '', ''),
-(23, 1, 3, 'sdhgjghjgh', NULL, '2018-10-27 03:52:18', NULL, NULL, 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', NULL, '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', '', ''),
-(24, 1, 3, 'sdhgjghjghx', NULL, '2018-10-27 03:56:54', NULL, NULL, 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', NULL, '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', '', ''),
-(25, 1, 3, 'sdhgjghjghm', NULL, '2018-10-27 04:00:59', NULL, NULL, 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', NULL, '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', '', ''),
-(26, 2, 6, 'keduaaa', NULL, '2018-10-27 04:01:22', NULL, NULL, 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', NULL, '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', '', ''),
-(27, 2, 3, 'dffddf', NULL, '2018-10-27 04:02:16', NULL, NULL, 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', NULL, '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', '', ''),
-(28, 3, 1, 'fgdfg', NULL, '2018-10-27 04:05:56', NULL, NULL, 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', NULL, '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', '', ''),
-(29, 3, 4, 'oooktt', NULL, '2018-10-27 04:07:14', NULL, NULL, 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', NULL, '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', '', ''),
-(30, 2, 5, 'sdsdsd', NULL, '2018-10-27 04:09:04', NULL, NULL, 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', NULL, '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', '', ''),
-(31, 3, 4, '999999', NULL, '2018-10-27 04:11:49', NULL, NULL, 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', NULL, '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', '', ''),
-(32, 3, 6, 'terbaru', NULL, '2018-10-27 04:30:12', NULL, NULL, 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', NULL, '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', '', ''),
-(33, 1, 4, 'mau mandi', NULL, '2018-10-27 05:21:35', NULL, NULL, 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', NULL, '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', '', ''),
-(34, 3, 3, 'oookttasd', NULL, '2018-10-27 05:37:07', NULL, NULL, 'n', '2018-10-28 10:25:11', '0000-00-00 00:00:00', '', NULL, '', '', '', '2018-12-27 10:25:11', NULL, '', NULL, '', '', '2018-12-27 10:25:11', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 4, '', '', '', '', '', '', '', '', '', '', '', ''),
-(35, 3, 4, 'sdasd', NULL, '2018-10-27 05:48:57', NULL, NULL, 'n', '2018-10-27 16:29:24', '0000-00-00 00:00:00', '', NULL, '', '', '', '2018-12-26 16:29:24', NULL, '', NULL, '', '', '2018-12-26 16:29:24', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 4, '', '', '', '', '', '', '', '', '', '', '', ''),
-(36, 2, 3, 'sadddann', NULL, '2018-10-28 12:32:43', NULL, NULL, 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', NULL, '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', '', ''),
-(37, 2, 3, 'oookpp', NULL, '2018-10-29 02:21:07', NULL, NULL, 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', NULL, '', NULL, '', '', '0000-00-00 00:00:00', NULL, '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'n', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', '', '');
+(22, 1, 3, 'Terima Jadi Buku', 'Terima_Jadi_Buku_20181025142839.docx', '2018-10-25 07:28:39', '2018-10-29 02:03:59', NULL, 'y', '2018-10-25 14:29:00', '2018-10-25 14:28:49', '', NULL, '', '', '', '2018-12-24 14:29:00', NULL, '', NULL, '', '', '2018-12-24 14:29:00', NULL, '', 'y', '2018-10-25 14:31:42', '2018-10-25 14:31:35', '', NULL, '', '', '', '2018-12-24 14:31:42', '', 'y', '2018-10-25 14:31:55', '2018-10-25 14:31:45', '', NULL, '', '', '', '2018-12-24 14:31:55', '', NULL, '', '', '', '', 'y', '2018-10-25 14:31:45', '2018-10-25 14:31:58', 'Terima_Jadi_Buku_proofread_file_20181025143208.docx', '2018-10-25 14:32:08', 'superadmin', '', '', '<p>setujui<br></p>', 14, '', '', '', '', '', '', '', '', '', '', '', ''),
+(24, 1, 1, 'Tes Buku', 'Tes_Buku_20181029091439.docx', '2018-10-29 02:14:39', '2018-10-29 02:17:46', NULL, 'y', '2018-10-29 09:15:40', '2018-10-29 09:15:45', '', NULL, '', '', '', '2018-12-28 09:15:40', NULL, '', NULL, '', '', '2018-12-28 09:15:40', NULL, '', 'y', '0000-00-00 00:00:00', '2018-10-29 09:15:55', '', NULL, '', '', '', '0000-00-00 00:00:00', '', 'y', '0000-00-00 00:00:00', '2018-10-29 09:15:59', '', NULL, '', '', '', '0000-00-00 00:00:00', '', NULL, '', '', '', '', 'y', '2018-10-29 09:15:59', '2018-10-29 09:16:04', 'Tes_Buku_proofread_file_20181029091658.pdf', '2018-10-29 09:16:58', 'superadmin', '', '', '', 14, '', '', '', '', '', '', '', '', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -407,7 +383,7 @@ CREATE TABLE IF NOT EXISTS `draft_author` (
   `draft_id` mediumint(9) DEFAULT NULL,
   `author_id` mediumint(9) DEFAULT NULL,
   `draft_author_status` int(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `draft_author`
@@ -439,30 +415,7 @@ INSERT INTO `draft_author` (`draft_author_id`, `draft_id`, `author_id`, `draft_a
 (27, 19, 2, 0),
 (29, 21, 9, 1),
 (30, 22, 1, 1),
-(32, 7, 2, 0),
-(33, 7, 10, 0),
-(35, 24, 9, 1),
-(36, 25, 2, 1),
-(38, 27, NULL, 1),
-(39, 28, 2, 1),
-(40, 28, 10, 0),
-(41, 28, 17, 0),
-(42, 29, 8, 1),
-(43, 30, 18, 1),
-(44, 31, 19, 1),
-(45, 31, 20, 0),
-(46, 32, 14, 1),
-(47, 33, 2, 1),
-(48, 33, 19, 0),
-(49, 33, 24, 0),
-(50, 33, 21, 0),
-(51, 34, 25, 1),
-(52, 35, 1, 1),
-(53, 35, 17, 0),
-(54, 35, 26, 0),
-(55, 24, 1, 0),
-(56, 36, 28, 1),
-(57, 37, 2, 1);
+(32, 24, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -475,7 +428,7 @@ CREATE TABLE IF NOT EXISTS `draft_reviewer` (
   `draft_id` mediumint(9) DEFAULT NULL,
   `reviewer_id` mediumint(9) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT '0' COMMENT '1 = Accept, 2 = Reject'
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `draft_reviewer`
@@ -510,8 +463,8 @@ INSERT INTO `draft_reviewer` (`draft_reviewer_id`, `draft_id`, `reviewer_id`, `s
 (31, 21, 4, 0),
 (32, 22, 1, 0),
 (33, 22, 2, 0),
-(41, 35, 5, 0),
-(42, 34, 1, 0);
+(34, 24, 1, 0),
+(35, 24, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -612,29 +565,25 @@ CREATE TABLE IF NOT EXISTS `reviewer` (
   `reviewer_id` mediumint(9) NOT NULL,
   `reviewer_nip` varchar(256) NOT NULL,
   `reviewer_name` varchar(256) NOT NULL,
+  `faculty_id` mediumint(9) DEFAULT NULL,
+  `user_id` mediumint(9) DEFAULT NULL,
+  `expert` text NOT NULL,
   `reviewer_degree_front` varchar(256) NOT NULL,
   `reviewer_degree_back` varchar(256) NOT NULL,
-  `faculty_id` mediumint(9) DEFAULT NULL,
-  `expert` text NOT NULL,
   `reviewer_contact` varchar(20) NOT NULL,
-  `reviewer_email` varchar(256) NOT NULL,
-  `user_id` mediumint(9) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+  `reviewer_email` varchar(256) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `reviewer`
 --
 
-INSERT INTO `reviewer` (`reviewer_id`, `reviewer_nip`, `reviewer_name`, `reviewer_degree_front`, `reviewer_degree_back`, `faculty_id`, `expert`, `reviewer_contact`, `reviewer_email`, `user_id`) VALUES
-(1, '10001', 'Reviewer Pertama', '', '', 7, 'teknik,olahraga', '', '', 14),
-(2, '10002', 'Reviewer Kedua', '', '', 3, 'olahraga,hukum,sejarah', '', '', 11),
-(3, '10003', 'Penulis Reviewer Pertama', '', '', 6, 'geologi,geodesi', '', '', 15),
-(4, '10004', 'Penulis Reviewer Kedua', '', '', 2, 'vokasi,kedokteran', '', '', 16),
-(5, '10005', 'Reviewer Ketiga', '', '', 2, 'teknik,hukum', '', '', 17),
-(8, '123453', 'Penulis Ketiga', '', '', 3, 'geodesi', '', '', 9),
-(9, '456', 'adfdsf', '', '', 2, 'geodesi', '', '', 19),
-(10, '45675', 'syuhada sipayung mantul', '', '', 4, 'olahraga', '', '', 20),
-(11, '386533', 'jono subandi', '', '', 3, 'hukum', '', '', 21);
+INSERT INTO `reviewer` (`reviewer_id`, `reviewer_nip`, `reviewer_name`, `faculty_id`, `user_id`, `expert`, `reviewer_degree_front`, `reviewer_degree_back`, `reviewer_contact`, `reviewer_email`) VALUES
+(1, '10001', 'Reviewer Pertama', 7, 14, 'teknik,olahraga', '', '', '', ''),
+(2, '10002', 'Reviewer Kedua', 3, 11, 'olahraga,hukum,sejarah', '', '', '', ''),
+(3, '10003', 'Penulis Reviewer Pertama', 6, 15, 'geologi,geodesi', '', '', '', ''),
+(4, '10004', 'Penulis Reviewer Kedua', 2, 16, 'vokasi,kedokteran', '', '', '', ''),
+(5, '10005', 'Reviewer Ketiga', 2, 17, 'teknik,geologi', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -670,7 +619,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `password` varchar(256) NOT NULL,
   `level` enum('superadmin','admin_penerbitan','staff_penerbitan','editor','layouter','admin_pemasaran','admin_percetakan','admin_gudang','author','reviewer','author_reviewer') NOT NULL,
   `is_blocked` enum('y','n') NOT NULL DEFAULT 'n'
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
@@ -684,17 +633,13 @@ INSERT INTO `user` (`user_id`, `username`, `password`, `level`, `is_blocked`) VA
 (6, 'layouter2', 'd09153bee3b1f4cbe8cc800128cedd68', 'layouter', 'n'),
 (7, 'author1', 'b312ba4ffd5245fa2a1ab819ec0d0347', 'author', 'n'),
 (8, 'author2', '9bd97baef2b853ec00cc3cffd269f679', 'author', 'n'),
-(9, 'author3', 'c59a474d5ade296a15ebc40d6c4e8e11', 'author_reviewer', 'n'),
+(9, 'author3', 'c59a474d5ade296a15ebc40d6c4e8e11', 'author', 'n'),
 (11, 'reviewer2', '2693b57f0f59df94caacefb811e99851', 'reviewer', 'n'),
 (12, 'editor2', '0a96c5e164b4f259b4b8f6f565b55fe2', 'editor', 'n'),
 (14, 'reviewer1', '6ce19528a40dde9521d97cf7ba264eca', 'reviewer', 'n'),
 (15, 'authorreviewer1', 'f45b8b331a6cb91bd5b9a08058f552c1', 'author_reviewer', 'n'),
 (16, 'authorreviewer2', '7055e5f72015748c9c8f4ee9d4795826', 'author_reviewer', 'n'),
-(17, 'reviewer3', '315d31e7c8f3a136610aafa220d689be', 'reviewer', 'n'),
-(18, 'apa_21.y', 'af1cb0e9b6d7e820d13feaab1c185f73', 'layouter', 'n'),
-(19, 'revrev', '6ddf374cd8087de7372e6050b74c99c6', 'reviewer', 'n'),
-(20, 'cvbcvb', '26efd93b7b02eeab688480a0a758b801', 'reviewer', 'n'),
-(21, '12345', 'cae58f656b6f0f766923b1ee709f6111', 'reviewer', 'n');
+(17, 'reviewer3', '315d31e7c8f3a136610aafa220d689be', 'reviewer', 'n');
 
 -- --------------------------------------------------------
 
@@ -711,7 +656,7 @@ CREATE TABLE IF NOT EXISTS `worksheet` (
   `worksheet_notes` text NOT NULL,
   `worksheet_pic` varchar(256) NOT NULL,
   `worksheet_ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `worksheet`
@@ -735,19 +680,7 @@ INSERT INTO `worksheet` (`worksheet_id`, `draft_id`, `worksheet_num`, `is_reprin
 (20, 19, '2018-10-15', 'n', 1, '', 'superadmin', '2018-10-25 07:02:07'),
 (22, 21, '2018-10-16', 'n', 1, '', 'superadmin', '2018-10-25 07:26:00'),
 (23, 22, '2018-10-17', 'n', 1, '', 'superadmin', '2018-10-25 07:28:47'),
-(24, 24, '2018-10-18', 'n', 0, '', '', '2018-10-27 03:56:54'),
-(25, 25, '2018-10-19', 'n', 0, '', '', '2018-10-27 04:00:59'),
-(26, 27, '2018-10-20', 'n', 0, '', '', '2018-10-27 04:02:16'),
-(27, 28, '2018-10-21', 'n', 0, '', '', '2018-10-27 04:05:56'),
-(28, 29, '2018-10-22', 'n', 0, '', '', '2018-10-27 04:07:14'),
-(29, 30, '2018-10-23', 'n', 0, '', '', '2018-10-27 04:09:04'),
-(30, 31, '2018-10-24', 'n', 0, '', '', '2018-10-27 04:11:49'),
-(31, 32, '2018-10-25', 'n', 0, '', '', '2018-10-27 04:30:12'),
-(32, 33, '2018-10-26', 'n', 0, '', '', '2018-10-27 05:21:35'),
-(33, 34, '2018-10-27', 'n', 1, '', 'superadmin', '2018-10-28 03:25:01'),
-(34, 35, '2018-10-28', 'n', 1, 'siapp keren sekai isinya mantap', 'superadmin', '2018-10-27 08:12:23'),
-(35, 36, '2018-10-29', 'n', 0, '', '', '2018-10-28 12:32:43'),
-(36, 37, '2018-10-30', 'n', 0, '', '', '2018-10-29 02:21:07');
+(25, 24, '2018-10-18', 'n', 1, '', 'superadmin', '2018-10-29 02:14:54');
 
 -- --------------------------------------------------------
 
@@ -890,32 +823,32 @@ ALTER TABLE `work_unit`
 -- AUTO_INCREMENT for table `author`
 --
 ALTER TABLE `author`
-  MODIFY `author_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=32;
+  MODIFY `author_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `book`
 --
 ALTER TABLE `book`
-  MODIFY `book_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `book_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `category_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `category_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `draft`
 --
 ALTER TABLE `draft`
-  MODIFY `draft_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=38;
+  MODIFY `draft_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
 --
 -- AUTO_INCREMENT for table `draft_author`
 --
 ALTER TABLE `draft_author`
-  MODIFY `draft_author_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=58;
+  MODIFY `draft_author_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
 --
 -- AUTO_INCREMENT for table `draft_reviewer`
 --
 ALTER TABLE `draft_reviewer`
-  MODIFY `draft_reviewer_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=43;
+  MODIFY `draft_reviewer_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=36;
 --
 -- AUTO_INCREMENT for table `faculty`
 --
@@ -935,7 +868,7 @@ ALTER TABLE `responsibility`
 -- AUTO_INCREMENT for table `reviewer`
 --
 ALTER TABLE `reviewer`
-  MODIFY `reviewer_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+  MODIFY `reviewer_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `theme`
 --
@@ -945,12 +878,12 @@ ALTER TABLE `theme`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
+  MODIFY `user_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `worksheet`
 --
 ALTER TABLE `worksheet`
-  MODIFY `worksheet_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=37;
+  MODIFY `worksheet_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT for table `work_unit`
 --

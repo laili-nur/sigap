@@ -135,6 +135,5 @@ class Author_model extends MY_Model
                 unlink("./authorktp/$authorKTP");
             } 
         }
-        
     }
 }

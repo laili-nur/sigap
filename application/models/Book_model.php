@@ -66,8 +66,17 @@ class Book_model extends MY_Model
                 'field' => 'is_reprint',
                 'label' => 'Is Reprint',
                 'rules' => 'trim'
+            ],
+            [
+                'field' => 'nomor_hak_cipta',
+                'label' => 'Nomor Hak Cipta',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'status_hak_cipta',
+                'label' => 'Status Hak Cipta',
+                'rules' => 'trim'
             ]
-            
             
         ];
 
@@ -90,7 +99,9 @@ class Book_model extends MY_Model
             'serial_num_per_year'                  => '',
             'copies_num'                    => '',
             'book_notes'                  => '',
-            'is_reprint'                     => 'n'
+            'is_reprint'                     => 'n',
+            'nomor_hak_cipta'                  => '',
+            'status_hak_cipta'                  => ''
         ];
     }
    
@@ -123,6 +134,38 @@ class Book_model extends MY_Model
         }
     }
 
+    public function uploadHCfile($HCfieldname, $HCFileName)
+    {
+        $config = [
+            'upload_path'      => './hakcipta/',
+            'file_name'        => $HCFileName,
+            'allowed_types'    => 'jpg|png|jpeg|pdf',    // file types allowed
+            'max_size'         => 15360,     // 15MB
+            'overwrite'        => true,
+            'file_ext_tolower' => true,
+        ];
+
+        $this->load->library('upload', $config);
+        if ($this->upload->do_upload($HCfieldname)) {
+            // Upload OK, return uploaded file info.
+            return $this->upload->data();
+        } else {
+            // Add error to $_error_array
+            $this->form_validation->add_to_error_array($HCfieldname, $this->upload->display_errors('', ''));
+            return false;
+        }
+    }    
+    
+        public function deleteHCfile($HCfile)
+    {
+           if (file_exists("./hakcipta/$HCfile")) {
+                unlink("./hakcipta/$HCfile");
+            } 
+        
+    }
+    
+    
+    
 //     public function uploadCover($coverfieldname, $coverFileName)
 //    {
 //        $config = [

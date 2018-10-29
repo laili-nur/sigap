@@ -145,11 +145,10 @@
           username : {
             crequired :true,
             username : true,
-            cminlength : 4
           },
           password: {
             crequired : true,
-            cminlength : 5
+            cminlength : 4
           },
           level : "crequired"
         },

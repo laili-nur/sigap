@@ -289,7 +289,7 @@ class Author extends Operator_Controller
         $author_contact      = $this->input->post('author_contact');
         $author_id = $this->input->post('author_id');
         if($author_contact==''){return true;}
-
+        
         $this->author->where('author_contact', $author_contact);
         !$author_id || $this->author->where('author_id !=', $author_id);
         $author = $this->author->get();
@@ -306,7 +306,7 @@ class Author extends Operator_Controller
         $author_email      = $this->input->post('author_email');
         $author_id = $this->input->post('author_id');
         if($author_email==''){return true;}
-
+        
         $this->author->where('author_email', $author_email);
         !$author_id || $this->author->where('author_id !=', $author_id);
         $author = $this->author->get();
@@ -323,7 +323,7 @@ class Author extends Operator_Controller
         $author_saving_num      = $this->input->post('author_saving_num');
         $author_id = $this->input->post('author_id');
         if($author_saving_num==''){return true;}
-
+        
         $this->author->where('author_saving_num', $author_saving_num);
         !$author_id || $this->author->where('author_id !=', $author_id);
         $author = $this->author->get();

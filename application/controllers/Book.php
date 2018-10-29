@@ -45,7 +45,7 @@ class Book extends Operator_Controller
 //            }
 //        }
         
-        
+        if (!$this->book->validate()){
         if (!empty($_FILES) && $_FILES['book_file']['size'] > 0) {
             $getextension=explode(".",$_FILES['book_file']['name']);            
             $bookFileName  = str_replace(" ","_",$input->book_title . '_' . date('YmdHis').".".$getextension[1]); // Book file name
@@ -56,6 +56,17 @@ class Book extends Operator_Controller
             }
         }
         
+        
+            if (!empty($_FILES) && $_FILES['file_hak_cipta']['size'] > 0) {
+            $getextension=explode(".",$_FILES['file_hak_cipta']['name']);            
+            $bookFileName  = str_replace(" ","_",'Hak_Cipta' . '_' . $input->book_title . '_' . date('YmdHis').".".$getextension[1]); // Book file name
+            $upload = $this->book->uploadHCfile('file_hak_cipta', $HCFileName);
+
+            if ($upload) {
+                $input->file_hak_cipta =  "$HCFileName"; // Data for column "file hak cipta".
+            }
+        }
+        }
         
         if (!$this->book->validate() || $this->form_validation->error_array()) {
             $pages     = $this->pages;
@@ -117,6 +128,8 @@ class Book extends Operator_Controller
 // -- edit --         
         public function edit($id = null)
 	{
+            
+            
         $book = $this->book->where('book_id', $id)->get();
         if (!$book) {
             $this->session->set_flashdata('warning', 'Book data were not available');
@@ -147,7 +160,7 @@ class Book extends Operator_Controller
 //            }
 //        }
         
-        
+        if($this->book->validate()){
         // Upload new book (if any)
         if (!empty($_FILES) && $_FILES['book_file']['size'] > 0) {            
             $getextension=explode(".",$_FILES['book_file']['name']);            
@@ -162,6 +175,23 @@ class Book extends Operator_Controller
                 }
             }
         }   
+        
+        
+            if (!empty($_FILES) && $_FILES['file_hak_cipta']['size'] > 0) {
+                // Upload new hak cipta (if any)
+                $getextension=explode(".",$_FILES['file_hak_cipta']['name']);            
+                $HCFileName  = str_replace(" ","_",'Hak_Cipta' . '_' . $input->book_title . '_' . date('YmdHis').".".$getextension[1]); // hak cipta file name
+                $upload = $this->book->uploadHCfile('file_hak_cipta', $HCFileName);
+
+                if ($upload) {
+                    $input->file_hak_cipta =  "$HCFileName";
+                    // Delete old HC file
+                    if ($book->file_hak_cipta) {
+                        $this->book->deleteHCfile($book->file_hak_cipta);
+                    }
+                }
+            }
+        }
         
         
         // If something wrong
@@ -195,8 +225,8 @@ class Book extends Operator_Controller
         if ($this->book->where('book_id', $id)->delete()) {
             // Delete book.
             $this->book->deleteBookfile($book->book_file);
-            // Delete cover.
-//            $this->book->deleteCover($book->cover);
+            // Delete HC.
+            $this->book->deleteHCfile($book->file_hak_cipta);
             $this->session->set_flashdata('success', 'Data deleted');
 		} else {
             $this->session->set_flashdata('error', 'Data failed to delete');
