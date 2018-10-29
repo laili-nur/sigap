@@ -21,9 +21,6 @@
   </nav>
 </header>
 <!-- /.page-title-bar -->
-<pre>
-  <?php print_r($input) ?>
-</pre>
 <!-- .page-section -->
 <div class="page-section">
   <div class="row">
