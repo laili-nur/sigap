@@ -83,6 +83,7 @@
                     <th scope="col">Edisi</th>
                     <th scope="col">Copy</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Hak Cipta</th>
                     <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
                     <th style="width:100px; min-width:100px;"> &nbsp; </th>
                     <?php endif ?>
@@ -99,6 +100,10 @@
                     <td class="align-middle"><?= $book->book_edition ?></td>
                     <td class="align-middle"><?= $book->copies_num ?></td>
                     <td class="align-middle"><?= $book->is_reprint == 'y' ? 'Cetak Ulang' : 'Baru' ?></td>
+                    <td class="align-middle">
+                      <?= $book->status_hak_cipta == '2' ? 'Sudah jadi' : '' ?>
+                      <?= $book->status_hak_cipta == '1' ? 'Dalam Proses' : '' ?>
+                    </td>
                     <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
                     <td class="align-middle text-right">
                       <a title="Edit" href="<?= base_url('book/edit/'.$book->book_id.'') ?>" class="btn btn-sm btn-secondary">

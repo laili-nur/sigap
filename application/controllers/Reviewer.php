@@ -51,6 +51,9 @@ class Reviewer extends Operator_Controller
 
 
         if (!$this->reviewer->validate()) {
+            //assign select tags pilihan
+            $input->pilih = $input->expert;
+            
             $pages     = $this->pages;
             $main_view   = 'reviewer/form_reviewer';
             $form_action = 'reviewer/add';

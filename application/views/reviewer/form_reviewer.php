@@ -102,7 +102,7 @@
             <label for="expert">Kepakaran
               <abbr title="Required">*</abbr>
             </label>
-              <?= form_dropdown('expert[]',$input->sumber,$input->expert, 'id="expert" class="form-control custom-select d-block" multiple="multiple"') ?> 
+              <?= form_dropdown('expert[]',$input->sumber,$input->pilih, 'id="expert" class="form-control custom-select d-block" multiple="multiple"') ?> 
               <small class="form-text text-muted">Pilih kepakaran yang telah ada, atau tambahkan kepakaran baru (Ketik lalu tekan enter)</small>
             <?= form_error('expert') ?>
           </div>
@@ -158,12 +158,13 @@
           },
           faculty_id : "crequired",
           "expert[]" : "crequired",
-        reviewer_contact : {
+          reviewer_contact : {
             cnumber :true
           },
           reviewer_email : {
             cemail :true
           },
+        },
         errorElement: "span",
         errorPlacement: function (error, element) {
            error.addClass( "invalid-feedback" );

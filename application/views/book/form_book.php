@@ -77,7 +77,6 @@
             <label for="book_file">File Buku
 <!--              <abbr title="Required">*</abbr>-->
             </label>
-           <?= isset($input->book_file)? ' <p><a href="'.base_url('draftfile/'.$input->book_file).'">'.$input->book_file.'</a></p>' : ''  ?>
             <div class="custom-file">
               <?= form_upload('book_file','','class="custom-file-input" ') ?> 
               <label class="custom-file-label" for="tf3">Choose file</label>
@@ -173,7 +172,6 @@
             <label for="file_hak_cipta">File Hak Cipta
 <!--              <abbr title="Required">*</abbr>-->
             </label>
-           <?= isset($input->file_hak_cipta)? ' <p><a href="'.base_url('bookfile/'.$input->file_hak_cipta).'">'.$input->file_hak_cipta.'</a></p>' : ''  ?>
             <div class="custom-file">
               <?= form_upload('file_hak_cipta','','class="custom-file-input" ') ?> 
               <label class="custom-file-label" for="tf3">Choose file</label>
@@ -193,11 +191,11 @@
                     <?= form_radio('status_hak_cipta', '',
                     isset($input->is_reprint) && ($input->status_hak_cipta == '') ? true : false,'required class="custom-control-input" id="status_hak_cipta0"')?> -</label>
                   <label class="btn btn-secondary <?=($input->status_hak_cipta == '1') ? 'active' : '' ?>">
-                    <?= form_radio('status_hak_cipta', 'y',
+                    <?= form_radio('status_hak_cipta', '1',
                     isset($input->is_reprint) && ($input->status_hak_cipta == '1') ? true : false,'required class="custom-control-input" id="status_hak_cipta1"')?> Dalam Proses</label>
                     
                     <label class="btn btn-secondary <?=($input->status_hak_cipta == '2') ? 'active' : '' ?>">
-                    <?= form_radio('status_hak_cipta', 'n',
+                    <?= form_radio('status_hak_cipta', '2',
                     isset($input->is_reprint) && ($input->status_hak_cipta == '2') ? true : false,' class="custom-control-input" id="status_hak_cipta2"')?> Sudah Jadi</label>
                 </div>
               <!-- /button radio -->
@@ -237,6 +235,10 @@
           },
           book_file: {
             dokumen: "docx|doc|pdf",
+            filesize50: 52428200
+          },
+          file_hak_cipta: {
+            dokumen: "png|jpg|jpeg|pdf",
             filesize50: 52428200
           }
 

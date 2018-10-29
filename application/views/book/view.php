@@ -118,6 +118,42 @@
             <tbody>
               <!-- tr -->
               <tr>
+                <td width="200px"> Nomor Hak Cipta</td>
+                <td>: <?= $input->nomor_hak_cipta ?>  </td>
+              </tr>
+              <!-- /tr -->
+              <!-- tr -->
+              <tr>
+                <td width="200px"> Status Hak Cipta</td>
+                <td>: 
+                  <?= ($input->status_hak_cipta == '')? '-' : '' ?>
+                  <?= ($input->status_hak_cipta == 1)? 'Dalam Proses' : '' ?>
+                  <?= ($input->status_hak_cipta == 2)? 'Sudah Jadi' : '' ?>
+                </td>
+              </tr>
+              <!-- /tr -->
+              <!-- tr -->
+              <tr>
+                <td width="200px"> File Hak Cipta </td>
+                <td>: <?=(!empty($input->file_hak_cipta))? '<a href="'.base_url('hakcipta/'.$input->file_hak_cipta).'">'.$input->file_hak_cipta.'</a>' : '' ?>
+                   </td>
+              </tr>
+              <!-- /tr -->
+            </tbody>
+            <!-- /tbody -->
+          </table>
+          <!-- /.table -->
+        </div>
+        <!-- /.table-responsive -->
+        <hr class="my-4">
+        <!-- .table-responsive -->
+        <div class="table-responsive">
+          <!-- .table -->
+          <table class="table table-striped table-bordered mb-0">
+            <!-- tbody -->
+            <tbody>
+              <!-- tr -->
+              <tr>
                 <td width="200px"> Tipe printing</td>
                 <td>: <?= ($input->printing_type == 'o')? 'Offset' : '' ?> <?= ($input->printing_type == 'p')? 'Print On Demand' : '' ?>  </td>
               </tr>

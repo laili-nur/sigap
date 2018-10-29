@@ -21,6 +21,9 @@
   </nav>
 </header>
 <!-- /.page-title-bar -->
+<pre>
+  <?php print_r($input) ?>
+</pre>
 <!-- .page-section -->
 <div class="page-section">
   <div class="row">
@@ -167,7 +170,7 @@
       select2_validasi()
      );
 
-    $('[name=date_open]').next('input').attr("name","date_open");
-    $('[name=date_close]').next('input').attr("name","date_close");
+    // $('[name=date_open]').next('input').attr("name","date_open");
+    // $('[name=date_close]').next('input').attr("name","date_close");
   })
 </script>

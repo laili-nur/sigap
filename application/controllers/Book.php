@@ -59,7 +59,7 @@ class Book extends Operator_Controller
         
             if (!empty($_FILES) && $_FILES['file_hak_cipta']['size'] > 0) {
             $getextension=explode(".",$_FILES['file_hak_cipta']['name']);            
-            $bookFileName  = str_replace(" ","_",'Hak_Cipta' . '_' . $input->book_title . '_' . date('YmdHis').".".$getextension[1]); // Book file name
+            $HCFileName  = str_replace(" ","_",'Hak_Cipta' . '_' . $input->book_title . '_' . date('YmdHis').".".$getextension[1]); // Book file name
             $upload = $this->book->uploadHCfile('file_hak_cipta', $HCFileName);
 
             if ($upload) {
@@ -341,7 +341,10 @@ class Book extends Operator_Controller
             public function is_date_format_valid($str)
     {
         if(!preg_match('/([0-9]{4})-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])/', $str)) {
+            //tanggal boleh kosong
+            if($str==''){return TRUE;}
                 //if(!preg_match('/(0[1-9]|1[0-9]|2[0-9]|3[01]-([0-9]{4})-(0[1-9]|1[012]))/', $str)) {    
+            
             $this->form_validation->set_message('is_date_format_valid', 'Invalid date format (yyyy-mm-dd)');
             return FALSE;
         }
