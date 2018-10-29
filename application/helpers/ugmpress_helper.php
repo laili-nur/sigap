@@ -49,7 +49,7 @@ function konversiID($table,$vars,$id)
 function getDropdownListBook($table, $columns)
 {
     $CI =& get_instance();
-    $query = $CI->db->select($columns)->from($table)->where('draft_status','13')->get();
+    $query = $CI->db->select($columns)->from($table)->where('draft_status','14')->get();
 
     if ($query->num_rows() >= 1) {
         $options1 = ['' => '-- Choose --'];

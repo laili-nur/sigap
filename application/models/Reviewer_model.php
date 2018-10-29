@@ -18,9 +18,29 @@ class Reviewer_model extends MY_Model
                 'rules' => 'trim|required|min_length[1]|max_length[256]'
             ],
             [
+                'field' => 'reviewer_degree_front',
+                'label' => 'Reviewer Degree Front',
+                'rules' => 'trim|min_length[2]|max_length[256]'
+            ],
+            [
+                'field' => 'reviewer_degree_back',
+                'label' => 'Reviewer Degree Back',
+                'rules' => 'trim|min_length[2]|max_length[256]'
+            ],
+            [
                 'field' => 'faculty_id',
                 'label' => 'Reviewer ID',
                 'rules' => 'trim|required'
+            ],
+             [
+                'field' => 'reviewer_contact',
+                'label' => 'Reviewer Contact',
+                'rules' => 'trim|max_length[20]|callback_unique_reviewer_contact'
+            ],
+            [
+                'field' => 'reviewer_email',
+                'label' => 'Reviewer Email',
+                'rules' => 'trim|valid_email|callback_unique_reviewer_email'
             ],
             [
                 'field' => 'user_id',
@@ -42,7 +62,11 @@ class Reviewer_model extends MY_Model
         return [
             'reviewer_nip'           => '',
             'reviewer_name'           => '',
+            'reviewer_degree_front'              => '',
+            'reviewer_degree_back'              => '',
             'faculty_id'              => '',
+            'reviewer_contact'              => '',
+            'reviewer_email'           => '',
             'user_id'              => '',
             'expert'              => ''
         ];

@@ -188,7 +188,6 @@
             cminlength: 5,
           },
           book_file: {
-            crequired: true,
             dokumen: "docx|doc|pdf",
             filesize50: 52428200
           }

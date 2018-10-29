@@ -145,6 +145,7 @@
           username : {
             crequired :true,
             username : true,
+            cminlength : 4
           },
           password: {
             crequired : true,

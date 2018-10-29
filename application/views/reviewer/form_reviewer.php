@@ -70,16 +70,58 @@
             <?= form_error('faculty_id') ?>
           </div>
           <!-- /.form-group -->
+          <div class="row">
+            <div class="col-md-6">
+              <!-- .form-group -->
+              <div class="form-group">
+                <label for="author_degree_front">Gelar Depan Nama</label>
+                <?= form_input('reviewer_degree_front', $input->reviewer_degree_front,'class="form-control" id="reviewer_degree_front" placeholder="contoh = Ir."') ?>
+                <?= form_error('reviewer_degree_front') ?>
+              </div>
+              <!-- /.form-group -->
+            </div>
+            <div class="col-md-6">
+              <!-- .form-group -->
+              <div class="form-group">
+                <label for="reviewer_degree_back">Gelar Belakang Nama</label>
+                <div class="has-clearable">
+                  <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">
+                      <i class="fa fa-times-circle"></i>
+                    </span>
+                  </button>
+                <?= form_input('reviewer_degree_back', $input->reviewer_degree_back,'class="form-control" id="reviewer_degree_back" placeholder="contoh = S.T"') ?>
+                </div>
+                <?= form_error('reviewer_degree_back') ?>
+              </div>
+              <!-- /.form-group -->
+            </div>
+          </div>
           <!-- .form-group -->
           <div class="form-group">
             <label for="expert">Kepakaran
               <abbr title="Required">*</abbr>
             </label>
-              <?= form_dropdown('expert[]',$input->sumber,$input->pilih, 'id="expert" class="form-control custom-select d-block" multiple="multiple"') ?> 
+              <?= form_dropdown('expert[]',$input->sumber,$input->expert, 'id="expert" class="form-control custom-select d-block" multiple="multiple"') ?> 
               <small class="form-text text-muted">Pilih kepakaran yang telah ada, atau tambahkan kepakaran baru (Ketik lalu tekan enter)</small>
             <?= form_error('expert') ?>
           </div>
           <!-- /.form-group -->
+          <hr class="my-2">
+            <!-- .form-group -->
+            <div class="form-group">
+              <label for="reviewer_contact">No HP</label>
+              <?= form_input('reviewer_contact', $input->reviewer_contact,'class="form-control" id="reviewer_contact"') ?>
+              <?= form_error('reviewer_contact') ?>
+            </div>
+            <!-- /.form-group -->
+            <!-- .form-group -->
+            <div class="form-group">
+              <label for="reviewer_email">Email</label>
+              <?= form_input('reviewer_email', $input->reviewer_email,'class="form-control" id="reviewer_email"') ?>
+              <?= form_error('reviewer_email') ?>
+            </div>
+            <!-- /.form-group -->
         </fieldset>
         <!-- /.fieldset -->
         <hr>
@@ -116,6 +158,12 @@
           },
           faculty_id : "crequired",
           "expert[]" : "crequired",
+          reviewer_contact : {
+            cnumber :true
+          },
+          reviewer_email : {
+            cemail :true
+          },
         },
         errorElement: "span",
         errorPlacement: function (error, element) {

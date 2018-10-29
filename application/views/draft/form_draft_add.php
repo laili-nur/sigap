@@ -83,7 +83,7 @@
             <small class="text-muted">Jika Penulis belum ada di list, tambahkan penulis di menu <a target="_blank" href="<?=base_url('author/add') ?>">PENULIS</a>, lalu klik tombol reload berikut</small>
           </div>
           <div class="p-0 m-0">
-            <button id="callback" class="btn btn-secondary btn-xs mt-2"><i class="fa fa-sync" id="ajax-reload-author"></i> Reload Penulis</button>
+            <button id="callback" type="button" class="btn btn-secondary btn-xs mt-2"><i class="fa fa-sync" id="ajax-reload-author"></i> Reload Penulis</button>
           </div>
           </div>
           <?php endif ?>
