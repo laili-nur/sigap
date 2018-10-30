@@ -74,6 +74,13 @@
           <!-- /.form-group -->
           <!-- .form-group -->
           <div class="form-group">
+            <label for="eisbn">eISBN</label>
+            <?= form_input('eisbn', $input->eisbn, 'class="form-control" id="eisbn"') ?>
+            <?= form_error('eisbn') ?>
+          </div>
+          <!-- /.form-group -->
+          <!-- .form-group -->
+          <div class="form-group">
             <label for="book_file">File Buku
 <!--              <abbr title="Required">*</abbr>-->
             </label>

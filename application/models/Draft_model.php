@@ -256,9 +256,37 @@ class Draft_model extends MY_Model
                 'field' => 'draft_notes',
                 'label' => 'Draft Notes',
                 'rules' => 'trim'
-            ]
-            
-            
+            ],
+            [
+                'field' => 'reviewer1_file_link',
+                'label' => 'Reviewer1 File Link',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'reviewer2_file_link',
+                'label' => 'Reviewer2 File Link',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'editor_file_link',
+                'label' => 'Editor File Link',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'layouter_file_link',
+                'label' => 'Layouter File Link',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'cover_file_link',
+                'label' => 'Cover File Link',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'proofread_file_link',
+                'label' => 'Proofread File Link',
+                'rules' => 'trim'
+            ],
         ];
 
         return $validationRules;
@@ -315,7 +343,12 @@ class Draft_model extends MY_Model
             'proofread_notes_author'        => '',
             'draft_status'                  => '',
             'draft_notes'                   => '',
-
+            'reviewer1_file_link'                => '',
+            'reviewer2_file_link'         => '',
+            'editor_file_link'               => '',
+            'cover_file_link'        => '',
+            'layouter_file_link'                  => '',
+            'proofread_file_link'                   => '',
         ];
     }
 

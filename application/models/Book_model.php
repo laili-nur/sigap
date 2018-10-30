@@ -33,6 +33,11 @@ class Book_model extends MY_Model
                 'rules' => 'trim|min_length[1]|max_length[256]'
             ],
             [
+                'field' => 'eisbn',
+                'label' => 'EISBN',
+                'rules' => 'trim|min_length[1]|max_length[256]'
+            ],
+            [
                 'field' => 'published_date',
                 'label' => 'Published Date',
                 'rules' => 'trim|callback_is_date_format_valid'
@@ -92,6 +97,7 @@ class Book_model extends MY_Model
 //            'cover'                    => '',
             'book_edition'                 => '',
             'isbn'                 => '',
+            'eisbn'                 => '',
 //            'book_file'                    => '',
             'published_date'                   => '',
             'printing_type'                    => 'p',

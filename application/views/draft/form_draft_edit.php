@@ -83,6 +83,23 @@
                   <?= fileFormError('draft_file', '<p class="text-danger">', '</p>'); ?>
                 </div>
                 <!-- /.form-group -->
+                <!-- .form-group -->
+                <div class="form-group">
+                  <label for="entry_date">Tanggal Masuk
+                    <abbr title="Required">*</abbr>
+                  </label>
+                  <div class="has-clearable">
+                    <button type="button" class="close" aria-label="Close">
+                      <span aria-hidden="true">
+                        <i class="fa fa-times-circle"></i>
+                      </span>
+                    </button>
+                    <?= form_input('entry_date', $input->entry_date, 'class="form-control" id="flatpickr03"') ?>
+                    <div class="invalid-feedback"> Field is required </div>
+                    <?= form_error('entry_date') ?>
+                </div>
+                </div>
+                <!-- /.form-group -->
                 <hr>
                 <h5 class="card-title">Review</h5>
                 <!-- .form-group -->
@@ -156,11 +173,26 @@
                     </div>
                     <!-- /.form-group -->
                     <!-- .form-group -->
+                      <div class="form-group">
+                        <label for="reviewer1_file_link">Link File Review 1</label>
+                        <?= form_input('reviewer1_file_link', $input->reviewer1_file_link, 'class="form-control" id="reviewer1_file_link"') ?>
+                        <?= form_error('reviewer1_file_link') ?>
+                      </div>
+                      <!-- /.form-group -->
+                    <!-- .form-group -->
                     <div class="form-group">
-                      <label for="review1_notes">Keterangan Review 1</label>
+                      <label for="review1_notes">Keterangan Review 1(Reviewer 1)</label>
                         <?= form_textarea('review1_notes', $input->review1_notes, 'class="form-control summernote-basic"') ?>
                       <div class="invalid-feedback"> Field is required </div>
                       <?= form_error('review1_notes') ?>
+                    </div>
+                    <!-- /.form-group -->
+                    <!-- .form-group -->
+                    <div class="form-group">
+                      <label for="catatan_review1_admin">Keterangan Review 1(admin)</label>
+                        <?= form_textarea('catatan_review1_admin', $input->catatan_review1_admin, 'class="form-control summernote-basic"') ?>
+                      <div class="invalid-feedback"> Field is required </div>
+                      <?= form_error('catatan_review1_admin') ?>
                     </div>
                     <!-- /.form-group -->
                     <!-- .form-group -->
@@ -205,11 +237,26 @@
                     </div>
                     <!-- /.form-group -->
                     <!-- .form-group -->
+                      <div class="form-group">
+                        <label for="reviewer2_file_link">Link File Review 2</label>
+                        <?= form_input('reviewer2_file_link', $input->reviewer2_file_link, 'class="form-control" id="reviewer2_file_link"') ?>
+                        <?= form_error('reviewer2_file_link') ?>
+                      </div>
+                      <!-- /.form-group -->
+                    <!-- .form-group -->
                     <div class="form-group">
-                      <label for="review2_notes">Keterangan Review 2</label>
+                      <label for="review2_notes">Keterangan Review 2 (Reviewer 2)</label>
                         <?= form_textarea('review2_notes', $input->review2_notes, 'class="form-control summernote-basic"') ?>
                       <div class="invalid-feedback"> Field is required </div>
                       <?= form_error('review2_notes') ?>
+                    </div>
+                    <!-- /.form-group -->
+                    <!-- .form-group -->
+                    <div class="form-group">
+                      <label for="catatan_review2_admin">Keterangan Review 2 (Admin)</label>
+                        <?= form_textarea('catatan_review2_admin', $input->catatan_review2_admin, 'class="form-control summernote-basic"') ?>
+                      <div class="invalid-feedback"> Field is required </div>
+                      <?= form_error('catatan_review2_admin') ?>
                     </div>
                     <!-- /.form-group -->
                     <!-- .form-group -->
@@ -249,7 +296,7 @@
                     <label>
                     <?= form_radio('is_edit', 'y',
                         isset($input->is_edit) && ($input->is_edit == 'y') ? true : false)
-                    ?> edited
+                    ?> Edited
                     </label>
                   </div>
                   <div class="mb-1">
@@ -311,6 +358,13 @@
                 </div>
                 <!-- /.form-group -->
                 <!-- .form-group -->
+                      <div class="form-group">
+                        <label for="editor_file_link">Link File Edit</label>
+                        <?= form_input('editor_file_link', $input->editor_file_link, 'class="form-control" id="editor_file_link"') ?>
+                        <?= form_error('editor_file_link') ?>
+                      </div>
+                      <!-- /.form-group -->
+                <!-- .form-group -->
                 <div class="form-group">
                   <label for="edit_notes">Keterangan Edit</label>
                     <?= form_textarea('edit_notes', $input->edit_notes, 'class="form-control summernote-basic"') ?>
@@ -335,7 +389,7 @@
                     <label>
                     <?= form_radio('is_layout', 'y',
                         isset($input->is_layout) && ($input->is_layout == 'y') ? true : false)
-                    ?> layouted
+                    ?> Layouted
                     </label>
                   </div>
                   <div class="mb-1">
@@ -399,6 +453,13 @@
                     </div>
                     <!-- /.form-group -->
                     <!-- .form-group -->
+                      <div class="form-group">
+                        <label for="layouter_file_link">Link File Layout</label>
+                        <?= form_input('layouter_file_link', $input->layouter_file_link, 'class="form-control" id="layouter_file_link"') ?>
+                        <?= form_error('layouter_file_link') ?>
+                      </div>
+                      <!-- /.form-group -->
+                    <!-- .form-group -->
                     <div class="form-group">
                       <label for="layout_notes">Keterangan layout</label>
                         <?= form_textarea('layout_notes', $input->layout_notes, 'class="form-control summernote-basic"') ?>
@@ -429,6 +490,13 @@
                       <?= fileFormError('cover_file', '<p class="text-danger">', '</p>'); ?>
                     </div>
                     <!-- /.form-group -->
+                        <!-- .form-group -->
+                      <div class="form-group">
+                        <label for="cover_file_link">Link File Cover</label>
+                        <?= form_input('cover_file_link', $input->cover_file_link, 'class="form-control" id="cover_file_link"') ?>
+                        <?= form_error('cover_file_link') ?>
+                      </div>
+                      <!-- /.form-group -->
                     <!-- .form-group -->
                     <div class="form-group">
                       <label for="cover_notes">Keterangan Cover</label>
@@ -456,7 +524,7 @@
                     <label>
                     <?= form_radio('is_proofread', 'y',
                         isset($input->is_proofread) && ($input->is_proofread == 'y') ? true : false)
-                    ?> proofread
+                    ?> Proofread
                     </label>
                   </div>
                   <div class="mb-1">
@@ -517,6 +585,13 @@
                   <?= fileFormError('proofread_file', '<p class="text-danger">', '</p>'); ?>
                 </div>
                 <!-- /.form-group -->
+                <!-- .form-group -->
+          <div class="form-group">
+            <label for="proofread_file_link">Link File Proofread</label>
+            <?= form_input('proofread_file_link', $input->proofread_file_link, 'class="form-control" id="proofread_file_link"') ?>
+            <?= form_error('proofread_file_link') ?>
+          </div>
+          <!-- /.form-group -->
                 <!-- .form-group -->
                 <div class="form-group">
                   <label for="proofread_notes">Keterangan proofread</label>
