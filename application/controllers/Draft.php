@@ -13,6 +13,10 @@ class Draft extends Operator_Controller
         $ceklevel = $this->session->userdata('level');
         $cekusername = $this->session->userdata('username');
 
+        //custom perpage
+        if($this->input->get('per_page', true) != null){
+            $this->draft->perPage = $this->input->get('per_page', true);
+        }
 
         //get id user
         

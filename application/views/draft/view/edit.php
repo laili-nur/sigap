@@ -10,7 +10,7 @@
         <div class="card-header-control">
           <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
           <!-- .tombol add -->
-          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#piliheditor">Pilih Editor</button>
+          <button type="button" class="btn <?=($editors==null)? 'btn-warning' : 'btn-secondary' ?>" data-toggle="modal" data-target="#piliheditor">Pilih Editor</button>
           <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#edit_deadline">Atur Deadline</button>
           <!-- /.tombol add -->
           <?php endif ?>
@@ -19,6 +19,9 @@
       </div>
       <!-- /.d-flex -->
     </header>
+    <?php if($editors == null): ?>
+    <div class="alert alert-warning"><strong>PERHATIAN!</strong> Pilih editor terlebih dahulu sebelum lanjut ke tahap selanjutnya.</div>
+    <?php endif ?>
     <div class="list-group list-group-flush list-group-bordered" id="list-group-edit">
       <div class="list-group-item justify-content-between">
         <span class="text-muted">Tanggal masuk</span>
@@ -81,25 +84,33 @@
                   <p class="font-weight-bold">NASKAH</p>
                   <!-- if upload ditampilkan di level tertentu -->
                   <?php if($ceklevel=='editor' or ($ceklevel == 'author' and $author_order==1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+                  <div class="alert alert-info">Upload file naskah atau sertakan link naskah.</div>
                   <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/edit_file', 'id="editform"'); ?>
                     <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                     <!-- .form-group -->
                       <div class="form-group">
                         <label for="edit_file">File Naskah</label>
                         <!-- .input-group -->
-                        <div class="input-group input-group-alt">
                           <div class="custom-file">
-                            <?= form_upload('edit_file','','class="custom-file-input" id="edit_file"') ?> 
+                            <?= form_upload('edit_file','','class="custom-file-input naskah" id="edit_file"') ?> 
                             <label class="custom-file-label" for="edit_file">Choose file</label>
                           </div>
-                          <div class="input-group-append">
-                            <button class="btn btn-primary" type="submit" value="Submit" id="btn-upload-edit"><i class="fa fa-upload"></i> Upload</button>
-                          </div>
-                        </div>
                         <small class="form-text text-muted">Tipe file upload  bertype : docx, doc, dan pdf.</small>
                         <!-- /.input-group -->
                       </div>
                       <!-- /.form-group -->
+                      <!-- .form-group -->
+                    <div class="form-group">
+                      <label for="editor_file_link">Link Naskah</label>
+                      <div>
+                        <?= form_input('editor_file_link', $input->editor_file_link, 'class="form-control naskah" id="editor_file_link"') ?>
+                      </div>
+                        <?= form_error('editor_file_link') ?>
+                    </div>
+                    <!-- /.form-group -->
+                    <div class="form-group">
+                      <button class="btn btn-primary " type="submit" value="Submit" id="btn-upload-edit"><i class="fa fa-upload"></i> Upload</button>
+                    </div>
                   <?= form_close(); ?>
                   <?php endif ?>
                   <!-- endif upload ditampilkan di level tertentu -->
@@ -112,7 +123,8 @@
                     <em>(<?=$input->edit_last_upload ?>)</em>
                   <?php endif ?>
                   </p>
-                  <?=(!empty($input->edit_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->edit_file.'" href="'.base_url('draftfile/'.$input->edit_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : 'No data' ?>
+                  <?=(!empty($input->edit_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->edit_file.'" href="'.base_url('draftfile/'.$input->edit_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
+                  <?=(!empty($input->editor_file_link))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->editor_file_link.'" href="'.$input->editor_file_link.'" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
                   </div>
   
                   <hr class="my-3">
@@ -244,7 +256,7 @@
               <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-light" id="btn-close-editor" data-dismiss="modal">Close</button>
               </div>
               <!-- /.modal-footer -->
               <?= form_close(); ?>
@@ -376,9 +388,12 @@
       $("#editform").validate({
           rules: {
             edit_file: {
-              crequired :true,
+              require_from_group: [1, ".naskah"],
               dokumen: "docx|doc|pdf",
               filesize50: 52428200
+            },
+            editor_file_link : {
+              require_from_group: [1, ".naskah"]
             }
           },
           errorElement: "span",
@@ -432,6 +447,60 @@
         },
         select2_validasi()
        );
+
+      //pilih editor
+    $('#btn-pilih-editor').on('click',function(){
+      $('.help-block').remove();
+      var $this = $(this);
+      $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+      var draft = $('input[name=draft_id]').val();
+      var editor = $('#pilih_editor').val();
+      $.ajax({
+        type : "POST",
+        url : "<?php echo base_url('responsibility/add/editor') ?>",
+        datatype : "JSON",
+        cache:false,
+        data : {
+          draft_id : draft,
+          user_id : editor
+        },
+        success :function(data){
+          var dataeditor = JSON.parse(data);
+          console.log(dataeditor);
+          if(!dataeditor.validasi){
+            $('#form-editor').append('<div class="text-danger help-block">editor sudah dipilih</div>');
+            toastr_view('33');
+          }else if(dataeditor.validasi == 'max'){
+            toastr_view('98');
+          }else{
+            toastr_view('5');
+          }
+          $('[name=editor]').val("");
+          $('#reload-editor').load(' #reload-editor');
+          //$('#list-group-edit').load(' #list-group-edit');
+          $this.removeAttr("disabled").html("Pilih");
+        }
+
+      });
+      return false;
+    });
+
+    //hapus editor
+    $('#reload-editor').on('click','.delete-editor',function(){
+        $(this).attr('disabled','disabled').html("<i class='fa fa-spinner fa-spin '></i>");
+        var id=$(this).attr('data');
+        console.log(id);
+        $.ajax({
+          url : "<?php echo base_url('responsibility/delete/') ?>"+id,
+          success : function(data){
+            console.log(data);
+            $('#reload-editor').load(' #reload-editor');
+            toastr_view('6');
+            //$('#list-group-edit').load(' #list-group-edit');
+          }
+
+        })
+    });
 
       $('#btn-submit-edit').on('click',function(){
         var $this = $(this);
@@ -535,7 +604,38 @@
           return false;
       });
 
-      
+      //edit deadline
+    $('#btn-edit-deadline').on('click',function(){
+        var $this = $(this);
+        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+        let id=$('[name=draft_id]').val();
+        let ed=$('[name=edit_deadline]').val();
+        $.ajax({
+          type : "POST",
+          url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
+          datatype : "JSON",
+          data : {
+            edit_deadline : ed
+          },
+          success :function(data){
+            let datax = JSON.parse(data);
+            console.log(datax)
+            $this.removeAttr("disabled").html("Submit");
+            if(datax.status == true){
+              toastr_view('111');
+            }else{
+              toastr_view('000');
+            }
+             $('#list-group-edit').load(' #list-group-edit');
+             $('#edit_deadline').modal('toggle');
+          }
+        });
+        return false;
+      });
+
+    $('#btn-close-editor').on('click',function(){
+      location.reload();
+    });
 
     })
   </script>

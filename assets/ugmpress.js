@@ -1,3 +1,5 @@
+
+
 function preview_image(event) 
   {
    var reader = new FileReader();
@@ -25,6 +27,7 @@ function setting_validasi(){
     $.validator.addMethod("huruf", function(value, element) {
         return this.optional(element) || /^[a-z ]+$/i.test(value);
     }, "Hanya diperbolehkan menggunakan huruf alfabet");
+    $.validator.addMethod("require_from_group", $.validator.methods.require_from_group,"Wajib isi salah satu kolom ini");
     $.validator.addMethod("crequired", $.validator.methods.required,"Kolom tidak boleh kosong");
     $.validator.addMethod("cminlength", $.validator.methods.minlength, $.validator.format("Minimal {0} karakter"));
     $.validator.addMethod("cnumber", $.validator.methods.number, $.validator.format("Hanya diperbolehkan menggunakan angka"));

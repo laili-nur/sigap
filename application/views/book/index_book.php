@@ -74,7 +74,7 @@
             <?php if ($books):?>
             <div class="table-responsive">
               <!-- .table -->
-              <table class="table">
+              <table class="table table-striped">
                 <!-- thead -->
                 <thead>
                   <tr>

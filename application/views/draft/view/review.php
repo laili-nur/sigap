@@ -119,25 +119,33 @@
                 <p class="font-weight-bold">NASKAH</p>
                 <!-- if upload ditampilkan di level tertentu -->
                 <?php if($ceklevel=='reviewer' or ($ceklevel == 'author' and $author_order==1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+                <div class="alert alert-info">Upload file naskah atau sertakan link naskah. Kosongi jika file naskah hard copy.</div>
                 <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/review1_file', ' novalidate id="rev1form"'); ?>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                   <!-- .form-group -->
                     <div class="form-group">
                       <label for="review1_file">File Naskah</label>
                       <!-- .input-group -->
-                      <div class="input-group input-group-alt">
                         <div class="custom-file">
-                          <?= form_upload('review1_file','','class="custom-file-input" id="review1_file"') ?> 
+                          <?= form_upload('review1_file','','class="custom-file-input naskah" id="review1_file"') ?> 
                           <label class="custom-file-label" for="review1_file">Choose file</label>
                         </div>
-                        <div class="input-group-append">
-                          <button class="btn btn-primary" type="submit" value="Submit" id="btn-upload-review1"><i class="fa fa-upload"></i> Upload</button>
-                        </div>
-                      </div>
                       <small class="form-text text-muted">Tipe file upload  bertype : docx, doc, dan pdf.</small>
                       <!-- /.input-group -->
                     </div>
                     <!-- /.form-group -->
+                    <!-- .form-group -->
+                    <div class="form-group">
+                      <label for="reviewer1_file_link">Link Naskah</label>
+                      <div>
+                        <?= form_input('reviewer1_file_link', $input->reviewer1_file_link, 'class="form-control naskah" id="reviewer1_file_link"') ?>
+                      </div>
+                        <?= form_error('reviewer1_file_link') ?>
+                    </div>
+                    <!-- /.form-group -->
+                    <div class="form-group">
+                      <button class="btn btn-primary " type="submit" value="Submit" id="btn-upload-review1"><i class="fa fa-upload"></i> Upload</button>
+                    </div>
                 <?= form_close(); ?>
                 <?php endif ?>
                 <!-- endif upload ditampilkan di level tertentu -->
@@ -150,13 +158,14 @@
                   <em>(<?=$input->review1_last_upload ?>)</em>
                 <?php endif ?>
                 </p>
-                <?=(!empty($input->review1_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review1_file.'" href="'.base_url('draftfile/'.$input->review1_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : 'No data' ?>
+                <?=(!empty($input->review1_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review1_file.'" href="'.base_url('draftfile/'.$input->review1_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
+                <?=(!empty($input->reviewer1_file_link))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->reviewer1_file_link.'" href="'.$input->reviewer1_file_link.'" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
                 </div>
 
-                <hr class="my-3">
                 <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formreview1_krit" novalidate=""'); ?>
                   <!-- review dari reviewer hanya bisa dibaca admin dan staff ugmpress -->
                   <?php if($ceklevel!='author'): ?>
+                  <hr class="my-3">
                   <p class="font-weight-bold">REVIEW</p>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                   <!-- .form-group -->
@@ -347,14 +356,12 @@
                     <?php endif ?>
                  </div>
                 <!-- /.form-group -->
-                <hr class="my-3">
                 <!-- endif review dari reviewer hanya bisa dibaca admin dan staff ugmpress -->
                 <?php endif ?>
-                <!-- <?= form_close(); ?> -->
-                <!-- .form -->
-                <!-- <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formreview1"') ?> -->
                   <!-- .fieldset -->
                   <fieldset>
+                    <?php if($ceklevel!='author'): ?>
+                    <hr class="my-3">
                     <!-- .form-group -->
                     <div class="form-group">
                       <label for="cr1" class="font-weight-bold">Catatan Reviewer 1</label>
@@ -366,13 +373,36 @@
                           'rows' => '6',
                           'value'=> $input->review1_notes
                       );
-                      if($ceklevel!='reviewer' and $ceklevel!='superadmin' and $ceklevel!='admin_penerbitan'){
+                      if($ceklevel!='reviewer' and $ceklevel!='superadmin'){
                         echo '<div class="font-italic">'.nl2br($input->review1_notes).'</div>';
                       }else{
                         echo form_textarea($optionscr1);
                       }
                       ?>
                     </div>
+                    <?php endif ?>
+                    <!-- /.form-group -->
+                    <?php if($ceklevel=='superadmin' or $ceklevel=='author'): ?>
+                    <hr class="my-3">
+                    <!-- .form-group -->
+                    <div class="form-group">
+                      <label for="cr1a" class="font-weight-bold">Catatan Admin untuk Penulis</label>
+                      <?php 
+                      $optionscr1a = array(
+                          'name' => 'catatan_review1_admin',
+                          'class'=> 'form-control summernote-basic',
+                          'id'  => 'cr1a',
+                          'rows' => '6',
+                          'value'=> $input->catatan_review1_admin
+                      );
+                      if($ceklevel=='superadmin'){
+                        echo form_textarea($optionscr1a);
+                      }elseif($ceklevel=='author'){
+                        echo '<div class="font-italic">'.nl2br($input->catatan_review1_admin).'</div>';
+                      }else{}
+                      ?>
+                    </div>
+                    <?php endif ?>
                     <!-- /.form-group -->
                     <hr class="my-3">
                     <!-- .form-group -->
@@ -412,9 +442,11 @@
                     <label class="custom-control-label" for="review1_flagn">Tidak</label>
                   </div>
                 </div>
+                <!-- submit khusus reviewer -->
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-review1-rev">Submit</button>
                 <?php else: ?>
                   <?php if($author_order==1): ?>
+                <!-- submit untuk selain reviewer -->
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-review1-other">Submit</button>
                   <?php endif ?>
                 <?php endif ?>
@@ -445,6 +477,7 @@
                 <p class="font-weight-bold">NASKAH</p>
                 <?php if($ceklevel=='reviewer' or ($ceklevel == 'author' and $author_order==1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
                 <?= form_open('draft/upload_progress/'.$input->draft_id.'/review2_file', 'novalidate id="rev2form"'); ?>
+                <div class="alert alert-info">Upload file naskah atau sertakan link naskah. Kosongi jika file naskah hard copy.</div>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : 'No data' ?>
                   <!-- .form-group -->
                     <div class="form-group">
@@ -452,7 +485,7 @@
                       <!-- .input-group -->
                       <div class="input-group input-group-alt">
                         <div class="custom-file">
-                          <?= form_upload('review2_file','','class="custom-file-input" id="review2_file"') ?> 
+                          <?= form_upload('review2_file','','class="custom-file-input naskah" id="review2_file"') ?> 
                           <label class="custom-file-label" for="review2_file">Choose file</label>
                         </div>
                         <div class="input-group-append">
@@ -463,6 +496,18 @@
                       <!-- /.input-group -->
                     </div>
                     <!-- /.form-group -->
+                    <!-- .form-group -->
+                    <div class="form-group">
+                      <label for="reviewer2_file_link">Link Naskah</label>
+                      <div>
+                        <?= form_input('reviewer2_file_link', $input->reviewer2_file_link, 'class="form-control naskah" id="reviewer2_file_link"') ?>
+                      </div>
+                        <?= form_error('reviewer2_file_link') ?>
+                    </div>
+                    <!-- /.form-group -->
+                    <div class="form-group">
+                      <button class="btn btn-primary " type="submit" value="Submit" id="btn-upload-review2"><i class="fa fa-upload"></i> Upload</button>
+                    </div>
                 <?= form_close(); ?>
                 <?php endif ?>
                 <!-- endif upload ditampilkan di level tertentu -->
@@ -475,7 +520,8 @@
                   <em>(<?=$input->review2_last_upload ?>)</em>
                 <?php endif ?>
                 </p>
-                <?=(!empty($input->review2_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review2_file.'" href="'.base_url('draftfile/'.$input->review2_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : 'No data' ?>
+                <?=(!empty($input->review2_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review2_file.'" href="'.base_url('draftfile/'.$input->review2_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
+                <?=(!empty($input->reviewer2_file_link))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->reviewer2_file_link.'" href="'.$input->reviewer2_file_link.'" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
                 </div>
 
                 <hr class="my-3">
@@ -672,14 +718,12 @@
                     <?php endif ?>
                  </div>
                 <!-- /.form-group -->
-                <hr class="my-3">
                 <!-- endif review dari reviewer hanya bisa dibaca admin dan staff ugmpress -->
                 <?php endif ?>
-                <!-- <?= form_close(); ?> -->
-                <!-- .form -->
-                <!-- <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formreview2"') ?> -->
                   <!-- .fieldset -->
                   <fieldset>
+                    <?php if($ceklevel!='author'): ?>
+                    <hr class="my-3">
                     <!-- .form-group -->
                     <div class="form-group">
                       <label for="cr2" class="font-weight-bold">Catatan Reviewer 2</label>
@@ -691,15 +735,38 @@
                           'rows' => '6',
                           'value'=> $input->review2_notes
                       );
-                      if($ceklevel!='reviewer' and $ceklevel!='superadmin' and $ceklevel!='admin_penerbitan'){
+                      if($ceklevel!='reviewer' and $ceklevel!='superadmin'){
                         echo '<div class="font-italic">'.nl2br($input->review2_notes).'</div>';
                       }else{
                         echo form_textarea($optionscr2);
                       }
                       ?>
                     </div>
+                    <?php endif ?>
                     <!-- /.form-group -->
-                    <hr>
+                    <?php if($ceklevel=='superadmin' or $ceklevel=='author'): ?>
+                    <hr class="my-3">
+                    <!-- .form-group -->
+                    <div class="form-group">
+                      <label for="cr2a" class="font-weight-bold">Catatan Admin untuk Penulis</label>
+                      <?php 
+                      $optionscr2a = array(
+                          'name' => 'catatan_review2_admin',
+                          'class'=> 'form-control summernote-basic',
+                          'id'  => 'cr2a',
+                          'rows' => '6',
+                          'value'=> $input->catatan_review2_admin
+                      );
+                      if($ceklevel=='superadmin'){
+                        echo form_textarea($optionscr2a);
+                      }elseif($ceklevel=='author'){
+                        echo '<div class="font-italic">'.nl2br($input->catatan_review2_admin).'</div>';
+                      }else{}
+                      ?>
+                    </div>
+                    <?php endif ?>
+                    <!-- /.form-group -->
+                    <hr class="my-3">
                     <!-- .form-group -->
                     <div class="form-group">
                       <label for="crp2" class="font-weight-bold">Catatan Penulis</label>
@@ -886,9 +953,12 @@
       $("#rev1form").validate({
           rules: {
             review1_file: {
-              crequired :true,
+              require_from_group: [1, ".naskah"],
               dokumen: "docx|doc|pdf",
               filesize50: 52428200
+            },
+            reviewer1_file_link : {
+              require_from_group: [1, ".naskah"]
             }
           },
           errorElement: "span",
@@ -947,9 +1017,12 @@
       $("#rev2form").validate({
           rules: {
             review2_file: {
-              crequired :true,
+              require_from_group: [1, ".naskah"],
               dokumen: "docx|doc|pdf",
               filesize50: 52428200
+            },
+            reviewer2_file_link : {
+              require_from_group: [1, ".naskah"]
             }
           },
           errorElement: "span",
@@ -1063,6 +1136,7 @@
         var $this = $(this);
         let id=$('[name=draft_id]').val();
         let cr1=$('#cr1').val();
+        let cr1a=$('#cr1a').val();
         let crp1=$('#crp1').val();
         let rev1_flag=$('[name=review1_flag]:checked').val();
         $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
@@ -1071,6 +1145,7 @@
           url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
           datatype : "JSON",
           data : {
+            catatan_review1_admin : cr1a,
             review1_notes : cr1,
             review1_notes_author : crp1,
             review1_flag : rev1_flag,
@@ -1105,15 +1180,6 @@
         let nilai_reviewer2_2=$('[name=nilai_reviewer2_2]:checked').val();
         let nilai_reviewer2_3=$('[name=nilai_reviewer2_3]:checked').val();
         let nilai_reviewer2 = [nilai_reviewer2_0,nilai_reviewer2_1,nilai_reviewer2_2,nilai_reviewer2_3];
-        console.log(nilai_reviewer2_0);
-        console.log(nilai_reviewer2_1);
-        console.log(nilai_reviewer2_2);
-        console.log(nilai_reviewer2_3);
-        console.log(kriteria1_reviewer2);
-        console.log(kriteria2_reviewer2);
-        console.log(kriteria3_reviewer2);
-        console.log(kriteria4_reviewer2);
-        console.log(nilai_reviewer2);
         if(nilai_reviewer2_0 == null || nilai_reviewer2_1 == null || nilai_reviewer2_2 == null || nilai_reviewer2_3 == null){
           toastr_view('penilaian');
           return false;
@@ -1157,6 +1223,7 @@
         var $this = $(this);
         let id=$('[name=draft_id]').val();
         let cr2=$('#cr2').val();
+        let cr2a=$('#cr2a').val();
         let crp2=$('#crp2').val();
         let rev2_flag=$('[name=review2_flag]:checked').val();
         $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
@@ -1165,6 +1232,7 @@
           url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
           datatype : "JSON",
           data : {
+            catatan_review2_admin : cr2a,
             review2_notes : cr2,
             review2_notes_author : crp2,
             review2_flag : rev2_flag,
@@ -1229,7 +1297,7 @@
         let action=$('#review-tolak').val();
         let end_date=$('#review_end_date').val();
 
-              console.log(end_date);
+        console.log(end_date);
         $.ajax({
             type : "POST",
             url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
@@ -1258,20 +1326,36 @@
           return false;
       });
 
-    //   $('#cr2').summernote({
-    //   placeholder: 'Write here...',
-    //   height: 200,
-    //   disableDragAndDrop: true,
-    //   toolbar: [
-    //     ['style', ['bold', 'italic', 'underline', 'clear']],
-    //     ['font', ['strikethrough']],
-    //     ['fontsize', ['fontsize','height']],
-    //     ['para', ['ul', 'ol', 'paragraph']],
-    //     ['height', ['height']],
-    //     ['view', ['codeview']],
-    //   ],
-      
-    // });
+      //review deadline
+    $('#btn-review-deadline').on('click',function(){
+        var $this = $(this);
+        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+        let id=$('[name=draft_id]').val();
+        let rd1=$('[name=review1_deadline]').val();
+        let rd2=$('[name=review2_deadline]').val();
+        $.ajax({
+          type : "POST",
+          url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
+          datatype : "JSON",
+          data : {
+            review1_deadline : rd1,
+            review2_deadline : rd2,
+          },
+          success :function(data){
+            let datax = JSON.parse(data);
+            console.log(datax)
+            $this.removeAttr("disabled").html("Submit");
+            if(datax.status == true){
+              toastr_view('111');
+            }else{
+              toastr_view('000');
+            }
+             $('#list-group-review').load(' #list-group-review');
+             $('#review_deadline').modal('toggle');
+          }
+        });
+        return false;
+      });
 
     })
   </script>

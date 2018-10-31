@@ -93,7 +93,7 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> Tanggal Masuk </td>
-                <td>: <?= konversiTanggal($input->entry_date) ?>  </td>
+                <td>: <?= konversiTanggal($input->entry_date) ?>  <button type="button" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#ubah_entry_date">Edit</button></td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
@@ -129,6 +129,50 @@
         </div>
         <!-- /.table-responsive -->
         </div>
+        <!-- modal ubah entry date -->
+          <div class="modal fade" id="ubah_entry_date" tabindex="-1" role="dialog" aria-labelledby="ubah_entry_date" aria-hidden="true">
+            <!-- .modal-dialog -->
+            <div class="modal-dialog" role="document">
+              <!-- .modal-content -->
+              <div class="modal-content">
+                <!-- .modal-header -->
+                <div class="modal-header">
+                  <h5 class="modal-title">Ubah Tanggal masuk</h5>
+                </div>
+                <!-- /.modal-header -->
+                <!-- .modal-body -->
+                <div class="modal-body">
+                  <!-- .form -->
+                  <?= form_open('draft/ubahnotes/'.$input->draft_id) ?>
+                    <!-- .fieldset -->
+                    <fieldset>
+                    <!-- .form-group -->
+                    <div class="form-group">
+                      <!-- <label for="edit_deadline">Deadline Edit</label> -->
+                      <div>
+                        <?= form_input('entry_date', $input->entry_date, 'class="form-control d-none" id="entry_date"') ?>
+                      </div>
+                        <?= form_error('entry_date') ?>
+                    </div>
+                    <!-- /.form-group -->
+                    </fieldset>
+                    <!-- /.fieldset -->
+                </div>
+                <!-- /.modal-body -->
+                <!-- .modal-footer -->
+                <div class="modal-footer">
+                  <button class="btn btn-primary" type="submit" id="btn-ubah_entry_date">Pilih</button>
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                </div>
+                <!-- /.modal-footer -->
+                <?=form_close(); ?>
+                  <!-- /.form -->
+              </div>
+              <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+          </div>
+        <!-- /.modal -->
         <div class="tab-pane fade" id="data-penulis">
           <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
           <div class="form-group">
@@ -459,6 +503,13 @@
 
 <script>
   $(document).ready(function() {
+    $('#entry_date').flatpickr({
+      disableMobile: true,
+      altInput: true,
+      altFormat: 'j F Y',
+      dateFormat: 'Y-m-d',
+      inline: true
+    });
 
     //scroll to top dan ganti tab
     function activaTab(tab){
@@ -561,80 +612,9 @@
       return false;
     });
 
-    //pilih editor
-    $('#btn-pilih-editor').on('click',function(){
-      $('.help-block').remove();
-      var $this = $(this);
-      $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-      var draft = $('input[name=draft_id]').val();
-      var editor = $('#pilih_editor').val();
-      $.ajax({
-        type : "POST",
-        url : "<?php echo base_url('responsibility/add/editor') ?>",
-        datatype : "JSON",
-        cache:false,
-        data : {
-          draft_id : draft,
-          user_id : editor
-        },
-        success :function(data){
-          var dataeditor = JSON.parse(data);
-          console.log(dataeditor);
-          if(!dataeditor.validasi){
-            $('#form-editor').append('<div class="text-danger help-block">editor sudah dipilih</div>');
-            toastr_view('33');
-          }else if(dataeditor.validasi == 'max'){
-            toastr_view('98');
-          }else{
-            toastr_view('5');
-          }
-          $('[name=editor]').val("");
-          $('#reload-editor').load(' #reload-editor');
-          $('#list-group-edit').load(' #list-group-edit');
-          $this.removeAttr("disabled").html("Pilih");
-        }
+    
 
-      });
-      return false;
-
-    });
-
-    //pilih layouter
-    $('#btn-pilih-layouter').on('click',function(){
-      $('.help-block').remove();
-      var $this = $(this);
-      $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-      var draft = $('input[name=draft_id]').val();
-      var layouter = $('#pilih_layouter').val();
-      $.ajax({
-        type : "POST",
-        url : "<?php echo base_url('responsibility/add/layouter') ?>",
-        datatype : "JSON",
-        data : {
-          draft_id : draft,
-          user_id : layouter
-        },
-        success :function(data){
-          var datalayouter = JSON.parse(data);
-          console.log(datalayouter);
-          if(!datalayouter.validasi){
-            $('#form-layouter').append('<div class="text-danger help-block">layouter sudah dipilih</div>');
-            toastr_view('44');
-          }else if(datalayouter.validasi == 'max'){
-            toastr_view('97');
-          }else{
-            toastr_view('7');
-          }
-          $('[name=layouter]').val("");
-          $('#reload-layouter').load(' #reload-layouter');
-          $('#list-group-layout').load(' #list-group-layout');
-          $this.removeAttr("disabled").html("Pilih");
-        }
-
-      });
-      return false;
-
-    });
+    
 
 
     //hapus penulis
@@ -668,54 +648,23 @@
         })
     });
 
-    //hapus editor
-    $('#reload-editor').on('click','.delete-editor',function(){
-        $(this).attr('disabled','disabled').html("<i class='fa fa-spinner fa-spin '></i>");
-        var id=$(this).attr('data');
-        console.log(id);
-        $.ajax({
-          url : "<?php echo base_url('responsibility/delete/') ?>"+id,
-          success : function(data){
-            console.log(data);
-            $('#reload-editor').load(' #reload-editor');
-            toastr_view('6');
-            $('#list-group-edit').load(' #list-group-edit');
-          }
+    
 
-        })
-    });
+    
 
-    //hapus layouter
-    $('#reload-layouter').on('click','.delete-layouter',function(){
-        $(this).attr('disabled','disabled').html("<i class='fa fa-spinner fa-spin '></i>");
-        var id=$(this).attr('data');
-        console.log(id);
-        $.ajax({
-          url : "<?php echo base_url('responsibility/delete/') ?>"+id,
-          success : function(data){
-            console.log(data);
-            $('#reload-layouter').load(' #reload-layouter');
-            toastr_view('8');
-            $('#list-group-layout').load(' #list-group-layout');
-          }
-
-        })
-    });
-
-    //review deadline
-    $('#btn-review-deadline').on('click',function(){
+    //ubah entry date
+    $('#btn-ubah_entry_date').on('click',function(){
         var $this = $(this);
         $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
         let id=$('[name=draft_id]').val();
-        let rd1=$('[name=review1_deadline]').val();
-        let rd2=$('[name=review2_deadline]').val();
+        let entry_date=$('[name=entry_date]').val();
+        console.log(entry_date)
         $.ajax({
           type : "POST",
           url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
           datatype : "JSON",
           data : {
-            review1_deadline : rd1,
-            review2_deadline : rd2,
+            entry_date : entry_date,
           },
           success :function(data){
             let datax = JSON.parse(data);
@@ -726,64 +675,10 @@
             }else{
               toastr_view('000');
             }
-             $('#list-group-review').load(' #list-group-review');
+             $('#data-drafts').load(' #data-drafts');
+             $('#ubah_entry_date').modal('toggle');
           }
-        });
-        return false;
-      });
 
-    //edit deadline
-    $('#btn-edit-deadline').on('click',function(){
-        var $this = $(this);
-        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-        let id=$('[name=draft_id]').val();
-        let ed=$('[name=edit_deadline]').val();
-        $.ajax({
-          type : "POST",
-          url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
-          datatype : "JSON",
-          data : {
-            edit_deadline : ed
-          },
-          success :function(data){
-            let datax = JSON.parse(data);
-            console.log(datax)
-            $this.removeAttr("disabled").html("Submit");
-            if(datax.status == true){
-              toastr_view('111');
-            }else{
-              toastr_view('000');
-            }
-             $('#list-group-edit').load(' #list-group-edit');
-          }
-        });
-        return false;
-      });
-
-    //layout deadline
-    $('#btn-layout-deadline').on('click',function(){
-        var $this = $(this);
-        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-        let id=$('[name=draft_id]').val();
-        let ld=$('[name=layout_deadline]').val();
-        $.ajax({
-          type : "POST",
-          url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
-          datatype : "JSON",
-          data : {
-            layout_deadline : ld
-          },
-          success :function(data){
-            let datax = JSON.parse(data);
-            console.log(datax)
-            $this.removeAttr("disabled").html("Submit");
-            if(datax.status == true){
-              toastr_view('111');
-            }else{
-              toastr_view('000');
-            }
-             $('#list-group-layout').load(' #list-group-layout');
-          }
         });
         return false;
       });

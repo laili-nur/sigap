@@ -72,7 +72,7 @@
             <?php if ($reviewers):?>
             <div class="table-responsive">
               <!-- .table -->
-              <table class="table nowrap">
+              <table class="table nowrap table-striped">
                 <!-- thead -->
                 <thead>
                   <tr>

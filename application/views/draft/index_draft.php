@@ -1,6 +1,6 @@
 <?php $ceklevel = $this->session->userdata('level'); ?>
 <?php
-  $perPage = 10;
+  $perPage = $this->input->get('per_page');
   $keywords = $this->input->get('keywords');
   $filter = $this->input->get('filter');
   if (isset($keywords) or isset($filter)) {
@@ -80,7 +80,7 @@
           ];
         }else{
           $filter_status = [
-            '' => '- Filter Tahapan -',
+            '' => '- Filter Status -',
             'desk-screening' => ' Tahap Desk Screening',
             'review' => ' Tahap Review',
             'edit' => 'Tahap Editorial',
@@ -90,19 +90,36 @@
             'final' => 'Draft Final',
           ];
         }
+
+        $per_page = [
+            '10' => '10',
+            '25' => '25',
+            '50' => '50',
+            '100' => '100',
+          ];
          ?>
+
         <!-- .card-body -->
         <div class="card-body p-0">
           <div class="p-3">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <p class="m-0">Tabel berikut dapat digeser secara horizontal.</p>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
             <div class="row">
-              <?php if(true): ?>
-              <div class="col-12 col-md-3 mb-3">
+               <div class="col-3 col-lg-1 mb-3">
+                <?= form_open('draft', ['method' => 'GET']) ?>
+                  <?= form_dropdown('per_page', $per_page, $this->input->get('per_page'), 'onchange="this.form.submit()" id="per_page" class="form-control custom-select d-block" title="List per page"') ?>
+                  <?= form_close() ?>
+              </div> 
+              <div class="col-9 col-lg-3 mb-3">
                 <?= form_open('draft/filter', ['method' => 'GET']) ?>
-                  <?= form_dropdown('filter', $filter_status, $this->input->get('filter'), 'onchange="this.form.submit()" id="filter" class="form-control custom-select d-block"') ?>
+                  <?= form_dropdown('filter', $filter_status, $this->input->get('filter'), 'onchange="this.form.submit()" id="filter" class="form-control custom-select d-block" title="Filter status"') ?>
                   <?= form_close() ?>
               </div>
-              <?php endif ?>
-              <div class="col-12 <?=(true)?'col-md-9':'' ?> ">
+              <div class="col-12 col-lg-8 ">
                 <?= form_open('draft/search', ['method' => 'GET']) ?>
                 <!-- .input-group -->
                 <?php $placeholder = ($ceklevel=='superadmin')? 'placeholder="Enter Category, Theme, or Title" class="form-control"':'placeholder="Enter Title" class="form-control"' ?>
@@ -121,7 +138,7 @@
           <?php if ($drafts):?>
           <div class="table-responsive">
             <!-- .table -->
-            <table class="table nowrap">
+            <table class="table nowrap table-striped">
               <!-- thead -->
               <thead>
                 <tr>

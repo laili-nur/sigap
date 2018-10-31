@@ -10,7 +10,7 @@
         <div class="card-header-control">
           <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
           <!-- .tombol add -->
-          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#pilihlayouter">Pilih Layouter</button>
+          <button type="button" class="btn <?=($layouters==null)? 'btn-warning' : 'btn-secondary' ?>" data-toggle="modal" data-target="#pilihlayouter">Pilih Layouter</button>
           <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#layout_deadline">Atur Deadline</button>
           <!-- /.tombol add -->
           <?php endif ?>
@@ -19,6 +19,9 @@
       </div>
       <!-- /.d-flex -->
     </header>
+    <?php if($layouters == null): ?>
+    <div class="alert alert-warning"><strong>PERHATIAN!</strong> Pilih layouter terlebih dahulu sebelum lanjut ke tahap selanjutnya.</div>
+    <?php endif ?>
     <div class="list-group list-group-flush list-group-bordered" id="list-group-layout">
       <div class="list-group-item justify-content-between">
         <span class="text-muted">Tanggal masuk</span>
@@ -83,24 +86,32 @@
                   <!-- if upload ditampilkan di level tertentu -->
                   <?php if($ceklevel=='layouter' or $ceklevel=='editor' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
                   <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/layout_file', 'id="layoutform"'); ?>
+                  <div class="alert alert-info">Upload file naskah atau sertakan link naskah. Kosongi jika file naskah hard copy.</div>
                     <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                     <!-- .form-group -->
                       <div class="form-group ">
                         <label for="layout_file">File Naskah</label>
                         <!-- .input-group -->
-                        <div class="input-group input-group-alt">
                           <div class="custom-file">
-                            <?= form_upload('layout_file','','class="custom-file-input" id="layout_file"') ?> 
+                            <?= form_upload('layout_file','','class="custom-file-input naskah" id="layout_file"') ?> 
                             <label class="custom-file-label" for="layout_file">Choose file</label>
                           </div>
-                          <div class="input-group-append">
-                            <button class="btn btn-primary" type="submit" value="Submit" id="btn-upload-layout"><i class="fa fa-upload"></i> Upload</button>
-                          </div>
-                        </div>
                         <small class="form-text text-muted">Tipe file upload  bertype : docx, doc, dan pdf.</small>
                         <!-- /.input-group -->
                       </div>
                       <!-- /.form-group -->
+                      <!-- .form-group -->
+                    <div class="form-group">
+                      <label for="layouter_file_link">Link Naskah</label>
+                      <div>
+                        <?= form_input('layouter_file_link', $input->layouter_file_link, 'class="form-control naskah" id="layouter_file_link"') ?>
+                      </div>
+                        <?= form_error('layouter_file_link') ?>
+                    </div>
+                    <!-- /.form-group -->
+                    <div class="form-group">
+                      <button class="btn btn-primary " type="submit" value="Submit" id="btn-upload-layout"><i class="fa fa-upload"></i> Upload</button>
+                    </div>
                   <?= form_close(); ?>
                   <?php endif ?>
                   <!-- endif upload ditampilkan di level tertentu -->
@@ -113,7 +124,8 @@
                     <em>(<?=$input->layout_last_upload ?>)</em>
                   <?php endif ?>
                   </p>
-                  <?=(!empty($input->layout_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->layout_file.'" href="'.base_url('draftfile/'.$input->layout_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : 'No data' ?>
+                  <?=(!empty($input->layout_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->layout_file.'" href="'.base_url('draftfile/'.$input->layout_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
+                  <?=(!empty($input->layouter_file_link))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->layouter_file_link.'" href="'.$input->layouter_file_link.'" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
                   </div>
 
                   <hr class="my-3">
@@ -196,25 +208,33 @@
                 <p class="font-weight-bold">COVER</p>
                 <!-- if upload ditampilkan di level tertentu -->
                 <?php if($ceklevel=='layouter' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+                  <div class="alert alert-info">Upload file cover atau sertakan link cover.</div>
                 <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/cover_file', 'id="coverform"'); ?>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                   <!-- .form-group -->
                     <div class="form-group">
                       <label for="cover_file">File Cover</label>
                       <!-- .input-group -->
-                      <div class="input-group input-group-alt">
                         <div class="custom-file">
-                          <?= form_upload('cover_file','','class="custom-file-input" id="cover_file"') ?> 
+                          <?= form_upload('cover_file','','class="custom-file-input naskah" id="cover_file"') ?> 
                           <label class="custom-file-label" for="cover_file">Choose file</label>
                         </div>
-                        <div class="input-group-append">
-                          <button class="btn btn-primary" type="submit" value="Submit" id="btn-upload-cover"><i class="fa fa-upload"></i> Upload</button>
-                        </div>
-                      </div>
                       <small class="form-text text-muted">Tipe file upload  bertype : jpg, jpeg, png, dan pdf.</small>
                       <!-- /.input-group -->
                     </div>
                     <!-- /.form-group -->
+                    <!-- .form-group -->
+                    <div class="form-group">
+                      <label for="cover_file_link">Link Cover</label>
+                      <div>
+                        <?= form_input('cover_file_link', $input->cover_file_link, 'class="form-control naskah" id="cover_file_link"') ?>
+                      </div>
+                        <?= form_error('cover_file_link') ?>
+                    </div>
+                    <!-- /.form-group -->
+                    <div class="form-group">
+                      <button class="btn btn-primary " type="submit" value="Submit" id="btn-upload-cover"><i class="fa fa-upload"></i> Upload</button>
+                    </div>
                 <?= form_close(); ?>
                 <?php endif ?>
                 <!-- endif upload ditampilkan di level tertentu -->
@@ -257,9 +277,8 @@
                   </div>
                   <!-- /grid column -->
                   </div>
-                  <?php else: ?>
-                    <p>no data</p>
                 <?php endif ?>
+                <?=(!empty($input->cover_file_link))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->cover_file_link.'" href="'.$input->cover_file_link.'" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
                 </div>
                 <hr class="my-3">
                 <!-- .form -->
@@ -391,7 +410,7 @@
               <!-- /.modal-body -->
               <!-- .modal-footer -->
               <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-light" data-dismiss="modal" id="btn-close-layouter">Close</button>
               </div>
               <!-- /.modal-footer -->
               <?=form_close(); ?>
@@ -523,9 +542,12 @@
       $("#layoutform").validate({
           rules: {
             layout_file: {
-              crequired :true,
+              require_from_group: [1, ".naskah"],
               dokumen: "docx|doc|pdf",
               filesize50: 52428200
+            },
+            layouter_file_link : {
+              require_from_group: [1, ".naskah"]
             }
           },
           errorElement: "span",
@@ -584,9 +606,12 @@
       $("#coverform").validate({
           rules: {
             cover_file: {
-              crequired :true,
+              require_from_group: [1, ".naskah"],
               dokumen: "jpg|jpeg|png|pdf",
               filesize50: 52428200
+            },
+            cover_file_link : {
+              require_from_group: [1, ".naskah"]
             }
           },
           errorElement: "span",
@@ -640,6 +665,59 @@
         },
         select2_validasi()
        );
+
+      //pilih layouter
+    $('#btn-pilih-layouter').on('click',function(){
+      $('.help-block').remove();
+      var $this = $(this);
+      $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+      var draft = $('input[name=draft_id]').val();
+      var layouter = $('#pilih_layouter').val();
+      $.ajax({
+        type : "POST",
+        url : "<?php echo base_url('responsibility/add/layouter') ?>",
+        datatype : "JSON",
+        data : {
+          draft_id : draft,
+          user_id : layouter
+        },
+        success :function(data){
+          var datalayouter = JSON.parse(data);
+          console.log(datalayouter);
+          if(!datalayouter.validasi){
+            $('#form-layouter').append('<div class="text-danger help-block">layouter sudah dipilih</div>');
+            toastr_view('44');
+          }else if(datalayouter.validasi == 'max'){
+            toastr_view('97');
+          }else{
+            toastr_view('7');
+          }
+          $('[name=layouter]').val("");
+          $('#reload-layouter').load(' #reload-layouter');
+          //$('#list-group-layout').load(' #list-group-layout');
+          $this.removeAttr("disabled").html("Pilih");
+        }
+
+      });
+      return false;
+    });
+
+    //hapus layouter
+    $('#reload-layouter').on('click','.delete-layouter',function(){
+        $(this).attr('disabled','disabled').html("<i class='fa fa-spinner fa-spin '></i>");
+        var id=$(this).attr('data');
+        console.log(id);
+        $.ajax({
+          url : "<?php echo base_url('responsibility/delete/') ?>"+id,
+          success : function(data){
+            console.log(data);
+            $('#reload-layouter').load(' #reload-layouter');
+            toastr_view('8');
+            //$('#list-group-layout').load(' #list-group-layout');
+          }
+
+        })
+    });
 
       $('#btn-submit-layout').on('click',function(){
         var $this = $(this);
@@ -773,6 +851,39 @@
           // $('#layout_aksi').modal('hide');
           return false;
       });
+
+      //layout deadline
+    $('#btn-layout-deadline').on('click',function(){
+        var $this = $(this);
+        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+        let id=$('[name=draft_id]').val();
+        let ld=$('[name=layout_deadline]').val();
+        $.ajax({
+          type : "POST",
+          url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
+          datatype : "JSON",
+          data : {
+            layout_deadline : ld
+          },
+          success :function(data){
+            let datax = JSON.parse(data);
+            console.log(datax)
+            $this.removeAttr("disabled").html("Submit");
+            if(datax.status == true){
+              toastr_view('111');
+            }else{
+              toastr_view('000');
+            }
+             $('#list-group-layout').load(' #list-group-layout');
+             $('#layout_deadline').modal('toggle');
+          }
+        });
+        return false;
+      });
+
+    $('#btn-close-layouter').on('click',function(){
+      location.reload();
+    });
 
     })
   </script>

@@ -147,7 +147,7 @@ class MY_Model extends CI_Model
     public function validate()
     {
         $this->load->library('form_validation');
-        $this->form_validation->set_error_delimiters('<p class="text-danger">', '</p>');
+        $this->form_validation->set_error_delimiters('<small class="text-danger">', '</small>');
         $validationRules = $this->getValidationRules();
         $this->form_validation->set_rules($validationRules);
         return $this->form_validation->run();
@@ -221,25 +221,26 @@ class MY_Model extends CI_Model
             'per_page'          => $this->perPage,
             'total_rows'        => $totalRows,
             'use_page_numbers'  => true,
-            'num_links'         => 5,
+            'num_links'         => 2,
+            'attributes'        => array('class' => 'page-link'),
             'first_link'        => 'First',
             'last_link'         => 'Last',
             'next_link'         => '<i class="fa fa-lg fa-angle-right"></i>',
             'prev_link'         => '<i class="fa fa-lg fa-angle-left"></i>',
             'full_tag_open'     => '<ul class="pagination justify-content-center mt-4">',
             'full_tag_close'    => '</ul>',
-            'num_tag_open'      => '<li class="page-item"><span class="page-link">',
-            'num_tag_close'     => '</span></li>',
+            'num_tag_open'      => '<li class="page-item">',
+            'num_tag_close'     => '</li>',
             'cur_tag_open'      => '<li class="page-item active"><span class="page-link">',
-            'cur_tag_close'     => '<span class="sr-only">(current)</span></span></li>',
-            'next_tag_open'     => '<li class="page-item"><span class="page-link">',
-            'next_tagl_close'   => '<span aria-hidden="true">&raquo;yyyy</span></span></li>',
-            'prev_tag_open'     => '<li class="page-item"><span class="page-link">',
-            'prev_tagl_close'   => '</span>Next</li>',
-            'first_tag_open'    => '<li class="page-item"><span class="page-link">',
-            'first_tagl_close'  => '</span></li>',
-            'last_tag_open'     => '<li class="page-item"><span class="page-link">',
-            'last_tagl_close'   => '</span></li>',
+            'cur_tag_close'     => '</span></li>',
+            'next_tag_open'     => '<li class="page-item">',
+            'next_tagl_close'   => '</li>',
+            'prev_tag_open'     => '<li class="page-item">',
+            'prev_tagl_close'   => 'Next</li>',
+            'first_tag_open'    => '<li class="page-item">',
+            'first_tag_close'  => '</li>',
+            'last_tag_open'     => '<li class="page-item">',
+            'last_tagl_close'   => '</li>',
         ];
 
 

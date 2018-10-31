@@ -49,7 +49,7 @@
             <?php if ($themes):?>
             <div class="table-responsive">
               <!-- .table -->
-              <table class="table">
+              <table class="table table-striped">
                 <!-- thead -->
                 <thead>
                   <tr>

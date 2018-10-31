@@ -61,7 +61,7 @@
                   <label for="date_open">Tanggal Buka
                     <abbr title="Required">*</abbr>
                   </label>
-                    <?= form_input('date_open', $input->date_open, 'class="form-control mydate" id="date_open" ') ?>
+                    <?= form_input('date_open', $input->date_open, 'class="form-control" id="date_open" ') ?>
                     <?= form_error('date_open') ?>
                 </div>
                 <!-- /.form-group -->
@@ -71,7 +71,7 @@
                   <label for="date_close">Tanggal Tutup
                     <abbr title="Required">*</abbr>
                   </label>
-                    <?= form_input('date_close', $input->date_close, 'class="form-control mydate" id="date_close" ') ?>
+                    <?= form_input('date_close', $input->date_close, 'class="form-control" id="date_close" ') ?>
                     <?= form_error('date_close') ?>
                 </div>
                 <!-- /.form-group -->
@@ -122,6 +122,20 @@
 <!-- /.page-section -->
 <script>
   $(document).ready(function(){
+
+
+    $('#date_open').flatpickr({
+      disableMobile: true,
+      dateFormat: 'Y-m-d',
+
+    });
+
+    $('#date_close').flatpickr({
+      disableMobile: true,
+      dateFormat: 'Y-m-d',
+    });
+
+
      $.validator.addMethod("endDate", function(value, element) {
         var startDate = $('#date_open').val();
         return Date.parse(startDate) <= Date.parse(value) || value == "";
@@ -167,7 +181,8 @@
       select2_validasi()
      );
 
-    // $('[name=date_open]').next('input').attr("name","date_open");
-    // $('[name=date_close]').next('input').attr("name","date_close");
+      // $('[name=date_open]').next('input').attr("name","date_open");
+      // $('[name=date_close]').next('input').attr("name","date_close");
+
   })
 </script>

@@ -4932,7 +4932,6 @@ input[type="button"].btn-block {
 }
 
 .pagination {
-  display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   padding-left: 0;
@@ -4946,24 +4945,23 @@ input[type="button"].btn-block {
   padding: 0.5rem 0.75rem;
   margin-left: -1px;
   line-height: 1.25;
-  color: #28313B;
-  background-color: transparent;
-  border: 1px solid transparent;
+  color: #346CB0;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
 }
 
 .page-link:hover {
   z-index: 2;
-  color: #346CB0;
+  color: #0056b3;
   text-decoration: none;
-  background-color: transparent;
-  border-color: transparent;
+  background-color: #e9ecef;
+  border-color: #dee2e6;
 }
 
 .page-link:focus {
   z-index: 2;
   outline: 0;
-  -webkit-box-shadow: none;
-          box-shadow: none;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 .page-link:not(:disabled):not(.disabled) {
@@ -4983,17 +4981,17 @@ input[type="button"].btn-block {
 
 .page-item.active .page-link {
   z-index: 1;
-  color: #346CB0;
-  background-color: transparent;
-  border-color: transparent;
+  color: #fff;
+  background-color: #346CB0;
+  border-color: #346CB0;
 }
 
 .page-item.disabled .page-link {
   color: #6c757d;
   pointer-events: none;
   cursor: auto;
-  background-color: transparent;
-  border-color: transparent;
+  background-color: #fff;
+  border-color: #dee2e6;
 }
 
 .pagination-lg .page-link {

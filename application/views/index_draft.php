@@ -78,7 +78,7 @@
                 <!-- thead -->
                 <thead>
                   <tr>
-                    <th scope="col" class="pl-4">No</th>
+                    <th scope="col" class="pl-4">Noxxx</th>
                     <th scope="col">Kategori</th>
                     <?php if($ceklevel!='reviewer'): ?>
                     <th scope="col">Penulis</th>

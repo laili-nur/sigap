@@ -2,7 +2,8 @@
 
 class Draft_model extends MY_Model
 {
-   protected $perPage = 25;
+//bisa di override di controller
+   public $perPage = 10;
    
    public function getValidationRules()
     {
@@ -287,6 +288,16 @@ class Draft_model extends MY_Model
                 'label' => 'Proofread File Link',
                 'rules' => 'trim'
             ],
+            [
+                'field' => 'catatan_review1_admin',
+                'label' => 'Catatan Review1 Admin',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'catatan_review2_admin',
+                'label' => 'Catatan Review1 Admin',
+                'rules' => 'trim'
+            ],
         ];
 
         return $validationRules;
@@ -349,6 +360,14 @@ class Draft_model extends MY_Model
             'cover_file_link'        => '',
             'layouter_file_link'                  => '',
             'proofread_file_link'                   => '',
+            'catatan_review1_admin'                   => '',
+            'catatan_review2_admin'                   => '',
+            'review1_last_upload'                   => '',
+            'review2_last_upload'                   => '',
+            'edit_last_upload'                   => '',
+            'layout_last_upload'                   => '',
+            'proofread_last_upload'                   => '',
+
         ];
     }
 

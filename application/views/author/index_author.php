@@ -80,7 +80,7 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
            <?php if ($authors):?>
             <div class="table-responsive">
               <!-- .table -->
-              <table class="table nowrap">
+              <table class="table nowrap table-striped">
                 <!-- thead -->
                 <thead>
                   <tr>

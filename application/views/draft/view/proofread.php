@@ -47,25 +47,34 @@
                 <p class="font-weight-bold">NASKAH</p>
                 <!-- if upload ditampilkan di level tertentu -->
                 <?php if($ceklevel=='layouter' or $ceklevel=='editor' or ($ceklevel == 'author' and $author_order==1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+                  <div class="alert alert-info">Upload file naskah atau sertakan link naskah.</div>
                 <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/proofread_file', 'id="proofreadform"'); ?>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                   <!-- .form-group -->
                     <div class="form-group">
                       <label for="proofread_file">File Naskah</label>
                       <!-- .input-group -->
-                      <div class="input-group input-group-alt">
                         <div class="custom-file">
-                          <?= form_upload('proofread_file','','class="custom-file-input" id="proofread_file"') ?> 
+                          <?= form_upload('proofread_file','','class="custom-file-input naskah" id="proofread_file"') ?> 
                           <label class="custom-file-label" for="proofread_file">Choose file</label>
                         </div>
-                        <div class="input-group-append">
-                          <button class="btn btn-primary" type="submit" value="Submit" id="btn-upload-proofread"><i class="fa fa-upload"></i> Upload</button>
-                        </div>
-                      </div>
+  
                       <small class="form-text text-muted">Tipe file upload  bertype : jpg, jpeg, png, dan pdf.</small>
                       <!-- /.input-group -->
                     </div>
                     <!-- /.form-group -->
+                    <!-- .form-group -->
+                    <div class="form-group">
+                      <label for="proofread_file_link">Link Naskah</label>
+                      <div>
+                        <?= form_input('proofread_file_link', $input->proofread_file_link, 'class="form-control naskah" id="proofread_file_link"') ?>
+                      </div>
+                        <?= form_error('proofread_file_link') ?>
+                    </div>
+                    <!-- /.form-group -->
+                    <div class="form-group">
+                      <button class="btn btn-primary " type="submit" value="Submit" id="btn-upload-proofread"><i class="fa fa-upload"></i> Upload</button>
+                    </div>
                 <?= form_close(); ?>
                 <?php endif ?>
                 <!-- endif upload ditampilkan di level tertentu -->
@@ -78,7 +87,8 @@
                     <em>(<?=$input->proofread_last_upload ?>)</em>
                   <?php endif ?>
                   </p>
-                  <?=(!empty($input->proofread_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->proofread_file.'" href="'.base_url('draftfile/'.$input->proofread_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : 'No data' ?>
+                  <?=(!empty($input->proofread_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->proofread_file.'" href="'.base_url('draftfile/'.$input->proofread_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
+                  <?=(!empty($input->proofread_file_link))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->proofread_file_link.'" href="'.$input->proofread_file_link.'" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
                   </div>
 
                 <hr class="my-3">
