@@ -93,7 +93,9 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> Tanggal Masuk </td>
-                <td>: <?= konversiTanggal($input->entry_date) ?>  <button type="button" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#ubah_entry_date">Edit</button></td>
+                <td>: <?= konversiTanggal($input->entry_date) ?>  
+                <?=($ceklevel==='superadmin' or $ceklevel==='admin_penerbitan')?'<button type="button" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#ubah_entry_date">Edit</button>':'' ?>
+                </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->

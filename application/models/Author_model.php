@@ -40,7 +40,7 @@ class Author_model extends MY_Model
             [
                 'field' => 'author_latest_education',
                 'label' => 'Author Latest Education',
-                'rules' => 'trim|required'
+                'rules' => 'trim'
             ],
             [
                 'field' => 'author_address',

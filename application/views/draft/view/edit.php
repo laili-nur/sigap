@@ -12,8 +12,11 @@
           <!-- .tombol add -->
           <button type="button" class="btn <?=($editors==null)? 'btn-warning' : 'btn-secondary' ?>" data-toggle="modal" data-target="#piliheditor">Pilih Editor</button>
           <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#edit_deadline">Atur Deadline</button>
-          <!-- /.tombol add -->
           <?php endif ?>
+          <?php if($ceklevel == 'editor'): ?>
+          <button type="button" class="btn btn-warning" id="btn-kerjakan-editor">Mulai Proses</button>
+          <?php endif ?>
+          <!-- /.tombol add -->
         </div>
         <!-- /.card-header-control -->
       </div>
@@ -479,6 +482,37 @@
           $('#reload-editor').load(' #reload-editor');
           //$('#list-group-edit').load(' #list-group-edit');
           $this.removeAttr("disabled").html("Pilih");
+        }
+
+      });
+      return false;
+    });
+
+    //tombol kerjakan editor
+    $('#btn-kerjakan-editor').on('click',function(){
+      var $this = $(this);
+      $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+      var draft = $('input[name=draft_id]').val();
+      $.ajax({
+        type : "POST",
+        url : "<?php echo base_url('responsibility/mulai_proses') ?>",
+        datatype : "JSON",
+        cache:false,
+        data : {
+          draft_id : draft,
+          col : 'edit_start_date'
+        },
+        success :function(data){
+          let datax = JSON.parse(data);
+          console.log(datax)
+          $this.removeAttr("disabled").html("Submit");
+          if(datax.status == true){
+            toastr_view('111');
+          }else{
+            toastr_view('000');
+          }
+          $('#list-group-edit').load(' #list-group-edit');
+          $this.removeAttr("disabled").html("Mulai Proses");
         }
 
       });

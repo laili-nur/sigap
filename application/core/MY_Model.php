@@ -296,8 +296,11 @@ class MY_Model extends CI_Model
         }
 
         $data = array($column => $date);
-        $this->where('draft_id', $id)
-             ->update($data, 'draft');
+        if($this->where('draft_id', $id)->update($data, 'draft')){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public function getIdRoleFromUserId($user_id, $role) {

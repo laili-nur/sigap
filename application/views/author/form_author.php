@@ -107,11 +107,10 @@
             </div>
             <!-- .form-group -->
             <div class="form-group">
-              <label for="author_latest_education">Pendidikan Terakhir
-                <abbr title="Required">*</abbr>
-              </label>
+              <label for="author_latest_education">Pendidikan Terakhir</label>
               <?php 
               $options = array(
+                ''         => '-- Choose --',
                 'S1'         => 'S1',
                 'S2'         => 'S2',
                 'S3'         => 'S3',
@@ -213,7 +212,6 @@
           },
           work_unit_id : "crequired",
           institute_id : "crequired",
-          author_latest_education : "crequired",
           author_contact : {
             cnumber :true
           },

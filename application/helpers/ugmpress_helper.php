@@ -6,10 +6,14 @@ function konversi_username_level($username){
     }else{
         $CI =& get_instance();
         $query = $CI->db->from('user')->where('username', $username)->get();
-        if($query){
-            return $query->row()->level;
-        }else{
+        if(!$query){
             return "-";
+        }else{
+            if(isset($query->row()->level)){
+                return $query->row()->level;
+            }else{
+                return "-";
+            }
         }
     }
     

@@ -12,8 +12,11 @@
           <!-- .tombol add -->
           <button type="button" class="btn <?=($layouters==null)? 'btn-warning' : 'btn-secondary' ?>" data-toggle="modal" data-target="#pilihlayouter">Pilih Layouter</button>
           <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#layout_deadline">Atur Deadline</button>
-          <!-- /.tombol add -->
           <?php endif ?>
+          <?php if($ceklevel == 'layouter'): ?>
+          <button type="button" class="btn btn-warning" id="btn-kerjakan-layouter">Mulai Proses</button>
+          <?php endif ?>
+          <!-- /.tombol add -->
         </div>
         <!-- /.card-header-control -->
       </div>
@@ -696,6 +699,37 @@
           $('#reload-layouter').load(' #reload-layouter');
           //$('#list-group-layout').load(' #list-group-layout');
           $this.removeAttr("disabled").html("Pilih");
+        }
+
+      });
+      return false;
+    });
+
+    //tombol kerjakan editor
+    $('#btn-kerjakan-layouter').on('click',function(){
+      var $this = $(this);
+      $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+      var draft = $('input[name=draft_id]').val();
+      $.ajax({
+        type : "POST",
+        url : "<?php echo base_url('responsibility/mulai_proses/') ?>",
+        datatype : "JSON",
+        cache:false,
+        data : {
+          draft_id : draft,
+          col : 'layout_start_date'
+        },
+        success :function(data){
+          let datax = JSON.parse(data);
+          console.log(datax)
+          $this.removeAttr("disabled").html("Submit");
+          if(datax.status == true){
+            toastr_view('111');
+          }else{
+            toastr_view('000');
+          }
+          $('#list-group-layout').load(' #list-group-layout');
+          $this.removeAttr("disabled").html("Mulai Proses");
         }
 
       });
