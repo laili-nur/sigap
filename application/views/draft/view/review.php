@@ -445,7 +445,7 @@
                 <!-- submit khusus reviewer -->
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-review1-rev">Submit</button>
                 <?php else: ?>
-                  <?php if($author_order==1): ?>
+                  <?php if(true): ?>
                 <!-- submit untuk selain reviewer -->
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-review1-other">Submit</button>
                   <?php endif ?>
@@ -806,7 +806,7 @@
                 </div>
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-review2-rev">Submit</button>
                 <?php else: ?>
-                  <?php if($author_order==1): ?>
+                  <?php if(true): ?>
                 <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-review2-other">Submit</button>
                   <?php endif ?>
                 <?php endif ?>
