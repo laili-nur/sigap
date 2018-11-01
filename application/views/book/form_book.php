@@ -37,7 +37,7 @@
             <label for="category">Draft
               <abbr title="Required">*</abbr>
             </label>
-            <?= form_dropdown('draft_id', getDropdownListBook('draft', ['draft_id', 'draft_title']), $input->draft_id, 'id="draft" class="form-control custom-select d-block"') ?>
+            <?= form_dropdown('draft_id', getDropdownListBook('draft', ['draft_id', 'draft_title']), $input->draft_id, 'id="draft_id" class="form-control custom-select d-block"') ?>
             <small class="form-text text-muted">Hanya draft yang telah lolos proofread yang dapat dipilih</small>
             <?= form_error('category_id') ?>
           </div>
@@ -85,11 +85,18 @@
 <!--              <abbr title="Required">*</abbr>-->
             </label>
             <div class="custom-file">
-              <?= form_upload('book_file','','class="custom-file-input" ') ?> 
-              <label class="custom-file-label" for="tf3">Choose file</label>
+              <?= form_upload('book_file','','class="custom-file-input" id="book_file"') ?> 
+              <label class="custom-file-label" for="book_file">Choose file</label>
             </div>
             <small class="form-text text-muted">Hanya menerima file bertype : pdf, docx, dan doc</small>
             <?= fileFormError('book_file', '<p class="text-danger">', '</p>'); ?>
+          </div>
+          <!-- /.form-group -->
+          <!-- .form-group -->
+          <div class="form-group">
+            <label for="book_file_link">Link File Buku</label>
+            <?= form_input('book_file_link', $input->book_file_link, 'class="form-control" id="book_file_link"') ?>
+            <?= form_error('book_file_link') ?>
           </div>
           <!-- /.form-group -->
           <!-- .form-group -->
@@ -180,14 +187,20 @@
 <!--              <abbr title="Required">*</abbr>-->
             </label>
             <div class="custom-file">
-              <?= form_upload('file_hak_cipta','','class="custom-file-input" ') ?> 
+              <?= form_upload('file_hak_cipta','','class="custom-file-input" id="file_hak_cipta"') ?> 
               <label class="custom-file-label" for="tf3">Choose file</label>
             </div>
             <small class="form-text text-muted">Hanya menerima file bertype : jpg, png, jpeg, dan pdf</small>
             <?= fileFormError('file_hak_cipta', '<p class="text-danger">', '</p>'); ?>
           </div>
           <!-- /.form-group -->
-          
+          <!-- .form-group -->
+          <div class="form-group">
+            <label for="file_hak_cipta_link">Link File Hak Cipta</label>
+            <?= form_input('file_hak_cipta_link', $input->file_hak_cipta_link, 'class="form-control" id="file_hak_cipta_link"') ?>
+            <?= form_error('file_hak_cipta_link') ?>
+          </div>
+          <!-- /.form-group -->
             <!-- .form-group -->
             <div class="form-group">
               <label>Status Hak Cipta</label>
@@ -232,6 +245,13 @@
 <!-- /.page-section -->
 <script>
   $(document).ready(function() {
+    //populate judul ketika pilih draft
+    $('#draft_id').on('change', function() {
+      var data = $("#draft_id option:selected").text();
+      $('#book_title').val(data);
+    })
+    
+
     setting_validasi();
     $("#formbook").validate({
         rules: {
@@ -279,7 +299,7 @@
       select2_validasi()
      );
 
-    $("#draft").select2({
+    $("#draft_id").select2({
       placeholder: '-- Choose --',
       allowClear: true
     });

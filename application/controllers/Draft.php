@@ -648,6 +648,10 @@ class Draft extends Operator_Controller
         $ambil_worksheet = ['draft_id' => $id];
         $desk = $this->draft->getWhere($ambil_worksheet, 'worksheet');
 
+        // ambil tabel worksheet
+        $ambil_books = ['draft_id' => $id];
+        $books = $this->draft->getWhere($ambil_books, 'book');
+
         //pecah data csv jadi array
         $draft->nilai_reviewer1 = explode(",",$draft->nilai_reviewer1);
         $draft->nilai_reviewer2 = explode(",",$draft->nilai_reviewer2);
@@ -747,7 +751,7 @@ class Draft extends Operator_Controller
             $main_view   = 'draft/view/view';
             $form_action = "draft/edit/$id";
 
-            $this->load->view('template', compact('author_order','draft','reviewer_order','desk','pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers','editors','layouters'));
+            $this->load->view('template', compact('books','author_order','draft','reviewer_order','desk','pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers','editors','layouters'));
             return;
         }
         

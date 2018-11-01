@@ -4,13 +4,10 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="<?=base_url()?>"><span class="fa fa-home"></span> Admin Panel</a>
+          <a href="<?=base_url()?>"><span class="fa fa-home"></span></a>
         </li>
         <li class="breadcrumb-item">
-          <a href="<?=base_url('user')?>">User</a>
-        </li>
-        <li class="breadcrumb-item">
-          <a class="text-muted">Form</a>
+          <a class="text-muted">Form Ganti Password</a>
         </li>
       </ol>
     </nav> 
@@ -25,10 +22,10 @@
       <!-- .card-body -->
       <div class="card-body">
         <!-- .form -->
-        <?= form_open($form_action,'id="formuser" novalidate=""') ?>
+        <?= form_open($form_action,'id="formchangepassword" novalidate=""') ?>
           <!-- .fieldset -->
           <fieldset>
-            <legend>Data User</legend>
+            <legend>Ganti Password</legend>
             <?= isset($input->user_id) ? form_hidden('user_id', $input->user_id) : '' ?>
             <!-- .form-group -->
             <div class="form-group">
@@ -43,7 +40,7 @@
             
             <!-- .form-group -->
             <div class="form-group">
-              <label for="password">Old Password
+              <label for="password">Password Lama
                 <abbr title="Required">*</abbr>
               </label>
              <?= form_password('password','' ,'class="form-control" id="password"') ?>
@@ -53,7 +50,7 @@
             
             <!-- .form-group -->
             <div class="form-group">
-              <label for="newpassword">New Password
+              <label for="newpassword">Password Baru
                 <abbr title="Required">*</abbr>
               </label>
              <?= form_password('newpassword','' ,'class="form-control" id="newpassword"') ?>
@@ -63,80 +60,15 @@
             
             <!-- .form-group -->
             <div class="form-group">
-              <label for="confirmpassword">Confirm Password
+              <label for="confirmpassword">Konfirmasi Password
                 <abbr title="Required">*</abbr>
               </label>
              <?= form_password('confirmpassword','' ,'class="form-control" id="confirmpassword"') ?>
               <?= form_error('confirmpassword') ?>
             </div>
             <!-- /.form-group -->
-            
-            <div class="row" id="hilang">
-              <div class="col-md-6">
-                <!-- .form-group -->
-                  <div class="form-group">
-                    <label>Level</label>
-                      <div class="custom-control custom-radio">
-                        <?= form_radio('level', 'superadmin',
-                          isset($input->level) && ($input->level == 'superadmin') ? true : false,' class="custom-control-input" id="level1"')?>
-                        <label class="custom-control-label" for="level1">Superadmin</label>
-                      </div>
-                      <div class="custom-control custom-radio">
-                        <?= form_radio('level', 'admin_penerbitan',
-                          isset($input->level) && ($input->level == 'admin_penerbitan') ? true : false, 'class="custom-control-input" id="level2"')?>
-                        <label class="custom-control-label" for="level2">Admin Penerbitan</label>
-                      </div>
-                      <div class="custom-control custom-radio">
-                        <?= form_radio('level', 'editor',
-                          isset($input->level) && ($input->level == 'editor') ? true : false,' class="custom-control-input" id="level3"')?>
-                        <label class="custom-control-label" for="level3">Editor</label>
-                      </div>
-                      <div class="custom-control custom-radio">
-                        <?= form_radio('level', 'layouter',
-                          isset($input->level) && ($input->level == 'layouter') ? true : false,' class="custom-control-input" id="level4"')?>
-                        <label class="custom-control-label" for="level4">Layouter</label>
-                      </div>
-                      <div class="custom-control custom-radio">
-                        <?= form_radio('level', 'author',
-                          isset($input->level) && ($input->level == 'author') ? true : false,' class="custom-control-input" id="level5"')?>
-                        <label class="custom-control-label" for="level5">Author</label>
-                      </div>
-                      <div class="custom-control custom-radio">
-                        <?= form_radio('level', 'reviewer',
-                          isset($input->level) && ($input->level == 'reviewer') ? true : false,' class="custom-control-input" id="level6"')?>
-                        <label class="custom-control-label" for="level6">Reviewer</label>
-                      </div>
-                      <div class="custom-control custom-radio">
-                        <?= form_radio('level', 'author_reviewer',
-                          isset($input->level) && ($input->level == 'author_reviewer') ? true : false,' class="custom-control-input" id="level7"')?>
-                        <label class="custom-control-label" for="level7">Author dan Reviewer</label>
-                      </div>
-                     <?= form_error('level') ?>
-                  </div>
-                  <!-- /.form-group -->
-              </div>
-              <div class="col-md-6">
-                <!-- .form-group -->
-                <div class="form-group">
-                  <label>Status</label>
-                  <div>
-                    <!-- button radio -->
-                  <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-secondary <?=($input->is_blocked == 'y') ? 'active' : '' ?>">
-                      <?= form_radio('is_blocked', 'y',
-                      isset($input->is_blocked) && ($input->is_blocked == 'y') ? true : false,' class="custom-control-input" id="blocked1"')?> Blocked</label>
-                    <label class="btn btn-secondary <?=($input->is_blocked == 'n') ? 'active' : '' ?>">
-                      <?= form_radio('is_blocked', 'n',
-                      isset($input->is_blocked) && ($input->is_blocked == 'n') ? true : false,' class="custom-control-input" id="blocked2"')?> Not Blocked</label>
-                  </div>
-                  <!-- /button radio -->
-                  </div>
-                  
-                   <?= form_error('is_blocked') ?>
-                </div>
-                <!-- /.form-group -->
-              </div>
-            </div>
+            <?= isset($input->level) ? form_hidden('level', $input->level) : '' ?>
+            <?= isset($input->is_blocked) ? form_hidden('is_blocked', $input->is_blocked) : '' ?>
           </fieldset>
           <!-- /.fieldset -->
           <hr>
@@ -156,17 +88,6 @@
 </div>
 <!-- /.page-section -->
 
-<?php if ($input->username == 'superadmin'): ?>
-  <script>
-    $('#hilang').hide();
-  </script>
-<?php endif ?>
-  <?php $ceklevel = $this->session->userdata('level');    
-  if ($ceklevel != 'superadmin'): ?>
-  <script>
-    $('#hilang').hide();
-  </script>
-<?php endif ?>
 <script>
   $(document).ready(function(){
     setting_validasi();
@@ -182,13 +103,23 @@
           },
           newpassword: {
             crequired : true,
-            cminlength : 4
+            cminlength : 4,
+            notEqualTo: '#password'
           },
           confirmpassword: {
             crequired : true,
-            cminlength : 4
+            minlength : 4,
+            equalTo : '#newpassword'
           },
           level : "crequired"
+        },
+        messages : {
+          newpassword: {
+            notEqualTo: 'Password baru tidak boleh sama dengan password lama'
+          },
+          confirmpassword: {
+            equalTo : "Kolom konfirmasi harus sama dengan kolom password baru"
+          }
         },
         errorElement: "span",
         errorPlacement: function (error, element) {

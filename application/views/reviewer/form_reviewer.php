@@ -192,8 +192,8 @@
         placeholder: '-- Choose --',
         allowClear: true
       });
-      $('#expert option[value=""]').detach();
-      $("#expert").select2({
+      $('#reviewer_expert option[value=""]').detach();
+      $("#reviewer_expert").select2({
         tags:true,
         placeholder: '-- Multiple --',
         tokenSeparators: [',']

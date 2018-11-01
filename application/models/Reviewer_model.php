@@ -48,8 +48,8 @@ class Reviewer_model extends MY_Model
                 'rules' => 'trim|required|callback_unique_reviewer_username'
             ],
             [
-                'field' => 'expert',
-                'label' => 'Expert',
+                'field' => 'reviewer_expert',
+                'label' => 'Reviewer Expert',
                 'rules' => 'trim'
             ]
         ];
@@ -68,7 +68,7 @@ class Reviewer_model extends MY_Model
             'reviewer_contact'              => '',
             'reviewer_email'           => '',
             'user_id'              => '',
-            'expert'              => ''
+            'reviewer_expert'              => ''
         ];
     }
 }

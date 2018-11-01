@@ -56,44 +56,45 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> Judul Buku </td>
-                <td>: <strong><?= $input->book_title ?></strong> </td>
+                <td><strong><?= $input->book_title ?></strong> </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Kode Buku </td>
-                <td>: <?= $input->book_code ?> </td>
+                <td><?= $input->book_code ?> </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Edisi Buku </td>
-                <td>: <?= $input->book_edition ?> </td>
+                <td><?= $input->book_edition ?> </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Kategori </td>
-                <td>: <?=isset($input->category_id)? konversiID('category','category_id', $input->category_id)->category_name : ''?> </td>
+                <td><?=isset($input->category_id)? konversiID('category','category_id', $input->category_id)->category_name : ''?> </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Tema </td>
-                <td>: <?=isset($input->theme_id)? konversiID('theme','theme_id', $input->theme_id)->theme_name : ''?> </td>
+                <td><?=isset($input->theme_id)? konversiID('theme','theme_id', $input->theme_id)->theme_name : ''?> </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> File Buku </td>
-                <td>: <?=(!empty($input->book_file))? '<a href="'.base_url('draftfile/'.$input->book_file).'">'.$input->book_file.'</a>' : '' ?>
+                <td><?=(!empty($input->book_file))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->book_file.'" class="btn btn-success btn-xs m-0" href="'.base_url('bookfile/'.$input->book_file).'"><i class="fa fa-download"></i> Download</a>' : '' ?>
+                <?=(!empty($input->book_file_link))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->book_file_link.'" class="btn btn-success btn-xs m-0" href="'.$input->book_file_link.'"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
                    </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> File Cover </td>
-                <td>: <?=(!empty($input->cover_file))? '<a href="'.base_url('draftfile/'.$input->cover_file).'">'.$input->cover_file.'</a>' : '' ?>
+                <td><?=(!empty($input->cover_file))? '<a href="'.base_url('draftfile/'.$input->cover_file).'">'.$input->cover_file.'</a>' : '' ?>
                    </td>
               </tr>
               <!-- /tr -->
@@ -119,13 +120,13 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> Nomor Hak Cipta</td>
-                <td>: <?= $input->nomor_hak_cipta ?>  </td>
+                <td><?= $input->nomor_hak_cipta ?>  </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Status Hak Cipta</td>
-                <td>: 
+                <td>
                   <?= ($input->status_hak_cipta == '')? '-' : '' ?>
                   <?= ($input->status_hak_cipta == 1)? 'Dalam Proses' : '' ?>
                   <?= ($input->status_hak_cipta == 2)? 'Sudah Jadi' : '' ?>
@@ -135,7 +136,8 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> File Hak Cipta </td>
-                <td>: <?=(!empty($input->file_hak_cipta))? '<a href="'.base_url('hakcipta/'.$input->file_hak_cipta).'">'.$input->file_hak_cipta.'</a>' : '' ?>
+                <td><?=(!empty($input->file_hak_cipta))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->file_hak_cipta.'" class="btn btn-success btn-xs m-0" href="'.base_url('bookfile/'.$input->file_hak_cipta).'"><i class="fa fa-download"></i> Download</a>' : '' ?>
+                <?=(!empty($input->file_hak_cipta_link))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->file_hak_cipta_link.'" class="btn btn-success btn-xs m-0" href="'.$input->file_hak_cipta_link.'"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
                    </td>
               </tr>
               <!-- /tr -->
@@ -155,31 +157,31 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> Tipe printing</td>
-                <td>: <?= ($input->printing_type == 'o')? 'Offset' : '' ?> <?= ($input->printing_type == 'p')? 'Print On Demand' : '' ?>  </td>
+                <td><?= ($input->printing_type == 'o')? 'Offset' : '' ?> <?= ($input->printing_type == 'p')? 'Print On Demand' : '' ?>  </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Serial Number</td>
-                <td>: <?= $input->serial_num ?>  </td>
+                <td><?= $input->serial_num ?>  </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Serial Number per tahun </td>
-                <td>: <?= $input->serial_num_per_year ?>  </td>
+                <td><?= $input->serial_num_per_year ?>  </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Jumlah copy </td>
-                <td>: <?= $input->copies_num ?>  </td>
+                <td><?= $input->copies_num ?>  </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Cetak Ulang </td>
-                <td>: <?= ($input->is_reprint == 'y')? 'Cetak Ulang' : '' ?> <?= ($input->is_reprint == 'n')? 'Naskah baru' : '' ?>  </td>
+                <td><?= ($input->is_reprint == 'y')? 'Cetak Ulang' : '' ?> <?= ($input->is_reprint == 'n')? 'Naskah baru' : '' ?>  </td>
               </tr>
               <!-- /tr -->
             </tbody>

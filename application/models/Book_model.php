@@ -96,6 +96,7 @@ class Book_model extends MY_Model
             'book_title'                   => '',
 //            'cover'                    => '',
             'book_edition'                 => '',
+            'book_file_link'                 => '',
             'isbn'                 => '',
             'eisbn'                 => '',
 //            'book_file'                    => '',
@@ -107,7 +108,8 @@ class Book_model extends MY_Model
             'book_notes'                  => '',
             'is_reprint'                     => 'n',
             'nomor_hak_cipta'                  => '',
-            'status_hak_cipta'                  => ''
+            'status_hak_cipta'                  => '',
+            'file_hak_cipta_link'                  => ''
         ];
     }
    

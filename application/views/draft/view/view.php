@@ -49,6 +49,11 @@
         </li>
         <!-- endif hilangkan tab data reviewer -->
         <?php endif ?>
+        <?php if($ceklevel == 'author'): ?>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#data-buku">Data Buku</a>
+        </li>
+        <?php endif ?>
       </ul>
     </header>
     <!-- /.card-header -->
@@ -67,59 +72,53 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> Judul Draft </td>
-                <td>: <strong><?= $input->draft_title ?></strong> </td>
+                <td><strong><?= $input->draft_title ?></strong> </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Kategori </td>
-                <td>: <?=isset($input->category_id)? konversiID('category','category_id', $input->category_id)->category_name : ''?> </td>
+                <td><?=isset($input->category_id)? konversiID('category','category_id', $input->category_id)->category_name : ''?> </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Tema </td>
-                <td>: <?=isset($input->theme_id)? konversiID('theme','theme_id', $input->theme_id)->theme_name : ''?> </td>
+                <td><?=isset($input->theme_id)? konversiID('theme','theme_id', $input->theme_id)->theme_name : ''?> </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> File Draft </td>
-                <td>: <?=(!empty($input->draft_file))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->draft_file.'" class="btn btn-success btn-xs m-0" href="'.base_url('draftfile/'.$input->draft_file).'"><i class="fa fa-download"></i> Download</a>' : '' ?>
+                <td><?=(!empty($input->draft_file))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->draft_file.'" class="btn btn-success btn-xs m-0" href="'.base_url('draftfile/'.$input->draft_file).'"><i class="fa fa-download"></i> Download</a>' : '' ?>
+                <?=(!empty($input->draft_file_link))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->draft_file_link.'" class="btn btn-success btn-xs m-0" href="'.$input->draft_file_link.'"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
                    </td>
               </tr>
               <!-- /tr -->
               <?php if($ceklevel != 'reviewer'): ?>
               <!-- tr -->
               <tr>
-                <td width="200px"> Tanggal Masuk </td>
-                <td>: <?= konversiTanggal($input->entry_date) ?>  
-                <?=($ceklevel==='superadmin' or $ceklevel==='admin_penerbitan')?'<button type="button" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#ubah_entry_date">Edit</button>':'' ?>
+                <td width="200px"> Tanggal Masuk <?=($ceklevel==='superadmin' or $ceklevel==='admin_penerbitan')?'<button type="button" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#ubah_entry_date">Edit</button>':'' ?></td>
+                <td><?= konversiTanggal($input->entry_date) ?>  
                 </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Tanggal Selesai </td>
-                <td>: <?= konversiTanggal($input->finish_date) ?>  </td>
-              </tr>
-              <!-- /tr -->
-              <!-- tr -->
-              <tr>
-                <td width="200px"> Tanggal Cetak </td>
-                <td>: <?= konversiTanggal($input->print_date) ?>  </td>
+                <td><?= konversiTanggal($input->finish_date) ?>  </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Status Draft </td>
-                <td>: <span class="font-weight-bold"><?= $input->draft_status ?></span>  </td>
+                <td><span class="font-weight-bold"><?= $input->draft_status ?></span>  </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
-                <td width="200px"> Catatan Draft </td>
-                <td>: <span class="font-weight-bold"><?= $input->draft_notes ?></span>  </td>
+                <td width="200px"> Catatan Draft <?=($ceklevel!='author' and $ceklevel!='reviewer')?'<button type="button" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#ubah_draft_notes">Edit</button>':'' ?></td>
+                <td><div class="font-weight-bold"><?= $input->draft_notes ?></div>  </td>
               </tr>
               <!-- /tr -->
               <!-- endif data yang dilihat reviewer -->
@@ -164,6 +163,49 @@
                 <!-- .modal-footer -->
                 <div class="modal-footer">
                   <button class="btn btn-primary" type="submit" id="btn-ubah_entry_date">Pilih</button>
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                </div>
+                <!-- /.modal-footer -->
+                <?=form_close(); ?>
+                  <!-- /.form -->
+              </div>
+              <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+          </div>
+        <!-- /.modal -->
+        <!-- modal ubah draft notes -->
+          <div class="modal fade" id="ubah_draft_notes" tabindex="-1" role="dialog" aria-labelledby="ubah_draft_notes" aria-hidden="true">
+            <!-- .modal-dialog -->
+            <div class="modal-dialog" role="document">
+              <!-- .modal-content -->
+              <div class="modal-content">
+                <!-- .modal-header -->
+                <div class="modal-header">
+                  <h5 class="modal-title">Ubah Catatan Draft</h5>
+                </div>
+                <!-- /.modal-header -->
+                <!-- .modal-body -->
+                <div class="modal-body">
+                  <!-- .form -->
+                  <?= form_open('draft/ubahnotes/'.$input->draft_id) ?>
+                    <!-- .fieldset -->
+                    <fieldset>
+                    <!-- .form-group -->
+                    <div class="form-group">
+                      <div>
+                        <?= form_textarea('draft_notes', $input->draft_notes, 'class="form-control summernote-basic" id="draft_notes"') ?>
+                      </div>
+                        <?= form_error('draft_notes') ?>
+                    </div>
+                    <!-- /.form-group -->
+                    </fieldset>
+                    <!-- /.fieldset -->
+                </div>
+                <!-- /.modal-body -->
+                <!-- .modal-footer -->
+                <div class="modal-footer">
+                  <button class="btn btn-primary" type="submit" id="btn-ubah_draft_notes">Pilih</button>
                   <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
                 </div>
                 <!-- /.modal-footer -->
@@ -297,6 +339,57 @@
               <p>Reviewer data were not available</p>
           <?php endif ?>
           </div>
+        </div>
+        <div class="tab-pane fade" id="data-buku">
+          <div class="alert alert-info alert-dismissible fade show" role="alert">
+            Data akan tampil apabila draft telah disetujui untuk menjadi buku.
+          </div>
+          <?php if ($books):?>
+            <!-- .table-responsive -->
+        <div class="table-responsive">
+          <!-- .table -->
+          <table class="table table-striped table-bordered mb-0 nowrap">
+            <!-- tbody -->
+            <tbody>
+              <!-- tr -->
+              <tr>
+                <td width="200px"> Judul Buku </td>
+                <td><strong><?= $books->book_title ?></strong> </td>
+              </tr>
+              <!-- /tr -->
+               <!-- tr -->
+              <tr>
+                <td width="200px"> Nomor Hak Cipta </td>
+                <td><strong><?= $books->nomor_hak_cipta ?></strong> </td>
+              </tr>
+              <!-- /tr -->
+               <!-- tr -->
+              <tr>
+                <td width="200px"> File hak cipta </td>
+                <td><?=(!empty($input->file_hak_cipta))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->file_hak_cipta.'" class="btn btn-success btn-xs m-0" href="'.base_url('bookfile/'.$input->file_hak_cipta).'"><i class="fa fa-download"></i> Download</a>' : '' ?>
+                <?=(!empty($input->file_hak_cipta_link))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->file_hak_cipta_link.'" class="btn btn-success btn-xs m-0" href="'.$input->file_hak_cipta_link.'"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
+                </td>
+              </tr>
+              <!-- /tr -->
+              <!-- tr -->
+              <tr>
+                <td width="200px"> Status Hak Cipta</td>
+                <td>
+                  <?= ($books->status_hak_cipta == '')? '-' : '' ?>
+                  <?= ($books->status_hak_cipta == 1)? '<span class="badge badge-info">Dalam Proses</span>' : '' ?>
+                  <?= ($books->status_hak_cipta == 2)? '<span class="badge badge-success">Sudah Jadi</span>' : '' ?>
+                </td>
+              </tr>
+              <!-- /tr -->
+            </tbody>
+            <!-- /tbody -->
+          </table>
+          <!-- /.table -->
+        </div>
+        <!-- /.table-responsive -->
+          <?php else: ?>
+              <p class="text-center my-4">Draft belum final</p>
+          <?php endif ?>
         </div>
       </div>
       <!-- /.tab-content -->
@@ -678,6 +771,37 @@
             }
              $('#data-drafts').load(' #data-drafts');
              $('#ubah_entry_date').modal('toggle');
+          }
+
+        });
+        return false;
+      });
+
+    //ubah entry date
+    $('#btn-ubah_draft_notes').on('click',function(){
+        var $this = $(this);
+        $this.attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+        let id=$('[name=draft_id]').val();
+        let draft_notes=$('[name=draft_notes]').val();
+        console.log(draft_notes)
+        $.ajax({
+          type : "POST",
+          url : "<?php echo base_url('draft/ubahnotes/') ?>"+id,
+          datatype : "JSON",
+          data : {
+            draft_notes : draft_notes,
+          },
+          success :function(data){
+            let datax = JSON.parse(data);
+            console.log(datax)
+            $this.removeAttr("disabled").html("Submit");
+            if(datax.status == true){
+              toastr_view('111');
+            }else{
+              toastr_view('000');
+            }
+             $('#data-drafts').load(' #data-drafts');
+             $('#ubah_draft_notes').modal('toggle');
           }
 
         });

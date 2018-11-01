@@ -45,27 +45,29 @@ class Book extends Operator_Controller
 //            }
 //        }
         
-        if (!$this->book->validate()){
-        if (!empty($_FILES) && $_FILES['book_file']['size'] > 0) {
+        if($this->book->validate()){
+        // Upload new book (if any)
+        if (!empty($_FILES) && $_FILES['book_file']['size'] > 0) {            
             $getextension=explode(".",$_FILES['book_file']['name']);            
-            $bookFileName  = str_replace(" ","_",$input->book_title . '_' . date('YmdHis').".".$getextension[1]); // Book file name
+            $bookFileName  = str_replace(" ","_",$input->book_title . '_' . date('YmdHis').".".$getextension[1]); // book file name
             $upload = $this->book->uploadBookfile('book_file', $bookFileName);
 
             if ($upload) {
-                $input->book_file =  "$bookFileName"; // Data for column "book".
+                $input->book_file =  "$bookFileName";
             }
-        }
+        }   
         
         
             if (!empty($_FILES) && $_FILES['file_hak_cipta']['size'] > 0) {
-            $getextension=explode(".",$_FILES['file_hak_cipta']['name']);            
-            $HCFileName  = str_replace(" ","_",'Hak_Cipta' . '_' . $input->book_title . '_' . date('YmdHis').".".$getextension[1]); // Book file name
-            $upload = $this->book->uploadHCfile('file_hak_cipta', $HCFileName);
+                // Upload new hak cipta (if any)
+                $getextension=explode(".",$_FILES['file_hak_cipta']['name']);            
+                $HCFileName  = str_replace(" ","_",'Hak_Cipta' . '_' . $input->book_title . '_' . date('YmdHis').".".$getextension[1]); // hak cipta file name
+                $upload = $this->book->uploadHCfile('file_hak_cipta', $HCFileName);
 
-            if ($upload) {
-                $input->file_hak_cipta =  "$HCFileName"; // Data for column "file hak cipta".
+                if ($upload) {
+                    $input->file_hak_cipta =  "$HCFileName";
+                }
             }
-        }
         }
         
         if (!$this->book->validate() || $this->form_validation->error_array()) {

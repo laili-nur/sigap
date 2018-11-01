@@ -464,7 +464,7 @@
               <!-- /.table -->
             </div>
             <?php else: ?>
-            <p class="text-center">Data tidak tersedia</p>
+            <p class="text-center my-4">Data tidak tersedia</p>
             <?php endif ?>
             <!-- /.table-responsive -->
             <!-- .card-footer -->
@@ -789,7 +789,7 @@
                 <!-- /.table -->
               </div>
               <?php else: ?>
-              <p class="text-center">Data tidak tersedia</p>
+              <p class="text-center my-4">Data tidak tersedia</p>
               <?php endif ?>
               <!-- /.table-responsive -->
             </section>

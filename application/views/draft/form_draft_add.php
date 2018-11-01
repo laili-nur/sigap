@@ -94,7 +94,7 @@
               <?= form_upload('draft_file','','class="custom-file-input"') ?> 
               <label class="custom-file-label" for="draft_file">Choose file</label>
             </div>
-            <small class="form-text text-muted">Tipe file upload  bertype : docx, doc, dan pdf. Maksimal 50 MB.</small>
+            <small class="form-text text-muted">Tipe file upload  bertype : docx, doc, dan pdf. Maksimal 50 MB</small>
             <?= fileFormError('draft_file', '<p class="text-danger">', '</p>'); ?>
           </div>
           <!-- /.form-group -->
@@ -102,6 +102,7 @@
             <div class="form-group">
                 <label for="draft_file_link">Link File Draft</label>
                 <?= form_input('draft_file_link', $input->draft_file_link, 'class="form-control" id="draft_file_link"') ?>
+                <small class="form-text text-muted">Isikan link external file draft</small>
                 <?= form_error('draft_file_link') ?>
             </div>
           <!-- /.form-group -->

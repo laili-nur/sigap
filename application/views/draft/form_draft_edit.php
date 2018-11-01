@@ -12,7 +12,7 @@
         <a href="<?=base_url('draft')?>">Draft</a>
       </li>
       <li class="breadcrumb-item">
-        <a class="text-muted">Tambah</a>
+        <a class="text-muted">Form</a>
       </li>
     </ol>
   </nav> 
