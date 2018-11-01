@@ -84,6 +84,13 @@
                 </div>
                 <!-- /.form-group -->
                 <!-- .form-group -->
+            <div class="form-group">
+                <label for="draft_file_link">Link File Draft</label>
+                <?= form_input('draft_file_link', $input->draft_file_link, 'class="form-control" id="draft_file_link"') ?>
+                <?= form_error('draft_file_link') ?>
+            </div>
+          <!-- /.form-group -->
+                <!-- .form-group -->
                 <div class="form-group">
                   <label for="entry_date">Tanggal Masuk
                     <abbr title="Required">*</abbr>

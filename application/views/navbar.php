@@ -103,8 +103,8 @@
                 <hr>
               <?php endif ?>
               
-            <a class="dropdown-item" href="">
-              <span class="dropdown-icon oi oi-person"></span> Profil</a>
+            <a class="dropdown-item" href="<?=base_url('user/changepassword/' . $this->session->userdata('user_id')) ?>">
+              <span class="dropdown-icon oi oi-person"></span> Ganti Password</a>
             <a class="dropdown-item" href="<?=base_url('login/logout') ?>">
               <span class="dropdown-icon oi oi-account-logout"></span> Logout</a>
           </div>

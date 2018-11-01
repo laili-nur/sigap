@@ -366,12 +366,11 @@
             <!-- .fieldset -->
             <fieldset>
             <!-- .form-group -->
-            <div class="form-group" id="form-reviewer">
+           <div class="form-group" id="form-reviewer">
               <label for="user_id">Nama Reviewer</label>
-              <?= form_dropdown('reviewer', getDropdownList('reviewer', ['reviewer_id', 'reviewer_name']), '', 'id="pilih_reviewer" class="form-control custom-select d-block"') ?>
-            </div>
-            <!-- /.form-group -->
-            </fieldset>
+              <?= form_dropdown('reviewer', getDropdownList('reviewer', ['reviewer_id', 'reviewer_name', 'faculty_id','reviewer_expert']), '', 'id="pilih_reviewer" class="form-control custom-select d-block"') ?>
+             </div>
+            <!-- /.form-groid            </fieldset>
             <!-- /.fieldset -->
         </div>
         <!-- /.modal-body -->

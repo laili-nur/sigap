@@ -298,6 +298,11 @@ class Draft_model extends MY_Model
                 'label' => 'Catatan Review1 Admin',
                 'rules' => 'trim'
             ],
+            [
+                'field' => 'draft_file_link',
+                'label' => 'Draft File Link',
+                'rules' => 'trim'
+            ]
         ];
 
         return $validationRules;
@@ -354,6 +359,7 @@ class Draft_model extends MY_Model
             'proofread_notes_author'        => '',
             'draft_status'                  => '',
             'draft_notes'                   => '',
+            'draft_file_link'                => '',
             'reviewer1_file_link'                => '',
             'reviewer2_file_link'         => '',
             'editor_file_link'               => '',

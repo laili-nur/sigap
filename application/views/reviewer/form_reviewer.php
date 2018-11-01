@@ -99,12 +99,12 @@
           </div>
           <!-- .form-group -->
           <div class="form-group">
-            <label for="expert">Kepakaran
+            <label for="reviewer_expert">Kepakaran
               <abbr title="Required">*</abbr>
             </label>
-              <?= form_dropdown('expert[]',$input->sumber,$input->pilih, 'id="expert" class="form-control custom-select d-block" multiple="multiple"') ?> 
+              <?= form_dropdown('reviewer_expert[]',$input->sumber,$input->pilih, 'id="reviewer_expert" class="form-control custom-select d-block" multiple="multiple"') ?> 
               <small class="form-text text-muted">Pilih kepakaran yang telah ada, atau tambahkan kepakaran baru (Ketik lalu tekan enter)</small>
-            <?= form_error('expert') ?>
+            <?= form_error('reviewer_expert') ?>
           </div>
           <!-- /.form-group -->
         <hr class="my-2">
@@ -157,7 +157,7 @@
             huruf :true
           },
           faculty_id : "crequired",
-          "expert[]" : "crequired",
+          "reviewer_expert[]" : "crequired",
           reviewer_contact : {
             cnumber :true
           },

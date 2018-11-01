@@ -34,10 +34,10 @@ class Reviewer extends Operator_Controller
         }
 
         // untuk select2 tags sumber
-        $allexpert = $this->reviewer->select('expert')->getAll();
+        $allexpert = $this->reviewer->select('reviewer_expert')->getAll();
         if($allexpert!=null){
             foreach ($allexpert as $value) {
-                $pecah = explode(",",$value->expert);
+                $pecah = explode(",",$value->reviewer_expert);
                 foreach ($pecah as $key => $value) {        
                     $input->sumber[$value] = $value;
                 }
@@ -52,7 +52,7 @@ class Reviewer extends Operator_Controller
 
         if (!$this->reviewer->validate()) {
             //assign select tags pilihan
-            $input->pilih = $input->expert;
+            $input->pilih = $input->reviewer_expert;
             
             $pages     = $this->pages;
             $main_view   = 'reviewer/form_reviewer';
@@ -63,7 +63,7 @@ class Reviewer extends Operator_Controller
         }
 
         //gabungkan array masuk ke db
-        $input->expert = implode(",",$input->expert);
+        $input->reviewer_expert = implode(",",$input->reviewer_expert);
         unset($input->sumber);
         
         if ($this->reviewer->insert($input)) {
@@ -80,15 +80,15 @@ class Reviewer extends Operator_Controller
         $reviewer = $this->reviewer->where('reviewer_id', $id)->get();
 
         // untuk select2 tags sumber
-        $allexpert = $this->reviewer->select('expert')->getAll();
+        $allexpert = $this->reviewer->select('reviewer_expert')->getAll();
         foreach ($allexpert as $value) {
-            $pecah = explode(",",$value->expert);
+            $pecah = explode(",",$value->reviewer_expert);
             foreach ($pecah as $key => $value) {        
                 $reviewer->sumber[$value] = $value;
             }
         }
         // untuk select2 tags pilihan
-        $reviewer->pilih = explode(",",$reviewer->expert);
+        $reviewer->pilih = explode(",",$reviewer->reviewer_expert);
         
 
         if (!$reviewer) {
@@ -112,7 +112,7 @@ class Reviewer extends Operator_Controller
         }
 
         //gabungkan array masuk ke db
-        $input->expert = implode(",",$input->expert);
+        $input->reviewer_expert = implode(",",$input->reviewer_expert);
 
         if ($this->reviewer->where('reviewer_id', $id)->update($input)) {
             $this->session->set_flashdata('success', 'Data updated');
@@ -155,7 +155,7 @@ class Reviewer extends Operator_Controller
         $reviewers     = $this->reviewer->like('reviewer_nip', $keywords)
                                   ->orLike('reviewer_name', $keywords)
                                   ->orLike('faculty_name', $keywords)
-                                  ->orLike('expert', $keywords)
+                                  ->orLike('reviewer_expert', $keywords)
                                   ->orLike('username', $keywords)
                                   ->join('faculty')
                                   ->join('user')
@@ -165,7 +165,7 @@ class Reviewer extends Operator_Controller
                                   ->getAll();
         $tot        = $this->reviewer->like('reviewer_id', $keywords)
                                   ->orLike('reviewer_name', $keywords)
-                                  ->orLike('expert', $keywords)
+                                  ->orLike('reviewer_expert', $keywords)
                                   ->join('faculty')
                                   ->orderBy('faculty.faculty_id')
                                   ->orderBy('reviewer_name')
