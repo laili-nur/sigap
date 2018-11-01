@@ -368,9 +368,9 @@
             <!-- .form-group -->
            <div class="form-group" id="form-reviewer">
               <label for="user_id">Nama Reviewer</label>
-              <?= form_dropdown('reviewer', getDropdownList('reviewer', ['reviewer_id', 'reviewer_name', 'faculty_id','reviewer_expert']), '', 'id="pilih_reviewer" class="form-control custom-select d-block"') ?>
+              <?= form_dropdown('reviewer', getMoreDropdownList('reviewer', ['reviewer_id', 'reviewer_name', 'faculty_name','reviewer_expert']), '', 'id="pilih_reviewer" class="form-control custom-select d-block"') ?>
              </div>
-            <!-- /.form-groid            </fieldset>
+            <!-- /.form-group            </fieldset>
             <!-- /.fieldset -->
         </div>
         <!-- /.modal-body -->

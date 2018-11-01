@@ -166,47 +166,44 @@ function getMoreDropdownList($table, $columns)
         $tables = array();
     for ($i = 0; $i < count($columns); $i++) {
         $column = explode('_', $columns[$i]);
-        if ($column[0] != $table) {
             if(!array_key_exists($column[0], $tables)){
                 $tables[$column[0]] = array($columns[$i]);
                 } Else {
                     array_push($tables[$column[0]], $columns[$i]);
                 }  
-        }
     }
-var_dump($tables);
     
     $CI =& get_instance();
-    $query = $CI->db->select($columns)->from($table)->get();
-
+    
+    foreach ($tables as $key => $val) {
+    if ($key == $table) {
+    $query = $CI->db->get($key);
+    }
+    }
     if ($query->num_rows() >= 1) {
         $result = $query->result_array();
         $options1 = ['' => '-- Choose --'];
         $options2 = array_column($result, $columns[1], $columns[0]);
         if (count($columns) > 2) {
-            // var_dump($result[0][$columns[2]]);
             $j = 0;
             foreach ($options2 as $key => $value) {
                 
                 for ($i = 2; $i < count($columns); $i++) {
-                    
-                    If (!empty($tables)) {
-Foreach ($tables as $key1 => $val1) {
-$table_rel = explode('_', $columns[$i])[0];
-If ($table_rel == $key1) {
-$query2 = $CI->db->select($val1)->from($key1)->where($table_rel . '_id', $result[$j][$table_rel . '_id'])->get();
-$result2 = $query1->result_array();
-var_dump($result2);
-Foreach ($val1 as $key2) {
-}
-}
-}
-}
-                    
-               // $value .= ' - ' . $result[$j][$columns[$i]];
-                // $options2[$key] = $value;
+        foreach ($tables as $key1 => $val1) {
+            if($key1 != $table) {
+        $table_rel = explode('_', $columns[$i])[0];
+        if ($table_rel == $key1) {
+        $query2 = $CI->db->select($val1)->where($table_rel . '_id', $result[$j][$table_rel . '_id'])->from($key1)->get();
+        $result2 = $query2->result_array();
+        foreach ($result2 as $key2) {
+            $result[$j][$columns[$i]] = $key2[$columns[$i]];
+        }
+        }
+        }
+        } 
+                $value .= ' - ' . $result[$j][$columns[$i]];
+                 $options2[$key] = $value;
                 }
-                
                 $j++;
             }            
         }
@@ -227,7 +224,7 @@ function getDropdownBankList($table, $columns)
         $options = $options1 + $options2;
         return $options;
     }
-
+    
     return $options = ['' => '- Choose -'];
 }
 
