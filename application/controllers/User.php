@@ -14,7 +14,7 @@ class User extends Operator_Controller
         if ($ceklevel != 'superadmin'){
             redirect('home');
         }
-        $users      = $this->user->paginate($page)->orderBy('level')->orderBy('username')->getAll();
+        $users      = $this->user->paginate($page)->orderBy('username')->orderBy('level')->getAll();
         $total      = $this->user->orderBy('level')->orderBy('username')->count();
         $pages      = $this->pages;
         $main_view  = 'user/index_user';

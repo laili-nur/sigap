@@ -373,7 +373,7 @@
                           'rows' => '6',
                           'value'=> $input->review1_notes
                       );
-                      if($ceklevel!='reviewer' and $ceklevel!='superadmin'){
+                      if($ceklevel!='reviewer'){
                         echo '<div class="font-italic">'.nl2br($input->review1_notes).'</div>';
                       }else{
                         echo form_textarea($optionscr1);
@@ -735,7 +735,7 @@
                           'rows' => '6',
                           'value'=> $input->review2_notes
                       );
-                      if($ceklevel!='reviewer' and $ceklevel!='superadmin'){
+                      if($ceklevel!='reviewer'){
                         echo '<div class="font-italic">'.nl2br($input->review2_notes).'</div>';
                       }else{
                         echo form_textarea($optionscr2);
