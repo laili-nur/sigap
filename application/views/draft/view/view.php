@@ -366,8 +366,8 @@
                <!-- tr -->
               <tr>
                 <td width="200px"> File hak cipta </td>
-                <td><?=(!empty($input->file_hak_cipta))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->file_hak_cipta.'" class="btn btn-success btn-xs m-0" href="'.base_url('bookfile/'.$input->file_hak_cipta).'"><i class="fa fa-download"></i> Download</a>' : '' ?>
-                <?=(!empty($input->file_hak_cipta_link))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->file_hak_cipta_link.'" class="btn btn-success btn-xs m-0" href="'.$input->file_hak_cipta_link.'"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
+                <td><?=(!empty($books->file_hak_cipta))? '<a data-toggle="tooltip" data-placement="right" title="'.$books->file_hak_cipta.'" class="btn btn-success btn-xs m-0" href="'.base_url('hakcipta/'.$books->file_hak_cipta).'"><i class="fa fa-download"></i> Download</a>' : '' ?>
+                <?=(!empty($books->file_hak_cipta_link))? '<a data-toggle="tooltip" data-placement="right" title="'.$books->file_hak_cipta_link.'" class="btn btn-success btn-xs m-0" href="'.$books->file_hak_cipta_link.'"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
                 </td>
               </tr>
               <!-- /tr -->
