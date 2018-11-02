@@ -166,6 +166,9 @@ function getMoreDropdownList($table, $columns)
         $tables = array();
     for ($i = 0; $i < count($columns); $i++) {
         $column = explode('_', $columns[$i]);
+        If(count($column) > 2) {
+        $column[0] = $column[0] . '_' . $column[1];
+        }
             if(!array_key_exists($column[0], $tables)){
                 $tables[$column[0]] = array($columns[$i]);
                 } Else {
@@ -191,7 +194,11 @@ function getMoreDropdownList($table, $columns)
                 for ($i = 2; $i < count($columns); $i++) {
         foreach ($tables as $key1 => $val1) {
             if($key1 != $table) {
-        $table_rel = explode('_', $columns[$i])[0];
+        $table_rel = explode('_', $columns[$i]);
+        if (count($table_rel) > 2) {
+            $table_rel[0] = $table_rel[0] .'_' . $table_rel[1];
+        }
+        $table_rel = $table_rel[0];
         if ($table_rel == $key1) {
         $query2 = $CI->db->select($val1)->where($table_rel . '_id', $result[$j][$table_rel . '_id'])->from($key1)->get();
         $result2 = $query2->result_array();

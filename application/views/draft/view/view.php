@@ -418,7 +418,7 @@
             <!-- .form-group -->
             <div class="form-group" id="form-author">
               <label for="user_id">Nama Penulis</label>
-              <?= form_dropdown('author', getDropdownList('author', ['author_id', 'author_name']), '', 'id="pilih_author" class="form-control custom-select d-block" required') ?>
+              <?= form_dropdown('author', getMoreDropdownList('author', ['author_id', 'author_name', 'work_unit_name']), '', 'id="pilih_author" class="form-control custom-select d-block" required') ?>
             </div>
             <!-- /.form-group -->
             </fieldset>
