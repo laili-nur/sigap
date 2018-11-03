@@ -524,8 +524,8 @@
         );
         echo form_input($hidden_date);?>
       <span class="d-inline-block" tabindex="0" data-trigger="focus" data-toggle="popover" <?=($input->is_proofread == 'n')? 'data-content="Proofread belum disetujui"':'' ?> data-placement="top">
-       <button class="btn btn-primary"  data-toggle="modal" data-target="#modalsimpan" <?=($input->is_proofread == 'y' and $input->proofread_file != '')? '':'disabled style="pointer-events: none;"' ?>>Simpan jadi buku</button>
-       <button class="btn btn-danger" data-toggle="modal" data-target="#modaltolak" <?=($input->is_proofread == 'y' and $input->proofread_file != '')? '':'disabled style="pointer-events: none;"' ?>>Tolak</button>
+       <button class="btn btn-primary"  data-toggle="modal" data-target="#modalsimpan" <?=($input->is_proofread == 'y' and ($input->proofread_file != '' or $input->proofread_file_link != ''))? '':'disabled style="pointer-events: none;"' ?>>Simpan jadi buku</button>
+       <button class="btn btn-danger" data-toggle="modal" data-target="#modaltolak" <?=($input->is_proofread == 'y' and ($input->proofread_file != '' or $input->proofread_file_link != ''))? '':'disabled style="pointer-events: none;"' ?>>Tolak</button>
        </span>
      </div>
      <!-- Alert Danger Modal -->
@@ -816,7 +816,7 @@
         let draft_file=$this.attr('draft-file');
         let action=$('#draft-setuju').val();
         let finish_date=$('#finish_date').val();
-        let cek = '<?php echo base_url('draft/copyToBook/')?>'+id+'/'+draft_title+'/'+draft_file;
+        let cek = '<?php echo base_url('draft/copyToBook/')?>'+id;
         console.log(cek);
         $.ajax({
             type : "POST",

@@ -958,6 +958,7 @@
               filesize50: 52428200
             },
             reviewer1_file_link : {
+              curl : true,
               require_from_group: [1, ".naskah"]
             }
           },
@@ -1022,6 +1023,7 @@
               filesize50: 52428200
             },
             reviewer2_file_link : {
+              curl : true,
               require_from_group: [1, ".naskah"]
             }
           },

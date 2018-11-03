@@ -770,10 +770,10 @@ class Draft extends Operator_Controller
 //        force_download($file,$path);
 //    }
     
-    function download($file_name)
+    function download($path,$file_name)
 {
     $this->load->helper('download');
-    force_download('./coverfile/'.$file_name, NULL);
+    force_download('./'.$path.'/'.$file_name, NULL);
 }
 
 
@@ -944,7 +944,7 @@ class Draft extends Operator_Controller
         if (!$_POST) {
             $input = (object) $draft;
         } else {
-            $input = (object) $this->input->post(null, true);
+            $input = (object) $this->input->post(null, false);
             $input->draft_file = $draft->draft_file; // Set draft file for preview.
         }
 
@@ -1050,17 +1050,21 @@ class Draft extends Operator_Controller
         redirect('draft');
 	}
 
-    public function copyToBook($draft_id, $title, $file) 
+    public function copyToBook($draft_id) 
     {
         
         $this->load->model('book_model', 'book', true);
         $book_id = $this->book->getIdDraftFromDraftId($draft_id, 'book');
 
+        $datax = array('draft_id' => $draft_id);
+        $draft = $this->draft->getWhere($datax);
+
         if ($book_id == 0) {
             $data = array(
                 'draft_id' => $draft_id,
-                'book_title' => urldecode($title),
-                'book_file' => urldecode($file),
+                'book_title' => $draft->draft_title,
+                'book_file' => $draft->proofread_file,
+                'book_file_link' => $draft->proofread_file_link,
                 'published_date' => date('Y-m-d H:i:s')
             );
 
@@ -1068,6 +1072,7 @@ class Draft extends Operator_Controller
                 $book_id = $this->db->insert_id();
 
                 if ($book_id != 0) {
+                    $this->session->set_flashdata('warning', 'Lengkapi data lalu Submit');
                     redirect('book/edit/' . $book_id);
                 }
             }

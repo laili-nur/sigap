@@ -354,6 +354,8 @@ class Author extends Operator_Controller
     {
         $user_id      = $this->input->post('user_id');
         $author_id = $this->input->post('author_id');
+        //boleh kosong
+        if($user_id ==''){return true;}
 
         $this->author->where('user_id', $user_id);
         !$author_id || $this->author->where('author_id !=', $author_id);

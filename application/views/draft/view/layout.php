@@ -262,14 +262,14 @@
                         <div class="figure-img">
                             <img class="img-fluid" src="<?= base_url('coverfile/'.$input->cover_file);?>" alt="Card image cap">
                           <div class="figure-action">
-                            <a href="<?=base_url('draft/download/'.urlencode($input->cover_file)) ?>" class="btn btn-block btn-sm btn-primary">Download Cover</a>
+                            <a href="<?=base_url('draft/download/coverfile/'.urlencode($input->cover_file)) ?>" class="btn btn-block btn-sm btn-primary">Download Cover</a>
                           </div>
                         </div>
                         <!-- /.figure-img -->
                         <!-- .figure-caption -->
                         <figcaption class="figure-caption">
                           <h6 class="figure-title">
-                            <a href="<?=base_url('draft/download/'.urlencode($input->cover_file)) ?>"><?=$input->cover_file ?></a>
+                            <a href="<?=base_url('draft/download/coverfile/'.urlencode($input->cover_file)) ?>"><?=$input->cover_file ?></a>
                           </h6>
                         </figcaption>
                         <!-- /.figure-caption -->
@@ -550,6 +550,7 @@
               filesize50: 52428200
             },
             layouter_file_link : {
+              curl : true,
               require_from_group: [1, ".naskah"]
             }
           },
@@ -614,6 +615,7 @@
               filesize50: 52428200
             },
             cover_file_link : {
+              curl : true,
               require_from_group: [1, ".naskah"]
             }
           },

@@ -36,6 +36,7 @@ function setting_validasi(){
     $.validator.addMethod("cnumber", $.validator.methods.number, $.validator.format("Hanya diperbolehkan menggunakan angka"));
     $.validator.addMethod("cemail", $.validator.methods.email, $.validator.format("Masukkan sesuai format email"));
     $.validator.addMethod("crange", $.validator.methods.range, $.validator.format("Masukkan tahun antara {0} sampai {1}"));
+    $.validator.addMethod("curl", $.validator.methods.url, $.validator.format("Masukkan URL yang valid diawali protokol. Contoh http://ugm.ac.id"));
     $.validator.addMethod("dokumen", $.validator.methods.extension, "Format/Ekstensi file salah");
 }
 

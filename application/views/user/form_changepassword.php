@@ -91,7 +91,7 @@
 <script>
   $(document).ready(function(){
     setting_validasi();
-    $("#formuser").validate({
+    $("#formchangepassword").validate({
         rules: {
           username : {
             crequired :true,

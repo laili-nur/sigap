@@ -396,6 +396,7 @@
               filesize50: 52428200
             },
             editor_file_link : {
+              curl : true,
               require_from_group: [1, ".naskah"]
             }
           },

@@ -236,6 +236,10 @@
               crequired :true,
               dokumen: "docx|doc|pdf",
               filesize50: 52428200
+            },
+            proofread_file_link : {
+              curl : true,
+              require_from_group: [1, ".naskah"]
             }
           },
           errorElement: "span",

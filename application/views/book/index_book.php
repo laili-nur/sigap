@@ -105,10 +105,12 @@
                       <?= $book->status_hak_cipta == '1' ? 'Dalam Proses' : '' ?>
                     </td>
                     <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
-                    <td class="align-middle text-right">
-                      <a title="Edit" href="<?= base_url('book/edit/'.$book->book_id.'') ?>" class="btn btn-sm btn-secondary">
+                    <td style="min-width: 130px" class="align-middle text-right">
+                      <a title="Edit Hak Cipta" href="<?= base_url('book/edit_hakcipta/'.$book->book_id.'') ?>" class="btn btn-sm btn-secondary">
+                        <i class="fa fa-file-alt"></i>
+                      </a>
+                      <a title="Edit Buku" href="<?= base_url('book/edit/'.$book->book_id.'') ?>" class="btn btn-sm btn-secondary">
                         <i class="fa fa-pencil-alt"></i>
-                        <span class="sr-only">Edit</span>
                       </a>
                       <button title="Delete" type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modalhapus-<?= $book->book_id ?>"><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
                     </td>

@@ -142,7 +142,8 @@
           draft_file: {
             dokumen: "docx|doc|pdf",
             filesize50: 52428200
-          }
+          },
+          draft_file_link :"curl"
 
         },
         messages: {},
@@ -190,10 +191,10 @@
       $.get("<?php echo base_url('draft/ajax_reload_author/');?>",
         function(data){
           var datax = JSON.parse(data);
-          var tampil = [];
-          for(i=0; i<datax.length; i++){
-            tampil[datax[i].author_id]=datax[i].author_name;
-          }
+          // var tampil = [];
+          // for(i=0; i<datax.length; i++){
+          //   tampil[datax[i].author_id]=datax[i].author_name;
+          // }
 
           $('#author').find('option').remove().end();
           $.each(datax, (key, value) => {
@@ -219,6 +220,15 @@
     $("#author").select2({
       placeholder: '-- Choose Multiple --',
       multiple :true
+    });
+    //urut sesuai pilihan input
+    $("#author").on("select2:select", function (evt) {
+      var element = evt.params.data.element;
+      var $element = $(element);
+      
+      $element.detach();
+      $(this).append($element);
+      $(this).trigger("change");
     });
     
     // $("#formdraft").submit(function(){

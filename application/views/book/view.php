@@ -86,22 +86,36 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> File Buku </td>
-                <td><?=(!empty($input->book_file))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->book_file.'" class="btn btn-success btn-xs m-0" href="'.base_url('draftfile/'.$input->book_file).'"><i class="fa fa-download"></i> Download</a>' : '' ?>
-                <?=(!empty($input->book_file_link))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->book_file_link.'" class="btn btn-success btn-xs m-0" href="'.$input->book_file_link.'"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
-                   </td>
+                <td>
+                <?php
+                if(!empty($input->book_file)){
+                  if($draft->proofread_file == $input->book_file){
+                    echo '<a data-toggle="tooltip" data-placement="right" title="'.$input->book_file.'" class="btn btn-success btn-xs my-0" href="'.base_url('draftfile/'.$input->book_file).'"><i class="fa fa-book"></i> File Buku</a>';
+                  }else{
+                    echo '<a data-toggle="tooltip" data-placement="right" title="'.$input->book_file.'" class="btn btn-success btn-xs my-0" href="'.base_url('bookfile/'.$input->book_file).'"><i class="fa fa-book"></i> File Buku</a>';
+                  }
+                }
+
+                ?>
+
+                <?=(!empty($input->book_file_link))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->book_file_link.'" class="btn btn-success btn-xs my-0" target="_blank" href="'.$input->book_file_link.'"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
+                </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> File Cover </td>
-                <td><?=(!empty($input->cover_file))? '<a href="'.base_url('draftfile/'.$input->cover_file).'">'.$input->cover_file.'</a>' : '' ?>
-                   </td>
+                <td>
+                  <?=(!empty($draft->cover_file))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->cover_file.'" class="btn btn-success btn-xs my-0" href="'.base_url('draft/download/coverfile/'.urlencode($draft->cover_file)).'"><i class="fa fa-file-image"></i> File Cover</a>' : '' ?>
+
+                  <?=(!empty($draft->cover_file_link))? '<a data-toggle="tooltip" data-placement="right" title="'.$draft->cover_file_link.'" class="btn btn-success btn-xs my-0" target="_blank" href="'.$draft->cover_file_link.'"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
+                </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Catatan Buku </td>
-                <td>: <?= $input->book_notes ?></td>
+                <td><?= $input->book_notes ?></td>
               </tr>
               <!-- /tr -->
             </tbody>
@@ -136,8 +150,10 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> File Hak Cipta </td>
-                <td><?=(!empty($input->file_hak_cipta))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->file_hak_cipta.'" class="btn btn-success btn-xs m-0" href="'.base_url('hakcipta/'.$input->file_hak_cipta).'"><i class="fa fa-download"></i> Download</a>' : '' ?>
-                <?=(!empty($input->file_hak_cipta_link))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->file_hak_cipta_link.'" class="btn btn-success btn-xs m-0" href="'.$input->file_hak_cipta_link.'"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
+                <td>
+                  <?=(!empty($input->file_hak_cipta))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->file_hak_cipta.'" class="btn btn-success btn-xs my-0" href="'.base_url('draft/download/hakcipta/'.urlencode($input->file_hak_cipta)).'"><i class="fa fa-file-alt"></i> File Hak Cipta</a>' : '' ?>
+
+                  <?=(!empty($input->file_hak_cipta_link))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->file_hak_cipta_link.'" class="btn btn-success btn-xs my-0" target="_blank" href="'.$input->file_hak_cipta_link.'"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
                    </td>
               </tr>
               <!-- /tr -->
@@ -180,7 +196,7 @@
               <!-- /tr -->
               <!-- tr -->
               <tr>
-                <td width="200px"> Cetak Ulang </td>
+                <td width="200px"> Tipe Naskah </td>
                 <td><?= ($input->is_reprint == 'y')? 'Cetak Ulang' : '' ?> <?= ($input->is_reprint == 'n')? 'Naskah baru' : '' ?>  </td>
               </tr>
               <!-- /tr -->
@@ -200,25 +216,25 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> Tanggal Masuk Draft</td>
-                <td>: <?= konversiTanggal($input->entry_date) ?>  </td>
+                <td><?= konversiTanggal($input->entry_date) ?>  </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Tanggal Selesai Draft</td>
-                <td>: <?= konversiTanggal($input->finish_date) ?>  </td>
+                <td><?= konversiTanggal($input->finish_date) ?>  </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Tanggal Cetak </td>
-                <td>: <?= konversiTanggal($input->print_date) ?>  </td>
+                <td><?= konversiTanggal($input->print_date) ?>  </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Tanggal Terbit </td>
-                <td>: <?= konversiTanggal($input->published_date) ?>  </td>
+                <td><?= konversiTanggal($input->published_date) ?>  </td>
               </tr>
               <!-- /tr -->
             </tbody>
