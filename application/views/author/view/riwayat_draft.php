@@ -13,10 +13,10 @@
                     <thead>
                       <tr>
                         <th scope="col">No</th>
-                        <th scope="col">Nama</th>
                         <th scope="col">Judul Draft</th>
                         <th scope="col">Kategori</th>
                         <th scope="col">Tema</th>
+                        <th scope="col">Tanggal Masuk</th>
                       </tr>
                     </thead>
                     <!-- /thead -->
@@ -26,10 +26,10 @@
               <!-- tr -->
               <tr>
                 <td class="align-middle"><?= $i++ ?></td>
-                <td class="align-middle"><?= $draft->author_name ?></td>
                 <td class="align-middle"><a href="<?= base_url('draft/view/'.$draft->draft_id) ?>"><?= $draft->draft_title ?></a></td>
                 <td class="align-middle"><?= $draft->category_name ?></td>
                 <td class="align-middle"><?= $draft->theme_name ?></td>
+                <td class="align-middle"><?= konversiTanggal($draft->entry_date) ?></td>
               </tr>
               <!-- /tr -->
 

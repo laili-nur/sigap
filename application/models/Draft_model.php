@@ -26,7 +26,7 @@ class Draft_model extends MY_Model
             [
                 'field' => 'author_id[]',
                 'label' => 'Author ID',
-                'rules' => 'trim|required'
+                'rules' => 'trim'
             ],
             [
                 'field' => 'entry_date',

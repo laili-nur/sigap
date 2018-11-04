@@ -653,8 +653,25 @@ class Draft extends Operator_Controller
         $books = $this->draft->getWhere($ambil_books, 'book');
 
         //pecah data csv jadi array
-        $draft->nilai_reviewer1 = explode(",",$draft->nilai_reviewer1);
-        $draft->nilai_reviewer2 = explode(",",$draft->nilai_reviewer2);
+        if(!empty($draft->nilai_reviewer1)){
+            $draft->nilai_reviewer1 = explode(",",$draft->nilai_reviewer1);
+        }
+        if(!empty($draft->nilai_reviewer2)){
+            $draft->nilai_reviewer2 = explode(",",$draft->nilai_reviewer2);
+        }
+
+        //hitung bobot nilai
+        if(!empty($draft->nilai_reviewer1)){
+            $draft->nilai_total_reviewer1 = 35*$draft->nilai_reviewer1[0]+25*$draft->nilai_reviewer1[1]+10*$draft->nilai_reviewer1[2]+30*$draft->nilai_reviewer1[3];
+        }else{
+            $draft->nilai_total_reviewer1 = '';
+        }
+
+        if(!empty($draft->nilai_reviewer2)){
+            $draft->nilai_total_reviewer2 = 35*$draft->nilai_reviewer2[0]+25*$draft->nilai_reviewer2[1]+10*$draft->nilai_reviewer2[2]+30*$draft->nilai_reviewer2[3];
+        }else{
+            $draft->nilai_total_reviewer2 = '';
+        }
         
         // $arrayapa = array($draft->nilai_reviewer1[0],$draft->nilai_reviewer1[1],$draft->nilai_reviewer1[2]);
         // $draft->apa = implode(",",$arrayapa);

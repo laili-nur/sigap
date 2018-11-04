@@ -11,7 +11,7 @@
     <div class="top-bar-brand">
       <a href="<?php echo base_url(); ?>">
         <img src="<?= base_url('') ?>" height="32" alt=""> 
-        <span class="badge badge-light" style="font-size: 1.3em">SIGAP <small>beta</small></span>
+        <span class="badge badge-light" style="font-size: 1.3em">SIGAP</span>
       </a>
     </div>
     <!-- /.top-bar-brand -->

@@ -70,7 +70,7 @@ class Author extends Operator_Controller
             $input = (object) $this->input->post(null, true);
         }
 
-        $drafts =  $this->author->select(['draft_author.author_id','author_name','draft_author.draft_id','draft_title','category_name','theme_name'])->join3('draft_author','author','author')->join3('draft','draft_author','draft')->join3('category','draft','category')->join3('theme','draft','theme')->where('draft_author.author_id',$id)->getAll();
+        $drafts =  $this->author->select(['draft_author.author_id','author_name','draft_author.draft_id','draft_title','category_name','theme_name','entry_date'])->join3('draft_author','author','author')->join3('draft','draft_author','draft')->join3('category','draft','category')->join3('theme','draft','theme')->where('draft_author.author_id',$id)->getAll();
 
         $main_view   = 'author/view_author';
         $pages    = $this->pages;

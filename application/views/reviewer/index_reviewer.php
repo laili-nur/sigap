@@ -92,7 +92,7 @@
                   <!-- tr -->
                   <tr>
                     <td class="align-middle pl-4"><?= ++$i ?></td>
-                    <td class="align-middle"><?= $reviewer->reviewer_name ?></td>
+                    <td class="align-middle"><?= $reviewer->reviewer_degree_front ?> <?= ucwords($reviewer->reviewer_name) ?> <?= $reviewer->reviewer_degree_back ?></td>
                     <td class="align-middle"><?= $reviewer->username ?></td>
                     <td class="align-middle"><?= $reviewer->reviewer_nip ?></td>
                     <td class="align-middle"><?= $reviewer->faculty_name  ?></td>

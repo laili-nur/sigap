@@ -355,6 +355,25 @@
                       <p class="m-0 p-0">Nilai = <?=isset($input->nilai_reviewer1[3])?$input->nilai_reviewer1[3]:''; ?></p>
                     <?php endif ?>
                  </div>
+                 <?php if($ceklevel != 'author'): ?>
+                 <div id="total_reviewer1">
+                   <?php if(!empty($draft->nilai_total_reviewer1)){
+                    if($draft->nilai_total_reviewer1 >=400){
+                      $hasil = '<div class="alert alert-success"><span class="badge badge-success">Naskah Lolos Review</span><br>';
+                      $hasil .= '<strong>Nilai total = '.$draft->nilai_total_reviewer1.'</strong><br>';
+                      $hasil .= 'Passing Grade = 400 <br>';
+                      $hasil .= '</div>';
+                    }else{
+                      $hasil = '<div class="alert alert-danger"><span class="badge badge-danger">Naskah Tidak Lolos Review</span><br>';
+                      $hasil .= '<strong>Nilai total = '.$draft->nilai_total_reviewer1.'</strong><br>';
+                      $hasil .= 'Passing Grade = 400 <br>';
+                      $hasil .= '</div>';
+                    }
+                      echo $hasil;
+                   } 
+                   ?>
+                 </div>
+                <?php endif ?>
                 <!-- /.form-group -->
                 <!-- endif review dari reviewer hanya bisa dibaca admin dan staff ugmpress -->
                 <?php endif ?>
@@ -483,15 +502,10 @@
                     <div class="form-group">
                       <label for="review2_file">File Naskah</label>
                       <!-- .input-group -->
-                      <div class="input-group input-group-alt">
                         <div class="custom-file">
                           <?= form_upload('review2_file','','class="custom-file-input naskah" id="review2_file"') ?> 
                           <label class="custom-file-label" for="review2_file">Choose file</label>
                         </div>
-                        <div class="input-group-append">
-                          <button class="btn btn-primary" type="submit" value="Submit" id="btn-upload-review2"><i class="fa fa-upload"></i> Upload</button>
-                        </div>
-                      </div>
                       <small class="form-text text-muted">Tipe file upload  bertype : docx, doc, dan pdf.</small>
                       <!-- /.input-group -->
                     </div>
@@ -717,6 +731,25 @@
                       <p class="m-0 p-0">Nilai = <?=isset($input->nilai_reviewer2[3])?$input->nilai_reviewer2[3]:''; ?></p>
                     <?php endif ?>
                  </div>
+                 <?php if($ceklevel != 'author'): ?>
+                 <div id="total_reviewer2">
+                   <?php if(!empty($draft->nilai_total_reviewer2)){
+                    if($draft->nilai_total_reviewer2 >=400){
+                      $hasil = '<div class="alert alert-success"><span class="badge badge-success">Naskah Lolos Review</span><br>';
+                      $hasil .= '<strong>Nilai total = '.$draft->nilai_total_reviewer2.'</strong><br>';
+                      $hasil .= 'Passing Grade = 400 <br>';
+                      $hasil .= '</div>';
+                    }else{
+                      $hasil = '<div class="alert alert-danger"><span class="badge badge-danger">Naskah Tidak Lolos Review</span><br>';
+                      $hasil .= '<strong>Nilai total = '.$draft->nilai_total_reviewer2.'</strong><br>';
+                      $hasil .= 'Passing Grade = 400 <br>';
+                      $hasil .= '</div>';
+                    }
+                      echo $hasil;
+                   } 
+                   ?>
+                 </div>
+                <?php endif ?>
                 <!-- /.form-group -->
                 <!-- endif review dari reviewer hanya bisa dibaca admin dan staff ugmpress -->
                 <?php endif ?>
@@ -1128,7 +1161,7 @@
             }else{
               toastr_view('000');
             }
-            $('#list-group-review').load(' #list-group-review');
+            $('#total_reviewer1').load(' #total_reviewer1');
           }
         });
         return false;
@@ -1215,7 +1248,7 @@
             }else{
               toastr_view('000');
             }
-            $('#list-group-review').load(' #list-group-review');
+            $('#total_reviewer2').load(' #total_reviewer2');
           }
         });
         return false;
