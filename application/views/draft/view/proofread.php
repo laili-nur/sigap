@@ -28,7 +28,7 @@
     <div class="card-body">
       <div class="el-example">
         <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
-        <button title="Aksi admin" class="btn btn-secondary" style="width:50px" data-toggle="modal" data-target="#proofread_aksi"><i class="fa fa-thumbs-up"></i></button>    
+        <button title="Aksi admin" class="btn btn-secondary" data-toggle="modal" data-target="#proofread_aksi"><i class="fa fa-thumbs-up"></i> Aksi</button>    
         <?php endif ?>
         <button type="button" class="btn <?=($input->proofread_notes!='' || $input->proofread_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#proofread">Tanggapan Proofread <?=($input->proofread_notes!='' || $input->proofread_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
         <!-- modal -->
@@ -190,7 +190,7 @@
                           'rows' => '6',
                           'value'=> $input->proofread_status
                       );
-                      if($ceklevel!='superadmin'){
+                      if($ceklevel!='superadmin' and $ceklevel!='admin_penerbitan'){
                         echo '<div class="font-italic">'.nl2br($input->proofread_status).'</div>';
                       }else{
                         echo form_textarea($proofread_status);
@@ -233,7 +233,7 @@
       $("#proofreadform").validate({
           rules: {
             proofread_file: {
-              crequired :true,
+              require_from_group: [1, ".naskah"],
               dokumen: "docx|doc|pdf",
               filesize50: 52428200
             },

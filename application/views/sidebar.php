@@ -148,6 +148,8 @@
               <!-- /child menu -->
             </li>
             <!-- /.menu-item -->
+            <!-- if superadmin halaman user -->
+            <?php if ($ceklevel == 'superadmin'): ?>
             <!-- .menu-header -->
             <li class="menu-header">LAPORAN </li>
             <!-- /.menu-header -->
@@ -159,8 +161,6 @@
               </a>
             </li>
             <!-- /.menu-item -->
-            <!-- if superadmin halaman user -->
-            <?php if ($ceklevel == 'superadmin'): ?>
             <!-- .menu-header -->
             <li class="menu-header">Akun </li>
             <!-- /.menu-header -->

@@ -72,7 +72,7 @@
       <!-- /.auth-form -->
       <!-- copyright -->
       <footer class="auth-footer">
-        <p><strong>last update : 1 November 2018</strong></p>
+        <p><strong>last update : 5 November 2018</strong></p>
         <p class="text-center"><a href="#" data-toggle="modal" data-target="#exampleModalSm">About</a></p>
         <!-- .modal -->
 	      <div id="exampleModalSm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">

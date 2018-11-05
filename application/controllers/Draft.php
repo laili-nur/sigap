@@ -580,6 +580,14 @@ class Draft extends Operator_Controller
             }  
         }
 
+        //author tidak bisa coba2 url draft/add
+        if ($ceklevel == 'author' ){
+            if(empty($input->category_id)){
+                $this->session->set_flashdata('error', 'Choose category from dashboard');
+                redirect('home');
+            }
+        }
+
         if (!$this->draft->validate() || $this->form_validation->error_array()) {
             $pages     = $this->pages;
             $main_view   = 'draft/form_draft_add';

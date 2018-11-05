@@ -79,7 +79,7 @@
                 <thead>
                   <tr>
                     <th scope="col" class="pl-4">No</th>
-                    <th scope="col">Judul</th>
+                    <th scope="col">Judul Buku</th>
                     <th scope="col">Edisi</th>
                     <th scope="col">Copy</th>
                     <th scope="col">Status</th>

@@ -67,7 +67,7 @@
     <div class="card-body">
       <div class="el-example">
         <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
-        <button title="Aksi admin" class="btn btn-secondary" style="width:50px" data-toggle="modal" data-target="#layout_aksi"><i class="fa fa-thumbs-up"></i></button>
+        <button title="Aksi admin" class="btn btn-secondary" data-toggle="modal" data-target="#layout_aksi"><i class="fa fa-thumbs-up"></i> Aksi</button>
         <?php endif ?>
         <button type="button" class="btn <?=($input->layout_notes!='' || $input->layout_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#layout">Tanggapan Layout <?=($input->layout_notes!='' || $input->layout_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
         <button type="button" class="btn <?=($input->cover_notes!='' || $input->cover_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#cover">Tanggapan Cover <?=($input->cover_notes!='' || $input->cover_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
@@ -213,9 +213,9 @@
               <!-- /.modal-header -->
               <!-- .modal-body -->
               <div class="modal-body">
+                <p class="font-weight-bold">COVER</p>
                 <!-- if upload ditampilkan di level tertentu -->
                 <?php if($ceklevel=='layouter' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
-                <p class="font-weight-bold">COVER</p>
                 <div class="alert alert-info">Upload file cover atau sertakan link cover.</div>
                 <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/cover_file', 'id="coverform"'); ?>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
@@ -290,9 +290,9 @@
                 <?php endif ?>
                 <?=(!empty($input->cover_file_link))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->cover_file_link.'" href="'.$input->cover_file_link.'" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
                 </div>
-                <hr class="my-3">
                 <?php endif ?>
                 <!-- endif download ditampilkan di level tertentu -->
+                <hr class="my-3">
                 
                 <!-- .form -->
                 <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formcover"') ?>
@@ -513,7 +513,7 @@
                           'rows' => '6',
                           'value'=> $input->layout_status
                       );
-                      if($ceklevel!='superadmin'){
+                      if($ceklevel!='superadmin' and $ceklevel!='admin_penerbitan'){
                         echo '<div class="font-italic">'.nl2br($input->layout_status).'</div>';
                       }else{
                         echo form_textarea($layout_status);

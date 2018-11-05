@@ -46,8 +46,10 @@
             <span class="text-muted">Reviewer</span>
             <div>
               <?php if ($reviewers) {
+                $i = 1;
                 foreach ($reviewers as $reviewer){
-                  echo '<span class="badge badge-info p-1">'.$reviewer->reviewer_name.'</span> ';
+                  echo '<span class="badge badge-info p-1">'.$i.'. '.$reviewer->reviewer_name.'</span> ';
+                  $i++;
                 }
               }
               ?>
@@ -93,7 +95,7 @@
     <div class="card-body">
       <div class="el-example ">
         <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
-        <button title="Aksi admin" class="btn btn-secondary" style="width:50px" data-toggle="modal" data-target="#review_aksi"><i class="fa fa-thumbs-up"></i></button>
+        <button title="Aksi admin" class="btn btn-secondary" data-toggle="modal" data-target="#review_aksi"><i class="fa fa-thumbs-up"></i> Aksi</button>
         <!-- <button class="btn btn-danger" style="width:50px"><i class="fa fa-times"></i></button> -->
         <?php endif ?>
         <?php if($reviewer_order=='0' or $reviewer_order!='1'): ?>       
@@ -943,7 +945,7 @@
                           'rows' => '6',
                           'value'=> $input->review_status
                       );
-                      if($ceklevel!='superadmin'){
+                      if($ceklevel!='superadmin' and $ceklevel!='admin_penerbitan'){
                         echo '<div class="font-italic">'.nl2br($input->review_status).'</div>';
                       }else{
                         echo form_textarea($review_status);

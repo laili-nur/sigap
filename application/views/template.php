@@ -78,7 +78,6 @@
     <script src="<?= base_url('assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js')?>"></script>
     <script src="<?= base_url('assets/vendor/flatpickr/flatpickr_new.min.js')?>"></script> 
     <script src="<?= base_url('assets/vendor/handlebars/handlebars.min.js')?>"></script>
-    <script src="<?= base_url('assets/vendor/typeahead.js/typeahead.bundle.min.js')?>"></script>
     <script src="<?= base_url('assets/vendor/select2/js/select2.min.js')?>"></script>
     <script src="<?= base_url('assets/vendor/tribute/tribute.min.js')?>"></script>
     <script src="<?= base_url('assets/vendor/Caret/jquery.caret.min.js')?>"></script>
@@ -91,10 +90,8 @@
     <!-- END THEME JS -->
     <!-- BEGIN PAGE LEVEL JS -->
     <script src="<?= base_url('assets/javascript/pages/flatpickr-demo.js')?>"></script>
-    <script src="<?= base_url('assets/javascript/pages/typeahead-demo.js')?>"></script>
     <script src="<?= base_url('assets/javascript/pages/select2-demo.js')?>"></script>
     <script src="<?= base_url('assets/javascript/pages/easypiechart-demo.js')?>"></script>
-    <script src="<?= base_url('assets/javascript/pages/table-demo.js')?>"></script>
     <script src="<?= base_url('assets/javascript/pages/summernote-demo.js')?>"></script>    
     <!-- END PAGE LEVEL JS -->
     <!-- Global site tag (gtag.js) - Google Analytics -->

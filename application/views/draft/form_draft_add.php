@@ -39,9 +39,22 @@
             <label for="category">Jenis Kategori
               <abbr title="Required">*</abbr>
             </label>
-            <?= form_dropdown('category_id', getDropdownListCategory('category', ['category_id', 'category_name']), $input->category_id, 'id="category" class="form-control custom-select d-block"') ?>
+            <!-- cek parameter category, jika ada isinya maka disable pilihan category -->
+            <?php if(!empty($this->uri->segment(3))){
+              $atribut = 'disabled';
+            }else{
+              $atribut = '';
+            }
+            ?>
+            <?= form_dropdown('category_id', getDropdownListCategory('category', ['category_id', 'category_name']), $input->category_id, 'id="category" class="form-control custom-select d-block '.$atribut.'" '.$atribut.'') ?>
             <?= form_error('category_id') ?>
           </div>
+          <?php if (!empty($this->uri->segment(3))){
+            if(isset($input->category_id)){
+              echo form_hidden('category_id', $input->category_id);
+            } 
+          } 
+          ?>
           <!-- /.form-group -->
           <hr class="my-2">
           <!-- .form-group -->
