@@ -1,4 +1,8 @@
-  <?php $ceklevel = $this->session->userdata('level'); ?>
+  <?php 
+  $ceklevel = $this->session->userdata('level'); 
+  $sisa_waktu_rev1 = ceil((strtotime($input->review1_deadline)-strtotime(date('Y-m-d H:i:s')))/86400); 
+  $sisa_waktu_rev2 = ceil((strtotime($input->review2_deadline)-strtotime(date('Y-m-d H:i:s')))/86400); 
+  ?>
   <!-- .card -->
   <section id="progress-review" class="card" >
     <!-- .card-header -->
@@ -30,14 +34,12 @@
           <?php if($reviewer_order=='0' or $reviewer_order!='1'): ?>
           <div class="list-group-item justify-content-between">
             <span class="text-muted">Deadline reviewer 1</span>
-            <?php $sisa_waktu_rev1 = round((strtotime($input->review1_deadline)-strtotime(date('Y-m-d H:i:s')))/86400); ?>
             <strong><?= ( $sisa_waktu_rev1 <= 0 and $input->review1_flag =='')? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">'.konversiTanggal($input->review1_deadline).'</span>' : konversiTanggal($input->review1_deadline) ?></strong>
           </div>
           <?php endif ?>
           <?php if($reviewer_order=='1' or $reviewer_order!='0'): ?>
           <div class="list-group-item justify-content-between">
             <span class="text-muted">Deadline reviewer 2</span>
-            <?php $sisa_waktu_rev2 = round((strtotime($input->review2_deadline)-strtotime(date('Y-m-d H:i:s')))/86400); ?>
             <strong><?= ( $sisa_waktu_rev2 <= 0 and $input->review2_flag =='')? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">'.konversiTanggal($input->review2_deadline).'</span>' : konversiTanggal($input->review2_deadline) ?></strong>
           </div>
           <?php endif ?>
@@ -99,10 +101,14 @@
         <!-- <button class="btn btn-danger" style="width:50px"><i class="fa fa-times"></i></button> -->
         <?php endif ?>
         <?php if($reviewer_order=='0' or $reviewer_order!='1'): ?>       
-          <button type="button" class="btn <?=($input->review1_notes!='' || $input->review1_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#review1">Tanggapan Review 1 <?=($input->review1_notes!='' || $input->review1_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
+          <button type="button" class="btn <?=($input->review1_notes!='' || $input->review1_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#review1" <?=($ceklevel=='reviewer' and $sisa_waktu_rev1 <= 0 and $input->review1_flag =='')? 'disabled' : '' ?>>Tanggapan Review 1 <?=($input->review1_notes!='' || $input->review1_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
+          <!-- peringatan disabled -->
+          <?=($ceklevel=='reviewer' and $sisa_waktu_rev1 <= 0 and $input->review1_flag =='')? '<span class="font-weight-bold text-danger" data-toggle="tooltip" data-placement="bottom" title="Hubungi admin untuk membuka draft ini"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>' : '' ?>
         <?php endif ?>
         <?php if($reviewer_order=='1' or $reviewer_order!='0'): ?>
-          <button type="button" class="btn <?=($input->review2_notes!='' || $input->review2_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#review2">Tanggapan Review 2 <?=($input->review2_notes!='' || $input->review2_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
+          <button type="button" class="btn <?=($input->review2_notes!='' || $input->review2_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#review2" <?=($ceklevel=='reviewer' and $sisa_waktu_rev2 <= 0 and $input->review2_flag =='')? 'disabled' : '' ?>>Tanggapan Review 2 <?=($input->review2_notes!='' || $input->review2_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
+          <!-- peringatan disabled -->
+          <?=($ceklevel=='reviewer' and $sisa_waktu_rev2 <= 0 and $input->review2_flag =='')? '<span class="font-weight-bold text-danger" data-toggle="tooltip" data-placement="bottom" title="Hubungi admin untuk membuka draft ini"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>' : '' ?>
         <?php endif ?>
       </div>
         <!-- modal -->

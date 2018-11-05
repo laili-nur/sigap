@@ -1,4 +1,8 @@
-  <?php $ceklevel = $this->session->userdata('level'); ?>
+  <?php 
+  $ceklevel = $this->session->userdata('level');
+  $sisa_waktu_edit = ceil((strtotime($input->edit_deadline)-strtotime(date('Y-m-d H:i:s')))/86400);
+  ?>
+
 <!-- .card -->
   <section id="progress-edit" class="card">
     <!-- .card-header -->
@@ -36,7 +40,7 @@
       </div>
       <div class="list-group-item justify-content-between">
         <span class="text-muted">Deadline</span>
-        <strong><?= konversiTanggal($input->edit_deadline) ?></strong>
+        <strong><?= ($sisa_waktu_edit <= 0 and $input->edit_notes =='')? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">'.konversiTanggal($input->edit_deadline).'</span>' : konversiTanggal($input->edit_deadline) ?></strong>
       </div>
       <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer' ): ?>
       <div class="list-group-item justify-content-between" id="reloadeditor">
@@ -69,7 +73,9 @@
         <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
         <button title="Aksi admin" class="btn btn-secondary" data-toggle="modal" data-target="#edit_aksi"><i class="fa fa-thumbs-up"></i> Aksi</button>
         <?php endif ?>   
-        <button type="button" class="btn <?=($input->edit_notes!='' || $input->edit_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#edit">Tanggapan Editorial <?=($input->edit_notes!='' || $input->edit_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
+        <button type="button" class="btn <?=($input->edit_notes!='' || $input->edit_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#edit" <?=($ceklevel=='editor' and $sisa_waktu_edit <= 0 and $input->edit_notes =='')? 'disabled' : '' ?>>Tanggapan Editorial <?=($input->edit_notes!='' || $input->edit_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
+        <!-- peringatan disabled -->
+          <?=($ceklevel=='editor' and $sisa_waktu_edit <= 0 and $input->edit_notes =='')? '<span class="font-weight-bold text-danger" data-toggle="tooltip" data-placement="bottom" title="Hubungi admin untuk membuka draft ini"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>' : '' ?>
       </div>
         <!-- modal -->
         <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

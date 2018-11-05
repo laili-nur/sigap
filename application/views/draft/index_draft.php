@@ -150,13 +150,13 @@
                   <th scope="col">Judul</th>
                   <th scope="col">Tanggal Masuk</th>
                   <th scope="col">Status</th>
-                  <?php if ($ceklevel == 'reviewer'): ?>
-                  <th scope="col">Sisa Waktu</th>
+                  <?php if ($ceklevel == 'reviewer' or $ceklevel == 'editor' or $ceklevel == 'layouter'): ?>
+                    <th scope="col">Sisa Waktu</th>
                   <?php endif ?>
                   <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
-                  <th style="width:100px; min-width:100px;"> &nbsp; </th>
+                    <th style="width:100px; min-width:100px;"> &nbsp; </th>
                   <?php else: ?>
-                  <th scope="col"> Aksi </th>
+                    <th scope="col"> Aksi </th>
                   <?php endif ?>
                 </tr>
               </thead>
@@ -193,13 +193,39 @@
                     } 
                     ?>                      
                   </td>
-                  <?php if ($ceklevel == 'reviewer'): ?>
+                  <?php if ($ceklevel == 'reviewer' ): ?>
                   <td class="align-middle">
                     <?php
-                     $sisa_waktu = round((strtotime($draft->deadline)-strtotime(date('Y-m-d H:i:s')))/86400);
+                     $sisa_waktu = ceil((strtotime($draft->deadline)-strtotime(date('Y-m-d H:i:s')))/86400);
                      if($sisa_waktu <= 0 and $draft->review_flag ==''){
-                       echo '<span class="font-weight-bold" style="color:red" data-toggle="tooltip" data-placement="bottom" title="Hubungi staff untuk membuka draft ini"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>';
+                       echo '<span class="font-weight-bold text-danger" ><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>';
                      }elseif($sisa_waktu <= 0 and $draft->review_flag !=''){
+                        echo '-';
+                     }else{
+                       echo $sisa_waktu.' hari';
+                     }
+                     ?>
+                  </td>
+                  <?php elseif($ceklevel == 'editor'): ?>
+                  <td class="align-middle">
+                    <?php
+                     $sisa_waktu = ceil((strtotime($draft->edit_deadline)-strtotime(date('Y-m-d H:i:s')))/86400);
+                     if($sisa_waktu <= 0 and $draft->edit_notes ==''){
+                       echo '<span class="font-weight-bold text-danger" ><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>';
+                     }elseif($sisa_waktu <= 0 and $draft->edit_notes !=''){
+                        echo '-';
+                     }else{
+                       echo $sisa_waktu.' hari';
+                     }
+                     ?>
+                  </td>
+                  <?php elseif($ceklevel == 'layouter'): ?>
+                  <td class="align-middle">
+                    <?php
+                     $sisa_waktu = ceil((strtotime($draft->layout_deadline)-strtotime(date('Y-m-d H:i:s')))/86400);
+                     if($sisa_waktu <= 0 and $draft->layout_notes ==''){
+                       echo '<span class="font-weight-bold text-danger" ><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>';
+                     }elseif($sisa_waktu <= 0 and $draft->layout_notes !=''){
                         echo '-';
                      }else{
                        echo $sisa_waktu.' hari';
@@ -208,7 +234,7 @@
                   </td>
                   <?php else: ?>
                   <!-- selain reviewer, di set default -->
-                  <?php $sisa_waktu = 1; $draft->review_flag=true; ?>                  
+                  <?php $sisa_waktu = 1; $draft->review_flag =true; ?>                  
                   <?php endif ?>
                   <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
                   <td class="align-middle text-right">
@@ -224,9 +250,13 @@
                   </td>
                   <?php else: ?>
                   <td class="align-middle">
-                    <button onclick="location.href='<?= base_url('draft/view/'.$draft->draft_id.'') ?>'" class="btn btn-sm btn-secondary <?=($sisa_waktu <= 0 and $draft->review_flag =='')? 'btn-disabled' : '' ?>" <?=($sisa_waktu <= 0 and $draft->review_flag =='')? 'disabled' : '' ?>><i class="fa fa-eye" ></i> View
+                    <!-- <button onclick="location.href='<?= base_url('draft/view/'.$draft->draft_id.'') ?>'" class="btn btn-sm btn-secondary <?=($sisa_waktu <= 0 and $draft->review_flag =='')? 'btn-disabled' : '' ?>" <?=($sisa_waktu <= 0 and $draft->review_flag =='')? 'disabled' : '' ?>><i class="fa fa-eye" ></i> View
                       <span class="sr-only">View</span>
-                    </button>
+                    </button> -->
+                    <a title="View" href="<?= base_url('draft/view/'.$draft->draft_id.'') ?>" class="btn btn-sm btn-secondary">
+                      <i class="fa fa-eye"></i> View
+                      <span class="sr-only">View</span>
+                    </a>
 
                   </td>
                   <?php endif ?>
