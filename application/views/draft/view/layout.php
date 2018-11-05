@@ -87,7 +87,7 @@
                 <div class="modal-body">
                   <p class="font-weight-bold">NASKAH</p>
                   <!-- if upload ditampilkan di level tertentu -->
-                  <?php if($ceklevel=='layouter' or $ceklevel=='editor' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+                  <?php if($ceklevel=='layouter' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
                   <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/layout_file', 'id="layoutform"'); ?>
                   <div class="alert alert-info">Upload file naskah atau sertakan link naskah. Kosongi jika file naskah hard copy.</div>
                     <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
@@ -119,19 +119,24 @@
                   <?php endif ?>
                   <!-- endif upload ditampilkan di level tertentu -->
                   
+                  <!-- if download ditampilkan di level tertentu -->
+                  <?php if($ceklevel!='author' and $ceklevel != 'reviewer' ): ?>
                   <!-- keterangan last upload dan tombol download -->
                   <div id="modal-layout">
                   <p>Last Upload : <?=konversiTanggal($input->layout_upload_date) ?>, 
-                  <br> by : <?=konversi_username_level($input->layout_last_upload) ?>
-                  <?php  if($ceklevel !='author' and $ceklevel !='reviewer'):?>
-                    <em>(<?=$input->layout_last_upload ?>)</em>
-                  <?php endif ?>
+                    <br> by : <?=konversi_username_level($input->layout_last_upload) ?>
+                    <?php  if($ceklevel !='author' and $ceklevel !='reviewer'):?>
+                      <em>(<?=$input->layout_last_upload ?>)</em>
+                    <?php endif ?>
                   </p>
                   <?=(!empty($input->layout_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->layout_file.'" href="'.base_url('draftfile/'.$input->layout_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
                   <?=(!empty($input->layouter_file_link))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->layouter_file_link.'" href="'.$input->layouter_file_link.'" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
                   </div>
-
+                  <?php endif ?>
+                  <!-- endif download ditampilkan di level tertentu -->
                   <hr class="my-3">
+
+
                   <!-- .form -->
                   <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formlayout"') ?>
                     <!-- .fieldset -->
@@ -208,10 +213,10 @@
               <!-- /.modal-header -->
               <!-- .modal-body -->
               <div class="modal-body">
-                <p class="font-weight-bold">COVER</p>
                 <!-- if upload ditampilkan di level tertentu -->
                 <?php if($ceklevel=='layouter' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
-                  <div class="alert alert-info">Upload file cover atau sertakan link cover.</div>
+                <p class="font-weight-bold">COVER</p>
+                <div class="alert alert-info">Upload file cover atau sertakan link cover.</div>
                 <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/cover_file', 'id="coverform"'); ?>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                   <!-- .form-group -->
@@ -241,7 +246,9 @@
                 <?= form_close(); ?>
                 <?php endif ?>
                 <!-- endif upload ditampilkan di level tertentu -->
-
+                
+                <!-- if download ditampilkan di level tertentu -->
+                <?php if($ceklevel!='author' and $ceklevel != 'reviewer' ): ?>
                 <!-- keterangan last upload dan tombol download -->
                 <div id="modal-cover">
                   <p>Last Upload : <?=konversiTanggal($input->cover_upload_date) ?>, 
@@ -284,6 +291,9 @@
                 <?=(!empty($input->cover_file_link))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->cover_file_link.'" href="'.$input->cover_file_link.'" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
                 </div>
                 <hr class="my-3">
+                <?php endif ?>
+                <!-- endif download ditampilkan di level tertentu -->
+                
                 <!-- .form -->
                 <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formcover"') ?>
                   <!-- .fieldset -->

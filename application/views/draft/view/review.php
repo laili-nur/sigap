@@ -538,10 +538,10 @@
                 <?=(!empty($input->reviewer2_file_link))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->reviewer2_file_link.'" href="'.$input->reviewer2_file_link.'" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
                 </div>
 
-                <hr class="my-3">
                 <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formreview2_krit" novalidate=""'); ?>
                   <!-- review dari reviewer hanya bisa dibaca admin dan staff ugmpress -->
                   <?php if($ceklevel!='author'): ?>
+                  <hr class="my-3">
                   <p class="font-weight-bold">REVIEW</p>
                   <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
                   <!-- .form-group -->
