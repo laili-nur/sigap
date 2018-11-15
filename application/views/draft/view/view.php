@@ -523,10 +523,11 @@
             'value' => date('Y-m-d H:i:s')
         );
         echo form_input($hidden_date);?>
-      <span class="d-inline-block" tabindex="0" data-trigger="focus" data-toggle="popover" <?=($input->is_proofread == 'n')? 'data-content="Proofread belum disetujui"':'' ?> data-placement="top">
-       <button class="btn btn-primary"  data-toggle="modal" data-target="#modalsimpan" <?=($input->is_proofread == 'y' and ($input->proofread_file != '' or $input->proofread_file_link != ''))? '':'disabled style="pointer-events: none;"' ?>>Simpan jadi buku</button>
-       <button class="btn btn-danger" data-toggle="modal" data-target="#modaltolak" <?=($input->is_proofread == 'y' and ($input->proofread_file != '' or $input->proofread_file_link != ''))? '':'disabled style="pointer-events: none;"' ?>>Tolak</button>
-       </span>
+      <div class="d-inline-block" tabindex="0" data-trigger="focus" data-toggle="popover" <?=($input->is_proofread == 'y' and ($input->proofread_file != '' or $input->proofread_file_link != ''))? '':'data-content="Proofread belum disetujui dan File proofread belum ada"' ?> data-placement="top">
+       <button class="btn btn-primary"  data-toggle="modal" data-target="#modalsimpan" <?=($input->is_proofread == 'y' and ($input->proofread_file != '' or $input->proofread_file_link != ''))? '':'disabled' ?>>Simpan jadi buku</button>
+       <button class="btn btn-danger" data-toggle="modal" data-target="#modaltolak" <?=($input->is_proofread == 'y' and ($input->proofread_file != '' or $input->proofread_file_link != ''))? '':'disabled' ?>>Tolak</button>
+       </div>
+       <?=($input->is_proofread == 'y' and ($input->proofread_file != '' or $input->proofread_file_link != ''))? '':'<div class="m-0"><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> Proofread belum disetujui dan File/Link proofread belum ada</small></div>' ?>
      </div>
      <!-- Alert Danger Modal -->
       <div class="modal modal-warning fade" id="modalsimpan" tabindex="-1" role="dialog" aria-labelledby="modalsimpan" aria-hidden="true">
@@ -832,7 +833,7 @@
               $this.removeAttr("disabled").html("Simpan Jadi Buku");
               if(datax.status == true){
                 toastr_view('111');
-                location.href ='<?php echo base_url('draft/copyToBook/')?>'+id+'/'+draft_title+'/'+draft_file;
+                location.href ='<?php echo base_url('draft/copyToBook/')?>'+id;
               }else{
                 toastr_view('000');
               }

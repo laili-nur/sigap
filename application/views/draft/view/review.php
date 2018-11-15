@@ -409,7 +409,7 @@
                     </div>
                     <?php endif ?>
                     <!-- /.form-group -->
-                    <?php if($ceklevel=='superadmin' or $ceklevel=='author'): ?>
+                    <?php if($ceklevel=='superadmin' or $ceklevel=='admin_penerbitan' or $ceklevel=='author'): ?>
                     <hr class="my-3">
                     <!-- .form-group -->
                     <div class="form-group">
@@ -422,7 +422,7 @@
                           'rows' => '6',
                           'value'=> $input->catatan_review1_admin
                       );
-                      if($ceklevel=='superadmin'){
+                      if($ceklevel=='superadmin' or $ceklevel=='admin_penerbitan'){
                         echo form_textarea($optionscr1a);
                       }elseif($ceklevel=='author'){
                         echo '<div class="font-italic">'.nl2br($input->catatan_review1_admin).'</div>';
@@ -785,7 +785,7 @@
                     </div>
                     <?php endif ?>
                     <!-- /.form-group -->
-                    <?php if($ceklevel=='superadmin' or $ceklevel=='author'): ?>
+                    <?php if($ceklevel=='superadmin' or $ceklevel=='admin_penerbitan' or $ceklevel=='author'): ?>
                     <hr class="my-3">
                     <!-- .form-group -->
                     <div class="form-group">
@@ -798,7 +798,7 @@
                           'rows' => '6',
                           'value'=> $input->catatan_review2_admin
                       );
-                      if($ceklevel=='superadmin'){
+                      if($ceklevel=='superadmin' or $ceklevel=='admin_penerbitan'){
                         echo form_textarea($optionscr2a);
                       }elseif($ceklevel=='author'){
                         echo '<div class="font-italic">'.nl2br($input->catatan_review2_admin).'</div>';

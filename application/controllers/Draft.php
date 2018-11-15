@@ -1242,6 +1242,24 @@ class Draft extends Operator_Controller
             }
         }
 
+        //cari tau rev 1 atau rev 2 yg sedang login
+        foreach ($drafts as $key => $value) {
+            $rev = $this->draft->getIdAndName('reviewer', 'draft_reviewer', $value->draft_id);
+            $value->rev = key(array_filter(
+                $rev,
+                function ($e) {
+                    return $e->reviewer_id == $this->session->userdata('role_id');
+                }
+            ));
+            if($value->rev == 0){
+              $value->review_flag = $value->review1_flag;
+              $value->deadline = $value->review1_deadline;
+            }elseif($value->rev == 1){
+              $value->review_flag = $value->review2_flag;
+              $value->deadline = $value->review2_deadline;
+            }else{}
+        }
+
         $pages    = $this->pages;
         $main_view  = 'draft/index_draft';
         $this->load->view('template', compact('pages', 'main_view', 'drafts', 'pagination', 'total'));
