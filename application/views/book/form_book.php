@@ -37,9 +37,15 @@
             <label for="category">Draft
               <abbr title="Required">*</abbr>
             </label>
+            <?php if($input->draft_id=='' or $this->uri->segment(2)=='add'): ?>
             <?= form_dropdown('draft_id', getDropdownListBook('draft', ['draft_id', 'draft_title']), $input->draft_id, 'id="draft_id" class="form-control custom-select d-block"') ?>
             <small class="form-text text-muted">Hanya draft yang telah lolos proofread yang dapat dipilih</small>
-            <?= form_error('category_id') ?>
+            <?= form_error('draft_id') ?>
+            <?php else: ?>
+            <p class="font-weight-bold"><a href="<?=base_url('draft/view/'.$input->draft_id) ?>"><?=konversiID('draft','draft_id',$input->draft_id)->draft_title ?></a></p>
+            <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
+            <?php endif ?>
+
           </div>
           <!-- /.form-group -->
           <!-- .form-group -->

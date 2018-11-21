@@ -1,6 +1,9 @@
 <?php $ceklevel = $this->session->userdata('level'); ?>
 <?php
   $perPage = $this->input->get('per_page');
+  if(empty($perPage)){
+    $perPage = 10;
+  }
   $keywords = $this->input->get('keywords');
   $filter = $this->input->get('filter');
   if (isset($keywords) or isset($filter)) {
@@ -56,6 +59,9 @@
         </header>
         <!-- /.card-header -->
         <?php
+        /*==================================================
+        =            Pilihan dropdown per level            =
+        ==================================================*/
         if($ceklevel == 'reviewer'){
           $filter_status = [
             '' => '- Filter Review -',
@@ -121,8 +127,7 @@
               </div>
               <div class="col-12 col-lg-8 ">
                 <?= form_open('draft/search', ['method' => 'GET']) ?>
-                <!-- .input-group -->
-                <?php $placeholder = ($ceklevel=='superadmin')? 'placeholder="Enter Category, Theme, or Title" class="form-control"':'placeholder="Enter Title" class="form-control"' ?>
+                <?php $placeholder = ($ceklevel=='superadmin')? 'placeholder="Cari berdasarkan Judul, Kategori, atau Tema" class="form-control"':'placeholder="Enter Title" class="form-control"' ?>
                 <div class="input-group input-group-alt">
                   <?= form_input('keywords', $this->input->get('keywords'), $placeholder) ?>
                   <div class="input-group-append">
@@ -132,29 +137,28 @@
                 </div>
               </div>
             </div>
-            <!-- /.input-group -->
           </div>
           <!-- .table-responsive -->
           <?php if ($drafts):?>
           <div class="table-responsive">
             <!-- .table -->
-            <table class="table nowrap table-striped">
+            <table class="table table-striped">
               <!-- thead -->
               <thead>
                 <tr>
-                  <th scope="col" class="pl-4">No</th>
-                  <th scope="col">Kategori</th>
+                  <th scope="col" class="pl-3">No</th>
+                  <th scope="col" style="min-width:200px;">Kategori</th>
                   <?php if($ceklevel!='reviewer'): ?>
-                  <th scope="col">Penulis</th>
+                  <th scope="col" style="min-width:150px;">Penulis</th>
                   <?php endif ?>
-                  <th scope="col">Judul</th>
-                  <th scope="col">Tanggal Masuk</th>
-                  <th scope="col">Status</th>
+                  <th scope="col" style="min-width:340px;">Judul</th>
+                  <th scope="col" style="max-width:100px;">Tanggal Masuk</th>
+                  <th scope="col" style="min-width:130px;">Status</th>
                   <?php if ($ceklevel == 'reviewer' or $ceklevel == 'editor' or $ceklevel == 'layouter'): ?>
                     <th scope="col">Sisa Waktu</th>
                   <?php endif ?>
                   <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
-                    <th style="width:100px; min-width:100px;"> &nbsp; </th>
+                    <th style="min-width:170px;"> &nbsp; </th>
                   <?php else: ?>
                     <th scope="col"> Aksi </th>
                   <?php endif ?>
@@ -173,7 +177,7 @@
                 ?>
                 <!-- tr -->
                 <tr>
-                  <td class="align-middle pl-4"><?= ++$i ?></td>
+                  <td class="align-middle pl-3"><?= ++$i ?></td>
                   <td class="align-middle"><?= $draft->category_name ?></td>
                   <?php if($ceklevel!='reviewer'): ?>
                   <td class="align-middle"><?= isset($draft->author[0]->author_name)?$draft->author[0]->author_name:'-' ?></td>

@@ -12,73 +12,73 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> User ID </td>
-                <td>: <?= (!empty($input->user_id))? konversiID('user','user_id', $input->user_id)->username : '' ?> </td>
+                <td><?= (!empty($input->user_id))? konversiID('user','user_id', $input->user_id)->username : '' ?> </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> NIP </td>
-                <td>: <?= $input->author_nip ?> </td>
+                <td><?= $input->author_nip ?> </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Nama </td>
-                <td>: <?= $input->author_name ?> </td>
+                <td><?= $input->author_name ?> </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Gelar </td>
-                <td>: <?= $input->author_degree_front ?>, <?= $input->author_degree_back ?></td>
+                <td><?= $input->author_degree_front ?>, <?= $input->author_degree_back ?></td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Pendidikan Terakhir </td>
-                <td>: <?= ucwords($input->author_latest_education) ?></td>
+                <td><?= ucwords($input->author_latest_education) ?></td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Unit Kerja </td>
-                <td> : <?= konversiID('work_unit','work_unit_id', $input->work_unit_id)->work_unit_name;?>  </td>
+                <td> <?= konversiID('work_unit','work_unit_id', $input->work_unit_id)->work_unit_name;?>  </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Institusi </td>
-                <td> : <?= konversiID('institute','institute_id', $input->institute_id)->institute_name;?>  </td>
+                <td> <?= konversiID('institute','institute_id', $input->institute_id)->institute_name;?>  </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Alamat </td>
-                <td>: <?= $input->author_address ?> </td>
+                <td><?= $input->author_address ?> </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> No HP </td>
-                <td>: <?= $input->author_contact ?> </td>
+                <td<?= $input->author_contact ?> </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Email </td>
-                <td>: <?= $input->author_email ?>  </td>
+                <td><?= $input->author_email ?>  </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Ahli Waris </td>
-                <td> : <?= $input->heir_name ?>  </td>
+                <td> <?= $input->heir_name ?>  </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> KTP </td>
-                <td> : <img src="<?=base_url('authorktp/'.$input->author_ktp); ?>" alt="" width="30%"> </td>
+                <td> <img src="<?=base_url('authorktp/'.$input->author_ktp); ?>" alt="" width="30%"> </td>
               </tr>
               <!-- /tr -->
             </tbody>

@@ -68,7 +68,7 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
               <!-- .input-group -->
               <?= form_open('author/search', ['method' => 'GET']) ?>
               <div class="input-group input-group-alt">
-                <?= form_input('keywords', $this->input->get('keywords'), ['placeholder' => 'Enter Work Unit, Institute, NIP, Username, or Name', 'class' => 'form-control']) ?>
+                <?= form_input('keywords', $this->input->get('keywords'), ['placeholder' => 'Cari berdasarkan Nama Penulis, Username, NIP, Unit Kerja atau Institusi', 'class' => 'form-control']) ?>
                 <div class="input-group-append">
                  <?= form_button(['type' => 'submit', 'content' => 'Search', 'class' => 'btn btn-secondary']) ?>
                </div>
@@ -100,7 +100,7 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
                     <!-- tr -->
                     <tr>
                       <td class="align-middle pl-4"><?= ++$i ?></td>
-                      <td class="align-middle"><a href="<?= base_url('author/profil/'.$author->author_id) ?>"><?= $author->author_degree_front ?> <?= ucwords($author->author_name) ?> <?= $author->author_degree_back ?></a></td>
+                      <td class="align-middle"><a href="<?= base_url('author/view/profil/'.$author->author_id) ?>"><?= $author->author_degree_front ?> <?= ucwords($author->author_name) ?> <?= $author->author_degree_back ?></a></td>
                       <td class="align-middle"><?= $author->username ?></td>
                       <td class="align-middle"><?= $author->author_nip ?></td>
                       <td class="align-middle"><?= $author->work_unit_name ?></td>

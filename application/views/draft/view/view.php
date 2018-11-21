@@ -252,7 +252,7 @@
                     <td class="align-middle"><?= $i++ ?></td>
                     <!-- jika admin maka ada linknya ke profil -->
                     <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
-                    <td class="align-middle"><a href="<?= base_url('author/profil/'.$author->author_id) ?>"><?= $author->author_name ?></a></td>
+                    <td class="align-middle"><a href="<?= base_url('author/view/profil/'.$author->author_id) ?>"><?= $author->author_name ?></a></td>
                     <?php else: ?>
                     <td class="align-middle"><?= $author->author_name ?></td>
                     <?php endif ?>

@@ -62,7 +62,7 @@
               <!-- .input-group -->
               <?= form_open('book/search', ['method' => 'GET']) ?>
               <div class="input-group input-group-alt">
-                <?= form_input('keywords', $this->input->get('keywords'), ['placeholder' => 'Enter Category, Theme, or Title', 'class' => 'form-control']) ?>
+                <?= form_input('keywords', $this->input->get('keywords'), ['placeholder' => 'Cari berdasarkan Judul Buku, Kode Buku, ISBN', 'class' => 'form-control']) ?>
                 <div class="input-group-append">
                    <?= form_button(['type' => 'submit', 'content' => 'Search', 'class' => 'btn btn-secondary']) ?>
                 </div>
@@ -80,8 +80,9 @@
                   <tr>
                     <th scope="col" class="pl-4">No</th>
                     <th scope="col">Judul Buku</th>
-                    <th scope="col">Edisi</th>
-                    <th scope="col">Copy</th>
+                    <th scope="col">Penulis</th>
+                    <th scope="col">Kode</th>
+                    <th scope="col">ISBN</th>
                     <th scope="col">Status</th>
                     <th scope="col">Hak Cipta</th>
                     <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
@@ -97,12 +98,13 @@
                   <tr>
                     <td class="align-middle pl-4"><?= ++$i ?></td>
                     <td class="align-middle"><a href="<?= base_url('book/view/'.$book->book_id) ?>"><?= $book->book_title ?></a></td>
-                    <td class="align-middle"><?= $book->book_edition ?></td>
-                    <td class="align-middle"><?= $book->copies_num ?></td>
+                    <td class="align-middle"><?= isset($book->author[0]->author_name)?$book->author[0]->author_name:'-' ?></td>
+                    <td class="align-middle"><?= $book->book_code ?></td>
+                    <td class="align-middle"><?= $book->isbn ?></td>
                     <td class="align-middle"><?= $book->is_reprint == 'y' ? 'Cetak Ulang' : 'Baru' ?></td>
                     <td class="align-middle">
-                      <?= $book->status_hak_cipta == '2' ? 'Sudah jadi' : '' ?>
-                      <?= $book->status_hak_cipta == '1' ? 'Dalam Proses' : '' ?>
+                      <?= $book->status_hak_cipta == '2' ? '<span class="badge badge-success">Sudah Jadi</span>' : '' ?>
+                      <?= $book->status_hak_cipta == '1' ? '<span class="badge badge-warning">Dalam Proses</span>' : '' ?>
                     </td>
                     <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
                     <td style="min-width: 130px" class="align-middle text-right">

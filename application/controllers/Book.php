@@ -13,21 +13,33 @@ class Book extends Operator_Controller
         }
     }
 
-	public function index($page = null)
-	{
+    public function index($page = null)
+    {
         $books     = $this->book->join('draft')->orderBy('draft.draft_id')->orderBy('book_id')->paginate($page)->getAll();
         $tot        = $this->book->join('draft')->orderBy('draft.draft_id')->orderBy('book_id')->getAll();
+
+        //tampilkan author
+        foreach ($books as $key => $value) {
+            if(!empty($value->draft_id)){
+                $authors = $this->book->getIdAndName('author', 'draft_author', $value->draft_id,'draft');
+            }else{
+                $authors = '';
+            }
+
+            $value->author = $authors;
+        }
+
         $total     = count($tot);
         $pages    = $this->pages;
         $main_view  = 'book/index_book';
         $pagination = $this->book->makePagination(site_url('book'), 2, $total);
 
-		$this->load->view('template', compact('pages', 'main_view', 'books', 'pagination', 'total'));
-	}
-        
+        $this->load->view('template', compact('pages', 'main_view', 'books', 'pagination', 'total'));
+    }
+
 // -- add --        
-        public function add()
-	{
+    public function add()
+    {
         if (!$_POST) {
             $input = (object) $this->book->getDefaultValues();
         } else {
@@ -47,8 +59,8 @@ class Book extends Operator_Controller
         
         if($this->book->validate()){
         // Upload new book (if any)
-        if (!empty($_FILES) && $_FILES['book_file']['size'] > 0) {            
-            $getextension=explode(".",$_FILES['book_file']['name']);            
+            if (!empty($_FILES) && $_FILES['book_file']['size'] > 0) {            
+                $getextension=explode(".",$_FILES['book_file']['name']);            
             $bookFileName  = str_replace(" ","_",$input->book_title . '_' . date('YmdHis').".".$getextension[1]); // book file name
             $upload = $this->book->uploadBookfile('book_file', $bookFileName);
 
@@ -58,9 +70,9 @@ class Book extends Operator_Controller
         }   
         
         
-            if (!empty($_FILES) && $_FILES['file_hak_cipta']['size'] > 0) {
+        if (!empty($_FILES) && $_FILES['file_hak_cipta']['size'] > 0) {
                 // Upload new hak cipta (if any)
-                $getextension=explode(".",$_FILES['file_hak_cipta']['name']);            
+            $getextension=explode(".",$_FILES['file_hak_cipta']['name']);            
                 $HCFileName  = str_replace(" ","_",'Hak_Cipta' . '_' . $input->book_title . '_' . date('YmdHis').".".$getextension[1]); // hak cipta file name
                 $upload = $this->book->uploadHCfile('file_hak_cipta', $HCFileName);
 
@@ -86,7 +98,7 @@ class Book extends Operator_Controller
         }
 
         redirect('book');
-	}
+    }
 
     public function view($id = null)
     {
@@ -128,13 +140,13 @@ class Book extends Operator_Controller
 
         redirect('book');
     }
- 
-        
+
+
 // -- edit --         
-        public function edit($id = null)
-	{
-            
-            
+    public function edit($id = null)
+    {
+
+
         $book = $this->book->where('book_id', $id)->get();
         if (!$book) {
             $this->session->set_flashdata('warning', 'Book data were not available');
@@ -167,8 +179,8 @@ class Book extends Operator_Controller
         
         if($this->book->validate()){
         // Upload new book (if any)
-        if (!empty($_FILES) && $_FILES['book_file']['size'] > 0) {            
-            $getextension=explode(".",$_FILES['book_file']['name']);            
+            if (!empty($_FILES) && $_FILES['book_file']['size'] > 0) {            
+                $getextension=explode(".",$_FILES['book_file']['name']);            
             $bookFileName  = str_replace(" ","_",$input->book_title . '_' . date('YmdHis').".".$getextension[1]); // book file name
             $upload = $this->book->uploadBookfile('book_file', $bookFileName);
 
@@ -197,41 +209,41 @@ class Book extends Operator_Controller
             //         }
             //     }
             // }
-        }
-        
-        
+    }
+
+
         // If something wrong
-        if (!$this->book->validate() || $this->form_validation->error_array()) {
-            $pages    = $this->pages;
-            $main_view   = 'book/form_book';
-            $form_action = "book/edit/$id";
+    if (!$this->book->validate() || $this->form_validation->error_array()) {
+        $pages    = $this->pages;
+        $main_view   = 'book/form_book';
+        $form_action = "book/edit/$id";
 
-            $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
-            return;
-        }
+        $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
+        return;
+    }
 
-        if ($this->book->where('book_id', $id)->update($input)) {
-            $this->session->set_flashdata('success', 'Data updated');
-        } else {
-            $this->session->set_flashdata('error', 'Data failed to update');
-        }
+    if ($this->book->where('book_id', $id)->update($input)) {
+        $this->session->set_flashdata('success', 'Data updated');
+    } else {
+        $this->session->set_flashdata('error', 'Data failed to update');
+    }
 
+    redirect('book');
+}
+
+public function edit_hakcipta($id = null)
+{
+
+    $book = $this->book->where('book_id', $id)->get();
+    if (!$book) {
+        $this->session->set_flashdata('warning', 'Book data were not available');
         redirect('book');
-	}
+    }
 
-    public function edit_hakcipta($id = null)
-    {
-            
-        $book = $this->book->where('book_id', $id)->get();
-        if (!$book) {
-            $this->session->set_flashdata('warning', 'Book data were not available');
-            redirect('book');
-        }
-
-        if (!$_POST) {
-            $input = (object) $book;
-        } else {
-            $input = (object) $this->input->post(null, true);
+    if (!$_POST) {
+        $input = (object) $book;
+    } else {
+        $input = (object) $this->input->post(null, true);
             $input->book_file = $book->book_file; // Set book file for preview.
             //$input->cover = $book->cover; // Set cover untuk preview.
         }
@@ -277,68 +289,90 @@ class Book extends Operator_Controller
     }
 
 // -- delete --         
-        public function delete($id = null)
-	{
-	$book = $this->book->where('book_id', $id)->get();
-        if (!$book) {
-            $this->session->set_flashdata('warning', 'Book data were not available');
-            redirect('book');
-        }
-
-        if ($this->book->where('book_id', $id)->delete()) {
-            // Delete book.
-            $this->book->deleteBookfile($book->book_file);
-            // Delete HC.
-            $this->book->deleteHCfile($book->file_hak_cipta);
-            $this->session->set_flashdata('success', 'Data deleted');
-		} else {
-            $this->session->set_flashdata('error', 'Data failed to delete');
-        }
-
-		redirect('book');
-	}
- 
-// -- search --        
-        public function search($page = null)
-        {
-        $keywords   = $this->input->get('keywords', true);
-        $books     = $this->book->like('book_code', $keywords)
-                                  ->orLike('draft_title', $keywords)
-                                  ->orLike('book_title', $keywords)
-                                  ->orLike('ISBN', $keywords)
-                                  ->join('draft')
-                                  ->orderBy('book_id')
-                                  ->orderBy('draft.draft_id')
-                                  ->orderBy('book_title')                
-                                  ->orderBy('book_code')
-                                  ->orderBy('ISBN')
-                                  ->paginate($page)
-                                  ->getAll();
-        $tot        = $this->book->like('book_code', $keywords)
-                                  ->orLike('draft_title', $keywords)
-                                  ->orLike('book_title', $keywords)
-                                  ->orLike('ISBN', $keywords)
-                                  ->join('draft')
-                                  ->orderBy('book_id')
-                                  ->orderBy('draft.draft_id')
-                                  ->orderBy('book_title')                
-                                  ->orderBy('book_code')
-                                  ->orderBy('ISBN')
-                                  ->getAll();
-        $total = count($tot);
-
-        $pagination = $this->book->makePagination(site_url('book/search/'), 3, $total);
-
-        if (!$books) {
-            $this->session->set_flashdata('warning', 'Data were not found');
-            redirect('book');
-        }
-
-        $pages    = $this->pages;
-        $main_view  = 'book/index_book';
-        $this->load->view('template', compact('pages', 'main_view', 'books', 'pagination', 'total'));
+    public function delete($id = null)
+    {
+       $book = $this->book->where('book_id', $id)->get();
+       if (!$book) {
+        $this->session->set_flashdata('warning', 'Book data were not available');
+        redirect('book');
     }
-        
+
+    if ($this->book->where('book_id', $id)->delete()) {
+            // Delete book.
+        $this->book->deleteBookfile($book->book_file);
+            // Delete HC.
+        $this->book->deleteHCfile($book->file_hak_cipta);
+        $this->session->set_flashdata('success', 'Data deleted');
+    } else {
+        $this->session->set_flashdata('error', 'Data failed to delete');
+    }
+
+    redirect('book');
+}
+
+// -- search --        
+public function search($page = null)
+{
+    $keywords = $this->input->get('keywords', true);
+    $books    = $this->book->like('book_code', $keywords)
+    ->orLike('draft_title', $keywords)
+    ->orLike('book_title', $keywords)
+    ->orLike('ISBN', $keywords)
+    ->orLike('author_name', $keywords)
+    ->join('draft')
+    ->joinRelationMiddle('draft', 'draft_author')
+    ->joinRelationDest('author', 'draft_author')
+    ->orderBy('book_id')
+    ->orderBy('draft.draft_id')
+    ->orderBy('book_title')                
+    ->orderBy('book_code')
+    ->orderBy('ISBN')
+    ->paginate($page)
+    ->getAll();
+    $tot      = $this->book->like('book_code', $keywords)
+    ->orLike('draft_title', $keywords)
+    ->orLike('book_title', $keywords)
+    ->orLike('ISBN', $keywords)
+    ->orLike('author_name', $keywords)
+    ->join('draft')
+    ->joinRelationMiddle('draft', 'draft_author')
+    ->joinRelationDest('author', 'draft_author')
+    ->orderBy('book_id')
+    ->orderBy('draft.draft_id')
+    ->orderBy('book_title')                
+    ->orderBy('book_code')
+    ->orderBy('ISBN')
+    ->getAll();
+    $total = count($tot);
+
+    $pagination = $this->book->makePagination(site_url('book/search/'), 3, $total);
+
+    if (!$books) {
+        $this->session->set_flashdata('warning', 'Data were not found');
+        redirect('book');
+    }else {
+        foreach ($books as $key => $value) {
+            $authors       = $this->book->getIdAndName('author', 'draft_author', $value->draft_id,'draft');
+            $value->author = $authors;
+        }
+    }
+
+    //tampilkan author
+        foreach ($books as $key => $value) {
+            if(!empty($value->draft_id)){
+                $authors = $this->book->getIdAndName('author', 'draft_author', $value->draft_id,'draft');
+            }else{
+                $authors = '';
+            }
+
+            $value->author = $authors;
+        }
+
+    $pages    = $this->pages;
+    $main_view  = 'book/index_book';
+    $this->load->view('template', compact('pages', 'main_view', 'books', 'pagination', 'total'));
+}
+
         /*
     |-----------------------------------------------------------------
     | Callback
@@ -401,7 +435,7 @@ class Book extends Operator_Controller
         return true;
     }
     
-            public function is_date_format_valid($str)
+    public function is_date_format_valid($str)
     {
         if(!preg_match('/([0-9]{4})-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])/', $str)) {
             //tanggal boleh kosong

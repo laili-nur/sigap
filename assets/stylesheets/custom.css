@@ -7,6 +7,15 @@
     min-width: 500px;
 }*/
 
+/*tombol info kecil di pojokan card dashboard*/
+.info-home {
+    position: absolute;
+    top: 5px;
+    right: 5px; 
+    font-size: 15px;
+    color: #346CB0;
+}
+
 .breadcrumb {
     background-image: -webkit-linear-gradient(top, #fff 0, #f8f8f8 100%);
     background-image: -o-linear-gradient(top, #fff 0, #f8f8f8 100%);

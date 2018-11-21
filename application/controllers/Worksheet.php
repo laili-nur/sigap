@@ -13,20 +13,67 @@ class Worksheet extends Operator_Controller
         }
     }
 
-	public function index($page = null)
-	{
+    public function index($page = null)
+    {
         $worksheets     = $this->worksheet->join('draft')->orderBy('worksheet_status')->orderBy('worksheet_id','desc')->orderBy('worksheet_num')->paginate($page)->getAll();
         $total       = $this->worksheet->join('draft')->count();
         $pages    = $this->pages;
         $main_view  = 'worksheet/index_worksheet';
         $pagination = $this->worksheet->makePagination(site_url('worksheet'), 2, $total);
 
-		$this->load->view('template', compact('pages', 'main_view', 'worksheets', 'pagination', 'total'));
-	}
-        
-        
-        public function add()
-	{
+        $this->load->view('template', compact('pages', 'main_view', 'worksheets', 'pagination', 'total'));
+    }
+
+    public function filter($page = null)
+    {
+        $filter   = $this->input->get('filter', true);
+        $this->db->group_by('worksheet.worksheet_id');
+        if($filter == 'waiting'){
+            $worksheets = $this->worksheet->join('draft')
+            ->where('draft_status',0)
+            ->orderBy('worksheet_num')
+            ->paginate($page)
+            ->getAll();
+            $total = $this->worksheet->join('draft')
+            ->where('draft_status',0)
+            ->count();
+        }elseif($filter == 'approved'){
+            $worksheets = $this->worksheet->join('draft')
+            ->where('draft_status',1)
+            ->orderBy('worksheet_num')
+            ->paginate($page)
+            ->getAll();
+            $total = $this->worksheet->join('draft')
+            ->where('draft_status',1)
+            ->count();
+        }elseif($filter == 'rejected'){
+            $worksheets = $this->worksheet->join('draft')
+            ->where('draft_status',2)
+            ->orderBy('worksheet_num')
+            ->paginate($page)
+            ->getAll();
+            $total = $this->worksheet->join('draft')
+            ->where('draft_status',2)
+            ->count();
+        }else{
+            redirect(base_url('worksheet'));
+        }
+
+        $pagination = $this->worksheet->makePagination(site_url('worksheet/filter/'), 3, $total);
+
+        if (!$worksheets) {
+            $this->session->set_flashdata('warning', 'Data were not found');
+            redirect($this->pages);
+        }
+
+        $pages    = $this->pages;
+        $main_view  = 'worksheet/index_worksheet';
+        $this->load->view('template', compact('pages', 'main_view', 'worksheets', 'pagination', 'total'));
+    }
+
+
+    public function add()
+    {
         if (!$_POST) {
             $input = (object) $this->worksheet->getDefaultValues();
         } else {
@@ -49,15 +96,17 @@ class Worksheet extends Operator_Controller
         }
 
         redirect('worksheet');
-	}
-        
-        public function edit($id = null)
-	{
+    }
+
+    public function edit($id = null)
+    {
         $worksheet = $this->worksheet->where('worksheet_id', $id)->get();
         $data = array('draft_id' => $worksheet->draft_id);
-        $draft_title = $this->worksheet->getWhere($data, 'draft');
+        $draft = $this->worksheet->getWhere($data, 'draft');
 
-        $worksheet->draft_title = $draft_title->draft_title;
+        $worksheet->draft_title = $draft->draft_title;
+        $worksheet->draft_file = $draft->draft_file;
+        $worksheet->draft_file_link = $draft->draft_file_link;
 
         if (!$worksheet) {
             $this->session->set_flashdata('warning', 'Worksheet data were not available');
@@ -80,6 +129,10 @@ class Worksheet extends Operator_Controller
         }
 
         $input->worksheet_pic = $this->username;
+
+        unset($input->files);
+        unset($input->draft_file);
+        unset($input->draft_file_link);
         
         if ($this->worksheet->where('worksheet_id', $id)->update($input)) {
             if($input->worksheet_status == 1){
@@ -96,7 +149,7 @@ class Worksheet extends Operator_Controller
         }
 
         redirect('worksheet');
-	}
+    }
 
     public function action($id, $action)
     {
@@ -130,7 +183,7 @@ class Worksheet extends Operator_Controller
 
         redirect('worksheet');
     }
-        
+
 //        public function delete($id = null)
 //	{
 //	$worksheet = $this->worksheet->where('worksheet_id', $id)->get();
@@ -147,25 +200,23 @@ class Worksheet extends Operator_Controller
 //
 //		redirect('worksheet');
 //	}
-        
-        public function search($page = null)
-        {
+
+    public function search($page = null)
+    {
         $keywords       = $this->input->get('keywords', true);
         $worksheets     = $this->worksheet->like('worksheet_num', $keywords)
-                                  ->orLike('draft_title', $keywords)
-                                  ->join('draft')
-                                  ->orderBy('worksheet_id')
-                                  ->orderBy('draft.draft_id')
-                                  ->orderBy('worksheet_num')  
-                                  ->paginate($page)
-                                  ->getAll();
+        ->orLike('draft_title', $keywords)
+        ->join('draft')
+        ->orderBy('draft.draft_title')
+        ->orderBy('worksheet_num')  
+        ->paginate($page)
+        ->getAll();
         $tot            = $this->worksheet->like('worksheet_num', $keywords)
-                                  ->orLike('draft_title', $keywords)
-                                  ->join('draft')
-                                  ->orderBy('worksheet_id')
-                                  ->orderBy('draft.draft_id')
-                                  ->orderBy('worksheet_num')  
-                                  ->getAll();
+        ->orLike('draft_title', $keywords)
+        ->join('draft')
+        ->orderBy('draft.draft_title')
+        ->orderBy('worksheet_num')  
+        ->getAll();
         $total = count($tot);
 
         $pagination = $this->worksheet->makePagination(site_url('worksheet/search/'), 3, $total);
@@ -179,21 +230,19 @@ class Worksheet extends Operator_Controller
         $main_view  = 'worksheet/index_worksheet';
         $this->load->view('template', compact('pages', 'main_view', 'worksheets', 'pagination', 'total'));
     }
-        
-        /*
-    |-----------------------------------------------------------------
-    | Callback
-    |-----------------------------------------------------------------
-    */
-//    public function alpha_coma_dash_dot_space($str)
-//    {
-//        if ( !preg_match('/^[a-zA-Z .,\-]+$/i',$str) )
-//        {
-//            $this->form_validation->set_message('alpha_coma_dash_dot_space', 'Can only be filled with letters, numbers, dash(-), dot(.), and comma(,).');
-//            return false;
-//        }
-//    }
-//
+
+    /*================================
+    =            Callback            =
+    ================================*/
+    //    public function alpha_coma_dash_dot_space($str)
+    //    {
+    //        if ( !preg_match('/^[a-zA-Z .,\-]+$/i',$str) )
+    //        {
+    //            $this->form_validation->set_message('alpha_coma_dash_dot_space', 'Can only be filled with letters, numbers, dash(-), dot(.), and comma(,).');
+    //            return false;
+    //        }
+    //    }
+    //
     public function unique_worksheet_num()
     {
         $worksheet_num      = $this->input->post('worksheet_num');
@@ -210,7 +259,7 @@ class Worksheet extends Operator_Controller
         return true;
     }
     
-        public function unique_worksheet_draft()
+    public function unique_worksheet_draft()
     {
         $draft_id      = $this->input->post('draft_id');
         $worksheet_id = $this->input->post('worksheet_id');

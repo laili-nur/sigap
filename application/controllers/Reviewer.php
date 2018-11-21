@@ -21,6 +21,10 @@ class Reviewer extends Operator_Controller
         $main_view  = 'reviewer/index_reviewer';
         $pagination = $this->reviewer->makePagination(site_url('reviewer'), 2, $total);
 
+        foreach ($reviewers as $reviewer) {
+            $reviewer->reviewer_expert = explode(",",$reviewer->reviewer_expert);
+        }
+
         $this->load->view('template', compact('pages', 'main_view', 'reviewers', 'pagination', 'total'));
     }
         
@@ -177,6 +181,10 @@ class Reviewer extends Operator_Controller
         if (!$reviewers) {
             $this->session->set_flashdata('warning', 'Data were not found');
             redirect('reviewer');
+        }else{
+            foreach ($reviewers as $reviewer) {
+                $reviewer->reviewer_expert = explode(",",$reviewer->reviewer_expert);
+            }
         }
 
         $pages    = $this->pages;

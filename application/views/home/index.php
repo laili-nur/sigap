@@ -1,7 +1,8 @@
 <?php
    $username = $this->session->userdata('username');
    $is_login = $this->session->userdata('is_login');
-   $ceklevel    = $this->session->userdata('level');
+   $ceklevel = $this->session->userdata('level');
+   $cekrole  = $this->session->userdata('role_id'); 
    $semua    = $this->session->userdata();
    ?>
 <!-- .page-title-bar -->
@@ -29,13 +30,13 @@
             <!-- .metric -->
             <a href="
               <?=base_url('category') ?>" class="metric metric-bordered align-items-center">
-              <h2 class="metric-label"> Kategori </h2>
+              <h2 class="metric-label"> Total Kategori </h2>
               <p class="metric-value h3">
                 <sub>
                   <i class="fa fa-list-alt"></i>
                 </sub>
                 <span class="value">
-                  <?=$drafts['tot_category'] ?>
+                  <?=$count['tot_category'] ?>
                 </span>
               </p>
             </a>
@@ -47,13 +48,13 @@
             <!-- .metric -->
             <a href="
               <?=base_url('draft') ?>" class="metric metric-bordered align-items-center">
-              <h2 class="metric-label"> Draft </h2>
+              <h2 class="metric-label"> Total Draft Masuk </h2>
               <p class="metric-value h3">
                 <sub>
                   <i class="fa fa-paperclip"></i>
                 </sub>
                 <span class="value">
-                  <?=$drafts['tot_draft'] ?>
+                  <?=$count['tot_draft'] ?>
                 </span>
               </p>
             </a>
@@ -65,13 +66,13 @@
             <!-- .metric -->
             <a href="
               <?=base_url('book') ?>" class="metric metric-bordered align-items-center">
-              <h2 class="metric-label"> Buku </h2>
+              <h2 class="metric-label"> Total Buku </h2>
               <p class="metric-value h3">
                 <sub>
                   <i class="fa fa-book"></i>
                 </sub>
                 <span class="value">
-                  <?=$drafts['tot_book'] ?>
+                  <?=$count['tot_book'] ?>
                 </span>
               </p>
             </a>
@@ -83,13 +84,13 @@
             <!-- .metric -->
             <a href="
               <?=base_url('author') ?>" class="metric metric-bordered align-items-center">
-              <h2 class="metric-label"> Penulis </h2>
+              <h2 class="metric-label"> Total Penulis </h2>
               <p class="metric-value h3">
                 <sub>
                   <i class="fa fa-users"></i>
                 </sub>
                 <span class="value">
-                  <?=$drafts['tot_author'] ?>
+                  <?=$count['tot_author'] ?>
                 </span>
               </p>
             </a>
@@ -101,13 +102,13 @@
             <!-- .metric -->
             <a href="
               <?=base_url('reviewer') ?>" class="metric metric-bordered align-items-center">
-              <h2 class="metric-label"> Reviewer </h2>
+              <h2 class="metric-label"> Total Reviewer </h2>
               <p class="metric-value h3">
                 <sub>
                   <i class="fa fa-university"></i>
                 </sub>
                 <span class="value">
-                  <?=$drafts['tot_reviewer'] ?>
+                  <?=$count['tot_reviewer'] ?>
                 </span>
               </p>
             </a>
@@ -123,6 +124,7 @@
   <div class="section-block card px-4 pt-3">
     <h4 class="card-title m-0 p-0"> Ringkasan Draft </h4>
     <hr>
+    <small class="text-muted">Data dibawah ini merupakan jumlah keseluruhan draft sampai saat ini.</small>
       <!-- metric row -->
       <div class="metric-row">
         <div class="col-12">
@@ -130,8 +132,7 @@
             <!-- metric column -->
             <div class="col">
               <!-- .metric -->
-              <a href="
-                <?=base_url('draft/filter?filter=desk-screening') ?>" class="metric metric-bordered align-items-center">
+              <a href="<?=base_url('draft/filter?filter=desk-screening') ?>" class="metric metric-bordered align-items-center">
                 <div class="metric-badge">
                   <span class="badge badge-lg badge-secondary">
                     <span class="oi oi-media-record pulse mr-1"></span> DESK SCREENING
@@ -142,8 +143,9 @@
                     <i class="fa fa-tasks"></i>
                   </sub>
                   <span class="value">
-                    <?=$drafts['tot_desk_phase'] ?>
+                    <?=$count['draft_desk'] ?>
                   </span>
+                  <span href="#" onclick="event.preventDefault()" class="font-weight-bold info-home" data-toggle="tooltip" data-html="true"  data-placement="left" title="Desk Screening = <?=$count['draft_desk'] ?><br>Lolos Desk Screening = <?=$count['draft_desk_lolos'] ?>" ><i class="fa fa-info-circle"></i></span>
                 </p>
               </a>
               <!-- /.metric -->
@@ -164,7 +166,7 @@
                     <i class="fa fa-tasks"></i>
                   </sub>
                   <span class="value">
-                    <?=$drafts['tot_review_phase'] ?>
+                    <?=$count['draft_review'] ?>
                   </span>
                 </p>
               </a>
@@ -186,7 +188,7 @@
                     <i class="fa fa-tasks"></i>
                   </sub>
                   <span class="value">
-                    <?=$drafts['tot_edit_phase'] ?>
+                    <?=$count['draft_edit'] ?>
                   </span>
                 </p>
               </a>
@@ -208,7 +210,7 @@
                     <i class="fa fa-tasks"></i>
                   </sub>
                   <span class="value">
-                    <?=$drafts['tot_layout_phase'] ?>
+                    <?=$count['draft_layout'] ?>
                   </span>
                 </p>
               </a>
@@ -230,7 +232,7 @@
                     <i class="fa fa-tasks"></i>
                   </sub>
                   <span class="value">
-                    <?=$drafts['tot_proofread_phase'] ?>
+                    <?=$count['draft_proofread'] ?>
                   </span>
                 </p>
               </a>
@@ -248,34 +250,69 @@
             <!-- metric column -->
             <div class="col">
               <!-- .metric -->
-              <a href="
-                <?=base_url('draft/filter?filter=final') ?>" class="metric metric-bordered align-items-center">
+              <div class="metric metric-bordered align-items-center">
                 <h2 class="metric-label">
-                  <i class="fa fa-check"></i> Draft disetujui 
+                  <i class="fa fa-check"></i> Draft diterima
                 </h2>
                 <p class="metric-value h3">
                   <span class="value">
-                    <?=$drafts['tot_approved'] ?>
+                    <?=$count['draft_review_lolos'] ?>
                   </span>
+                  <a href="#" onclick="event.preventDefault()" class="font-weight-bold info-home" data-toggle="tooltip" data-html="true" data-placement="left" title="Draft yang lolos review"  ><i class="fa fa-info-circle"></i></a>
                 </p>
-              </a>
+              </div>
               <!-- /.metric -->
             </div>
             <!-- /metric column -->
             <!-- metric column -->
             <div class="col">
               <!-- .metric -->
-              <a href="
-                <?=base_url('draft/filter?filter=reject') ?>" class="metric metric-bordered align-items-center">
+              <div class="metric metric-bordered align-items-center">
                 <h2 class="metric-label">
-                  <i class="fa fa-times"></i> Draft ditolak 
+                  <i class="fa fa-sync"></i> Draft dalam proses
+                </h2>
+                <p class="metric-value ">
+                  <span class="value h3">
+                    <?=$count['draft_in_progress'] ?>
+                  </span>
+                  <a href="#" onclick="event.preventDefault()" class="font-weight-bold info-home" data-toggle="tooltip" data-placement="left" title="Total Draft yang sedang dalam tahap editorial, layout, dan proofread" ><i class="fa fa-info-circle"></i></a>
+                </p>
+
+              </div>
+              <!-- /.metric -->
+            </div>
+            <!-- /metric column -->
+            <!-- metric column -->
+            <div class="col">
+              <!-- .metric -->
+              <div class="metric metric-bordered align-items-center">
+                <h2 class="metric-label">
+                  <i class="fa fa-check"></i> Draft final 
                 </h2>
                 <p class="metric-value h3">
                   <span class="value">
-                    <?=$drafts['tot_rejected'] ?>
+                    <?=$count['draft_final'] ?>
                   </span>
+                  <a href="#" onclick="event.preventDefault()" class="font-weight-bold info-home" data-toggle="tooltip" data-html="true"  data-placement="left" title="Draft yang sudah selesai proses" ><i class="fa fa-info-circle"></i></a>
                 </p>
-              </a>
+              </div>
+              <!-- /.metric -->
+            </div>
+            <!-- /metric column -->
+            <!-- metric column -->
+            <div class="col">
+              <!-- .metric -->
+              <div class="metric metric-bordered align-items-center">
+                <h2 class="metric-label">
+                   <i class="fa fa-times"></i> Draft ditolak
+                </h2>
+                <p class="metric-value">
+                  <span class="value h3">
+                    <?=$count['draft_rejected_total'] ?>
+                  </span>
+                  <a href="#" onclick="event.preventDefault()" class="font-weight-bold info-home" data-toggle="tooltip" data-placement="left" title="Draft yang ditolak pada tahap desk screening dan tahap selanjutnya" ><i class="fa fa-info-circle"></i></a>
+                </p>
+              </div>
               <!-- /.metric -->
             </div>
             <!-- /metric column -->
@@ -708,8 +745,14 @@
                 <!-- /.d-flex -->
               </header>
               <!-- /.card-header -->
-              <!-- .table-responsive -->
+              <?php if($cekrole == 0): ?>
+              <div class="alert alert-warning m-3">
+                <strong>Penulis belum didaftarkan</strong><br>
+                Untuk mengusulkan kategori, penulis perlu didaftarkan oleh admin
+              </div>
+              <?php else: ?>
               <?php if ($categories):?>
+              <!-- .table-responsive -->
               <div class="table-responsive table-striped">
                 <!-- .table -->
                 <table class="table">
@@ -792,6 +835,7 @@
               <p class="text-center my-4">Data tidak tersedia</p>
               <?php endif ?>
               <!-- /.table-responsive -->
+              <?php endif ?>
             </section>
             <!-- /.card -->
           </div>

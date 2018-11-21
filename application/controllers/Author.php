@@ -15,19 +15,23 @@ class Author extends Operator_Controller
 
 	public function index($page = null)
 	{
-        $authors     = $this->author->join('work_unit')->join('institute')->join('bank')->join('user')->orderBy('work_unit.work_unit_id')->orderBy('institute.institute_id')->orderBy('author_nip')->paginate($page)->getAll();
+        $authors    = $this->author->join('work_unit')->join('institute')->join('bank')->join('user')->orderBy('work_unit.work_unit_id')->orderBy('institute.institute_id')->orderBy('author_nip')->paginate($page)->getAll();
         $tot        = $this->author->join('work_unit')->join('institute')->join('bank')->join('user')->orderBy('work_unit.work_unit_id')->orderBy('institute.institute_id')->orderBy('author_nip')->getAll();
-        $total     = count($tot);
-        $pages    = $this->pages;
+        $total      = count($tot);
+        $pages      = $this->pages;
         $main_view  = 'author/index_author';
         $pagination = $this->author->makePagination(site_url('author'), 2, $total);
-
-		$this->load->view('template', compact('pages', 'main_view', 'authors', 'pagination', 'total'));
+        
+        $this->load->view('template', compact('pages', 'main_view', 'authors', 'pagination', 'total'));
 	}
 
-    public function profil($id = null)
+    public function view($halaman, $id = null)
     {
-        $author = $this->author->where('author_id', $id)->get();
+        if($halaman and $id == null){
+            redirect('author');
+        }
+
+        $author = $this->author->join3('user','author','user')->where('author_id', $id)->get();
         if (!$author) {
             $this->session->set_flashdata('warning', 'Author data were not available');
             redirect('author');
@@ -39,42 +43,19 @@ class Author extends Operator_Controller
             $input = (object) $this->input->post(null, true);
         }
 
-        if (!$this->author->validate()) {
-            $main_view   = 'author/view_author';
-            $form_action = "author/edit/$id";
-            $pages    = $this->pages;
-            $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
-            return;
-        }
+        //total draft penulis
+        $drafts =  $this->author->select(['draft_author.author_id','author_name','draft_author.draft_id','draft_title','category_name','theme_name','entry_date','finish_date'])->join3('draft_author','author','author')->join3('draft','draft_author','draft')->join3('category','draft','category')->join3('theme','draft','theme')->where('draft_author.author_id',$id)->getAll();
 
-        if ($this->author->where('author_id', $id)->update($input)) {
-            $this->session->set_flashdata('success', 'Data updated');
-        } else {
-            $this->session->set_flashdata('error', 'Data failed to update');
-        }
+        //total riwayat draft
+        $total_draft =  count($drafts);
 
-        redirect('author');
-    }
+        $books =  $this->author->join3('draft','book','draft')->join3('draft_author','draft','draft')->join3('author','draft_author','author')->where('draft_author.author_id',$id)->getAll('book');
 
-    public function riwayat_draft($id = null)
-    {
-        $author = $this->author->where('author_id', $id)->get();
-        if (!$author) {
-            $this->session->set_flashdata('warning', 'Author data were not available');
-            redirect('author');
-        }
-
-        if (!$_POST) {
-            $input = (object) $author;
-        } else {
-            $input = (object) $this->input->post(null, true);
-        }
-
-        $drafts =  $this->author->select(['draft_author.author_id','author_name','draft_author.draft_id','draft_title','category_name','theme_name','entry_date'])->join3('draft_author','author','author')->join3('draft','draft_author','draft')->join3('category','draft','category')->join3('theme','draft','theme')->where('draft_author.author_id',$id)->getAll();
+        $total_book =  count($books);
 
         $main_view   = 'author/view_author';
         $pages    = $this->pages;
-        $this->load->view('template', compact('pages','main_view', 'drafts', 'input'));
+        $this->load->view('template', compact('pages','main_view', 'drafts', 'input', 'total_draft','books','total_book'));
     
     }
         
@@ -167,9 +148,9 @@ class Author extends Operator_Controller
         redirect('author');
 	}
         
-        public function delete($id = null)
+    public function delete($id = null)
 	{
-	$author = $this->author->where('author_id', $id)->get();
+	   $author = $this->author->where('author_id', $id)->get();
         if (!$author) {
             $this->session->set_flashdata('warning', 'Author data were not available');
             redirect('author');

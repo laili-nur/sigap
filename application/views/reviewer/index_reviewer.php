@@ -60,7 +60,7 @@
               <!-- .input-group -->
               <?= form_open('reviewer/search', ['method' => 'GET']) ?>
               <div class="input-group input-group-alt">
-                <?= form_input('keywords', $this->input->get('keywords'), ['placeholder' => 'Enter Work Unit, Institute, NIP, Username, or Name', 'class' => 'form-control']) ?>
+                <?= form_input('keywords', $this->input->get('keywords'), ['placeholder' => 'Cari berdasarkan Nama Reviewer, Username, NIP, Fakultas, atau Kepakaran', 'class' => 'form-control']) ?>
                 <div class="input-group-append">
                    <?= form_button(['type' => 'submit', 'content' => 'Search', 'class' => 'btn btn-secondary']) ?>
                 </div>
@@ -72,7 +72,7 @@
             <?php if ($reviewers):?>
             <div class="table-responsive">
               <!-- .table -->
-              <table class="table nowrap table-striped">
+              <table class="table table-striped">
                 <!-- thead -->
                 <thead>
                   <tr>
@@ -96,7 +96,13 @@
                     <td class="align-middle"><?= $reviewer->username ?></td>
                     <td class="align-middle"><?= $reviewer->reviewer_nip ?></td>
                     <td class="align-middle"><?= $reviewer->faculty_name  ?></td>
-                    <td class="align-middle"><?= $reviewer->reviewer_expert  ?></td>
+                    <td class="align-middle">
+                      <?php foreach ($reviewer->reviewer_expert as $pakar) {
+                        echo '<span class="badge badge-info">'.$pakar.'</span>&nbsp;';
+                      }  
+                      ?>
+                      
+                    </td>
                     <td class="align-middle text-right">
                       <a href="<?= base_url('reviewer/edit/'.$reviewer->reviewer_id.'') ?>" class="btn btn-sm btn-secondary">
                         <i class="fa fa-pencil-alt"></i>

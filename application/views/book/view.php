@@ -11,7 +11,7 @@
           <a href="<?=base_url()?>">Penerbitan</a>
         </li>
                 <li class="breadcrumb-item">
-          <a href="<?=base_url('book')?>">Book</a>
+          <a href="<?=base_url('book')?>">Buku</a>
         </li>
         <li class="breadcrumb-item">
           <a class="text-muted"><?= $input->book_title ?></a>
@@ -71,6 +71,18 @@
                 <td><?= $input->book_edition ?> </td>
               </tr>
               <!-- /tr -->
+               <!-- tr -->
+              <tr>
+                <td width="200px"> ISBN </td>
+                <td><?= $input->isbn ?> </td>
+              </tr>
+              <!-- /tr -->
+               <!-- tr -->
+              <tr>
+                <td width="200px"> eISBN </td>
+                <td><?= $input->eisbn ?> </td>
+              </tr>
+              <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Kategori </td>
@@ -116,6 +128,12 @@
               <tr>
                 <td width="200px"> Catatan Buku </td>
                 <td><?= $input->book_notes ?></td>
+              </tr>
+              <!-- /tr -->
+              <!-- tr -->
+              <tr>
+                <td width="200px"> Referensi Draft </td>
+                <td><a href="<?=base_url('draft/view/'.$input->draft_id) ?>"><?=$input->draft_title ?></a></td>
               </tr>
               <!-- /tr -->
             </tbody>

@@ -34,24 +34,12 @@
           <?= isset($input->book_id) ? form_hidden('book_id', $input->book_id) : '' ?>
           <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
           <?= isset($input->book_title) ? form_hidden('book_title', $input->book_title) : '' ?>
-          <!-- <?= isset($input->book_code) ? form_hidden('book_code', $input->book_code) : '' ?>
-          <?= isset($input->book_edition) ? form_hidden('book_edition', $input->book_edition) : '' ?>
-          <?= isset($input->isbn) ? form_hidden('isbn', $input->isbn) : '' ?>
-          <?= isset($input->eisbn) ? form_hidden('eisbn', $input->eisbn) : '' ?>
-          <?= isset($input->book_file) ? form_hidden('book_file', $input->book_file) : '' ?>
-          <?= isset($input->book_file_link) ? form_hidden('book_file_link', $input->book_file_link) : '' ?>
-          <?= isset($input->published_date) ? form_hidden('published_date', $input->published_date) : '' ?>
-          <?= isset($input->printing_type) ? form_hidden('printing_type', $input->printing_type) : '' ?>
-          <?= isset($input->serial_num) ? form_hidden('serial_num', $input->serial_num) : '' ?>
-          <?= isset($input->serial_num_per_year) ? form_hidden('serial_num_per_year', $input->serial_num_per_year) : '' ?>
-          <?= isset($input->copies_num) ? form_hidden('copies_num', $input->copies_num) : '' ?>
-          <?= isset($input->book_notes) ? form_hidden('book_notes', $input->book_notes) : '' ?>
-          <?= isset($input->is_reprint) ? form_hidden('is_reprint', $input->is_reprint) : '' ?> -->
             
             <!-- .form-group -->
           <div class="form-group">
-            <label for="book_title">Judul</label>
-            <h6><?=$input->book_title ?></h6>
+            <label for="book_title">Judul Buku</label>
+            <p class="font-weight-bold"><?=$input->book_title ?></p>
+            <?= empty($input->draft_id)? '<small class="text-danger">Tidak ada Draft yang diasosiasikan ke buku ini. Silakan pilih draft untuk diasosiasikan. <a href="'.base_url('book/edit/'.$input->book_id).'">Klik di sini</a> </small>':'' ?>
           </div>
           <!-- /.form-group -->
           <!-- .form-group -->

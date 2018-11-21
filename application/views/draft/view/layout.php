@@ -104,7 +104,7 @@
                             <?= form_upload('layout_file','','class="custom-file-input naskah" id="layout_file"') ?> 
                             <label class="custom-file-label" for="layout_file">Choose file</label>
                           </div>
-                        <small class="form-text text-muted">Tipe file upload  bertype : docx, doc, dan pdf.</small>
+                        <small class="form-text text-muted">Tipe file upload  bertype : idml, indd, indt dan pdf.</small>
                         <!-- /.input-group -->
                       </div>
                       <!-- /.form-group -->
@@ -561,7 +561,7 @@
           rules: {
             layout_file: {
               require_from_group: [1, ".naskah"],
-              dokumen: "docx|doc|pdf",
+              dokumen: "idml|indd|indt|pdf",
               filesize50: 52428200
             },
             layouter_file_link : {
