@@ -1,3 +1,13 @@
+function doublescroll(){
+   $('.double-scroll').doubleScroll({
+      resetOnWindowResize: true,
+      onlyIfScroll: true,
+      timeToWaitForResize: 30
+
+    }); 
+}
+    
+
 function preview_image(event) {
     var reader = new FileReader();
     reader.onload = function() {

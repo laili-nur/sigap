@@ -92,19 +92,19 @@ $filter_worksheet = [
          </div>
          <!-- .table-responsive -->
          <?php if ($worksheets):?>
-          <div class="table-responsive">
+          <div class="double-scroll">
             <!-- .table -->
-            <table class="table nowrap table-striped">
+            <table class="table table-striped">
               <!-- thead -->
               <thead>
                 <tr>
                   <th scope="col" class="pl-4">No</th>
-                  <th scope="col">Judul Draft</th>
+                  <th scope="col" style="min-width:350px;">Judul Draft</th>
                   <th scope="col">Nomor Lembar Kerja</th>
                   <th scope="col">Jenis</th>
                   <th scope="col">Status</th>
                   <th scope="col">PIC</th>
-                  <th style="width:100px; min-width:100px;"> &nbsp; </th>
+                  <th style="min-width:170px;"> &nbsp; </th>
                 </tr>
               </thead>
               <!-- /thead -->
@@ -185,4 +185,10 @@ $filter_worksheet = [
     <!-- /grid row -->
   </div>
   <!-- /.page-section -->
+
+  <script type="text/javascript">
+  $(document).ready(function() {
+    doublescroll();
+  });
+</script>
 

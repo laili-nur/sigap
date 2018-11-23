@@ -27,7 +27,7 @@
     <div class="col-md-6">
       <!-- .card -->
       <section class="card card-fluid">
-          <!-- .card-header -->
+        <!-- .card-header -->
         <header class="card-header">
           <!-- .d-flex -->
           <div class="d-flex align-items-center">
@@ -42,11 +42,11 @@
           </div>
           <!-- /.d-flex -->
         </header>
-          <!-- /.card-header -->
-         <!-- .card-body -->
-        <div class="card-body">
+        <!-- /.card-header -->
+        <!-- .card-body -->
+        <div class="card-body p-0">
           <!-- .table-responsive -->
-            <?php if ($themes):?>
+          <?php if ($themes):?>
             <div class="table-responsive">
               <!-- .table -->
               <table class="table table-striped">
@@ -62,29 +62,29 @@
                 <!-- tbody -->
                 <tbody>
                   <?php foreach($themes as $theme): ?>
-                  <!-- tr -->
-                  <tr>
-                    <td class="align-middle pl-4"><?= ++$i ?></td>
-                    <td class="align-middle"><?= $theme->theme_name ?></td>
-                    <td class="align-middle text-right">
-                      <a href="<?= base_url('theme/edit/'.$theme->theme_id.'') ?>" class="btn btn-sm btn-secondary">
-                        <i class="fa fa-pencil-alt"></i>
-                        <span class="sr-only">Edit</span>
-                      </a>
-                      <button type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modalhapus-<?= $theme->theme_id ?>" konfirmasi="<?= $theme->theme_name ?>"><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
-                        </td>
-                      </tr>
-                      <!-- /tr -->
-                      <!-- Alert Danger Modal -->
-                      <div class="modal modal-alert fade" id="modalhapus-<?= $theme->theme_id ?>" tabindex="-1" role="dialog" aria-labelledby="modalhapus" aria-hidden="true">
-                        <!-- .modal-dialog -->
-                        <div class="modal-dialog" role="document">
-                          <!-- .modal-content -->
-                          <div class="modal-content">
-                            <!-- .modal-header -->
-                            <div class="modal-header">
-                              <h5 class="modal-title">
-                                <i class="fa fa-exclamation-triangle text-red mr-1"></i> Konfirmasi Hapus</h5>
+                    <!-- tr -->
+                    <tr>
+                      <td class="align-middle pl-4"><?= ++$i ?></td>
+                      <td class="align-middle"><?= $theme->theme_name ?></td>
+                      <td class="align-middle text-right">
+                        <a href="<?= base_url('theme/edit/'.$theme->theme_id.'') ?>" class="btn btn-sm btn-secondary">
+                          <i class="fa fa-pencil-alt"></i>
+                          <span class="sr-only">Edit</span>
+                        </a>
+                        <button type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modalhapus-<?= $theme->theme_id ?>" konfirmasi="<?= $theme->theme_name ?>"><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
+                      </td>
+                    </tr>
+                    <!-- /tr -->
+                    <!-- Alert Danger Modal -->
+                    <div class="modal modal-alert fade" id="modalhapus-<?= $theme->theme_id ?>" tabindex="-1" role="dialog" aria-labelledby="modalhapus" aria-hidden="true">
+                      <!-- .modal-dialog -->
+                      <div class="modal-dialog" role="document">
+                        <!-- .modal-content -->
+                        <div class="modal-content">
+                          <!-- .modal-header -->
+                          <div class="modal-header">
+                            <h5 class="modal-title">
+                              <i class="fa fa-exclamation-triangle text-red mr-1"></i> Konfirmasi Hapus</h5>
                             </div>
                             <!-- /.modal-header -->
                             <!-- .modal-body -->
@@ -104,23 +104,23 @@
                         <!-- /.modal-dialog -->
                       </div>
                       <!-- /.modal -->
-                  <?php endforeach ?>
-                </tbody>
-                <!-- /tbody -->
-              </table>
-              <!-- /.table -->
-            </div>
-            <?php else: ?>
+                    <?php endforeach ?>
+                  </tbody>
+                  <!-- /tbody -->
+                </table>
+                <!-- /.table -->
+              </div>
+              <?php else: ?>
                 <p class="text-center">Data tidak tersedia</p>
-            <?php endif ?>
-            <!-- /.table-responsive -->
+              <?php endif ?>
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.card-body -->
+          </section>
+          <!-- /.card -->
         </div>
-        <!-- /.card-body -->
-      </section>
-      <!-- /.card -->
+        <!-- /grid column -->
+      </div>
+      <!-- /grid row -->
     </div>
-    <!-- /grid column -->
-  </div>
-  <!-- /grid row -->
-</div>
 <!-- /.page-section -->

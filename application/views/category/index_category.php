@@ -19,139 +19,147 @@
   </nav>
 </header>
 <!-- /.page-title-bar -->
-  <!-- .page-section -->
-  <div class="page-section">
-    <!-- grid row -->
-    <div class="row">
-      <!-- grid column -->
-      <div class="col-12">
-        <!-- .card -->
-        <section class="card card-fluid">
+<!-- .page-section -->
+<div class="page-section">
+  <!-- grid row -->
+  <div class="row">
+    <!-- grid column -->
+    <div class="col-12">
+      <!-- .card -->
+      <section class="card card-fluid">
         <!-- .card-header -->
-          <header class="card-header">
-            <!-- .d-flex -->
-            <div class="d-flex align-items-center">
-              <span class="mr-auto">Tabel Kategori</span>
-              <!-- .card-header-control -->
-              <div class="card-header-control">
-                <!-- .tombol add -->
-                <a href="<?=base_url('category/add') ?>" class="btn btn-primary btn-sm">Tambah Kategori</a>
-                <!-- /.tombol add -->
-              </div>
-              <!-- /.card-header-control -->
+        <header class="card-header">
+          <!-- .d-flex -->
+          <div class="d-flex align-items-center">
+            <span class="mr-auto">Tabel Kategori</span>
+            <!-- .card-header-control -->
+            <div class="card-header-control">
+              <!-- .tombol add -->
+              <a href="<?=base_url('category/add') ?>" class="btn btn-primary btn-sm">Tambah Kategori</a>
+              <!-- /.tombol add -->
             </div>
-            <!-- /.d-flex -->
-          </header>
-            <!-- /.card-header -->
-           <!-- .card-body -->
-          <div class="card-body">
-            <!-- .table-responsive -->
-                <?php if ($categories):?>
-                <div class="table-responsive">
-                  <!-- .table -->
-                  <table class="table nowrap table-striped">
-                    <!-- thead -->
-                    <thead>
-                      <tr>
-                        <th scope="col" class="pl-4">No</th>
-                        <th scope="col">Jenis Kategori</th>
-                        <th scope="col">Tahun</th>
-                        <th scope="col">Tanggal Buka</th>
-                        <th scope="col">Sisa Waktu Buka</th>
-                        <th scope="col">Tanggal Tutup</th>
-                        <th scope="col">Sisa Waktu Tutup</th>
-                        <th scope="col">Status</th>
-                        <th style="width:100px; min-width:100px;"> &nbsp; </th>
-                      </tr>
-                    </thead>
-                    <!-- /thead -->
-                    <!-- tbody -->
-                    <tbody>
-                      <?php foreach($categories as $category): ?>
-                      <!-- tr -->
-                      <tr>
-                        <td class="align-middle pl-4"><?= ++$i ?></td>
-                        <td class="align-middle"><?= $category->category_name ?></td>
-                        <td class="align-middle"><?= $category->category_year ?></td>
-                        <td class="align-middle"><?= konversiTanggal($category->date_open,'dateonly') ?></td>
-                        
-                        <td class="align-middle"><?php 
-                                $sisa_waktu_buka = ceil((strtotime($category->date_open)-strtotime(date('Y-m-d H:i:s')))/86400);
-                                 if($sisa_waktu_buka >= 1){
-                                   echo $sisa_waktu_buka.' hari';
-                                 }
-                                 else{
-                                     echo '<span style="color:green">Sudah dibuka</span>';
-                                 }
-                                 ?>
-                        </td>
-                        
-                        <td class="align-middle"><?= konversiTanggal($category->date_close,'dateonly') ?></td>
-                        
-                        <td class="align-middle"><?php $sisa_waktu_tutup = ceil((strtotime($category->date_close)-strtotime(date('Y-m-d H:i:s')))/86400);
-                                 if($sisa_waktu_tutup <= 0){
-                                  echo '<span style="color:red">Berakhir</span>';
-                                 }else{
-                                   echo $sisa_waktu_tutup.' hari';
-                                 } ?>
-                        </td>
-                        
-                        <td class="align-middle"><?= $category->category_status == 'y' ? 'Active' : 'Not Active' ?></td>
-                        <td class="align-middle text-right">
-                          <a href="<?= base_url('category/edit/'.$category->category_id.'') ?>" class="btn btn-sm btn-secondary">
-                            <i class="fa fa-pencil-alt"></i>
-                            <span class="sr-only">Edit</span>
-                          </a>
-                          <button type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modalhapus-<?= $category->category_id ?>" ><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
-                        </td>
-                      </tr>
-                      <!-- /tr -->
-                      <!-- Alert Danger Modal -->
-                      <div class="modal modal-alert fade" id="modalhapus-<?= $category->category_id ?>" tabindex="-1" role="dialog" aria-labelledby="modalhapus" aria-hidden="true">
-                        <!-- .modal-dialog -->
-                        <div class="modal-dialog" role="document">
-                          <!-- .modal-content -->
-                          <div class="modal-content">
-                            <!-- .modal-header -->
-                            <div class="modal-header">
-                              <h5 class="modal-title">
-                                <i class="fa fa-exclamation-triangle text-red mr-1"></i> Konfirmasi Hapus</h5>
-                            </div>
-                            <!-- /.modal-header -->
-                            <!-- .modal-body -->
-                            <div class="modal-body">
-                              <p>Apakah anda yakin akan menghapus kategori <span class="font-weight-bold"><?= $category->category_name ?></span>?</p>
-                            </div>
-                            <!-- /.modal-body -->
-                            <!-- .modal-footer -->
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-danger" onclick="location.href='<?= base_url('category/delete/'.$category->category_id.'') ?>'" data-dismiss="modal">Hapus</button>
-                              <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-                            </div>
-                            <!-- /.modal-footer -->
-                          </div>
-                          <!-- /.modal-content -->
-                        </div>
-                        <!-- /.modal-dialog -->
-                      </div>
-                      <!-- /.modal -->
-                      <?php endforeach ?>
-                    </tbody>
-                    <!-- /tbody -->
-                  </table>
-                  <!-- /.table -->
-                </div>
-                <?php else: ?>
-                    <p class="text-center">Data tidak tersedia</p>
-                <?php endif ?>
-                <!-- /.table-responsive -->
+            <!-- /.card-header-control -->
           </div>
-          <!-- /.card-body -->
-        </section>
-        <!-- /.card -->
+          <!-- /.d-flex -->
+        </header>
+        <!-- /.card-header -->
+        <!-- .card-body -->
+        <div class="card-body p-0">
+          <!-- .table-responsive -->
+          <?php if ($categories):?>
+            <div class="double-scroll">
+              <!-- .table -->
+              <table class="table table-striped">
+                <!-- thead -->
+                <thead>
+                  <tr>
+                    <th scope="col" class="pl-4">No</th>
+                    <th scope="col" style="min-width:200px;">Jenis Kategori</th>
+                    <th scope="col">Tahun</th>
+                    <th scope="col">Tanggal Buka</th>
+                    <th scope="col">Sisa Waktu Buka</th>
+                    <th scope="col">Tanggal Tutup</th>
+                    <th scope="col">Sisa Waktu Tutup</th>
+                    <th scope="col">Status</th>
+                    <th style="min-width:150px;"> &nbsp; </th>
+                  </tr>
+                </thead>
+                <!-- /thead -->
+                <!-- tbody -->
+                <tbody>
+                  <?php foreach($categories as $category): ?>
+                    <!-- tr -->
+                    <tr>
+                      <td class="align-middle pl-4"><?= ++$i ?></td>
+                      <td class="align-middle"><?= $category->category_name ?></td>
+                      <td class="align-middle"><?= $category->category_year ?></td>
+                      <td class="align-middle"><?= konversiTanggal($category->date_open,'dateonly') ?></td>
+                      
+                      <td class="align-middle"><?php 
+                      $sisa_waktu_buka = ceil((strtotime($category->date_open)-strtotime(date('Y-m-d H:i:s')))/86400);
+                      if($sisa_waktu_buka >= 1){
+                       echo $sisa_waktu_buka.' hari';
+                     }
+                     else{
+                       echo '<span style="color:green">Sudah dibuka</span>';
+                     }
+                     ?>
+                   </td>
+                   
+                   <td class="align-middle"><?= konversiTanggal($category->date_close,'dateonly') ?></td>
+                   
+                   <td class="align-middle"><?php $sisa_waktu_tutup = ceil((strtotime($category->date_close)-strtotime(date('Y-m-d H:i:s')))/86400);
+                   if($sisa_waktu_tutup <= 0){
+                    echo '<span style="color:red">Berakhir</span>';
+                  }else{
+                   echo $sisa_waktu_tutup.' hari';
+                 } ?>
+               </td>
+               
+               <td class="align-middle"><?= $category->category_status == 'y' ? 'Active' : 'Not Active' ?></td>
+               <td class="align-middle text-right">
+                <a href="<?= base_url('category/edit/'.$category->category_id.'') ?>" class="btn btn-sm btn-secondary">
+                  <i class="fa fa-pencil-alt"></i>
+                  <span class="sr-only">Edit</span>
+                </a>
+                <button type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modalhapus-<?= $category->category_id ?>" ><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
+                <div class="text-left">
+                  <!-- Alert Danger Modal -->
+                  <div class="modal modal-alert fade" id="modalhapus-<?= $category->category_id ?>" tabindex="-1" role="dialog" aria-labelledby="modalhapus" aria-hidden="true">
+                    <!-- .modal-dialog -->
+                    <div class="modal-dialog" role="document">
+                      <!-- .modal-content -->
+                      <div class="modal-content">
+                        <!-- .modal-header -->
+                        <div class="modal-header">
+                          <h5 class="modal-title">
+                            <i class="fa fa-exclamation-triangle text-red mr-1"></i> Konfirmasi Hapus</h5>
+                          </div>
+                          <!-- /.modal-header -->
+                          <!-- .modal-body -->
+                          <div class="modal-body">
+                            <p>Apakah anda yakin akan menghapus kategori <span class="font-weight-bold"><?= $category->category_name ?></span>?</p>
+                          </div>
+                          <!-- /.modal-body -->
+                          <!-- .modal-footer -->
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" onclick="location.href='<?= base_url('category/delete/'.$category->category_id.'') ?>'" data-dismiss="modal">Hapus</button>
+                            <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                          </div>
+                          <!-- /.modal-footer -->
+                        </div>
+                        <!-- /.modal-content -->
+                      </div>
+                      <!-- /.modal-dialog -->
+                    </div>
+                    <!-- /.modal -->
+                  </div>
+                </td>
+              </tr>
+              <!-- /tr -->
+            <?php endforeach ?>
+          </tbody>
+          <!-- /tbody -->
+        </table>
+        <!-- /.table -->
       </div>
-      <!-- /grid column -->
+      <?php else: ?>
+        <p class="text-center">Data tidak tersedia</p>
+      <?php endif ?>
+      <!-- /.table-responsive -->
     </div>
-    <!-- /grid row -->
-  </div>
-  <!-- /.page-section -->
+    <!-- /.card-body -->
+  </section>
+  <!-- /.card -->
+</div>
+<!-- /grid column -->
+</div>
+<!-- /grid row -->
+</div>
+<!-- /.page-section -->
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    doublescroll();
+  });
+</script>
