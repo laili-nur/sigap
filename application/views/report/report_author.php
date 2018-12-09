@@ -22,6 +22,7 @@
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_draft') ?>">Laporan Draft</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_books') ?>">Laporan Buku</a></li>
     <li class="nav-item"><a class="nav-link active" href="<?= base_url('reporting/index_author') ?>">Laporan Author</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_hibah') ?>">Laporan Hibah</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/performa_editor') ?>">Performa Editor</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/performa_layouter') ?>">Performa Layouter</a></li>
   </ul>
@@ -80,7 +81,6 @@
     <div class="table-responsive">
       <table class="table table-bordered">
         <tr>
-          <th>Author ID</th>
           <th>Author Name</th>
           <th>Author Email</th>
         </tr>
@@ -91,7 +91,6 @@
         {
       ?>
         <tr>
-          <td><?php echo $row->author_id; ?></td>
           <td><?php echo $row->author_name; ?></td>
           <td><?php echo $row->author_email; ?></td>
         </tr>

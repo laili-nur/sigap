@@ -22,6 +22,7 @@
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_draft') ?>">Laporan Draft</a></li>
     <li class="nav-item"><a class="nav-link active" href="<?= base_url('reporting/index_books') ?>">Laporan Buku</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_author') ?>">Laporan Author</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_hibah') ?>">Laporan Hibah</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/performa_editor') ?>">Performa Editor</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/performa_layouter') ?>">Performa Layouter</a></li>
   </ul>
@@ -125,7 +126,6 @@
       <div class="table-responsive">
         <table class="table table-bordered">
           <tr>
-            <th>Book ID</th>
             <th>Book Title</th>
             <th>Published Date</th>
             <th>Year</th>
@@ -137,7 +137,6 @@
           {
         ?>
           <tr>
-            <td><?php echo $row->book_id; ?></td>
             <td><?php echo $row->book_title; ?></td>
             <td><?php echo konversiTanggal($row->published_date); ?></td>
             <td><?php echo date("Y",strtotime($row->published_date)); ?></td>

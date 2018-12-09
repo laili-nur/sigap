@@ -35,6 +35,12 @@ class Reporting_model extends MY_Model{
     return $query->result();
   }
 
+  public function fetch_data_hibah()
+  {
+    $query = $this->db->query("SELECT * FROM category ORDER BY category_id ASC LIMIT 10");
+    return $query->result();
+  }
+
   public function fetch_performa_editor()
   {
     $query = $this->db->query("SELECT * FROM draft ORDER BY edit_start_date DESC LIMIT 5");
@@ -69,38 +75,9 @@ class Reporting_model extends MY_Model{
     return $query->result();
   }
 
-  /*Model for API*/
-
-  public function apiDraft($draft_id = NULL)
+  public function getHibah()
   {
-    if($draft_id == FALSE){
-			$result = $this->db->select('draft_id, category_id, theme_id, draft_title, entry_date, finish_date, review_start_date, review_end_date, draft_status')->get('draft')->result();
-		} else{
-			$this->db->select('draft_id, category_id, theme_id, draft_title, entry_date, finish_date, review_start_date, review_end_date, draft_status')->where('draft_id', $draft_id);
-			$result = $this->db->get('draft')->result();
-		}
-    return $result;
-  }
-
-  public function apiBook($book_id = NULL)
-  {
-    if($book_id == FALSE){
-			$result = $this->db->select('book_id, draft_id, book_code, book_title, isbn, published_date, serial_num')->get('book')->result();
-		} else{
-			$this->db->select('book_id, draft_id, book_code, book_title, isbn, published_date, serial_num')->where('book_id', $book_id);
-			$result = $this->db->get('book')->result();
-		}
-    return $result;
-  }
-
-  public function apiAuthor($author_id = NULL)
-  {
-    if($author_id == FALSE){
-      $result = $this->db->select('author_id, work_unit_id, author_name, author_nip, author_latest_education, author_address, author_contact, author_email, author_saving_num, heir_name')->get('author')->result();
-    } else{
-      $this->db->select('author_id, work_unit_id, author_name, author_nip, author_latest_education, author_address, author_contact, author_email, author_saving_num, heir_name')->where('author_id', $author_id);
-      $result = $this->db->get('author')->result();
-    }
-    return $result;
+    $query = $this->db->query("SELECT category_id, category_name, category_year FROM category ");
+    return $query->result();
   }
 }

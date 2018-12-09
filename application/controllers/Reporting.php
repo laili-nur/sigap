@@ -51,6 +51,16 @@ class Reporting extends Admin_Controller {
 		$this->load->view('template', compact('main_view', 'pages','author'));
 	}
 
+	public function index_hibah()
+	{
+		$hibah     = $this->reporting->fetch_data_hibah();
+
+		$pages    = $this->pages;
+		$main_view  = 'report/report_hibah';
+
+		$this->load->view('template', compact('main_view', 'pages','hibah'));
+	}
+
 	public function performa_editor()
 	{
 
@@ -142,6 +152,31 @@ class Reporting extends Admin_Controller {
 		echo json_encode($result);
 	}
 
+	public function getPieHibah()
+	{
+		$count_ugm = 0;
+		$count_press = 0;
+		$count_umum = 0;
+
+		$result_ugm = $this->reporting->select(['category_id'])->getAll('draft');
+		foreach ($result_ugm as $category_ugm){
+			if ($category_ugm->category_id == 1) {
+					$count_ugm++;
+			}
+			if ($category_ugm->category_id == 2) {
+					$count_press++;
+			}
+			else {
+				$count_umum++;
+			}
+		}
+		$result['count_ugm'] = $count_ugm;
+		$result['count_press'] = $count_press;
+		$result['count_umum'] = $count_umum;
+
+		echo json_encode($result);
+	}
+
 	public function getDraft()
   {
 		for($i = 1; $i <= 12; $i++)
@@ -172,25 +207,13 @@ class Reporting extends Admin_Controller {
 		echo json_encode($result);
   }
 
-	/*GET Controller for access API*/
-
-	public function apiDraft($draft_id = NULL)
+	public function getHibah()
 	{
-		$result=$this->reporting->apiDraft($draft_id);
-		echo json_encode($result);
-	}
-
-	public function apiBook($book_id = NULL)
-	{
-
-		$result=$this->reporting->apiBook($book_id);
-		echo json_encode($result);
-	}
-
-	public function apiAuthor($author_id = NULL)
-	{
-
-		$result=$this->reporting->apiAuthor($author_id);
+		for($i = 1; $i <= 3; $i++)
+		{
+			$result[$i] = $this->reporting->getHibah($i);
+			$result['count'][$i] = count($result[$i]);
+		}
 		echo json_encode($result);
 	}
 }
