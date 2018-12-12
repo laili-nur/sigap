@@ -69,7 +69,7 @@ class Reporting_model extends MY_Model{
     return $query->result();
   }
 
-  public function getAuthor($month)
+  public function getAuthor()
   {
     $query = $this->db->query("SELECT author_id, author_name, author_email FROM author ");
     return $query->result();

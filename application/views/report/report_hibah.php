@@ -44,18 +44,17 @@
       function(data){
         var obj = JSON.parse(data);
 
-        var ugm = obj.count_ugm;
-        var press = obj.count_press;
-        var umum = obj.count_umum;
+        var hibah = obj.count_hibah;
+        var reguler = obj.count_reguler;
 
         var ctx = $("#myPieChart");
         var myPieChart = new Chart(ctx,{
           type: 'pie',
           data : {
-            labels: ['Hibah UGM', 'Hibah UGM Press', 'Hibah Umum'],
+            labels: ['Hibah Buku Karya', 'Hibah Reguler'],
             datasets: [{
-              label : 'Penulis',
-              data: [ugm, press, umum],
+              label : 'Hibah',
+              data: [hibah, reguler],
               backgroundColor : [
                 'rgba(54, 162, 235, 1)',
                 'rgba(198, 198, 198, 1)',
@@ -73,7 +72,8 @@
     });
   </script>
 
-  <!-- table for author -->
+
+  <!-- table for hibah -->
 
   <br />
   <h5>Tabel Hibah</h5>

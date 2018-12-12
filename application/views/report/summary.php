@@ -36,7 +36,7 @@
 
     <!-- graph for summary -->
 
-    <canvas id="myChart" width="500" height="155"></canvas>
+    <canvas id="myChart" width="500" height="170"></canvas>
     <script>
 
     $.post("<?php echo base_url();?>Reporting/getSummary",

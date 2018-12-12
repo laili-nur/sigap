@@ -16,7 +16,7 @@ class Api_author extends REST_Controller {
     function index_get() {
         $id = $this->get('author_id');
         if ($id == '') {
-            $author = $this->db->get('author')->result();
+            $author = $this->db->select(['author_id', 'author_name', 'author_nip', 'author_degree_front', 'author_degree_back'])->get('author')->result();
         } else {
             $this->db->where('author_id', $id);
             $author = $this->db->get('author')->result();

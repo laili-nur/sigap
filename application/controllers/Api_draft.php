@@ -16,7 +16,7 @@ class Api_draft extends REST_Controller {
     function index_get() {
         $id = $this->get('draft_id');
         if ($id == '') {
-            $draft = $this->db->get('draft')->result();
+            $draft = $this->db->select(['draft_id', 'draft_title', 'draft_file', 'entry_date', 'finish_date', 'is_review'])->get('draft')->result();
         } else {
             $this->db->where('draft_id', $id);
             $draft = $this->db->get('draft')->result();

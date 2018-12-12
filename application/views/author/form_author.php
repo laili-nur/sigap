@@ -15,7 +15,7 @@
           <a class="text-muted">Form</a>
         </li>
       </ol>
-    </nav> 
+    </nav>
   </header>
   <!-- /.page-title-bar -->
   <!-- .page-section -->
@@ -108,19 +108,20 @@
             <!-- .form-group -->
             <div class="form-group">
               <label for="author_latest_education">Pendidikan Terakhir</label>
-              <?php 
+              <?php
               $options = array(
                 ''         => '-- Choose --',
                 'S1'         => 'S1',
                 'S2'         => 'S2',
                 'S3'         => 'S3',
+                'S4'         => 'Professor'
                 'other'      => 'Other',
               );
               echo form_dropdown('author_latest_education', $options,$input->author_latest_education,'id="author_latest_education" class="form-control custom-select d-block" ' )
               ?>
                <?= form_error('author_latest_education') ?>
             </div>
-            <!-- /.form-group -->           
+            <!-- /.form-group -->
             <hr class="my-2">
             <!-- .form-group -->
             <div class="form-group">
@@ -170,7 +171,7 @@
             <div class="form-group">
               <label for="author_ktp">KTP</label>
               <div class="custom-file">
-                <?= form_upload('author_ktp','','class="custom-file-input" onchange="preview_image(event)"') ?> 
+                <?= form_upload('author_ktp','','class="custom-file-input" onchange="preview_image(event)"') ?>
                 <label class="custom-file-label" for="author_ktp">Choose file</label>
               </div>
               <small class="form-text text-muted">Hanya menerima file bertype : jpg, jpeg, png, pdf. Maksimal 15 MB</small>
@@ -229,7 +230,7 @@
         errorElement: "span",
         errorPlacement: function (error, element) {
            error.addClass( "invalid-feedback" );
-            if (element.parent('.input-group').length) { 
+            if (element.parent('.input-group').length) {
                 error.insertAfter(element.next('span.select2'));      // input group
             } else if (element.hasClass("select2-hidden-accessible")){
                 error.insertAfter(element.next('span.select2'));  // select2
@@ -237,7 +238,7 @@
                 error.insertAfter(element.next('label.custom-file-label'));  // fileinput custom
             } else if (element.hasClass("custom-control-input")){
                 error.insertAfter($(".custom-radio").last());  // radio
-            }else {                                      
+            }else {
                 error.insertAfter(element);               // default
             }
         }

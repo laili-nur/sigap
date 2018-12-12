@@ -94,7 +94,7 @@ class Reporting extends Admin_Controller {
 
 		$result_review = $this->reporting->select(['draft_status'])->getAll('draft');
 		foreach ($result_review as $hasil_review){
-			if ($hasil_review->draft_status == 5) {
+			if ($hasil_review->draft_status == 4 or $hasil_review->draft_status == 5) {
 					$count_review++;
 			}
 		}
@@ -123,7 +123,6 @@ class Reporting extends Admin_Controller {
 				$count_book++;
 			}
 		}
-
 		$result['count_editor'] = $count_editor;
 		$result['count_layout'] = $count_layout;
 		$result['count_proofread'] = $count_proofread;
@@ -152,27 +151,46 @@ class Reporting extends Admin_Controller {
 		echo json_encode($result);
 	}
 
-	public function getPieHibah()
-	{
-		$count_ugm = 0;
-		$count_press = 0;
-		$count_umum = 0;
+	public function getPieAuthorGelar(){
+		$count_prof = 0;
+		$count_doctor = 0;
+		$count_lainnya = 0;
 
-		$result_ugm = $this->reporting->select(['category_id'])->getAll('draft');
-		foreach ($result_ugm as $category_ugm){
-			if ($category_ugm->category_id == 1) {
-					$count_ugm++;
+		$result_gelar = $this->reporting->select(['author_latest_education'])->getAll('author');
+		foreach ($result_gelar as $gelar_ugm){
+			if ($gelar_ugm->author_latest_education == 's4'){
+				$count_prof++;
 			}
-			if ($category_ugm->category_id == 2) {
-					$count_press++;
+			elseif ($gelar_ugm->author_latest_education == 's3'){
+				$count_doctor++;
 			}
 			else {
-				$count_umum++;
+				$count_lainnya++;
 			}
 		}
-		$result['count_ugm'] = $count_ugm;
-		$result['count_press'] = $count_press;
-		$result['count_umum'] = $count_umum;
+		$result['count_prof'] = $count_prof;
+		$result['count_doctor'] = $count_doctor;
+		$result['count_lainnya'] = $count_lainnya;
+
+		echo json_encode($result);
+	}
+
+	public function getPieHibah()
+	{
+		$count_hibah = 0;
+		$count_reguler = 0;
+
+		$result_ugm = $this->reporting->select(['category_type'])->join3('category', 'draft', 'category')->getAll('draft');
+		foreach ($result_ugm as $category_ugm){
+			if ($category_ugm->category_type == 1) {
+					$count_hibah++;
+			}
+			else {
+					$count_reguler++;
+			}
+		}
+		$result['count_hibah'] = $count_hibah;
+		$result['count_reguler'] = $count_reguler;
 
 		echo json_encode($result);
 	}
@@ -218,8 +236,78 @@ class Reporting extends Admin_Controller {
 	}
 }
 
-/*search filter*/
-
+// function filter($page = null){
+// 	$filter   = $this->input->get('filter', true);
+// 	$this->db->group_by('draft.draft_id');
+// 	if($this->level == 'reviewer'){
+// 					/*=============================================
+// 					=            Filter level reviewer            =
+// 					=============================================*/
+// 					if($filter == 'sudah'){
+// 							$drafts =array();
+// 							$drafts_source = $this->draft->join('category')
+// 							->join('theme')
+// 							->join3('draft_reviewer','draft','draft')
+// 							->join3('reviewer','draft_reviewer','reviewer')
+// 							->join3('user','reviewer','user')
+// 							->where('user.username',$this->username)
+// 							->orderBy('draft_title')
+// 							->paginate($page)
+// 							->getAll();
+// 					//cari tau rev 1 atau rev 2 yg sedang login
+// 							foreach ($drafts_source as $key => $value) {
+// 									$rev = $this->draft->getIdAndName('reviewer', 'draft_reviewer', $value->draft_id);
+// 									$value->rev = key(array_filter(
+// 											$rev,
+// 											function ($e) {
+// 													return $e->reviewer_id == $this->session->userdata('role_id');
+// 											}
+// 									));
+// 									if($value->rev == 0){
+// 										$value->review_flag = $value->review1_flag;
+// 								}elseif($value->rev == 1){
+// 										$value->review_flag = $value->review2_flag;
+// 								}else{}
+//
+// 								if($value->review_flag != ''){
+// 										$drafts[] =$value;
+// 								}
+// 								$total = count($drafts);
+// 						}
+// 				}elseif($filter == 'belum'){
+// 					$drafts =array();
+// 					$drafts_source = $this->draft->join('category')
+// 					->join('theme')
+// 					->join3('draft_reviewer','draft','draft')
+// 					->join3('reviewer','draft_reviewer','reviewer')
+// 					->join3('user','reviewer','user')
+// 					->where('user.username',$this->username)
+// 					->orderBy('draft_title')
+// 					->paginate($page)
+// 					->getAll();
+// 					//cari tau rev 1 atau rev 2 yg sedang login
+// 					foreach ($drafts_source as $key => $value) {
+// 							$rev = $this->draft->getIdAndName('reviewer', 'draft_reviewer', $value->draft_id);
+// 							$value->rev = key(array_filter(
+// 									$rev,
+// 									function ($e) {
+// 											return $e->reviewer_id == $this->session->userdata('role_id');
+// 									}
+// 							));
+// 							if($value->rev == 0){
+// 								$value->review_flag = $value->review1_flag;
+// 						}elseif($value->rev == 1){
+// 								$value->review_flag = $value->review2_flag;
+// 						}else{}
+//
+// 						if($value->review_flag == ''){
+// 								$drafts[] =$value;
+// 						}
+// 						$total = count($drafts);
+// 				}
+// 		}
+// 	}
+// }
 
 /* End of file Reporting.php */
 /* Location: ./application/controllers/Reporting.php */

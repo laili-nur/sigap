@@ -71,6 +71,47 @@
     });
   </script>
 
+  <br />
+  <div align="center">
+    <h6>Grafik Author Berdasarkan Gelar</h6>
+  </div>
+
+  <canvas id="myPieChartGelar" width="380" height="100"></canvas>
+  <script>
+
+  $.post("<?php echo base_url();?>Reporting/getPieAuthorGelar",
+      function(data){
+        var obj = JSON.parse(data);
+
+        var prof = obj.count_prof;
+        var doctor = obj.count_doctor;
+        var lainnya = obj.count_lainnya;
+
+        var ctx = $("#myPieChartGelar");
+        var myPieChart = new Chart(ctx,{
+          type: 'pie',
+          data : {
+            labels: ['Author Professor', 'Author Doktor', 'Author Magister, Sarjana, dll'],
+            datasets: [{
+              label : 'Gelar Penulis',
+              data: [prof, doctor, lainnya],
+              backgroundColor : [
+                'rgba(54, 162, 235, 1)',
+                'rgba(198, 198, 198, 1)',
+                'rgba(208, 222, 98, 1)'
+              ],
+              borderWidth : 1
+            }]
+          },
+          options: {
+            ticks : {
+              beginAtZero:true
+            }
+          }
+      });
+    });
+  </script>
+
   <!-- table for author -->
 
   <br />

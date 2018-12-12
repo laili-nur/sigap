@@ -29,8 +29,12 @@
   <!-- Reporting buku -->
   <!-- /.page-title-bar -->
   <br />
-  <h5>Performa Layouter</h5>
+  <div align="center">
+    <h5>UGM Press</h5>
+    <h6>Performa Staff Layouter</h6>
+  </div>
   <br />
+
   <div class="container">
     <div class="table-responsive">
       <table class="table table-bordered">
