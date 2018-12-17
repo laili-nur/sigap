@@ -52,10 +52,6 @@ function select2_validasi() {
     })
 }
 
-$.validator.addClassRules("req", {
-    crequired: true,
-});
-
 
 function toastr_view(param) {
     toastr.options = {

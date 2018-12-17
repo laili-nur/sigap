@@ -18,6 +18,7 @@
           <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#edit_deadline">Atur Deadline</button>
           <?php endif ?>
           <?php if($ceklevel == 'editor'): ?>
+          <button type="button" class="btn btn-warning" id="btn-kerjakan-editor">Mulai Revisi</button>
           <button type="button" class="btn btn-warning" id="btn-kerjakan-editor">Mulai Proses</button>
           <?php endif ?>
           <!-- /.tombol add -->
@@ -31,11 +32,11 @@
     <?php endif ?>
     <div class="list-group list-group-flush list-group-bordered" id="list-group-edit">
       <div class="list-group-item justify-content-between">
-        <span class="text-muted">Tanggal masuk</span>
+        <span class="text-muted">Tanggal mulai</span>
         <strong><?= konversiTanggal($input->edit_start_date) ?></strong>
       </div>
       <div class="list-group-item justify-content-between">
-        <span class="text-muted">Tanggal jadi</span>
+        <span class="text-muted">Tanggal selesai</span>
         <strong><?= konversiTanggal($input->edit_end_date) ?></strong>
       </div>
       <div class="list-group-item justify-content-between">

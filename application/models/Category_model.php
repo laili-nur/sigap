@@ -11,6 +11,11 @@ class Category_model extends MY_Model
                 'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_category_name'
             ],
             [
+                'field' => 'category_tipe',
+                'label' => 'Category tipe',
+                'rules' => 'trim|required'
+            ],
+            [
                 'field' => 'category_year',
                 'label' => 'Category Year',
                 'rules' => 'trim|required|exact_length[4]'
@@ -45,6 +50,7 @@ class Category_model extends MY_Model
     {
         return [
             'category_name'    => '',
+            'category_type'    => '',
             'category_year'    => '',
             'category_note'    => '',
             'date_open'    => '',

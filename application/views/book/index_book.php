@@ -80,9 +80,10 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
                 <tr>
                   <th scope="col" class="pl-4">No</th>
                   <th scope="col" style="min-width:350px;">Judul Buku</th>
+                  <th scope="col" style="min-width:220px;">Kategori</th>
                   <th scope="col" style="min-width:200px;">Penulis</th>
                   <th scope="col">Kode</th>
-                  <th scope="col">ISBN</th>
+                  <th scope="col" style="min-width:150px;">ISBN</th>
                   <th scope="col">Status</th>
                   <th scope="col">Hak Cipta</th>
                   <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
@@ -98,6 +99,7 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
                   <tr>
                     <td class="align-middle pl-4"><?= ++$i ?></td>
                     <td class="align-middle"><a href="<?= base_url('book/view/'.$book->book_id) ?>"><?= $book->book_title ?></a></td>
+                    <td class="align-middle"><?= $book->category_name?></td>
                     <td class="align-middle"><?= isset($book->author[0]->author_name)?$book->author[0]->author_name:'-' ?></td>
                     <td class="align-middle"><?= $book->book_code ?></td>
                     <td class="align-middle"><?= $book->isbn ?></td>

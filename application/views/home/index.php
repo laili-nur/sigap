@@ -10,10 +10,27 @@
   <!-- <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item active"><a class="text-muted"><span class="fa fa-home"></span> Admin Panel</a></li></ol></nav> -->
   <h1 class="page-title"> Dashboard </h1>
   <p class="lead">
-    <span class="font-weight-bold">Hai, 
-      <?=$username ?>.
-    </span>
-    <span class="d-block text-muted">Selamat bekerja dan semoga harimu menyenangkan.</span>
+    <span class="font-weight-bold">Halo, <?=$username ?></span>
+    <span class="d-block text-muted"><?php echo $tulisan_dashboard->dashboard_head ;?></span>
+    <?php 
+    if($ceklevel=='author'){
+      if(!empty($tulisan_dashboard->dashboard_content_author) or $tulisan_dashboard->dashboard_content_author == '<p><br></p>'){
+        echo '<div class="alert alert-info">'.$tulisan_dashboard->dashboard_content_author.'</div>';
+      }
+    }elseif($ceklevel=='reviewer'){
+      if(!empty($tulisan_dashboard->dashboard_content_reviewer) or $tulisan_dashboard->dashboard_content_reviewer == '<p><br></p>'){
+        echo '<div class="alert alert-info">'.$tulisan_dashboard->dashboard_content_reviewer.'</div>';
+      }
+    }elseif($ceklevel=='layouter'){
+      if(!empty($tulisan_dashboard->dashboard_content_layouter) or $tulisan_dashboard->dashboard_content_layouter == '<p><br></p>'){
+        echo '<div class="alert alert-info">'.$tulisan_dashboard->dashboard_content_layouter.'</div>';
+      }
+    }elseif($ceklevel=='editor'){
+      if(!empty($tulisan_dashboard->dashboard_content_editor) or $tulisan_dashboard->dashboard_content_editor == '<p><br></p>'){
+        echo '<div class="alert alert-info">'.$tulisan_dashboard->dashboard_content_editor.'</div>';
+      }
+    }
+    ?>
   </p>
 </header>
 <!-- /.page-title-bar -->

@@ -162,18 +162,26 @@
             </li>
             <!-- /.menu-item -->
             <!-- .menu-header -->
-            <li class="menu-header">Akun </li>
+            <li class="menu-header">Pengaturan </li>
             <!-- /.menu-header -->
             <!-- .menu-item -->
             <li class="menu-item <?=($pages=='user')?'has-active':'' ?>">
               <a href="<?=base_url('user') ?>" class="menu-link">
                 <span class="menu-icon fa fa-users"></span>
-                <span class="menu-text">User</span>    
+                <span class="menu-text">Akun User</span>    
+              </a>
+            </li>
+            <!-- /.menu-item -->
+            <!-- .menu-item -->
+            <li class="menu-item <?=($pages=='setting')?'has-active':'' ?>">
+              <a href="<?=base_url('setting') ?>" class="menu-link">
+                <span class="menu-icon fa fa-cog"></span>
+                <span class="menu-text">Setting</span>    
               </a>
             </li>
             <!-- /.menu-item -->
             <?php endif ?>
-            <!-- endif superadmin halaman user -->
+            <!-- endif superadmin halaman user dan setting -->
             
           <?php endif ?>
           </ul>

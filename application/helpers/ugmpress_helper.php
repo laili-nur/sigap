@@ -130,13 +130,19 @@ function getDropdownListLayouter($table, $columns)
 }
 
 // Khusus untuk category, mengambil yang aktif saja
-function getDropdownListCategory($table, $columns)
+function getDropdownListCategory($table, $columns, $all = false)
 {
     $CI =& get_instance();
-    $query = $CI->db->select($columns)->from($table)->where('category_status','y')->get();
+    if($all == true){
+        //ambil semua kategori
+        $query = $CI->db->select($columns)->from($table)->get();
+    }else{
+        //ambil karegori yang aktif
+        $query = $CI->db->select($columns)->from($table)->where('category_status','y')->get();
+    }
 
     if ($query->num_rows() >= 1) {
-        $options1 = ['' => '-- Choose --'];
+        $options1 = ['' => '-- Semua --'];
         $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
         $options = $options1 + $options2;
         return $options;

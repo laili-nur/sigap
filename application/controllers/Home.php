@@ -16,6 +16,7 @@ class Home extends Operator_Controller
 
 	public function index($page = null)
 	{
+        $tulisan_dashboard = $this->home->get('setting');
         // handle untuk merubah category status yang udah expired
         $current_date = strtotime(date('Y-m-d'));
         $all_categories = $this->home->orderBy('category_name')->getAllWhere("category_status = 'y'",'category');
@@ -152,6 +153,6 @@ class Home extends Operator_Controller
 
         $pages    = $this->pages;
         $main_view  = 'home/index';
-	$this->load->view('template', compact('categories','count','drafts_newest','drafts','pages', 'main_view'));        
+	$this->load->view('template', compact('tulisan_dashboard','categories','count','drafts_newest','drafts','pages', 'main_view'));        
 	}
 }

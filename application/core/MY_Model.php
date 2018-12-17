@@ -26,6 +26,18 @@ class MY_Model extends CI_Model
         return $this->db->query($sql);
     }
 
+    public function group_start()
+    {
+        $this->db->group_start();
+        return $this;
+    }
+
+    public function group_end()
+    {
+        $this->db->group_end();
+        return $this;
+    }
+
     public function count($table = "")
     {
         $table = $this->checkTable($table);
@@ -132,6 +144,24 @@ class MY_Model extends CI_Model
         return $this;
     }
     
+    public function having($column, $condition ="")
+    {
+        $this->db->having($column, $condition);
+        return $this;
+    }
+
+    public function or_having($column, $condition)
+    {
+        $this->db->or_having($column, $condition);
+        return $this;
+    }
+
+    public function group_by($column)
+    {
+        $this->db->group_by($column);
+        return $this;
+    }
+
         public function like($column, $condition)
     {
         $this->db->like($column, $condition);

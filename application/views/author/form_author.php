@@ -111,10 +111,10 @@
               <?php
               $options = array(
                 ''         => '-- Choose --',
-                'S1'         => 'S1',
-                'S2'         => 'S2',
-                'S3'         => 'S3',
-                'S4'         => 'Professor'
+                's1'         => 'S1',
+                's2'         => 'S2',
+                's3'         => 'S3',
+                's4'         => 'Professor',
                 'other'      => 'Other',
               );
               echo form_dropdown('author_latest_education', $options,$input->author_latest_education,'id="author_latest_education" class="form-control custom-select d-block" ' )

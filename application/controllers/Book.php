@@ -15,7 +15,7 @@ class Book extends Operator_Controller
 
     public function index($page = null)
     {
-        $books     = $this->book->join('draft')->orderBy('draft.draft_id')->orderBy('book_id')->paginate($page)->getAll();
+        $books     = $this->book->join('draft')->join3('category','draft','category')->orderBy('draft.draft_id')->orderBy('book_id')->paginate($page)->getAll();
         $tot        = $this->book->join('draft')->orderBy('draft.draft_id')->orderBy('book_id')->getAll();
 
         //tampilkan author
