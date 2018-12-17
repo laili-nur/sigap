@@ -22,15 +22,25 @@ class Setting extends Admin_Controller
         }
             
         $setting = $this->setting->get();
-        if (!$setting) {
-            //redirect('404');
-        }
 
         if (!$_POST) {
-            $input = (object) $setting;
+            if(empty($setting)){
+                $input = (object) $this->setting->getDefaultValues();
+            }else{
+                $input = (object) $setting;
+            }
         } else {
             $input = (object) $this->input->post(null, false);
         }
+
+        // if (empty($input->dashboard_head)) {
+        //     $input->dashboard_head = 'cocol';
+        // }
+            // $input->dashboard_content_reviewer = 'cocol';
+            // $input->dashboard_content_author = 'cocol';
+            // $input->dashboard_content_editor = 'cocol';
+            // $input->dashboard_content_layouter = 'cocol';
+        
 
         if (!$this->setting->validate()) {
             $pages    = $this->pages;
@@ -42,11 +52,20 @@ class Setting extends Admin_Controller
         }
          unset($input->files);
 
-        if ($this->setting->update($input)) {
-            $this->session->set_flashdata('success', 'Data saved');
-        } else {
-            $this->session->set_flashdata('error', 'Data failed to save');
+         if(empty($setting)){
+            if ($this->setting->insert_setting($input)) {
+                $this->session->set_flashdata('success', 'Data saved');
+            } else {
+                $this->session->set_flashdata('error', 'Data failed to save');
+            }
+        }else{
+            if ($this->setting->update_setting($input)) {
+                $this->session->set_flashdata('success', 'Data saved');
+            } else {
+                $this->session->set_flashdata('error', 'Data failed to save');
+            }
         }
+        
 
         redirect('setting/edit');
 	}        

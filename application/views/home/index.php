@@ -11,7 +11,9 @@
   <h1 class="page-title"> Dashboard </h1>
   <p class="lead">
     <span class="font-weight-bold">Halo, <?=$username ?></span>
-    <span class="d-block text-muted"><?php echo $tulisan_dashboard->dashboard_head ;?></span>
+    <span class="d-block text-muted">
+      <?=(!empty($tulisan_dashboard->dashboard_head))? $tulisan_dashboard->dashboard_head : '';?>
+    </span>
     <?php 
     if($ceklevel=='author'){
       if(!empty($tulisan_dashboard->dashboard_content_author) or $tulisan_dashboard->dashboard_content_author == '<p><br></p>'){

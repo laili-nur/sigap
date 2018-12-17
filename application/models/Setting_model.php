@@ -45,4 +45,17 @@ class Setting_model extends MY_Model
             'dashboard_content_layouter'  => '',
         ];
     }
+
+    public function insert_setting($data, $table = "")
+    {
+        $table = $this->checkTable($table);
+        $this->db->insert($table, $data);
+        return true;
+    }
+
+    public function update_setting($data, $table = "")
+    {
+        $table = $this->checkTable($table);
+        return $this->db->update($table, $data);
+    }
 }
