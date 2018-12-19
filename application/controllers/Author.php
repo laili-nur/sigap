@@ -216,6 +216,7 @@ class Author extends Operator_Controller
                                   ->orLike('institute_name', $keywords)
                                   ->orLike('author_nip', $keywords)
                                   ->orLike('author_name', $keywords)
+                                  ->orLike('username', $keywords)
                                   ->join('work_unit')
                                   ->join('institute')
                                   ->join('bank')
@@ -225,10 +226,11 @@ class Author extends Operator_Controller
                                   ->orderBy('author_name')
                                   ->paginate($page)
                                   ->getAll();
-        $tot        = $this->author->like('work_unit_name', $keywords)
+        $total        = $this->author->like('work_unit_name', $keywords)
                                   ->orLike('institute_name', $keywords)
                                   ->orLike('author_nip', $keywords)
                                   ->orLike('author_name', $keywords)
+                                  ->orLike('username', $keywords)
                                   ->join('work_unit')
                                   ->join('institute')
                                   ->join('bank')
@@ -236,8 +238,7 @@ class Author extends Operator_Controller
                                   ->orderBy('work_unit.work_unit_id')
                                   ->orderBy('institute.institute_id')                
                                   ->orderBy('author_name')
-                                  ->getAll();
-        $total = count($tot);
+                                  ->count();
 
         $pagination = $this->author->makePagination(site_url('author/search/'), 3, $total);
 

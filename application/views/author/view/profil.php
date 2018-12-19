@@ -36,7 +36,7 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> Pendidikan Terakhir </td>
-                <td><?= ucwords($input->author_latest_education) ?></td>
+                <td><?= ($input->author_latest_education == 's4')? 'Professor' : ucwords($input->author_latest_education) ?></td>
               </tr>
               <!-- /tr -->
               <!-- tr -->

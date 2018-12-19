@@ -429,6 +429,7 @@ class Draft extends Operator_Controller
               ->joinRelationDest('author', 'draft_author')
               ->where('draft_status','0')
               ->where($kat['cond_temp'], $kat['category'])
+              ->orderBy('draft_status')
               ->orderBy('draft_title')
               ->paginate($page)
               ->getAll();
@@ -443,6 +444,7 @@ class Draft extends Operator_Controller
               ->where('is_review','n')
               ->where('draft_status','4')
               ->where($kat['cond_temp'], $kat['category'])
+              ->orderBy('draft_status')
               ->orderBy('draft_title')
               ->paginate($page)
               ->getAll();
@@ -459,6 +461,7 @@ class Draft extends Operator_Controller
               ->where('is_edit','n')
               ->whereNot('draft_status','99')
               ->where($kat['cond_temp'], $kat['category'])
+              ->orderBy('draft_status')
               ->orderBy('draft_title')
               ->paginate($page)
               ->getAll();
@@ -476,6 +479,7 @@ class Draft extends Operator_Controller
               ->where('is_layout','n')
               ->whereNot('draft_status','99')
               ->where($kat['cond_temp'], $kat['category'])
+              ->orderBy('draft_status')
               ->orderBy('draft_title')
               ->paginate($page)
               ->getAll();
@@ -493,6 +497,7 @@ class Draft extends Operator_Controller
               ->where('is_layout','y')
               ->whereNot('draft_status','99')
               ->where($kat['cond_temp'], $kat['category'])
+              ->orderBy('draft_status')
               ->orderBy('draft_title')
               ->paginate($page)
               ->getAll();
@@ -511,6 +516,7 @@ class Draft extends Operator_Controller
               ->orWhere('draft_status','2')
               ->group_end()
               ->where($kat['cond_temp'], $kat['category'])
+              ->orderBy('draft_status')
               ->orderBy('draft_title')
               ->paginate($page)
               ->getAll();
@@ -529,6 +535,7 @@ class Draft extends Operator_Controller
               ->joinRelationDest('author', 'draft_author')
               ->where('draft_status','14')
               ->where($kat['cond_temp'], $kat['category'])
+              ->orderBy('draft_status')
               ->orderBy('draft_title')
               ->paginate($page)
               ->getAll();
@@ -537,16 +544,17 @@ class Draft extends Operator_Controller
               ->where($kat['cond_temp'], $kat['category'])
               ->count();
           }else{
-           $drafts = $this->draft->join('category')
-           ->join('theme')
-           ->joinRelationMiddle('draft', 'draft_author')
-           ->joinRelationDest('author', 'draft_author')
-           ->where($kat['cond_temp'], $kat['category'])
-           ->orderBy('draft_title')
-           ->paginate($page)
-           ->getAll();
-           $total = $this->draft->where($kat['cond_temp'], $kat['category'])
-           ->count();
+               $drafts = $this->draft->join('category')
+               ->join('theme')
+               ->joinRelationMiddle('draft', 'draft_author')
+               ->joinRelationDest('author', 'draft_author')
+               ->where($kat['cond_temp'], $kat['category'])
+               ->orderBy('draft_status')
+               ->orderBy('draft_title')
+               ->paginate($page)
+               ->getAll();
+               $total = $this->draft->where($kat['cond_temp'], $kat['category'])
+               ->count();
        }
    }
 
@@ -554,7 +562,7 @@ class Draft extends Operator_Controller
 
    if (!$drafts) {
     $this->session->set_flashdata('warning', 'Data were not found');
-    redirect($this->pages);
+    //redirect($this->pages);
     } else {
         foreach ($drafts as $key => $value) {
             $authors = $this->draft->getIdAndName('author', 'draft_author', $value->draft_id);
