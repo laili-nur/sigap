@@ -21,6 +21,17 @@ class Author extends Operator_Controller
         $pages      = $this->pages;
         $main_view  = 'author/index_author';
         $pagination = $this->author->makePagination(site_url('author'), 2, $total);
+
+        foreach ($authors as $author) {
+            $author->is_author_reviewer = false;
+            if ($author->user_id != 0) {
+                $data = array('user_id' => $author->user_id);
+                $reviewer = $this->author->getWhere($data, 'reviewer');
+                if (!is_null($reviewer)) {
+                    $author->is_author_reviewer = true;
+                }
+            }
+        }
         
         $this->load->view('template', compact('pages', 'main_view', 'authors', 'pagination', 'total'));
 	}
@@ -185,27 +196,14 @@ class Author extends Operator_Controller
         $reviewer_id = $this->reviewer->getIdRoleFromUserId($user_id, 'reviewer');
 
         if ($reviewer_id == 0) {
-            $data = array(
-                'user_id' => $user_id,
-                'reviewer_nip' => $nip,
-                'reviewer_name' => urldecode($name)
-            );
+            $this->session->user_id_temp = $user_id;
+            $this->session->reviewer_nip_temp = $nip;
+            $this->session->reviewer_name_temp = urldecode($name);
 
-            if ($this->reviewer->insert($data)) {
-                $reviewer_id = $this->db->insert_id();
-
-                if ($reviewer_id != 0) {
-                    $data_level = array(
-                        'level' => 'author_reviewer'
-                    );
-                    $this->reviewer->where('user_id', $user_id)->update($data_level, 'user');
-                    redirect('reviewer/edit/' . $reviewer_id);
-                }
-            }
+            redirect('reviewer/edit/-99');
         } else {
             $this->session->set_flashdata('warning', 'User telah memiliki role Author dan Reviewer');
             redirect('author');
-
         }
     }
         

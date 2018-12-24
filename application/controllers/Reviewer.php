@@ -81,24 +81,40 @@ class Reviewer extends Operator_Controller
         
         public function edit($id = null)
 	{
-        $reviewer = $this->reviewer->where('reviewer_id', $id)->get();
+        if ($id != -99) {
+            $reviewer = $this->reviewer->where('reviewer_id', $id)->get();
+
+            if (!$reviewer) {
+                $this->session->set_flashdata('warning', 'Reviewer data were not available');
+                redirect('reviewer');
+            }
+        } else {
+            if (isset($_SESSION['user_id_temp'])) {
+                $session_temp = array(
+                                    'user_id' => $this->session->user_id_temp,
+                                    'reviewer_nip' => $this->session->reviewer_nip_temp,
+                                    'reviewer_name' => $this->session->reviewer_name_temp,
+                                    'faculty_id' => '',
+                                    'reviewer_expert' => '',
+                                    'reviewer_degree_front' => '',
+                                    'reviewer_degree_back' => '',
+                                    'reviewer_contact' => '',
+                                    'reviewer_email' => ''
+                                );
+                $reviewer = (object) $session_temp;
+            }
+        }
 
         // untuk select2 tags sumber
         $allexpert = $this->reviewer->select('reviewer_expert')->getAll();
         foreach ($allexpert as $value) {
             $pecah = explode(",",$value->reviewer_expert);
-            foreach ($pecah as $key => $value) {        
-                $reviewer->sumber[$value] = $value;
+            foreach ($pecah as $key => $value) {
+                    $reviewer->sumber[$value] = $value;
             }
         }
         // untuk select2 tags pilihan
         $reviewer->pilih = explode(",",$reviewer->reviewer_expert);
-        
-
-        if (!$reviewer) {
-            $this->session->set_flashdata('warning', 'Reviewer data were not available');
-            redirect('reviewer');
-        }
 
         if (!$_POST) {
             $input = (object) $reviewer;
@@ -118,11 +134,35 @@ class Reviewer extends Operator_Controller
         //gabungkan array masuk ke db
         $input->reviewer_expert = implode(",",$input->reviewer_expert);
 
-        if ($this->reviewer->where('reviewer_id', $id)->update($input)) {
-            $this->session->set_flashdata('success', 'Data updated');
+        if ($id == -99) {
+            $data_level = array(
+                'level' => 'author_reviewer'
+            );
+            if ($this->reviewer->insert($input) && 
+                $this->reviewer->where('user_id', $_SESSION['user_id_temp'])->update($data_level, 'user')) {
+                $status = 'success';
+                $message = 'Data saved';
+            } else {
+                $status = 'error';
+                $message = 'Data failed to save';
+            }
+
+            unset(
+                $_SESSION['user_id_temp'],
+                $_SESSION['reviewer_nip_temp'],
+                $_SESSION['reviewer_name_temp']
+            );
         } else {
-            $this->session->set_flashdata('error', 'Data failed to update');
+            if ($this->reviewer->where('reviewer_id', $id)->update($input)) {
+                $status = 'success';
+                $message = 'Data updated';
+            } else {
+                $status = 'error';
+                $message = 'Data failed to update';
+            }
         }
+
+        $this->session->set_flashdata($status, $message);
 
         redirect('reviewer');
 	}
@@ -214,7 +254,7 @@ class Reviewer extends Operator_Controller
         $this->reviewer->where('reviewer_contact', $reviewer_contact);
         !$reviewer_id || $this->reviewer->where('reviewer_id !=', $reviewer_id);
         $reviewer = $this->reviewer->get();
-        if (count($reviewer)) {
+        if (!is_null($reviewer) && count($reviewer)) {
             $this->form_validation->set_message('unique_reviewer_contact', '%s has been used');
             return false;
         }
@@ -229,7 +269,7 @@ class Reviewer extends Operator_Controller
         $this->reviewer->where('reviewer_email', $reviewer_email);
         !$reviewer_id || $this->reviewer->where('reviewer_id !=', $reviewer_id);
         $reviewer = $this->reviewer->get();
-        if (count($reviewer)) {
+        if (!is_null($reviewer) && count($reviewer)) {
             $this->form_validation->set_message('unique_reviewer_email', '%s has been used');
             return false;
         }
@@ -245,7 +285,7 @@ class Reviewer extends Operator_Controller
         !$reviewer_id || $this->reviewer->where('reviewer_id !=', $reviewer_id);
         $reviewer = $this->reviewer->get();
 
-        if (count($reviewer)) {
+        if (!is_null($reviewer) && count($reviewer)) {
             $this->form_validation->set_message('unique_reviewer_nip', '%s has been used');
             return false;
         }
@@ -261,7 +301,7 @@ class Reviewer extends Operator_Controller
         !$reviewer_id || $this->reviewer->where('reviewer_id !=', $reviewer_id);
         $reviewer = $this->reviewer->get();
 
-        if (count($reviewer)) {
+        if (!is_null($reviewer) && count($reviewer)) {
             $this->form_validation->set_message('unique_reviewer_username', '%s has been used');
             return false;
         }

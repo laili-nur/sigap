@@ -69,7 +69,11 @@ function getDropdownListBook($table, $columns)
 function getDropdownListReviewer($table, $columns)
 {
     $CI =& get_instance();
-    $query = $CI->db->select($columns)->where('level','reviewer')->or_where('level','author_reviewer')->from($table)->get();
+    if (isset($_SESSION['user_id_temp'])) {
+        $query = $CI->db->select($columns)->where('user_id', $_SESSION['user_id_temp'])->or_where('level','reviewer')->or_where('level','author_reviewer')->from($table)->get();
+    } else {
+        $query = $CI->db->select($columns)->where('level','reviewer')->or_where('level','author_reviewer')->from($table)->get();
+    }
 
     if ($query->num_rows() >= 1) {
         $options1 = ['' => '-- Choose --'];
@@ -208,13 +212,17 @@ function getMoreDropdownList($table, $columns)
                             if ($table_rel == $key1) {
                                 $query2 = $CI->db->select($val1)->where($table_rel . '_id', $result[$j][$table_rel . '_id'])->from($key1)->get();
                                 $result2 = $query2->result_array();
-                                foreach ($result2 as $key2) {
-                                    $result[$j][$columns[$i]] = $key2[$columns[$i]];
+                                $value2 = '';
+                                if (count($result2) > 0) {
+                                    foreach ($result2 as $key2) {
+                                        $value2 .= ' - ';
+                                        $value2 .= $result[$j][$columns[$i]] = $key2[$columns[$i]];
+                                    }
                                 }
                             }
                         }
                     } 
-                    $value .= ' - ' . $result[$j][$columns[$i]];
+                    $value .= $value2;
                     $options2[$key] = $value;
                 }
                 $j++;
