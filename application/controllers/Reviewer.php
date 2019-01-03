@@ -120,6 +120,8 @@ class Reviewer extends Operator_Controller
             $input = (object) $reviewer;
         } else {
             $input = (object) $this->input->post(null, true);
+            $input->sumber = $reviewer->sumber;
+            $input->pilih = $reviewer->pilih;
         }
 
         if (!$this->reviewer->validate()) {
