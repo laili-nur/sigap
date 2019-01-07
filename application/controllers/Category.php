@@ -6,25 +6,25 @@ class Category extends Operator_Controller
     {
         parent::__construct();
         $this->pages = 'category';
-        //khusus admin
+        //akses khusus admin
         $ceklevel = $this->session->userdata('level');
         if ($ceklevel == 'author' || $ceklevel == 'reviewer' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
             redirect('home');
         }
     }
-//--index--
-	public function index($page = null)
-	{
-        $categories     = $this->category->orderBy('date_close','desc')->orderBy('date_open')->getAll();
+
+    public function index($page = null)
+    {
+        $categories     = $this->category->orderBy('date_close','desc')->orderBy('category_name')->getAll();
         $total    = count($categories);
         $pages    = $this->pages;
         $main_view  = 'category/index_category';
-		$this->load->view('template', compact('pages', 'main_view', 'categories', 'total'));
-	}
-        
-//--add--
-        public function add()
-	{                     
+        $this->load->view('template', compact('pages', 'main_view', 'categories', 'total'));
+    }
+
+
+    public function add()
+    {                     
         if (!$_POST) {
             $input = (object) $this->category->getDefaultValues();
         } else {
@@ -47,11 +47,10 @@ class Category extends Operator_Controller
         }
 
         redirect('category');
-	}
-        
-//--edit--        
-        public function edit($id = null)
-	{
+    }
+
+    public function edit($id = null)
+    {
         $category = $this->category->where('category_id', $id)->get();
         if (!$this) {
             $this->session->set_flashdata('warning', 'Category data were not available');
@@ -80,15 +79,14 @@ class Category extends Operator_Controller
         }
 
         redirect('category');
-	}
-        
-//--delete--        
-        	public function delete($id = null)
-	{
-		$category = $this->category->where('category_id', $id)->get();
-        if (!$category) {
-            $this->session->set_flashdata('warning', 'Category data were not available');
-            redirect('category');
+    }
+
+    public function delete($id = null)
+    {
+      $category = $this->category->where('category_id', $id)->get();
+      if (!$category) {
+        $this->session->set_flashdata('warning', 'Category data were not available');
+        redirect('category');
         }
 
         if ($this->category->where('category_id', $id)->delete()) {
@@ -98,26 +96,21 @@ class Category extends Operator_Controller
         }
 
         redirect('category');
-	}
-        
+    }
 
-    /*
-    |-----------------------------------------------------------------
-    | Callback
-    |-----------------------------------------------------------------
-    */        
-        
 
-//            public function alpha_numeric_coma_dash_dot_space($str)
-//    {
-//        if ( !preg_match('/^[a-zA-Z0-9 .,\-]+$/i',$str) )
-//        {
-//            $this->form_validation->set_message('alpha_numeric_coma_dash_dot_space', 'Can only be filled with letters, numbers, dash(-), dot(.), and comma(,).');
-//            return false;
-//        }
-//    }
+    //validasi format nama
+    // public function alpha_numeric_coma_dash_dot_space($str)
+    // {
+    //    if ( !preg_match('/^[a-zA-Z0-9 .,\-]+$/i',$str) )
+    //    {
+    //        $this->form_validation->set_message('alpha_numeric_coma_dash_dot_space', 'Can only be filled with letters, numbers, dash(-), dot(.), and comma(,).');
+    //        return false;
+    //    }
+    // }
     
-        public function unique_category_name()
+    //validasi nama
+    public function unique_category_name()
     {
         $category_name = $this->input->post('category_name');
         $category_id   = $this->input->post('category_id');
@@ -133,10 +126,11 @@ class Category extends Operator_Controller
         return true;
     }
     
-        public function is_date_format_valid($str)
+    //validasi format tanggal 
+    public function is_date_format_valid($str)
     {
-        if(!preg_match('/([0-9]{4})-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])/', $str)) {
-                //if(!preg_match('/(0[1-9]|1[0-9]|2[0-9]|3[01]-([0-9]{4})-(0[1-9]|1[012]))/', $str)) {    
+        if(!preg_match('/([0-9]{4})-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])/', $str))
+        {   
             $this->form_validation->set_message('is_date_format_valid', 'Invalid date format (yyyy-mm-dd)');
             return FALSE;
         }
@@ -144,7 +138,8 @@ class Category extends Operator_Controller
         return TRUE;
     }
     
-        public function check_date()
+    //validasi cek tanggal
+    public function check_date()
     {
         $date_close = $this->input->post('date_close');
         $date_open   = $this->input->post('date_open');

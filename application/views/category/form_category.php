@@ -13,9 +13,9 @@
       </li>
       <li class="breadcrumb-item ">
         <a href="<?=base_url('category')?>">Kategori</a>
-        <li class="breadcrumb-item active">
-          <a class="text-muted">Form</a>
-        </li>
+      <li class="breadcrumb-item active">
+        <a class="text-muted">Form</a>
+      </li>
       </li>
     </ol>
   </nav>
@@ -38,7 +38,7 @@
             <!-- .form-group -->
             <div class="form-group">
               <label for="category_name">Judul Kategori
-                <abbr title="Required">*</abbr>
+              <abbr title="Required">*</abbr>
               </label>
               <?= form_input('category_name', $input->category_name, 'class="form-control" id="category_name" autofocus') ?>
               <?= form_error('category_name') ?>
@@ -49,10 +49,10 @@
               $category_type = [
               '1' => 'Hibah buku karya',
               '2' => 'Hibah Reguler',
-            ]; ?>
+              ]; ?>
             <div class="form-group">
               <label for="category_type">Tipe Kategori
-                <abbr title="Required">*</abbr>
+              <abbr title="Required">*</abbr>
               </label>
               <?= form_dropdown('category_type', $category_type, $input->category_type, 'id="category_type" class="form-control custom-select d-block"') ?>
               <?= form_error('category_type') ?>
@@ -61,27 +61,25 @@
             <!-- .form-group -->
             <div class="form-group">
               <label for="category_year">Tahun Kategori
-                <abbr title="Required">*</abbr>
+              <abbr title="Required">*</abbr>
               </label>
               <?= form_input('category_year', $input->category_year, 'class="form-control" id="category_year"') ?>
               <?= form_error('category_year') ?>
             </div>
             <!-- /.form-group -->
-
             <!-- .form-group -->
             <div class="form-group">
               <label for="date_open">Tanggal Buka
-                <abbr title="Required">*</abbr>
+              <abbr title="Required">*</abbr>
               </label>
               <?= form_input('date_open', $input->date_open, 'class="form-control" id="date_open" ') ?>
               <?= form_error('date_open') ?>
             </div>
             <!-- /.form-group -->
-
             <!-- .form-group -->
             <div class="form-group">
               <label for="date_close">Tanggal Tutup
-                <abbr title="Required">*</abbr>
+              <abbr title="Required">*</abbr>
               </label>
               <?= form_input('date_close', $input->date_close, 'class="form-control" id="date_close" ') ?>
               <?= form_error('date_close') ?>
@@ -97,104 +95,101 @@
             <!-- .form-group -->
             <div class="form-group">
               <label>Status
-                <abbr title="Required">*</abbr>
+              <abbr title="Required">*</abbr>
               </label>
               <div>
                 <!-- button radio -->
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                   <label class="btn btn-secondary <?=($input->category_status == 'y') ? 'active' : '' ?>">
-                    <?= form_radio('category_status', 'y',
+                  <?= form_radio('category_status', 'y',
                     isset($input->category_status) && ($input->category_status == 'y') ? true : false,'required class="custom-control-input" id="blocked1"')?> Aktif</label>
-                    <label class="btn btn-secondary <?=($input->category_status == 'n') ? 'active' : '' ?>">
-                      <?= form_radio('category_status', 'n',
-                      isset($input->category_status) && ($input->category_status == 'n') ? true : false,' class="custom-control-input" id="blocked2"')?> Tidak Aktif</label>
-                    </div>
-                    <!-- /button radio -->
-                  </div>
-                  <?= form_error('category_status') ?>
+                  <label class="btn btn-secondary <?=($input->category_status == 'n') ? 'active' : '' ?>">
+                  <?= form_radio('category_status', 'n',
+                    isset($input->category_status) && ($input->category_status == 'n') ? true : false,' class="custom-control-input" id="blocked2"')?> Tidak Aktif</label>
                 </div>
-                <!-- /.form-group -->
-              </fieldset>
-              <!-- /.fieldset -->
-              <hr>
-              <!-- .form-actions -->
-              <div class="form-actions">
-                <button class="btn btn-primary ml-auto" type="submit">Submit data</button>
+                <!-- /button radio -->
               </div>
-              <!-- /.form-actions -->
-            </form>
-            <!-- /.form -->
+              <?= form_error('category_status') ?>
+            </div>
+            <!-- /.form-group -->
+          </fieldset>
+          <!-- /.fieldset -->
+          <hr>
+          <!-- .form-actions -->
+          <div class="form-actions">
+            <button class="btn btn-primary ml-auto" type="submit">Submit data</button>
           </div>
-          <!-- /.card-body -->
-        </section>
-        <!-- /.card -->
-      </div>
-    </div>      
+          <!-- /.form-actions -->
+          </form>
+          <!-- /.form -->
+        </div>
+        <!-- /.card-body -->
+      </section>
+      <!-- /.card -->
+    </div>
   </div>
-  <!-- /.page-section -->
-  <script>
-    $(document).ready(function(){
-
-
-      $('#date_open').flatpickr({
-        disableMobile: true,
-        dateFormat: 'Y-m-d',
-
-      });
-
-      $('#date_close').flatpickr({
-        disableMobile: true,
-        dateFormat: 'Y-m-d',
-      });
-
-
-      $.validator.addMethod("endDate", function(value, element) {
-        var startDate = $('#date_open').val();
-        return Date.parse(startDate) <= Date.parse(value) || value == "";
-      }, "Tanggal tutup harus setelah tanggal buka");
-      setting_validasi();
-      $("#formcategory").validate({
-        rules: {
-          category_name : {
-            crequired :true,
-            alphanum : true,
-          },
-          category_year : {
-            crequired:true,
-            crange:[1900,2100],
-          },
-          date_open : {
-            crequired : true,
-            date : true
-          },
-          date_close : {
-            crequired : true,
-            date : true,
-            endDate: true
-          },
-          category_status : "crequired"
+</div>
+<!-- /.page-section -->
+<script>
+  $(document).ready(function(){
+    $('#date_open').flatpickr({
+      disableMobile: true,
+      dateFormat: 'Y-m-d',
+    });
+    $('#date_close').flatpickr({
+      disableMobile: true,
+      dateFormat: 'Y-m-d',
+    });
+    $.validator.addMethod("endDate", function(value, element) {
+      var startDate = $('#date_open').val();
+      return Date.parse(startDate) <= Date.parse(value) || value == "";
+    }, "Tanggal tutup harus setelah tanggal buka");
+    setting_validasi();
+    $("#formcategory").validate({
+      rules: {
+        category_name : {
+          crequired :true,
+          alphanum : true,
         },
-        errorElement: "span",
-        errorPlacement: function (error, element) {
-         error.addClass( "invalid-feedback" );
-         if (element.parent('.input-group').length) { 
-                error.insertAfter(element.next('span.select2'));      // input group
-              } else if (element.hasClass("select2-hidden-accessible")){
-                error.insertAfter(element.next('span.select2'));  // select2
-              } else if (element.hasClass("custom-file-input")){
-                error.insertAfter(element.next('label.custom-file-label'));  // fileinput custom
-              } else if (element.hasClass("custom-control-input")){
-                error.insertAfter($(".custom-radio").last());  // radio
-              }else {                                      
-                error.insertAfter(element);               // default
-              }
-            }
-          },
-          select2_validasi()
-          );
-
-      // $('[name=date_open]').next('input').attr("name","date_open");
-      // $('[name=date_close]').next('input').attr("name","date_close");
-
-    })
-  </script>
+        category_year : {
+          crequired:true,
+          crange:[1900,2100],
+        },
+        date_open : {
+          crequired : true,
+          date : true
+        },
+        date_close : {
+          crequired : true,
+          date : true,
+          endDate: true
+        },
+        category_status : "crequired"
+      },
+      errorElement: "span",
+      errorPlacement: function (error, element) {
+        error.addClass( "invalid-feedback" );
+        if (element.parent('.input-group').length) {
+            // input group
+            error.insertAfter(element.next('span.select2'));
+          } else if (element.hasClass("select2-hidden-accessible")){
+            // select2
+            error.insertAfter(element.next('span.select2'));
+          } else if (element.hasClass("custom-file-input")){
+            // fileinput custom
+            error.insertAfter(element.next('label.custom-file-label'));
+          } else if (element.hasClass("custom-control-input")){
+            // radio
+            error.insertAfter($(".custom-radio").last());
+          }else {
+            // default             
+            error.insertAfter(element);               
+          }
+        }
+      },
+      select2_validasi()
+      );
+    // $('[name=date_open]').next('input').attr("name","date_open");
+    // $('[name=date_close]').next('input').attr("name","date_close");
+  })
+</script>
