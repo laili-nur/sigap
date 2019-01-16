@@ -29,6 +29,20 @@
   <!-- Reporting buku -->
   <!-- /.page-title-bar -->
   <br />
+
+  <div class="form-group row">
+      <div class="col-11 mb-1">
+          <div align="right">
+            <label for="" class="col-sm-4 col-form-label"><h6>Filter:</h6></label>
+          </div>
+      </div>
+      <div class="col-1  mb-4">
+      <?= form_open('', ['method' => 'GET']) ?>
+      <?= form_dropdown('droptahunbuku', getYearsBook(), $this->input->get('droptahunbuku'), 'onchange="this.form.submit()" id="droptahunbuku" class="form-control custom-select d-block" title="Filter tahun"') ?>
+      <?= form_close() ?>
+      </div>
+  </div>
+
   <div align="center">
     <h5>UGM Press</h5>
     <h6>Grafik Jumlah Buku</h6>
@@ -38,8 +52,8 @@
 
     <canvas id="myChart" width="500" height="170"></canvas>
     <script>
-
-    $.post("<?php echo base_url();?>Reporting/getBook",
+    var tahun = $('#droptahunbuku').val();
+    $.post("<?php echo base_url();?>Reporting/getBook?droptahunbuku="+tahun,
         function(data){
           var obj = JSON.parse(data);
           console.log(obj);
@@ -53,8 +67,8 @@
           var myChart = new Chart(ctx, {
               type: 'bar',
               data: {
-                  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
-                          "Aug", "Sep", "Oct", "Nov", "Des"],
+                  labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli",
+                          "Agustus", "September", "Oktober", "November", "Desember"],
                   datasets: [{
                       label: 'Laporan Buku',
                       data: tampil,
@@ -117,41 +131,3 @@
           });
       });
     </script>
-
-    <!-- table for book -->
-    <br />
-    <h5>Tabel Buku</h5>
-    <br />
-    <div class="container">
-      <div class="table-responsive">
-        <table class="table table-bordered">
-          <tr>
-            <th>Book Title</th>
-            <th>Published Date</th>
-            <th>Year</th>
-          </tr>
-        <?php
-        if($books)
-        {
-          foreach ($books as $row)
-          {
-        ?>
-          <tr>
-            <td><?php echo $row->book_title; ?></td>
-            <td><?php echo konversiTanggal($row->published_date); ?></td>
-            <td><?php echo date("Y",strtotime($row->published_date)); ?></td>
-          </tr>
-          <?php
-          }
-        }
-        else
-        {
-          ?>
-          <tr>
-            <td colspan="3">No data found</td>
-          </tr>
-        <?php
-        }
-        ?>
-        </table>
-      </div>

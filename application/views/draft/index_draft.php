@@ -204,7 +204,7 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
                     <?= konversiTanggal($draft->entry_date) ?>
                   </td>
                   <td class="align-middle">
-                    <?php 
+                    <?php
                     if ($ceklevel == 'reviewer') {
                       if ($draft->review_flag != '') {
                         echo '<span class="badge badge-success">Sudah direview</span>';

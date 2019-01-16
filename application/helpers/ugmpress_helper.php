@@ -1,5 +1,47 @@
 <?php
 
+function getYears()
+{
+  $tahun =array();
+  //$filtertahun = $this->reporting->group_by('YEAR(entry_date)')->getAllArray('draft');
+  $CI =& get_instance();
+  $filtertahun = $CI->db->from('draft')->group_by('YEAR(entry_date)')->order_by('entry_date','DESC')->get();
+  $filtertahunz = $filtertahun->result();
+  foreach ($filtertahunz as $key => $value){
+    $tahun[date('Y',strtotime($value->entry_date))] = date('Y',strtotime($value->entry_date));
+  }
+
+  return($tahun);
+}
+
+function getYearsBook()
+{
+  $tahun =array();
+  //$filtertahun = $this->reporting->group_by('YEAR(entry_date)')->getAllArray('draft');
+  $CI =& get_instance();
+  $filtertahun = $CI->db->from('book')->group_by('YEAR(published_date)')->order_by('published_date','DESC')->get();
+  $filtertahunz = $filtertahun->result();
+  foreach ($filtertahunz as $key => $value){
+    $tahun[date('Y',strtotime($value->published_date))] = date('Y',strtotime($value->published_date));
+  }
+
+  return($tahun);
+}
+
+function getYearsSummary()
+{
+  $tahun =array();
+  //$filtertahun = $this->reporting->group_by('YEAR(entry_date)')->getAllArray('draft');
+  $CI =& get_instance();
+  $filtertahun = $CI->db->from('draft')->group_by('YEAR(entry_date)')->order_by('entry_date','DESC')->get();
+  $filtertahunz = $filtertahun->result();
+  foreach ($filtertahunz as $key => $value){
+    $tahun[date('Y',strtotime($value->entry_date))] = date('Y',strtotime($value->entry_date));
+  }
+
+  return($tahun);
+}
+
 function konversi_username_level($username){
     if($username=='' || $username == null){
         return "-";
@@ -16,7 +58,7 @@ function konversi_username_level($username){
             }
         }
     }
-    
+
 }
 
 function konversiTanggal($input=null,$opsi=''){
@@ -46,7 +88,7 @@ function konversiID($table,$vars,$id)
             return "";
         }
     }
-    
+
 }
 
 // Get list of option for dropdown.
@@ -69,11 +111,7 @@ function getDropdownListBook($table, $columns)
 function getDropdownListReviewer($table, $columns)
 {
     $CI =& get_instance();
-    if (isset($_SESSION['user_id_temp'])) {
-        $query = $CI->db->select($columns)->where('user_id', $_SESSION['user_id_temp'])->or_where('level','reviewer')->or_where('level','author_reviewer')->from($table)->get();
-    } else {
-        $query = $CI->db->select($columns)->where('level','reviewer')->or_where('level','author_reviewer')->from($table)->get();
-    }
+    $query = $CI->db->select($columns)->where('level','reviewer')->or_where('level','author_reviewer')->from($table)->get();
 
     if ($query->num_rows() >= 1) {
         $options1 = ['' => '-- Choose --'];
@@ -184,11 +222,11 @@ function getMoreDropdownList($table, $columns)
             $tables[$column[0]] = array($columns[$i]);
         } else {
             array_push($tables[$column[0]], $columns[$i]);
-        }  
+        }
     }
-    
+
     $CI =& get_instance();
-    
+
     foreach ($tables as $key => $val) {
         if ($key == $table) {
             $query = $CI->db->get($key);
@@ -212,21 +250,17 @@ function getMoreDropdownList($table, $columns)
                             if ($table_rel == $key1) {
                                 $query2 = $CI->db->select($val1)->where($table_rel . '_id', $result[$j][$table_rel . '_id'])->from($key1)->get();
                                 $result2 = $query2->result_array();
-                                $value2 = '';
-                                if (count($result2) > 0) {
-                                    foreach ($result2 as $key2) {
-                                        $value2 .= ' - ';
-                                        $value2 .= $result[$j][$columns[$i]] = $key2[$columns[$i]];
-                                    }
+                                foreach ($result2 as $key2) {
+                                    $result[$j][$columns[$i]] = $key2[$columns[$i]];
                                 }
                             }
                         }
-                    } 
-                    $value .= $value2;
+                    }
+                    $value .= ' - ' . $result[$j][$columns[$i]];
                     $options2[$key] = $value;
                 }
                 $j++;
-            }            
+            }
         }
         $options = $options1 + $options2;
         return $options;
@@ -245,7 +279,7 @@ function getDropdownBankList($table, $columns)
         $options = $options1 + $options2;
         return $options;
     }
-    
+
     return $options = ['' => '- Choose -'];
 }
 
@@ -262,4 +296,3 @@ function fileFormError($field, $prefix = '', $suffix = '')
     }
     return '';
 }
-

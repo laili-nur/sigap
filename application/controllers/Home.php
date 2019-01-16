@@ -6,13 +6,18 @@ class Home extends Operator_Controller
     {
         parent::__construct();
         $this->pages = 'home';
+        // $is_login = $this->session->userdata('is_login');
+
+        // if (!$is_login) {
+        //     redirect(base_url('login'));
+        //     return;
+        // }
     }
 
-    public function index($page = null)
-    {
+	public function index($page = null)
+	{
         $tulisan_dashboard = $this->home->get('setting');
-
-        // menampilkan kategori yang open saja
+        // handle untuk merubah category status yang udah expired
         $current_date = strtotime(date('Y-m-d'));
         $all_categories = $this->home->orderBy('category_name')->getAllWhere("category_status = 'y'",'category');
         foreach ($all_categories as $key) {
@@ -21,6 +26,7 @@ class Home extends Operator_Controller
 
             if ($current_date >= $close_date) {
                 $data = array('category_status' => 'n');
+
                 $this->home->where('category_id', $key->category_id)->update($data, 'category');
             }
         }
@@ -30,13 +36,13 @@ class Home extends Operator_Controller
         $drafts = array();
         $count = array();
 
-        //menampilkan info sesuai level
         if($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'){
             $count['tot_category']     = $this->home->count('category');
             $count['tot_draft']     = $this->home->count('draft');
             $count['tot_book']     = $this->home->count('book');
             $count['tot_author']     = $this->home->count('author');
             $count['tot_reviewer']     = $this->home->count('reviewer');
+
             $count['draft_desk'] = $this->home->where('draft_status','0')->count('draft');
             $count['draft_desk_lolos'] = $this->home->where('draft_status','1')->count('draft');
             $count['draft_desk_total'] = $count['draft_desk']+$count['draft_desk_lolos'];
@@ -117,15 +123,17 @@ class Home extends Operator_Controller
             $count['count_total'] = $count_total;
         }elseif($ceklevel == 'author'){
             $categories = $this->home->orderBy('category_name')->getAllWhere("category_status = 'y'",'category');
+
             $count['draft_total'] = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->count('draft');
             $count['draft_desk'] = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('draft_status','0')->count('draft');
             $count['draft_review'] = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('draft_status','4')->where('is_review','n')->count('draft');
             $count['draft_edit'] = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('is_review','y')->where('is_edit','n')->whereNot('draft_status','99')->count('draft');
-            $count['draft_layout'] = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('is_edit','y')->where('is_layout','n')->whereNot('draft_status','99')->count('draft');
+             $count['draft_layout'] = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('is_edit','y')->where('is_layout','n')->whereNot('draft_status','99')->count('draft');
             $count['draft_proofread'] = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->where('is_layout','y')->where('is_proofread','n')->whereNot('draft_status','99')->count('draft');
             $count['draft_approved'] = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->whereNot('draft_status','99')->whereNot('draft_status','2')->where('user.username',$cekusername)->count('draft');
             $count['draft_rejected'] = $this->home->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('draft_status','99')->where('user.username',$cekusername)->count('draft');
             $count['draft_book'] = $this->home->join3('draft','book','draft')->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('user','author','user')->where('user.username',$cekusername)->count('book');
+
         }elseif($ceklevel == 'editor'){
             $count['draft_total'] = $this->home->join3('responsibility','draft','draft')->join3('user','responsibility','user')->where('user.username',$cekusername)->count('draft');
             $count['draft_desk'] = $this->home->where('draft_status',0)->count('draft');
@@ -142,8 +150,9 @@ class Home extends Operator_Controller
             $count['draft_rejected'] = $this->home->join3('responsibility','draft','draft')->join3('user','responsibility','user')->where('is_layout','n')->where('draft_status',99)->where('user.username',$cekusername)->count('draft');
         }
 
+
         $pages    = $this->pages;
         $main_view  = 'home/index';
-        $this->load->view('template', compact('tulisan_dashboard','categories','count','drafts_newest','drafts','pages', 'main_view'));        
-    }
+	$this->load->view('template', compact('tulisan_dashboard','categories','count','drafts_newest','drafts','pages', 'main_view'));        
+	}
 }

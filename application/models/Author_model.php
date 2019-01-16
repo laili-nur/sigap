@@ -130,7 +130,7 @@ class Author_model extends MY_Model
 
     public function deleteAuthorKTP($authorKTP)
     {
-        if($authorKTP != "") {
+        if($draftFile != "") {
            if (file_exists("./authorktp/$authorKTP")) {
                 unlink("./authorktp/$authorKTP");
             } 

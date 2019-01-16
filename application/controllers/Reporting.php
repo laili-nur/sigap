@@ -91,8 +91,9 @@ class Reporting extends Admin_Controller {
 		$count_layout = 0;
 		$count_proofread = 0;
 		$count_book = 0;
+		$year = $this->input->get('droptahunsummary');
 
-		$result_review = $this->reporting->select(['draft_status'])->getAll('draft');
+		$result_review = $this->reporting->select(['draft_status'])->getSummary($year);
 		foreach ($result_review as $hasil_review){
 			if ($hasil_review->draft_status == 4 or $hasil_review->draft_status == 5) {
 					$count_review++;
@@ -100,7 +101,7 @@ class Reporting extends Admin_Controller {
 		}
 		$result['count_review'] = $count_review;
 
-		$result_disetujui = $this->reporting->select(['is_review'])->getAll('draft');
+		$result_disetujui = $this->reporting->select(['is_review'])->getSummary($year);
 		foreach ($result_disetujui as $hasil_disetujui) {
 			if ($hasil_disetujui->is_review == 'y') {
 				$count_disetujui++;
@@ -108,7 +109,7 @@ class Reporting extends Admin_Controller {
 		}
 		$result['count_disetujui'] = $count_disetujui;
 
-		$result_editor = $this->reporting->select(['is_review','is_edit','is_layout','is_proofread'])->getAll('draft');
+		$result_editor = $this->reporting->select(['is_review','is_edit','is_layout','is_proofread'])->getSummary($year);
 		foreach ($result_editor as $hasil_editor) {
 			if ($hasil_editor->is_review == 'y' AND $hasil_editor->is_edit == 'n') {
 				$count_editor++;
@@ -197,19 +198,22 @@ class Reporting extends Admin_Controller {
 
 	public function getDraft()
   {
+		$year = $this->input->get('droptahun');
 		for($i = 1; $i <= 12; $i++)
 		{
-			$result[$i] = $this->reporting->getDraft($i);
+			$result[$i] = $this->reporting->getDraft($i, $year);
 			$result['count'][$i] = count($result[$i]);
 		}
+
 		echo json_encode($result);
   }
 
 	public function getBook()
   {
+		$year = $this->input->get('droptahunbuku');
 		for($i = 1; $i <= 12; $i++)
 		{
-			$result[$i] = $this->reporting->getBook($i);
+			$result[$i] = $this->reporting->getBook($i,$year);
 			$result['count'][$i] = count($result[$i]);
 		}
 		echo json_encode($result);
@@ -225,6 +229,36 @@ class Reporting extends Admin_Controller {
 		echo json_encode($result);
   }
 
+	public function getYearsSummary()
+	{
+		$filtertahun = $this->reporting->group_by('YEAR(entry_date)')->getAllArray('draft');
+		foreach ($filtertahun as $key => $value){
+			$tahun[$key] = date('Y',strtotime($value['entry_date']));
+		}
+
+		echo json_encode($tahun);
+	}
+
+	public function getYears()
+	{
+		$filtertahun = $this->reporting->group_by('YEAR(entry_date)')->getAllArray('draft');
+		foreach ($filtertahun as $key => $value){
+			$tahun[$key] = date('Y',strtotime($value['entry_date']));
+		}
+
+		echo json_encode($tahun);
+	}
+
+	public function getYearsBook()
+	{
+		$filtertahun = $this->reporting->group_by('YEAR(published_date)')->getAllArray('book');
+		foreach ($filtertahun as $key => $value){
+			$tahun[$key] = date('Y',strtotime($value['published_date']));
+		}
+
+		echo json_encode($tahun);
+	}
+
 	public function getHibah()
 	{
 		for($i = 1; $i <= 3; $i++)
@@ -235,79 +269,6 @@ class Reporting extends Admin_Controller {
 		echo json_encode($result);
 	}
 }
-
-// function filter($page = null){
-// 	$filter   = $this->input->get('filter', true);
-// 	$this->db->group_by('draft.draft_id');
-// 	if($this->level == 'reviewer'){
-// 					/*=============================================
-// 					=            Filter level reviewer            =
-// 					=============================================*/
-// 					if($filter == 'sudah'){
-// 							$drafts =array();
-// 							$drafts_source = $this->draft->join('category')
-// 							->join('theme')
-// 							->join3('draft_reviewer','draft','draft')
-// 							->join3('reviewer','draft_reviewer','reviewer')
-// 							->join3('user','reviewer','user')
-// 							->where('user.username',$this->username)
-// 							->orderBy('draft_title')
-// 							->paginate($page)
-// 							->getAll();
-// 					//cari tau rev 1 atau rev 2 yg sedang login
-// 							foreach ($drafts_source as $key => $value) {
-// 									$rev = $this->draft->getIdAndName('reviewer', 'draft_reviewer', $value->draft_id);
-// 									$value->rev = key(array_filter(
-// 											$rev,
-// 											function ($e) {
-// 													return $e->reviewer_id == $this->session->userdata('role_id');
-// 											}
-// 									));
-// 									if($value->rev == 0){
-// 										$value->review_flag = $value->review1_flag;
-// 								}elseif($value->rev == 1){
-// 										$value->review_flag = $value->review2_flag;
-// 								}else{}
-//
-// 								if($value->review_flag != ''){
-// 										$drafts[] =$value;
-// 								}
-// 								$total = count($drafts);
-// 						}
-// 				}elseif($filter == 'belum'){
-// 					$drafts =array();
-// 					$drafts_source = $this->draft->join('category')
-// 					->join('theme')
-// 					->join3('draft_reviewer','draft','draft')
-// 					->join3('reviewer','draft_reviewer','reviewer')
-// 					->join3('user','reviewer','user')
-// 					->where('user.username',$this->username)
-// 					->orderBy('draft_title')
-// 					->paginate($page)
-// 					->getAll();
-// 					//cari tau rev 1 atau rev 2 yg sedang login
-// 					foreach ($drafts_source as $key => $value) {
-// 							$rev = $this->draft->getIdAndName('reviewer', 'draft_reviewer', $value->draft_id);
-// 							$value->rev = key(array_filter(
-// 									$rev,
-// 									function ($e) {
-// 											return $e->reviewer_id == $this->session->userdata('role_id');
-// 									}
-// 							));
-// 							if($value->rev == 0){
-// 								$value->review_flag = $value->review1_flag;
-// 						}elseif($value->rev == 1){
-// 								$value->review_flag = $value->review2_flag;
-// 						}else{}
-//
-// 						if($value->review_flag == ''){
-// 								$drafts[] =$value;
-// 						}
-// 						$total = count($drafts);
-// 				}
-// 		}
-// 	}
-// }
 
 /* End of file Reporting.php */
 /* Location: ./application/controllers/Reporting.php */

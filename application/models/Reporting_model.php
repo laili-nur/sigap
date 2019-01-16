@@ -56,16 +56,27 @@ class Reporting_model extends MY_Model{
   }
 
   /*model for graph*/
-
-  public function getDraft($month)
+  public function getSummary($year)
   {
-    $query = $this->db->query("SELECT draft_id, draft_title, entry_date FROM draft WHERE Month(entry_date) = $month");
+    $query = $this->db->query("SELECT * FROM draft WHERE YEAR(entry_date) = $year");
     return $query->result();
   }
 
-  public function getBook($month)
+  // public function getAll($table = "")
+  // {
+  //     $table = $this->checkTable($table);
+  //     return $this->db->get($table)->result();
+  // }
+
+  public function getDraft($month, $year)
   {
-    $query = $this->db->query("SELECT book_id, book_title, published_date FROM book WHERE Month(published_date) = $month");
+    $query = $this->db->query("SELECT draft_id, draft_title, entry_date FROM draft WHERE MONTH(entry_date) = $month and YEAR(entry_date) = $year");
+    return $query->result();
+  }
+
+  public function getBook($month, $year)
+  {
+    $query = $this->db->query("SELECT book_id, book_title, published_date FROM book WHERE Month(published_date) = $month and YEAR(published_date) = $year");
     return $query->result();
   }
 

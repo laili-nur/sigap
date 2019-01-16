@@ -137,7 +137,7 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
               <!-- /.table -->
             </div>
             <?php else: ?>
-              <p class="text-center">Data tidak tersedia</p>
+              <p>Author data were not available</p>
             <?php endif ?>
             <!-- /.table-responsive -->
             <!-- Pagination -->

@@ -9,7 +9,7 @@
         <a href="<?=base_url('setting')?>">Setting</a>
       </li>
     </ol>
-  </nav>
+  </nav> 
 </header>
 <!-- /.page-title-bar -->
 <!-- .page-section -->
@@ -34,7 +34,7 @@
               <?= form_error('dashboard_head') ?>
             </div>
             <!-- /.form-group -->
-            <!-- .form-group -->
+           <!-- .form-group -->
             <div class="form-group">
               <label for="dashboard_content_author">Dashboard author
               </label>
@@ -74,13 +74,13 @@
             <button class="btn btn-primary ml-auto" type="submit">Submit data</button>
           </div>
           <!-- /.form-actions -->
-          </form>
-          <!-- /.form -->
-        </div>
-        <!-- /.card-body -->
-      </section>
-      <!-- /.card -->
-    </div>
+        </form>
+        <!-- /.form -->
+      </div>
+      <!-- /.card-body -->
+    </section>
+    <!-- /.card -->
   </div>
+</div>
 </div>
 <!-- /.page-section -->

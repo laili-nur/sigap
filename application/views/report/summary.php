@@ -29,6 +29,20 @@
   <!-- Reporting buku -->
   <!-- /.page-title-bar -->
   <br />
+
+  <div class="form-group row">
+      <div class="col-11 mb-1">
+          <div align="right">
+            <label for="" class="col-sm-4 col-form-label"><h6>Filter:</h6></label>
+          </div>
+      </div>
+      <div class="col-1  mb-4">
+      <?= form_open('', ['method' => 'GET']) ?>
+      <?= form_dropdown('droptahunsummary', getYearsSummary(), $this->input->get('droptahunsummary'), 'onchange="this.form.submit()" id="droptahunsummary" class="form-control custom-select d-block" title="Filter tahun"') ?>
+      <?= form_close() ?>
+      </div>
+  </div>
+
   <div align="center">
     <h5>UGM Press</h5>
     <h6>Grafik Ringkasan Pencetakan Buku</h6>
@@ -38,11 +52,10 @@
 
     <canvas id="myChart" width="500" height="170"></canvas>
     <script>
-
-    $.post("<?php echo base_url();?>Reporting/getSummary",
+    var tahun = $('#droptahunsummary').val();
+    $.post("<?php echo base_url();?>Reporting/getSummary?droptahunsummary="+tahun,
         function(data){
           var obj = JSON.parse(data);
-
           var review = obj.count_review;
           var disetujui = obj.count_disetujui;
           var editor = obj.count_editor;

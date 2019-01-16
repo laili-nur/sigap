@@ -28,7 +28,22 @@
   </ul>
   <!-- Reporting buku -->
   <!-- /.page-title-bar -->
-  <br />
+
+  <br/>
+
+  <div class="form-group row">
+      <div class="col-11 mb-1">
+          <div align="right">
+            <label for="" class="col-sm-4 col-form-label"><h6>Filter:</h6></label>
+          </div>
+      </div>
+      <div class="col-1  mb-4">
+      <?= form_open('', ['method' => 'GET']) ?>
+      <?= form_dropdown('droptahun', getYears(), $this->input->get('droptahun'), 'onchange="this.form.submit()" id="droptahun" class="form-control custom-select d-block" title="Filter tahun"') ?>
+      <?= form_close() ?>
+      </div>
+  </div>
+
   <div align="center">
     <h5>UGM Press</h5>
     <h6>Grafik Jumlah Draft</h6>
@@ -38,8 +53,8 @@
 
     <canvas id="myChart" width="500" height="170"></canvas>
     <script>
-
-    $.post("<?php echo base_url();?>Reporting/getDraft",
+    var tahun = $('#droptahun').val();
+    $.post("<?php echo base_url();?>Reporting/getDraft?droptahun="+tahun,
         function(data){
           var obj = JSON.parse(data);
           console.log(obj);
@@ -53,8 +68,8 @@
           var myChart = new Chart(ctx, {
               type: 'bar',
               data: {
-                  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
-                          "Aug", "Sep", "Oct", "Nov", "Des"],
+                  labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli",
+                          "Agustus", "September", "Oktober", "November", "Desember"] ,
                   datasets: [{
                       label: 'Laporan Draft',
                       data: tampil,
@@ -87,6 +102,7 @@
                   }]
               },
               options: {
+                onClick: mantul,
                 legend: {
                   display : false,
                 },
@@ -103,7 +119,8 @@
                     }],
                       xAxes : [{
                         gridLines : {
-                          display : false
+                          display : false,
+
                         },
                         ticks: {
                           fontFamily :"'Helvetica'",
@@ -116,6 +133,10 @@
               }
           });
       });
+
+      function mantul() {
+        alert('hello');
+      }
     </script>
 
     <!-- table for draft -->

@@ -107,7 +107,7 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
                       <td class="align-middle"><?= $author->institute_name ?></td>
                       <td class="align-middle text-right">    
 
-                        <button title="Jadikan Reviewer" onclick="location.href='<?= base_url('author/copyToReviewer/' . $author->user_id . '/' . $author->author_nip . '/' . $author->author_name) ?>'"  class="btn btn-sm btn-primary" <?=(!$author->user_id || $author->is_author_reviewer)? 'disabled' : '' ?>>
+                        <button title="Jadikan Reviewer" onclick="location.href='<?= base_url('author/copyToReviewer/' . $author->user_id . '/' . $author->author_nip . '/' . $author->author_name) ?>'"  class="btn btn-sm btn-primary" <?=(!$author->user_id)? 'disabled' : '' ?>>
                           <i class="fa fa-user-plus"></i>
                           <span class="sr-only">Jadikan reviewer</span>
                         </button>
