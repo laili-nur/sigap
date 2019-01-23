@@ -11,8 +11,8 @@ class Category_model extends MY_Model
                 'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_category_name'
             ],
             [
-                'field' => 'category_tipe',
-                'label' => 'Category tipe',
+                'field' => 'category_type',
+                'label' => 'Category Type',
                 'rules' => 'trim|required'
             ],
             [

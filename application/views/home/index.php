@@ -341,27 +341,6 @@
       <!-- /metric row -->
     </div>
     <!-- /.section-block -->
-    <!-- grid row -->
-    <div class="row">
-      <!-- grid column -->
-      <div class="col-12 col-lg-12 col-xl-4">
-        <!-- .card -->
-        <section class="card card-fluid">
-          <!-- .card-body -->
-          <div class="card-body">
-            <!-- .d-flex -->
-            <div class="d-flex align-items-center mb-3">
-              <h3 class="card-title mr-auto"> Data </h3>
-            </div>
-            <!-- /.d-flex -->
-          </div>
-          <!-- /.card-body -->
-        </section>
-        <!-- /.card -->
-      </div>
-      <!-- /grid column -->
-    </div>
-    <!-- /grid row -->
     <?php endif ?>
     <!-- untuk level reviewer -->
     <?php if ($ceklevel == 'reviewer'): ?>

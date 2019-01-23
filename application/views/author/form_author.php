@@ -169,6 +169,7 @@
             <script></script>
             <!-- .form-group -->
             <div class="form-group">
+
               <label for="author_ktp">KTP</label>
               <div class="custom-file">
                 <?= form_upload('author_ktp','','class="custom-file-input" onchange="preview_image(event)"') ?>
@@ -176,7 +177,10 @@
               </div>
               <small class="form-text text-muted">Hanya menerima file bertype : jpg, jpeg, png, pdf. Maksimal 15 MB</small>
               <?= fileFormError('author_ktp', '<p class="text-danger">', '</p>'); ?>
-              <div class="col-8 offset-2 mt-3"><img width="100%" id="output_image"/></div>
+              <div class="col-8 offset-2 mt-3">
+                <?=($input->author_ktp !='')? '<img src="'.base_url('authorktp/'.$input->author_ktp).'" width="100%" id="previewxx"><br>' : '' ?>
+                <img width="100%" id="output_image"/>
+              </div>
             </div>
             <!-- /.form-group -->
           </fieldset>

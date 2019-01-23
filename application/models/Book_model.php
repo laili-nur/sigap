@@ -28,6 +28,11 @@ class Book_model extends MY_Model
                 'rules' => 'trim|min_length[1]|max_length[256]'
             ],
             [
+                'field' => 'book_pages',
+                'label' => 'Book pages',
+                'rules' => 'trim|min_length[1]|max_length[256]'
+            ],
+            [
                 'field' => 'isbn',
                 'label' => 'ISBN',
                 'rules' => 'trim|min_length[1]|max_length[256]'
@@ -97,6 +102,7 @@ class Book_model extends MY_Model
 //            'cover'                    => '',
             'book_edition'                 => '',
             'book_file_link'                 => '',
+            'book_pages'                 => '',
             'isbn'                 => '',
             'eisbn'                 => '',
 //            'book_file'                    => '',

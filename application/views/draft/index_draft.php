@@ -115,17 +115,17 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
               </button>
             </div>
             <div class="row">
-              <div class="col-3 col-lg-2 mb-3">
+              <div class="col-12 col-md-4 col-lg-2 mb-3">
                 <?= form_open('draft/filter', ['method' => 'GET']) ?>
                 <?= form_dropdown('per_page', $per_page, $this->input->get('per_page'), 'id="per_page" class="form-control custom-select d-block" title="List per page"') ?>
               </div>
-              <div class="col-3 col-lg-4 mb-3">
+              <div class="col-12 col-md-4 col-lg-4 mb-3">
                 <?= form_dropdown('filter', $filter_status, $this->input->get('filter'), ' id="filter" class="form-control custom-select d-block" title="Filter status"') ?>
               </div>
-              <div class="col-3 col-lg-4 mb-3">
+              <div class="col-12 col-md-4 col-lg-4 mb-3">
                 <?= form_dropdown('category', getDropdownListCategory('category', ['category_id', 'category_name'],true), $this->input->get('category'), '" id="category" class="form-control custom-select d-block "') ?>
               </div>
-              <div class="col-3 col-lg-2 mb-3">
+              <div class="col-12 col-md-12 col-lg-2 mb-3">
                 <button class="btn btn-primary btn-block ml-auto" type="submit" value="Submit" id="btn-submit"><i class="fa fa-filter"></i> Filter data</button>
                 <?= form_close() ?>
               </div>
@@ -204,7 +204,7 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
                     <?= konversiTanggal($draft->entry_date) ?>
                   </td>
                   <td class="align-middle">
-                    <?php
+                    <?php 
                     if ($ceklevel == 'reviewer') {
                       if ($draft->review_flag != '') {
                         echo '<span class="badge badge-success">Sudah direview</span>';

@@ -71,6 +71,12 @@
                 <td><?= $input->book_edition ?> </td>
               </tr>
               <!-- /tr -->
+              <!-- tr -->
+              <tr>
+                <td width="200px"> Halaman Buku </td>
+                <td><?= $input->book_pages ?> </td>
+              </tr>
+              <!-- /tr -->
                <!-- tr -->
               <tr>
                 <td width="200px"> ISBN </td>
