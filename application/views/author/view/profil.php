@@ -78,7 +78,24 @@
           <!-- tr -->
           <tr>
             <td width="200px"> KTP </td>
-            <td> <img src="<?=base_url('authorktp/'.$input->author_ktp); ?>" alt="" width="30%"> </td>
+            <td>
+            <?php
+                //liat ekstensi file 
+                if($input->author_ktp!=''){
+                  $getextension = explode(".", $input->author_ktp); 
+                }else{
+                  $getextension[1] = '';
+                }
+                if($input->author_ktp !=''){
+                //jika ekstensi pdf maka tampilkan link
+                  if($getextension[1]!='pdf'){
+                    echo '<img src="'.base_url('authorktp/'.$input->author_ktp).'" width="30%" class="previewxx"><br>';
+                  }else{
+                    echo '<div align="left"><a href="'.base_url('authorktp/'.$input->author_ktp).'" class="btn btn-success btn-sm previewxx"><i class="fa fa-download"></i> Lihat KTP</a></div>';
+                  }
+                }
+                ?>
+              </td>
           </tr>
           <!-- /tr -->
         </tbody>

@@ -178,7 +178,23 @@
               <small class="form-text text-muted">Hanya menerima file bertype : jpg, jpeg, png, pdf. Maksimal 15 MB</small>
               <?= fileFormError('author_ktp', '<p class="text-danger">', '</p>'); ?>
               <div class="col-8 offset-2 mt-3">
-                <?=($input->author_ktp !='')? '<img src="'.base_url('authorktp/'.$input->author_ktp).'" width="100%" id="previewxx"><br>' : '' ?>
+                <?php
+                //liat ekstensi file 
+                if($input->author_ktp!=''){
+                  $getextension = explode(".", $input->author_ktp); 
+                }else{
+                  $getextension[1] = '';
+                }
+                if($input->author_ktp !=''){
+                //jika ekstensi pdf maka tampilkan link
+                  if($getextension[1]!='pdf'){
+                    echo '<img src="'.base_url('authorktp/'.$input->author_ktp).'" width="100%" class="previewxx"><br>';
+                  }else{
+                    echo '<div align="middle"><a href="'.base_url('authorktp/'.$input->author_ktp).'" class="btn btn-success btn-sm previewxx"><i class="fa fa-download"></i> Lihat KTP</a></div>';
+                  }
+                }
+                ?>
+
                 <img width="100%" id="output_image"/>
               </div>
             </div>
