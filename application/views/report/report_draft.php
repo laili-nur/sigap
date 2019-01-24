@@ -32,12 +32,12 @@
   <br/>
 
   <div class="form-group row">
-      <div class="col-11 mb-1">
+      <div class="col-8 col-md-10 mb-1">
           <div align="right">
             <label for="" class="col-sm-4 col-form-label"><h6>Filter:</h6></label>
           </div>
       </div>
-      <div class="col-1  mb-4">
+      <div class="col-4 col-md-2  mb-4">
       <?= form_open('', ['method' => 'GET']) ?>
       <?= form_dropdown('droptahun', getYears(), $this->input->get('droptahun'), 'onchange="this.form.submit()" id="droptahun" class="form-control custom-select d-block" title="Filter tahun"') ?>
       <?= form_close() ?>
