@@ -181,7 +181,7 @@ function getDropdownListCategory($table, $columns, $all = false)
     $CI =& get_instance();
     if($all == true){
         //ambil semua kategori
-        $query = $CI->db->select($columns)->from($table)->get();
+        $query = $CI->db->select($columns)->from($table)->order_by('category_name', 'asc')->get();
     }else{
         //ambil karegori yang aktif
         $query = $CI->db->select($columns)->from($table)->where('category_status','y')->get();
