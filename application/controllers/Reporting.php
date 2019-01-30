@@ -128,7 +128,6 @@ class Reporting extends Admin_Controller {
 		$result['count_layout'] = $count_layout;
 		$result['count_proofread'] = $count_proofread;
 		$result['count_book'] = $count_book;
-
 		echo json_encode($result);
 	}
 
@@ -148,7 +147,6 @@ class Reporting extends Admin_Controller {
 		}
 		$result['count_ugm'] = $count_ugm;
 		$result['count_lain'] = $count_lain;
-
 		echo json_encode($result);
 	}
 
@@ -172,7 +170,6 @@ class Reporting extends Admin_Controller {
 		$result['count_prof'] = $count_prof;
 		$result['count_doctor'] = $count_doctor;
 		$result['count_lainnya'] = $count_lainnya;
-
 		echo json_encode($result);
 	}
 
@@ -180,8 +177,9 @@ class Reporting extends Admin_Controller {
 	{
 		$count_hibah = 0;
 		$count_reguler = 0;
+		$year = $this->input->get('droptahunhibah');
 
-		$result_ugm = $this->reporting->select(['category_type'])->join3('category', 'draft', 'category')->getAll('draft');
+		$result_ugm = $this->reporting->select(['category_type'])->join3('category', 'draft', 'category')->where('YEAR(entry_date)',$year)->getAll('draft');
 		foreach ($result_ugm as $category_ugm){
 			if ($category_ugm->category_type == 1) {
 					$count_hibah++;
@@ -192,7 +190,6 @@ class Reporting extends Admin_Controller {
 		}
 		$result['count_hibah'] = $count_hibah;
 		$result['count_reguler'] = $count_reguler;
-
 		echo json_encode($result);
 	}
 
@@ -204,7 +201,6 @@ class Reporting extends Admin_Controller {
 			$result[$i] = $this->reporting->getDraft($i, $year);
 			$result['count'][$i] = count($result[$i]);
 		}
-
 		echo json_encode($result);
   }
 
@@ -229,13 +225,13 @@ class Reporting extends Admin_Controller {
 		echo json_encode($result);
   }
 
+
 	public function getYearsSummary()
 	{
 		$filtertahun = $this->reporting->group_by('YEAR(entry_date)')->getAllArray('draft');
 		foreach ($filtertahun as $key => $value){
 			$tahun[$key] = date('Y',strtotime($value['entry_date']));
 		}
-
 		echo json_encode($tahun);
 	}
 
@@ -245,7 +241,6 @@ class Reporting extends Admin_Controller {
 		foreach ($filtertahun as $key => $value){
 			$tahun[$key] = date('Y',strtotime($value['entry_date']));
 		}
-
 		echo json_encode($tahun);
 	}
 
@@ -255,19 +250,18 @@ class Reporting extends Admin_Controller {
 		foreach ($filtertahun as $key => $value){
 			$tahun[$key] = date('Y',strtotime($value['published_date']));
 		}
-
 		echo json_encode($tahun);
 	}
 
-	public function getHibah()
+	public function getYearsHibah()
 	{
-		for($i = 1; $i <= 3; $i++)
-		{
-			$result[$i] = $this->reporting->getHibah($i);
-			$result['count'][$i] = count($result[$i]);
+		$filtertahun = $this->reporting->group_by('YEAR(entry_date)')->getAllArray('draft');
+		foreach ($filtertahun as $key => $value){
+			$tahun[$key] = date('Y',strtotime($value['entry_date']));
 		}
-		echo json_encode($result);
+		echo json_encode($tahun);
 	}
+
 }
 
 /* End of file Reporting.php */

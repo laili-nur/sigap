@@ -21,7 +21,7 @@
     <li class="nav-item"><a class="nav-link active" href="<?= base_url('reporting/index') ?>">Summary</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_draft') ?>">Laporan Draft</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_books') ?>">Laporan Buku</a></li>
-    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_author') ?>">Laporan Author</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_author') ?>">Laporan Penulis</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_hibah') ?>">Laporan Hibah</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/performa_editor') ?>">Performa Editor</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/performa_layouter') ?>">Performa Layouter</a></li>
@@ -44,12 +44,12 @@
   </div>
 
   <div align="center">
-    <h5>UGM Press</h5>
-    <h6>Grafik Ringkasan Pencetakan Buku</h6>
+    <h4>UGM Press</h4>
+    <h5>Laporan Grafik Ringkasan Pencetakan Buku</h5>
   </div>
 
     <!-- graph for summary -->
-
+    <div class="chart-container" style="position: relative; height:40vh; width:80vw">
     <canvas id="myChart" width="500" height="170"></canvas>
     <script>
     var tahun = $('#droptahunsummary').val();
@@ -67,7 +67,7 @@
           var myChart = new Chart(ctx, {
               type: 'bar',
               data: {
-                  labels: ["Review", "Disetujui", "Editor", "Layouter", "Proofread", "Buku"],
+                  labels: ["Review", "Disetujui", "Editor", "Layouter", "Proofread", "Final"],
                   datasets: [{
                       label: ['summary'],
                       data: [review, disetujui, editor, layout, proofread, book],
@@ -99,12 +99,24 @@
                           'rgba(75, 192, 192, 1)',
                           'rgba(153, 102, 255, 1)'
                       ],
-                      borderWidth: 1
+                      borderWidth: [
+                        1,
+                      ],
                   }]
               },
               options: {
                 legend: {
                   display : false,
+                },
+                title:{
+                  display: true,
+                  text : 'Jumlah Data',
+                  fontSize : 15,
+                  fontFamily :'Helvetica',
+                  fontColor : 'black',
+                  fontStyle : 'bold',
+                  position : 'left',
+                  padding : 15,
                 },
                   scales: {
                       yAxes: [{
@@ -112,8 +124,9 @@
                           display : true
                         },
                         ticks: {
-                          fontFamily :"'Helvetica'",
-                          fontSize : 13,
+                          fontFamily :'Helvetica Neue',
+                          fontSize : 14,
+                          fontStyle :'italic',
                           beginAtZero:true
                         }
                     }],
@@ -122,14 +135,23 @@
                           display : false
                         },
                         ticks: {
-                          fontFamily :"'Helvetica'",
+                          fontFamily :'Helvetica Neue',
                           fontSize : 13,
+                          fontStyle : '',
                           beginAtZero:true
                         }
                       }],
-
+                  },
+                  layout:{
+                    padding: {
+                      left:65,
+                      right:95,
+                      top:10,
+                      bottom:40,
+                    }
                   }
               }
           });
       });
     </script>
+  </div>

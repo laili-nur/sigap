@@ -21,7 +21,7 @@
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index') ?>">Summary</a></li>
     <li class="nav-item"><a class="nav-link active" href="<?= base_url('reporting/index_draft') ?>">Laporan Draft</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_books') ?>">Laporan Buku</a></li>
-    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_author') ?>">Laporan Author</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_author') ?>">Laporan Penulis</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_hibah') ?>">Laporan Hibah</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/performa_editor') ?>">Performa Editor</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/performa_layouter') ?>">Performa Layouter</a></li>
@@ -45,12 +45,12 @@
   </div>
 
   <div align="center">
-    <h5>UGM Press</h5>
-    <h6>Grafik Jumlah Draft</h6>
+    <h4>UGM Press</h4>
+    <h5>Laporan Grafik Jumlah Draft Perbulan</h5>
   </div>
 
     <!-- graph for draft -->
-
+    <div class="chart-container" style="position: relative; height:40vh; width:80vw">
     <canvas id="myChart" width="500" height="170"></canvas>
     <script>
     var tahun = $('#droptahun').val();
@@ -68,8 +68,8 @@
           var myChart = new Chart(ctx, {
               type: 'bar',
               data: {
-                  labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli",
-                          "Agustus", "September", "Oktober", "November", "Desember"] ,
+                  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+                          "Aug", "Sep", "Oct", "Nov", "Des"] ,
                   datasets: [{
                       label: 'Laporan Draft',
                       data: tampil,
@@ -106,14 +106,25 @@
                 legend: {
                   display : false,
                 },
+                title:{
+                  display: true,
+                  text : 'Jumlah Data',
+                  fontSize : 15,
+                  fontFamily :'Helvetica Neue',
+                  fontColor : 'black',
+                  fontStyle : 'bold',
+                  position : 'left',
+                  padding : 15,
+                },
                   scales: {
                       yAxes: [{
                         gridLines :{
                           display : true
                         },
                         ticks: {
-                          fontFamily :"'Helvetica'",
-                          fontSize : 13,
+                          fontFamily :'Helvetica Neue',
+                          fontSize : 14,
+                          fontStyle :'italic',
                           beginAtZero:true
                         }
                     }],
@@ -123,12 +134,21 @@
 
                         },
                         ticks: {
-                          fontFamily :"'Helvetica'",
+                          fontFamily :'Helvetica Neue',
                           fontSize : 13,
+                          fontStyle : '',
                           beginAtZero:true
                         }
                       }],
 
+                  },
+                  layout:{
+                    padding: {
+                      left:65,
+                      right:95,
+                      top:10,
+                      bottom:40,
+                    }
                   }
               }
           });
@@ -138,43 +158,4 @@
         alert('hello');
       }
     </script>
-
-    <!-- table for draft -->
-
-    <br />
-    <h5>Tabel Draft</h5>
-    <br />
-
-    <div class="container">
-      <div class="table-responsive">
-        <table class="table table-bordered">
-          <tr>
-            <th>Draft Title</th>
-            <th>Entry Date</th>
-            <!-- <th>Month</th> -->
-          </tr>
-        <?php
-        if($drafts)
-        {
-          foreach ($drafts as $row)
-          {
-        ?>
-          <tr>
-            <td><?php echo $row->draft_title; ?></td>
-            <td><?php echo konversiTanggal($row->entry_date); ?></td>
-            <!-- <td><?php echo date("m",strtotime($row->entry_date)); ?></td> -->
-          </tr>
-          <?php
-          }
-        }
-        else
-        {
-          ?>
-          <tr>
-            <td colspan="3">No data found</td>
-          </tr>
-        <?php
-        }
-        ?>
-        </table>
-      </div>
+  </div>

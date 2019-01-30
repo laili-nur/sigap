@@ -62,12 +62,6 @@ class Reporting_model extends MY_Model{
     return $query->result();
   }
 
-  // public function getAll($table = "")
-  // {
-  //     $table = $this->checkTable($table);
-  //     return $this->db->get($table)->result();
-  // }
-
   public function getDraft($month, $year)
   {
     $query = $this->db->query("SELECT draft_id, draft_title, entry_date FROM draft WHERE MONTH(entry_date) = $month and YEAR(entry_date) = $year");
@@ -86,9 +80,9 @@ class Reporting_model extends MY_Model{
     return $query->result();
   }
 
-  public function getHibah()
+  public function getHibah($year)
   {
-    $query = $this->db->query("SELECT category_id, category_name, category_year FROM category ");
+    $query = $this->db->query("SELECT category_type FROM draft JOIN category ON draft.category_id = category.category_id WHERE YEAR(entry_date) = $year");
     return $query->result();
   }
 }

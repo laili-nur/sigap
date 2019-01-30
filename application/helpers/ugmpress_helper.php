@@ -3,28 +3,24 @@
 function getYears()
 {
   $tahun =array();
-  //$filtertahun = $this->reporting->group_by('YEAR(entry_date)')->getAllArray('draft');
   $CI =& get_instance();
   $filtertahun = $CI->db->from('draft')->group_by('YEAR(entry_date)')->order_by('entry_date','DESC')->get();
   $filtertahunz = $filtertahun->result();
   foreach ($filtertahunz as $key => $value){
     $tahun[date('Y',strtotime($value->entry_date))] = date('Y',strtotime($value->entry_date));
   }
-
   return($tahun);
 }
 
 function getYearsBook()
 {
   $tahun =array();
-  //$filtertahun = $this->reporting->group_by('YEAR(entry_date)')->getAllArray('draft');
   $CI =& get_instance();
   $filtertahun = $CI->db->from('book')->group_by('YEAR(published_date)')->order_by('published_date','DESC')->get();
   $filtertahunz = $filtertahun->result();
   foreach ($filtertahunz as $key => $value){
     $tahun[date('Y',strtotime($value->published_date))] = date('Y',strtotime($value->published_date));
   }
-
   return($tahun);
 }
 
@@ -38,7 +34,18 @@ function getYearsSummary()
   foreach ($filtertahunz as $key => $value){
     $tahun[date('Y',strtotime($value->entry_date))] = date('Y',strtotime($value->entry_date));
   }
+  return($tahun);
+}
 
+function getYearsHibah()
+{
+  $tahun = array();
+  $CI =& get_instance();
+  $filtertahun = $CI->db->from('draft')->group_by('YEAR(entry_date)')->order_by('entry_date','DESC')->get();
+  $filtertahunz = $filtertahun->result();
+  foreach ($filtertahunz as $key => $value){
+    $tahun[date('Y',strtotime($value->entry_date))] = date('Y',strtotime($value->entry_date));
+  }
   return($tahun);
 }
 
@@ -58,7 +65,7 @@ function konversi_username_level($username){
             }
         }
     }
-    
+
 }
 
 function konversiTanggal($input=null,$opsi=''){
@@ -88,7 +95,7 @@ function konversiID($table,$vars,$id)
             return "";
         }
     }
-    
+
 }
 
 // Get list of option for dropdown.
@@ -226,11 +233,11 @@ function getMoreDropdownList($table, $columns)
             $tables[$column[0]] = array($columns[$i]);
         } else {
             array_push($tables[$column[0]], $columns[$i]);
-        }  
+        }
     }
-    
+
     $CI =& get_instance();
-    
+
     foreach ($tables as $key => $val) {
         if ($key == $table) {
             $query = $CI->db->get($key);
@@ -263,12 +270,12 @@ function getMoreDropdownList($table, $columns)
                                 }
                             }
                         }
-                    } 
+                    }
                     $value .= $value2;
                     $options2[$key] = $value;
                 }
                 $j++;
-            }            
+            }
         }
         $options = $options1 + $options2;
         return $options;
@@ -287,7 +294,7 @@ function getDropdownBankList($table, $columns)
         $options = $options1 + $options2;
         return $options;
     }
-    
+
     return $options = ['' => '- Choose -'];
 }
 
@@ -304,4 +311,3 @@ function fileFormError($field, $prefix = '', $suffix = '')
     }
     return '';
 }
-

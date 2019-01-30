@@ -21,7 +21,7 @@
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index') ?>">Summary</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_draft') ?>">Laporan Draft</a></li>
     <li class="nav-item"><a class="nav-link active" href="<?= base_url('reporting/index_books') ?>">Laporan Buku</a></li>
-    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_author') ?>">Laporan Author</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_author') ?>">Laporan Penulis</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_hibah') ?>">Laporan Hibah</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/performa_editor') ?>">Performa Editor</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/performa_layouter') ?>">Performa Layouter</a></li>
@@ -44,12 +44,12 @@
   </div>
 
   <div align="center">
-    <h5>UGM Press</h5>
-    <h6>Grafik Jumlah Buku</h6>
+    <h4>UGM Press</h4>
+    <h5>Laporan Grafik Jumlah Buku Perbulan</h5>
   </div>
 
     <!-- graph for book -->
-
+    <div class="chart-container" style="position: relative; height:40vh; width:80vw">
     <canvas id="myChart" width="500" height="170"></canvas>
     <script>
     var tahun = $('#droptahunbuku').val();
@@ -67,8 +67,8 @@
           var myChart = new Chart(ctx, {
               type: 'bar',
               data: {
-                  labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli",
-                          "Agustus", "September", "Oktober", "November", "Desember"],
+                  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+                          "Aug", "Sep", "Oct", "Nov", "Des"],
                   datasets: [{
                       label: 'Laporan Buku',
                       data: tampil,
@@ -104,14 +104,25 @@
                 legend: {
                   display : false,
                 },
+                title:{
+                  display: true,
+                  text : 'Jumlah Data',
+                  fontSize : 15,
+                  fontFamily :'Helvetica Neue',
+                  fontColor : 'black',
+                  fontStyle : 'bold',
+                  position : 'left',
+                  padding : 15,
+                },
                   scales: {
                       yAxes: [{
                         gridLines :{
                           display : true
                         },
                         ticks: {
-                          fontFamily :"'Helvetica'",
-                          fontSize : 13,
+                          fontFamily :'Helvetica Neue',
+                          fontSize : 14,
+                          fontStyle :'italic',
                           beginAtZero:true
                         }
                     }],
@@ -120,14 +131,24 @@
                           display : false
                         },
                         ticks: {
-                          fontFamily :"'Helvetica'",
+                          fontFamily :'Helvetica Neue',
                           fontSize : 13,
                           beginAtZero:true
                         }
                       }],
 
+                  },
+
+                  layout:{
+                    padding: {
+                      left:65,
+                      right:95,
+                      top:10,
+                      bottom:40,
+                    }
                   }
               }
           });
       });
     </script>
+  </div>

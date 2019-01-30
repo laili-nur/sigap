@@ -21,7 +21,7 @@
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index') ?>">Summary</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_draft') ?>">Laporan Draft</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_books') ?>">Laporan Buku</a></li>
-    <li class="nav-item"><a class="nav-link active" href="<?= base_url('reporting/index_author') ?>">Laporan Author</a></li>
+    <li class="nav-item"><a class="nav-link active" href="<?= base_url('reporting/index_author') ?>">Laporan Penulis</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_hibah') ?>">Laporan Hibah</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/performa_editor') ?>">Performa Editor</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/performa_layouter') ?>">Performa Layouter</a></li>
@@ -33,8 +33,8 @@
 
   <br />
   <div align="center">
-    <h5>UGM Press</h5>
-    <h6>Grafik Instansi Author</h6>
+    <h4>UGM Press</h4>
+    <h5>Laporan Grafik Instansi Penulis</h5>
   </div>
 
   <canvas id="myPieChart" width="380" height="100"></canvas>
@@ -54,7 +54,7 @@
             labels: ['UGM', 'Selain UGM'],
             datasets: [{
               label : 'Penulis',
-              data: [ugm, lain],
+              data: [lain, ugm],
               backgroundColor : [
                 'rgba(54, 162, 235, 1)',
                 'rgba(198, 198, 198, 1)'
@@ -65,6 +65,14 @@
           options: {
             ticks : {
               beginAtZero:true
+            },
+            layout:{
+              padding: {
+                left:80,
+                right:80,
+                top:5,
+                bottom:25,
+              }
             }
           }
       });
@@ -73,7 +81,7 @@
 
   <br />
   <div align="center">
-    <h6>Grafik Author Berdasarkan Gelar</h6>
+    <h5>Laporan Grafik Penulis Berdasarkan Gelar</h5>
   </div>
 
   <canvas id="myPieChartGelar" width="380" height="100"></canvas>
@@ -106,6 +114,14 @@
           options: {
             ticks : {
               beginAtZero:true
+            },
+            layout:{
+              padding: {
+                left:80,
+                right:80,
+                top:5,
+                bottom:25,
+              }
             }
           }
       });

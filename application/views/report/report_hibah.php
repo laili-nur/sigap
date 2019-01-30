@@ -21,7 +21,7 @@
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index') ?>">Summary</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_draft') ?>">Laporan Draft</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_books') ?>">Laporan Buku</a></li>
-    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_author') ?>">Laporan Author</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_author') ?>">Laporan Penulis</a></li>
     <li class="nav-item"><a class="nav-link active" href="<?= base_url('reporting/index_hibah') ?>">Laporan Hibah</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/performa_editor') ?>">Performa Editor</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/performa_layouter') ?>">Performa Layouter</a></li>
@@ -29,18 +29,30 @@
 
   <!-- /.page-title-bar -->
 
-  <!-- Graph for Author -->
-
   <br />
+
+  <div class="form-group row">
+      <div class="col-8 col-md-10 mb-1">
+          <div align="right">
+            <label for="" class="col-sm-4 col-form-label"><h6>Filter:</h6></label>
+          </div>
+      </div>
+      <div class="col-4 col-md-2  mb-4">
+      <?= form_open('', ['method' => 'GET']) ?>
+      <?= form_dropdown('droptahunhibah', getYearsHibah(), $this->input->get('droptahunhibah'), 'onchange="this.form.submit()" id="droptahunhibah" class="form-control custom-select d-block" title="Filter tahun"') ?>
+      <?= form_close() ?>
+      </div>
+  </div>
+
   <div align="center">
-    <h5>UGM Press</h5>
-    <h6>Grafik Jumlah Hibah</h6>
+    <h4>UGM Press</h4>
+    <h4>Laporan Grafik Jumlah Hibah</h4>
   </div>
 
   <canvas id="myPieChart" width="380" height="100"></canvas>
   <script>
-
-  $.post("<?php echo base_url();?>Reporting/getPieHibah",
+  var tahun = $('#droptahunhibah').val();
+  $.post("<?php echo base_url();?>Reporting/getPieHibah?droptahunhibah="+tahun,
       function(data){
         var obj = JSON.parse(data);
 
@@ -66,7 +78,15 @@
           options: {
             ticks : {
               beginAtZero:true
-            }
+            },
+            layout:{
+              padding: {
+                left:80,
+                right:80,
+                top:5,
+                bottom:25,
+              }
+            },
           }
       });
     });
