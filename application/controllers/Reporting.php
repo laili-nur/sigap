@@ -90,7 +90,8 @@ class Reporting extends Admin_Controller {
 		$count_editor = 0;
 		$count_layout = 0;
 		$count_proofread = 0;
-		$count_book = 0;
+		$count_print = 0;
+		$count_final = 0;
 		$year = $this->input->get('droptahunsummary');
 
 		$result_review = $this->reporting->select(['draft_status'])->getSummary($year);
@@ -109,7 +110,7 @@ class Reporting extends Admin_Controller {
 		}
 		$result['count_disetujui'] = $count_disetujui;
 
-		$result_editor = $this->reporting->select(['is_review','is_edit','is_layout','is_proofread'])->getSummary($year);
+		$result_editor = $this->reporting->select(['is_review','is_edit','is_layout','is_proofread', 'is_print'])->getSummary($year);
 		foreach ($result_editor as $hasil_editor) {
 			if ($hasil_editor->is_review == 'y' AND $hasil_editor->is_edit == 'n') {
 				$count_editor++;
@@ -120,14 +121,18 @@ class Reporting extends Admin_Controller {
 			if($hasil_editor->is_layout == 'y' AND $hasil_editor->is_proofread == 'n'){
 				$count_proofread++;
 			}
-			if($hasil_editor->is_proofread == 'y'){
-				$count_book++;
+			if($hasil_editor->is_proofread == 'y' AND $hasil_editor->is_print == 'n'){
+				$count_print++;
+			}
+			if($hasil_editor->draft_status == 14){
+				$count_final++;
 			}
 		}
 		$result['count_editor'] = $count_editor;
 		$result['count_layout'] = $count_layout;
 		$result['count_proofread'] = $count_proofread;
-		$result['count_book'] = $count_book;
+		$result['count_print'] = $count_print;
+		$result['count_final'] = $count_final;
 		echo json_encode($result);
 	}
 

@@ -61,16 +61,17 @@
           var editor = obj.count_editor;
           var layout = obj.count_layout;
           var proofread = obj.count_proofread;
-          var book = obj.count_book;
+          var print = obj.count_print;
+          var final = obj.count_final;
 
           var ctx = $("#myChart");
           var myChart = new Chart(ctx, {
               type: 'bar',
               data: {
-                  labels: ["Review", "Disetujui", "Editor", "Layouter", "Proofread", "Final"],
+                  labels: ["Review", "Disetujui", "Editor", "Layouter", "Proofread", "Cetak", "Final"],
                   datasets: [{
                       label: ['summary'],
-                      data: [review, disetujui, editor, layout, proofread, book],
+                      data: [review, disetujui, editor, layout, proofread, print, final],
                       backgroundColor: [
                           'rgba(54, 162, 235, 1)',
                           'rgba(198, 198, 198, 1)',
