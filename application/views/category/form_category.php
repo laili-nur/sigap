@@ -49,6 +49,7 @@
               $category_type = [
               '1' => 'Hibah buku karya',
               '2' => 'Hibah Reguler',
+              '3' => 'Cetak Ulang',
               ]; ?>
             <div class="form-group">
               <label for="category_type">Tipe Kategori

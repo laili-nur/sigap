@@ -101,6 +101,7 @@
                   <th scope="col" style="min-width:350px;">Judul Draft</th>
                   <th scope="col" style="min-width:120px;">Nomor Lembar Kerja</th>
                   <th scope="col">Jenis</th>
+                  <th scope="col">Revisi</th>
                   <th scope="col">Status</th>
                   <th scope="col">PIC</th>
                   <th style="min-width:170px;"> &nbsp; </th>
@@ -116,6 +117,7 @@
                   <td class="align-middle"><a title="Lihat detail draft" href="<?= base_url('draft/view/'.$worksheet->draft_id) ?>"><?= $worksheet->draft_title ?></a></td>
                   <td class="align-middle"><a title="Lihat Desk Screening" href="<?= base_url('worksheet/edit/'.$worksheet->worksheet_id) ?>"><?= $worksheet->worksheet_num ?></a></td>
                   <td class="align-middle"><?= $worksheet->is_reprint == 'y' ? 'Cetak Ulang' : 'Baru' ?></td>
+                  <td class="align-middle"><?= $worksheet->is_revise == 'y' ? '<i class="fa fa-check text-success"></i>' : '<i class="fa fa-times text-danger"></i>' ?></td>
                   <td class="align-middle"><?=
                     $status = "";
                     if ($worksheet->worksheet_status > 0) {

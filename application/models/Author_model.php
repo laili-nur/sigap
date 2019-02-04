@@ -101,7 +101,7 @@ class Author_model extends MY_Model
             'author_saving_num'           => '',
             'heir_name'              => '',
             'user_id'              => '',
-            //'author_ktp'              => '',
+            'author_ktp'              => '',
         ];
     }
     

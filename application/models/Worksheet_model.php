@@ -26,6 +26,11 @@ class Worksheet_model extends MY_Model
                 'field' => 'is_reprint',
                 'label' => 'Reprint Status',
                 'rules' => 'trim|required'
+            ],
+            [
+                'field' => 'is_revise',
+                'label' => 'Revise Status',
+                'rules' => 'trim|required'
             ]
 
         ];
@@ -40,6 +45,7 @@ class Worksheet_model extends MY_Model
             'worksheet_num'           => '',
             'worksheet_notes'           => '',
             'is_reprint'              => 'n',
+            'is_revise'              => 'n',
             'worksheet_status'              => '0'
         ];
     }

@@ -194,7 +194,6 @@
                   }
                 }
                 ?>
-
                 <img width="100%" id="output_image"/>
               </div>
             </div>

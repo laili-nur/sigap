@@ -20,7 +20,6 @@
     </nav>
 </header>
 <!-- /.page-title-bar -->
-comm-section
 <!-- .page-section -->
 <div class="page-section">
   <div class="row">
@@ -41,7 +40,7 @@ comm-section
               <abbr title="Required">*</abbr>
             </label>
             <!-- cek parameter category, jika ada isinya maka disable pilihan category -->
-            <?php if(!empty($this->uri->segment(3))){
+            <?php if(!empty($this->uri->segment(3)) and $this->uri->segment(2) != 'cetakUlang'){
               $atribut = 'disabled';
             }else{
               $atribut = '';

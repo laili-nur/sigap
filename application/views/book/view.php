@@ -1,4 +1,3 @@
-
 <?php $ceklevel = $this->session->userdata('level'); ?>
 <!-- .page-title-bar -->
   <header class="page-title-bar">
@@ -107,7 +106,7 @@
                 <td>
                 <?php
                 if(!empty($input->book_file)){
-                  if($draft->proofread_file == $input->book_file){
+                  if(!empty($draft->print_file) and $draft->print_file == $input->book_file){
                     echo '<a data-toggle="tooltip" data-placement="right" title="'.$input->book_file.'" class="btn btn-success btn-xs my-0" href="'.base_url('draftfile/'.$input->book_file).'"><i class="fa fa-book"></i> File Buku</a>';
                   }else{
                     echo '<a data-toggle="tooltip" data-placement="right" title="'.$input->book_file.'" class="btn btn-success btn-xs my-0" href="'.base_url('bookfile/'.$input->book_file).'"><i class="fa fa-book"></i> File Buku</a>';
@@ -220,6 +219,30 @@
               <!-- /tr -->
               <!-- tr -->
               <tr>
+                <td width="200px"> Cetakan ke </td>
+                <td><?= $input->cetakan_ke ?>  </td>
+              </tr>
+              <!-- /tr -->
+              <!-- tr -->
+              <tr>
+                <td width="200px"> Kertas isi </td>
+                <td><?= $input->kertas_isi ?>  </td>
+              </tr>
+              <!-- /tr -->
+              <!-- tr -->
+              <tr>
+                <td width="200px"> Kertas cover </td>
+                <td><?= $input->kertas_cover ?>  </td>
+              </tr>
+              <!-- /tr -->
+              <!-- tr -->
+              <tr>
+                <td width="200px"> Ukuran </td>
+                <td><?= $input->ukuran ?>  </td>
+              </tr>
+              <!-- /tr -->
+              <!-- tr -->
+              <tr>
                 <td width="200px"> Tipe Naskah </td>
                 <td><?= ($input->is_reprint == 'y')? 'Cetak Ulang' : '' ?> <?= ($input->is_reprint == 'n')? 'Naskah baru' : '' ?>  </td>
               </tr>
@@ -252,7 +275,7 @@
               <!-- tr -->
               <tr>
                 <td width="200px"> Tanggal Cetak </td>
-                <td><?= konversiTanggal($input->print_date) ?>  </td>
+                <td><?= konversiTanggal($input->print_end_date) ?>  </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
@@ -308,7 +331,7 @@
             </div>
             <!-- /.table-responsive -->
           <?php else: ?>
-              <p>Author data were not available</p>
+              <p>Data penulis tidak tersedia</p>
           <?php endif ?>
           </div>
         </div>

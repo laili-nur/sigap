@@ -93,6 +93,20 @@
             <!-- /.form-group -->
             <!-- .form-group -->
             <div class="form-group">
+              <label for="published_date">Tanggal Terbit</label>
+              <?= form_input('published_date', $input->published_date, 'class="form-control mydate" id="published_date"') ?>
+              <?= form_error('published_date') ?>
+            </div>
+            <!-- /.form-group -->
+            <!-- .form-group -->
+            <div class="form-group">
+              <label for="harga">Harga</label>
+              <?= form_input('harga', $input->harga, 'class="form-control" id="harga"') ?>
+              <?= form_error('harga') ?>
+            </div>
+            <!-- /.form-group -->
+            <!-- .form-group -->
+            <div class="form-group">
               <label for="book_file">
                 File Buku
                 <!--              <abbr title="Required">*</abbr>-->
@@ -115,77 +129,11 @@
             <!-- /.form-group -->
             <!-- .form-group -->
             <div class="form-group">
-              <label for="published_date">Tanggal Terbit</label>
-              <?= form_input('published_date', $input->published_date, 'class="form-control mydate" id="published_date"') ?>
-              <?= form_error('published_date') ?>
-            </div>
-            <!-- /.form-group -->
-            <!-- .form-group -->
-            <div class="form-group">
-              <label>Tipe Printing</label>
-              <div>
-                <!-- button radio -->
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                  <label class="btn btn-secondary <?=($input->printing_type == 'p') ? 'active' : '' ?>">
-                  <?= form_radio('printing_type', 'p',
-                    isset($input->printing_type) && ($input->printing_type == 'p') ? true : false,'required class="custom-control-input" id="blocked1"')?> POD</label>
-                  <label class="btn btn-secondary <?=($input->printing_type == 'o') ? 'active' : '' ?>">
-                  <?= form_radio('printing_type', 'o',
-                    isset($input->printing_type) && ($input->printing_type == 'o') ? true : false,' class="custom-control-input" id="blocked2"')?> Offset</label>
-                </div>
-                <!-- /button radio -->
-              </div>
-              <?= form_error('printing_type') ?>
-            </div>
-            <!-- /.form-group -->
-            <!-- .form-group -->
-            <div class="form-group">
-              <label for="serial_num">Serial Number Total
-              </label>
-              <?= form_input('serial_num', $input->serial_num, 'class="form-control" id="serial_num"') ?>
-              <?= form_error('serial_num') ?>
-            </div>
-            <!-- /.form-group -->
-            <!-- .form-group -->
-            <div class="form-group">
-              <label for="serial_num_per_year">Serial Number Per Tahun</label>
-              <?= form_input('serial_num_per_year', $input->serial_num_per_year, 'class="form-control" id="serial_num_per_year" ') ?>
-              <?= form_error('serial_num_per_year') ?>
-            </div>
-            <!-- /.form-group -->
-            <!-- .form-group -->
-            <div class="form-group">
-              <label for="copies_num">Jumlah Copy</label>
-              <?= form_input('copies_num', $input->copies_num, 'class="form-control" id="copies_num"') ?>
-              <?= form_error('copies_num') ?>
-            </div>
-            <!-- /.form-group -->
-            <!-- .form-group -->
-            <!-- .form-group -->
-            <div class="form-group">
               <label for="book_notes">Keterangan Buku</label>
               <?= form_textarea('book_notes', $input->book_notes, 'class="form-control summernote-basic"') ?>
               <?= form_error('book_notes') ?>
             </div>
             <!-- /.form-group -->
-            <!-- .form-group -->
-            <div class="form-group">
-              <label>Status</label>
-              <div>
-                <!-- button radio -->
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                  <label class="btn btn-secondary <?=($input->is_reprint == 'y') ? 'active' : '' ?>">
-                  <?= form_radio('is_reprint', 'y',
-                    isset($input->is_reprint) && ($input->is_reprint == 'y') ? true : false,'required class="custom-control-input" id="reprint1"')?> Cetak Ulang</label>
-                  <label class="btn btn-secondary <?=($input->is_reprint == 'n') ? 'active' : '' ?>">
-                  <?= form_radio('is_reprint', 'n',
-                    isset($input->is_reprint) && ($input->is_reprint == 'n') ? true : false,' class="custom-control-input" id="reprint2"')?> Baru</label>
-                </div>
-                <!-- /button radio -->
-              </div>
-              <?= form_error('is_reprint') ?>
-            </div>
-            <!-- /.form-group -->  
           </fieldset>
           <!-- /.fieldset -->
           <hr>

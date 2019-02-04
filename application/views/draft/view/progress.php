@@ -64,6 +64,7 @@
             </button>
             <span class="progress-label d-none d-sm-inline-block">Layout</span>
           </li>
+          <!-- PROOFREAD -->
           <li class="
           <?= ($input->is_layout == 'y' and $input->is_proofread == 'n' and $input->stts == 99)? 'error':'' ?>
           <?= ($input->is_proofread == 'y') ? 'success' : '' ?>
@@ -82,10 +83,30 @@
             </button>
             <span class="progress-label d-none d-sm-inline-block">Proofread</span>
           </li>
+          <!-- CETAK -->
           <li class="
-          <?= ($input->is_review == 'y' and $input->is_edit == 'y' and $input->is_layout == 'y' and $input->is_proofread == 'y' and $input->stts == 99)? 'error':'' ?>
-          <?= ($input->stts == 14) ? 'success' : '' ?>
+          <?= ($input->is_proofread == 'y' and $input->is_print == 'n' and $input->stts == 99)? 'error':'' ?>
+          <?= ($input->is_print == 'y') ? 'success' : '' ?>
           <?= ($input->is_proofread == 'y') ? 'active' : '' ?>
+          ">
+            <button type="button" data-toggle="tooltip" title="
+            <?php if($input->is_print == 'n' and $input->stts == 99){
+              echo 'Ditolak';
+            }elseif($input->is_print == 'y'){
+              echo 'Selesai';
+            }else{
+              echo 'Progress';
+            }?>">
+              <!-- progress indicator -->
+              <span class="progress-indicator"></span>
+            </button>
+            <span class="progress-label d-none d-sm-inline-block">Cetak</span>
+          </li>
+          <!-- FINAL -->
+          <li class="
+          <?= ($input->is_review == 'y' and $input->is_edit == 'y' and $input->is_layout == 'y' and $input->is_proofread == 'y' and $input->is_print == 'y' and $input->stts == 99)? 'error':'' ?>
+          <?= ($input->stts == 14) ? 'success' : '' ?>
+          <?= ($input->is_print == 'y') ? 'active' : '' ?>
           ">
             <button type="button" data-toggle="tooltip" title="
             <?php if($input->is_review == 'y' and $input->is_edit == 'y' and $input->is_layout == 'y' and $input->is_proofread == 'y' and $input->stts == 99){

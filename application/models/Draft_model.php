@@ -39,8 +39,18 @@ class Draft_model extends MY_Model
                 'rules' => 'trim'
             ],
             [
-                'field' => 'print_date',
-                'label' => 'Print Date',
+                'field' => 'draft_file_link',
+                'label' => 'Draft File Link',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'draft_status',
+                'label' => 'Draft Status',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'draft_notes',
+                'label' => 'Draft Notes',
                 'rules' => 'trim'
             ],
             //review
@@ -65,8 +75,8 @@ class Draft_model extends MY_Model
                 'rules' => 'trim'
             ],
             [
-                'field' => 'review1_template',
-                'label' => 'Review 1 template',
+                'field' => 'reviewer1_file_link',
+                'label' => 'Reviewer1 File Link',
                 'rules' => 'trim'
             ],
             [
@@ -95,8 +105,8 @@ class Draft_model extends MY_Model
                 'rules' => 'trim'
             ],
             [
-                'field' => 'review2_template',
-                'label' => 'Review 2 template',
+                'field' => 'reviewer2_file_link',
+                'label' => 'Reviewer2 File Link',
                 'rules' => 'trim'
             ],
             [
@@ -141,6 +151,11 @@ class Draft_model extends MY_Model
                 'rules' => 'trim'
             ],
             [
+                'field' => 'editor_file_link',
+                'label' => 'Editor File Link',
+                'rules' => 'trim'
+            ],
+            [
                 'field' => 'edit_upload_date',
                 'label' => 'Edit Upload Date',
                 'rules' => 'trim'
@@ -174,6 +189,16 @@ class Draft_model extends MY_Model
             [
                 'field' => 'layout_file',
                 'label' => 'Layout File',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'layouter_file_link',
+                'label' => 'Layouter File Link',
+                'rules' => 'trim'
+            ],
+            [
+                'field' => 'cover_file_link',
+                'label' => 'Cover File Link',
                 'rules' => 'trim'
             ],
             [
@@ -234,6 +259,11 @@ class Draft_model extends MY_Model
                 'rules' => 'trim'
             ],
             [
+                'field' => 'proofread_file_link',
+                'label' => 'Proofread File Link',
+                'rules' => 'trim'
+            ],
+            [
                 'field' => 'proofread_upload_date',
                 'label' => 'Proofread Upload Date',
                 'rules' => 'trim'
@@ -248,61 +278,6 @@ class Draft_model extends MY_Model
                 'label' => 'Author Proofread Notes',
                 'rules' => 'trim'
             ],
-            [
-                'field' => 'draft_status',
-                'label' => 'Draft Status',
-                'rules' => 'trim'
-            ],
-            [
-                'field' => 'draft_notes',
-                'label' => 'Draft Notes',
-                'rules' => 'trim'
-            ],
-            [
-                'field' => 'reviewer1_file_link',
-                'label' => 'Reviewer1 File Link',
-                'rules' => 'trim'
-            ],
-            [
-                'field' => 'reviewer2_file_link',
-                'label' => 'Reviewer2 File Link',
-                'rules' => 'trim'
-            ],
-            [
-                'field' => 'editor_file_link',
-                'label' => 'Editor File Link',
-                'rules' => 'trim'
-            ],
-            [
-                'field' => 'layouter_file_link',
-                'label' => 'Layouter File Link',
-                'rules' => 'trim'
-            ],
-            [
-                'field' => 'cover_file_link',
-                'label' => 'Cover File Link',
-                'rules' => 'trim'
-            ],
-            [
-                'field' => 'proofread_file_link',
-                'label' => 'Proofread File Link',
-                'rules' => 'trim'
-            ],
-            [
-                'field' => 'catatan_review1_admin',
-                'label' => 'Catatan Review1 Admin',
-                'rules' => 'trim'
-            ],
-            [
-                'field' => 'catatan_review2_admin',
-                'label' => 'Catatan Review1 Admin',
-                'rules' => 'trim'
-            ],
-            [
-                'field' => 'draft_file_link',
-                'label' => 'Draft File Link',
-                'rules' => 'trim'
-            ]
         ];
 
         return $validationRules;
@@ -318,17 +293,20 @@ class Draft_model extends MY_Model
             'draft_file'             => '',
             'entry_date'             => '',
             'finish_date'            => '',
-            'print_date'             => '',
             'is_review'              => '',
             'review_start_date'      => '',
             'review_end_date'        => '',
             'review1_file'           => '',
+            'reviewer1_file_link'    => '',
             'review1_upload_date'    => '',
+            'review1_last_upload'    => '',
             'review1_notes'          => '',
             'review1_notes_author'   => '',
             'review1_deadline'       => '',
             'review2_file'           => '',
+            'reviewer2_file_link'    => '',
             'review2_upload_date'    => '',
+            'review2_last_upload'    => '',
             'review2_notes'          => '',
             'review2_notes_author'   => '',
             'review2_deadline'       => '',
@@ -336,17 +314,22 @@ class Draft_model extends MY_Model
             'edit_start_date'        => '',
             'edit_end_date'          => '',
             'edit_file'              => '',
+            'editor_file_link'       => '',
             'edit_upload_date'       => '',
+            'edit_last_upload'       => '',
             'edit_notes'             => '',
             'edit_notes_author'      => '',
             'is_layout'              => '',
             'layout_start_date'      => '',
             'layout_end_date'        => '',
             'layout_file'            => '',
+            'layouter_file_link'     => '',
             'layout_upload_date'     => '',
+            'layout_last_upload'     => '',
             'layout_notes'           => '',
             'layout_notes_author'    => '',
             'cover_file'             => '',
+            'cover_file_link'        => '',
             'cover_upload_date'      => '',
             'cover_notes'            => '',
             'cover_notes_author'     => '',
@@ -354,26 +337,14 @@ class Draft_model extends MY_Model
             'proofread_start_date'   => '',
             'proofread_end_date'     => '',
             'proofread_file'         => '',
+            'proofread_file_link'    => '',
             'proofread_upload_date'  => '',
+            'proofread_last_upload'  => '',
             'proofread_notes'        => '',
             'proofread_notes_author' => '',
             'draft_status'           => '',
             'draft_notes'            => '',
             'draft_file_link'        => '',
-            'reviewer1_file_link'    => '',
-            'reviewer2_file_link'    => '',
-            'editor_file_link'       => '',
-            'cover_file_link'        => '',
-            'layouter_file_link'     => '',
-            'proofread_file_link'    => '',
-            'catatan_review1_admin'  => '',
-            'catatan_review2_admin'  => '',
-            'review1_last_upload'    => '',
-            'review2_last_upload'    => '',
-            'edit_last_upload'       => '',
-            'layout_last_upload'     => '',
-            'proofread_last_upload'  => '',
-
         ];
     }
 

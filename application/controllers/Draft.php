@@ -653,7 +653,7 @@ class Draft extends Operator_Controller {
         $datax = array('draft_id' => $draft_id);
         $draft = $this->draft->getWhere($datax);
         if ($book_id == 0) {
-            $data = array('draft_id' => $draft_id, 'book_title' => $draft->draft_title, 'book_file' => $draft->proofread_file, 'book_file_link' => $draft->proofread_file_link, 'published_date' => date('Y-m-d H:i:s'));
+            $data = array('draft_id' => $draft_id, 'book_title' => $draft->draft_title, 'book_file' => $draft->print_file, 'book_file_link' => $draft->print_file_link, 'published_date' => date('Y-m-d H:i:s'));
             if ($this->book->insert($data)) {
                 $book_id = $this->db->insert_id();
                 if ($book_id != 0) {
@@ -666,6 +666,71 @@ class Draft extends Operator_Controller {
             redirect('book');
         }
     }
+
+    public function cetakUlang($id = '') {
+
+        $draft = $this->draft->where('draft_id', $id)->get();
+        if (!$draft) {
+            $this->session->set_flashdata('warning', 'Draft data were not available');
+            redirect('draft');
+        }
+        $draft->draft_title = $draft->draft_title . " (cetak ulang)"; 
+        // if (!$_POST) {
+        // } else {
+        //     $input = (object)$this->input->post(null, false);
+        // }
+        $input = (object)$draft;
+        $input->is_reprint = 'y';
+        unset($input->draft_id);
+
+        //get array penulis
+        $input->authors = $this->draft->select('draft_author.author_id')->join3('draft_author', 'draft', 'draft')->join3('author', 'draft_author', 'author')->join3('work_unit', 'author', 'work_unit')->join3('institute', 'author', 'institute')->where('draft_author.draft_id', $id)->getAll();
+        $input->author_id =array();
+        foreach($input->authors as $au){
+            array_push($input->author_id, $au->author_id);
+        }
+        
+        // if (!$this->draft->validate() || $this->form_validation->error_array()) {
+        //     $pages = $this->pages;
+        //     $main_view = 'draft/form_draft_add';
+        //     $form_action = 'draft/add';
+        //     $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
+        //     return;
+        // }
+
+        $draft_id = $this->draft->insert($input);
+        $isSuccess = true;
+        if ($draft_id > 0) {
+            foreach ($input->author_id as $key => $value) {
+                $data_author = array('author_id' => $value, 'draft_id' => $draft_id);
+                if ($key == 0) {
+                    $data_author['draft_author_status'] = 1;
+                }
+                $draft_author_id = $this->draft->insert($data_author, 'draft_author');
+                if ($draft_author_id < 1) {
+                    $isSuccess = false;
+                    break;
+                }
+            }
+        } else {
+            $isSuccess = false;
+        }
+        if ($isSuccess) {
+            $worksheet_num = $this->generateWorksheetNumber();
+            $data_worksheet = array('draft_id' => $draft_id, 'worksheet_num' => $worksheet_num, 'worksheet_status' => 1, 'is_reprint' => 'y');
+            $worksheet_id = $this->draft->insert($data_worksheet, 'worksheet');
+            if ($worksheet_id < 1) {
+                $isSuccess = false;
+            }
+        }
+        if ($isSuccess) {
+            $this->session->set_flashdata('success', 'Data saved');
+        } else {
+            $this->session->set_flashdata('error', 'Data failed to save');
+        }
+        redirect('draft/view/' . $draft_id);
+    }
+
     public function search($page = null) {
         $cekusername = $this->session->userdata('username');
         $keywords = $this->input->get('keywords', true);
@@ -809,6 +874,12 @@ class Draft extends Operator_Controller {
             break;
             case 14:
                 $status = 'Draft Final';
+            break;
+            case 15:
+                $status = 'Cetak';
+            break;
+            case 16:
+                $status = 'Cetak Selesai';
             break;
             case 99:
                 $status = 'Draft Ditolak';

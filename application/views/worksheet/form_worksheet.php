@@ -99,12 +99,30 @@
               <?= form_error('is_reprint') ?>
             </div>
             <!-- /.form-group -->
+            <!-- .form-group -->
+            <div class="form-group">
+              <label>Naskah Revisi
+              <abbr title="Required">*</abbr>
+              </label>
+              <div class="custom-control custom-radio mb-1">
+                <?= form_radio('is_revise', 'y',
+                  isset($input->is_revise) && ($input->is_revise == 'y') ? true : false,' class="custom-control-input" id="revisi"')?>
+                <label class="custom-control-label" for="revisi">Revisi</label>
+              </div>
+              <div class="custom-control custom-radio mb-1">
+                <?= form_radio('is_revise', 'n',
+                  isset($input->is_revise) && ($input->is_revise == 'n') ? true : false,' class="custom-control-input" id="tidakrevisi"')?>
+                <label class="custom-control-label" for="tidakrevisi">Tidak Revisi</label>
+              </div>
+              <?= form_error('is_revise') ?>
+            </div>
+            <!-- /.form-group -->
           </fieldset>
           <!-- /.fieldset -->
           <hr>
           <!-- .form-group -->
           <div class="form-group">
-            <label>Status
+            <label>Aksi
             <abbr title="Required">*</abbr>
             </label>
             <div class="custom-control custom-radio mb-1">
@@ -115,12 +133,12 @@
             <div class="custom-control custom-radio mb-1">
               <?= form_radio('worksheet_status', '1',
                 isset($input->worksheet_status) && ($input->worksheet_status == '1') ? true : false,' class="custom-control-input" id="approve"')?>
-              <label class="custom-control-label" for="approve">Approve</label>
+              <label class="custom-control-label" for="approve">Setuju</label>
             </div>
             <div class="custom-control custom-radio mb-1">
               <?= form_radio('worksheet_status', '2',
                 isset($input->worksheet_status) && ($input->worksheet_status == '2') ? true : false,' class="custom-control-input" id="reject"')?>
-              <label class="custom-control-label" for="reject">Reject</label>
+              <label class="custom-control-label" for="reject">Tolak</label>
             </div>
             <?= form_error('worksheet_status') ?>
           </div>

@@ -57,27 +57,6 @@ class Responsibility extends Operator_Controller
         }
 
         if ($this->responsibility->insert($input)) {
-            $ambil_level = $this->responsibility->join('user')->where('user.user_id',$input->user_id)->get();
-            $data['level'] = $ambil_level->level;
-            if($ambil_level->level == 'editor'){
-                $status = array('draft_status' => 6);
-                //$this->responsibility->editDraftDate($input->draft_id, 'edit_start_date');
-                $this->responsibility->updateDraftStatus($input->draft_id, $status);
-                $current_date = strtotime(date('Y-m-d H:i:s'));
-                $end_date = 60 * 24 * 60 * 60;
-                $deadline_editor = date('Y-m-d H:i:s', ($current_date + $end_date));
-                $this->responsibility->editDraftDate($input->draft_id, 'edit_deadline', $deadline_editor);
-            }
-            if($ambil_level->level == 'layouter'){
-                $status = array('draft_status' => 8);
-                //$this->responsibility->editDraftDate($input->draft_id, 'layout_start_date');
-                $this->responsibility->updateDraftStatus($input->draft_id, $status);
-                $current_date = strtotime(date('Y-m-d H:i:s'));
-                $end_date = 60 * 24 * 60 * 60;
-                $deadline_layouter = date('Y-m-d H:i:s', ($current_date + $end_date));
-                $this->responsibility->editDraftDate($input->draft_id, 'layout_deadline', $deadline_layouter);
-            }
-            
             $data['validasi'] = true;
             $data['status'] = true;
             $this->session->set_flashdata('success', 'Data saved');
@@ -90,15 +69,38 @@ class Responsibility extends Operator_Controller
         echo json_encode($data);
 	}
 
-        public function mulai_proses()
+        public function mulai_proses($jenis_staff)
     {
+        //ketika editor/layouter klik mulai maka akan mencatat tanggal mulai dan tanggal deadline
         $input = (object) $this->input->post(null, true);
-        
-        if($this->responsibility->editDraftDate($input->draft_id, $input->col)){
-            $data['status'] = true;
-        }else{
-            $data['status'] = false;
+
+        if($jenis_staff == 'editor'){
+            $status = array('draft_status' => 6);
+            $this->responsibility->updateDraftStatus($input->draft_id, $status);
+            $current_date = strtotime(date('Y-m-d H:i:s'));
+            $end_date = 60 * 24 * 60 * 60;
+            $deadline_editor = date('Y-m-d H:i:s', ($current_date + $end_date));
+            $this->responsibility->editDraftDate($input->draft_id, 'edit_deadline', $deadline_editor);
+            if($this->responsibility->editDraftDate($input->draft_id, $input->col)){
+                $data['status'] = true;
+            }else{
+                $data['status'] = false;
+            }
+        }elseif($jenis_staff == 'layouter'){
+            $status = array('draft_status' => 8);
+            $this->responsibility->updateDraftStatus($input->draft_id, $status);
+            $current_date = strtotime(date('Y-m-d H:i:s'));
+            $end_date = 60 * 24 * 60 * 60;
+            $deadline_layouter = date('Y-m-d H:i:s', ($current_date + $end_date));
+            $this->responsibility->editDraftDate($input->draft_id, 'layout_deadline', $deadline_layouter);
+            if($this->responsibility->editDraftDate($input->draft_id, $input->col)){
+                $data['status'] = true;
+            }else{
+                $data['status'] = false;
+            }
         }
+        
+        
         echo json_encode($data);
     }
         

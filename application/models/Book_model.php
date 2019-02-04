@@ -46,27 +46,12 @@ class Book_model extends MY_Model
                 'field' => 'published_date',
                 'label' => 'Published Date',
                 'rules' => 'trim|callback_is_date_format_valid'
-            ],            
+            ],  
             [
-                'field' => 'printing_type',
-                'label' => 'Printing Type',
+                'field' => 'harga',
+                'label' => 'Harga',
                 'rules' => 'trim'
-            ],
-            [
-                'field' => 'serial_num',
-                'label' => 'Serial Number',
-                'rules' => 'trim|numeric'
-            ],
-            [
-                'field' => 'serial_num_per_year',
-                'label' => 'Serial Number Per Year',
-                'rules' => 'trim|numeric'
-            ],
-            [
-                'field' => 'copies_num',
-                'label' => 'Copies Number',
-                'rules' => 'trim|numeric'
-            ],
+            ],              
             [
                 'field' => 'book_notes',
                 'label' => 'Book Note',
@@ -107,10 +92,7 @@ class Book_model extends MY_Model
             'eisbn'                 => '',
 //            'book_file'                    => '',
             'published_date'                   => '',
-            'printing_type'                    => 'p',
-            'serial_num'                   => '',
-            'serial_num_per_year'                  => '',
-            'copies_num'                    => '',
+            'harga' => '',
             'book_notes'                  => '',
             'is_reprint'                     => 'n',
             'nomor_hak_cipta'                  => '',
