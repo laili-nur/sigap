@@ -63,6 +63,11 @@
             }]
           },
           options: {
+            legend :{
+              labels: {
+                fontColor: 'black',
+              }
+            },
             ticks : {
               beginAtZero:true
             },
@@ -112,6 +117,11 @@
             }]
           },
           options: {
+            legend :{
+              labels: {
+                fontColor: 'black',
+              }
+            },
             ticks : {
               beginAtZero:true
             },

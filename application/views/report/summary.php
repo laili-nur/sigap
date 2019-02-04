@@ -128,6 +128,7 @@
                           fontFamily :'Helvetica Neue',
                           fontSize : 14,
                           fontStyle :'italic',
+                          fontColor : 'black',
                           beginAtZero:true
                         }
                     }],
@@ -139,6 +140,7 @@
                           fontFamily :'Helvetica Neue',
                           fontSize : 13,
                           fontStyle : '',
+                          fontColor : 'black',
                           beginAtZero:true
                         }
                       }],

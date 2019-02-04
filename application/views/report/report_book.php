@@ -123,6 +123,7 @@
                           fontFamily :'Helvetica Neue',
                           fontSize : 14,
                           fontStyle :'italic',
+                          fontColor : 'black',
                           beginAtZero:true
                         }
                     }],
@@ -133,6 +134,7 @@
                         ticks: {
                           fontFamily :'Helvetica Neue',
                           fontSize : 13,
+                          fontColor : 'black',
                           beginAtZero:true
                         }
                       }],
