@@ -1,2 +1,2 @@
 # siip-new
-gabungan
+sistem informasi penerbitan dan percetakan buku 
