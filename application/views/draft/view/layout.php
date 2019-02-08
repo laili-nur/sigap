@@ -16,7 +16,7 @@
         <button type="button" class="btn <?=($layouters==null)? 'btn-warning' : 'btn-secondary' ?>" data-toggle="modal" data-target="#pilihlayouter">Pilih Layouter</button>
         <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#layout_deadline">Atur Deadline</button>
         <?php endif ?>
-        <?php if($ceklevel == 'layouter'): ?>
+        <?php if($ceklevel == 'layouter' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
         <button type="button" class="btn btn-warning" id="btn-mulai-layouter" <?=($input->layout_start_date==null or $input->layout_start_date=='0000-00-00 00:00:00')? '' : 'disabled' ?>>Mulai Proses</button>
         <?php endif ?>
         <!-- /.tombol add -->

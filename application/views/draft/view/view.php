@@ -27,11 +27,6 @@
          <i class="fa fa-th-list"></i>
        </button>
      </div> -->
-     <div class="alert alert-info">
-       <p class="mb-1">Hanya draft dengan status final yang dapat di cetak ulang.</p>
-       <?php ($input->stts != 14)? $atribut = 'disabled' : $atribut = '' ;?>
-      <a class="btn btn-info btn-block mb-2 <?=$atribut ?>" href="<?=base_url("draft/cetakUlang/$input->draft_id") ?> <?=$atribut ?>">Cetak Ulang</a>
-     </div>
   <!-- .card -->
   <section id="data-draft" class="card">
     <!-- .card-header -->
@@ -154,14 +149,23 @@
                 <!-- /tr -->
                 <!-- tr -->
                 <tr>
-                  <td width="200px"> Status Draft </td>
+                  <td width="200px"> Status Proses </td>
                   <td><span class="font-weight-bold"><?= $input->draft_status ?></span> </td>
                 </tr>
                 <!-- /tr -->
                 <!-- tr -->
                 <tr>
-                  <td width="200px"> Status Cetak Ulang </td>
-                  <td class="align-middle"><?= $input->is_reprint == 'y' ? '<span class="badge badge-warning">Cetak Ulang</span>' : '<span class="badge badge-success">Baru</span>' ?></td>
+                  <td width="200px"> Status Naskah </td>
+                  <td class="align-middle">
+                    <?= $input->is_reprint == 'y' ? '<span class="badge badge-warning mb-2">Cetak Ulang</span>' : '<span class="badge badge-success mb-2">Baru</span>' ?>
+                    <?php if($input->is_reprint == 'n'): ?>
+                    <div class="alert alert-info m-0 p-2">
+                      <?php ($input->stts != 14)? $atribut = 'disabled' : $atribut = '' ;?>
+                      <p class="m-0 p-0">Draft dengan status proses final dapat di cetak ulang.</p>
+                      <?=($ceklevel==='superadmin' or $ceklevel==='admin_penerbitan')? '<a type="button" class="btn btn-info btn-xs '.$atribut.'" href="'.base_url('draft/cetakUlang/'.$input->draft_id).'">Cetak Ulang</a>':'' ?>
+                    </div>
+                    <?php endif ?>
+                  </td>
                 </tr>
                 <!-- /tr -->
                 <!-- tr -->
@@ -644,13 +648,14 @@
               <!-- .modal-header -->
               <div class="modal-header">
                 <h5 class="modal-title">
-                  <i class="fa fa-bullhorn text-yellow mr-1"></i> Konfirmasi Draft
+                  <i class="fa fa-bullhorn text-yellow mr-1"></i> Konfirmasi Draft Final
                 </h5>
               </div>
               <!-- /.modal-header -->
               <!-- .modal-body -->
               <div class="modal-body">
                 <p>Draft <span class="font-weight-bold"><?= $input->draft_title ?></span> sudah final dan akan disimpan jadi buku?</p>
+                <div class="alert alert-warning">Tanggal selesai draft akan tercatat ketika klik Submit</div>
               </div>
               <!-- /.modal-body -->
               <!-- .modal-footer -->

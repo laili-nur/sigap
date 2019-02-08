@@ -93,8 +93,10 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
             'edit' => 'Tahap Editorial',
             'layout' => 'Tahap Layout',
             'proofread' => 'Tahap Proofread',
+            'cetak' => 'Tahap Cetak',
             'reject' => 'Draft Ditolak',
             'final' => 'Draft Final',
+            'cetak-ulang' => 'Draft Cetak Ulang',
           ];
         }
 

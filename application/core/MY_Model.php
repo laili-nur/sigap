@@ -1,8 +1,8 @@
 <?php
 class MY_Model extends CI_Model
 {
-    protected $table          = '';
-    protected $perPage        = 0;
+    protected $table   = '';
+    protected $perPage = 0;
 
     public function __construct()
     {
@@ -13,7 +13,8 @@ class MY_Model extends CI_Model
         }
     }
 
-    public function checkTable($table) {
+    public function checkTable($table)
+    {
         if ($table == "") {
             $table = $this->table;
         }
@@ -50,7 +51,8 @@ class MY_Model extends CI_Model
         return $this->db->get($table)->row();
     }
 
-    public function getRowArray($table = "") {
+    public function getRowArray($table = "")
+    {
         $table = $this->checkTable($table);
         return $this->db->get($table)->row_array();
     }
@@ -67,12 +69,14 @@ class MY_Model extends CI_Model
         return $this->db->get($table)->result_array();
     }
 
-    public function getWhere($data, $table = "") {
+    public function getWhere($data, $table = "")
+    {
         $table = $this->checkTable($table);
         return $this->db->get_where($table, $data)->row();
     }
 
-    public function getAllWhere($data, $table = "") {
+    public function getAllWhere($data, $table = "")
+    {
         $table = $this->checkTable($table);
         return $this->db->get_where($table, $data)->result();
     }
@@ -111,10 +115,10 @@ class MY_Model extends CI_Model
         $this->db->where($column, $condition);
         return $this;
     }
-    
+
     public function whereNot($column, $condition)
     {
-        $this->db->where($column.' !=', $condition);
+        $this->db->where($column . ' !=', $condition);
         return $this;
     }
 
@@ -126,7 +130,7 @@ class MY_Model extends CI_Model
 
     public function orWhereNot($column, $condition)
     {
-        $this->db->or_where($column.' !=', $condition);
+        $this->db->or_where($column . ' !=', $condition);
         return $this;
     }
 
@@ -143,8 +147,8 @@ class MY_Model extends CI_Model
         $this->db->or_where("$table_middle.{$table}_id", $condition);
         return $this;
     }
-    
-    public function having($column, $condition ="")
+
+    public function having($column, $condition = "")
     {
         $this->db->having($column, $condition);
         return $this;
@@ -162,7 +166,7 @@ class MY_Model extends CI_Model
         return $this;
     }
 
-        public function like($column, $condition)
+    public function like($column, $condition)
     {
         $this->db->like($column, $condition);
         return $this;
@@ -217,12 +221,14 @@ class MY_Model extends CI_Model
         return $this;
     }
 
-    public function joinRelationMiddle($table_dest, $table_middle) {
+    public function joinRelationMiddle($table_dest, $table_middle)
+    {
         $this->db->join($table_middle, "$table_dest.{$table_dest}_id = $table_middle.{$table_dest}_id", "left");
         return $this;
     }
 
-    public function joinRelationDest($table_dest, $table_middle) {
+    public function joinRelationDest($table_dest, $table_middle)
+    {
         $this->db->join($table_dest, "$table_middle.{$table_dest}_id = $table_dest.{$table_dest}_id", "left");
         return $this;
     }
@@ -246,33 +252,32 @@ class MY_Model extends CI_Model
         $this->load->library('pagination');
 
         $config = [
-            'base_url'          => $baseURL,
-            'uri_segment'       => $uriSegment,
-            'per_page'          => $this->perPage,
-            'total_rows'        => $totalRows,
-            'use_page_numbers'  => true,
-            'num_links'         => 2,
-            'attributes'        => array('class' => 'page-link'),
-            'first_link'        => 'First',
-            'last_link'         => 'Last',
-            'next_link'         => '<i class="fa fa-lg fa-angle-right"></i>',
-            'prev_link'         => '<i class="fa fa-lg fa-angle-left"></i>',
-            'full_tag_open'     => '<ul class="pagination justify-content-center mt-4">',
-            'full_tag_close'    => '</ul>',
-            'num_tag_open'      => '<li class="page-item">',
-            'num_tag_close'     => '</li>',
-            'cur_tag_open'      => '<li class="page-item active"><span class="page-link">',
-            'cur_tag_close'     => '</span></li>',
-            'next_tag_open'     => '<li class="page-item">',
-            'next_tagl_close'   => '</li>',
-            'prev_tag_open'     => '<li class="page-item">',
-            'prev_tagl_close'   => 'Next</li>',
-            'first_tag_open'    => '<li class="page-item">',
+            'base_url'         => $baseURL,
+            'uri_segment'      => $uriSegment,
+            'per_page'         => $this->perPage,
+            'total_rows'       => $totalRows,
+            'use_page_numbers' => true,
+            'num_links'        => 2,
+            'attributes'       => array('class' => 'page-link'),
+            'first_link'       => 'First',
+            'last_link'        => 'Last',
+            'next_link'        => '<i class="fa fa-lg fa-angle-right"></i>',
+            'prev_link'        => '<i class="fa fa-lg fa-angle-left"></i>',
+            'full_tag_open'    => '<ul class="pagination justify-content-center mt-4">',
+            'full_tag_close'   => '</ul>',
+            'num_tag_open'     => '<li class="page-item">',
+            'num_tag_close'    => '</li>',
+            'cur_tag_open'     => '<li class="page-item active"><span class="page-link">',
+            'cur_tag_close'    => '</span></li>',
+            'next_tag_open'    => '<li class="page-item">',
+            'next_tagl_close'  => '</li>',
+            'prev_tag_open'    => '<li class="page-item">',
+            'prev_tagl_close'  => 'Next</li>',
+            'first_tag_open'   => '<li class="page-item">',
             'first_tag_close'  => '</li>',
-            'last_tag_open'     => '<li class="page-item">',
-            'last_tagl_close'   => '</li>',
+            'last_tag_open'    => '<li class="page-item">',
+            'last_tagl_close'  => '</li>',
         ];
-
 
         if (count($_GET) > 0) {
             $config['suffix']    = '?' . http_build_query($_GET, '', "&");
@@ -286,30 +291,34 @@ class MY_Model extends CI_Model
         return $this->pagination->create_links();
     }
 
-    public function getIdAndName($table_dest, $table_middle, $id_table_middle, $table_from = "") {
+    public function getIdAndName($table_dest, $table_middle, $id_table_middle, $table_from = "")
+    {
         $table = $this->checkTable($table_from);
         return $this->select("$table_dest.{$table_dest}_id")
-                    ->select("$table_dest.{$table_dest}_name")
-                    ->joinRelationMiddle($table_dest, $table_middle)
-                    ->whereRelation($table_middle, $id_table_middle, $table)
-                    ->getAll($table_dest);
+            ->select("$table_dest.{$table_dest}_name")
+            ->joinRelationMiddle($table_dest, $table_middle)
+            ->whereRelation($table_middle, $id_table_middle, $table)
+            ->getAll($table_dest);
     }
 
-    public function updateDraftStatus($draft_id, $status) {
+    public function updateDraftStatus($draft_id, $status)
+    {
         $this->where('draft_id', $draft_id)
-             ->update($status, 'draft');
+            ->update($status, 'draft');
     }
 
-    public function getDraftFromRelation($table_dest, $table_middle) {
+    public function getDraftFromRelation($table_dest, $table_middle)
+    {
         return $this->joinRelationMiddle('draft', $table_middle)
-                    ->joinRelationDest($table_dest, $table_middle);
+            ->joinRelationDest($table_dest, $table_middle);
     }
 
-    public function getPKTableId($table_dest, $table_from, $table_middle, $id_table_dest, $id_table_from) {
+    public function getPKTableId($table_dest, $table_from, $table_middle, $id_table_dest, $id_table_from)
+    {
         $query = $this->select("{$table_middle}_id")
-                      ->where("{$table_dest}_id", $id_table_dest)
-                      ->where("{$table_from}_id", $id_table_from)
-                      ->getRowArray($table_middle);
+            ->where("{$table_dest}_id", $id_table_dest)
+            ->where("{$table_from}_id", $id_table_from)
+            ->getRowArray($table_middle);
 
         if ($query) {
             $data = $query;
@@ -320,26 +329,28 @@ class MY_Model extends CI_Model
         }
     }
 
-    public function editDraftDate($id, $column, $date = '') {
+    public function editDraftDate($id, $column, $date = '')
+    {
         if ($date == "") {
             $date = date('Y-m-d H:i:s');
         }
 
         $data = array($column => $date);
-        if($this->where('draft_id', $id)->update($data, 'draft')){
+        if ($this->where('draft_id', $id)->update($data, 'draft')) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public function getIdRoleFromUserId($user_id, $role) {
+    public function getIdRoleFromUserId($user_id, $role)
+    {
         $id = 0;
 
-        $data =  $this->select($role . '_id')
-                      ->joinRelationDest('user', $role)
-                      ->whereRelation($role, $user_id, 'user')
-                      ->getRowArray($role);
+        $data = $this->select($role . '_id')
+            ->joinRelationDest('user', $role)
+            ->whereRelation($role, $user_id, 'user')
+            ->getRowArray($role);
 
         if ($data) {
             $id = $data[$role . '_id'];
@@ -348,13 +359,14 @@ class MY_Model extends CI_Model
         return $id;
     }
 
-    public function getIdDraftFromDraftId($draft_id, $role) {
+    public function getIdDraftFromDraftId($draft_id, $role)
+    {
         $id = 0;
 
-        $data =  $this->select($role . '_id')
-                      ->joinRelationDest('draft', $role)
-                      ->whereRelation($role, $draft_id, 'draft')
-                      ->getRowArray($role);
+        $data = $this->select($role . '_id')
+            ->joinRelationDest('draft', $role)
+            ->whereRelation($role, $draft_id, 'draft')
+            ->getRowArray($role);
 
         if ($data) {
             $id = $data[$role . '_id'];

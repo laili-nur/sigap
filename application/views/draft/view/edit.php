@@ -16,7 +16,7 @@
         <button type="button" class="btn <?=($editors==null)? 'btn-warning' : 'btn-secondary' ?>" data-toggle="modal" data-target="#piliheditor">Pilih Editor</button>
         <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#edit_deadline">Atur Deadline</button>
         <?php endif ?>
-        <?php if($ceklevel == 'editor'): ?>
+        <?php if($ceklevel == 'editor' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
         <button type="button" class="btn btn-warning" id="btn-mulai-editor" <?=($input->edit_start_date==null or $input->edit_start_date=='0000-00-00 00:00:00')? '' : 'disabled' ?>>Mulai Proses</button>
         <?php endif ?>
         <!-- /.tombol add -->
