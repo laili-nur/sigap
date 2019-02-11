@@ -77,8 +77,9 @@
           },
           options: {
             legend :{
+              position: 'bottom',
               labels: {
-                fontColor: 'black',
+                fontColor: 'black'
               }
             },
             ticks : {

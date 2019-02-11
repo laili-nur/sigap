@@ -64,6 +64,7 @@
           },
           options: {
             legend :{
+              position: 'bottom',
               labels: {
                 fontColor: 'black',
               }
@@ -118,6 +119,7 @@
           },
           options: {
             legend :{
+              position: 'bottom',
               labels: {
                 fontColor: 'black',
               }

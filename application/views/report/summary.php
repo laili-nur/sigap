@@ -127,7 +127,7 @@
                         ticks: {
                           fontFamily :'Helvetica Neue',
                           fontSize : 14,
-                          fontStyle :'italic',
+                          fontStyle :'',
                           fontColor : 'black',
                           beginAtZero:true
                         }
