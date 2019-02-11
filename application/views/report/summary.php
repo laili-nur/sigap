@@ -49,7 +49,7 @@
   </div>
 
     <!-- graph for summary -->
-    <div class="chart-container" style="position: relative; height:40vh; width:80vw">
+
     <canvas id="myChart" width="500" height="170"></canvas>
     <script>
     var tahun = $('#droptahunsummary').val();
@@ -147,14 +147,13 @@
                   },
                   layout:{
                     padding: {
-                      left:65,
-                      right:95,
+                      left:50,
+                      right:85,
                       top:10,
-                      bottom:40,
+                      bottom:50,
                     }
                   }
               }
           });
       });
     </script>
-  </div>
