@@ -2,7 +2,21 @@
 <!-- .card -->
 <section id="progress-print" class="card">
   <!-- .card-header -->
-  <header class="card-header">Cetak</header>
+  <header class="card-header">
+    <!-- .d-flex -->
+    <div class="d-flex align-items-center">
+      <span class="mr-auto">Cetak</span>
+      <!-- .card-header-control -->
+      <div class="card-header-control">
+        <?php if($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+        <button type="button" class="btn btn-warning" id="btn-mulai-cetak" <?=($input->print_start_date==null or $input->print_start_date=='0000-00-00 00:00:00')? '' : 'disabled' ?>>Mulai Cetak</button>
+        <?php endif ?>
+        <!-- /.tombol add -->
+      </div>
+      <!-- /.card-header-control -->
+    </div>
+    <!-- /.d-flex -->
+  </header>
   <div class="list-group list-group-flush list-group-bordered" id="list-group-print">
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Tanggal masuk</span>
@@ -372,6 +386,40 @@ $(document).ready(function() {
           toastr_view('000');
         }
       }
+    });
+    return false;
+  });
+
+  //tombol mulai proses cetak
+  $('#btn-mulai-cetak').on('click', function() {
+    var $this = $(this);
+    $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+    var draft = $('input[name=draft_id]').val();
+    $.ajax({
+      type: "POST",
+      url: "<?php echo base_url('responsibility/mulai_proses/') ?>",
+      datatype: "JSON",
+      cache: false,
+      data: {
+        draft_id: draft,
+        col: 'print_start_date'
+      },
+      success: function(data) {
+        let datax = JSON.parse(data);
+        console.log(datax)
+        $this.removeAttr("disabled").html("Submit");
+        if (datax.status == true) {
+          toastr_view('111');
+        } else {
+          toastr_view('000');
+        }
+        $('#list-group-edit').load(' #list-group-edit');
+        $this.removeAttr("disabled").html("Mulai Cetak");
+        $this.addClass('disabled');
+        $this.attr("disabled", "disabled");
+        location.reload();
+      }
+
     });
     return false;
   });

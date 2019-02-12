@@ -211,7 +211,7 @@
             <!-- /.modal-body -->
             <!-- .modal-footer -->
             <div class="modal-footer">
-              <button class="btn btn-success" type="submit" id="proofread-setuju" value="15">Setuju</button>
+              <button class="btn btn-success" type="submit" id="proofread-setuju" value="13">Setuju</button>
               <button class="btn btn-danger" type="submit" id="proofread-tolak" value="99">Tolak</button>
               <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
             </div>
@@ -342,7 +342,6 @@ $(document).ready(function() {
         proofread_status: proofread_status,
         draft_status: action,
         proofread_end_date: end_date,
-        print_start_date : end_date,
         is_proofread: 'y'
       },
       success: function(data) {

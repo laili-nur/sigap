@@ -935,7 +935,7 @@
             success :function(data){
               let datax = JSON.parse(data);
               console.log(datax);
-              $this.removeAttr("disabled").html("Simpan Jadi Buku");
+              $this.removeAttr("disabled").html("Submit");
               if(datax.status == true){
                 toastr_view('111');
                 location.href ='<?php echo base_url('draft/copyToBook/')?>'+id;

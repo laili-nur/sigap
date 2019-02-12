@@ -69,7 +69,7 @@ class Responsibility extends Operator_Controller
         echo json_encode($data);
 	}
 
-        public function mulai_proses($jenis_staff)
+        public function mulai_proses($jenis_staff = null)
     {
         //ketika editor/layouter klik mulai maka akan mencatat tanggal mulai dan tanggal deadline
         $input = (object) $this->input->post(null, true);
@@ -93,6 +93,14 @@ class Responsibility extends Operator_Controller
             $end_date = 60 * 24 * 60 * 60;
             $deadline_layouter = date('Y-m-d H:i:s', ($current_date + $end_date));
             $this->responsibility->editDraftDate($input->draft_id, 'layout_deadline', $deadline_layouter);
+            if($this->responsibility->editDraftDate($input->draft_id, $input->col)){
+                $data['status'] = true;
+            }else{
+                $data['status'] = false;
+            }
+        }else{
+            $status = array('draft_status' => 15);
+            $this->responsibility->updateDraftStatus($input->draft_id, $status);
             if($this->responsibility->editDraftDate($input->draft_id, $input->col)){
                 $data['status'] = true;
             }else{
