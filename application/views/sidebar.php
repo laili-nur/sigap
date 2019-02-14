@@ -1,4 +1,4 @@
-<?php 
+<?php
     $username = ucwords($this->session->userdata('username'));
     $ceklevel = $this->session->userdata('level');
     $level = ucwords(str_replace('_', ' ', $ceklevel));
@@ -157,7 +157,13 @@
             <li class="menu-item <?=($pages=='reporting')?'has-active':'' ?>">
               <a href="<?=base_url('reporting') ?>" class="menu-link">
                 <span class="menu-icon fa fa-chart-bar"></span>
-                <span class="menu-text">Laporan</span>    
+                <span class="menu-text">Laporan</span>
+              </a>
+            </li>
+            <li class="menu-item <?=($pages=='performance')?'has-active':'' ?>">
+              <a href="<?=base_url('performance') ?>" class="menu-link">
+                <span class="menu-icon fa fa-walking"></span>
+                <span class="menu-text">Performa</span>
               </a>
             </li>
             <!-- /.menu-item -->
@@ -168,7 +174,7 @@
             <li class="menu-item <?=($pages=='user')?'has-active':'' ?>">
               <a href="<?=base_url('user') ?>" class="menu-link">
                 <span class="menu-icon fa fa-users"></span>
-                <span class="menu-text">Akun User</span>    
+                <span class="menu-text">Akun User</span>
               </a>
             </li>
             <!-- /.menu-item -->
@@ -176,13 +182,13 @@
             <li class="menu-item <?=($pages=='setting')?'has-active':'' ?>">
               <a href="<?=base_url('setting') ?>" class="menu-link">
                 <span class="menu-icon fa fa-cog"></span>
-                <span class="menu-text">Setting</span>    
+                <span class="menu-text">Setting</span>
               </a>
             </li>
             <!-- /.menu-item -->
             <?php endif ?>
             <!-- endif superadmin halaman user dan setting -->
-            
+
           <?php endif ?>
           </ul>
           <!-- /.menu -->

@@ -11,6 +11,7 @@ class Reporting extends Admin_Controller {
 
 	/*Controller for fetching data to the table*/
 
+	/* Fungsi untuk menampilkan halaman summary */
 	public function index()
 	{
 		$summaries     = $this->reporting->fetch_data();
@@ -20,7 +21,7 @@ class Reporting extends Admin_Controller {
 
 		$this->load->view('template', compact('main_view', 'pages', 'summaries'));
 	}
-
+	/* Fungsi untuk menampilkan halaman draft */
 	public function index_draft()
 	{
 		$drafts     = $this->reporting->fetch_data_draft();
@@ -30,7 +31,7 @@ class Reporting extends Admin_Controller {
 
 		$this->load->view('template', compact('main_view', 'pages', 'drafts'));
 	}
-
+	/* Fungsi untuk menampilkan halaman buku */
 	public function index_books()
 	{
 		$books     = $this->reporting->fetch_data_book();
@@ -40,7 +41,7 @@ class Reporting extends Admin_Controller {
 
 		$this->load->view('template', compact('main_view', 'pages','books'));
 	}
-
+	/* Fungsi untuk menampilkan halaman penulis */
 	public function index_author()
 	{
 		$author     = $this->reporting->fetch_data_author();
@@ -50,7 +51,7 @@ class Reporting extends Admin_Controller {
 
 		$this->load->view('template', compact('main_view', 'pages','author'));
 	}
-
+	/* Fungsi untuk menampilkan halaman hibah*/
 	public function index_hibah()
 	{
 		$hibah     = $this->reporting->fetch_data_hibah();
@@ -60,29 +61,9 @@ class Reporting extends Admin_Controller {
 
 		$this->load->view('template', compact('main_view', 'pages','hibah'));
 	}
+	/* Fungsi untuk menampilkan halaman performa editor */
 
-	public function performa_editor()
-	{
-
-		$performance_editor = $this->reporting->select(['draft_title','username','edit_start_date','edit_deadline','edit_end_date'])->join3('responsibility','draft','draft')->join3('user','responsibility','user')->where('level', 'editor')->getAll('draft');
-
-		$pages    = $this->pages;
-		$main_view = 'report/performance_editor';
-
-		$this->load->view('template', compact('main_view', 'pages', 'performance_editor'));
-
-	}
-
-	public function performa_layouter()
-	{
-		$performance_layouter = $this->reporting->select(['draft_title','username','layout_start_date','layout_deadline','layout_end_date'])->join3('responsibility','draft','draft')->join3('user','responsibility','user')->where('level', 'layouter')->getAll('draft');
-
-		$pages    = $this->pages;
-		$main_view = 'report/performance_layouter';
-
-		$this->load->view('template', compact('main_view', 'pages', 'performance_layouter'));
-	}
-
+	/* Fungsi untuk menampilkan grafik summary */
 	public function getSummary()
 	{
 		$count_review = 0;
@@ -124,7 +105,7 @@ class Reporting extends Admin_Controller {
 			if($hasil_editor->is_proofread == 'y' AND $hasil_editor->is_print == 'n'){
 				$count_print++;
 			}
-			if($hasil_editor->draft_status == 14){
+			if($hasil_editor->is_print == 'y' OR $hasil_editor->draft_status == 14){
 				$count_final++;
 			}
 		}
@@ -135,7 +116,7 @@ class Reporting extends Admin_Controller {
 		$result['count_final'] = $count_final;
 		echo json_encode($result);
 	}
-
+	/* Fungsi untuk menampilkan grafik penulis berdasarkan instansi */
 	public function getPie()
 	{
 		$count_ugm = 0;
@@ -155,6 +136,7 @@ class Reporting extends Admin_Controller {
 		echo json_encode($result);
 	}
 
+	/* Fungsi untuk menampilkan grafik penulis berdasarkan gelar */
 	public function getPieAuthorGelar(){
 		$count_prof = 0;
 		$count_doctor = 0;
@@ -178,6 +160,7 @@ class Reporting extends Admin_Controller {
 		echo json_encode($result);
 	}
 
+	/* Fungsi untuk menampilkan grafik hibah */
 	public function getPieHibah()
 	{
 		$count_hibah = 0;
@@ -198,6 +181,7 @@ class Reporting extends Admin_Controller {
 		echo json_encode($result);
 	}
 
+	/* Fungsi untuk menambah data pada grafik draft*/
 	public function getDraft()
   {
 		$year = $this->input->get('droptahun');
@@ -209,6 +193,7 @@ class Reporting extends Admin_Controller {
 		echo json_encode($result);
   }
 
+	/* Fungsi untuk menambah data pada grafik buku*/
 	public function getBook()
   {
 		$year = $this->input->get('droptahunbuku');
@@ -220,6 +205,7 @@ class Reporting extends Admin_Controller {
 		echo json_encode($result);
   }
 
+	/* Fungsi untuk menambah data pada grafik penulis*/
 	public function getAuthor()
   {
 		for($i = 1; $i <= 3; $i++)
@@ -230,7 +216,7 @@ class Reporting extends Admin_Controller {
 		echo json_encode($result);
   }
 
-
+	/* Fungsi filter data pada grafik summary*/
 	public function getYearsSummary()
 	{
 		$filtertahun = $this->reporting->group_by('YEAR(entry_date)')->getAllArray('draft');
@@ -240,6 +226,7 @@ class Reporting extends Admin_Controller {
 		echo json_encode($tahun);
 	}
 
+	/* Fungsi filter data pada grafik draft*/
 	public function getYears()
 	{
 		$filtertahun = $this->reporting->group_by('YEAR(entry_date)')->getAllArray('draft');
@@ -249,6 +236,7 @@ class Reporting extends Admin_Controller {
 		echo json_encode($tahun);
 	}
 
+	/* Fungsi filter data pada grafik buku*/
 	public function getYearsBook()
 	{
 		$filtertahun = $this->reporting->group_by('YEAR(published_date)')->getAllArray('book');
@@ -258,6 +246,7 @@ class Reporting extends Admin_Controller {
 		echo json_encode($tahun);
 	}
 
+	/* Fungsi filter data pada grafik hibah*/
 	public function getYearsHibah()
 	{
 		$filtertahun = $this->reporting->group_by('YEAR(entry_date)')->getAllArray('draft');

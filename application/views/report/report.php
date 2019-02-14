@@ -10,7 +10,7 @@
         </li>
       </ol>
     </nav>
-    <h1 class="page-title"> Report </h1>  
+    <h1 class="page-title"> Report </h1>
   </header>
   <!-- /.page-title-bar -->
   <div class="page-section">

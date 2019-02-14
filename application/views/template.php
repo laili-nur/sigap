@@ -7,7 +7,7 @@
     <!-- End Required meta tags -->
     <title>Sistem Informasi UGMPRESS</title>
     <!-- file bawaan template -->
-    
+
     <!-- FAVICONS -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<?= base_url('assets/apple-touch-icon.png') ?>">
     <link rel="shortcut icon" href="<?= base_url('assets/favicon.ico')?>">
@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/vendor/select2/css/select2.min.css')?>">
     <link rel="stylesheet" href="<?= base_url('assets/vendor/toastr/toastr.min.css')?>">
     <link rel="stylesheet" href="<?= base_url('assets/vendor/summernote/summernote-bs4.css')?>">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
     <!-- END PLUGINS STYLES -->
     <!-- BEGIN THEME STYLES -->
     <link rel="stylesheet" href="<?= base_url('assets/stylesheets/main.css')?>">
@@ -36,7 +37,7 @@
     <script src="<?= base_url('assets/vendor/jquery-validation/jquery.validate.min.js'); ?>"></script>
     <script src="<?= base_url('assets/vendor/jquery-validation/additional-methods.min.js'); ?>"></script>
     <script src="<?= base_url('assets/vendor/DoubleScroll/jquery.doubleScroll.js'); ?>"></script>
-    
+
 </head>
 <body>
     <!-- .app -->
@@ -77,14 +78,17 @@
     <!-- BEGIN PLUGINS JS -->
     <script src="<?= base_url('assets/vendor/stacked-menu/stacked-menu.min.js');?>"></script>
     <script src="<?= base_url('assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js')?>"></script>
-    <script src="<?= base_url('assets/vendor/flatpickr/flatpickr_new.min.js')?>"></script> 
+    <script src="<?= base_url('assets/vendor/flatpickr/flatpickr_new.min.js')?>"></script>
     <script src="<?= base_url('assets/vendor/handlebars/handlebars.min.js')?>"></script>
     <script src="<?= base_url('assets/vendor/select2/js/select2.min.js')?>"></script>
     <script src="<?= base_url('assets/vendor/tribute/tribute.min.js')?>"></script>
     <script src="<?= base_url('assets/vendor/Caret/jquery.caret.min.js')?>"></script>
     <script src="<?= base_url('assets/vendor/At.js/js/jquery.atwho.min.js')?>"></script>
     <script src="<?= base_url('assets/vendor/toastr/toastr.min.js')?>"></script>
-    <script src="<?= base_url('assets/vendor/summernote/summernote-bs4.js')?>"></script> 
+    <script src="<?= base_url('assets/vendor/summernote/summernote-bs4.js')?>"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
     <!-- END PLUGINS JS -->
     <!-- BEGIN THEME JS -->
     <script src="<?= base_url('assets/javascript/main.min.js')?>"></script>
@@ -93,7 +97,7 @@
     <script src="<?= base_url('assets/javascript/pages/flatpickr-demo.js')?>"></script>
     <script src="<?= base_url('assets/javascript/pages/select2-demo.js')?>"></script>
     <script src="<?= base_url('assets/javascript/pages/easypiechart-demo.js')?>"></script>
-    <script src="<?= base_url('assets/javascript/pages/summernote-demo.js')?>"></script>    
+    <script src="<?= base_url('assets/javascript/pages/summernote-demo.js')?>"></script>
     <!-- END PAGE LEVEL JS -->
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-116692175-1"></script>
