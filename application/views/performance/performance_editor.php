@@ -48,6 +48,7 @@
             <th><font color="white">Tanggal Masuk</font></th>
             <th><font color="white">Deadline</font></th>
             <th><font color="white">Tanggal Jadi</font></th>
+            <th><font color="white">edit</font></th>
             <th><font color="white">Status</font></th>
           </tr>
       </thead>
@@ -60,23 +61,27 @@
       ?>
         <tr>
           <td><?php echo $row->username; ?></td>
-          <td><?php echo $row->draft_title; ?></td>
+          <td class="align-middle"><strong><a href="<?= base_url('draft/view/' . $row->draft_id . '') ?>"><?= $row->draft_title ?></a></strong></td>
           <td><?php echo $row->category_name; ?></td>
           <td><?php echo konversiTanggal($row->edit_start_date); ?></td>
           <td><?php echo konversiTanggal($row->edit_deadline); ?></td>
           <td><?php echo konversiTanggal($row->edit_end_date); ?></td>
-          <td><?php if($row->performance_status == 1){
-            ?> <span class="badge badge-primary">ON PROCESS</span> <?php
+          <td><?php echo $row->is_edit; ?></td>
+         <td><?php 
+            if(($row->edit_start_date == '0000-00-00 00:00:00' OR $row->edit_start_date == 'NULL') AND ($row->edit_end_date == '0000-00-00 00:00:00' OR $row->edit_end_date == 'NULL')){
+            echo "-";
+          } elseif (($row->edit_start_date != '0000-00-00 00:00:00' AND $row->edit_start_date != 'NULL') AND ($row->edit_end_date == '0000-00-00 00:00:00' OR $row->edit_end_date == 'NULL')){
+            echo '<span class="badge badge-primary">ON PROCESS</span>';
+          } elseif ($row->is_edit = 'y' AND ($row->edit_end_date < $row->edit_deadline) AND $row->edit_start_date != '0000-00-00 00:00:00' AND $row->edit_start_date != 'NULL' AND $row->edit_end_date != '0000-00-00 00:00:00' AND $row->edit_end_date != 'NULL') {
+            echo '<span class="badge badge-success">ON TIME</span>';
+          } elseif ($row->is_edit = 'n' AND ($row->edit_end_date < $row->edit_deadline) AND $row->edit_start_date != '0000-00-00 00:00:00' AND $row->edit_start_date != 'NULL' AND $row->edit_end_date != '0000-00-00 00:00:00' AND $row->edit_end_date != 'NULL') {
+            echo '<span class="badge badge-warning">FINAL</span>';
+          }  elseif ($row->edit_end_date > $row->edit_deadline AND ($row->edit_start_date != '0000-00-00 00:00:00' AND $row->edit_start_date != 'NULL') AND ($row->edit_end_date != '0000-00-00 00:00:00' AND $row->edit_end_date != 'NULL')) {
+            echo '<span class="badge badge-danger">LATE</span>';
+          } else {
+            echo '<i class="fa fa-exclamation-triangle text-danger"></i>';
           }
-          elseif ($row->performance_status == 2) {
-            ?> <span class="badge badge-warning">FINAL</button> <?php
-          }
-          elseif ($row->performance_status == 3) {
-            ?> <span class="badge badge-success">ON TIME</button> <?php
-          }
-          else {
-            ?> <span class="badge badge-danger">LATE</button> <?php
-          }?></td>
+          ?></td>
         </tr>
         <?php
         }

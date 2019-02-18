@@ -42,7 +42,7 @@ class Responsibility extends Operator_Controller
         //$datax = array('draft_id' => $input->draft_id);
         if($jenis_staff == 'editor'){
             $data['jmlstaff'] = count($this->responsibility->join('user')->where('user.level','editor')->where('responsibility.draft_id',$input->draft_id)->getAll());
-            if($data['jmlstaff'] >0){
+            if($data['jmlstaff'] >1){
                 $data['validasi'] = 'max';
                 echo json_encode($data);
                 return;
@@ -59,6 +59,7 @@ class Responsibility extends Operator_Controller
         if ($this->responsibility->insert($input)) {
             $data['validasi'] = true;
             $data['status'] = true;
+            $data['isi'] = 'haahashsahdhasdhasd';
             $this->session->set_flashdata('success', 'Data saved');
         } else {
             $data['validasi'] = true;
@@ -78,7 +79,7 @@ class Responsibility extends Operator_Controller
             $status = array('draft_status' => 6);
             $this->responsibility->updateDraftStatus($input->draft_id, $status);
             $current_date = strtotime(date('Y-m-d H:i:s'));
-            $end_date = 60 * 24 * 60 * 60;
+            $end_date = 30 * 24 * 60 * 60;
             $deadline_editor = date('Y-m-d H:i:s', ($current_date + $end_date));
             $this->responsibility->editDraftDate($input->draft_id, 'edit_deadline', $deadline_editor);
             if($this->responsibility->editDraftDate($input->draft_id, $input->col)){
@@ -90,7 +91,7 @@ class Responsibility extends Operator_Controller
             $status = array('draft_status' => 8);
             $this->responsibility->updateDraftStatus($input->draft_id, $status);
             $current_date = strtotime(date('Y-m-d H:i:s'));
-            $end_date = 60 * 24 * 60 * 60;
+            $end_date = 30 * 24 * 60 * 60;
             $deadline_layouter = date('Y-m-d H:i:s', ($current_date + $end_date));
             $this->responsibility->editDraftDate($input->draft_id, 'layout_deadline', $deadline_layouter);
             if($this->responsibility->editDraftDate($input->draft_id, $input->col)){
@@ -107,8 +108,37 @@ class Responsibility extends Operator_Controller
                 $data['status'] = false;
             }
         }
-        
-        
+        echo json_encode($data);
+    }
+
+    public function selesai_proses($jenis_staff = null)
+    {
+        //ketika editor/layouter klik selesai maka akan mencatat tanggal selesai
+        $input = (object) $this->input->post(null, true);
+
+        if($jenis_staff == 'editor'){
+           $this->db->query("UPDATE responsibility
+            LEFT JOIN user ON responsibility.user_id = user.user_id 
+            SET performance_status = 2
+            WHERE level = '".$jenis_staff."' and draft_id = ".$input->draft_id);
+
+            if($this->responsibility->editDraftDate($input->draft_id, $input->col)){
+                $data['status'] = true;
+            }else{
+                $data['status'] = false;
+            }
+        }elseif($jenis_staff == 'layouter'){
+            $this->db->query("UPDATE responsibility
+            LEFT JOIN user ON responsibility.user_id = user.user_id 
+            SET performance_status = 2
+            WHERE level = '".$jenis_staff."' and draft_id = ".$input->draft_id);
+
+            if($this->responsibility->editDraftDate($input->draft_id, $input->col)){
+                $data['status'] = true;
+            }else{
+                $data['status'] = false;
+            }
+        }
         echo json_encode($data);
     }
         

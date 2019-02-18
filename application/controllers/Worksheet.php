@@ -24,8 +24,8 @@ class Worksheet extends Operator_Controller {
             $worksheets = $this->worksheet->join('draft')->where('draft_status', 0)->orderBy('worksheet_num')->paginate($page)->getAll();
             $total = $this->worksheet->join('draft')->where('draft_status', 0)->count();
         } elseif ($filter == 'approved') {
-            $worksheets = $this->worksheet->join('draft')->where('draft_status', 1)->orderBy('worksheet_num')->paginate($page)->getAll();
-            $total = $this->worksheet->join('draft')->where('draft_status', 1)->count();
+            $worksheets = $this->worksheet->join('draft')->whereNot('draft_status', 0)->whereNot('draft_status', 2)->orderBy('worksheet_num')->paginate($page)->getAll();
+            $total = $this->worksheet->join('draft')->whereNot('draft_status', 0)->whereNot('draft_status', 2)->count();
         } elseif ($filter == 'rejected') {
             $worksheets = $this->worksheet->join('draft')->where('draft_status', 2)->orderBy('worksheet_num')->paginate($page)->getAll();
             $total = $this->worksheet->join('draft')->where('draft_status', 2)->count();

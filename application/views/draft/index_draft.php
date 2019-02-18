@@ -94,9 +94,10 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
             'layout' => 'Tahap Layout',
             'proofread' => 'Tahap Proofread',
             'cetak' => 'Tahap Cetak',
-            'reject' => 'Draft Ditolak',
-            'final' => 'Draft Final',
-            'cetak-ulang' => 'Draft Cetak Ulang',
+            'final' => 'Final',
+            'reject' => 'Ditolak',
+            'cetak-ulang' => 'Cetak Ulang',
+            'error' => 'Draft Error',
           ];
         }
 
@@ -116,6 +117,14 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
+            <?php if($this->input->get('filter') == 'error'): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <p class="m-0">Lakukan penyesuaian draft berikut agar tidak terjadi error progress, dengan cara masuk ke menu edit manual lalu sesuaikan progress dan tanggalnya. Selain itu dapat juga direset dengan mengosongi isian pada <em>halaman edit</em>, lalu memulai progress dengan benar di <em>halaman view</em>.</p>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <?php endif ?>
             <div class="row">
               <div class="col-12 col-md-4 col-lg-2 mb-3">
                 <?= form_open('draft/filter', ['method' => 'GET']) ?>

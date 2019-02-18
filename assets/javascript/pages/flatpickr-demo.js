@@ -40,7 +40,6 @@ var flatpickrDemo = {
     return flatpickr('.mydate_modal', {
       disableMobile: true,
       altInput: true,
-      minDate: 'today',
       altFormat: 'j F Y',
       dateFormat: 'Y-m-d',
       inline: true

@@ -98,7 +98,7 @@ function toastr_view(param) {
     } else if (param == '99') {
         toastr.error('Reviewer max 2');
     } else if (param == '98') {
-        toastr.error('Editor max 1');
+        toastr.error('Editor max 2');
     } else if (param == '97') {
         toastr.error('Layouter max 2');
     } else if (param == '111') {

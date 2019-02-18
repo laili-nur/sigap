@@ -37,20 +37,29 @@ class Home extends Operator_Controller
             $count['tot_book']     = $this->home->count('book');
             $count['tot_author']     = $this->home->count('author');
             $count['tot_reviewer']     = $this->home->count('reviewer');
-            $count['draft_desk'] = $this->home->where('draft_status','0')->count('draft');
-            $count['draft_desk_lolos'] = $this->home->where('draft_status','1')->count('draft');
-            $count['draft_desk_total'] = $count['draft_desk']+$count['draft_desk_lolos'];
-            $count['draft_review'] = $this->home->where('is_review','n')->where('draft_status','4')->count('draft');
-            $count['draft_review_lolos'] = $this->home->where('draft_status','5')->count('draft');
-            $count['draft_edit'] = $this->home->where('is_review','y')->where('is_edit','n')->whereNot('draft_status','99')->count('draft');
-            $count['draft_layout'] = $this->home->where('is_edit','y')->where('is_layout','n')->whereNot('draft_status','99')->count('draft');
-            $count['draft_proofread'] = $this->home->where('is_proofread','n')->where('is_layout','y')->whereNot('draft_status','99')->count('draft');
-            $count['draft_final'] = $this->home->where('draft_status','14')->count('draft');
-            $count['draft_approved'] = $count['draft_desk_lolos']+$count['draft_review_lolos'];
-            $count['draft_in_progress'] = $count['draft_edit']+$count['draft_layout']+$count['draft_proofread'];
-            $count['draft_rejected'] = $this->home->where('draft_status','99')->count('draft');
-            $count['draft_rejected_desk'] = $this->home->where('draft_status','2')->count('draft');
-            $count['draft_rejected_total'] = $count['draft_rejected']+$count['draft_rejected_desk'];
+            //sedang desk screening dan lolos desk screening
+            $count['draft_desk'] = $this->home->where('is_review','n')->where('is_edit','n')->where('is_layout','n')->where('is_proofread','n')->where('is_print','n')->group_start()->where('draft_status',1)->orWhere('draft_status',0)->group_end()->count('draft');    
+            //sedang review
+            $count['draft_review'] = $this->home->where('is_review','n')->where('is_edit','n')->where('is_layout','n')->where('is_proofread','n')->where('is_print','n')->where('draft_status','4')->count('draft');
+            //lolos review
+            $count['draft_review_lolos'] = $this->home->where('is_review','y')->where('draft_status','5')->count('draft');
+            //sedang edit
+            $count['draft_edit'] = $this->home->where('is_review','y')->where('is_edit','n')->where('is_layout','n')->where('is_proofread','n')->where('is_print','n')->whereNot('draft_status','99')->count('draft');
+            //sedang layout
+            $count['draft_layout'] = $this->home->where('is_review','y')->where('is_edit','y')->where('is_layout','n')->where('is_proofread','n')->where('is_print','n')->whereNot('draft_status','99')->count('draft');
+            //sedang proofread
+            $count['draft_proofread'] = $this->home->where('is_review','y')->where('is_edit','y')->where('is_layout','y')->where('is_proofread','n')->where('is_print','n')->whereNot('draft_status','99')->count('draft');
+            //sedang cetak
+            $count['draft_cetak'] = $this->home->where('is_review','y')->where('is_edit','y')->where('is_layout','y')->where('is_proofread','y')->group_start()->where('is_print','n')->orWhere('is_print','y')->group_end()->whereNot('draft_status','99')->whereNot('draft_status','14')->count('draft');
+            //final
+            $count['draft_final'] = $this->home->where('is_review','y')->where('is_edit','y')->where('is_layout','y')->where('is_proofread','y')->where('is_print','y')->where('is_reprint','n')->where('draft_status','14')->count('draft');
+            //cetak ulang
+            $count['draft_cetak_ulang'] = $this->home->where('is_reprint','y')->count('draft');
+
+            //$count['draft_approved'] = $count['draft_desk_lolos']+$count['draft_review_lolos'];
+            $count['draft_in_progress'] = $count['draft_edit']+$count['draft_layout']+$count['draft_proofread']+$count['draft_cetak'];
+            $count['draft_rejected_total'] = $this->home->where('draft_status','2')->orWhere('draft_status','99')->count('draft');
+            $count['draft_error'] = $count['tot_draft'] - $count['draft_in_progress'] - $count['draft_review'] - $count['draft_desk'] - $count['draft_cetak_ulang'] - $count['draft_final'] - $count['draft_rejected_total'];
         }elseif($ceklevel == 'reviewer'){
             $drafts = $this->home->join3('draft_reviewer','draft','draft')->join3('reviewer','draft_reviewer','reviewer')->join3('user','reviewer','user')->where('user.username',$cekusername)->getAll('draft');
             $drafts_newest = $this->home->join3('draft_reviewer','draft','draft')->join3('reviewer','draft_reviewer','reviewer')->join3('user','reviewer','user')->where('user.username',$cekusername)->limit(5)->orderBy('entry_date','desc')->getAll('draft');

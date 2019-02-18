@@ -164,7 +164,7 @@
                   <span class="value">
                     <?=$count['draft_desk'] ?>
                   </span>
-                  <span href="#" onclick="event.preventDefault()" class="font-weight-bold info-home" data-toggle="tooltip" data-html="true"  data-placement="left" title="Desk Screening = <?=$count['draft_desk'] ?><br>Lolos Desk Screening = <?=$count['draft_desk_lolos'] ?>" ><i class="fa fa-info-circle"></i></span>
+                  <!-- <span href="#" onclick="event.preventDefault()" class="font-weight-bold info-home" data-toggle="tooltip" data-html="true"  data-placement="left" title="Sedang Desk Screening = <?=$count['draft_desk'] ?><br>Lolos Desk Screening = <?=$count['draft_desk_lolos'] ?>" ><i class="fa fa-info-circle"></i></span> -->
                 </p>
               </a>
               <!-- /.metric -->
@@ -258,6 +258,28 @@
               <!-- /.metric -->
             </div>
             <!-- /metric column -->
+            <!-- metric column -->
+            <div class="col">
+              <!-- .metric -->
+              <a href="
+                <?=base_url('draft/filter?filter=cetak') ?>" class="metric metric-bordered align-items-center">
+                <div class="metric-badge">
+                  <span class="badge badge-lg badge-dark">
+                    <span class="oi oi-media-record pulse mr-1"></span> CETAK
+                  </span>
+                </div>
+                <p class="metric-value h3">
+                  <sub>
+                    <i class="fa fa-tasks"></i>
+                  </sub>
+                  <span class="value">
+                    <?=$count['draft_cetak'] ?>
+                  </span>
+                </p>
+              </a>
+              <!-- /.metric -->
+            </div>
+            <!-- /metric column -->
           </div>
         </div>
       </div>
@@ -270,44 +292,9 @@
             <div class="col">
               <!-- .metric -->
               <div class="metric metric-bordered align-items-center">
-                <h2 class="metric-label">
-                  <i class="fa fa-check"></i> Draft diterima
-                </h2>
-                <p class="metric-value h3">
-                  <span class="value">
-                    <?=$count['draft_review_lolos'] ?>
-                  </span>
-                  <a href="#" onclick="event.preventDefault()" class="font-weight-bold info-home" data-toggle="tooltip" data-html="true" data-placement="left" title="Draft yang lolos review"  ><i class="fa fa-info-circle"></i></a>
-                </p>
-              </div>
-              <!-- /.metric -->
-            </div>
-            <!-- /metric column -->
-            <!-- metric column -->
-            <div class="col">
-              <!-- .metric -->
-              <div class="metric metric-bordered align-items-center">
-                <h2 class="metric-label">
-                  <i class="fa fa-sync"></i> Draft dalam proses
-                </h2>
-                <p class="metric-value ">
-                  <span class="value h3">
-                    <?=$count['draft_in_progress'] ?>
-                  </span>
-                  <a href="#" onclick="event.preventDefault()" class="font-weight-bold info-home" data-toggle="tooltip" data-placement="left" title="Total Draft yang sedang dalam tahap editorial, layout, dan proofread" ><i class="fa fa-info-circle"></i></a>
-                </p>
-
-              </div>
-              <!-- /.metric -->
-            </div>
-            <!-- /metric column -->
-            <!-- metric column -->
-            <div class="col">
-              <!-- .metric -->
-              <div class="metric metric-bordered align-items-center">
-                <h2 class="metric-label">
+                <a href="<?=base_url('draft/filter?filter=final') ?>" class="metric-label">
                   <i class="fa fa-check"></i> Draft final 
-                </h2>
+                </a>
                 <p class="metric-value h3">
                   <span class="value">
                     <?=$count['draft_final'] ?>
@@ -322,14 +309,48 @@
             <div class="col">
               <!-- .metric -->
               <div class="metric metric-bordered align-items-center">
-                <h2 class="metric-label">
+                <a href="<?=base_url('draft/filter?filter=cetak-ulang') ?>" class="metric-label">
+                  <i class="fa fa-redo"></i> Draft Cetak Ulang 
+                </a>
+                <p class="metric-value h3">
+                  <span class="value">
+                    <?=$count['draft_cetak_ulang'] ?>
+                  </span>
+                  <a href="#" onclick="event.preventDefault()" class="font-weight-bold info-home" data-toggle="tooltip" data-html="true"  data-placement="left" title="Draft final yang di cetak ulang" ><i class="fa fa-info-circle"></i></a>
+                </p>
+              </div>
+              <!-- /.metric -->
+            </div>
+            <!-- /metric column -->
+            <!-- metric column -->
+            <div class="col">
+              <!-- .metric -->
+              <div class="metric metric-bordered align-items-center">
+                <a href="<?=base_url('draft/filter?filter=rejected') ?>" class="metric-label">
                    <i class="fa fa-times"></i> Draft ditolak
-                </h2>
+                </a>
                 <p class="metric-value">
                   <span class="value h3">
                     <?=$count['draft_rejected_total'] ?>
                   </span>
                   <a href="#" onclick="event.preventDefault()" class="font-weight-bold info-home" data-toggle="tooltip" data-placement="left" title="Draft yang ditolak pada tahap desk screening dan tahap selanjutnya" ><i class="fa fa-info-circle"></i></a>
+                </p>
+              </div>
+              <!-- /.metric -->
+            </div>
+            <!-- /metric column -->
+            <!-- metric column -->
+            <div class="col">
+              <!-- .metric -->
+              <div class="metric metric-bordered align-items-center">
+                <a href="<?=base_url('draft/filter?filter=error') ?>" class="metric-label">
+                   <i class="fa fa-exclamation-triangle"></i> Draft Error Status
+                </a>
+                <p class="metric-value">
+                  <span class="value h3">
+                    <?=$count['draft_error'] ?>
+                  </span>
+                  <a href="#" onclick="event.preventDefault()" class="font-weight-bold info-home" data-toggle="tooltip" data-placement="left" title="Draft yang status atau progressnya salah atau tidak sesuai" ><i class="fa fa-info-circle"></i></a>
                 </p>
               </div>
               <!-- /.metric -->
@@ -879,7 +900,7 @@
                 <div class="col">
                   <!-- .metric -->
                   <a href="
-                    <?=base_url('worksheet') ?>" class="metric metric-bordered align-items-center">
+                    <?=base_url('worksheet/filter?filter=waiting') ?>" class="metric metric-bordered align-items-center">
                     <div class="metric-badge">
                       <span class="badge badge-lg badge-secondary">
                         <span class="oi oi-media-record pulse mr-1"></span> MENUNGGU DESK SCREENING

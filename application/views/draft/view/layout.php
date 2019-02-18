@@ -13,11 +13,12 @@
       <div class="card-header-control">
         <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
         <!-- .tombol add -->
-        <button type="button" class="btn <?=($layouters==null)? 'btn-warning' : 'btn-secondary' ?>" data-toggle="modal" data-target="#pilihlayouter">Pilih Layouter</button>
-        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#layout_deadline">Atur Deadline</button>
+        <button type="button" class="d-inline btn <?=($layouters==null)? 'btn-warning' : 'btn-secondary' ?>" data-toggle="modal" data-target="#pilihlayouter" title="Pilih Layouter"><i class="fas fa-user-plus fa-fw"></i><span class="d-none d-lg-inline"> Pilih layouter</span></button>
+        <button type="button" class="d-inline btn btn-secondary" data-toggle="modal" data-target="#layout_deadline" title="Ubah Deadline"><i class="fas fa-calendar-alt fa-fw"></i><span class="d-none d-lg-inline"> Ubah Deadline</span></button>
         <?php endif ?>
         <?php if($ceklevel == 'layouter' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
-        <button type="button" class="btn btn-warning" id="btn-mulai-layouter" <?=($input->layout_start_date==null or $input->layout_start_date=='0000-00-00 00:00:00')? '' : 'disabled' ?>>Mulai Proses</button>
+        <button title="Mulai proses layout" type="button" class="d-inline btn btn-secondary" id="btn-mulai-layouter" <?=(($input->layout_start_date==null or $input->layout_start_date=='0000-00-00 00:00:00') and $layouters)? '' : 'disabled' ?>><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
+        <button title="Mulai proses layout" type="button" class="d-inline btn btn-secondary" id="btn-selesai-layouter" <?=($input->layout_end_date==null or $input->layout_end_date=='0000-00-00 00:00:00' and ($input->layout_start_date!=null and $input->layout_start_date!='0000-00-00 00:00:00'))? '' : 'disabled' ?>><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
         <?php endif ?>
         <!-- /.tombol add -->
       </div>
@@ -26,7 +27,7 @@
     <!-- /.d-flex -->
   </header>
   <?php if($layouters == null and ($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan')): ?>
-  <div class="alert alert-warning"><strong>PERHATIAN!</strong> Pilih layouter terlebih dahulu sebelum lanjut ke tahap selanjutnya.</div>
+  <div class="alert alert-warning"><strong>PERHATIAN!</strong> Pilih layouter terlebih dahulu sebelum mulai proses layout.</div>
   <?php endif ?>
   <div class="list-group list-group-flush list-group-bordered" id="list-group-layout">
     <div class="list-group-item justify-content-between">
@@ -150,6 +151,7 @@
               <!-- .form-group -->
               <div class="form-group">
                 <label for="cl" class="font-weight-bold">Catatan Layout</label>
+                <small class="text-muted" id="layout_last_notes"><?=konversiTanggal($input->layout_notes_date) ?></small>
                 <?php 
                       $optionscl = array(
                         'name' => 'layout_notes',
@@ -257,7 +259,7 @@
             <!-- keterangan last upload dan tombol download -->
             <div id="modal-cover">
               <p>Last Upload :
-                <?=konversiTanggal($input->cover_upload_date) ?>,
+                <?=konversiTanggal($input->cover_upload_date) ?>
                 <br> by :
                 <?=konversi_username_level($input->cover_last_upload) ?>
                 <?php  if($ceklevel !='author' and $ceklevel !='reviewer'):?>
@@ -513,7 +515,7 @@
                 <?php 
                       $hidden_date = array(
                         'type'  => 'hidden',
-                        'id'    => 'layout_end_date',
+                        'id'    => 'layout_finish_date',
                         'value' => date('Y-m-d H:i:s')
                       );
                       echo form_input($hidden_date);
@@ -755,10 +757,44 @@ $(document).ready(function() {
           toastr_view('000');
         }
         $('#list-group-layout').load(' #list-group-layout');
-        $this.removeAttr("disabled").html("Mulai Proses");
+        $this.removeAttr("disabled").html('<i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span>');
         $this.addClass('disabled');
         $this.attr("disabled", "disabled");
         location.reload();
+      }
+
+    });
+    return false;
+  });
+
+   //tombol selesai proses editor
+  $('#btn-selesai-layouter').on('click', function() {
+    var $this = $(this);
+    $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+    var draft = $('input[name=draft_id]').val();
+    $.ajax({
+      type: "POST",
+      url: "<?php echo base_url('responsibility/selesai_proses/layouter') ?>",
+      datatype: "JSON",
+      cache: false,
+      data: {
+        draft_id: draft,
+        col: 'layout_end_date'
+      },
+      success: function(data) {
+        let datax = JSON.parse(data);
+        console.log(datax)
+        $this.removeAttr("disabled").html("Submit");
+        if (datax.status == true) {
+          toastr_view('111');
+        } else {
+          toastr_view('000');
+        }
+        $('#list-group-layout').load(' #list-group-layout');
+        $this.removeAttr("disabled").html('<i class="fas fa-stop"></i><span class="d-none d-md-inline"> Selesai</span>');
+        $this.addClass('disabled');
+        $this.attr("disabled", "disabled");
+        //location.reload();
       }
 
     });
@@ -794,6 +830,7 @@ $(document).ready(function() {
       datatype: "JSON",
       data: {
         layout_notes: cl,
+        layout_notes_date: true,
         layout_notes_author: clp
       },
       success: function(data) {
@@ -806,6 +843,8 @@ $(document).ready(function() {
           toastr_view('000');
         }
         $('#list-group-layout').load(' #list-group-layout');
+        $('#layout_last_notes').html(datax.layout_notes_date);
+        $('#layout').modal('toggle');
       }
     });
     return false;
@@ -836,6 +875,7 @@ $(document).ready(function() {
           toastr_view('000');
         }
         $('#list-group-layout').load(' #list-group-layout');
+        $('#cover').modal('toggle');
       }
     });
     return false;
@@ -848,7 +888,7 @@ $(document).ready(function() {
     let id = $('[name=draft_id]').val();
     let layout_status = $('[name=layout_status]').val();
     let action = $('#layout-setuju').val();
-    let end_date = $('#layout_end_date').val();
+    let end_date = $('#layout_finish_date').val();
     $.ajax({
       type: "POST",
       url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
@@ -856,7 +896,6 @@ $(document).ready(function() {
       data: {
         layout_status: layout_status,
         draft_status: action,
-        layout_end_date: end_date,
         proofread_start_date: end_date,
         is_layout: 'y',
       },
@@ -884,7 +923,7 @@ $(document).ready(function() {
     let id = $('[name=draft_id]').val();
     let layout_status = $('[name=layout_status]').val();
     let action = $('#layout-tolak').val();
-    let end_date = $('#layout_end_date').val();
+    let end_date = $('#layout_finish_date').val();
 
     console.log(end_date);
     $.ajax({
@@ -894,7 +933,6 @@ $(document).ready(function() {
       data: {
         layout_status: layout_status,
         draft_status: action,
-        layout_end_date: end_date,
         is_layout: 'n'
       },
       success: function(data) {

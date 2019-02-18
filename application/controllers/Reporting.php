@@ -77,7 +77,7 @@ class Reporting extends Admin_Controller {
 
 		$result_review = $this->reporting->select(['draft_status'])->getSummary($year);
 		foreach ($result_review as $hasil_review){
-			if ($hasil_review->draft_status == 4 or $hasil_review->draft_status == 5) {
+			if ($hasil_review->draft_status == 4) {
 					$count_review++;
 			}
 		}

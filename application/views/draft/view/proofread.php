@@ -30,7 +30,7 @@
       <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
       <button title="Aksi admin" class="btn btn-secondary" data-toggle="modal" data-target="#proofread_aksi"><i class="fa fa-thumbs-up"></i> Aksi</button>
       <?php endif ?>
-      <button type="button" class="btn <?=($input->proofread_notes!='' || $input->proofread_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#proofread">Tanggapan Proofread
+      <button type="button" class="btn <?=($input->proofread_notes!='' || $input->proofread_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#proofread" id="btn-tanggapan-proofread">Tanggapan Proofread
         <?=($input->proofread_notes!='' || $input->proofread_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
       <!-- modal -->
       <div class="modal fade" id="proofread" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -322,6 +322,7 @@ $(document).ready(function() {
         } else {
           toastr_view('000');
         }
+        $('#proofread').modal('toggle');
       }
     });
     return false;

@@ -41,20 +41,20 @@
               </label>
               <!-- cek parameter category, jika ada isinya maka disable pilihan category -->
               <?php if (!empty($this->uri->segment(3)) and $this->uri->segment(2) != 'cetakUlang') {
-    $atribut = 'disabled';
-} else {
-    $atribut = '';
-}
-?>
+                  $atribut = 'disabled';
+              } else {
+                  $atribut = '';
+              }
+              ?>
               <?=form_dropdown('category_id', getDropdownListCategory('category', ['category_id', 'category_name']), $input->category_id, 'id="category" class="form-control custom-select d-block ' . $atribut . '" ' . $atribut . '');?>
               <?=form_error('category_id');?>
             </div>
             <?php if (!empty($this->uri->segment(3))) {
-    if (isset($input->category_id)) {
-        echo form_hidden('category_id', $input->category_id);
-    }
-}
-?>
+                if (isset($input->category_id)) {
+                    echo form_hidden('category_id', $input->category_id);
+                }
+            }
+            ?>
             <!-- /.form-group -->
             <hr class="my-2">
             <!-- .form-group -->
@@ -107,7 +107,7 @@
                 <?=form_upload('draft_file', '', 'class="custom-file-input"');?>
                 <label class="custom-file-label" for="draft_file">Choose file</label>
               </div>
-              <small class="form-text text-muted">Tipe file upload  bertype : docx, doc, dan pdf. Maksimal 50 MB</small>
+              <small class="form-text text-muted">Tipe file upload bertype : docx, doc, dan pdf. Maksimal 50 MB</small>
               <?=fileFormError('draft_file', '<p class="text-danger">', '</p>');?>
             </div>
             <!-- /.form-group -->

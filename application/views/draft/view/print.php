@@ -9,7 +9,7 @@
       <!-- .card-header-control -->
       <div class="card-header-control">
         <?php if($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
-        <button type="button" class="btn btn-warning" id="btn-mulai-cetak" <?=($input->print_start_date==null or $input->print_start_date=='0000-00-00 00:00:00')? '' : 'disabled' ?>>Mulai Cetak</button>
+        <button type="button" class="btn btn-secondary" id="btn-mulai-cetak" <?=($input->print_start_date==null or $input->print_start_date=='0000-00-00 00:00:00')? '' : 'disabled' ?>><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
         <?php endif ?>
         <!-- /.tombol add -->
       </div>
@@ -385,6 +385,7 @@ $(document).ready(function() {
         } else {
           toastr_view('000');
         }
+        $('#print').modal('toggle');
       }
     });
     return false;
@@ -413,8 +414,8 @@ $(document).ready(function() {
         } else {
           toastr_view('000');
         }
-        $('#list-group-edit').load(' #list-group-edit');
-        $this.removeAttr("disabled").html("Mulai Cetak");
+        $('#list-group-print').load(' #list-group-print');
+        $this.removeAttr("disabled").html('<i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span>');
         $this.addClass('disabled');
         $this.attr("disabled", "disabled");
         location.reload();

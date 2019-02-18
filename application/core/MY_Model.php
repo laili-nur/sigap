@@ -134,6 +134,12 @@ class MY_Model extends CI_Model
         return $this;
     }
 
+    public function whereNotIn($column, $condition)
+    {
+        $this->db->where_not_in($column, $condition);
+        return $this;
+    }
+
     public function whereRelation($table_middle, $condition, $table_from = "")
     {
         $table = $this->checkTable($table_from);

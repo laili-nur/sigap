@@ -141,6 +141,14 @@
                 <!-- /tr -->
                 <!-- tr -->
                 <tr>
+                  <td width="200px"> Diinput oleh </td>
+                  <td>
+                    <em><?= $input->input_by ?></em>
+                  </td>
+                </tr>
+                <!-- /tr -->
+                <!-- tr -->
+                <tr>
                   <td width="200px"> Tanggal Selesai </td>
                   <td>
                     <?= konversiTanggal($input->finish_date) ?>

@@ -13,11 +13,12 @@
       <div class="card-header-control">
         <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
         <!-- .tombol add -->
-        <button type="button" class="btn <?=($editors==null)? 'btn-warning' : 'btn-secondary' ?>" data-toggle="modal" data-target="#piliheditor">Pilih Editor</button>
-        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#edit_deadline">Atur Deadline</button>
+        <button type="button" class="d-inline btn <?=($editors==null)? 'btn-warning' : 'btn-secondary' ?>" data-toggle="modal" data-target="#piliheditor" title="Pilih editor"><i class="fas fa-user-plus fa-fw"></i><span class="d-none d-lg-inline"> Pilih Editor</span></button>
+        <button type="button" class="d-inline btn btn-secondary" data-toggle="modal" data-target="#edit_deadline" title="Ubah Deadline"><i class="fas fa-calendar-alt fa-fw"></i><span class="d-none d-lg-inline"> Ubah Deadline</span></button>
         <?php endif ?>
         <?php if($ceklevel == 'editor' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
-        <button type="button" class="btn btn-warning" id="btn-mulai-editor" <?=($input->edit_start_date==null or $input->edit_start_date=='0000-00-00 00:00:00')? '' : 'disabled' ?>>Mulai Proses</button>
+        <button title="Mulai proses editorial" type="button" class="d-inline btn btn-secondary" id="btn-mulai-editor" <?=(($input->edit_start_date==null or $input->edit_start_date=='0000-00-00 00:00:00') and $editors )? '' : 'disabled' ?>><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
+        <button title="Selesai proses editorial" type="button" class="d-inline btn btn-secondary" id="btn-selesai-editor" <?=($input->edit_end_date==null or $input->edit_end_date=='0000-00-00 00:00:00' and ($input->edit_start_date!=null and $input->edit_start_date!='0000-00-00 00:00:00'))? '' : 'disabled' ?>><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
         <?php endif ?>
         <!-- /.tombol add -->
       </div>
@@ -26,7 +27,7 @@
     <!-- /.d-flex -->
   </header>
   <?php if($editors == null and ($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan')): ?>
-  <div class="alert alert-warning"><strong>PERHATIAN!</strong> Pilih editor terlebih dahulu sebelum lanjut ke tahap selanjutnya.</div>
+  <div class="alert alert-warning"><strong>PERHATIAN!</strong> Pilih editor terlebih dahulu sebelum mulai proses editorial</div>
   <?php endif ?>
   <div class="list-group list-group-flush list-group-bordered" id="list-group-edit">
     <div class="list-group-item justify-content-between">
@@ -74,10 +75,14 @@
       <?php endif ?>
       <button type="button" class="btn <?=($input->edit_notes!='' || $input->edit_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#edit" <?=($ceklevel=='editor' and $sisa_waktu_edit <=0 and $input->edit_notes =='')? 'disabled' : '' ?>>Tanggapan Editorial
         <?=($input->edit_notes!='' || $input->edit_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
+      <!-- tombol confidential tidak bisa diliat penulis -->
+      <?php if ($ceklevel != 'author' and  $ceklevel != 'layouter'): ?>
+        <button data-toggle="modal" data-target="#edit-confidential" class="btn btn-secondary"><i class="far fa-sticky-note"></i> Catatan</button>
+      <?php endif ?>
       <!-- peringatan disabled -->
       <?=($ceklevel=='editor' and $sisa_waktu_edit <= 0 and $input->edit_notes =='' and ($input->edit_start_date != "0000-00-00 00:00:00" and $input->edit_start_date !=null))? '<span class="font-weight-bold text-danger" data-toggle="tooltip" data-placement="bottom" title="Hubungi admin untuk membuka draft ini"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>' : '' ?>
     </div>
-    <!-- modal -->
+    <!-- modal tanggapan edit -->
     <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <!-- .modal-dialog -->
       <div class="modal-dialog modal-lg modal-dialog-overflow" role="document">
@@ -144,6 +149,7 @@
               <!-- .form-group -->
               <div class="form-group">
                 <label for="ce" class="font-weight-bold">Catatan Editor</label>
+                <small class="text-muted" id="edit_last_notes"><?=konversiTanggal($input->edit_notes_date) ?></small>
                 <?php 
                   $optionsce = array(
                       'name' => 'edit_notes',
@@ -189,6 +195,63 @@
             <?php if($author_order!=0 or $ceklevel!='author'): ?>
             <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-edit">Submit</button>
             <?php endif ?>
+            <?= form_close(); ?>
+            <!-- /.form -->
+            <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+          </div>
+          <!-- /.modal-footer -->
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal tanggapan edit-->
+    <!-- modal -->
+    <div class="modal fade" id="edit-confidential" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <!-- .modal-dialog -->
+      <div class="modal-dialog modal-lg modal-dialog-overflow" role="document">
+        <!-- .modal-content -->
+        <div class="modal-content">
+          <!-- .modal-header -->
+          <div class="modal-header">
+            <h5 class="modal-title"> Catatan Confidential</h5>
+          </div>
+          <!-- /.modal-header -->
+          <!-- .modal-body -->
+          <div class="modal-body">
+            <div class="alert alert-info">
+              Catatan dibawah ini tidak dapat dilihat oleh penulis.
+            </div>
+            <!-- .form -->
+            <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formeditconfidental"') ?>
+            <!-- .fieldset -->
+            <fieldset>
+              <!-- .form-group -->
+              <div class="form-group">
+                <label for="cecon" class="font-weight-bold">Catatan Editor</label>
+                <?php 
+                  $optionscecon = array(
+                      'name' => 'edit_notes_confidential',
+                      'class'=> 'form-control summernote-basic',
+                      'id'  => 'cecon',
+                      'rows' => '6',
+                      'value'=> $input->edit_notes_confidential
+                  );
+                  if($ceklevel!='editor'){
+                    echo '<div class="font-italic">'.nl2br($input->edit_notes_confidential).'</div>';
+                  }else{
+                    echo form_textarea($optionscecon);
+                  }
+                  ?>
+              </div>
+              <!-- /.form-group -->
+            </fieldset>
+            <!-- /.fieldset -->
+          </div>
+          <!-- /.modal-body -->
+          <!-- .modal-footer -->
+          <div class="modal-footer">
+            <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-edit-confidential">Submit</button>
             <?= form_close(); ?>
             <!-- /.form -->
             <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
@@ -348,7 +411,7 @@
                 <?php 
                   $hidden_date = array(
                       'type'  => 'hidden',
-                      'id'    => 'edit_end_date',
+                      'id'    => 'edit_finish_date',
                       'value' => date('Y-m-d H:i:s')
                   );
                   echo form_input($hidden_date);
@@ -527,7 +590,7 @@ $(document).ready(function() {
           toastr_view('000');
         }
         $('#list-group-edit').load(' #list-group-edit');
-        $this.removeAttr("disabled").html("Mulai Proses");
+        $this.removeAttr("disabled").html('<i class="fas fa-play"></i><span class="d-none d-md-inline"> Mulai</span>');
         $this.addClass('disabled');
         $this.attr("disabled", "disabled");
         location.reload();
@@ -537,19 +600,19 @@ $(document).ready(function() {
     return false;
   });
 
-  //tombol mulai revisi editor
-  $('#btn-revisie-editor').on('click', function() {
+  //tombol selesai proses editor
+  $('#btn-selesai-editor').on('click', function() {
     var $this = $(this);
     $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
     var draft = $('input[name=draft_id]').val();
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('responsibility/mulai_proses') ?>",
+      url: "<?php echo base_url('responsibility/selesai_proses/editor') ?>",
       datatype: "JSON",
       cache: false,
       data: {
         draft_id: draft,
-        col: 'edit_start_date'
+        col: 'edit_end_date'
       },
       success: function(data) {
         let datax = JSON.parse(data);
@@ -561,9 +624,10 @@ $(document).ready(function() {
           toastr_view('000');
         }
         $('#list-group-edit').load(' #list-group-edit');
-        $this.removeAttr("disabled").html("Mulai Proses");
+        $this.removeAttr("disabled").html('<i class="fas fa-stop"></i><span class="d-none d-md-inline"> Selesai</span>');
         $this.addClass('disabled');
         $this.attr("disabled", "disabled");
+        //location.reload();
       }
 
     });
@@ -598,11 +662,13 @@ $(document).ready(function() {
       datatype: "JSON",
       data: {
         edit_notes: ce,
+        edit_notes_date: true,
         edit_notes_author: cep
       },
       success: function(data) {
         let datax = JSON.parse(data);
-        console.log(datax)
+        console.log(datax);
+
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
           toastr_view('111');
@@ -610,10 +676,40 @@ $(document).ready(function() {
           toastr_view('000');
         }
         $('#list-group-edit').load(' #list-group-edit');
+        $('#edit_last_notes').html(datax.edit_notes_date);
+        $('#edit').modal('toggle');
       }
     });
     return false;
   });
+
+  $('#btn-submit-edit-confidential').on('click', function() {
+    var $this = $(this);
+    $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+    let id = $('[name=draft_id]').val();
+    let cecon = $('#cecon').val();
+    $.ajax({
+      type: "POST",
+      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
+      datatype: "JSON",
+      data: {
+        edit_notes_confidential: cecon,
+      },
+      success: function(data) {
+        let datax = JSON.parse(data);
+        console.log(datax);
+        $this.removeAttr("disabled").html("Submit");
+        if (datax.status == true) {
+          toastr_view('111');
+        } else {
+          toastr_view('000');
+        }
+        $('#edit-confidential').modal('toggle');
+      }
+    });
+    return false;
+  });
+
 
 
   $('#edit-setuju').on('click', function() {
@@ -622,15 +718,15 @@ $(document).ready(function() {
     let id = $('[name=draft_id]').val();
     let edit_status = $('[name=edit_status]').val();
     let action = $('#edit-setuju').val();
-    let end_date = $('#edit_end_date').val();
+    let end_date = $('#edit_finish_date').val();
     $.ajax({
       type: "POST",
       url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
       datatype: "JSON",
       data: {
         edit_status: edit_status,
+        layout_start_date: end_date,
         draft_status: action,
-        edit_end_date: end_date,
         is_edit: 'y'
       },
       success: function(data) {
@@ -657,7 +753,7 @@ $(document).ready(function() {
     let id = $('[name=draft_id]').val();
     let edit_status = $('[name=edit_status]').val();
     let action = $('#edit-tolak').val();
-    let end_date = $('#edit_end_date').val();
+    let end_date = $('#edit_finish_date').val();
 
     console.log(end_date);
     $.ajax({
@@ -667,7 +763,6 @@ $(document).ready(function() {
       data: {
         edit_status: edit_status,
         draft_status: action,
-        edit_end_date: end_date,
         is_edit: 'n'
       },
       success: function(data) {

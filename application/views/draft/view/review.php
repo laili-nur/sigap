@@ -1175,6 +1175,7 @@ $(document).ready(function() {
           toastr_view('000');
         }
         $('#total_reviewer1').load(' #total_reviewer1');
+        $('#review1').modal('toggle');
       }
     });
     return false;
@@ -1208,6 +1209,7 @@ $(document).ready(function() {
           toastr_view('000');
         }
         $('#list-group-review').load(' #list-group-review');
+        $('#review1').modal('toggle');
       }
     });
     return false;
@@ -1262,6 +1264,7 @@ $(document).ready(function() {
           toastr_view('000');
         }
         $('#total_reviewer2').load(' #total_reviewer2');
+        $('#review2').modal('toggle');
       }
     });
     return false;
@@ -1295,6 +1298,7 @@ $(document).ready(function() {
           toastr_view('000');
         }
         $('#list-group-review').load(' #list-group-review');
+        $('#review2').modal('toggle');
       }
     });
     return false;

@@ -44,7 +44,7 @@ var summernoteDemo = {
 
     // click to edit
     var edit = function edit() {
-      $('#summernote-click2edit').summernote({
+      $('.summernote-click2edit').summernote({
         focus: true,
         callbacks: {
           // fix broken checkbox on link modal
@@ -56,21 +56,21 @@ var summernoteDemo = {
       });
     };
     var save = function save() {
-      var makrup = $('#summernote-click2edit').summernote('code');
-      $('#summernote-click2edit').summernote('destroy');
+      var makrup = $('.summernote-click2edit').summernote('code');
+      $('.summernote-click2edit').summernote('destroy');
     };
 
-    $('#summernote-edit').on('click', function () {
+    $('.summernote-edit').on('click', function () {
       edit();
       // toggle buttons
       $(this).hide();
-      $('#summernote-save').show();
+      $('.summernote-save').show();
     });
-    $('#summernote-save').on('click', function () {
+    $('.summernote-save').on('click', function () {
       save();
       // toggle buttons
       $(this).hide();
-      $('#summernote-edit').show();
+      $('.summernote-edit').show();
     });
   }
 };
