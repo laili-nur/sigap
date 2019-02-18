@@ -41,8 +41,10 @@ var flatpickrDemo = {
       disableMobile: true,
       altInput: true,
       altFormat: 'j F Y',
-      dateFormat: 'Y-m-d',
-      inline: true
+      dateFormat: 'Y-m-d H:i',
+      inline: true,
+      enableTime: true,
+      time_24hr: true
     });
   },
   _fp5: function _fp5() {
