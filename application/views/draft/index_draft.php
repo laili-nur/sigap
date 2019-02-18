@@ -205,7 +205,8 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
                     <?= $draft->category_year ?>
                   </td>
                   <td class="align-middle"><strong><a href="<?= base_url('draft/view/' . $draft->draft_id . '') ?>">
-                        <?= $draft->draft_title ?></a></strong></td>
+                    <?=($draft->is_reprint == 'y')? '<span class="badge badge-warning"><i class="fa fa-redo " data-toggle="tooltip" title="Cetak Ulang"></i></span>' : ''; ?>
+                    <?= $draft->draft_title ?></a></strong></td>
                   <?php if ($ceklevel != 'reviewer') : ?>
                   <td class="align-middle">
                     <?= isset($draft->author[0]->author_name) ? $draft->author[0]->author_name : '-' ?>

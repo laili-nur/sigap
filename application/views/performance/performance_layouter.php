@@ -64,23 +64,26 @@
       ?>
         <tr>
           <td><?php echo $row->username; ?></td>
-          <td><?php echo $row->draft_title;?></td>
+          <td class="align-middle"><strong><a href="<?= base_url('draft/view/' . $row->draft_id . '') ?>"><?= $row->draft_title ?></a></strong></td>
           <td><?php echo $row->category_name; ?></td>
           <td><?php echo konversiTanggal($row->layout_start_date); ?></td>
           <td><?php echo konversiTanggal($row->layout_deadline); ?></td>
           <td><?php echo konversiTanggal($row->layout_end_date); ?></td>
-          <td><?php if($row->performance_status == 1){
-            ?> <span class="badge badge-primary">ON PROCESS</span> <?php
+          <td><?php 
+            if(($row->layout_start_date == '0000-00-00 00:00:00' OR $row->layout_start_date == 'NULL') AND ($row->layout_end_date == '0000-00-00 00:00:00' OR $row->layout_end_date == 'NULL')){
+            echo "-";
+          } elseif (($row->layout_start_date != '0000-00-00 00:00:00' AND $row->layout_start_date != 'NULL') AND ($row->layout_end_date == '0000-00-00 00:00:00' OR $row->layout_end_date == 'NULL')){
+            echo '<span class="badge badge-primary">ON PROCESS</span>';
+          } elseif ($row->is_layout == 'y' AND ($row->layout_end_date < $row->layout_deadline) AND $row->layout_start_date != '0000-00-00 00:00:00' AND $row->layout_start_date != 'NULL' AND $row->layout_end_date != '0000-00-00 00:00:00' AND $row->layout_end_date != 'NULL') {
+            echo '<span class="badge badge-success">ON TIME</span>';
+          } elseif ($row->is_layout == 'n' AND ($row->layout_end_date < $row->layout_deadline) AND $row->layout_start_date != '0000-00-00 00:00:00' AND $row->layout_start_date != 'NULL' AND $row->layout_end_date != '0000-00-00 00:00:00' AND $row->layout_end_date != 'NULL') {
+            echo '<span class="badge badge-warning">FINAL</span>';
+          }  elseif ($row->layout_end_date > $row->layout_deadline AND ($row->layout_start_date != '0000-00-00 00:00:00' AND $row->layout_start_date != 'NULL') AND ($row->layout_end_date != '0000-00-00 00:00:00' AND $row->layout_end_date != 'NULL')) {
+            echo '<span class="badge badge-danger">LATE</span>';
+          } else {
+            echo '<i class="fa fa-exclamation-triangle text-danger"></i>';
           }
-          elseif ($row->performance_status == 2) {
-            ?> <span class="badge badge-warning">FINAL</button> <?php
-          }
-          elseif ($row->performance_status == 3) {
-            ?> <span class="badge badge-success">ON TIME</button> <?php
-          }
-          else {
-            ?> <span class="badge badge-danger">LATE</button> <?php
-          }?></td>
+          ?></td>
         </tr>
         <?php
         }

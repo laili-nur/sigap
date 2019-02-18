@@ -38,7 +38,7 @@ class Home extends Operator_Controller
             $count['tot_author']     = $this->home->count('author');
             $count['tot_reviewer']     = $this->home->count('reviewer');
             //sedang desk screening dan lolos desk screening
-            $count['draft_desk'] = $this->home->where('is_review','n')->where('is_edit','n')->where('is_layout','n')->where('is_proofread','n')->where('is_print','n')->group_start()->where('draft_status',1)->orWhere('draft_status',0)->group_end()->count('draft');    
+            $count['draft_desk'] = $this->home->where('draft_status',1)->orWhere('draft_status',0)->count('draft');    
             //sedang review
             $count['draft_review'] = $this->home->where('is_review','n')->where('is_edit','n')->where('is_layout','n')->where('is_proofread','n')->where('is_print','n')->where('draft_status','4')->count('draft');
             //lolos review
@@ -59,7 +59,6 @@ class Home extends Operator_Controller
             //$count['draft_approved'] = $count['draft_desk_lolos']+$count['draft_review_lolos'];
             $count['draft_in_progress'] = $count['draft_edit']+$count['draft_layout']+$count['draft_proofread']+$count['draft_cetak'];
             $count['draft_rejected_total'] = $this->home->where('draft_status','2')->orWhere('draft_status','99')->count('draft');
-            $count['draft_error'] = $count['tot_draft'] - $count['draft_in_progress'] - $count['draft_review'] - $count['draft_desk'] - $count['draft_cetak_ulang'] - $count['draft_final'] - $count['draft_rejected_total'];
         }elseif($ceklevel == 'reviewer'){
             $drafts = $this->home->join3('draft_reviewer','draft','draft')->join3('reviewer','draft_reviewer','reviewer')->join3('user','reviewer','user')->where('user.username',$cekusername)->getAll('draft');
             $drafts_newest = $this->home->join3('draft_reviewer','draft','draft')->join3('reviewer','draft_reviewer','reviewer')->join3('user','reviewer','user')->where('user.username',$cekusername)->limit(5)->orderBy('entry_date','desc')->getAll('draft');

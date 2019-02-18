@@ -170,8 +170,8 @@ class Draft extends Operator_Controller
             }
         } else {
             if ($filter == 'desk-screening') {
-                $drafts = $this->draft->join('category')->join('theme')->where('is_review','n')->where('is_edit','n')->where('is_layout','n')->where('is_proofread','n')->where('is_print','n')->where('is_reprint','n')->group_start()->where('draft_status',1)->orWhere('draft_status',0)->group_end()->where($kat['cond_temp'], $kat['category'])->orderBy('draft_status')->orderBy('draft_title')->paginate($page)->getAll();
-                $total  = $this->draft->where('is_review','n')->where('is_edit','n')->where('is_layout','n')->where('is_proofread','n')->where('is_print','n')->where('is_reprint','n')->group_start()->where('draft_status',1)->orWhere('draft_status',0)->group_end()->where($kat['cond_temp'], $kat['category'])->count();
+                $drafts = $this->draft->join('category')->join('theme')->where('draft_status',1)->orWhere('draft_status',0)->where($kat['cond_temp'], $kat['category'])->orderBy('draft_status')->orderBy('draft_title')->paginate($page)->getAll();
+                $total  = $this->draft->where('draft_status',1)->orWhere('draft_status',0)->where($kat['cond_temp'], $kat['category'])->count();
             } elseif ($filter == 'review') {
                 $drafts = $this->draft->join('category')->join('theme')->where('is_review', 'n')->where('draft_status', '4')->where($kat['cond_temp'], $kat['category'])->orderBy('draft_status')->orderBy('draft_title')->paginate($page)->getAll();
                 $total  = $this->draft->where('is_review', 'n')->where('draft_status', '4')->where($kat['cond_temp'], $kat['category'])->count();
@@ -198,17 +198,17 @@ class Draft extends Operator_Controller
                 $total  = $this->draft->where('is_reprint', 'y')->where($kat['cond_temp'], $kat['category'])->count();
             } elseif ($filter == 'error') {
                //inisialisasi array penampung kondisi not in
-                $desk_screening = ['null'];
-                $review = ['null'];
-                $edit = ['null'];
-                $layout = ['null'];
-                $proofread = ['null'];
-                $final = ['null'];
-                $cetak_ulang = ['null'];
-                $ditolak = ['null'];
+                $desk_screening = [''];
+                $review = [''];
+                $edit = [''];
+                $layout = [''];
+                $proofread = [''];
+                $final = [''];
+                $cetak_ulang = [''];
+                $ditolak = [''];
                 
                 //menghitung filter lain, untuk mencari draft yang error
-                $desk_screenings = $this->draft->select(['draft_id'])->where('is_review','n')->where('is_edit','n')->where('is_layout','n')->where('is_proofread','n')->where('is_print','n')->group_start()->where('draft_status',1)->orWhere('draft_status',0)->group_end()->getAll();
+                $desk_screenings = $this->draft->select(['draft_id'])->where('draft_status',1)->orWhere('draft_status',0)->getAll();
                 foreach ($desk_screenings as $value) {
                     $desk_screening[] = $value->draft_id;
                 }
@@ -228,7 +228,7 @@ class Draft extends Operator_Controller
                 foreach ($proofreads as $value) {
                     $proofread[] = $value->draft_id;
                 }
-                $prints= $this->db->query("SELECT draft_id FROM draft WHERE is_review = 'y' AND is_edit = 'y' AND is_layout = 'y' AND is_proofread = 'y' AND (is_print = 'n' OR is_print = 'y') AND draft_status != 99 AND draft_status != 14 AND is_reprint = 'n'")->result();
+                $prints= $this->draft->select(['draft_id'])->where('is_review','y')->where('is_edit','y')->where('is_layout','y')->where('is_proofread','y')->group_start()->where('is_print','n')->orWhere('is_print','y')->group_end()->whereNot('draft_status','99')->whereNot('draft_status','14')->getAll();
                 foreach ($prints as $value) {
                     $print[] = $value->draft_id;
                 }

@@ -326,7 +326,7 @@
             <div class="col">
               <!-- .metric -->
               <div class="metric metric-bordered align-items-center">
-                <a href="<?=base_url('draft/filter?filter=rejected') ?>" class="metric-label">
+                <a href="<?=base_url('draft/filter?filter=reject') ?>" class="metric-label">
                    <i class="fa fa-times"></i> Draft ditolak
                 </a>
                 <p class="metric-value">
@@ -334,23 +334,6 @@
                     <?=$count['draft_rejected_total'] ?>
                   </span>
                   <a href="#" onclick="event.preventDefault()" class="font-weight-bold info-home" data-toggle="tooltip" data-placement="left" title="Draft yang ditolak pada tahap desk screening dan tahap selanjutnya" ><i class="fa fa-info-circle"></i></a>
-                </p>
-              </div>
-              <!-- /.metric -->
-            </div>
-            <!-- /metric column -->
-            <!-- metric column -->
-            <div class="col">
-              <!-- .metric -->
-              <div class="metric metric-bordered align-items-center">
-                <a href="<?=base_url('draft/filter?filter=error') ?>" class="metric-label">
-                   <i class="fa fa-exclamation-triangle"></i> Draft Error Status
-                </a>
-                <p class="metric-value">
-                  <span class="value h3">
-                    <?=$count['draft_error'] ?>
-                  </span>
-                  <a href="#" onclick="event.preventDefault()" class="font-weight-bold info-home" data-toggle="tooltip" data-placement="left" title="Draft yang status atau progressnya salah atau tidak sesuai" ><i class="fa fa-info-circle"></i></a>
                 </p>
               </div>
               <!-- /.metric -->
