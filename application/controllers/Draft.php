@@ -198,14 +198,14 @@ class Draft extends Operator_Controller
                 $total  = $this->draft->where('is_reprint', 'y')->where($kat['cond_temp'], $kat['category'])->count();
             } elseif ($filter == 'error') {
                //inisialisasi array penampung kondisi not in
-                $desk_screening = [];
-                $review = [];
-                $edit = [];
-                $layout = [];
-                $proofread = [];
-                $final = [];
-                $cetak_ulang = [];
-                $ditolak = [];
+                $desk_screening = ['null'];
+                $review = ['null'];
+                $edit = ['null'];
+                $layout = ['null'];
+                $proofread = ['null'];
+                $final = ['null'];
+                $cetak_ulang = ['null'];
+                $ditolak = ['null'];
                 
                 //menghitung filter lain, untuk mencari draft yang error
                 $desk_screenings = $this->draft->select(['draft_id'])->where('is_review','n')->where('is_edit','n')->where('is_layout','n')->where('is_proofread','n')->where('is_print','n')->group_start()->where('draft_status',1)->orWhere('draft_status',0)->group_end()->getAll();
