@@ -62,6 +62,12 @@ class Reporting_model extends MY_Model{
     return $query->result();
   }
 
+  public function getSummaryUlang($year)
+  {
+    $query = $this->db->query("SELECT * FROM draft WHERE YEAR(entry_date) = $year");
+    return $query->result();
+  }
+
   public function getDraft($month, $year)
   {
     $query = $this->db->query("SELECT draft_id, draft_title, entry_date FROM draft WHERE MONTH(entry_date) = $month and YEAR(entry_date) = $year");

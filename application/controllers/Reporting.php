@@ -67,6 +67,7 @@ class Reporting extends Admin_Controller {
 	public function getSummary()
 	{
 		$count_review = 0;
+		$count_review_selesai = 0;
 		$count_disetujui = 0;
 		$count_editor = 0;
 		$count_layout = 0;
@@ -80,8 +81,12 @@ class Reporting extends Admin_Controller {
 			if ($hasil_review->draft_status == 4) {
 					$count_review++;
 			}
+			if ($hasil_review->draft_status == 5){
+					$count_review_selesai++;
+			}
 		}
 		$result['count_review'] = $count_review;
+		$result['count_review_selesai'] = $count_review_selesai;
 
 		$result_disetujui = $this->reporting->select(['is_review'])->getSummary($year);
 		foreach ($result_disetujui as $hasil_disetujui) {
@@ -114,6 +119,64 @@ class Reporting extends Admin_Controller {
 		$result['count_proofread'] = $count_proofread;
 		$result['count_print'] = $count_print;
 		$result['count_final'] = $count_final;
+		echo json_encode($result);
+	}
+
+	public function getSummaryUlang()
+	{
+		$count_review_ulang = 0;
+		$count_review_selesai_ulang = 0;
+		$count_disetujui_ulang = 0;
+		$count_editor_ulang = 0;
+		$count_layout_ulang = 0;
+		$count_proofread_ulang = 0;
+		$count_print_ulang = 0;
+		$count_final_ulang = 0;
+		$year = $this->input->get('droptahunsummary');
+
+		$result_review = $this->reporting->select(['draft_status', 'is_reprint'])->getSummaryUlang($year);
+		foreach ($result_review as $hasil_review){
+			if ($hasil_review->draft_status == 4 AND $hasil_review->is_reprint == 'y') {
+					$count_review_ulang++;
+			}
+			if ($hasil_review->draft_status == 5 AND $hasil_review->is_reprint == 'y'){
+					$count_review_selesai_ulang++;
+			}
+		}
+		$result['count_review_ulang'] = $count_review_ulang;
+		$result['count_review_selesai_ulang'] = $count_review_selesai_ulang;
+
+		$result_disetujui = $this->reporting->select(['is_review','is_reprint'])->getSummaryUlang($year);
+		foreach ($result_disetujui as $hasil_disetujui) {
+			if ($hasil_disetujui->is_review == 'y' AND $hasil_disetujui->is_reprint == 'y') {
+				$count_disetujui_ulang++;
+			}
+		}
+		$result['count_disetujui_ulang'] = $count_disetujui_ulang;
+
+		$result_editor = $this->reporting->select(['is_review','is_edit','is_layout','is_proofread', 'is_print', 'is_reprint'])->getSummaryUlang($year);
+		foreach ($result_editor as $hasil_editor) {
+			if (($hasil_editor->is_review == 'y' AND $hasil_editor->is_edit == 'n') AND $hasil_editor->is_reprint == 'y') {
+				$count_editor_ulang++;
+			}
+			if(($hasil_editor->is_edit == 'y' AND $hasil_editor->is_layout == 'n') AND $hasil_editor->is_reprint == 'y'){
+				$count_layout_ulang++;
+			}
+			if(($hasil_editor->is_layout == 'y' AND $hasil_editor->is_proofread == 'n') AND $hasil_editor->is_reprint == 'y'){
+				$count_proofread_ulang++;
+			}
+			if(($hasil_editor->is_proofread == 'y' AND $hasil_editor->is_print == 'n') AND $hasil_editor->is_reprint == 'y'){
+				$count_print_ulang++;
+			}
+			if(($hasil_editor->is_print == 'y' OR $hasil_editor->draft_status == 14) AND $hasil_editor->is_reprint == 'y'){
+				$count_final_ulang++;
+			}
+		}
+		$result['count_editor_ulang'] = $count_editor_ulang;
+		$result['count_layout_ulang'] = $count_layout_ulang;
+		$result['count_proofread_ulang'] = $count_proofread_ulang;
+		$result['count_print_ulang'] = $count_print_ulang;
+		$result['count_final_ulang'] = $count_final_ulang;
 		echo json_encode($result);
 	}
 	/* Fungsi untuk menampilkan grafik penulis berdasarkan instansi */
@@ -165,6 +228,7 @@ class Reporting extends Admin_Controller {
 	{
 		$count_hibah = 0;
 		$count_reguler = 0;
+		$count_cetak_ulang = 0;
 		$year = $this->input->get('droptahunhibah');
 
 		$result_ugm = $this->reporting->select(['category_type'])->join3('category', 'draft', 'category')->where('YEAR(entry_date)',$year)->getAll('draft');
@@ -172,12 +236,16 @@ class Reporting extends Admin_Controller {
 			if ($category_ugm->category_type == 1) {
 					$count_hibah++;
 			}
-			else {
+			elseif ($category_ugm->category_type == 2){
 					$count_reguler++;
+			}
+			else {
+				$count_cetak_ulang++;
 			}
 		}
 		$result['count_hibah'] = $count_hibah;
 		$result['count_reguler'] = $count_reguler;
+		$result['count_cetak_ulang'] = $count_cetak_ulang;
 		echo json_encode($result);
 	}
 
@@ -218,6 +286,16 @@ class Reporting extends Admin_Controller {
 
 	/* Fungsi filter data pada grafik summary*/
 	public function getYearsSummary()
+	{
+		$filtertahun = $this->reporting->group_by('YEAR(entry_date)')->getAllArray('draft');
+		foreach ($filtertahun as $key => $value){
+			$tahun[$key] = date('Y',strtotime($value['entry_date']));
+		}
+		echo json_encode($tahun);
+	}
+
+	/* Fungsi filter data pada grafik summary cetak ulang*/
+	public function getYearsSummaryUlang()
 	{
 		$filtertahun = $this->reporting->group_by('YEAR(entry_date)')->getAllArray('draft');
 		foreach ($filtertahun as $key => $value){

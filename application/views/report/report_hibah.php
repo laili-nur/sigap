@@ -44,7 +44,7 @@
 
   <div align="center">
     <h4>UGM Press</h4>
-    <h4>Laporan Grafik Jumlah Hibah</h4>
+    <h4>Laporan Grafik Jumlah Katgori Buku</h4>
   </div>
 
   <canvas id="myPieChart" width="380" height="100"></canvas>
@@ -56,12 +56,13 @@
 
         var hibah = obj.count_hibah;
         var reguler = obj.count_reguler;
+        var ulang = obj.count_cetak_ulang;
 
         var ctx = $("#myPieChart");
         var myPieChart = new Chart(ctx,{
           type: 'pie',
           data : {
-            labels: ['Hibah Buku Karya', 'Hibah Reguler'],
+            labels: ['Hibah Buku Karya', 'Reguler', 'Cetak Ulang'],
             datasets: [{
               label : 'Hibah',
               data: [hibah, reguler],

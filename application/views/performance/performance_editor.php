@@ -65,19 +65,19 @@
           <td><?php echo konversiTanggal($row->edit_start_date); ?></td>
           <td><?php echo konversiTanggal($row->edit_deadline); ?></td>
           <td><?php echo konversiTanggal($row->edit_end_date); ?></td>
-         <td><?php 
+         <td><?php
             if(($row->edit_start_date == '0000-00-00 00:00:00' OR $row->edit_start_date == 'NULL') AND ($row->edit_end_date == '0000-00-00 00:00:00' OR $row->edit_end_date == 'NULL')){
             echo "-";
           } elseif (($row->edit_start_date != '0000-00-00 00:00:00' AND $row->edit_start_date != 'NULL') AND ($row->edit_end_date == '0000-00-00 00:00:00' OR $row->edit_end_date == 'NULL')){
-            echo '<span class="badge badge-primary">ON PROCESS</span>';
-          } elseif ($row->is_edit == 'y' AND ($row->edit_end_date < $row->edit_deadline) AND $row->edit_start_date != '0000-00-00 00:00:00' AND $row->edit_start_date != 'NULL' AND $row->edit_end_date != '0000-00-00 00:00:00' AND $row->edit_end_date != 'NULL') {
-            echo '<span class="badge badge-success">ON TIME</span>';
+            echo '<p hidden> 1 </p>','<span class="badge badge-primary">ON PROCESS</span>';
           } elseif ($row->is_edit == 'n' AND ($row->edit_end_date < $row->edit_deadline) AND $row->edit_start_date != '0000-00-00 00:00:00' AND $row->edit_start_date != 'NULL' AND $row->edit_end_date != '0000-00-00 00:00:00' AND $row->edit_end_date != 'NULL') {
-            echo '<span class="badge badge-warning">FINAL</span>';
-          }  elseif ($row->edit_end_date > $row->edit_deadline AND ($row->edit_start_date != '0000-00-00 00:00:00' AND $row->edit_start_date != 'NULL') AND ($row->edit_end_date != '0000-00-00 00:00:00' AND $row->edit_end_date != 'NULL')) {
-            echo '<span class="badge badge-danger">LATE</span>';
+            echo '<p hidden> 2 </p>','<span class="badge badge-warning">FINAL</span>';
+          } elseif ($row->is_edit == 'y' AND ($row->edit_end_date < $row->edit_deadline) AND $row->edit_start_date != '0000-00-00 00:00:00' AND $row->edit_start_date != 'NULL' AND $row->edit_end_date != '0000-00-00 00:00:00' AND $row->edit_end_date != 'NULL') {
+            echo '<p hidden> 3 </p>','<span class="badge badge-success">ON TIME</span>';
+          } elseif ($row->edit_end_date > $row->edit_deadline AND ($row->edit_start_date != '0000-00-00 00:00:00' AND $row->edit_start_date != 'NULL') AND ($row->edit_end_date != '0000-00-00 00:00:00' AND $row->edit_end_date != 'NULL')) {
+            echo '<p hidden> 4 </p>','<span class="badge badge-danger">LATE</span>';
           } else {
-            echo '<i class="fa fa-exclamation-triangle text-danger"></i>';
+            echo '<p hidden> 5 </p>','<i class="fa fa-exclamation-triangle text-danger"></i>';
           }
           ?></td>
         </tr>
@@ -99,6 +99,8 @@
 
 <script>
 $(document).ready(function() {
-  $('#editortable').DataTable();
+  $('#editortable').DataTable({
+    "order": [[ 6, "asc" ]]
+  });
 } );
 </script>
