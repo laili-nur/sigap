@@ -16,10 +16,24 @@
     <h1 class="page-title"> Performa </h1>
   </header>
   <!-- Reporting buku -->
-  <ul nav class="nav nav-tabs">
-    <li class="nav-item"><a class="nav-link active" href="<?= base_url('performance/index') ?>">Performa Editor</a></li>
-    <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/performa_layouter') ?>">Performa Layouter</a></li>
-  </ul>
+
+    <ul nav class="nav nav-tabs">
+      <li class="nav-item"><a class="nav-link active" href="<?= base_url('performance/index') ?>">Performa Editor</a></li>
+      <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/performa_layouter') ?>">Performa Layouter</a></li>
+    </ul>
+
+    <br/>
+
+    <div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Performa Editor
+    </button>
+    <ul class="dropdown-menu">
+      <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/index') ?>">Performa Editor Process</a></li>
+      <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/index_ontime') ?>">Performa Editor On Time</a></li>
+      <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/index_late') ?>">Performa Editor Late</a></li>
+    </ul>
+  </div>
+
   <!-- Reporting buku -->
   <!-- /.page-title-bar -->
   <br />
