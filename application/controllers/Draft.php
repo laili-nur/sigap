@@ -941,7 +941,7 @@ class Draft extends Operator_Controller
                 $status = 'Reviewing';
                 break;
             case 5:
-                $status = 'Review Selesai';
+                $status = 'Antri Edit';
                 break;
             case 6:
                 $status = 'Editing';

@@ -80,6 +80,15 @@ function konversiTanggal($input=null,$opsi=''){
     }else{}
 }
 
+//konversi date ke format tahun
+function konversiTahun($input=null){
+    if($input==null || $input=='0000-00-00'){
+        return "-";
+    }
+    $timeStamp = $input;
+        return $timeStamp = date( "Y", strtotime($timeStamp));
+}
+
 
 // konversi id ke nama
 function konversiID($table,$vars,$id)

@@ -111,12 +111,6 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
         <!-- .card-body -->
         <div class="card-body p-0">
           <div class="p-3">
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
-              <p class="m-0">Tabel berikut dapat digeser secara horizontal.</p>
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
             <?php if($this->input->get('filter') == 'error'): ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
               <p class="m-0">Lakukan penyesuaian draft berikut agar tidak terjadi error progress, dengan cara masuk ke menu edit manual lalu sesuaikan progress dan tanggalnya. Selain itu dapat juga direset dengan mengosongi isian pada <em>halaman edit</em>, lalu memulai progress dengan benar di <em>halaman view</em>.</p>
@@ -164,9 +158,9 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
               <thead>
                 <tr>
                   <th scope="col" class="pl-3">No</th>
+                  <th scope="col" style="min-width:350px;">Judul</th>
                   <th scope="col" style="min-width:220px;">Kategori</th>
                   <th scope="col" style="min-width:50px;">Tahun</th>
-                  <th scope="col" style="min-width:350px;">Judul</th>
                   <?php if ($ceklevel != 'reviewer') : ?>
                   <th scope="col" style="min-width:150px;">Penulis</th>
                   <?php endif ?>
@@ -198,15 +192,15 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
                   <td class="align-middle pl-3">
                     <?= ++$i ?>
                   </td>
+                  <td class="align-middle"><strong><a href="<?= base_url('draft/view/' . $draft->draft_id . '') ?>">
+                    <?=($draft->is_reprint == 'y')? '<span class="badge badge-warning"><i class="fa fa-redo " data-toggle="tooltip" title="Cetak Ulang"></i></span>' : ''; ?>
+                    <?= $draft->draft_title ?></a></strong></td>
                   <td class="align-middle">
                     <?= $draft->category_name ?>
                   </td>
                   <td class="align-middle">
                     <?= $draft->category_year ?>
                   </td>
-                  <td class="align-middle"><strong><a href="<?= base_url('draft/view/' . $draft->draft_id . '') ?>">
-                    <?=($draft->is_reprint == 'y')? '<span class="badge badge-warning"><i class="fa fa-redo " data-toggle="tooltip" title="Cetak Ulang"></i></span>' : ''; ?>
-                    <?= $draft->draft_title ?></a></strong></td>
                   <?php if ($ceklevel != 'reviewer') : ?>
                   <td class="align-middle">
                     <?= isset($draft->author[0]->author_name) ? $draft->author[0]->author_name : '-' ?>
@@ -354,17 +348,6 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
           <?php endif ?>
           <!-- .pagination -->
         </div>
-        <!-- /.card-body -->
-        <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan') : ?>
-        <!-- .card-footer -->
-        <footer class="card-footer">
-          <div class="card-footer-content">
-            <a href="<?= base_url('category') ?>" class="btn btn-secondary mr-2">Kategori</a>
-            <a href="<?= base_url('theme') ?>" class="btn btn-secondary mr-2">Tema</a>
-          </div>
-        </footer>
-        <!-- /.card-footer -->
-        <?php endif ?>
       </section>
       <!-- /.card -->
     </div>

@@ -250,12 +250,14 @@
           </div>
           <!-- /.modal-body -->
           <!-- .modal-footer -->
+          <?php if($ceklevel == 'editor'): ?>
           <div class="modal-footer">
             <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-edit-confidential">Submit</button>
             <?= form_close(); ?>
             <!-- /.form -->
             <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
           </div>
+          <?php endif ?>
           <!-- /.modal-footer -->
         </div>
         <!-- /.modal-content -->
@@ -725,7 +727,6 @@ $(document).ready(function() {
       datatype: "JSON",
       data: {
         edit_status: edit_status,
-        layout_start_date: end_date,
         draft_status: action,
         is_edit: 'y'
       },

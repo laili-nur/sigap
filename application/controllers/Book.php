@@ -12,7 +12,7 @@ class Book extends Operator_Controller {
     }
 
     public function index($page = null) {
-        $books = $this->book->join('draft')->join3('category', 'draft', 'category')->orderBy('draft.draft_id')->orderBy('book_id')->paginate($page)->getAll();
+        $books = $this->book->join('draft')->join3('category', 'draft', 'category')->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('work_unit','author','work_unit')->orderBy('status_hak_cipta')->orderBy('published_date')->orderBy('book_title')->paginate($page)->getAll();
         $tot = $this->book->join('draft')->orderBy('draft.draft_id')->orderBy('book_id')->getAll();
         //tampilkan author
         foreach ($books as $key => $value) {
@@ -254,8 +254,8 @@ class Book extends Operator_Controller {
     public function search($page = null) {
         $keywords = $this->input->get('keywords', true);
         $this->db->group_by('draft.draft_id');
-        $books = $this->book->like('book_code', $keywords)->orLike('draft_title', $keywords)->orLike('book_title', $keywords)->orLike('ISBN', $keywords)->orLike('author_name', $keywords)->join('draft')->joinRelationMiddle('draft', 'draft_author')->joinRelationDest('author', 'draft_author')->join3('category', 'draft', 'category')->orderBy('book_id')->orderBy('draft.draft_id')->orderBy('book_title')->orderBy('book_code')->orderBy('ISBN')->paginate($page)->getAll();
-        $tot = $this->book->like('book_code', $keywords)->orLike('draft_title', $keywords)->orLike('book_title', $keywords)->orLike('ISBN', $keywords)->orLike('author_name', $keywords)->join('draft')->joinRelationMiddle('draft', 'draft_author')->joinRelationDest('author', 'draft_author')->orderBy('book_id')->orderBy('draft.draft_id')->orderBy('book_title')->orderBy('book_code')->orderBy('ISBN')->getAll();
+        $books = $this->book->like('book_code', $keywords)->orLike('draft_title', $keywords)->orLike('book_title', $keywords)->orLike('ISBN', $keywords)->orLike('author_name', $keywords)->join('draft')->join3('category', 'draft', 'category')->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('work_unit','author','work_unit')->orderBy('status_hak_cipta')->orderBy('published_date')->orderBy('book_title')->paginate($page)->getAll();
+        $tot = $this->book->like('book_code', $keywords)->orLike('draft_title', $keywords)->orLike('book_title', $keywords)->orLike('ISBN', $keywords)->orLike('author_name', $keywords)->join('draft')->join3('category', 'draft', 'category')->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('work_unit','author','work_unit')->orderBy('status_hak_cipta')->orderBy('published_date')->orderBy('book_title')->getAll();
         $total = count($tot);
         $pagination = $this->book->makePagination(site_url('book/search/'), 3, $total);
         if (!$books) {
@@ -267,14 +267,14 @@ class Book extends Operator_Controller {
             }
         }
         //tampilkan author
-        // foreach ($books as $key => $value) {
-        //     if (!empty($value->draft_id)) {
-        //         $authors = $this->book->getIdAndName('author', 'draft_author', $value->draft_id, 'draft');
-        //     } else {
-        //         $authors = '';
-        //     }
-        //     $value->author = $authors;
-        // }
+        foreach ($books as $key => $value) {
+            if (!empty($value->draft_id)) {
+                $authors = $this->book->getIdAndName('author', 'draft_author', $value->draft_id, 'draft');
+            } else {
+                $authors = '';
+            }
+            $value->author = $authors;
+        }
         $pages = $this->pages;
         $main_view = 'book/index_book';
         $this->load->view('template', compact('pages', 'main_view', 'books', 'pagination', 'total'));
