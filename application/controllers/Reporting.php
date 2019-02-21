@@ -77,8 +77,8 @@ class Reporting extends Admin_Controller {
 	public function getSummary()
 	{
 		$count_review = 0;
-		$count_review_selesai = 0;
 		$count_disetujui = 0;
+		$count_antri_editor = 0;
 		$count_editor = 0;
 		$count_layout = 0;
 		$count_proofread = 0;
@@ -92,11 +92,11 @@ class Reporting extends Admin_Controller {
 					$count_review++;
 			}
 			if ($hasil_review->draft_status == 5){
-					$count_review_selesai++;
+					$count_antri_editor++;
 			}
 		}
 		$result['count_review'] = $count_review;
-		$result['count_review_selesai'] = $count_review_selesai;
+		$result['count_antri_editor'] = $count_antri_editor;
 
 		$result_disetujui = $this->reporting->select(['is_review'])->getSummary($year);
 		foreach ($result_disetujui as $hasil_disetujui) {
@@ -135,8 +135,8 @@ class Reporting extends Admin_Controller {
 	public function getSummaryUlang()
 	{
 		$count_review_ulang = 0;
-		$count_review_selesai_ulang = 0;
 		$count_disetujui_ulang = 0;
+		$count_antri_editor_ulang = 0;
 		$count_editor_ulang = 0;
 		$count_layout_ulang = 0;
 		$count_proofread_ulang = 0;
@@ -150,11 +150,11 @@ class Reporting extends Admin_Controller {
 					$count_review_ulang++;
 			}
 			if ($hasil_review->draft_status == 5 AND $hasil_review->is_reprint == 'y'){
-					$count_review_selesai_ulang++;
+					$count_antri_editor_ulang++;
 			}
 		}
 		$result['count_review_ulang'] = $count_review_ulang;
-		$result['count_review_selesai_ulang'] = $count_review_selesai_ulang;
+		$result['count_antri_editor_ulang'] = $count_antri_editor_ulang;
 
 		$result_disetujui = $this->reporting->select(['is_review','is_reprint'])->getSummaryUlang($year);
 		foreach ($result_disetujui as $hasil_disetujui) {

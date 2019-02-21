@@ -56,8 +56,8 @@
         function(data){
           var obj = JSON.parse(data);
           var review = obj.count_review;
-          var review_selesai = obj.count_review_selesai;
           var disetujui = obj.count_disetujui;
+          var antri_editor = obj.count_antri_editor;
           var editor = obj.count_editor;
           var layout = obj.count_layout;
           var proofread = obj.count_proofread;
@@ -68,10 +68,10 @@
           var myChart = new Chart(ctx, {
               type: 'bar',
               data: {
-                  labels: ["Review", "Review Selesai", "Disetujui", "Editor", "Layouter", "Proofread", "Cetak", "Final"],
+                  labels: ["Review", "Disetujui", "Antri Editor", "Editor", "Layouter", "Proofread", "Cetak", "Final"],
                   datasets: [{
                       label: ['summary'],
-                      data: [review, review_selesai, disetujui, editor, layout, proofread, print, final],
+                      data: [review, disetujui, antri_editor, editor, layout, proofread, print, final],
                       backgroundColor: [
                           'rgba(54, 162, 235, 1)',
                           'rgba(198, 198, 198, 1)',
