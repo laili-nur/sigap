@@ -4,10 +4,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Reporting extends Admin_Controller {
 
 	public function __construct()
-    {
-        parent::__construct();
-        $this->pages = 'reporting';
-    }
+	{
+		parent::__construct();
+		$this->pages = 'reporting';
+	}
 
 	/*Controller for fetching data to the table*/
 
@@ -99,10 +99,10 @@ class Reporting extends Admin_Controller {
 		$result_review = $this->reporting->select(['draft_status'])->getSummary($year);
 		foreach ($result_review as $hasil_review){
 			if ($hasil_review->draft_status == 4) {
-					$count_review++;
+				$count_review++;
 			}
 			if ($hasil_review->draft_status == 5){
-					$count_antri_editor++;
+				$count_antri_editor++;
 			}
 		}
 		$result['count_review'] = $count_review;
@@ -157,10 +157,10 @@ class Reporting extends Admin_Controller {
 		$result_review = $this->reporting->select(['draft_status', 'is_reprint'])->getSummaryBaru($year);
 		foreach ($result_review as $hasil_review){
 			if ($hasil_review->draft_status == 4 AND $hasil_review->is_reprint == 'n') {
-					$count_review_baru++;
+				$count_review_baru++;
 			}
 			if ($hasil_review->draft_status == 5 AND $hasil_review->is_reprint == 'n'){
-					$count_antri_editor_baru++;
+				$count_antri_editor_baru++;
 			}
 		}
 		$result['count_review_baru'] = $count_review_baru;
@@ -215,10 +215,10 @@ class Reporting extends Admin_Controller {
 		$result_review = $this->reporting->select(['draft_status', 'is_reprint'])->getSummaryUlang($year);
 		foreach ($result_review as $hasil_review){
 			if ($hasil_review->draft_status == 4 AND $hasil_review->is_reprint == 'y') {
-					$count_review_ulang++;
+				$count_review_ulang++;
 			}
 			if ($hasil_review->draft_status == 5 AND $hasil_review->is_reprint == 'y'){
-					$count_antri_editor_ulang++;
+				$count_antri_editor_ulang++;
 			}
 		}
 		$result['count_review_ulang'] = $count_review_ulang;
@@ -267,7 +267,7 @@ class Reporting extends Admin_Controller {
 		$result_ugm = $this->reporting->select(['institute_id'])->getAll('author');
 		foreach ($result_ugm as $institute_ugm){
 			if ($institute_ugm->institute_id == 4) {
-					$count_ugm++;
+				$count_ugm++;
 			}
 			else {
 				$count_lain++;
@@ -313,10 +313,10 @@ class Reporting extends Admin_Controller {
 		$result_ugm = $this->reporting->select(['category_type'])->join3('category', 'draft', 'category')->where('YEAR(entry_date)',$year)->getAll('draft');
 		foreach ($result_ugm as $category_ugm){
 			if ($category_ugm->category_type == 1) {
-					$count_hibah++;
+				$count_hibah++;
 			}
 			elseif ($category_ugm->category_type == 2){
-					$count_reguler++;
+				$count_reguler++;
 			}
 			else {
 				$count_cetak_ulang++;
@@ -330,7 +330,7 @@ class Reporting extends Admin_Controller {
 
 	/* Fungsi untuk menambah data pada grafik draft*/
 	public function getDraft()
-  {
+	{
 		$year = $this->input->get('droptahun');
 		for($i = 1; $i <= 12; $i++)
 		{
@@ -338,11 +338,11 @@ class Reporting extends Admin_Controller {
 			$result['count'][$i] = count($result[$i]);
 		}
 		echo json_encode($result);
-  }
+	}
 
 	/* Fungsi untuk menambah data pada grafik buku*/
 	public function getBook()
-  {
+	{
 		$year = $this->input->get('droptahunbuku');
 		for($i = 1; $i <= 12; $i++)
 		{
@@ -350,18 +350,18 @@ class Reporting extends Admin_Controller {
 			$result['count'][$i] = count($result[$i]);
 		}
 		echo json_encode($result);
-  }
+	}
 
 	/* Fungsi untuk menambah data pada grafik penulis*/
 	public function getAuthor()
-  {
+	{
 		for($i = 1; $i <= 3; $i++)
 		{
 			$result[$i] = $this->reporting->getAuthor($i);
 			$result['count'][$i] = count($result[$i]);
 		}
 		echo json_encode($result);
-  }
+	}
 
 	/* Fungsi filter data pada grafik summary*/
 	public function getYearsSummary()
