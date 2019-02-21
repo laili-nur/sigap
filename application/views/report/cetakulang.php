@@ -10,7 +10,7 @@
           <a href="<?=base_url('reporting')?>">Laporan</a>
         </li>
         <li class="breadcrumb-item active">
-          <a class="text-muted">Laporan Draft</a>
+          <a class="text-muted">Cetak Ulang</a>
         </li>
       </ol>
     </nav>
@@ -19,16 +19,15 @@
   <!-- Reporting buku -->
   <ul nav class="nav nav-tabs">
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index') ?>">Summary</a></li>
-    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_ulang') ?>">Cetak Ulang</a></li>
-    <li class="nav-item"><a class="nav-link active" href="<?= base_url('reporting/index_draft') ?>">Laporan Draft</a></li>
+    <li class="nav-item"><a class="nav-link active" href="<?= base_url('reporting/index_ulang') ?>">Cetak Ulang</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_draft') ?>">Laporan Draft</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_books') ?>">Laporan Buku</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_author') ?>">Laporan Penulis</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_hibah') ?>">Laporan Hibah</a></li>
   </ul>
-  <!-- Reporting buku -->
-  <!-- /.page-title-bar -->
 
-  <br/>
+  <!-- /.page-title-bar -->
+  <br />
 
   <div class="form-group row">
       <div class="col-8 col-md-10 mb-1">
@@ -38,40 +37,39 @@
       </div>
       <div class="col-4 col-md-2  mb-4">
       <?= form_open('', ['method' => 'GET']) ?>
-      <?= form_dropdown('droptahun', getYears(), $this->input->get('droptahun'), 'onchange="this.form.submit()" id="droptahun" class="form-control custom-select d-block" title="Filter tahun"') ?>
+      <?= form_dropdown('droptahunsummary', getYearsSummary(), $this->input->get('droptahunsummary'), 'onchange="this.form.submit()" id="droptahunsummary" class="form-control custom-select d-block" title="Filter tahun"') ?>
       <?= form_close() ?>
       </div>
   </div>
 
-  <div align="center">
-    <h4>UGM Press</h4>
-    <h5>Laporan Grafik Jumlah Draft Perbulan</h5>
-  </div>
+    <div align="center">
+      <h4>UGM Press</h4>
+      <h5>Laporan Grafik Ringkasan Cetak Ulang Buku</h5>
+    </div>
 
-    <!-- graph for draft -->
-
-    <canvas id="myChart" width="500" height="170"></canvas>
+    <canvas id="myChart1" width="500" height="170"></canvas>
     <script>
-    var tahun = $('#droptahun').val();
-    $.post("<?php echo base_url();?>Reporting/getDraft?droptahun="+tahun,
+    var tahun = $('#droptahunsummary').val();
+    $.post("<?php echo base_url();?>Reporting/getSummaryUlang?droptahunsummary="+tahun,
         function(data){
           var obj = JSON.parse(data);
-          console.log(obj);
-          var tampil = [];
-          for(var i=1;i<=12;i++){
-            obj.count[i];
-            tampil.push(obj.count[i]);
-          };
+          var review_ulang = obj.count_review_ulang;
+          var review_selesai_ulang = obj.count_review_selesai_ulang;
+          var disetujui_ulang = obj.count_disetujui_ulang;
+          var editor_ulang = obj.count_editor_ulang;
+          var layout_ulang = obj.count_layout_ulang;
+          var proofread_ulang = obj.count_proofread_ulang;
+          var print_ulang = obj.count_print_ulang;
+          var final_ulang = obj.count_final_ulang;
 
-          var ctx = $("#myChart");
+          var ctx = $("#myChart1");
           var myChart = new Chart(ctx, {
               type: 'bar',
               data: {
-                  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
-                          "Aug", "Sep", "Oct", "Nov", "Des"] ,
+                  labels: ["Review", "Review Selesai", "Disetujui", "Editor", "Layouter", "Proofread", "Cetak", "Final"],
                   datasets: [{
-                      label: 'Laporan Draft',
-                      data: tampil,
+                      label: ['summary'],
+                      data: [review_ulang, review_selesai_ulang, disetujui_ulang, editor_ulang, layout_ulang, proofread_ulang, print_ulang, final_ulang],
                       backgroundColor: [
                           'rgba(54, 162, 235, 1)',
                           'rgba(198, 198, 198, 1)',
@@ -82,7 +80,7 @@
                           'rgba(208, 222, 98, 1)',
                           'rgba(98, 222, 206, 1)',
                           'rgba(171, 98, 222, 1)',
-                          'rgba(255, 206, 86, 1)',
+                          'rgba(255, 99, 132, 1)',
                           'rgba(75, 192, 192, 1)',
                           'rgba(153, 102, 255, 1)'
                       ],
@@ -95,13 +93,17 @@
                           'rgba(255, 159, 64, 1)',
                           'rgba(208, 222, 98, 1)',
                           'rgba(98, 222, 206, 1)',
-                          'rgba(171, 98, 222, 1)'
+                          'rgba(171, 98, 222, 1)',
+                          'rgba(255, 99, 132, 1)',
+                          'rgba(75, 192, 192, 1)',
+                          'rgba(153, 102, 255, 1)'
                       ],
-                      borderWidth: 1
+                      borderWidth: [
+                        1,
+                      ],
                   }]
               },
               options: {
-
                 legend: {
                   display : false,
                 },
@@ -109,7 +111,7 @@
                   display: true,
                   text : 'Jumlah Data',
                   fontSize : 15,
-                  fontFamily :'Helvetica Neue',
+                  fontFamily :'Helvetica',
                   fontColor : 'black',
                   fontStyle : 'bold',
                   position : 'left',
@@ -130,8 +132,7 @@
                     }],
                       xAxes : [{
                         gridLines : {
-                          display : false,
-
+                          display : false
                         },
                         ticks: {
                           fontFamily :'Helvetica Neue',
@@ -141,7 +142,6 @@
                           beginAtZero:true
                         }
                       }],
-
                   },
                   layout:{
                     padding: {
@@ -154,5 +154,4 @@
               }
           });
       });
-
     </script>

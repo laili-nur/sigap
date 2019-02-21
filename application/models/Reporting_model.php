@@ -17,6 +17,12 @@ class Reporting_model extends MY_Model{
     return $query->result();
   }
 
+  public function fetch_data_ulang()
+  {
+    $query = $this->db->query("SELECT * FROM draft ORDER BY entry_date ASC");
+    return $query->result();
+  }
+
   public function fetch_data_draft()
   {
     $query = $this->db->query("SELECT * FROM draft ORDER BY entry_date DESC LIMIT 5");
@@ -64,7 +70,7 @@ class Reporting_model extends MY_Model{
 
   public function getSummaryUlang($year)
   {
-    $query = $this->db->query("SELECT * FROM draft WHERE YEAR(entry_date) = $year");
+    $query = $this->db->query("SELECT * FROM draft WHERE YEAR(entry_date) = $year and is_reprint = 'y'");
     return $query->result();
   }
 

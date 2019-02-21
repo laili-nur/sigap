@@ -21,6 +21,16 @@ class Reporting extends Admin_Controller {
 
 		$this->load->view('template', compact('main_view', 'pages', 'summaries'));
 	}
+	/* Fungsi untuk menampilkan halaman summary */
+	public function index_ulang()
+	{
+		$reprint     = $this->reporting->fetch_data_ulang();
+
+		$pages    = $this->pages;
+		$main_view  = 'report/cetakulang';
+
+		$this->load->view('template', compact('main_view', 'pages', 'reprint'));
+	}
 	/* Fungsi untuk menampilkan halaman draft */
 	public function index_draft()
 	{

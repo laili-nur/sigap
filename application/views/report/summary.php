@@ -19,12 +19,13 @@
   <!-- Reporting buku -->
   <ul nav class="nav nav-tabs">
     <li class="nav-item"><a class="nav-link active" href="<?= base_url('reporting/index') ?>">Summary</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_ulang') ?>">Cetak Ulang</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_draft') ?>">Laporan Draft</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_books') ?>">Laporan Buku</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_author') ?>">Laporan Penulis</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_hibah') ?>">Laporan Hibah</a></li>
   </ul>
-  <!-- Reporting buku -->
+
   <!-- /.page-title-bar -->
   <br />
 
@@ -71,119 +72,6 @@
                   datasets: [{
                       label: ['summary'],
                       data: [review, review_selesai, disetujui, editor, layout, proofread, print, final],
-                      backgroundColor: [
-                          'rgba(54, 162, 235, 1)',
-                          'rgba(198, 198, 198, 1)',
-                          'rgba(255, 206, 86, 1)',
-                          'rgba(75, 192, 192, 1)',
-                          'rgba(153, 102, 255, 1)',
-                          'rgba(255, 159, 64, 1)',
-                          'rgba(208, 222, 98, 1)',
-                          'rgba(98, 222, 206, 1)',
-                          'rgba(171, 98, 222, 1)',
-                          'rgba(255, 99, 132, 1)',
-                          'rgba(75, 192, 192, 1)',
-                          'rgba(153, 102, 255, 1)'
-                      ],
-                      borderColor: [
-                          'rgba(54, 162, 235, 1)',
-                          'rgba(198, 198, 198, 1)',
-                          'rgba(255, 206, 86, 1)',
-                          'rgba(75, 192, 192, 1)',
-                          'rgba(153, 102, 255, 1)',
-                          'rgba(255, 159, 64, 1)',
-                          'rgba(208, 222, 98, 1)',
-                          'rgba(98, 222, 206, 1)',
-                          'rgba(171, 98, 222, 1)',
-                          'rgba(255, 99, 132, 1)',
-                          'rgba(75, 192, 192, 1)',
-                          'rgba(153, 102, 255, 1)'
-                      ],
-                      borderWidth: [
-                        1,
-                      ],
-                  }]
-              },
-              options: {
-                legend: {
-                  display : false,
-                },
-                title:{
-                  display: true,
-                  text : 'Jumlah Data',
-                  fontSize : 15,
-                  fontFamily :'Helvetica',
-                  fontColor : 'black',
-                  fontStyle : 'bold',
-                  position : 'left',
-                  padding : 15,
-                },
-                  scales: {
-                      yAxes: [{
-                        gridLines :{
-                          display : true
-                        },
-                        ticks: {
-                          fontFamily :'Helvetica Neue',
-                          fontSize : 14,
-                          fontStyle :'',
-                          fontColor : 'black',
-                          beginAtZero:true
-                        }
-                    }],
-                      xAxes : [{
-                        gridLines : {
-                          display : false
-                        },
-                        ticks: {
-                          fontFamily :'Helvetica Neue',
-                          fontSize : 13,
-                          fontStyle : '',
-                          fontColor : 'black',
-                          beginAtZero:true
-                        }
-                      }],
-                  },
-                  layout:{
-                    padding: {
-                      left:50,
-                      right:85,
-                      top:10,
-                      bottom:50,
-                    }
-                  }
-              }
-          });
-      });
-    </script>
-
-    <div align="center">
-      <h5>Laporan Grafik Ringkasan Cetak Ulang Buku</h5>
-    </div>
-
-    <canvas id="myChart1" width="500" height="170"></canvas>
-    <script>
-    var tahun = $('#droptahunsummary').val();
-    $.post("<?php echo base_url();?>Reporting/getSummaryUlang?droptahunsummary="+tahun,
-        function(data){
-          var obj = JSON.parse(data);
-          var review_ulang = obj.count_review_ulang;
-          var review_selesai_ulang = obj.count_review_selesai_ulang;
-          var disetujui_ulang = obj.count_disetujui_ulang;
-          var editor_ulang = obj.count_editor_ulang;
-          var layout_ulang = obj.count_layout_ulang;
-          var proofread_ulang = obj.count_proofread_ulang;
-          var print_ulang = obj.count_print_ulang;
-          var final_ulang = obj.count_final_ulang;
-
-          var ctx = $("#myChart1");
-          var myChart = new Chart(ctx, {
-              type: 'bar',
-              data: {
-                  labels: ["Review", "Review Selesai", "Disetujui", "Editor", "Layouter", "Proofread", "Cetak", "Final"],
-                  datasets: [{
-                      label: ['summary'],
-                      data: [review_ulang, review_selesai_ulang, disetujui_ulang, editor_ulang, layout_ulang, proofread_ulang, print_ulang, final_ulang],
                       backgroundColor: [
                           'rgba(54, 162, 235, 1)',
                           'rgba(198, 198, 198, 1)',
