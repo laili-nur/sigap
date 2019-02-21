@@ -44,7 +44,7 @@
 
   <div align="center">
     <h4>UGM Press</h4>
-    <h4>Laporan Grafik Jumlah Katgori Buku</h4>
+    <h4>Laporan Grafik Jumlah Kategori Buku</h4>
   </div>
 
   <canvas id="myPieChart" width="380" height="100"></canvas>
@@ -65,7 +65,7 @@
             labels: ['Hibah Buku Karya', 'Reguler', 'Cetak Ulang'],
             datasets: [{
               label : 'Hibah',
-              data: [hibah, reguler],
+              data: [hibah, reguler, ulang],
               backgroundColor : [
                 'rgba(54, 162, 235, 1)',
                 'rgba(198, 198, 198, 1)',
