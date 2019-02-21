@@ -17,6 +17,12 @@ class Reporting_model extends MY_Model{
     return $query->result();
   }
 
+  public function fetch_data_baru()
+  {
+    $query = $this->db->query("SELECT * FROM draft ORDER BY entry_date ASC");
+    return $query->result();
+  }
+
   public function fetch_data_ulang()
   {
     $query = $this->db->query("SELECT * FROM draft ORDER BY entry_date ASC");
@@ -71,6 +77,12 @@ class Reporting_model extends MY_Model{
   public function getSummaryUlang($year)
   {
     $query = $this->db->query("SELECT * FROM draft WHERE YEAR(entry_date) = $year and is_reprint = 'y'");
+    return $query->result();
+  }
+
+  public function getSummaryBaru($year)
+  {
+    $query = $this->db->query("SELECT * FROM draft WHERE YEAR(entry_date) = $year and is_reprint = 'n'");
     return $query->result();
   }
 

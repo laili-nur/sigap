@@ -19,6 +19,7 @@
   <!-- Reporting buku -->
   <ul nav class="nav nav-tabs">
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index') ?>">Summary</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_baru') ?>">Naskah Baru</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_ulang') ?>">Cetak Ulang</a></li>
     <li class="nav-item"><a class="nav-link active" href="<?= base_url('reporting/index_draft') ?>">Laporan Draft</a></li>
     <li class="nav-item"><a class="nav-link" href="<?= base_url('reporting/index_books') ?>">Laporan Buku</a></li>

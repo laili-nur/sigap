@@ -21,7 +21,17 @@ class Reporting extends Admin_Controller {
 
 		$this->load->view('template', compact('main_view', 'pages', 'summaries'));
 	}
-	/* Fungsi untuk menampilkan halaman summary */
+	/* Fungsi untuk menampilkan halaman summary baru */
+	public function index_baru()
+	{
+		$new     = $this->reporting->fetch_data_baru();
+
+		$pages    = $this->pages;
+		$main_view  = 'report/naskahbaru';
+
+		$this->load->view('template', compact('main_view', 'pages', 'new'));
+	}
+	/* Fungsi untuk menampilkan halaman summary ulang */
 	public function index_ulang()
 	{
 		$reprint     = $this->reporting->fetch_data_ulang();
@@ -132,6 +142,64 @@ class Reporting extends Admin_Controller {
 		echo json_encode($result);
 	}
 
+	public function getSummaryBaru()
+	{
+		$count_review_baru = 0;
+		$count_disetujui_baru = 0;
+		$count_antri_editor_baru = 0;
+		$count_editor_baru = 0;
+		$count_layout_baru = 0;
+		$count_proofread_baru = 0;
+		$count_print_baru = 0;
+		$count_final_baru = 0;
+		$year = $this->input->get('droptahunsummary');
+
+		$result_review = $this->reporting->select(['draft_status', 'is_reprint'])->getSummaryBaru($year);
+		foreach ($result_review as $hasil_review){
+			if ($hasil_review->draft_status == 4 AND $hasil_review->is_reprint == 'n') {
+					$count_review_baru++;
+			}
+			if ($hasil_review->draft_status == 5 AND $hasil_review->is_reprint == 'n'){
+					$count_antri_editor_baru++;
+			}
+		}
+		$result['count_review_baru'] = $count_review_baru;
+		$result['count_antri_editor_baru'] = $count_antri_editor_baru;
+
+		$result_disetujui = $this->reporting->select(['is_review','is_reprint'])->getSummaryBaru($year);
+		foreach ($result_disetujui as $hasil_disetujui) {
+			if ($hasil_disetujui->is_review == 'y' AND $hasil_disetujui->is_reprint == 'n') {
+				$count_disetujui_baru++;
+			}
+		}
+		$result['count_disetujui_baru'] = $count_disetujui_baru;
+
+		$result_editor = $this->reporting->select(['is_review','is_edit','is_layout','is_proofread', 'is_print', 'is_reprint'])->getSummaryBaru($year);
+		foreach ($result_editor as $hasil_editor) {
+			if (($hasil_editor->is_review == 'y' AND $hasil_editor->is_edit == 'n') AND $hasil_editor->is_reprint == 'n') {
+				$count_editor_baru++;
+			}
+			if(($hasil_editor->is_edit == 'y' AND $hasil_editor->is_layout == 'n') AND $hasil_editor->is_reprint == 'n'){
+				$count_layout_baru++;
+			}
+			if(($hasil_editor->is_layout == 'y' AND $hasil_editor->is_proofread == 'n') AND $hasil_editor->is_reprint == 'n'){
+				$count_proofread_baru++;
+			}
+			if(($hasil_editor->is_proofread == 'y' AND $hasil_editor->is_print == 'n') AND $hasil_editor->is_reprint == 'n'){
+				$count_print_baru++;
+			}
+			if(($hasil_editor->is_print == 'y' OR $hasil_editor->draft_status == 14) AND $hasil_editor->is_reprint == 'n'){
+				$count_final_baru++;
+			}
+		}
+		$result['count_editor_baru'] = $count_editor_baru;
+		$result['count_layout_baru'] = $count_layout_baru;
+		$result['count_proofread_baru'] = $count_proofread_baru;
+		$result['count_print_baru'] = $count_print_baru;
+		$result['count_final_baru'] = $count_final_baru;
+		echo json_encode($result);
+	}
+
 	public function getSummaryUlang()
 	{
 		$count_review_ulang = 0;
@@ -189,6 +257,7 @@ class Reporting extends Admin_Controller {
 		$result['count_final_ulang'] = $count_final_ulang;
 		echo json_encode($result);
 	}
+
 	/* Fungsi untuk menampilkan grafik penulis berdasarkan instansi */
 	public function getPie()
 	{
