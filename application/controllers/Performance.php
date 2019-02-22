@@ -73,9 +73,6 @@ class Performance extends Admin_Controller {
 		// $this->db->group_by('draft_id');
 		$performance_editor = $this->performance->select(['draft.draft_id','draft_title','username','category_name','edit_start_date','edit_deadline','edit_end_date','is_edit','performance_status'])->join3('category','draft','category')->join3('responsibility','draft','draft')->join3('user','responsibility','user')->where('level', 'editor')->where('performance_status', 1)->where('responsibility.user_id !=', null)->orderBy('username')->getAll('draft');
 
-		$performance_layouter = $this->performance->select(['draft.draft_id','draft_title','username','category_name','layout_start_date','layout_deadline','layout_end_date','is_layout','performance_status'])->join3('category','draft','category')->join3('responsibility','draft','draft')->join3('user','responsibility','user')->where('level', 'layouter')->where('performance_status', 1)->where('responsibility.user_id !=', null)->orderBy('username')->getAll('draft');
-
-
 		$total = count($performance_editor);
 
 		$pages    = $this->pages;
