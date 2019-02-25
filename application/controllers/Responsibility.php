@@ -117,10 +117,11 @@ class Responsibility extends Operator_Controller
         $input = (object) $this->input->post(null, true);
 
         if($jenis_staff == 'editor'){
-           $this->db->query("UPDATE responsibility
-            LEFT JOIN user ON responsibility.user_id = user.user_id 
-            SET performance_status = 2
-            WHERE level = '".$jenis_staff."' and draft_id = ".$input->draft_id);
+            //untuk set performance status
+           // $this->db->query("UPDATE responsibility
+           //  LEFT JOIN user ON responsibility.user_id = user.user_id 
+           //  SET performance_status = 2
+           //  WHERE level = '".$jenis_staff."' and draft_id = ".$input->draft_id);
 
             if($this->responsibility->editDraftDate($input->draft_id, $input->col)){
                 $data['status'] = true;
@@ -128,10 +129,11 @@ class Responsibility extends Operator_Controller
                 $data['status'] = false;
             }
         }elseif($jenis_staff == 'layouter'){
-            $this->db->query("UPDATE responsibility
-            LEFT JOIN user ON responsibility.user_id = user.user_id 
-            SET performance_status = 2
-            WHERE level = '".$jenis_staff."' and draft_id = ".$input->draft_id);
+            //untuk set performance status
+            // $this->db->query("UPDATE responsibility
+            // LEFT JOIN user ON responsibility.user_id = user.user_id 
+            // SET performance_status = 2
+            // WHERE level = '".$jenis_staff."' and draft_id = ".$input->draft_id);
 
             if($this->responsibility->editDraftDate($input->draft_id, $input->col)){
                 $data['status'] = true;

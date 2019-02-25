@@ -182,7 +182,7 @@ class Draft extends Operator_Controller
                 $drafts = $this->draft->join('category')->join('theme')->where('is_review','y')->where('is_edit','y')->where('is_layout','n')->whereNot('draft_status', '99')->where($kat['cond_temp'], $kat['category'])->orderBy('draft_status')->orderBy('draft_title')->paginate($page)->getAll();
                 $total  = $this->draft->where('is_review','y')->where('is_edit','y')->where('is_layout','n')->whereNot('draft_status', '99')->where($kat['cond_temp'], $kat['category'])->count();
             } elseif ($filter == 'proofread') {
-                $drafts = $this->draft->join('category')->join('theme')->where('is_review','y')->where('is_edit','y')->where('is_layout','y')->where('is_proofread','n')->whereNot('draft_status', '99')->where($kat['cond_temp'], $kat['category'])->orderBy('draft_status')->orderBy('draft_title')->paginate($page)->getAll();
+                $drafts = $this->draft->join('category')->join('theme')->where('is_review','y')->where('is_edit','y')->where('is_layout','y')->where('is_proofread','n')->whereNot('draft_status', '99')->where($kat['cond_temp'], $kat['category'])->orderBy('draft_status','desc')->orderBy('draft_title')->paginate($page)->getAll();
                 $total  = $this->draft->where('is_review','y')->where('is_edit','y')->where('is_layout','y')->where('is_proofread','n')->whereNot('draft_status', '99')->where($kat['cond_temp'], $kat['category'])->count();
             } elseif ($filter == 'cetak') {
                 $drafts = $this->draft->join('category')->join('theme')->where('is_review','y')->where('is_edit','y')->where('is_layout','y')->where('is_proofread','y')->group_start()->where('is_print','n')->orWhere('is_print','y')->group_end()->whereNot('draft_status','99')->whereNot('draft_status','14')->where($kat['cond_temp'], $kat['category'])->orderBy('draft_status')->orderBy('draft_title')->paginate($page)->getAll();
@@ -434,6 +434,11 @@ class Draft extends Operator_Controller
         $editors = $this->draft->select(['username', 'level', 'responsibility_id', 'responsibility.user_id'])->join3('responsibility', 'draft', 'draft')->join3('user', 'responsibility', 'user')->where('responsibility.draft_id', $id)->where('level', 'editor')->getAll();
         // tampilkan layouter
         $layouters = $this->draft->select(['username', 'level', 'responsibility_id', 'responsibility.user_id'])->join3('responsibility', 'draft', 'draft')->join3('user', 'responsibility', 'user')->where('responsibility.draft_id', $id)->where('level', 'layouter')->getAll();
+
+        //hitung jumlah revisi
+        $tot_revisi['editor'] = $this->draft->where('revision_role','editor')->where('draft_id',$id)->count('revision');
+        $tot_revisi['layouter'] = $this->draft->where('revision_role','layouter')->where('draft_id',$id)->count('revision');
+
         //prevent ganti link
         if ($this->level == "reviewer") {
             $prevent = count(array_filter($reviewers, function ($e) {
@@ -476,7 +481,7 @@ class Draft extends Operator_Controller
             $pages       = $this->pages;
             $main_view   = 'draft/view/view';
             $form_action = "draft/edit/$id";
-            $this->load->view('template', compact('books', 'author_order', 'draft', 'reviewer_order', 'desk', 'pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers', 'editors', 'layouters'));
+            $this->load->view('template', compact('tot_revisi','books', 'author_order', 'draft', 'reviewer_order', 'desk', 'pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers', 'editors', 'layouters'));
             return;
         }
         if ($this->draft->where('draft_id', $id)->update($input)) {
@@ -821,6 +826,189 @@ class Draft extends Operator_Controller
         redirect('draft/view/' . $draft_id);
     }
 
+    public function getRevision()
+    {
+        $input = (object) $this->input->post(null);
+        $ceklevel    = $this->session->userdata('level');
+        $revisi = $this->draft->where('revision_role',$input->role)->where('draft_id',$input->draft_id)->getAll('revision');
+        $urutan = 1;
+        //flag menandai revisi yang belum selesai
+        //flag 1 dan lebih artinya ada yg blm selese
+        $flag = 0;
+        if($revisi){
+            foreach ($revisi as $value) {
+                if($value->revision_end_date !='0000-00-00 00:00:00' and $value->revision_end_date !=null){
+                    $atribut_tombol_selesai = 'disabled';
+                    $atribut_tombol_simpan = 'd-none';
+                    if(!empty($value->revision_notes)){
+                        $form_revisi = '<div class="font-italic">'.nl2br($value->revision_notes).'</div>';
+                    }else{
+                        $form_revisi = '<div class="font-italic mb-3">Tidak ada Catatan</div>';
+                    }
+                    $badge_revisi = '<span class="badge badge-success">Selesai</span>';
+                }else{
+                    $flag++;
+                    $atribut_tombol_selesai = '';
+                    $atribut_tombol_simpan = 'd-inline';
+                    if($ceklevel != 'editor'){
+                        if(!empty($value->revision_notes)){
+                            $form_revisi = '<div class="font-italic">'.nl2br($value->revision_notes).'</div>';
+                        }else{
+                            $form_revisi = '<div class="font-italic mb-3">Tidak ada Catatan</div>';
+                        }
+                    }else{
+                        $form_revisi = '<textarea rows="6" name="revisi'.$value->revision_id.'" class="form-control summernote-basic" id="revisi'.$value->revision_id.'">'.$value->revision_notes.'</textarea>';
+                    }
+                    $badge_revisi = '<span class="badge badge-info">Dalam Proses</span>';
+                }
+                if($input->role == 'editor'){
+                    $tahap = 'edit';
+                    $role = 'editor';
+                }else{
+                    $tahap = 'layout';
+                    $role = 'layouter';
+                }
+
+                if($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'){
+                    $tombol_hapus = '<button title="Hapus revisi" type="button" class="d-inline btn btn-danger hapus-revisi" data="'.$value->revision_id.'"><i class="fa fa-trash"></i><span class="d-none d-lg-inline"> Hapus</span></button>';
+                    $tombol_edit = '<button type="button" class="d-inline btn btn-secondary btn-xs trigger-'.$tahap.'-revisi-deadline" data-toggle="modal" data-target="#'.$tahap.'-revisi-deadline" title="'.$tahap.' Deadline" data="'.$value->revision_id.'">Edit</button>';
+                }else{
+                    $tombol_hapus = '';
+                    $tombol_edit = '';
+                }
+
+
+                $data['revisi'][] = '<section class="card card-expansion-item">
+                    <header class="card-header border-0" id="heading'.$value->revision_id.'">
+                      <button class="btn btn-reset collapsed" data-toggle="collapse" data-target="#collapse'.$value->revision_id.'" aria-expanded="false" aria-controls="collapse'.$value->revision_id.'">
+                        <span class="collapse-indicator mr-2">
+                          <i class="fa fa-fw fa-caret-right"></i>
+                        </span>
+                        <span>Revisi #'.$urutan.'</span>
+                        '.$badge_revisi.'
+                      </button>
+                    </header>
+                    <div id="collapse'.$value->revision_id.'" class="collapse" aria-labelledby="heading'.$value->revision_id.'" data-parent="#accordion-'.$role.'">
+                    <div class="list-group list-group-flush list-group-bordered">
+                        <div class="list-group-item justify-content-between">
+                          <span class="text-muted">Tanggal mulai</span>
+                          <strong>'.konversiTanggal($value->revision_start_date).'</strong>
+                        </div>
+                        <div class="list-group-item justify-content-between">
+                          <span class="text-muted">Tanggal selesai</span>
+                          <strong>'.konversiTanggal($value->revision_end_date).'</strong>
+                        </div>
+                        <div class="list-group-item justify-content-between">
+                          <span class="text-muted">Deadline '.$tombol_edit.'</span>
+                          <strong>'.konversiTanggal($value->revision_deadline).'</strong>
+                        </div>
+                        <div class="list-group-item mb-0 pb-0">
+                          <span class="text-muted">Catatan '.$role.'</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                    <form>
+                    '.$form_revisi.'
+                    </form>
+                        <div class="el-example">
+                            <button title="Submit catatan" type="button" class="'.$atribut_tombol_simpan.' btn btn-primary submit-revisi" data="'.$value->revision_id.'"><i class="fas fa-save"></i><span class="d-none d-lg-inline"> Simpan</span></button>
+                            <button title="Selesai revisi" type="button" class="d-inline btn btn-secondary selesai-revisi" '.$atribut_tombol_selesai.' data="'.$value->revision_id.'"><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
+                            '.$tombol_hapus.'
+                        </div>
+                    </div>
+                    </div>
+                  </section>';
+                  $urutan++;
+            }
+        }else{
+            $data['revisi'] = 'Tidak ada revisi';
+        }
+        
+        if($flag>0){
+            $data['flag'] = TRUE;
+        }else{
+            $data['flag'] = FALSE;
+        }
+        echo json_encode($data);
+    }
+
+    public function insertRevision()   
+    {
+        $input = (object) $this->input->post(null);
+        if($input->role == 'editor'){
+            $status = array('draft_status' => 17);
+        }elseif($input->role == 'layouter'){
+            $status = array('draft_status' => 18);
+        }
+        $this->draft->updateDraftStatus($input->draft_id, $status);
+        $datenow = date('Y-m-d H:i:s');
+        $deadline = date('Y-m-d H:i:s', (strtotime($datenow) + (7 * 24 * 60 * 60)));
+        $data = array('draft_id' => $input->draft_id, 'revision_start_date' => $datenow, 'revision_role' => $input->role, 'revision_deadline' => $deadline);
+        $insert = $this->draft->insert($data,'revision');
+        if($insert){
+            $data['status'] = TRUE;
+        }else{
+            $data['status'] = FALSE;
+        }
+        echo json_encode($data);
+    }
+
+
+    public function endRevision()   
+    {
+        $input = (object) $this->input->post(null);
+        $status = array('draft_status' => 19);
+        $this->draft->updateDraftStatus($input->draft_id, $status);
+        $datenow = date('Y-m-d H:i:s');
+        $data = array('revision_end_date' => $datenow);
+        $insert = $this->draft->where('revision_id',$input->revision_id)->update($data,'revision');
+        if($insert){
+            $data['status'] = TRUE;
+        }else{
+            $data['status'] = FALSE;
+        }
+        echo json_encode($data);
+    }
+
+    public function submitRevision()   
+    {
+        $input = (object) $this->input->post(null);
+        $revision_notes = $this->input->post('revision_notes');
+        $data = array('revision_notes' => $revision_notes);
+        $insert = $this->draft->where('revision_id',$input->revision_id)->update($data,'revision');
+        if($insert){
+            $data['status'] = TRUE;
+        }else{
+            $data['status'] = FALSE;
+        }
+        echo json_encode($data);
+    }
+
+    public function deleteRevision($revision_id ='')   
+    {
+        $delete = $this->draft->where('revision_id',$revision_id)->delete('revision');
+        if($delete){
+            $data['status'] = TRUE;
+        }else{
+            $data['status'] = FALSE;
+        }
+        echo json_encode($data);
+    }
+
+    public function deadlineRevision()   
+    {
+        $input = (object) $this->input->post(null);
+        $data = array('revision_deadline' => $input->revision_deadline);
+        $insert = $this->draft->where('revision_id',$input->revision_id)->update($data,'revision');
+        if($insert){
+            $data['status'] = TRUE;
+        }else{
+            $data['status'] = FALSE;
+        }
+        echo json_encode($data);
+    }
+
+
     public function search($page = null)
     {
         $cekusername = $this->session->userdata('username');
@@ -935,7 +1123,7 @@ class Draft extends Operator_Controller
                 $status = 'Tidak Lolos Desk Screening';
                 break;
             case 3:
-                $status = 'Reviewer Rejected';
+                $status = 'Review Ditolak';
                 break;
             case 4:
                 $status = 'Reviewing';
@@ -975,6 +1163,15 @@ class Draft extends Operator_Controller
                 break;
             case 16:
                 $status = 'Cetak Selesai';
+                break;
+            case 17:
+                $status = 'Revisi Edit';
+                break;
+            case 18:
+                $status = 'Revisi Layout';
+                break;
+            case 19:
+                $status = 'Selesai Revisi';
                 break;
             case 99:
                 $status = 'Draft Ditolak';

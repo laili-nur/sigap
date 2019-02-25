@@ -18,8 +18,10 @@
             	echo 'Ditolak';
             }elseif($input->is_review == 'y'){
             	echo 'Selesai';
+            }elseif(konversiTanggal($input->review_start_date) != '-'){
+              echo 'Progress';
             }else{
-            	echo 'Progress';
+              echo 'Belum Mulai';
             }?>">
               <!-- progress indicator -->
               <span width="300px" class="progress-indicator"></span>
@@ -37,8 +39,10 @@
             	echo 'Ditolak';
             }elseif($input->is_edit == 'y'){
             	echo 'Selesai';
+            }elseif(konversiTanggal($input->edit_start_date) != '-'){
+              echo 'Progress';
             }else{
-            	echo 'Progress';
+              echo 'Belum Mulai';
             }?>">
               <!-- progress indicator -->
               <span class="progress-indicator"></span>
@@ -56,8 +60,10 @@
             	echo 'Ditolak';
             }elseif($input->is_layout == 'y'){
             	echo 'Selesai';
+            }elseif(konversiTanggal($input->layout_start_date) != '-'){
+              echo 'Progress';
             }else{
-            	echo 'Progress';
+              echo 'Belum Mulai';
             }?>">
               <!-- progress indicator -->
               <span class="progress-indicator"></span>
@@ -70,18 +76,31 @@
           <?= ($input->is_proofread == 'y') ? 'success' : '' ?>
           <?= ($input->is_layout == 'y') ? 'active' : '' ?>
           ">
-            <button type="button" data-toggle="tooltip" title="
+
+          <?php if($input->is_layout=='y' and ($tot_revisi['editor'] != 0 or $tot_revisi['layouter'] != 0)){
+            $warna = 'style="border-color: #ffc107"';
+            $tebal_kuning = 'font-weight-bold text-warning';
+            $teks = '';
+          }else{
+            $warna = '';
+            $tebal_kuning = '';
+          } ?>
+            <button <?=$warna; ?> data-html="true" type="button" data-toggle="tooltip" title="
             <?php if($input->is_proofread == 'n' and $input->stts == 99){
             	echo 'Ditolak';
             }elseif($input->is_proofread == 'y'){
             	echo 'Selesai';
+            }elseif($tot_revisi['editor'] != 0 or $tot_revisi['layouter'] != 0){
+              echo 'Revisi Edit = '.$tot_revisi['editor'].'<br>'.'Revisi Layout = '.$tot_revisi['layouter'];
+            }elseif(konversiTanggal($input->proofread_start_date) != '-'){
+              echo 'Progress';
             }else{
-            	echo 'Progress';
+              echo 'Belum Mulai';
             }?>">
               <!-- progress indicator -->
               <span class="progress-indicator"></span>
             </button>
-            <span class="progress-label d-none d-sm-inline-block">Proofread</span>
+            <span class="progress-label d-none d-sm-inline-block <?=$tebal_kuning ?> ">Proofread</span>
           </li>
           <!-- CETAK -->
           <li class="
@@ -94,8 +113,10 @@
               echo 'Ditolak';
             }elseif($input->is_print == 'y'){
               echo 'Selesai';
-            }else{
+            }elseif(konversiTanggal($input->print_start_date) != '-'){
               echo 'Progress';
+            }else{
+              echo 'Belum Mulai';
             }?>">
               <!-- progress indicator -->
               <span class="progress-indicator"></span>
@@ -113,8 +134,10 @@
             	echo 'Ditolak';
             }elseif($input->stts == 14){
             	echo 'Selesai';
+            }elseif(konversiTanggal($input->print_end_date) != '-'){
+              echo 'Progress';
             }else{
-            	echo 'Progress';
+              echo 'Belum Mulai';
             }?>">
               <!-- progress indicator -->
               <span class="progress-indicator"></span>

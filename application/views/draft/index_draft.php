@@ -124,12 +124,18 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
                 <?= form_open('draft/filter', ['method' => 'GET']) ?>
                 <?= form_dropdown('per_page', $per_page, $this->input->get('per_page'), 'id="per_page" class="form-control custom-select d-block" title="List per page"') ?>
               </div>
+              <?php if($ceklevel == 'superadmin'): ?>
               <div class="col-12 col-md-4 col-lg-4 mb-3">
                 <?= form_dropdown('filter', $filter_status, $this->input->get('filter'), ' id="filter" class="form-control custom-select d-block" title="Filter status"') ?>
               </div>
               <div class="col-12 col-md-4 col-lg-4 mb-3">
                 <?= form_dropdown('category', getDropdownListCategory('category', ['category_id', 'category_name'],true), $this->input->get('category'), '" id="category" class="form-control custom-select d-block "') ?>
               </div>
+              <?php else: ?>
+                <div class="col-12 col-md-8 col-lg-8 mb-3">
+                <?= form_dropdown('filter', $filter_status, $this->input->get('filter'), ' id="filter" class="form-control custom-select d-block" title="Filter status"') ?>
+              </div>
+            <?php endif ?>
               <div class="col-12 col-md-12 col-lg-2 mb-3">
                 <button class="btn btn-primary btn-block ml-auto" type="submit" value="Submit" id="btn-submit"><i class="fa fa-filter"></i> Filter data</button>
                 <?= form_close() ?>
@@ -238,27 +244,41 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
                   <?php elseif ($ceklevel == 'editor') : ?>
                   <td class="align-middle">
                     <?php
-                    $sisa_waktu = ceil((strtotime($draft->edit_deadline) - strtotime(date('Y-m-d H:i:s'))) / 86400);
-                    if ($sisa_waktu <= 0 and $draft->edit_notes == '') {
-                      echo '<span class="font-weight-bold text-danger" ><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>';
-                    } elseif ($sisa_waktu <= 0 and $draft->edit_notes != '') {
-                      echo '-';
-                    } else {
-                      echo $sisa_waktu . ' hari';
+                    if(konversiTanggal($draft->edit_start_date) == '-'){
+                      echo 'Belum Mulai';
+                    }elseif(konversiTanggal($draft->edit_end_date) != '-'){
+                      echo 'Selesai';
+                    }else{
+                      $sisa_waktu = ceil((strtotime($draft->edit_deadline) - strtotime(date('Y-m-d H:i:s'))) / 86400);
+                      if ($sisa_waktu <= 0 and $draft->edit_notes == '') {
+                        echo '<span class="font-weight-bold text-danger" ><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>';
+                      } elseif ($sisa_waktu <= 0 and $draft->edit_notes != '') {
+                        echo '-';
+                      } else {
+                        echo $sisa_waktu . ' hari';
+                      }
                     }
+                    
                     ?>
                   </td>
                   <?php elseif ($ceklevel == 'layouter') : ?>
                   <td class="align-middle">
                     <?php
-                    $sisa_waktu = ceil((strtotime($draft->layout_deadline) - strtotime(date('Y-m-d H:i:s'))) / 86400);
-                    if ($sisa_waktu <= 0 and $draft->layout_notes == '') {
-                      echo '<span class="font-weight-bold text-danger" ><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>';
-                    } elseif ($sisa_waktu <= 0 and $draft->layout_notes != '') {
-                      echo '-';
-                    } else {
-                      echo $sisa_waktu . ' hari';
+                    if(konversiTanggal($draft->layout_start_date) == '-'){
+                      echo 'Belum Mulai';
+                    }elseif(konversiTanggal($draft->layout_end_date) != '-'){
+                      echo 'Selesai';
+                    }else{
+                      $sisa_waktu = ceil((strtotime($draft->layout_deadline) - strtotime(date('Y-m-d H:i:s'))) / 86400);
+                      if ($sisa_waktu <= 0 and $draft->layout_notes == '') {
+                        echo '<span class="font-weight-bold text-danger" ><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>';
+                      } elseif ($sisa_waktu <= 0 and $draft->layout_notes != '') {
+                        echo '-';
+                      } else {
+                        echo $sisa_waktu . ' hari';
+                      }
                     }
+                    
                     ?>
                   </td>
                   <?php else : ?>

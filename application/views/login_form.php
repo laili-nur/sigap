@@ -117,7 +117,7 @@
 					            <img src="assets/images/avatars/profile.jpg" alt="User Avatar"> </div>
 					          <!-- /.user-avatar -->
 					          <h2 class="card-title"> Bagaskara LA </h2>
-					          <h6 class="card-subtitle text-muted"> Front End and UX Developer </h6>
+					          <h6 class="card-subtitle text-muted"> Fullstack Developer and UX Researcher </h6>
 					        </div>
                         </div>
                       </div>

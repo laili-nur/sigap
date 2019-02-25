@@ -32,15 +32,18 @@
   <div class="list-group list-group-flush list-group-bordered" id="list-group-edit">
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Tanggal mulai</span>
-      <strong><?= konversiTanggal($input->edit_start_date) ?></strong>
+      <strong>
+        <?= konversiTanggal($input->edit_start_date) ?></strong>
     </div>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Tanggal selesai</span>
-      <strong><?= konversiTanggal($input->edit_end_date) ?></strong>
+      <strong>
+        <?= konversiTanggal($input->edit_end_date) ?></strong>
     </div>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Deadline</span>
-      <strong><?= ($sisa_waktu_edit <= 0 and $input->edit_notes =='' and ($input->edit_start_date != "0000-00-00 00:00:00" and $input->edit_start_date !=null))? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">'.konversiTanggal($input->edit_deadline).'</span>' : konversiTanggal($input->edit_deadline) ?></strong>
+      <strong>
+        <?= ($sisa_waktu_edit <= 0 and $input->edit_notes =='' and ($input->edit_start_date != "0000-00-00 00:00:00" and $input->edit_start_date !=null))? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">'.konversiTanggal($input->edit_deadline).'</span>' : konversiTanggal($input->edit_deadline) ?></strong>
     </div>
     <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer' ): ?>
     <div class="list-group-item justify-content-between" id="reloadeditor">
@@ -77,7 +80,10 @@
         <?=($input->edit_notes!='' || $input->edit_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
       <!-- tombol confidential tidak bisa diliat penulis -->
       <?php if ($ceklevel != 'author' and  $ceklevel != 'layouter'): ?>
-        <button data-toggle="modal" data-target="#edit-confidential" class="btn btn-secondary"><i class="far fa-sticky-note"></i> Catatan</button>
+      <button data-toggle="modal" data-target="#edit-confidential" class="btn btn-outline-dark"><i class="far fa-sticky-note"></i> Catatan</button>
+      <?php endif ?>
+      <?php if ($ceklevel != 'author'): ?>
+      <button data-toggle="modal" data-target="#edit-revisi" class="btn btn-outline-info"><i class="fa fa-tasks"></i> Revisi <span class="badge badge-info"><?=$tot_revisi['editor'] ?></span></button>
       <?php endif ?>
       <!-- peringatan disabled -->
       <?=($ceklevel=='editor' and $sisa_waktu_edit <= 0 and $input->edit_notes =='' and ($input->edit_start_date != "0000-00-00 00:00:00" and $input->edit_start_date !=null))? '<span class="font-weight-bold text-danger" data-toggle="tooltip" data-placement="bottom" title="Hubungi admin untuk membuka draft ini"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>' : '' ?>
@@ -109,7 +115,7 @@
                 <?= form_upload('edit_file','','class="custom-file-input naskah" id="edit_file"') ?>
                 <label class="custom-file-label" for="edit_file">Choose file</label>
               </div>
-              <small class="form-text text-muted">Tipe file upload  bertype : docx, doc, dan pdf.</small>
+              <small class="form-text text-muted">Tipe file upload bertype : docx, doc, dan pdf.</small>
               <!-- /.input-group -->
             </div>
             <!-- /.form-group -->
@@ -135,7 +141,8 @@
                 <br> by :
                 <?=konversi_username_level($input->edit_last_upload) ?>
                 <?php  if($ceklevel !='author' and $ceklevel !='reviewer'):?>
-                <em>(<?=$input->edit_last_upload ?>)</em>
+                <em>(
+                  <?=$input->edit_last_upload ?>)</em>
                 <?php endif ?>
               </p>
               <?=(!empty($input->edit_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->edit_file.'" href="'.base_url('draftfile/'.$input->edit_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
@@ -143,13 +150,14 @@
             </div>
             <hr class="my-3">
             <!-- .form -->
-            <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formedit"') ?>
+            <?= form_open('','id="formedit"') ?>
             <!-- .fieldset -->
             <fieldset>
               <!-- .form-group -->
               <div class="form-group">
                 <label for="ce" class="font-weight-bold">Catatan Editor</label>
-                <small class="text-muted" id="edit_last_notes"><?=konversiTanggal($input->edit_notes_date) ?></small>
+                <small class="text-muted" id="edit_last_notes">
+                  <?=konversiTanggal($input->edit_notes_date) ?></small>
                 <?php 
                   $optionsce = array(
                       'name' => 'edit_notes',
@@ -192,7 +200,7 @@
           <!-- /.modal-body -->
           <!-- .modal-footer -->
           <div class="modal-footer">
-            <?php if($author_order!=0 or $ceklevel!='author'): ?>
+            <?php if($author_order==1 and $ceklevel=='author' or $ceklevel=='editor'): ?>
             <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-edit">Submit</button>
             <?php endif ?>
             <?= form_close(); ?>
@@ -206,7 +214,7 @@
       <!-- /.modal-dialog -->
     </div>
     <!-- /.modal tanggapan edit-->
-    <!-- modal -->
+    <!-- modal catatan confidental -->
     <div class="modal fade" id="edit-confidential" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <!-- .modal-dialog -->
       <div class="modal-dialog modal-lg modal-dialog-overflow" role="document">
@@ -223,7 +231,7 @@
               Catatan dibawah ini tidak dapat dilihat oleh penulis.
             </div>
             <!-- .form -->
-            <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formeditconfidental"') ?>
+            <?= form_open() ?>
             <!-- .fieldset -->
             <fieldset>
               <!-- .form-group -->
@@ -253,18 +261,49 @@
           <?php if($ceklevel == 'editor'): ?>
           <div class="modal-footer">
             <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-edit-confidential">Submit</button>
-            <?= form_close(); ?>
             <!-- /.form -->
             <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
           </div>
           <?php endif ?>
+          <?= form_close(); ?>
           <!-- /.modal-footer -->
         </div>
         <!-- /.modal-content -->
       </div>
       <!-- /.modal-dialog -->
     </div>
-    <!-- /.modal -->
+    <!-- /.modal catatan confidental -->
+    <!-- modal edit revisi-->
+    <div class="modal fade" id="edit-revisi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <!-- .modal-dialog -->
+      <div class="modal-dialog modal-lg modal-dialog-overflow" role="document">
+        <!-- .modal-content -->
+        <div class="modal-content">
+          <!-- .modal-header -->
+          <div class="modal-header">
+            <h5 class="modal-title"> Revisi Edit</h5>
+          </div>
+          <!-- /.modal-header -->
+          <!-- .modal-body -->
+          <div class="modal-body">
+            <!-- #accordion -->
+            <div id="accordion-editor" class="card-expansion">
+            </div>
+            <!-- /#accordion -->
+          </div>
+          <!-- /.modal-body -->
+          <!-- .modal-footer -->
+          <div class="modal-footer justify-content-between">
+            <button disabled="disabled" class="btn btn-success" id="mulai-revisi-editor" title="Tanggal mulai revisi dan status draft akan tersimpan" data-toggle="tooltip"><i class="fa fa-plus"></i> Mulai Revisi Baru</button>
+            <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+          </div>
+          <!-- /.modal-footer -->
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal edit revisi-->
     <!-- modal editor-->
     <div class="modal fade" id="piliheditor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <!-- .modal-dialog -->
@@ -341,7 +380,7 @@
       </div>
       <!-- /.modal-dialog -->
     </div>
-    <!-- /.modal -->
+    <!-- /.modal editor-->
     <!-- modal deadline -->
     <div class="modal fade" id="edit_deadline" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <!-- .modal-dialog -->
@@ -356,7 +395,7 @@
           <!-- .modal-body -->
           <div class="modal-body">
             <!-- .form -->
-            <?= form_open('draft/ubahnotes/'.$input->draft_id) ?>
+            <?= form_open('','') ?>
             <!-- .fieldset -->
             <fieldset>
               <!-- .form-group -->
@@ -386,7 +425,50 @@
       </div>
       <!-- /.modal-dialog -->
     </div>
-    <!-- /.modal -->
+    <!-- /.modal deadline-->
+    <!-- modal deadline revisi-->
+    <div class="modal fade" id="edit-revisi-deadline" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <!-- .modal-dialog -->
+      <div class="modal-dialog" role="document">
+        <!-- .modal-content -->
+        <div class="modal-content">
+          <!-- .modal-header -->
+          <div class="modal-header">
+            <h5 class="modal-title">Deadline revisi</h5>
+          </div>
+          <!-- /.modal-header -->
+          <!-- .modal-body -->
+          <div class="modal-body">
+            <!-- .form -->
+            <?= form_open('','') ?>
+            <!-- .fieldset -->
+            <fieldset>
+              <input type="hidden" name="revision_id" id="revision_id" class="form-control" value="">
+              <!-- .form-group -->
+              <div class="form-group">
+                <div>
+                  <?= form_input('revision_edit_deadline', '', 'class="form-control mydate_modal d-none" id="revision_edit_deadline" required=""') ?>
+                </div>
+              </div>
+              <!-- /.form-group -->
+            </fieldset>
+            <!-- /.fieldset -->
+          </div>
+          <!-- /.modal-body -->
+          <!-- .modal-footer -->
+          <div class="modal-footer">
+            <button class="btn btn-primary" type="submit" id="btn-edit-revisi-deadline">Pilih</button>
+            <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+          </div>
+          <!-- /.modal-footer -->
+          <?=form_close(); ?>
+          <!-- /.form -->
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal deadline revisi-->
     <!-- modal aksi edit -->
     <div class="modal fade" id="edit_aksi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <!-- .modal-dialog -->
@@ -401,7 +483,7 @@
           <!-- .modal-body -->
           <div class="modal-body">
             <!-- .form -->
-            <?= form_open('draft/ubahnotes/'.$input->draft_id) ?>
+            <?= form_open('','') ?>
             <!-- .fieldset -->
             <fieldset>
               <!-- .form-group -->
@@ -455,7 +537,7 @@
       </div>
       <!-- /.modal-dialog -->
     </div>
-    <!-- /.modal -->
+    <!-- /.modal aksi edit-->
   </div>
   <!-- /.card-body -->
 </section>
@@ -813,8 +895,200 @@ $(document).ready(function() {
     return false;
   });
 
+  //load data ketika modal dibuka
+  $('#edit-revisi').on('shown.bs.modal', function (e) {
+    load_revisi_edit();
+  })
+
+  //kosongkan modal ketika close
+  $('#edit-revisi').on('hidden.bs.modal', function (e) {
+    $('#accordion-editor').html('');
+  })
+
+  //gantian modal revisi dan deadline revisi
+  $('#edit-revisi-deadline').on('shown.bs.modal', function (e) {
+    $('#edit-revisi').modal('toggle');
+  })
+  $('#edit-revisi-deadline').on('hidden.bs.modal', function (e) {
+    $('#edit-revisi').modal('toggle');
+  })
+
+  $('#accordion-editor').on('click', '.trigger-edit-revisi-deadline',function(e){
+    var revision_id = $(this).attr('data');
+    $('#revision_id').val(revision_id);
+  });
+
+  $('#btn-edit-revisi-deadline').on('click', function (e) {
+    var revision_id = $('#revision_id').val();
+        e.preventDefault();
+        let revision_edit_deadline = $('[name=revision_edit_deadline]').val();
+        $.ajax({
+          type: "POST",
+          url: "<?php echo base_url('draft/deadlineRevision'); ?>",
+          datatype: "JSON",
+          data: {
+            revision_id: revision_id,
+            revision_deadline: revision_edit_deadline,
+          },
+          success: function(data){
+            let datax = JSON.parse(data);
+            console.log(datax);
+            if (datax.status == true) {
+              toastr_view('111');
+            } else {
+              toastr_view('000');
+            }
+            $('#edit-revisi-deadline').modal('toggle');
+          }
+        })
+      })
+
+  function load_revisi_edit(){
+    let draft_id = $('[name=draft_id]').val();
+    $('#accordion-editor').html('<i class="fa fa-spinner fa-spin"></i> Loading data...');
+    $.ajax({
+      type: "POST",
+      url: "<?php echo base_url('draft/getRevision'); ?>",
+      datatype: "JSON",
+      data:{
+        draft_id: draft_id,
+        role: 'editor'
+      },
+      success: function(data){
+        let datax = JSON.parse(data);
+        console.log(datax.flag);
+        if(datax.flag != true){
+          $('#mulai-revisi-editor').removeAttr('disabled');
+        }
+        var i;
+        if(datax.revisi.length>0){
+          for(i=0; i<datax.revisi.length; i++){
+            $('#accordion-editor').html(datax.revisi);
+            $('.summernote-basic').summernote({
+              placeholder: 'Write here...',
+              height: 100,
+              disableDragAndDrop: true,
+              toolbar: [
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough']],
+                ['fontsize', ['fontsize','height']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['view', ['codeview']],
+              ]
+            });
+          }
+        }else{
+          $('#accordion-editor').html(datax.revisi);
+        }
+        
+      }
+    });
+  }
+
+
+
+  $('#accordion-editor').on('click', '.selesai-revisi',function(){
+    $(this).attr("disabled", "disabled");
+    var revision_id = $(this).attr('data');
+    let draft_id = $('[name=draft_id]').val();
+    $.ajax({
+      type: "POST",
+      url: "<?php echo base_url('draft/endRevision'); ?>",
+      datatype: "JSON",
+      data:{
+        revision_id : revision_id,
+        draft_id : draft_id
+      },
+      success: function(data){
+        let datax = JSON.parse(data);
+        console.log(datax);
+        if (datax.status == true) {
+          toastr_view('111');
+        } else {
+          toastr_view('000');
+        }
+        load_revisi_edit();
+      }
+    })
+  });
+
+  $('#accordion-editor').on('click', '.submit-revisi',function(){
+    var revision_id = $(this).attr('data');
+    var revision_notes = $('#revisi'+revision_id).val();
+    $.ajax({
+      type: "POST",
+      url: "<?php echo base_url('draft/submitRevision'); ?>",
+      datatype: "JSON",
+      data: {
+        revision_id: revision_id,
+        revision_notes: revision_notes
+      },
+      success: function(data){
+        let datax = JSON.parse(data);
+        console.log(datax);
+        if (datax.status == true) {
+          toastr_view('111');
+        } else {
+          toastr_view('000');
+        }
+      }
+    })
+  });
+
+  $('#accordion-editor').on('click', '.hapus-revisi',function(){
+    var id = $(this).attr('data');
+    $.ajax({
+      type: "POST",
+      url: "<?php echo base_url('draft/deleteRevision/'); ?>" + id,
+      datatype: "JSON",
+      success: function(data){
+        let datax = JSON.parse(data);
+        console.log(datax);
+        if (datax.status == true) {
+          toastr_view('111');
+        } else {
+          toastr_view('000');
+        }
+        load_revisi_edit();
+      }
+    })
+  });
+
+
+  $('#mulai-revisi-editor').on('click', function(){
+    $(this).attr("disabled", "disabled");
+    $(this).tooltip('dispose');
+    let draft_id = $('[name=draft_id]').val();
+    $.ajax({
+      type: "POST",
+      url: "<?php echo base_url('draft/insertRevision'); ?>",
+      datatype: "JSON",
+      data:{
+        draft_id: draft_id,
+        role: 'editor'
+      },
+      success: function(data){
+        let datax = JSON.parse(data);
+        console.log(datax);
+        if (datax.status == true) {
+          toastr_view('111');
+        } else {
+          toastr_view('000');
+        }
+        load_revisi_edit();
+      }
+    })
+  });
+
+
+
+
+
   $('#btn-close-editor').on('click', function() {
     location.reload();
   });
+
 })
 </script>
