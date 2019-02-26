@@ -449,9 +449,11 @@
     $('.tanggal_edit').flatpickr({
       disableMobile: true,
       altInput: true,
-      altFormat: 'j F Y',
-      dateFormat: 'Y-m-d',
-      minDate: "2000-01-01"
+      altFormat: 'j F Y H:i',
+      dateFormat: 'Y-m-d H:i',
+      minDate: "2000-01-01",
+      enableTime: true,
+      time_24hr: true
     });
     $("#category").select2({
       placeholder: '-- Choose --',
