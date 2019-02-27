@@ -30,9 +30,10 @@ var flatpickrDemo = {
     return flatpickr('.mydate', {
       disableMobile: true,
       altInput: true,
-      minDate: 'today',
       altFormat: 'j F Y',
       dateFormat: 'Y-m-d',
+      enableTime: true,
+      time_24hr: true
     });
   },
   _fp4: function _fp4() {

@@ -102,6 +102,12 @@
                   </td>
                 </tr>
                 <!-- /tr -->
+                <!-- tr -->
+                <tr>
+                  <td width="200px"> Jumlah halaman</td>
+                  <td><?= $input->draft_pages?></td>
+                </tr>
+                <!-- /tr -->
                 <!-- tampilkan status rekomendasi pada level reviewer  masing2 -->
                 <?php if ($ceklevel == 'reviewer' and $reviewer_order == 0): ?>
                 <!-- tr -->

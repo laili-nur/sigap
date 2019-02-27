@@ -655,7 +655,7 @@ class Draft extends Operator_Controller
             $input = (object) $draft;
         } else {
             $input             = (object) $this->input->post(null, false);
-            $input->draft_file = $draft->draft_file; // Set draft file for preview.
+            //$input->draft_file = $draft->draft_file; // Set draft file for preview.
 
         }
         if ($this->draft->validate()) {

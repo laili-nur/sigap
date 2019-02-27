@@ -92,6 +92,13 @@
             <!-- /.form-group -->
             <!-- .form-group -->
             <div class="form-group">
+              <label for="draft_pages">Jumlah Halaman</label>
+              <?=form_input('draft_pages', $input->draft_pages, 'class="form-control" id="draft_pages"');?>
+              <?=form_error('draft_pages');?>
+            </div>
+            <!-- /.form-group -->
+            <!-- .form-group -->
+            <div class="form-group">
               <label for="entry_date">Tanggal Masuk
                 <abbr title="Required">*</abbr>
               </label>

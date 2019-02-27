@@ -29,6 +29,11 @@ class Draft_model extends MY_Model
                 'rules' => 'trim'
             ],
             [
+                'field' => 'draft_pages',
+                'label' => 'Halaman Draft',
+                'rules' => 'trim'
+            ],
+            [
                 'field' => 'entry_date',
                 'label' => 'Entry Date',
                 'rules' => 'trim'
@@ -289,6 +294,7 @@ class Draft_model extends MY_Model
             'category_id'            => '',
             'theme_id'               => '',
             'draft_title'            => '',
+            'draft_pages'            => '',
             'author_id'              => '',
             'draft_file'             => '',
             'entry_date'             => '',

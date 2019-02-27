@@ -171,6 +171,14 @@
             <li class="menu-header">Pengaturan </li>
             <!-- /.menu-header -->
             <!-- .menu-item -->
+            <li class="menu-item <?=($pages=='document')?'has-active':'' ?>">
+              <a href="<?=base_url('document') ?>" class="menu-link">
+                <span class="menu-icon fa fa-users"></span>
+                <span class="menu-text">Dokumen</span>
+              </a>
+            </li>
+            <!-- /.menu-item -->
+            <!-- .menu-item -->
             <li class="menu-item <?=($pages=='user')?'has-active':'' ?>">
               <a href="<?=base_url('user') ?>" class="menu-link">
                 <span class="menu-icon fa fa-users"></span>
