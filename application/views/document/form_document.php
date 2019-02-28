@@ -3,10 +3,10 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="<?=base_url()?>"><span class="fa fa-home"></span> Admin Panel</a>
+        <a href="<?=base_url()?>"><span class="fa fa-home"></span></a>
       </li>
       <li class="breadcrumb-item">
-        <a href="<?=base_url('user')?>">Document</a>
+        <a href="<?=base_url('document')?>">Document</a>
       </li>
       <li class="breadcrumb-item">
         <a class="text-muted">Form</a>
@@ -36,6 +36,13 @@
               </label>
               <?= form_input('document_name', $input->document_name, 'class="form-control" id="document_name"') ?>
               <?= form_error('document_name') ?>
+            </div>
+            <!-- /.form-group -->
+             <!-- .form-group -->
+            <div class="form-group">
+              <label for="document_year">Tahun Dokumen</label>
+              <?= form_input('document_year', $input->document_year, 'class="form-control dokumen" id="document_year"') ?>
+              <?= form_error('document_year') ?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
@@ -90,12 +97,15 @@
           document_name : "crequired",
           document_file: {
             require_from_group: [1, ".dokumen"],
-            dokumen: "docx|doc|pdf|jpeg|jpg|png",
+            dokumen: "docx|doc|pdf|jpeg|jpg|png|xls|xlsx|zip|rar",
             filesize50: 52428200
           },
           document_file_link: {
             curl: true,
             require_from_group: [1, ".dokumen"]
+          },
+          document_year : {
+            crange : [1900,2100]
           }
         },
         errorElement: "span",

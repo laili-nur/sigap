@@ -1,5 +1,29 @@
 <?php
 
+function lihatEkstensi($ext='')
+{
+    if(!empty($ext)){
+        $getextension  = explode(".", $ext);
+        return strtolower($getextension[1]);
+    }else{
+        return false;
+    }
+    
+}
+
+function getYearsDocument()
+{
+  $tahun =array();
+  $CI =& get_instance();
+  $filtertahun = $CI->db->from('document')->group_by('document_year')->get();
+  $filtertahunz = $filtertahun->result();
+  foreach ($filtertahunz as $key => $value){
+    $tahun[$value->document_year] = $value->document_year;
+  }
+    $tahun[''] = '';
+  return($tahun);
+}
+
 function getYears()
 {
   $tahun =array();

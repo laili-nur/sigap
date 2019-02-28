@@ -7,11 +7,27 @@ class Document extends Admin_Controller {
     }
 
     public function index($page = null) {
-        $documents = $this->document->paginate($page)->getAll();
+        $documents = $this->document->paginate($page)->orderBy('document_year','desc')->orderBy('document_name')->getAll();
         $total = $this->document->count();
         $pages = $this->pages;
         $main_view = 'document/index_document';
         $pagination = $this->document->makePagination(site_url('document'), 2, $total);
+        $this->load->view('template', compact('pagination', 'pages', 'main_view', 'documents', 'total'));
+    }
+
+    public function filter($page = null) {
+        $filter = $this->input->get('filter', true);
+        if($filter!= ''){
+            $documents = $this->document->where('document_year',$filter)->paginate($page)->orderBy('document_year','desc')->orderBy('document_name')->getAll();
+            $total = $this->document->where('document_year',$filter)->count();
+        }else{
+            $documents = $this->document->paginate($page)->orderBy('document_year','desc')->orderBy('document_name')->getAll();
+            $total = $this->document->count();
+        }
+        
+        $pages = $this->pages;
+        $main_view = 'document/index_document';
+        $pagination = $this->document->makePagination(site_url('document/filter'), 3, $total);
         $this->load->view('template', compact('pagination', 'pages', 'main_view', 'documents', 'total'));
     }
 
@@ -41,6 +57,7 @@ class Document extends Admin_Controller {
             return;
         }
 
+        
         if ($this->document->insert($input)) {
             $this->session->set_flashdata('success', 'Data saved');
         } else {
@@ -83,6 +100,12 @@ class Document extends Admin_Controller {
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
+
+        if(empty($input->document_year)){
+            $input->document_year =  date('Y');
+        }
+
+
         if ($this->document->where('document_id', $id)->update($input)) {
             $this->session->set_flashdata('success', 'Data saved');
         } else {
@@ -120,6 +143,12 @@ class Document extends Admin_Controller {
         $pages = $this->pages;
         $main_view = 'document/index_document';
         $this->load->view('template', compact('pages', 'main_view', 'documents', 'pagination', 'total'));
+    }
+
+    public function download($path, $file_name)
+    {
+        $this->load->helper('download');
+        force_download('./' . $path . '/' . $file_name, null);
     }
 
 }

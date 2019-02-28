@@ -38,7 +38,7 @@ class Document_model extends MY_Model
             'document_name'  => '',
             'document_file'  => '',
             'document_file_link'     => '',
-            'document_year' => '',
+            'document_year' => date('Y'),
             'document_notes' => ''
         ];
     }
@@ -48,7 +48,7 @@ class Document_model extends MY_Model
         $config = [
             'upload_path'      => './documentfile/',
             'file_name'        => $documentFileName,
-            'allowed_types'    => 'docx|doc|pdf|jpeg|jpg|png',    // docx only
+            'allowed_types'    => 'docx|doc|pdf|jpeg|jpg|png|xls|xlsx|zip|rar',   
             'max_size'         => 51200,     // 50MB
             'overwrite'        => true,
             'file_ext_tolower' => true,

@@ -65,6 +65,7 @@ $route['responsibility/(:num)'] = 'responsibility/index/$1';
 $route['user/(:num)'] = 'user/index/$1';
 $route['theme/(:num)'] = 'theme/index/$1';
 $route['book/(:num)'] = 'book/index/$1';
+$route['document/(:num)'] = 'document/index/$1';
 
 
 $route['workunit'] = 'work_unit';
