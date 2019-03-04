@@ -130,7 +130,7 @@ class Reporting extends Admin_Controller {
 			if($hasil_editor->is_proofread == 'y' AND $hasil_editor->is_print == 'n'){
 				$count_print++;
 			}
-			if($hasil_editor->is_print == 'y' OR $hasil_editor->draft_status == 14){
+			if($hasil_editor->is_print == 'y'){
 				$count_final++;
 			}
 		}
@@ -188,7 +188,7 @@ class Reporting extends Admin_Controller {
 			if(($hasil_editor->is_proofread == 'y' AND $hasil_editor->is_print == 'n') AND $hasil_editor->is_reprint == 'n'){
 				$count_print_baru++;
 			}
-			if(($hasil_editor->is_print == 'y' OR $hasil_editor->draft_status == 14) AND $hasil_editor->is_reprint == 'n'){
+			if(($hasil_editor->is_print == 'y') AND $hasil_editor->is_reprint == 'n'){
 				$count_final_baru++;
 			}
 		}
@@ -234,7 +234,7 @@ class Reporting extends Admin_Controller {
 
 		$result_editor = $this->reporting->select(['is_review','is_edit','is_layout','is_proofread', 'is_print', 'is_reprint'])->getSummaryUlang($year);
 		foreach ($result_editor as $hasil_editor) {
-			if (($hasil_editor->is_review == 'y' AND $hasil_editor->is_edit == 'n') AND $hasil_editor->is_reprint == 'y') {
+			if (($hasil_editor->draft_status == 6) AND $hasil_editor->is_reprint == 'y') {
 				$count_editor_ulang++;
 			}
 			if(($hasil_editor->is_edit == 'y' AND $hasil_editor->is_layout == 'n') AND $hasil_editor->is_reprint == 'y'){
@@ -246,7 +246,7 @@ class Reporting extends Admin_Controller {
 			if(($hasil_editor->is_proofread == 'y' AND $hasil_editor->is_print == 'n') AND $hasil_editor->is_reprint == 'y'){
 				$count_print_ulang++;
 			}
-			if(($hasil_editor->is_print == 'y' OR $hasil_editor->draft_status == 14) AND $hasil_editor->is_reprint == 'y'){
+			if(($hasil_editor->is_print == 'y') AND $hasil_editor->is_reprint == 'y'){
 				$count_final_ulang++;
 			}
 		}
