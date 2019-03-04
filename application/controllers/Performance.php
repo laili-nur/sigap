@@ -11,7 +11,7 @@ class Performance extends Admin_Controller {
 		// $performance_editor = $this->performance->select(['draft.draft_id','draft_title','username','category_name','edit_start_date','edit_deadline','edit_end_date','is_edit','performance_status'])->join3('category','draft','category')->join3('responsibility','draft','draft')->join3('user','responsibility','user')->where('level', 'editor')->where('responsibility.user_id !=', null)->orderBy('performance_status')->getAll('draft');
 
 
-		
+
 	}
 
 	/* Fungsi untuk menampilkan halaman performa editor */

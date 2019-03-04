@@ -54,7 +54,7 @@ function(data){
       labels: ['UGM', 'Selain UGM'],
       datasets: [{
         label : 'Penulis',
-        data: [lain, ugm],
+        data: [ugm, lain],
         backgroundColor : [
           'rgba(54, 162, 235, 1)',
           'rgba(198, 198, 198, 1)'

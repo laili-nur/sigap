@@ -118,7 +118,7 @@ class Reporting extends Admin_Controller {
 
 		$result_editor = $this->reporting->select(['is_review','is_edit','is_layout','is_proofread', 'is_print'])->getSummary($year);
 		foreach ($result_editor as $hasil_editor) {
-			if ($hasil_editor->is_review == 'y' AND $hasil_editor->is_edit == 'n') {
+			if ($hasil_editor->draft_status == 6 AND $hasil_editor->is_edit == 'n') {
 				$count_editor++;
 			}
 			if($hasil_editor->is_edit == 'y' AND $hasil_editor->is_layout == 'n'){
@@ -174,9 +174,9 @@ class Reporting extends Admin_Controller {
 		}
 		$result['count_disetujui_baru'] = $count_disetujui_baru;
 
-		$result_editor = $this->reporting->select(['is_review','is_edit','is_layout','is_proofread', 'is_print', 'is_reprint'])->getSummaryBaru($year);
+		$result_editor = $this->reporting->select(['is_review','is_edit','is_layout','is_proofread', 'is_print', 'is_reprint','draft_status'])->getSummaryBaru($year);
 		foreach ($result_editor as $hasil_editor) {
-			if (($hasil_editor->is_review == 'y' AND $hasil_editor->is_edit == 'n') AND $hasil_editor->is_reprint == 'n') {
+			if (($hasil_editor->draft_status == 6) AND $hasil_editor->is_reprint == 'n') {
 				$count_editor_baru++;
 			}
 			if(($hasil_editor->is_edit == 'y' AND $hasil_editor->is_layout == 'n') AND $hasil_editor->is_reprint == 'n'){
@@ -266,7 +266,7 @@ class Reporting extends Admin_Controller {
 
 		$result_ugm = $this->reporting->select(['institute_id'])->getAll('author');
 		foreach ($result_ugm as $institute_ugm){
-			if ($institute_ugm->institute_id == 4) {
+			if ($institute_ugm->institute_id == 1) {
 				$count_ugm++;
 			}
 			else {
@@ -310,15 +310,18 @@ class Reporting extends Admin_Controller {
 		$count_cetak_ulang = 0;
 		$year = $this->input->get('droptahunhibah');
 
-		$result_ugm = $this->reporting->select(['category_type'])->join3('category', 'draft', 'category')->where('YEAR(entry_date)',$year)->getAll('draft');
+		$result_ugm = $this->reporting->select(['category_type','is_reprint'])->join3('category', 'draft', 'category')->where('YEAR(entry_date)',$year)->getAll('draft');
 		foreach ($result_ugm as $category_ugm){
-			if ($category_ugm->category_type == 1) {
+			if ($category_ugm->category_type == 1 AND $category_ugm->is_reprint == 'n') {
 				$count_hibah++;
 			}
-			elseif ($category_ugm->category_type == 2){
+			if ($category_ugm->category_type == 2 AND $category_ugm->is_reprint == 'n'){
 				$count_reguler++;
 			}
-			else {
+			if ($category_ugm->category_type == 3){
+				$count_cetak_ulang++;
+			}
+			if (($category_ugm->category_type == 1 OR $category_ugm->category_type == 2) AND $category_ugm->is_reprint == 'y'){
 				$count_cetak_ulang++;
 			}
 		}
