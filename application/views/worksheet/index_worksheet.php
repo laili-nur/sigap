@@ -5,11 +5,11 @@
   if (isset($keywords) or isset($filter)) {
     $page = $this->uri->segment(3);
   } else {
-    $page = $this->uri->segment(2); 
+    $page = $this->uri->segment(2);
   }
       // data table series number
   $i = isset($page) ? $page * $perPage - $perPage : 0;
-  
+
   $filter_worksheet = [
     '' => '- Filter Status -',
     'waiting' => ' Menunggu',
@@ -99,6 +99,7 @@
                 <tr>
                   <th scope="col" class="pl-4">No</th>
                   <th scope="col" style="min-width:350px;">Judul Draft</th>
+                  <th scope="col">Tahun Masuk</th>
                   <th scope="col" style="min-width:120px;">Nomor Lembar Kerja</th>
                   <th scope="col">Jenis</th>
                   <th scope="col">Revisi</th>
@@ -115,6 +116,7 @@
                 <tr>
                   <td class="align-middle pl-4"><?= ++$i ?></td>
                   <td class="align-middle"><a title="Lihat detail draft" href="<?= base_url('draft/view/'.$worksheet->draft_id) ?>"><?= $worksheet->draft_title ?></a></td>
+                  <td class="align-middle"><?=date('Y',strtotime($worksheet->entry_date)) ?></td>
                   <td class="align-middle"><a title="Lihat Desk Screening" href="<?= base_url('worksheet/edit/'.$worksheet->worksheet_id) ?>"><?= $worksheet->worksheet_num ?></a></td>
                   <td class="align-middle"><?= $worksheet->is_reprint == 'y' ? 'Cetak Ulang' : 'Baru' ?></td>
                   <td class="align-middle"><?= $worksheet->is_revise == 'y' ? '<i class="fa fa-check text-success"></i>' : '<i class="fa fa-times text-danger"></i>' ?></td>
@@ -130,7 +132,7 @@
                       $status = '<span class="badge badge-warning">Waiting</span>';
                     }
                     echo $status;
-                    ?>        
+                    ?>
                   </td>
                   <td class="align-middle"><?= $worksheet->worksheet_pic ?></td>
                   <td class="align-middle text-right">
@@ -170,7 +172,7 @@
           <?php endif ?>
           <!-- /.table-responsive -->
           <!-- Pagination -->
-          <?php if ($pagination): ?>          
+          <?php if ($pagination): ?>
           <?= $pagination ?>
           <?php else: ?>
           &nbsp;
