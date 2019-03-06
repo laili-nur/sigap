@@ -20,6 +20,7 @@
 <ul nav class="nav nav-tabs">
   <li class="nav-item"><a class="nav-link active" href="<?= base_url('performance/index') ?>">Performa Editor</a></li>
   <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/performa_layouter') ?>">Performa Layouter</a></li>
+  <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/index_edit_revise') ?>">Revisi Naskah</a></li>
 </ul>
 <br/>
 <div class="dropdown">

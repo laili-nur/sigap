@@ -119,6 +119,16 @@ class Performance extends Admin_Controller {
 		$this->load->view('template', compact('pagination','main_view', 'pages', 'performance_editor','total'));
 	}
 
+	public function index_edit_revise()
+	{
+		$revisi_naskah = $this->performance->select(['draft.draft_id','draft_title','revision_role','revision_start_date','revision_deadline','revision_end_date'])->join3('draft','revision','draft')->where('revision_role', 'editor')->getAll('revision');
+
+		$pages    = $this->pages;
+		$main_view = 'performance/naskah_revisi';
+
+		$this->load->view('template', compact('pagination','main_view', 'pages', 'revisi_naskah','total'));
+	}
+
 	public function performa_layouter()
 	{
 
@@ -219,5 +229,15 @@ class Performance extends Admin_Controller {
 		$main_view = 'performance/performance_layouter';
 
 		$this->load->view('template', compact('main_view', 'pages', 'performance_layouter'));
+	}
+
+	public function index_layout_revise()
+	{
+		$revisi_naskah = $this->performance->select(['draft.draft_id','draft_title','revision_role','revision_start_date','revision_deadline','revision_end_date'])->join3('draft','revision','draft')->where('revision_role', 'layouter')->getAll('revision');
+
+		$pages    = $this->pages;
+		$main_view = 'performance/naskah_revisi';
+
+		$this->load->view('template', compact('pagination','main_view', 'pages', 'revisi_naskah','total'));
 	}
 }
