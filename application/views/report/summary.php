@@ -48,6 +48,61 @@
   <h5>Laporan Grafik Ringkasan Pencetakan Buku</h5>
 </div>
 
+<div class="bg-modal">
+  <div class="modal-content">
+
+<div class="close">+</div>
+<form action="">
+  <a href="<?=base_url('draft/filter?filter=review') ?>" target="_blank" class="badge badge-primary">Review</a>
+  <a href="<?=base_url('draft/filter?filter=edit') ?>" target="_blank" class="badge badge-primary">Editorial</a>
+  <a href="<?=base_url('draft/filter?filter=layout') ?>" target="_blank" class="badge badge-primary">Layout</a>
+  <a href="<?=base_url('draft/filter?filter=proofread') ?>" target="_blank" class="badge badge-primary">Proofread</a>
+  <a href="<?=base_url('draft/filter?filter=cetak') ?>" target="_blank" class="badge badge-primary">Cetak</a>
+  <a href="<?=base_url('draft/filter?filter=final') ?>" target="_blank" class="badge badge-primary">Final</a>
+</form>
+
+  </div>
+</div>
+
+<style>
+  .bg-modal{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none;
+  }
+
+  .modal-content{
+    width: 600px;
+    height: 125px;
+    background-color: white;
+    border-radius: 4px;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .badge-primary{
+    width:15%;
+    height: 20%;
+    font-size: 12px;
+    display: inline-grid;
+    margin: 40px auto ;
+  }
+
+  .close{
+    position: absolute;
+    top:0;
+    right: 10px;
+    font-size: 32px;
+    transform: rotate(45deg);
+    cursor: pointer;
+  }
+</style>
 <!-- graph for summary -->
 
 <canvas id="myChart" width="500" height="170"></canvas>
@@ -107,6 +162,7 @@ function(data){
       }]
     },
     options: {
+      onClick: alertBox,
       legend: {
         display : false,
       },
@@ -153,8 +209,19 @@ function(data){
           top:10,
           bottom:50,
         }
+      },
+      tooltips: {
+
       }
     }
   });
+});
+
+function alertBox(){
+  document.querySelector('.bg-modal').style.display = 'flex';
+};
+document.querySelector('.close').addEventListener('click',
+function(){
+  document.querySelector('.bg-modal').style.display = 'none';
 });
 </script>
