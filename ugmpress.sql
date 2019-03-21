@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 21, 2019 at 07:25 AM
+-- Generation Time: Mar 21, 2019 at 07:34 AM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 7.0.32
 
@@ -1623,18 +1623,20 @@ CREATE TABLE `revision` (
   `revision_start_date` datetime NOT NULL,
   `revision_end_date` datetime NOT NULL,
   `revision_deadline` datetime NOT NULL,
-  `revision_notes` text NOT NULL
+  `revision_notes` text NOT NULL,
+  `user_id` mediumint(9) DEFAULT NULL,
+  `revision_status` enum('1','2','3','4','5') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `revision`
 --
 
-INSERT INTO `revision` (`revision_id`, `draft_id`, `revision_role`, `revision_start_date`, `revision_end_date`, `revision_deadline`, `revision_notes`) VALUES
-(1, 142, 'editor', '2019-03-06 13:33:42', '2019-03-06 13:33:46', '2019-03-13 13:33:42', ''),
-(2, 142, 'editor', '2019-03-06 13:33:48', '0000-00-00 00:00:00', '2019-03-13 13:33:48', ''),
-(3, 142, 'layouter', '2019-03-06 13:33:55', '2019-03-06 13:34:01', '2019-03-13 13:33:55', ''),
-(4, 142, 'layouter', '2019-03-06 13:34:03', '0000-00-00 00:00:00', '2019-03-13 13:34:03', '');
+INSERT INTO `revision` (`revision_id`, `draft_id`, `revision_role`, `revision_start_date`, `revision_end_date`, `revision_deadline`, `revision_notes`, `user_id`, `revision_status`) VALUES
+(1, 142, 'editor', '2019-03-06 13:33:42', '2019-03-06 13:33:46', '2019-03-13 13:33:42', '', NULL, NULL),
+(2, 142, 'editor', '2019-03-06 13:33:48', '0000-00-00 00:00:00', '2019-03-13 13:33:48', '', NULL, NULL),
+(3, 142, 'layouter', '2019-03-06 13:33:55', '2019-03-06 13:34:01', '2019-03-13 13:33:55', '', NULL, NULL),
+(4, 142, 'layouter', '2019-03-06 13:34:03', '0000-00-00 00:00:00', '2019-03-13 13:34:03', '', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2611,7 +2613,8 @@ ALTER TABLE `reviewer`
 --
 ALTER TABLE `revision`
   ADD PRIMARY KEY (`revision_id`),
-  ADD KEY `revision_ibfk_1` (`draft_id`);
+  ADD KEY `revision_ibfk_1` (`draft_id`),
+  ADD KEY `revision_ibfk_2` (`user_id`);
 
 --
 -- Indexes for table `theme`
@@ -2794,7 +2797,8 @@ ALTER TABLE `reviewer`
 -- Constraints for table `revision`
 --
 ALTER TABLE `revision`
-  ADD CONSTRAINT `revision_ibfk_1` FOREIGN KEY (`draft_id`) REFERENCES `draft` (`draft_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `revision_ibfk_1` FOREIGN KEY (`draft_id`) REFERENCES `draft` (`draft_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `revision_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `worksheet`
