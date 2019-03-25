@@ -1,5 +1,5 @@
-<?php 
-  $ceklevel = $this->session->userdata('level'); 
+<?php
+  $ceklevel = $this->session->userdata('level');
   $sisa_waktu_layout = ceil((strtotime($input->layout_deadline)-strtotime(date('Y-m-d H:i:s')))/86400);
   ?>
 <!-- .card -->
@@ -143,6 +143,7 @@
               </p>
               <?=(!empty($input->layout_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->layout_file.'" href="'.base_url('draftfile/'.$input->layout_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
               <?=(!empty($input->layouter_file_link))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->layouter_file_link.'" href="'.$input->layouter_file_link.'" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
+              <?=(!empty($input->layouter_file_link) or !empty($input->layout_file))? '<button data-toggle="tooltip" data-placement="right" title="" data-original-title="hapus file" class="btn btn-danger" id="btn-delete-layout"><i class="fa fa-trash"></i></button>' : '' ?>
             </div>
             <?php endif ?>
             <!-- endif download ditampilkan di level tertentu -->
@@ -155,7 +156,7 @@
               <div class="form-group">
                 <label for="cl" class="font-weight-bold">Catatan Layout</label>
                 <small class="text-muted" id="layout_last_notes"><?=konversiTanggal($input->layout_notes_date) ?></small>
-                <?php 
+                <?php
                       $optionscl = array(
                         'name' => 'layout_notes',
                         'class'=> 'form-control summernote-basic',
@@ -175,7 +176,7 @@
               <!-- .form-group -->
               <div class="form-group">
                 <label for="clp" class="font-weight-bold">Catatan Editor</label>
-                <?php 
+                <?php
                       $optionsclp = array(
                         'name' => 'layout_notes_author',
                         'class'=> 'form-control summernote-basic',
@@ -312,7 +313,7 @@
               <!-- .form-group -->
               <div class="form-group">
                 <label for="cc" class="font-weight-bold">Catatan Cover</label>
-                <?php 
+                <?php
                       $optionscc = array(
                         'name' => 'cover_notes',
                         'class'=> 'form-control summernote-basic',
@@ -332,7 +333,7 @@
               <!-- .form-group -->
               <div class="form-group">
                 <label for="ccp" class="font-weight-bold">Catatan Editor</label>
-                <?php 
+                <?php
                       $optionsccp = array(
                         'name' => 'cover_notes_author',
                         'class'=> 'form-control summernote-basic',
@@ -590,7 +591,7 @@
                 <div class="alert alert-info">
                   Catatan admin dapat dilihat oleh semua user yang terkait dengan draft ini.
                 </div>
-                <?php 
+                <?php
                       $hidden_date = array(
                         'type'  => 'hidden',
                         'id'    => 'layout_finish_date',
@@ -774,6 +775,30 @@ $(document).ready(function() {
     },
     select2_validasi()
   );
+
+   //tombol hapus file
+   $('#modal-layout').on('click','#btn-delete-layout', function(){
+    var $this = $(this);
+    $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
+    var id = $('input[name=draft_id]').val();
+    var jenis = 'layout';
+    $.ajax({
+      type: "POST",
+      url: "<?php echo base_url('draft/delete_progress/'); ?>" + id + "/" + jenis,
+      datatype: "JSON",
+      success: function(data){
+        let datax = JSON.parse(data);
+        console.log(datax);
+        if (datax.status == true) {
+          toastr_view('111');
+        } else {
+          toastr_view('000');
+        }
+        $('#modal-layout').load(' #modal-layout');
+        $('#layouter_file_link').val('');
+      }
+    })
+  });
 
   //pilih layouter
   $('#btn-pilih-layouter').on('click', function() {
@@ -1081,7 +1106,7 @@ $(document).ready(function() {
   $('#accordion-layouter').on('click', '.trigger-layout-revisi-deadline',function(e){
     var revision_id = $(this).attr('data');
     $('#revision_id').val(revision_id);
-     
+
   });
 
   $('#btn-layout-revisi-deadline').on('click', function (e) {
@@ -1149,7 +1174,7 @@ $(document).ready(function() {
         }else{
           $('#accordion-layouter').html(datax.revisi);
         }
-        
+
       }
     });
   }

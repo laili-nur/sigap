@@ -1,4 +1,4 @@
-<?php 
+<?php
   $ceklevel = $this->session->userdata('level');
   $sisa_waktu_edit = ceil((strtotime($input->edit_deadline)-strtotime(date('Y-m-d H:i:s')))/86400);
   ?>
@@ -52,9 +52,7 @@
         <?php if ($editors) {
           foreach ($editors as $editor){
             echo '<span class="badge badge-info p-1">'.$editor->username.'</span> ';
-          }
-          }
-          ?>
+          }}?>
       </div>
     </div>
     <?php endif ?>
@@ -147,6 +145,7 @@
               </p>
               <?=(!empty($input->edit_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->edit_file.'" href="'.base_url('draftfile/'.$input->edit_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
               <?=(!empty($input->editor_file_link))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->editor_file_link.'" href="'.$input->editor_file_link.'" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
+              <?=(!empty($input->editor_file_link) or !empty($input->edit_file))? '<button data-toggle="tooltip" data-placement="right" title="" data-original-title="hapus file" class="btn btn-danger" id="btn-delete-edit"><i class="fa fa-trash"></i></button>' : '' ?>
             </div>
             <hr class="my-3">
             <!-- .form -->
@@ -158,7 +157,7 @@
                 <label for="ce" class="font-weight-bold">Catatan Editor</label>
                 <small class="text-muted" id="edit_last_notes">
                   <?=konversiTanggal($input->edit_notes_date) ?></small>
-                <?php 
+                <?php
                   $optionsce = array(
                       'name' => 'edit_notes',
                       'class'=> 'form-control summernote-basic',
@@ -178,7 +177,7 @@
               <!-- .form-group -->
               <div class="form-group">
                 <label for="cep" class="font-weight-bold">Catatan Penulis</label>
-                <?php 
+                <?php
                   $optionscep = array(
                       'name' => 'edit_notes_author',
                       'class'=> 'form-control summernote-basic',
@@ -237,7 +236,7 @@
               <!-- .form-group -->
               <div class="form-group">
                 <label for="cecon" class="font-weight-bold">Catatan Editor</label>
-                <?php 
+                <?php
                   $optionscecon = array(
                       'name' => 'edit_notes_confidential',
                       'class'=> 'form-control summernote-basic',
@@ -492,7 +491,7 @@
                 <div class="alert alert-info">
                   Catatan admin dapat dilihat oleh semua user yang terkait dengan draft ini.
                 </div>
-                <?php 
+                <?php
                   $hidden_date = array(
                       'type'  => 'hidden',
                       'id'    => 'edit_finish_date',
@@ -612,6 +611,31 @@ $(document).ready(function() {
     },
     select2_validasi()
   );
+
+  //tombol hapus file
+  $('#modal-edit').on('click','#btn-delete-edit', function(){
+    var $this = $(this);
+    $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
+    var id = $('input[name=draft_id]').val();
+
+    var jenis = 'edit';
+    $.ajax({
+      type: "POST",
+      url: "<?php echo base_url('draft/delete_progress/'); ?>" + id + "/" + jenis,
+      datatype: "JSON",
+      success: function(data){
+        let datax = JSON.parse(data);
+        console.log(datax);
+        if (datax.status == true) {
+          toastr_view('111');
+        } else {
+          toastr_view('000');
+        }
+        $('#modal-edit').load(' #modal-edit');
+        $('#editor_file_link').val('');
+      }
+    })
+  });
 
   //tombol pilih editor
   $('#btn-pilih-editor').on('click', function() {
@@ -982,7 +1006,7 @@ $(document).ready(function() {
         }else{
           $('#accordion-editor').html(datax.revisi);
         }
-        
+
       }
     });
   }
