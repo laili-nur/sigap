@@ -110,7 +110,7 @@ tr:nth-child(even) {
   <script>
   $(document).ready(function() {
     $('#layoutertable').DataTable({
-
+      "order": [[ 5, "asc" ]]
     });
   } );
   </script>
