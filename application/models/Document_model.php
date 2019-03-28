@@ -48,7 +48,7 @@ class Document_model extends MY_Model
         $config = [
             'upload_path'      => './documentfile/',
             'file_name'        => $documentFileName,
-            'allowed_types'    => 'docx|doc|pdf|jpeg|jpg|png|xls|xlsx|zip|rar',   
+            'allowed_types'    => 'txt|docx|doc|pdf|jpeg|jpg|png|xls|xlsx|zip|rar',   
             'max_size'         => 51200,     // 50MB
             'overwrite'        => true,
             'file_ext_tolower' => true,

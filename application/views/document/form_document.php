@@ -52,7 +52,7 @@
                 <?=form_upload('document_file', '', 'class="custom-file-input dokumen"');?>
                 <label class="custom-file-label" for="document_file">Choose file</label>
               </div>
-              <small class="form-text text-muted">Tipe file upload bertype : jpg, png, jpeg, docx, doc, dan pdf. Maksimal 50 MB</small>
+              <small class="form-text text-muted">Tipe file upload bertype : txt, jpg, png, jpeg, docx, doc, xls, xlsx, zip, rar dan pdf. Maksimal 50 MB</small>
               <?=fileFormError('document_file', '<p class="text-danger">', '</p>');?>
             </div>
             <!-- /.form-group -->
@@ -97,7 +97,7 @@
           document_name : "crequired",
           document_file: {
             require_from_group: [1, ".dokumen"],
-            dokumen: "docx|doc|pdf|jpeg|jpg|png|xls|xlsx|zip|rar",
+            dokumen: "txt|docx|doc|pdf|jpeg|jpg|png|xls|xlsx|zip|rar",
             filesize50: 52428200
           },
           document_file_link: {

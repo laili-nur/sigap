@@ -113,7 +113,7 @@
                 <?= form_upload('edit_file','','class="custom-file-input naskah" id="edit_file"') ?>
                 <label class="custom-file-label" for="edit_file">Choose file</label>
               </div>
-              <small class="form-text text-muted">Tipe file upload bertype : docx, doc, dan pdf.</small>
+              <small class="form-text text-muted">Tipe file upload bertype : docx, doc, pdf, zip, dan rar.</small>
               <!-- /.input-group -->
             </div>
             <!-- /.form-group -->
@@ -443,6 +443,20 @@
             <!-- .fieldset -->
             <fieldset>
               <input type="hidden" name="revision_id" id="revision_id" class="form-control" value="">
+               <!-- .form-group -->
+              <div class="form-group">
+                <div>
+                  <?= form_input('revision_edit_start_date', '', 'class="form-control mydate_modal d-none" id="revision_edit_start_date" required=""') ?>
+                </div>
+              </div>
+              <!-- /.form-group -->
+               <!-- .form-group -->
+              <div class="form-group">
+                <div>
+                  <?= form_input('revision_edit_end_date', '', 'class="form-control mydate_modal d-none" id="revision_edit_end_date" required=""') ?>
+                </div>
+              </div>
+              <!-- /.form-group -->
               <!-- .form-group -->
               <div class="form-group">
                 <div>
@@ -552,7 +566,7 @@ $(document).ready(function() {
       rules: {
         edit_file: {
           require_from_group: [1, ".naskah"],
-          dokumen: "docx|doc|pdf",
+          dokumen: "docx|doc|pdf|zip|rar",
           filesize50: 52428200
         },
         editor_file_link: {
@@ -930,11 +944,11 @@ $(document).ready(function() {
   })
 
   //gantian modal revisi dan deadline revisi
-  $('#edit-revisi-deadline').on('shown.bs.modal', function (e) {
-    $('#edit-revisi').modal('toggle');
-  })
+  // $('#edit-revisi-deadline').on('shown.bs.modal', function (e) {
+  //   $('#edit-revisi').modal('toggle');
+  // })
   $('#edit-revisi-deadline').on('hidden.bs.modal', function (e) {
-    $('#edit-revisi').modal('toggle');
+    load_revisi_edit();
   })
 
   $('#accordion-editor').on('click', '.trigger-edit-revisi-deadline',function(e){
@@ -946,6 +960,8 @@ $(document).ready(function() {
     var revision_id = $('#revision_id').val();
         e.preventDefault();
         let revision_edit_deadline = $('[name=revision_edit_deadline]').val();
+        let revision_edit_start_date = $('[name=revision_edit_start_date]').val();
+        let revision_edit_end_date = $('[name=revision_edit_end_date]').val();
         $.ajax({
           type: "POST",
           url: "<?php echo base_url('draft/deadlineRevision'); ?>",
@@ -953,6 +969,8 @@ $(document).ready(function() {
           data: {
             revision_id: revision_id,
             revision_deadline: revision_edit_deadline,
+            revision_start_date: revision_edit_start_date,
+            revision_end_date: revision_edit_end_date,
           },
           success: function(data){
             let datax = JSON.parse(data);

@@ -110,7 +110,7 @@
                 <?= form_upload('layout_file','','class="custom-file-input naskah" id="layout_file"') ?>
                 <label class="custom-file-label" for="layout_file">Choose file</label>
               </div>
-              <small class="form-text text-muted">Tipe file upload  bertype : idml, indd, indt dan pdf.</small>
+              <small class="form-text text-muted">Tipe file upload  bertype : idml, indd, indt, pdf, rar, dan zip.</small>
               <!-- /.input-group -->
             </div>
             <!-- /.form-group -->
@@ -546,6 +546,22 @@
               <div class="form-group">
                 <!-- <label for="edit_deadline">Deadline Edit</label> -->
                 <div>
+                  <?= form_input('revision_layout_start_date', '', 'class="form-control mydate_modal d-none" id="revision_layout_start_date" required=""') ?>
+                </div>
+              </div>
+              <!-- /.form-group -->
+              <!-- .form-group -->
+              <div class="form-group">
+                <!-- <label for="edit_deadline">Deadline Edit</label> -->
+                <div>
+                  <?= form_input('revision_layout_end_date', '', 'class="form-control mydate_modal d-none" id="revision_layout_end_date" required=""') ?>
+                </div>
+              </div>
+              <!-- /.form-group -->
+              <!-- .form-group -->
+              <div class="form-group">
+                <!-- <label for="edit_deadline">Deadline Edit</label> -->
+                <div>
                   <?= form_input('revision_layout_deadline', '', 'class="form-control mydate_modal d-none" id="revision_layout_deadline" required=""') ?>
                 </div>
               </div>
@@ -651,7 +667,7 @@ $(document).ready(function() {
       rules: {
         layout_file: {
           require_from_group: [1, ".naskah"],
-          dokumen: "idml|indd|indt|pdf",
+          dokumen: "idml|indd|indt|pdf|zip|rar",
           filesize50: 52428200
         },
         layouter_file_link: {
@@ -1096,11 +1112,11 @@ $(document).ready(function() {
   })
 
   //gantian modal revisi dan deadline revisi
-  $('#layout-revisi-deadline').on('shown.bs.modal', function (e) {
-    $('#layout-revisi').modal('toggle');
-  })
+  // $('#layout-revisi-deadline').on('shown.bs.modal', function (e) {
+  //   $('#layout-revisi').modal('toggle');
+  // })
   $('#layout-revisi-deadline').on('hidden.bs.modal', function (e) {
-    $('#layout-revisi').modal('toggle');
+    load_revisi_layout();
   })
 
   $('#accordion-layouter').on('click', '.trigger-layout-revisi-deadline',function(e){
@@ -1113,6 +1129,8 @@ $(document).ready(function() {
         var revision_id = $('#revision_id').val();
         e.preventDefault();
         let revision_layout_deadline = $('[name=revision_layout_deadline]').val();
+        let revision_layout_start_date = $('[name=revision_layout_start_date]').val();
+        let revision_layout_end_date = $('[name=revision_layout_end_date]').val();
         $.ajax({
           type: "POST",
           url: "<?php echo base_url('draft/deadlineRevision'); ?>",
@@ -1120,6 +1138,8 @@ $(document).ready(function() {
           data: {
             revision_id: revision_id,
             revision_deadline: revision_layout_deadline,
+            revision_start_date: revision_layout_start_date,
+            revision_end_date: revision_layout_end_date,
           },
           success: function(data){
             let datax = JSON.parse(data);

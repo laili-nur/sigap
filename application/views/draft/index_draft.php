@@ -96,7 +96,6 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
             'cetak' => 'Tahap Cetak',
             'final' => 'Final',
             'reject' => 'Ditolak',
-            'cetak-ulang' => 'Cetak Ulang',
             'error' => 'Draft Error',
           ];
         }
@@ -107,6 +106,12 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
           '50' => '50',
           '100' => '100',
         ];
+
+        $cetak_ulang_status = [
+          '' => '- Filter Naskah',
+          'n' => ' Naskah Baru',
+          'y' => ' Naskah Cetak Ulang',
+        ]
         ?>
         <!-- .card-body -->
         <div class="card-body p-0">
@@ -120,23 +125,30 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
             </div>
             <?php endif ?>
             <div class="row">
-              <div class="col-12 col-md-4 col-lg-2 mb-3">
+              <div class="col-12 col-lg-1 mb-3">
+                <!-- select per page -->
                 <?= form_open('draft/filter', ['method' => 'GET']) ?>
                 <?= form_dropdown('per_page', $per_page, $this->input->get('per_page'), 'id="per_page" class="form-control custom-select d-block" title="List per page"') ?>
               </div>
               <?php if($ceklevel == 'superadmin'): ?>
-              <div class="col-12 col-md-4 col-lg-4 mb-3">
-                <?= form_dropdown('filter', $filter_status, $this->input->get('filter'), ' id="filter" class="form-control custom-select d-block" title="Filter status"') ?>
+                <div class="col-12 col-lg-3 mb-3">
+                <?= form_dropdown('reprint', $cetak_ulang_status, $this->input->get('reprint'), ' id="reprint" class="form-control custom-select d-block" title="Filter Naskah"') ?>
               </div>
-              <div class="col-12 col-md-4 col-lg-4 mb-3">
+                <!-- filter tahapan level admin -->
+              <div class="col-12 col-lg-3 mb-3">
+                <?= form_dropdown('filter', $filter_status, $this->input->get('filter'), ' id="filter" class="form-control custom-select d-block" title="Filter Progress"') ?>
+              </div>
+              <div class="col-12 col-lg-3 mb-3">
+                <!-- filter category level staff -->
                 <?= form_dropdown('category', getDropdownListCategory('category', ['category_id', 'category_name'],true), $this->input->get('category'), '" id="category" class="form-control custom-select d-block "') ?>
               </div>
               <?php else: ?>
+                <!-- filter tahapan level admin -->
                 <div class="col-12 col-md-8 col-lg-8 mb-3">
                 <?= form_dropdown('filter', $filter_status, $this->input->get('filter'), ' id="filter" class="form-control custom-select d-block" title="Filter status"') ?>
               </div>
             <?php endif ?>
-              <div class="col-12 col-md-12 col-lg-2 mb-3">
+              <div class="col-12  col-lg-2 mb-3">
                 <button class="btn btn-primary btn-block ml-auto" type="submit" value="Submit" id="btn-submit"><i class="fa fa-filter"></i> Filter data</button>
                 <?= form_close() ?>
               </div>
@@ -386,7 +398,11 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
       allowClear: true
     });
     $("#filter").select2({
-      placeholder: '-- Filter tahapan --',
+      placeholder: '-- Filter Progress --',
+      allowClear: true
+    });
+    $("#reprint").select2({
+      placeholder: '-- Filter Naskah --',
       allowClear: true
     });
   });
