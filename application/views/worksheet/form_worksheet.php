@@ -65,6 +65,33 @@
               </div>
               <?= form_error('worksheet_num') ?>
             </div>
+            <div class="form-group">
+              <label for="worksheet_num">Deadline Desk Screening
+              <abbr title="Required">*</abbr>
+              </label>
+              <div class="has-clearable">
+                <button type="button" class="close" aria-label="Close">
+                <span aria-hidden="true">
+                <i class="fa fa-times-circle"></i>
+                </span>
+                </button>
+                <?= form_input('worksheet_deadline', $input->worksheet_deadline, 'class="form-control mydate" id="worksheet_deadline"') ?>
+              </div>
+              <?= form_error('worksheet_num') ?>
+            </div>
+            <div class="form-group">
+              <label for="worksheet_num">Tanggal Jadi Desk Screening
+              </label>
+              <div class="has-clearable">
+                <button type="button" class="close" aria-label="Close">
+                <span aria-hidden="true">
+                <i class="fa fa-times-circle"></i>
+                </span>
+                </button>
+                <?= form_input('worksheet_end_date', $input->worksheet_end_date, 'class="form-control" id="worksheet_end_date"') ?>
+              </div>
+              <?= form_error('worksheet_num') ?>
+            </div>
             <!-- /.form-group -->
             <!-- .form-group -->
             <div class="form-group">
@@ -172,7 +199,7 @@
       errorElement: "span",
       errorPlacement: function (error, element) {
        error.addClass( "invalid-feedback" );
-       if (element.parent('.input-group').length) { 
+       if (element.parent('.input-group').length) {
                 error.insertAfter(element.next('span.select2'));      // input group
               } else if (element.hasClass("select2-hidden-accessible")){
                 error.insertAfter(element.next('span.select2'));  // select2
@@ -180,14 +207,14 @@
                 error.insertAfter(element.next('label.custom-file-label'));  // fileinput custom
               } else if (element.hasClass("custom-control-input")){
                 error.insertAfter($(".custom-radio").last());  // radio
-              }else {                                      
+              }else {
                 error.insertAfter(element);               // default
               }
             }
           },
           select2_validasi()
           );
-  
+
     $("#draft_id").select2({
       placeholder: '-- Choose --',
       allowClear: true

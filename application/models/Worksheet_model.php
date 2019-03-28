@@ -3,7 +3,7 @@
 class Worksheet_model extends MY_Model
 {
    protected $perPage = 10;
-   
+
        public function getValidationRules()
     {
         $validationRules = [
@@ -46,7 +46,9 @@ class Worksheet_model extends MY_Model
             'worksheet_notes'           => '',
             'is_reprint'              => 'n',
             'is_revise'              => 'n',
-            'worksheet_status'              => '0'
+            'worksheet_status'              => '0',
+            'worksheet_deadline'            => '0',
+            'worksheet_end_date'            => '0'
         ];
     }
 }

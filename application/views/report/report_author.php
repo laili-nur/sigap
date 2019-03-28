@@ -30,8 +30,18 @@
 <!-- /.page-title-bar -->
 
 <!-- Graph for Author -->
-
 <br />
+<div class="form-group row">
+  <div class="col-8 col-md-12 mb-2">
+    <div align="right">
+      <div class="col-4 col-md-2 mb-4">
+        <a href="<?=base_url('author/') ?>" class="btn btn-primary" target="_blank" >View  <i class="fa fa-eye"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div align="center">
   <h4>UGM Press</h4>
   <h5>Laporan Grafik Instansi Penulis</h5>

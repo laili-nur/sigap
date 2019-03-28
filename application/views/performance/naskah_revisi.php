@@ -55,10 +55,12 @@ tr:nth-child(even) {
     <table id="layoutertable" class="table table-bordered editortable">
       <thead>
         <tr>
+          <th><font color="white">Staf</font></th>
           <th><font color="white">Judul Draft</font></th>
           <th><font color="white">Tanggal Masuk</font></th>
           <th><font color="white">Deadline</font></th>
           <th><font color="white">Tanggal Jadi</font></th>
+          <th><font color="white">Status</font></th>
         </tr>
       </thead>
       <tbody>
@@ -69,10 +71,24 @@ tr:nth-child(even) {
           {
             ?>
             <tr>
+              <td></td>
               <td class="align-middle"><strong><a href="<?= base_url('draft/view/' . $row->draft_id . '') ?>"><?= $row->draft_title ?></a></strong></td>
               <td><?php echo konversiTanggal($row->revision_start_date); ?></td>
               <td><?php echo konversiTanggal($row->revision_deadline); ?></td>
               <td><?php echo konversiTanggal($row->revision_end_date); ?></td>
+              <td><?php
+              if($row->revision_status == NULL){
+                echo "-";
+              } elseif ($row->revision_status == 1){
+                echo '<p hidden> 1 </p>','<span class="badge badge-primary">ON PROCESS</span>';
+              } elseif ($row->revision_status == 2) {
+                echo '<p hidden> 2 </p>','<span class="badge badge-success">ON TIME</span>';
+              } elseif ($row->revision_status == 3) {
+                echo '<p hidden> 3 </p>','<span class="badge badge-danger">LATE</span>';
+              } else {
+                echo '<p hidden> 4 </p>','<i class="fa fa-exclamation-triangle text-danger"></i>';
+              }
+              ?></td>
             </tr>
             <?php
           }

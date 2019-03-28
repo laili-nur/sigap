@@ -33,13 +33,23 @@
 <div class="form-group row">
   <div class="col-8 col-md-10 mb-1">
     <div align="right">
-      <label for="" class="col-sm-4 col-form-label"><h6>Filter:</h6></label>
+      <label for="" class="col-sm-4 col-form-label"><h6><i class="fa fa-filter"></i> Filter :</h6></label>
     </div>
   </div>
   <div class="col-4 col-md-2  mb-4">
     <?= form_open('', ['method' => 'GET']) ?>
     <?= form_dropdown('droptahunsummary', getYearsSummary(), $this->input->get('droptahunsummary'), 'onchange="this.form.submit()" id="droptahunsummary" class="form-control custom-select d-block" title="Filter tahun"') ?>
     <?= form_close() ?>
+  </div>
+</div>
+
+<div class="form-group row">
+  <div class="col-8 col-md-12 mb-2">
+    <div align="right">
+      <div class="col-4 col-md-2 mb-4">
+        <button id="button" type="button" class="btn btn-primary">View  <i class="fa fa-eye"></i></a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -162,7 +172,6 @@ function(data){
       }]
     },
     options: {
-      onClick: alertBox,
       legend: {
         display : false,
       },
@@ -217,9 +226,10 @@ function(data){
   });
 });
 
-function alertBox(){
+document.getElementById('button').addEventListener('click',
+function (){
   document.querySelector('.bg-modal').style.display = 'flex';
-};
+});
 document.querySelector('.close').addEventListener('click',
 function(){
   document.querySelector('.bg-modal').style.display = 'none';

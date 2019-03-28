@@ -33,7 +33,7 @@
 <div class="form-group row">
   <div class="col-8 col-md-10 mb-1">
     <div align="right">
-      <label for="" class="col-sm-4 col-form-label"><h6>Filter:</h6></label>
+      <label for="" class="col-sm-4 col-form-label"><h6><i class="fa fa-filter"></i>  Filter :</h6></label>
     </div>
   </div>
   <div class="col-4 col-md-2  mb-4">
@@ -43,10 +43,71 @@
   </div>
 </div>
 
+<div class="form-group row">
+  <div class="col-8 col-md-12 mb-2">
+    <div align="right">
+      <div class="col-4 col-md-2 mb-4">
+        <button id="button" type="button" class="btn btn-primary">View  <i class="fa fa-eye"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div align="center">
   <h4>UGM Press</h4>
   <h5>Laporan Grafik Ringkasan Cetak Ulang Buku</h5>
 </div>
+
+<div class="bg-modal">
+  <div class="modal-content">
+
+<div class="close">+</div>
+<form action="">
+  <a href="<?=base_url('draft/filter?filter=cetak-ulang') ?>" target="_blank" class="badge badge-primary">Cetak Ulang</a>
+</form>
+
+  </div>
+</div>
+
+<style>
+  .bg-modal{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none;
+  }
+
+  .modal-content{
+    width: 600px;
+    height: 125px;
+    background-color: white;
+    border-radius: 4px;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .badge-primary{
+    width:15%;
+    height: 20%;
+    font-size: 12px;
+    display: inline-grid;
+    margin: 40px auto ;
+  }
+
+  .close{
+    position: absolute;
+    top:0;
+    right: 10px;
+    font-size: 32px;
+    transform: rotate(45deg);
+    cursor: pointer;
+  }
+</style>
 
 <canvas id="myChart1" width="500" height="170"></canvas>
 <script>
@@ -154,5 +215,14 @@ function(data){
       }
     }
   });
+});
+
+document.getElementById('button').addEventListener('click',
+function (){
+  document.querySelector('.bg-modal').style.display = 'flex';
+});
+document.querySelector('.close').addEventListener('click',
+function(){
+  document.querySelector('.bg-modal').style.display = 'none';
 });
 </script>

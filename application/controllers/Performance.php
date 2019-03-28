@@ -119,19 +119,9 @@ class Performance extends Admin_Controller {
 		$this->load->view('template', compact('pagination','main_view', 'pages', 'performance_editor','total'));
 	}
 
-	public function index_edit_revise()
-	{
-		$revisi_naskah = $this->performance->select(['draft.draft_id','draft_title','revision_role','revision_start_date','revision_deadline','revision_end_date'])->join3('draft','revision','draft')->where('revision_role', 'editor')->getAll('revision');
-
-		$pages    = $this->pages;
-		$main_view = 'performance/naskah_revisi';
-
-		$this->load->view('template', compact('pagination','main_view', 'pages', 'revisi_naskah','total'));
-	}
 
 	public function performa_layouter()
 	{
-
 		$xperformance_layouter = $this->performance->join3('draft','responsibility','draft')->join3('user','responsibility','user')->orderBy('responsibility.draft_id')->getAll('responsibility');
 
 		foreach ($xperformance_layouter as $key => $rows) {
@@ -229,6 +219,40 @@ class Performance extends Admin_Controller {
 		$main_view = 'performance/performance_layouter';
 
 		$this->load->view('template', compact('main_view', 'pages', 'performance_layouter'));
+	}
+
+	public function index_edit_revise()
+	{
+		$xrevisi_naskah = $this->performance->join3('draft','revision','draft')->orderBy('revision.draft_id')->getAll('revision');
+
+		foreach ($xrevisi_naskah as $key => $rows) {
+			if(($rows->revision_start_date == '0000-00-00 00:00:00' OR $rows->revision_start_date == 'NULL') AND ($rows->revision_end_date == '0000-00-00 00:00:00' OR $rows->revision_end_date == 'NULL')){
+				$data	= array('revision_status' => null);
+				$this->performance->where('draft_id', $rows->draft_id)->update($data, 'revision');
+			}
+			elseif (($rows->revision_start_date != '0000-00-00 00:00:00' AND $rows->revision_start_date != 'NULL') AND ($rows->revision_end_date == '0000-00-00 00:00:00' OR $rows->revision_end_date == 'NULL')){
+				$data	= array('revision_status' => 1);
+				$this->performance->where('draft_id', $rows->draft_id)->update($data, 'revision');
+			}
+			elseif ($rows->revision_end_date < $rows->revision_deadline AND $rows->revision_start_date != '0000-00-00 00:00:00' AND $rows->revision_start_date != 'NULL' AND $rows->revision_end_date != '0000-00-00 00:00:00' AND $rows->revision_end_date != 'NULL') {
+				$data	= array('revision_status' => 2);
+				$this->performance->where('draft_id', $rows->draft_id)->update($data, 'revision');
+			}
+			elseif ($rows->revision_end_date > $rows->revision_deadline AND ($rows->revision_start_date != '0000-00-00 00:00:00' AND $rows->revision_start_date != 'NULL') AND ($rows->revision_end_date != '0000-00-00 00:00:00' AND $rows->revision_end_date != 'NULL')) {
+				$data	= array('revision_status' => 3);
+				$this->performance->where('draft_id', $rows->draft_id)->update($data, 'revision');
+			}
+			else {
+				$data	= array('revision_status' => 4);
+				$this->performance->where('draft_id', $rows->draft_id)->update($data, 'revision');
+			}
+		}
+		$revisi_naskah = $this->performance->select(['draft.draft_id','draft_title','revision_role','revision_start_date','revision_deadline','revision_end_date','revision_status'])->join3('draft','revision','draft')->where('revision_role', 'editor')->getAll('revision');
+
+		$pages    = $this->pages;
+		$main_view = 'performance/naskah_revisi';
+
+		$this->load->view('template', compact('pagination','main_view', 'pages', 'revisi_naskah','total'));
 	}
 
 	public function index_layout_revise()

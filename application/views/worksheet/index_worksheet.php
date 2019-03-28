@@ -105,7 +105,9 @@
                   <th scope="col">Revisi</th>
                   <th scope="col">Status</th>
                   <th scope="col">PIC</th>
-                  <th style="min-width:170px;"> &nbsp; </th>
+                  <th scope="col">Deadline</th>
+                  <th scope="col">Tanggal Selesai</th>
+                  <th style="min-width:200px;"> &nbsp; </th>
                 </tr>
               </thead>
               <!-- /thead -->
@@ -135,6 +137,8 @@
                     ?>
                   </td>
                   <td class="align-middle"><?= $worksheet->worksheet_pic ?></td>
+                  <td class="align-middle"> <?= $worksheet->worksheet_deadline ?></td>
+                  <td class="align-middle"> <?= $worksheet->worksheet_end_date ?></td>
                   <td class="align-middle text-right">
                     <button type="button" class="btn btn-sm btn-secondary" data-container="body" data-toggle="popover" data-placement="left" data-html="true" data-content="
                       <?php echo html_escape('<div class="list-group list-group-bordered" style="margin: -9px -15px;border-radius:0;">

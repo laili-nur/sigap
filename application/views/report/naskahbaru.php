@@ -33,7 +33,7 @@
 <div class="form-group row">
   <div class="col-8 col-md-10 mb-1">
     <div align="right">
-      <label for="" class="col-sm-4 col-form-label"><h6>Filter:</h6></label>
+      <label for="" class="col-sm-4 col-form-label"><h6><i class="fa fa-filter"></i>  Filter :</h6></label>
     </div>
   </div>
   <div class="col-4 col-md-2  mb-4">
