@@ -71,7 +71,7 @@ tr:nth-child(even) {
           {
             ?>
             <tr>
-              <td></td>
+              <td><?=$row->username ?></td>
               <td class="align-middle"><strong><a href="<?= base_url('draft/view/' . $row->draft_id . '') ?>"><?= $row->draft_title ?></a></strong></td>
               <td><?php echo konversiTanggal($row->revision_start_date); ?></td>
               <td><?php echo konversiTanggal($row->revision_deadline); ?></td>

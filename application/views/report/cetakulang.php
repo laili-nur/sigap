@@ -63,7 +63,12 @@
 
 <div class="close">+</div>
 <form action="">
-  <a href="<?=base_url('draft/filter?filter=cetak-ulang') ?>" target="_blank" class="badge badge-primary">Cetak Ulang</a>
+  <a href="<?=base_url('draft/filter?reprint=y&filter=review') ?>" target="_blank" class="badge badge-primary">Review</a>
+  <a href="<?=base_url('draft/filter?reprint=y&filter=edit') ?>" target="_blank" class="badge badge-primary">Editorial</a>
+  <a href="<?=base_url('draft/filter?reprint=y&filter=layout') ?>" target="_blank" class="badge badge-primary">Layout</a>
+  <a href="<?=base_url('draft/filter?reprint=y&filter=proofread') ?>" target="_blank" class="badge badge-primary">Proofread</a>
+  <a href="<?=base_url('draft/filter?reprint=y&filter=cetak') ?>" target="_blank" class="badge badge-primary">Cetak</a>
+  <a href="<?=base_url('draft/filter?reprint=y&filter=final') ?>" target="_blank" class="badge badge-primary">Final</a>
 </form>
 
   </div>
