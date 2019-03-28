@@ -20,15 +20,15 @@
 <ul nav class="nav nav-tabs">
   <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/index') ?>">Performa Editor</a></li>
   <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/performa_layouter') ?>">Performa Layouter</a></li>
-  <li class="nav-item"><a class="nav-link active" href="<?= base_url('performance/index_edit_revise') ?>">Revisi Naskah</a></li>
-  <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/index_desk_screening') ?>">Performa Desk Screening</a></li>
+  <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/index_edit_revise') ?>">Revisi Naskah</a></li>
+  <li class="nav-item"><a class="nav-link active" href="<?= base_url('performance/index_desk_screening') ?>">Performa Desk Screening</a></li>
 </ul>
 <br/>
 <div class="dropdown">
-  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Naskah Revisi</button>
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Desk Screening</button>
   <ul class="dropdown-menu">
-    <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/index_edit_revise') ?>">Revisi Editor</a></li>
-    <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/index_layout_revise') ?>">Revisi Layouter</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/index_desk_screening') ?>">Desk Screening</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/index_desk_screening_error') ?>">Draft Error</a></li>
   </ul>
 </div>
 <!-- Reporting buku -->
@@ -56,9 +56,8 @@ tr:nth-child(even) {
     <table id="layoutertable" class="table table-bordered editortable">
       <thead>
         <tr>
-          <th><font color="white">Staf</font></th>
+          <th><font color="white">PIC</font></th>
           <th><font color="white">Judul Draft</font></th>
-          <th><font color="white">Tanggal Masuk</font></th>
           <th><font color="white">Deadline</font></th>
           <th><font color="white">Tanggal Jadi</font></th>
           <th><font color="white">Status</font></th>
@@ -66,25 +65,24 @@ tr:nth-child(even) {
       </thead>
       <tbody>
         <?php
-        if($revisi_naskah)
+        if($desk_screening)
         {
-          foreach ($revisi_naskah as $row)
+          foreach ($desk_screening as $row)
           {
             ?>
             <tr>
-              <td><?=$row->username ?></td>
+              <td><?=$row->worksheet_pic ?></td>
               <td class="align-middle"><strong><a href="<?= base_url('draft/view/' . $row->draft_id . '') ?>"><?= $row->draft_title ?></a></strong></td>
-              <td><?php echo konversiTanggal($row->revision_start_date); ?></td>
-              <td><?php echo konversiTanggal($row->revision_deadline); ?></td>
-              <td><?php echo konversiTanggal($row->revision_end_date); ?></td>
+              <td><?php echo konversiTanggal($row->worksheet_deadline); ?></td>
+              <td><?php echo konversiTanggal($row->worksheet_end_date); ?></td>
               <td><?php
-              if($row->revision_status == NULL){
+              if($row->worksheet_performance == NULL){
                 echo "-";
-              } elseif ($row->revision_status == 1){
+              } elseif ($row->worksheet_performance == 1){
                 echo '<p hidden> 1 </p>','<span class="badge badge-primary">ON PROCESS</span>';
-              } elseif ($row->revision_status == 2) {
+              } elseif ($row->worksheet_performance == 2) {
                 echo '<p hidden> 2 </p>','<span class="badge badge-success">ON TIME</span>';
-              } elseif ($row->revision_status == 3) {
+              } elseif ($row->worksheet_performance == 3) {
                 echo '<p hidden> 3 </p>','<span class="badge badge-danger">LATE</span>';
               } else {
                 echo '<p hidden> 4 </p>','<i class="fa fa-exclamation-triangle text-danger"></i>';
@@ -110,7 +108,7 @@ tr:nth-child(even) {
   <script>
   $(document).ready(function() {
     $('#layoutertable').DataTable({
-
+       "order": [[ 4, "asc" ]]
     });
   } );
   </script>

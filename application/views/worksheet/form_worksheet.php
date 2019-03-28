@@ -88,7 +88,7 @@
                 <i class="fa fa-times-circle"></i>
                 </span>
                 </button>
-                <?= form_input('worksheet_end_date', $input->worksheet_end_date, 'class="form-control" id="worksheet_end_date"') ?>
+                <?= form_input('worksheet_end_date', $input->worksheet_end_date, 'class="form-control mydate" id="worksheet_end_date"') ?>
               </div>
               <?= form_error('worksheet_num') ?>
             </div>

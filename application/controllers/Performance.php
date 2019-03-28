@@ -264,4 +264,48 @@ class Performance extends Admin_Controller {
 
 		$this->load->view('template', compact('pagination','main_view', 'pages', 'revisi_naskah','total'));
 	}
+
+	public function index_desk_screening()
+	{
+		$xdesk_screening = $this->performance->join3('draft','worksheet','draft')->orderBy('worksheet.draft_id')->getAll('worksheet');
+
+		foreach ($xdesk_screening as $key => $rows) {
+			if(($rows->worksheet_deadline == '0000-00-00 00:00:00' OR $rows->worksheet_deadline == 'NULL')){
+				$data	= array('worksheet_performance' => null);
+				$this->performance->where('draft_id', $rows->draft_id)->update($data, 'worksheet');
+			}
+			elseif (($rows->worksheet_deadline != '0000-00-00 00:00:00' OR $rows->worksheet_deadline != 'NULL') AND ($rows->worksheet_end_date == '0000-00-00 00:00:00' OR $rows->worksheet_end_date == 'NULL')){
+				$data	= array('worksheet_performance' => 1);
+				$this->performance->where('draft_id', $rows->draft_id)->update($data, 'worksheet');
+			}
+			elseif ($rows->worksheet_end_date < $rows->worksheet_deadline AND $rows->worksheet_end_date != '0000-00-00 00:00:00' AND $rows->worksheet_end_date != 'NULL') {
+				$data	= array('worksheet_performance' => 2);
+				$this->performance->where('draft_id', $rows->draft_id)->update($data, 'worksheet');
+			}
+			elseif ($rows->worksheet_end_date > $rows->worksheet_deadline AND ($rows->worksheet_end_date != '0000-00-00 00:00:00' AND $rows->worksheet_end_date != 'NULL')) {
+				$data	= array('worksheet_performance' => 3);
+				$this->performance->where('draft_id', $rows->draft_id)->update($data, 'worksheet');
+			}
+			else {
+				$data	= array('worksheet_performance' => 4);
+				$this->performance->where('draft_id', $rows->draft_id)->update($data, 'worksheet');
+			}
+		}
+		$desk_screening = $this->performance->select(['draft.draft_id','worksheet_pic','draft_title','worksheet_deadline','worksheet_end_date','worksheet_performance'])->join3('draft','worksheet','draft')->where('worksheet_performance', null)->orWhere('worksheet_performance', 1)->orWhere('worksheet_performance', 2)->orWhere('worksheet_performance', 3)->getAll('worksheet');
+
+		$pages    = $this->pages;
+		$main_view = 'performance/desk_screening';
+
+		$this->load->view('template', compact('pagination','main_view', 'pages', 'desk_screening','total'));
+	}
+
+	public function index_desk_screening_error()
+	{
+		$desk_screening = $this->performance->select(['draft.draft_id','worksheet_pic','draft_title','worksheet_deadline','worksheet_end_date','worksheet_performance'])->join3('draft','worksheet','draft')->where('worksheet_performance',4)->getAll('worksheet');
+
+		$pages    = $this->pages;
+		$main_view = 'performance/desk_screening';
+
+		$this->load->view('template', compact('pagination','main_view', 'pages', 'desk_screening','total'));
+	}
 }
