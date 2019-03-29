@@ -257,7 +257,7 @@ class Performance extends Admin_Controller {
 
 	public function index_layout_revise()
 	{
-		$revisi_naskah = $this->performance->select(['draft.draft_id','user.user_id','username','draft_title','revision_role','revision_start_date','revision_deadline','revision_end_date'])->join3('draft','revision','draft')->join3('user','revision','user')->where('revision_role', 'layouter')->getAll('revision');
+		$revisi_naskah = $this->performance->select(['draft.draft_id','user.user_id','username','draft_title','revision_role','revision_start_date','revision_deadline','revision_end_date','revision_status'])->join3('draft','revision','draft')->join3('user','revision','user')->where('revision_role', 'layouter')->getAll('revision');
 
 		$pages    = $this->pages;
 		$main_view = 'performance/naskah_revisi';
@@ -301,7 +301,7 @@ class Performance extends Admin_Controller {
 
 	public function index_desk_screening_error()
 	{
-		$desk_screening = $this->performance->select(['draft.draft_id','worksheet_pic','draft_title','worksheet_deadline','worksheet_end_date','worksheet_performance'])->join3('draft','worksheet','draft')->where('worksheet_performance',4)->getAll('worksheet');
+		$desk_screening = $this->performance->select(['draft.draft_id','worksheet_pic','draft_title','worksheet_deadline','worksheet_end_date','worksheet_performance'])->join3('draft','worksheet','draft')->where('worksheet_performance', 4)->getAll('worksheet');
 
 		$pages    = $this->pages;
 		$main_view = 'performance/desk_screening';
