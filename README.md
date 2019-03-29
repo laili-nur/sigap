@@ -23,3 +23,9 @@ Developed using:
 - Jquery
 - Mysql
 
+How to install:
+- Install xammpp with PHP 5.6
+- Import .sql databse using phpmyadmin
+- Set codeigniter database.php and config.php
+- Run server
+- Ready to go
