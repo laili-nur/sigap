@@ -228,26 +228,26 @@ class Performance extends Admin_Controller {
 		foreach ($xrevisi_naskah as $key => $rows) {
 			if(($rows->revision_start_date == '0000-00-00 00:00:00' OR $rows->revision_start_date == 'NULL') AND ($rows->revision_end_date == '0000-00-00 00:00:00' OR $rows->revision_end_date == 'NULL')){
 				$data	= array('revision_status' => null);
-				$this->performance->where('draft_id', $rows->draft_id)->where('user_id', $rows->user_id)->update($data, 'revision');
+				$this->performance->where('revision_id', $rows->revision_id)->where('user_id', $rows->user_id)->update($data, 'revision');
 			}
 			elseif (($rows->revision_start_date != '0000-00-00 00:00:00' AND $rows->revision_start_date != 'NULL') AND ($rows->revision_end_date == '0000-00-00 00:00:00' OR $rows->revision_end_date == 'NULL')){
 				$data	= array('revision_status' => 1);
-				$this->performance->where('draft_id', $rows->draft_id)->where('user_id', $rows->user_id)->update($data, 'revision');
+				$this->performance->where('revision_id', $rows->revision_id)->where('user_id', $rows->user_id)->update($data, 'revision');
 			}
-			elseif ($rows->revision_end_date < $rows->revision_deadline AND $rows->revision_start_date != '0000-00-00 00:00:00' AND $rows->revision_start_date != 'NULL' AND $rows->revision_end_date != '0000-00-00 00:00:00' AND $rows->revision_end_date != 'NULL') {
+			elseif (($rows->revision_end_date < $rows->revision_deadline) AND ($rows->revision_start_date != '0000-00-00 00:00:00' AND $rows->revision_start_date != 'NULL') AND $rows->revision_end_date != '0000-00-00 00:00:00' AND $rows->revision_end_date != 'NULL') {
 				$data	= array('revision_status' => 2);
-				$this->performance->where('draft_id', $rows->draft_id)->where('user_id', $rows->user_id)->update($data, 'revision');
+				$this->performance->where('revision_id', $rows->revision_id)->where('user_id', $rows->user_id)->update($data, 'revision');
 			}
 			elseif ($rows->revision_end_date > $rows->revision_deadline AND ($rows->revision_start_date != '0000-00-00 00:00:00' AND $rows->revision_start_date != 'NULL') AND ($rows->revision_end_date != '0000-00-00 00:00:00' AND $rows->revision_end_date != 'NULL')) {
 				$data	= array('revision_status' => 3);
-				$this->performance->where('draft_id', $rows->draft_id)->where('user_id', $rows->user_id)->update($data, 'revision');
+				$this->performance->where('revision_id', $rows->revision_id)->where('user_id', $rows->user_id)->update($data, 'revision');
 			}
 			else {
 				$data	= array('revision_status' => 4);
-				$this->performance->where('draft_id', $rows->draft_id)->where('user_id', $rows->user_id)->update($data, 'revision');
+				$this->performance->where('revision_id', $rows->revision_id)->where('user_id', $rows->user_id)->update($data, 'revision');
 			}
 		}
-		$revisi_naskah = $this->performance->select(['draft.draft_id','user.user_id','username','draft_title','revision_role','revision_start_date','revision_deadline','revision_end_date','revision_status'])->join3('draft','revision','draft')->join3('user','revision','user')->where('revision_role', 'editor')->getAll('revision');
+		$revisi_naskah = $this->performance->select(['revision_id','draft.draft_id','user.user_id','username','draft_title','revision_role','revision_start_date','revision_deadline','revision_end_date','revision_status'])->join3('draft','revision','draft')->join3('user','revision','user')->where('revision_role', 'editor')->getAll('revision');
 
 		$pages    = $this->pages;
 		$main_view = 'performance/naskah_revisi';
@@ -257,7 +257,7 @@ class Performance extends Admin_Controller {
 
 	public function index_layout_revise()
 	{
-		$revisi_naskah = $this->performance->select(['draft.draft_id','user.user_id','username','draft_title','revision_role','revision_start_date','revision_deadline','revision_end_date','revision_status'])->join3('draft','revision','draft')->join3('user','revision','user')->where('revision_role', 'layouter')->getAll('revision');
+		$revisi_naskah = $this->performance->select(['revision_id','draft.draft_id','user.user_id','username','draft_title','revision_role','revision_start_date','revision_deadline','revision_end_date','revision_status'])->join3('draft','revision','draft')->join3('user','revision','user')->where('revision_role', 'layouter')->getAll('revision');
 
 		$pages    = $this->pages;
 		$main_view = 'performance/naskah_revisi';
