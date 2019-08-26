@@ -1,31 +1,32 @@
-# sigap
-Sistem Informasi Penerbitan dan Percetakan Buku
+# SIGAP
+Sistem Informasi Penerbitan dan Percetakan Buku GAMA PRESS
 
 Developed for UGM PRESS internal system
 
-Features :
-- Manage Users
-- Manage Draft
-- Manage Books
-- Manage Document
-- Support user level
-- Draft versioning system
-and so on
+Fitur :
+- Manajemen Pengguna
+- Manajemen Draft
+- Manajemen Buku
+- Manajemen Dokumen
+- Akses Kontrol Level Pengguna
+- Versioning Draft
+dan lain-lain
 
-Developed by:
+Dikembangkan oleh :
 - Bagaskara LA (Fullstack)
 - Edward (Backend)
 - Syuhada Sipayung (Business Reporting)
 
 Developed using:
-- Codeigniter 3
-- Bootstrap
-- Jquery
-- Mysql
+- PHP - Codeigniter 3
+- CSS -Bootstrap 4
+- JS - Jquery
+- Database - Mysql
 
 How to install:
 - Install xammpp with PHP 5.6
-- Import .sql databse using phpmyadmin
-- Set codeigniter database.php and config.php
-- Run server
-- Ready to go
+- Run local webserver and mysql
+- Import sigap.sql database using phpmyadmin
+- Set codeigniter config.php
+- Set codeigniter database.php
+- Ready on localhost
