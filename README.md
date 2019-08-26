@@ -1,4 +1,4 @@
-# siip-new
+# sigap
 Sistem Informasi Penerbitan dan Percetakan Buku
 
 Developed for UGM PRESS internal system
