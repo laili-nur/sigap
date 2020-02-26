@@ -1,71 +1,48 @@
-# SIGAP
-Sistem Informasi Penerbitan dan Percetakan Buku GAMA PRESS
+# Codeigniter Migration Seed Boilerplate
 
-Developed for UGM PRESS internal system
+Ready to use laravel-like codeigniter.
 
 ## Feature
-- **PUBLISHING SYSTEM**
-  - User Management
-  - Draft Management
-  - Book Management
-  - Document Management
-  - User Access Control
-  - Versioning Draft / Track draft progress
-- **PRINTING SYSTEM** (coming soon)
-- **WAREHOUSE SYSTEM** (coming soon)
+- Database migration
+- Database seeding
+- Auth library
+- HMVC modules
+- Env loader
 
-## System
-- PHP - Codeigniter 3
-- CSS - Bootstrap 4
-- JS - Jquery
-- Database - Mysql
+## Requirements
+- Install composer and PHP
+- You can run PHP and composer on terminal
+- Create `.env.development` from `.env.example` and fill those credentials
+- Admin credential
+  - email = admin@admin.com
+  - password = admin
 
-## How to install
-- Install xammpp with PHP 5.6
-- Run local webserver and mysql
-- Import sigap.sql database using phpmyadmin
-- Set codeigniter config.php
-- Set codeigniter database.php
-- Ready on localhost/sigap
+## Usage
+- Run `composer install`
+- Testing CLI
+  - Run this command `php index.php tools message "Hello world"` and `php index.php tools help`
+- Create pre-built auth table structure `php index.php tools migrate`
+- Fill auth table with admin credential `php index.php tools seed Auth`
 
-### Tools
-- Xampp with PHP5.6
-- Visual Studio Code
+## Tutorial
 
-### Formatting Convention
-- Install **'Format HTML in PHP'** & **'phpfmt'** plugin from vs code marketplace
-- Add config below to setting.json in VS code
+### Migration Tutorial
+- Assume we are going to migrate *Brands* table, make sure using capital case
+- Create migration file ,run `php index.php tools migration Name_of_entity`
+- Edit generated migration file in `APPPATH/database/migrations`
+- Execute migration, run `php index.php tools migrate`
+- Migrate command will execute the latest migration
 
-```json
-    // Format HTML in PHP
-    "editor.insertSpaces": true,
-    "editor.tabSize": 3,
-    "html.format.contentUnformatted": "pre,code,textarea",
-    "html.format.endWithNewline": false,
-    "html.format.extraLiners": "head, body, /html",
-    "html.format.indentHandlebars": false,
-    "html.format.indentInnerHtml": false,
-    "html.format.maxPreserveNewLines": null,
-    "html.format.preserveNewLines": true,
-    "html.format.wrapLineLength": 120,
-    "html.format.wrapAttributes": "force-expand-multiline",
-    // phpfmt
-    "intelephense.format.enable": false,
-    "phpfmt.passes": [
-        "PSR2KeywordsLowerCase",
-        "PSR2LnAfterNamespace",
-        "PSR2CurlyOpenNextLine",
-        "PSR2ModifierVisibilityStaticOrder",
-        "PSR2SingleEmptyLineAndStripClosingTag",
-        "ReindentSwitchBlocks"
-    ],
-    "phpfmt.exclude": [
-        "ReindentComments",
-        "StripNewlineWithinClassBody"
-    ],
-    "phpfmt.enable_auto_align": true,
-```
-## Developer
-- Bagaskara LA (Fullstack)
-- Edward (Backend)
-- Syuhada Sipayung (Business Reporting)
+### Seeding Tutorial
+- Create seed file, run `php index.php tools seeder Name_of_entity`
+- Edit generated seeder file in `APPPATH/database/seeds`
+- Execute seeding, run `php index.php tools seed Name_of_entity`
+
+### Migration management UI
+- Open YOUR_BASE_URL/migrate
+
+## Credit
+- https://github.com/natanfelles/codeigniter-migrate
+- https://kode-blog.io/codeigniter-migration
+- https://github.com/agungjk/phpdotenv-for-codeigniter
+- https://github.com/emreakay/CodeIgniter-Aauth
