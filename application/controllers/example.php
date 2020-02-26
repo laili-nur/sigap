@@ -10,7 +10,7 @@ if (!defined('BASEPATH')) {
  * @property Aauth $aauth Description
  * @version 1.0
  */
-class Example extends CI_Controller
+class Example extends MY_Controller
 {
 
     public function __construct()
@@ -180,18 +180,6 @@ class Example extends CI_Controller
         echo '<pre>';
         print_r($this->aauth->list_groups());
         echo '</pre>';
-    }
-
-    public function check_email()
-    {
-
-        if ($this->aauth->check_email("aa@a.com")) {
-            echo 'uygun ';
-        } else {
-            echo 'alindi ';
-        }
-
-        $this->aauth->print_errors();
     }
 
     public function get_user()
@@ -421,21 +409,6 @@ class Example extends CI_Controller
     public function get_user_var()
     {
         echo $this->aauth->get_user_var("emre");
-    }
-
-    public function set_system_var()
-    {
-        $this->aauth->set_system_var("emre", "akay");
-    }
-
-    public function unset_system_var()
-    {
-        $this->aauth->unset_system_var("emre");
-    }
-
-    public function get_system_var()
-    {
-        echo $this->aauth->get_system_var("emre");
     }
 
     public function check_group_perm()
