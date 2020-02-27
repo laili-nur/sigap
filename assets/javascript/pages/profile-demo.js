@@ -1,104 +1,87 @@
-'use strict';
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 // Profile Demo
 // =============================================================
+var ProfileDemo =
+/*#__PURE__*/
+function () {
+  function ProfileDemo() {
+    _classCallCheck(this, ProfileDemo);
 
-var profileDemo = {
-  init: function init() {
-
-    this.bindUIActions();
-  },
-  bindUIActions: function bindUIActions() {
-    // turn off aspect ratio to get better mobile view
-    Chart.defaults.global.maintainAspectRatio = false;
-
-    // event handlers
-    this.achievementChart();
-    this.handleFlatpickr();
-  },
-  colors: function colors() {
-    return {
-      red: '#B76BA3',
-      orange: '#EC935E',
-      yellow: '#F7C46C',
-      green: '#A7C796',
-      teal: '#00A28A',
-      blue: '#346CB0',
-      purple: '#5F4B8B',
-      gray: '#BEC1C4',
-      grayLight: '#D4D5D7',
-      grayLighter: '#F5F5F5'
-    };
-  },
-  getColor: function getColor(color) {
-    return this.colors()[color];
-  },
-  randomScalingFactor: function randomScalingFactor() {
-    return 1.0 * Math.round(Math.random() * 100);
-  },
-  achievementChart: function achievementChart() {
-    var self = this;
-    var data = {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-      datasets: [{
-        label: 'Total Tasks',
-        borderColor: self.getColor('teal'),
-        backgroundColor: self.getColor('teal'),
-        data: [self.randomScalingFactor(), self.randomScalingFactor(), self.randomScalingFactor(), self.randomScalingFactor(), self.randomScalingFactor(), self.randomScalingFactor(), self.randomScalingFactor()]
-      }, {
-        label: 'Completed Tasks',
-        borderColor: self.getColor('purple'),
-        backgroundColor: self.getColor('purple'),
-        data: [self.randomScalingFactor(), self.randomScalingFactor(), self.randomScalingFactor(), self.randomScalingFactor(), self.randomScalingFactor(), self.randomScalingFactor(), self.randomScalingFactor()]
-      }]
-
-      // init achievement chart
-    };var canvas = $('#canvas-achievement')[0].getContext('2d');
-    var chart = new Chart(canvas, {
-      type: 'bar',
-      data: data,
-      options: {
-        responsive: true,
-        legend: { display: false },
-        title: { display: false },
-        tooltips: {
-          mode: 'index',
-          intersect: true
-        },
-        scales: {
-          xAxes: [{
-            gridLines: {
-              display: true,
-              drawBorder: false,
-              drawOnChartArea: false
-            }
-          }],
-          yAxes: [{
-            gridLines: {
-              display: true,
-              drawBorder: false,
-              drawOnChartArea: false
-            },
-            ticks: {
-              stepSize: 20
-            }
-          }]
-        }
-      }
-    });
-  },
-  handleFlatpickr: function handleFlatpickr() {
-    flatpickr('#flatpickr', {
-      inline: true,
-      disableMobile: true,
-      mode: 'range',
-      dateFormat: 'Y-m-d'
-    });
-
-    $('#flatpickr').next().on('click', function (e) {
-      e.stopPropagation();
-    });
+    this.init();
   }
-};
 
-profileDemo.init();
+  _createClass(ProfileDemo, [{
+    key: "init",
+    value: function init() {
+      // event handlers
+      this.achievementChart();
+    }
+  }, {
+    key: "achievementChart",
+    value: function achievementChart() {
+      var self = this;
+      var data = {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        datasets: [{
+          label: 'Assigned Tasks',
+          borderColor: Looper.colors.brand.teal,
+          backgroundColor: Looper.colors.brand.teal,
+          data: [41, 20, 68, 17, 100, 83, 53]
+        }, {
+          label: 'Completed Tasks',
+          borderColor: Looper.colors.brand.purple,
+          backgroundColor: Looper.colors.brand.purple,
+          data: [51, 14, 51, 63, 59, 83, 34]
+        }] // init achievement chart
+
+      };
+      var canvas = $('#canvas-achievement')[0].getContext('2d');
+      var chart = new Chart(canvas, {
+        type: 'bar',
+        data: data,
+        options: {
+          tooltips: {
+            mode: 'index',
+            intersect: true
+          },
+          scales: {
+            xAxes: [{
+              gridLines: {
+                display: true,
+                drawBorder: false,
+                drawOnChartArea: false
+              }
+            }],
+            yAxes: [{
+              gridLines: {
+                display: true,
+                borderDash: [8, 4]
+              },
+              ticks: {
+                stepSize: 20
+              }
+            }]
+          }
+        }
+      });
+    }
+  }]);
+
+  return ProfileDemo;
+}();
+/**
+ * Keep in mind that your scripts may not always be executed after the theme is completely ready,
+ * you might need to observe the `theme:load` event to make sure your scripts are executed after the theme is ready.
+ */
+
+
+$(document).on('theme:init', function () {
+  new ProfileDemo();
+});

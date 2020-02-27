@@ -1,15 +1,12 @@
-'use strict';
+"use strict";
 
 // Treeview Demo
 // =============================================================
-
 var treeviewDemo = {
   init: function init() {
-
     this.bindUIActions();
   },
   bindUIActions: function bindUIActions() {
-
     // event handlers
     this.handleTreeview();
   },
@@ -47,9 +44,8 @@ var treeviewDemo = {
       text: 'Parent 5',
       href: '#parent5',
       tags: ['New']
-    }];
+    }]; // init treeview
 
-    // init treeview
     $('#treeview01').treeview({
       data: sampleData,
       showBorder: false,
@@ -62,7 +58,6 @@ var treeviewDemo = {
       selectedBackColor: '#f5f5f5',
       onhoverColor: '#f5f5f5'
     });
-
     $('#treeview02').treeview({
       data: sampleData,
       showBorder: false,
@@ -81,5 +76,4 @@ var treeviewDemo = {
     });
   }
 };
-
 treeviewDemo.init();
