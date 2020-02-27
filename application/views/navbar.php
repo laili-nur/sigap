@@ -10,8 +10,8 @@ $ceklevelasli = $this->session->userdata('level_asli');
       <div class="top-bar-brand">
          <a href="<?php echo base_url(); ?>">
             <span
-               class="badge badge-light"
-               style="font-size: 1.3em"
+               class="badge badge-warning"
+               style="font-size: 0.8em"
             >SIGAP <small>v2</small></span>
          </a>
       </div>
@@ -47,7 +47,7 @@ $ceklevelasli = $this->session->userdata('level_asli');
                         >
                            <div class="user-avatar">
                               <img
-                                 src="assets/images/avatars/uifaces15.jpg"
+                                 src="<?=base_url('assets/images/avatars/profile.jpg');?>"
                                  alt=""
                               >
                            </div>
@@ -61,7 +61,7 @@ $ceklevelasli = $this->session->userdata('level_asli');
                         >
                            <div class="user-avatar">
                               <img
-                                 src="assets/images/avatars/uifaces17.jpg"
+                                 src="<?=base_url('assets/images/avatars/profile.jpg');?>"
                                  alt=""
                               >
                            </div>

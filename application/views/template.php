@@ -37,7 +37,7 @@
    <!-- BEGIN PLUGINS STYLES -->
    <link
       rel="stylesheet"
-      href="assets/vendor/open-iconic/css/open-iconic-bootstrap.min.css"
+      href="<?=base_url('assets/vendor/open-iconic/css/open-iconic-bootstrap.min.css');?>"
    >
    <link
       rel="stylesheet"
@@ -46,23 +46,37 @@
    <link
       rel="stylesheet"
       href="<?=base_url('assets/vendor/flatpickr/flatpickr.min.css');?>"
-   ><!-- END PLUGINS STYLES -->
+   >
+   <link
+      rel="stylesheet"
+      href="<?=base_url('assets/vendor/select2/css/select2.min.css');?>"
+   >
+   <link
+      rel="stylesheet"
+      href="<?=base_url('assets/vendor/toastr/toastr.min.css');?>"
+   >
+   <link
+      rel="stylesheet"
+      href="<?=base_url('assets/vendor/summernote/summernote-bs4.css');?>"
+   >
+   <!-- END PLUGINS STYLES -->
 
    <!-- BEGIN THEME STYLES -->
    <link
       rel="stylesheet"
-      href="assets/stylesheets/theme.min.css"
+      href="<?=base_url('assets/stylesheets/theme.min.css');?>"
       data-skin="default"
    >
    <link
       rel="stylesheet"
-      href="assets/stylesheets/theme-dark.min.css"
+      href="<?=base_url('assets/stylesheets/theme-dark.min.css');?>"
       data-skin="dark"
    >
    <link
       rel="stylesheet"
-      href="assets/stylesheets/custom.css"
+      href="<?=base_url('assets/stylesheets/custom.css');?>"
    ><!-- Disable unused skin immediately -->
+
    <script>
    var skin = localStorage.getItem('skin') || 'default';
    var unusedLink = document.querySelector('link[data-skin]:not([data-skin="' + skin + '"])');
@@ -82,10 +96,6 @@
    <!-- END BASE STYLES -->
 
    <!-- BEGIN PLUGINS STYLES -->
-   <!-- <link rel="stylesheet" href="<?=base_url('assets/vendor/flatpickr/flatpickr_new.min.css');?>"> -->
-   <!-- <link rel="stylesheet" href="<?=base_url('assets/vendor/select2/css/select2.min.css');?>"> -->
-   <!-- <link rel="stylesheet" href="<?=base_url('assets/vendor/toastr/toastr.min.css');?>"> -->
-   <!-- <link rel="stylesheet" href="<?=base_url('assets/vendor/summernote/summernote-bs4.css');?>"> -->
    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"> -->
    <!-- END PLUGINS STYLES -->
    <!-- BEGIN THEME STYLES -->
@@ -94,11 +104,9 @@
    <!-- END THEME STYLES -->
 
    <!-- JS -->
-   <!-- <script src="<?=base_url('assets/vendor/jquery/jquery.min.js');?>"></script> -->
-   <!-- <script src="<?=base_url('assets/vendor/jquery-validation/jquery.validate.min.js');?>"></script> -->
-   <!-- <script src="<?=base_url('assets/vendor/jquery-validation/additional-methods.min.js');?>"></script> -->
-   <!-- <script src="<?=base_url('assets/vendor/DoubleScroll/jquery.doubleScroll.js');?>"></script> -->
-
+   <script src="<?=base_url('assets/vendor/jquery/jquery.min.js');?>"></script>
+   <script src="<?=base_url('assets/vendor/jquery-validation/jquery.validate.min.js');?>"></script>
+   <script src="<?=base_url('assets/vendor/jquery-validation/additional-methods.min.js');?>"></script>
 </head>
 
 <body>
@@ -133,7 +141,7 @@
    </div>
    <!-- /.app -->
    <!-- BEGIN BASE JS -->
-   <script src="<?=base_url('assets/vendor/jquery/jquery.min.js');?>"></script>
+
    <script src="<?=base_url('assets/vendor/bootstrap/js/popper.min.js');?>"></script>
    <script src="<?=base_url('assets/vendor/bootstrap/js/bootstrap.min.js');?>"></script> <!-- END BASE JS -->
 
@@ -151,44 +159,36 @@
    <script src="<?=base_url('assets/vendor/handlebars/handlebars.min.js');?>"></script>
    <script src="<?=base_url('assets/vendor/easy-pie-chart/jquery.easypiechart.min.js');?>"></script>
    <script src="<?=base_url('assets/vendor/chart.js/Chart.min.js');?>"></script>
+   <script src="<?=base_url('assets/vendor/DoubleScroll/jquery.doubleScroll.js');?>"></script>
 
 
-   <!-- <script src="<?=base_url('assets/vendor/select2/js/select2.min.js');?>"></script>
+   <script src="<?=base_url('assets/vendor/select2/js/select2.min.js');?>"></script>
+   <script src="<?=base_url('assets/vendor/summernote/summernote-bs4.js');?>"></script>
+   <!--
    <script src="<?=base_url('assets/vendor/tribute/tribute.min.js');?>"></script>
    <script src="<?=base_url('assets/vendor/Caret/jquery.caret.min.js');?>"></script>
    <script src="<?=base_url('assets/vendor/At.js/js/jquery.atwho.min.js');?>"></script>
    <script src="<?=base_url('assets/vendor/toastr/toastr.min.js');?>"></script>
-   <script src="<?=base_url('assets/vendor/summernote/summernote-bs4.js');?>"></script>
    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script> -->
    <!-- END PLUGINS JS -->
 
    <!-- BEGIN THEME JS -->
    <script src="<?=base_url('assets/javascript/theme.min.js');?>"></script> <!-- END THEME JS -->
+
    <!-- BEGIN PAGE LEVEL JS -->
-   <script src="<?=base_url('assets/javascript/pages/dashboard-demo.js');?>"></script> <!-- END PAGE LEVEL JS -->
+   <!-- <script src="<?=base_url('assets/javascript/pages/dashboard-demo.js');?>"></script>  -->
+   <!-- END PAGE LEVEL JS -->
 
    <!-- BEGIN THEME JS -->
    <!-- <script src="<?=base_url('assets/javascript/main.min.js');?>"></script> -->
    <!-- END THEME JS -->
    <!-- BEGIN PAGE LEVEL JS -->
-   <!-- <script src="<?=base_url('assets/javascript/pages/flatpickr-demo.js');?>"></script>
    <script src="<?=base_url('assets/javascript/pages/select2-demo.js');?>"></script>
-   <script src="<?=base_url('assets/javascript/pages/easypiechart-demo.js');?>"></script>
-   <script src="<?=base_url('assets/javascript/pages/summernote-demo.js');?>"></script> -->
+   <script src="<?=base_url('assets/javascript/pages/flatpickr-demo.js');?>"></script>
+   <script src="<?=base_url('assets/javascript/pages/summernote-demo.js');?>"></script>
+   <!-- <script src="<?=base_url('assets/javascript/pages/easypiechart-demo.js');?>"></script> -->
    <!-- END PAGE LEVEL JS -->
-   <!-- Global site tag (gtag.js) - Google Analytics -->
-   <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-116692175-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-
-      function gtag()
-      {
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-      gtag('config', 'UA-116692175-1');
-    </script> -->
 </body>
 
 </html>
