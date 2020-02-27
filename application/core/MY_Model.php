@@ -13,7 +13,7 @@ class MY_Model extends CI_Model
         }
     }
 
-    public function checkTable($table)
+    public function check_table($table)
     {
         if ($table == "") {
             $table = $this->table;
@@ -41,53 +41,53 @@ class MY_Model extends CI_Model
 
     public function count($table = "")
     {
-        $table = $this->checkTable($table);
+        $table = $this->check_table($table);
         return $this->db->count_all_results($table);
     }
 
     public function get($table = "")
     {
-        $table = $this->checkTable($table);
+        $table = $this->check_table($table);
         return $this->db->get($table)->row();
     }
 
-    public function getRowArray($table = "")
+    public function get_row_array($table = "")
     {
-        $table = $this->checkTable($table);
+        $table = $this->check_table($table);
         return $this->db->get($table)->row_array();
     }
 
-    public function getAll($table = "")
+    public function get_all($table = "")
     {
-        $table = $this->checkTable($table);
+        $table = $this->check_table($table);
         return $this->db->get($table)->result();
     }
 
-    public function getAllArray($table = "")
+    public function get_all_array($table = "")
     {
-        $table = $this->checkTable($table);
+        $table = $this->check_table($table);
         return $this->db->get($table)->result_array();
     }
 
-    public function getWhere($data, $table = "")
+    public function get_where($data, $table = "")
     {
-        $table = $this->checkTable($table);
+        $table = $this->check_table($table);
         return $this->db->get_where($table, $data)->row();
     }
 
-    public function getAllWhere($data, $table = "")
+    public function get_all_where($data, $table = "")
     {
-        $table = $this->checkTable($table);
+        $table = $this->check_table($table);
         return $this->db->get_where($table, $data)->result();
     }
 
     public function paginate($page)
     {
-        $this->db->limit($this->perPage, $this->calculateRealOffset($page));
+        $this->db->limit($this->perPage, $this->calculate_real_offset($page));
         return $this;
     }
 
-    public function calculateRealOffset($page)
+    public function calculate_real_offset($page)
     {
         if (is_null($page) || empty($page)) {
             $offset = 0;
@@ -116,43 +116,43 @@ class MY_Model extends CI_Model
         return $this;
     }
 
-    public function whereNot($column, $condition)
+    public function where_not($column, $condition)
     {
         $this->db->where($column . ' !=', $condition);
         return $this;
     }
 
-    public function orWhere($column, $condition)
+    public function or_where($column, $condition)
     {
         $this->db->or_where($column, $condition);
         return $this;
     }
 
-    public function orWhereNot($column, $condition)
-    {
-        $this->db->or_where($column . ' !=', $condition);
-        return $this;
-    }
+    // public function or_where_not($column, $condition)
+    // {
+    //     $this->db->or_where($column . ' !=', $condition);
+    //     return $this;
+    // }
 
-    public function whereNotIn($column, $condition)
+    public function where_not_in($column, $condition)
     {
         $this->db->where_not_in($column, $condition);
         return $this;
     }
 
-    public function whereRelation($table_middle, $condition, $table_from = "")
+    public function where_relation($table_middle, $condition, $table_from = "")
     {
-        $table = $this->checkTable($table_from);
+        $table = $this->check_table($table_from);
         $this->db->where("$table_middle.{$table}_id", $condition);
         return $this;
     }
 
-    public function orWhereRelation($table_middle, $condition, $table_from = "")
-    {
-        $table = $this->checkTable($table_from);
-        $this->db->or_where("$table_middle.{$table}_id", $condition);
-        return $this;
-    }
+    // public function or_where_relation($table_middle, $condition, $table_from = "")
+    // {
+    //     $table = $this->check_table($table_from);
+    //     $this->db->or_where("$table_middle.{$table}_id", $condition);
+    //     return $this;
+    // }
 
     public function having($column, $condition = "")
     {
@@ -178,7 +178,7 @@ class MY_Model extends CI_Model
         return $this;
     }
 
-    public function orLike($column, $condition)
+    public function or_like($column, $condition)
     {
         $this->db->or_like($column, $condition);
         return $this;
@@ -188,7 +188,7 @@ class MY_Model extends CI_Model
     {
         $this->load->library('form_validation');
         $this->form_validation->set_error_delimiters('<small class="text-danger">', '</small>');
-        $validationRules = $this->getValidationRules();
+        $validationRules = $this->get_validation_rules(); // in child model
         $this->form_validation->set_rules($validationRules);
         return $this->form_validation->run();
 
@@ -197,20 +197,20 @@ class MY_Model extends CI_Model
 
     public function insert($data, $table = "")
     {
-        $table = $this->checkTable($table);
+        $table = $this->check_table($table);
         $this->db->insert($table, $data);
         return $this->db->insert_id();
     }
 
     public function update($data, $table = "")
     {
-        $table = $this->checkTable($table);
+        $table = $this->check_table($table);
         return $this->db->update($table, $data);
     }
 
     public function delete($table = "")
     {
-        $table = $this->checkTable($table);
+        $table = $this->check_table($table);
         $this->db->delete($table);
         return $this->db->affected_rows();
     }
@@ -227,19 +227,19 @@ class MY_Model extends CI_Model
         return $this;
     }
 
-    public function joinRelationMiddle($table_dest, $table_middle)
+    public function join_relation_middle($table_dest, $table_middle)
     {
         $this->db->join($table_middle, "$table_dest.{$table_dest}_id = $table_middle.{$table_dest}_id", "left");
         return $this;
     }
 
-    public function joinRelationDest($table_dest, $table_middle)
+    public function join_relation_dest($table_dest, $table_middle)
     {
         $this->db->join($table_dest, "$table_middle.{$table_dest}_id = $table_dest.{$table_dest}_id", "left");
         return $this;
     }
 
-    public function orderBy($column_name, $order = 'asc')
+    public function order_by($column_name, $order = 'asc')
     {
         $this->db->order_by($column_name, $order);
         return $this;
@@ -251,7 +251,7 @@ class MY_Model extends CI_Model
         return $this;
     }
 
-    public function makePagination($baseURL, $uriSegment, $totalRows = null)
+    public function make_pagination($baseURL, $uriSegment, $totalRows = null)
     {
         $args = func_get_args();
 
@@ -297,34 +297,34 @@ class MY_Model extends CI_Model
         return $this->pagination->create_links();
     }
 
-    public function getIdAndName($table_dest, $table_middle, $id_table_middle, $table_from = "")
+    public function get_id_and_name($table_dest, $table_middle, $id_table_middle, $table_from = "")
     {
-        $table = $this->checkTable($table_from);
+        $table = $this->check_table($table_from);
         return $this->select("$table_dest.{$table_dest}_id")
             ->select("$table_dest.{$table_dest}_name")
-            ->joinRelationMiddle($table_dest, $table_middle)
-            ->whereRelation($table_middle, $id_table_middle, $table)
-            ->getAll($table_dest);
+            ->join_relation_middle($table_dest, $table_middle)
+            ->where_relation($table_middle, $id_table_middle, $table)
+            ->get_all($table_dest);
     }
 
-    public function updateDraftStatus($draft_id, $status)
+    public function update_draft_status($draft_id, $status)
     {
         $this->where('draft_id', $draft_id)
             ->update($status, 'draft');
     }
 
-    public function getDraftFromRelation($table_dest, $table_middle)
-    {
-        return $this->joinRelationMiddle('draft', $table_middle)
-            ->joinRelationDest($table_dest, $table_middle);
-    }
+    // public function get_draft_from_relation($table_dest, $table_middle)
+    // {
+    //     return $this->join_relation_middle('draft', $table_middle)
+    //         ->join_relation_dest($table_dest, $table_middle);
+    // }
 
-    public function getPKTableId($table_dest, $table_from, $table_middle, $id_table_dest, $id_table_from)
+    public function get_pk_table_id($table_dest, $table_from, $table_middle, $id_table_dest, $id_table_from)
     {
         $query = $this->select("{$table_middle}_id")
             ->where("{$table_dest}_id", $id_table_dest)
             ->where("{$table_from}_id", $id_table_from)
-            ->getRowArray($table_middle);
+            ->get_row_array($table_middle);
 
         if ($query) {
             $data = $query;
@@ -335,7 +335,7 @@ class MY_Model extends CI_Model
         }
     }
 
-    public function editDraftDate($id, $column, $date = '')
+    public function edit_draft_date($id, $column, $date = '')
     {
         if ($date == "") {
             $date = date('Y-m-d H:i:s');
@@ -349,14 +349,14 @@ class MY_Model extends CI_Model
         }
     }
 
-    public function getIdRoleFromUserId($user_id, $role)
+    public function get_id_role_from_user_id($user_id, $role)
     {
         $id = 0;
 
         $data = $this->select($role . '_id')
-            ->joinRelationDest('user', $role)
-            ->whereRelation($role, $user_id, 'user')
-            ->getRowArray($role);
+            ->join_relation_dest('user', $role)
+            ->where_relation($role, $user_id, 'user')
+            ->get_row_array($role);
 
         if ($data) {
             $id = $data[$role . '_id'];
@@ -365,14 +365,14 @@ class MY_Model extends CI_Model
         return $id;
     }
 
-    public function getIdDraftFromDraftId($draft_id, $role)
+    public function get_id_draft_from_draft_id($draft_id, $role)
     {
         $id = 0;
 
         $data = $this->select($role . '_id')
-            ->joinRelationDest('draft', $role)
-            ->whereRelation($role, $draft_id, 'draft')
-            ->getRowArray($role);
+            ->join_relation_dest('draft', $role)
+            ->where_relation($role, $draft_id, 'draft')
+            ->get_row_array($role);
 
         if ($data) {
             $id = $data[$role . '_id'];

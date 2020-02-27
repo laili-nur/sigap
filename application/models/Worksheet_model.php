@@ -1,37 +1,37 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 class Worksheet_model extends MY_Model
 {
-   protected $perPage = 10;
+    protected $perPage = 10;
 
-       public function getValidationRules()
+    public function get_validation_rules()
     {
         $validationRules = [
             [
                 'field' => 'draft_id',
                 'label' => 'Draft ID',
-                'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_worksheet_draft'
+                'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_worksheet_draft',
             ],
             [
                 'field' => 'worksheet_num',
                 'label' => 'Worksheet Number',
-                'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_worksheet_num'
+                'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_worksheet_num',
             ],
             [
                 'field' => 'worksheet_notes',
                 'label' => 'Worksheet Number',
-                'rules' => 'trim'
+                'rules' => 'trim',
             ],
             [
                 'field' => 'is_reprint',
                 'label' => 'Reprint Status',
-                'rules' => 'trim|required'
+                'rules' => 'trim|required',
             ],
             [
                 'field' => 'is_revise',
                 'label' => 'Revise Status',
-                'rules' => 'trim|required'
-            ]
+                'rules' => 'trim|required',
+            ],
 
         ];
 
@@ -42,13 +42,13 @@ class Worksheet_model extends MY_Model
     {
         return [
             'draft_id'           => '',
-            'worksheet_num'           => '',
-            'worksheet_notes'           => '',
-            'is_reprint'              => 'n',
-            'is_revise'              => 'n',
-            'worksheet_status'              => '0',
-            'worksheet_deadline'            => '0',
-            'worksheet_end_date'            => '0'
+            'worksheet_num'      => '',
+            'worksheet_notes'    => '',
+            'is_reprint'         => 'n',
+            'is_revise'          => 'n',
+            'worksheet_status'   => '0',
+            'worksheet_deadline' => '0',
+            'worksheet_end_date' => '0',
         ];
     }
 }

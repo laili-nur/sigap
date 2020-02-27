@@ -17,7 +17,7 @@ class Faculty extends Operator_Controller
 
     public function index($page = null)
     {
-        $faculties = $this->faculty->orderBy('faculty_name')->getAll();
+        $faculties = $this->faculty->order_by('faculty_name')->get_all();
         $total     = count($faculties);
         $pages     = $this->pages;
         $main_view = 'faculty/index_faculty';

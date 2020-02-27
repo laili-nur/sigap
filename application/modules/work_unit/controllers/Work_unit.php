@@ -17,7 +17,7 @@ class Work_unit extends Operator_Controller
 
     public function index($page = null)
     {
-        $work_units = $this->work_unit->orderBy('work_unit_name')->getAll();
+        $work_units = $this->work_unit->order_by('work_unit_name')->get_all();
         $total      = count($work_units);
         $pages      = $this->pages;
         $main_view  = 'work_unit/index_work_unit';

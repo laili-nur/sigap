@@ -1,78 +1,78 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 class Book_model extends MY_Model
 {
-   protected $perPage = 10;
-   
-   public function getValidationRules()
+    protected $perPage = 10;
+
+    public function get_validation_rules()
     {
         $validationRules = [
             [
                 'field' => 'draft_id',
                 'label' => 'Draft ID',
-                'rules' => 'trim|required'
+                'rules' => 'trim|required',
             ],
             [
                 'field' => 'book_code',
                 'label' => 'Book Code',
-                'rules' => 'trim'
+                'rules' => 'trim',
             ],
             [
                 'field' => 'book_title',
                 'label' => 'Book Title',
-                'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_book_title'
+                'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_book_title',
             ],
             [
                 'field' => 'book_edition',
                 'label' => 'Book Edition',
-                'rules' => 'trim|min_length[1]|max_length[256]'
+                'rules' => 'trim|min_length[1]|max_length[256]',
             ],
             [
                 'field' => 'book_pages',
                 'label' => 'Book pages',
-                'rules' => 'trim|min_length[1]|max_length[256]'
+                'rules' => 'trim|min_length[1]|max_length[256]',
             ],
             [
                 'field' => 'isbn',
                 'label' => 'ISBN',
-                'rules' => 'trim|min_length[1]|max_length[256]'
+                'rules' => 'trim|min_length[1]|max_length[256]',
             ],
             [
                 'field' => 'eisbn',
                 'label' => 'EISBN',
-                'rules' => 'trim|min_length[1]|max_length[256]'
+                'rules' => 'trim|min_length[1]|max_length[256]',
             ],
             [
                 'field' => 'published_date',
                 'label' => 'Published Date',
-                'rules' => 'trim|callback_is_date_format_valid'
-            ],  
+                'rules' => 'trim|callback_is_date_format_valid',
+            ],
             [
                 'field' => 'harga',
                 'label' => 'Harga',
-                'rules' => 'trim'
-            ],              
+                'rules' => 'trim',
+            ],
             [
                 'field' => 'book_notes',
                 'label' => 'Book Note',
-                'rules' => 'trim'
+                'rules' => 'trim',
             ],
             [
                 'field' => 'is_reprint',
                 'label' => 'Is Reprint',
-                'rules' => 'trim'
+                'rules' => 'trim',
             ],
             [
                 'field' => 'nomor_hak_cipta',
                 'label' => 'Nomor Hak Cipta',
-                'rules' => 'trim'
+                'rules' => 'trim',
             ],
             [
                 'field' => 'status_hak_cipta',
                 'label' => 'Status Hak Cipta',
-                'rules' => 'trim'
-            ]
-            
+                'rules' => 'trim',
+            ],
+
         ];
 
         return $validationRules;
@@ -81,33 +81,33 @@ class Book_model extends MY_Model
     public function getDefaultValues()
     {
         return [
-            'draft_id'                   => '',
-            'book_code'                      => '',
-            'book_title'                   => '',
+            'draft_id'            => '',
+            'book_code'           => '',
+            'book_title'          => '',
 //            'cover'                    => '',
-            'book_edition'                 => '',
-            'book_file_link'                 => '',
-            'book_pages'                 => '',
-            'isbn'                 => '',
-            'eisbn'                 => '',
+            'book_edition'        => '',
+            'book_file_link'      => '',
+            'book_pages'          => '',
+            'isbn'                => '',
+            'eisbn'               => '',
 //            'book_file'                    => '',
-            'published_date'                   => '',
-            'harga' => '',
-            'book_notes'                  => '',
-            'is_reprint'                     => 'n',
-            'nomor_hak_cipta'                  => '',
-            'status_hak_cipta'                  => '',
-            'file_hak_cipta_link'                  => ''
+            'published_date'      => '',
+            'harga'               => '',
+            'book_notes'          => '',
+            'is_reprint'          => 'n',
+            'nomor_hak_cipta'     => '',
+            'status_hak_cipta'    => '',
+            'file_hak_cipta_link' => '',
         ];
     }
-   
+
     public function uploadBookfile($bookfieldname, $bookFileName)
     {
         $config = [
             'upload_path'      => './bookfile/',
-            'file_name'        => $bookFileName ,
-            'allowed_types'    => 'docx|doc|pdf',    // docx only
-            'max_size'         => 15360,     // 15MB
+            'file_name'        => $bookFileName,
+            'allowed_types'    => 'docx|doc|pdf', // docx only
+            'max_size'         => 15360, // 15MB
             'overwrite'        => true,
             'file_ext_tolower' => true,
         ];
@@ -135,8 +135,8 @@ class Book_model extends MY_Model
         $config = [
             'upload_path'      => './hakcipta/',
             'file_name'        => $HCFileName,
-            'allowed_types'    => 'jpg|png|jpeg|pdf',    // file types allowed
-            'max_size'         => 15360,     // 15MB
+            'allowed_types'    => 'jpg|png|jpeg|pdf', // file types allowed
+            'max_size'         => 15360, // 15MB
             'overwrite'        => true,
             'file_ext_tolower' => true,
         ];
@@ -150,68 +150,66 @@ class Book_model extends MY_Model
             $this->form_validation->add_to_error_array($HCfieldname, $this->upload->display_errors('', ''));
             return false;
         }
-    }    
-    
-        public function deleteHCfile($HCfile)
-    {
-           if (file_exists("./hakcipta/$HCfile")) {
-                unlink("./hakcipta/$HCfile");
-            } 
-        
     }
-    
-    
-    
+
+    public function deleteHCfile($HCfile)
+    {
+        if (file_exists("./hakcipta/$HCfile")) {
+            unlink("./hakcipta/$HCfile");
+        }
+
+    }
+
 //     public function uploadCover($coverfieldname, $coverFileName)
-//    {
-//        $config = [
-//            'upload_path'      => './cover/',
-//            'file_name'        => $coverFileName,
-//            'allowed_types'    => 'jpg|jpeg|png',    //  *.jpg only
-//            'max_size'         => 10240,     // 10MB
-//            'max_width'        => 0,
-//            'max_height'       => 0,
-//            'overwrite'        => true,
-//            'file_ext_tolower' => true,
-//        ];
-//
-//        $this->load->library('upload', $config);
-//        if ($this->upload->do_upload($coverfieldname)) {
-//            // Upload OK, return uploaded file info.
-//            return $this->upload->data();
-//        } else {
-//            // Add error to $_error_array
-//            $this->form_validation->add_to_error_array($coverfieldname, $this->upload->display_errors('', ''));
-//            return false;
-//        }
-//    }
-//
-//
-//    public function coverResize($coverfieldname, $source_path, $width, $height)
-//    {
-//        $config = [
-//            'image_library'  => 'gd2',
-//            'source_image'   => $source_path,
-//            'maintain_ratio' => true,
-//            'width'          => $width,
-//            'height'         => $height,
-//        ];
-//
-//        $this->load->library('image_lib', $config);
-//
-//        if ($this->image_lib->resize()) {
-//            return true;
-//        } else {
-//            $this->form_validation->add_to_error_array($coverfieldname, $this->image_lib->display_errors('', ''));
-//            return false;
-//        }
-//    }
-//
-//    public function deleteCover($imgFile)
-//    {
-//        if (file_exists("./cover/$imgFile")) {
-//            unlink("./cover/$imgFile");
-//        }
-//    }
+    //    {
+    //        $config = [
+    //            'upload_path'      => './cover/',
+    //            'file_name'        => $coverFileName,
+    //            'allowed_types'    => 'jpg|jpeg|png',    //  *.jpg only
+    //            'max_size'         => 10240,     // 10MB
+    //            'max_width'        => 0,
+    //            'max_height'       => 0,
+    //            'overwrite'        => true,
+    //            'file_ext_tolower' => true,
+    //        ];
+    //
+    //        $this->load->library('upload', $config);
+    //        if ($this->upload->do_upload($coverfieldname)) {
+    //            // Upload OK, return uploaded file info.
+    //            return $this->upload->data();
+    //        } else {
+    //            // Add error to $_error_array
+    //            $this->form_validation->add_to_error_array($coverfieldname, $this->upload->display_errors('', ''));
+    //            return false;
+    //        }
+    //    }
+    //
+    //
+    //    public function coverResize($coverfieldname, $source_path, $width, $height)
+    //    {
+    //        $config = [
+    //            'image_library'  => 'gd2',
+    //            'source_image'   => $source_path,
+    //            'maintain_ratio' => true,
+    //            'width'          => $width,
+    //            'height'         => $height,
+    //        ];
+    //
+    //        $this->load->library('image_lib', $config);
+    //
+    //        if ($this->image_lib->resize()) {
+    //            return true;
+    //        } else {
+    //            $this->form_validation->add_to_error_array($coverfieldname, $this->image_lib->display_errors('', ''));
+    //            return false;
+    //        }
+    //    }
+    //
+    //    public function deleteCover($imgFile)
+    //    {
+    //        if (file_exists("./cover/$imgFile")) {
+    //            unlink("./cover/$imgFile");
+    //        }
+    //    }
 
 }

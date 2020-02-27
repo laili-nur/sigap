@@ -1,32 +1,32 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 class Document_model extends MY_Model
 {
     protected $perPage = 10;
-    public function getValidationRules()
+    public function get_validation_rules()
     {
         $validationRules = [
             [
                 'field' => 'document_name',
                 'label' => 'document_name',
-                'rules' => 'trim|max_length[255]|required'
+                'rules' => 'trim|max_length[255]|required',
             ],
             [
                 'field' => 'document_file',
                 'label' => 'document_file',
-                'rules' => 'trim'
+                'rules' => 'trim',
             ],
             [
                 'field' => 'document_file_link',
                 'label' => 'document_file_link',
-                'rules' => 'trim'
+                'rules' => 'trim',
             ],
             [
                 'field' => 'document_notes',
                 'label' => 'document_notes',
-                'rules' => 'trim'
-            ]
-            
+                'rules' => 'trim',
+            ],
+
         ];
 
         return $validationRules;
@@ -35,11 +35,11 @@ class Document_model extends MY_Model
     public function getDefaultValues()
     {
         return [
-            'document_name'  => '',
-            'document_file'  => '',
-            'document_file_link'     => '',
-            'document_year' => date('Y'),
-            'document_notes' => ''
+            'document_name'      => '',
+            'document_file'      => '',
+            'document_file_link' => '',
+            'document_year'      => date('Y'),
+            'document_notes'     => '',
         ];
     }
 
@@ -48,8 +48,8 @@ class Document_model extends MY_Model
         $config = [
             'upload_path'      => './documentfile/',
             'file_name'        => $documentFileName,
-            'allowed_types'    => 'txt|docx|doc|pdf|jpeg|jpg|png|xls|xlsx|zip|rar',   
-            'max_size'         => 51200,     // 50MB
+            'allowed_types'    => 'txt|docx|doc|pdf|jpeg|jpg|png|xls|xlsx|zip|rar',
+            'max_size'         => 51200, // 50MB
             'overwrite'        => true,
             'file_ext_tolower' => true,
         ];
@@ -63,14 +63,13 @@ class Document_model extends MY_Model
             return false;
         }
     }
-    
-    
+
     public function deleteDocumentfile($documentFile)
     {
-        if($documentFile != "") {
+        if ($documentFile != "") {
             if (file_exists("./documentfile/$documentFile")) {
                 unlink("./documentfile/$documentFile");
-            }    
+            }
         }
     }
 }

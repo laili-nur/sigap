@@ -14,11 +14,11 @@ class User extends Operator_Controller
         if ($ceklevel != 'superadmin') {
             redirect('home');
         }
-        $users      = $this->user->paginate($page)->orderBy('username')->orderBy('level')->getAll();
-        $total      = $this->user->orderBy('level')->orderBy('username')->count();
+        $users      = $this->user->paginate($page)->order_by('username')->order_by('level')->get_all();
+        $total      = $this->user->order_by('level')->order_by('username')->count();
         $pages      = $this->pages;
         $main_view  = 'user/index_user';
-        $pagination = $this->user->makePagination(site_url('user'), 2, $total);
+        $pagination = $this->user->make_pagination(site_url('user'), 2, $total);
         $this->load->view('template', compact('pagination', 'pages', 'main_view', 'users', 'total'));
     }
 
@@ -183,10 +183,10 @@ class User extends Operator_Controller
             redirect('home');
         }
         $keywords   = $this->input->get('keywords', true);
-        $users      = $this->user->like('username', $keywords)->orLike('level', $keywords)->orderBy('user_id')->orderBy('username')->orderBy('level')->paginate($page)->getAll();
-        $tot        = $this->user->like('username', $keywords)->orLike('level', $keywords)->orderBy('user_id')->orderBy('username')->orderBy('level')->getAll();
+        $users      = $this->user->like('username', $keywords)->or_like('level', $keywords)->order_by('user_id')->order_by('username')->order_by('level')->paginate($page)->get_all();
+        $tot        = $this->user->like('username', $keywords)->or_like('level', $keywords)->order_by('user_id')->order_by('username')->order_by('level')->get_all();
         $total      = count($tot);
-        $pagination = $this->user->makePagination(site_url('user/search/'), 3, $total);
+        $pagination = $this->user->make_pagination(site_url('user/search/'), 3, $total);
         if (!$users) {
             $this->session->set_flashdata('warning', 'Data were not found');
         }

@@ -15,17 +15,17 @@ class Author extends Operator_Controller
 
     public function index($page = null)
     {
-        $authors    = $this->author->join('work_unit')->join('institute')->join('bank')->join('user')->orderBy('work_unit.work_unit_id')->orderBy('institute.institute_id')->orderBy('author_nip')->paginate($page)->getAll();
-        $tot        = $this->author->join('work_unit')->join('institute')->join('bank')->join('user')->orderBy('work_unit.work_unit_id')->orderBy('institute.institute_id')->orderBy('author_nip')->getAll();
+        $authors    = $this->author->join('work_unit')->join('institute')->join('bank')->join('user')->order_by('work_unit.work_unit_id')->order_by('institute.institute_id')->order_by('author_nip')->paginate($page)->get_all();
+        $tot        = $this->author->join('work_unit')->join('institute')->join('bank')->join('user')->order_by('work_unit.work_unit_id')->order_by('institute.institute_id')->order_by('author_nip')->get_all();
         $total      = count($tot);
         $pages      = $this->pages;
         $main_view  = 'author/index_author';
-        $pagination = $this->author->makePagination(site_url('author'), 2, $total);
+        $pagination = $this->author->make_pagination(site_url('author'), 2, $total);
         foreach ($authors as $author) {
             $author->is_author_reviewer = false;
             if ($author->user_id != 0) {
                 $data     = array('user_id' => $author->user_id);
-                $reviewer = $this->author->getWhere($data, 'reviewer');
+                $reviewer = $this->author->get_where($data, 'reviewer');
                 if (!is_null($reviewer)) {
                     $author->is_author_reviewer = true;
                 }
@@ -50,10 +50,10 @@ class Author extends Operator_Controller
             $input = (object) $this->input->post(null, true);
         }
         //total draft penulis
-        $drafts = $this->author->select(['draft_author.author_id', 'author_name', 'draft_author.draft_id', 'draft_title', 'category_name', 'theme_name', 'entry_date', 'finish_date'])->join3('draft_author', 'author', 'author')->join3('draft', 'draft_author', 'draft')->join3('category', 'draft', 'category')->join3('theme', 'draft', 'theme')->where('draft_author.author_id', $id)->getAll();
+        $drafts = $this->author->select(['draft_author.author_id', 'author_name', 'draft_author.draft_id', 'draft_title', 'category_name', 'theme_name', 'entry_date', 'finish_date'])->join3('draft_author', 'author', 'author')->join3('draft', 'draft_author', 'draft')->join3('category', 'draft', 'category')->join3('theme', 'draft', 'theme')->where('draft_author.author_id', $id)->get_all();
         //total riwayat draft
         $total_draft = count($drafts);
-        $books       = $this->author->join3('draft', 'book', 'draft')->join3('draft_author', 'draft', 'draft')->join3('author', 'draft_author', 'author')->where('draft_author.author_id', $id)->getAll('book');
+        $books       = $this->author->join3('draft', 'book', 'draft')->join3('draft_author', 'draft', 'draft')->join3('author', 'draft_author', 'author')->where('draft_author.author_id', $id)->get_all('book');
         $total_book  = count($books);
         $main_view   = 'author/view_author';
         $pages       = $this->pages;
@@ -165,7 +165,7 @@ class Author extends Operator_Controller
     public function copyToReviewer($user_id, $nip, $name)
     {
         $this->load->model('reviewer_model', 'reviewer', true);
-        $reviewer_id = $this->reviewer->getIdRoleFromUserId($user_id, 'reviewer');
+        $reviewer_id = $this->reviewer->get_id_role_from_user_id($user_id, 'reviewer');
         if ($reviewer_id == 0) {
             $this->session->user_id_temp       = $user_id;
             $this->session->reviewer_nip_temp  = $nip;
@@ -180,9 +180,9 @@ class Author extends Operator_Controller
     public function search($page = null)
     {
         $keywords   = $this->input->get('keywords', true);
-        $authors    = $this->author->like('work_unit_name', $keywords)->orLike('institute_name', $keywords)->orLike('author_nip', $keywords)->orLike('author_name', $keywords)->orLike('username', $keywords)->join('work_unit')->join('institute')->join('bank')->join('user')->orderBy('work_unit.work_unit_id')->orderBy('institute.institute_id')->orderBy('author_name')->paginate($page)->getAll();
-        $total      = $this->author->like('work_unit_name', $keywords)->orLike('institute_name', $keywords)->orLike('author_nip', $keywords)->orLike('author_name', $keywords)->orLike('username', $keywords)->join('work_unit')->join('institute')->join('bank')->join('user')->orderBy('work_unit.work_unit_id')->orderBy('institute.institute_id')->orderBy('author_name')->count();
-        $pagination = $this->author->makePagination(site_url('author/search/'), 3, $total);
+        $authors    = $this->author->like('work_unit_name', $keywords)->or_like('institute_name', $keywords)->or_like('author_nip', $keywords)->or_like('author_name', $keywords)->or_like('username', $keywords)->join('work_unit')->join('institute')->join('bank')->join('user')->order_by('work_unit.work_unit_id')->order_by('institute.institute_id')->order_by('author_name')->paginate($page)->get_all();
+        $total      = $this->author->like('work_unit_name', $keywords)->or_like('institute_name', $keywords)->or_like('author_nip', $keywords)->or_like('author_name', $keywords)->or_like('username', $keywords)->join('work_unit')->join('institute')->join('bank')->join('user')->order_by('work_unit.work_unit_id')->order_by('institute.institute_id')->order_by('author_name')->count();
+        $pagination = $this->author->make_pagination(site_url('author/search/'), 3, $total);
         if (!$authors) {
             $this->session->set_flashdata('warning', 'Data were not found');
         }
@@ -191,7 +191,7 @@ class Author extends Operator_Controller
             $author->is_author_reviewer = false;
             if ($author->user_id != 0) {
                 $data     = array('user_id' => $author->user_id);
-                $reviewer = $this->author->getWhere($data, 'reviewer');
+                $reviewer = $this->author->get_where($data, 'reviewer');
                 if (!is_null($reviewer)) {
                     $author->is_author_reviewer = true;
                 }

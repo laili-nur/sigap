@@ -1,12 +1,14 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 class Login extends MY_Controller
 {
-	public function index()
+    public function index()
     {
         //jika sudah punya sesi, tidak bisa ke halaman login
         $ceklogin = $this->session->userdata('is_login');
-        if($ceklogin){
+        if ($ceklogin) {
             redirect(base_url('home'));
         }
         if (!$_POST) {
@@ -22,9 +24,9 @@ class Login extends MY_Controller
 
         if ($this->login->login($input)) {
             $ceklevel = $this->session->userdata('level');
-            if($ceklevel == 'author_reviewer'){
+            if ($ceklevel == 'author_reviewer') {
                 redirect('login/multilevel/');
-            }else{
+            } else {
                 redirect(base_url());
             }
         } else {
@@ -32,42 +34,42 @@ class Login extends MY_Controller
         }
 
         redirect('login');
-	}
+    }
 
-	public function logout()
-	{
+    public function logout()
+    {
         $this->login->logout();
         redirect(base_url());
-	}
+    }
 
-    public function multilevel($sesi='')
+    public function multilevel($sesi = '')
     {
-        if($this->session->userdata('level_asli') == 'author_reviewer'){
-            if(!$sesi){
-            $this->load->view('multilevel');
-            }else{
+        if ($this->session->userdata('level_asli') == 'author_reviewer') {
+            if (!$sesi) {
+                $this->load->view('multilevel');
+            } else {
                 $cekuserid = $this->session->userdata('user_id');
-                $role_id = $this->login->getIdRoleFromUserId($cekuserid,$sesi);
-                if($sesi == 'author'){
+                $role_id   = $this->login->get_id_role_from_user_id($cekuserid, $sesi);
+                if ($sesi == 'author') {
                     $data = [
-                        'level'    => $sesi,
-                        'role_id'  => $role_id
+                        'level'   => $sesi,
+                        'role_id' => $role_id,
                     ];
                     $this->session->set_userdata($data);
                     redirect('home');
                 }
-                if($sesi == 'reviewer'){
+                if ($sesi == 'reviewer') {
                     $data = [
-                        'level'    => $sesi,
-                        'role_id'  => $role_id
+                        'level'   => $sesi,
+                        'role_id' => $role_id,
                     ];
                     $this->session->set_userdata($data);
                     redirect('home');
                 }
             }
-        }else{
+        } else {
             redirect('home');
         }
-        
+
     }
 }

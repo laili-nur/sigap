@@ -1,7 +1,9 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
-class Book extends Operator_Controller {
+<?php defined('BASEPATH') or exit('No direct script access allowed');
+class Book extends Operator_Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->pages = 'book';
         //khusus admin
@@ -11,30 +13,32 @@ class Book extends Operator_Controller {
         }
     }
 
-    public function index($page = null) {
-        $books = $this->book->join('draft')->join3('category', 'draft', 'category')->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('work_unit','author','work_unit')->orderBy('status_hak_cipta')->orderBy('published_date')->orderBy('book_title')->paginate($page)->getAll();
-        $tot = $this->book->join('draft')->orderBy('draft.draft_id')->orderBy('book_id')->getAll();
+    public function index($page = null)
+    {
+        $books = $this->book->join('draft')->join3('category', 'draft', 'category')->join3('draft_author', 'draft', 'draft')->join3('author', 'draft_author', 'author')->join3('work_unit', 'author', 'work_unit')->order_by('status_hak_cipta')->order_by('published_date')->order_by('book_title')->paginate($page)->get_all();
+        $tot   = $this->book->join('draft')->order_by('draft.draft_id')->order_by('book_id')->get_all();
         //tampilkan author
         foreach ($books as $key => $value) {
             if (!empty($value->draft_id)) {
-                $authors = $this->book->getIdAndName('author', 'draft_author', $value->draft_id, 'draft');
+                $authors = $this->book->get_id_and_name('author', 'draft_author', $value->draft_id, 'draft');
             } else {
                 $authors = '';
             }
             $value->author = $authors;
         }
-        $total = count($tot);
-        $pages = $this->pages;
-        $main_view = 'book/index_book';
-        $pagination = $this->book->makePagination(site_url('book'), 2, $total);
+        $total      = count($tot);
+        $pages      = $this->pages;
+        $main_view  = 'book/index_book';
+        $pagination = $this->book->make_pagination(site_url('book'), 2, $total);
         $this->load->view('template', compact('pages', 'main_view', 'books', 'pagination', 'total'));
     }
-    
-    public function add() {
+
+    public function add()
+    {
         if (!$_POST) {
-            $input = (object)$this->book->getDefaultValues();
+            $input = (object) $this->book->getDefaultValues();
         } else {
-            $input = (object)$this->input->post(null, false);
+            $input = (object) $this->input->post(null, false);
         }
         //        if (!empty($_FILES) && $_FILES['cover']['size'] > 0) {
         //            $getextension=explode(".",$_FILES['cover']['name']);
@@ -51,7 +55,7 @@ class Book extends Operator_Controller {
             if (!empty($_FILES) && $_FILES['book_file']['size'] > 0) {
                 $getextension = explode(".", $_FILES['book_file']['name']);
                 $bookFileName = str_replace(" ", "_", $input->book_title . '_' . date('YmdHis') . "." . $getextension[1]); // book file name
-                $upload = $this->book->uploadBookfile('book_file', $bookFileName);
+                $upload       = $this->book->uploadBookfile('book_file', $bookFileName);
                 if ($upload) {
                     $input->book_file = "$bookFileName";
                 }
@@ -59,16 +63,16 @@ class Book extends Operator_Controller {
             if (!empty($_FILES) && $_FILES['file_hak_cipta']['size'] > 0) {
                 // Upload new hak cipta (if any)
                 $getextension = explode(".", $_FILES['file_hak_cipta']['name']);
-                $HCFileName = str_replace(" ", "_", 'Hak_Cipta' . '_' . $input->book_title . '_' . date('YmdHis') . "." . $getextension[1]); // hak cipta file name
-                $upload = $this->book->uploadHCfile('file_hak_cipta', $HCFileName);
+                $HCFileName   = str_replace(" ", "_", 'Hak_Cipta' . '_' . $input->book_title . '_' . date('YmdHis') . "." . $getextension[1]); // hak cipta file name
+                $upload       = $this->book->uploadHCfile('file_hak_cipta', $HCFileName);
                 if ($upload) {
                     $input->file_hak_cipta = "$HCFileName";
                 }
             }
         }
         if (!$this->book->validate() || $this->form_validation->error_array()) {
-            $pages = $this->pages;
-            $main_view = 'book/form_book';
+            $pages       = $this->pages;
+            $main_view   = 'book/form_book';
             $form_action = 'book/add';
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
@@ -80,27 +84,28 @@ class Book extends Operator_Controller {
         }
         redirect('book');
     }
-    public function view($id = null) {
+    public function view($id = null)
+    {
         $book = $this->book->join('draft')->where('book_id', $id)->get();
         if (!$book) {
             $this->session->set_flashdata('warning', 'Book data were not available');
             redirect('book');
         }
         if (!$_POST) {
-            $input = (object)$book;
+            $input = (object) $book;
         } else {
-            $input = (object)$this->input->post(null, true);
+            $input            = (object) $this->input->post(null, true);
             $input->book_file = $book->book_file; // Set book file for preview.
-            
+
         }
         // tabel author
-        $authors = $this->book->select(['draft_author.author_id', 'draft_author_id', 'author_name', 'author_nip', 'work_unit_name', 'institute_name', 'draft.draft_id'])->join3('draft_author', 'draft', 'draft')->join3('author', 'draft_author', 'author')->join3('work_unit', 'author', 'work_unit')->join3('institute', 'author', 'institute')->where('draft_author.draft_id', $book->draft_id)->getAll('draft');
+        $authors = $this->book->select(['draft_author.author_id', 'draft_author_id', 'author_name', 'author_nip', 'work_unit_name', 'institute_name', 'draft.draft_id'])->join3('draft_author', 'draft', 'draft')->join3('author', 'draft_author', 'author')->join3('work_unit', 'author', 'work_unit')->join3('institute', 'author', 'institute')->where('draft_author.draft_id', $book->draft_id)->get_all('draft');
         // get draft
         $draft = $this->book->where('draft_id', $input->draft_id)->get('draft');
         // If something wrong
         if (!$this->book->validate() || $this->form_validation->error_array()) {
-            $pages = $this->pages;
-            $main_view = 'book/view';
+            $pages       = $this->pages;
+            $main_view   = 'book/view';
             $form_action = "book/edit/$id";
             $this->load->view('template', compact('draft', 'authors', 'pages', 'main_view', 'form_action', 'input'));
             return;
@@ -113,16 +118,17 @@ class Book extends Operator_Controller {
         redirect('book');
     }
 
-    public function edit($id = null) {
+    public function edit($id = null)
+    {
         $book = $this->book->where('book_id', $id)->get();
         if (!$book) {
             $this->session->set_flashdata('warning', 'Book data were not available');
             redirect('book');
         }
         if (!$_POST) {
-            $input = (object)$book;
+            $input = (object) $book;
         } else {
-            $input = (object)$this->input->post(null, false);
+            $input            = (object) $this->input->post(null, false);
             $input->book_file = $book->book_file; // Set book file for preview.
             //$input->cover = $book->cover; // Set cover untuk preview.
         }
@@ -146,7 +152,7 @@ class Book extends Operator_Controller {
             if (!empty($_FILES) && $_FILES['book_file']['size'] > 0) {
                 $getextension = explode(".", $_FILES['book_file']['name']);
                 $bookFileName = str_replace(" ", "_", $input->book_title . '_' . date('YmdHis') . "." . $getextension[1]); // book file name
-                $upload = $this->book->uploadBookfile('book_file', $bookFileName);
+                $upload       = $this->book->uploadBookfile('book_file', $bookFileName);
                 if ($upload) {
                     $input->book_file = "$bookFileName";
                     // Delete old book
@@ -169,12 +175,12 @@ class Book extends Operator_Controller {
             //         }
             //     }
             // }
-            
+
         }
         // If something wrong
         if (!$this->book->validate() || $this->form_validation->error_array()) {
-            $pages = $this->pages;
-            $main_view = 'book/form_book';
+            $pages       = $this->pages;
+            $main_view   = 'book/form_book';
             $form_action = "book/edit/$id";
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
@@ -187,27 +193,28 @@ class Book extends Operator_Controller {
         redirect('book');
     }
 
-    public function edit_hakcipta($id = null) {
+    public function edit_hakcipta($id = null)
+    {
         $book = $this->book->where('book_id', $id)->get();
         if (!$book) {
             $this->session->set_flashdata('warning', 'Book data were not available');
             redirect('book');
         }
         if (!$_POST) {
-            $input = (object)$book;
+            $input = (object) $book;
         } else {
-            $input = (object)$this->input->post(null, true);
+            $input            = (object) $this->input->post(null, true);
             $input->book_file = $book->book_file; // Set book file for preview.
             //$input->cover = $book->cover; // Set cover untuk preview.
-            
+
         }
         if ($this->book->validate()) {
             // Upload new hakcipta (if any)
             if (!empty($_FILES) && $_FILES['file_hak_cipta']['size'] > 0) {
                 // Upload new hak cipta (if any)
                 $getextension = explode(".", $_FILES['file_hak_cipta']['name']);
-                $HCFileName = str_replace(" ", "_", 'Hak_Cipta' . '_' . $input->book_title . '_' . date('YmdHis') . "." . $getextension[1]); // hak cipta file name
-                $upload = $this->book->uploadHCfile('file_hak_cipta', $HCFileName);
+                $HCFileName   = str_replace(" ", "_", 'Hak_Cipta' . '_' . $input->book_title . '_' . date('YmdHis') . "." . $getextension[1]); // hak cipta file name
+                $upload       = $this->book->uploadHCfile('file_hak_cipta', $HCFileName);
                 if ($upload) {
                     $input->file_hak_cipta = "$HCFileName";
                     // Delete old HC file
@@ -219,8 +226,8 @@ class Book extends Operator_Controller {
         }
         // If something wrong
         if (!$this->book->validate() || $this->form_validation->error_array()) {
-            $pages = $this->pages;
-            $main_view = 'book/form_hakcipta';
+            $pages       = $this->pages;
+            $main_view   = 'book/form_hakcipta';
             $form_action = "book/edit_hakcipta/$id";
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
@@ -233,7 +240,8 @@ class Book extends Operator_Controller {
         redirect('book');
     }
 
-    public function delete($id = null) {
+    public function delete($id = null)
+    {
         $book = $this->book->where('book_id', $id)->get();
         if (!$book) {
             $this->session->set_flashdata('warning', 'Book data were not available');
@@ -251,31 +259,32 @@ class Book extends Operator_Controller {
         redirect('book');
     }
 
-    public function search($page = null) {
+    public function search($page = null)
+    {
         $keywords = $this->input->get('keywords', true);
         $this->db->group_by('draft.draft_id');
-        $books = $this->book->like('book_code', $keywords)->orLike('draft_title', $keywords)->orLike('book_title', $keywords)->orLike('ISBN', $keywords)->orLike('author_name', $keywords)->join('draft')->join3('category', 'draft', 'category')->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('work_unit','author','work_unit')->orderBy('status_hak_cipta')->orderBy('published_date')->orderBy('book_title')->paginate($page)->getAll();
-        $tot = $this->book->like('book_code', $keywords)->orLike('draft_title', $keywords)->orLike('book_title', $keywords)->orLike('ISBN', $keywords)->orLike('author_name', $keywords)->join('draft')->join3('category', 'draft', 'category')->join3('draft_author','draft','draft')->join3('author','draft_author','author')->join3('work_unit','author','work_unit')->orderBy('status_hak_cipta')->orderBy('published_date')->orderBy('book_title')->getAll();
-        $total = count($tot);
-        $pagination = $this->book->makePagination(site_url('book/search/'), 3, $total);
+        $books      = $this->book->like('book_code', $keywords)->or_like('draft_title', $keywords)->or_like('book_title', $keywords)->or_like('ISBN', $keywords)->or_like('author_name', $keywords)->join('draft')->join3('category', 'draft', 'category')->join3('draft_author', 'draft', 'draft')->join3('author', 'draft_author', 'author')->join3('work_unit', 'author', 'work_unit')->order_by('status_hak_cipta')->order_by('published_date')->order_by('book_title')->paginate($page)->get_all();
+        $tot        = $this->book->like('book_code', $keywords)->or_like('draft_title', $keywords)->or_like('book_title', $keywords)->or_like('ISBN', $keywords)->or_like('author_name', $keywords)->join('draft')->join3('category', 'draft', 'category')->join3('draft_author', 'draft', 'draft')->join3('author', 'draft_author', 'author')->join3('work_unit', 'author', 'work_unit')->order_by('status_hak_cipta')->order_by('published_date')->order_by('book_title')->get_all();
+        $total      = count($tot);
+        $pagination = $this->book->make_pagination(site_url('book/search/'), 3, $total);
         if (!$books) {
             $this->session->set_flashdata('warning', 'Data were not found');
         } else {
             foreach ($books as $key => $value) {
-                $authors = $this->book->getIdAndName('author', 'draft_author', $value->draft_id, 'draft');
+                $authors       = $this->book->get_id_and_name('author', 'draft_author', $value->draft_id, 'draft');
                 $value->author = $authors;
             }
         }
         //tampilkan author
         foreach ($books as $key => $value) {
             if (!empty($value->draft_id)) {
-                $authors = $this->book->getIdAndName('author', 'draft_author', $value->draft_id, 'draft');
+                $authors = $this->book->get_id_and_name('author', 'draft_author', $value->draft_id, 'draft');
             } else {
                 $authors = '';
             }
             $value->author = $authors;
         }
-        $pages = $this->pages;
+        $pages     = $this->pages;
         $main_view = 'book/index_book';
         $this->load->view('template', compact('pages', 'main_view', 'books', 'pagination', 'total'));
     }
@@ -292,9 +301,10 @@ class Book extends Operator_Controller {
     //
 
     //validasi judul unik
-    public function unique_book_title() {
+    public function unique_book_title()
+    {
         $book_title = $this->input->post('book_title');
-        $book_id = $this->input->post('book_id');
+        $book_id    = $this->input->post('book_id');
         $this->book->where('book_title', $book_title);
         !$book_id || $this->book->where('book_id !=', $book_id);
         $book = $this->book->get();
@@ -305,8 +315,9 @@ class Book extends Operator_Controller {
         return true;
     }
     //validasi isbn unik
-    public function unique_isbn() {
-        $isbn = $this->input->post('isbn');
+    public function unique_isbn()
+    {
+        $isbn    = $this->input->post('isbn');
         $book_id = $this->input->post('book_id');
         $this->book->where('isbn', $isbn);
         !$book_id || $this->book->where('book_id !=', $book_id);
@@ -318,9 +329,10 @@ class Book extends Operator_Controller {
         return true;
     }
     //validasi sn unik
-    public function unique_serial_num() {
+    public function unique_serial_num()
+    {
         $serial_num = $this->input->post('serial_num');
-        $book_id = $this->input->post('book_id');
+        $book_id    = $this->input->post('book_id');
         $this->book->where('serial_num', $serial_num);
         !$book_id || $this->book->where('book_id !=', $book_id);
         $book = $this->book->get();
@@ -331,15 +343,16 @@ class Book extends Operator_Controller {
         return true;
     }
     //validasi format tanggal
-    public function is_date_format_valid($str) {
+    public function is_date_format_valid($str)
+    {
         if (!preg_match('/([0-9]{4})-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])/', $str)) {
             //tanggal boleh kosong
             if ($str == '') {
-                return TRUE;
+                return true;
             }
             $this->form_validation->set_message('is_date_format_valid', 'Invalid date format (yyyy-mm-dd)');
-            return FALSE;
+            return false;
         }
-        return TRUE;
+        return true;
     }
 }
