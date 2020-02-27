@@ -33,7 +33,7 @@ class Work_unit extends Operator_Controller
         }
         if (!$this->work_unit->validate()) {
             $pages       = $this->pages;
-            $main_view   = 'workunit/form_work_unit';
+            $main_view   = 'work_unit/form_work_unit';
             $form_action = 'work_unit/add';
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
@@ -60,7 +60,7 @@ class Work_unit extends Operator_Controller
         }
         if (!$this->work_unit->validate()) {
             $pages       = $this->pages;
-            $main_view   = 'workunit/form_work_unit';
+            $main_view   = 'work_unit/form_work_unit';
             $form_action = "work_unit/edit/$id";
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
