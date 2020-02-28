@@ -41,20 +41,20 @@
               </label>
               <!-- cek parameter category, jika ada isinya maka disable pilihan category -->
               <?php if (!empty($this->uri->segment(3)) and $this->uri->segment(2) != 'cetakUlang') {
-                  $atribut = 'disabled';
-              } else {
-                  $atribut = '';
-              }
-              ?>
+    $atribut = 'disabled';
+} else {
+    $atribut = '';
+}
+?>
               <?=form_dropdown('category_id', getDropdownListCategory('category', ['category_id', 'category_name']), $input->category_id, 'id="category" class="form-control custom-select d-block ' . $atribut . '" ' . $atribut . '');?>
               <?=form_error('category_id');?>
             </div>
             <?php if (!empty($this->uri->segment(3))) {
-                if (isset($input->category_id)) {
-                    echo form_hidden('category_id', $input->category_id);
-                }
-            }
-            ?>
+    if (isset($input->category_id)) {
+        echo form_hidden('category_id', $input->category_id);
+    }
+}
+?>
             <!-- /.form-group -->
             <hr class="my-2">
             <!-- .form-group -->
@@ -146,7 +146,7 @@
 <!-- /.page-section -->
 <script>
 $(document).ready(function() {
-  setting_validasi();
+  validate_setting();
   $("#formdraft").validate({
       rules: {
         category_id: "crequired",
@@ -192,7 +192,7 @@ $(document).ready(function() {
         $(element).addClass(validClass).removeClass(errorClass);
       }
     },
-    select2_validasi()
+   validate_select2()
   );
 
   // $("#callback").on("click",function(){

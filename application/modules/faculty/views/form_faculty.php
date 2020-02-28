@@ -3,19 +3,19 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="<?=base_url()?>"><span class="fa fa-home"></span></a>
+        <a href="<?=base_url();?>"><span class="fa fa-home"></span></a>
       </li>
       <li class="breadcrumb-item">
-        <a href="<?=base_url()?>">Penerbitan</a>
+        <a href="<?=base_url();?>">Penerbitan</a>
       </li>
       <li class="breadcrumb-item">
-        <a href="<?=base_url('faculty')?>">Fakultas</a>
+        <a href="<?=base_url('faculty');?>">Fakultas</a>
       </li>
       <li class="breadcrumb-item">
         <a class="text-muted">Form</a>
       </li>
     </ol>
-  </nav> 
+  </nav>
 </header>
 <!-- /.page-title-bar -->
 
@@ -28,18 +28,18 @@
     <!-- .card-body -->
     <div class="card-body">
       <!-- .form -->
-      <?= form_open($form_action,'id="formfaculty" novalidate=""') ?>
+      <?=form_open($form_action, 'id="formfaculty" novalidate=""');?>
         <!-- .fieldset -->
         <fieldset>
           <legend>Data Fakultas</legend>
-          <?= isset($input->faculty_id) ? form_hidden('faculty_id', $input->faculty_id) : '' ?>
+          <?=isset($input->faculty_id) ? form_hidden('faculty_id', $input->faculty_id) : '';?>
           <!-- .form-group -->
           <div class="form-group">
             <label for="faculty_name">Fakultas
               <abbr title="Required">*</abbr>
             </label>
-            <?= form_input('faculty_name', $input->faculty_name, 'class="form-control" id="faculty_name" autofocus') ?>
-            <?= form_error('faculty_name') ?>
+            <?=form_input('faculty_name', $input->faculty_name, 'class="form-control" id="faculty_name" autofocus');?>
+            <?=form_error('faculty_name');?>
           </div>
           <!-- /.form-group -->
         </fieldset>
@@ -56,13 +56,13 @@
     <!-- /.card-body -->
   </section>
   <!-- /.card -->
-  </div> 
+  </div>
   </div>
 </div>
 <!-- /.page-section -->
 <script>
   $(document).ready(function(){
-    setting_validasi();
+    validate_setting();
     $("#formfaculty").validate({
         rules: {
           faculty_name : {
@@ -73,7 +73,7 @@
         errorElement: "span",
         errorPlacement: function (error, element) {
            error.addClass( "invalid-feedback" );
-            if (element.parent('.input-group').length) { 
+            if (element.parent('.input-group').length) {
                 error.insertAfter(element.next('span.select2'));      // input group
             } else if (element.hasClass("select2-hidden-accessible")){
                 error.insertAfter(element.next('span.select2'));  // select2
@@ -81,12 +81,12 @@
                 error.insertAfter(element.next('label.custom-file-label'));  // fileinput custom
             } else if (element.hasClass("custom-control-input")){
                 error.insertAfter($(".custom-radio").last());  // radio
-            }else {                                      
+            }else {
                 error.insertAfter(element);               // default
             }
         }
       },
-      select2_validasi()
+     validate_select2()
      );
   })
 </script>

@@ -1,19 +1,19 @@
-<?php $i = 0 ?>
+<?php $i = 0;?>
 <!-- .page-title-bar -->
 <header class="page-title-bar">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="<?=base_url()?>"><span class="fa fa-home"></span></a>
+        <a href="<?=base_url();?>"><span class="fa fa-home"></span></a>
       </li>
       <li class="breadcrumb-item">
-        <a href="<?=base_url()?>">Penerbitan</a>
+        <a href="<?=base_url();?>">Penerbitan</a>
       </li>
       <li class="breadcrumb-item">
         <a class="text-muted">Fakultas</a>
       </li>
     </ol>
-  </nav> 
+  </nav>
 </header>
 <!-- /.page-title-bar -->
 <!-- .page-section -->
@@ -26,11 +26,11 @@
         <header class="card-header">
           <!-- .d-flex -->
           <div class="d-flex align-items-center">
-            <span class="mr-auto">Fakultas <span class="badge badge-info"><?=$total ?></span></span>
+            <span class="mr-auto">Fakultas <span class="badge badge-info"><?=$total;?></span></span>
             <!-- .card-header-control -->
             <div class="card-header-control">
               <!-- .tombol add -->
-              <a href="<?=base_url('faculty/add') ?>" class="btn btn-primary btn-sm">Tambah Fakultas</a>
+              <a href="<?=base_url('faculty/add');?>" class="btn btn-primary btn-sm">Tambah Fakultas</a>
               <!-- /.tombol add -->
             </div>
             <!-- /.card-header-control -->
@@ -41,7 +41,7 @@
         <!-- .card-body -->
         <div class="card-body p-0">
           <!-- .table-responsive -->
-          <?php if ($faculties):?>
+          <?php if ($faculties): ?>
             <div class="table-responsive">
               <!-- .table -->
               <table class="table table-striped">
@@ -56,22 +56,22 @@
                 <!-- /thead -->
                 <!-- tbody -->
                 <tbody>
-                  <?php foreach($faculties as $faculty): ?>
+                  <?php foreach ($faculties as $faculty): ?>
                     <!-- tr -->
                     <tr>
-                      <td class="align-middle"><?= ++$i ?></td>
-                      <td class="align-middle"><?= $faculty->faculty_name ?></td>
+                      <td class="align-middle"><?=++$i;?></td>
+                      <td class="align-middle"><?=$faculty->faculty_name;?></td>
                       <td class="align-middle text-right">
-                        <a href="<?= base_url('faculty/edit/'.$faculty->faculty_id.'') ?>" class="btn btn-sm btn-secondary">
+                        <a href="<?=base_url('faculty/edit/' . $faculty->faculty_id . '');?>" class="btn btn-sm btn-secondary">
                           <i class="fa fa-pencil-alt"></i>
                           <span class="sr-only">Edit</span>
                         </a>
-                        <button type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modalhapus-<?= $faculty->faculty_id ?>"><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
+                        <button type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modal-hapus-<?=$faculty->faculty_id;?>"><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
                       </td>
                     </tr>
                     <!-- /tr -->
                     <!-- Alert Danger Modal -->
-                    <div class="modal modal-alert fade" id="modalhapus-<?= $faculty->faculty_id ?>" tabindex="-1" role="dialog" aria-labelledby="modalhapus" aria-hidden="true">
+                    <div class="modal modal-alert fade" id="modal-hapus-<?=$faculty->faculty_id;?>" tabindex="-1" role="dialog" aria-labelledby="modal-hapus" aria-hidden="true">
                       <!-- .modal-dialog -->
                       <div class="modal-dialog" role="document">
                         <!-- .modal-content -->
@@ -84,12 +84,12 @@
                             <!-- /.modal-header -->
                             <!-- .modal-body -->
                             <div class="modal-body">
-                              <p>Apakah anda yakin akan menghapus fakultas <span class="font-weight-bold"><?= $faculty->faculty_name ?></span>?</p>
+                              <p>Apakah anda yakin akan menghapus fakultas <span class="font-weight-bold"><?=$faculty->faculty_name;?></span>?</p>
                             </div>
                             <!-- /.modal-body -->
                             <!-- .modal-footer -->
                             <div class="modal-footer">
-                              <button type="button" class="btn btn-danger" onclick="location.href='<?= base_url('faculty/delete/'.$faculty->faculty_id.'') ?>'" data-dismiss="modal">Hapus</button>
+                              <button type="button" class="btn btn-danger" onclick="location.href='<?=base_url('faculty/delete/' . $faculty->faculty_id . '');?>'" data-dismiss="modal">Hapus</button>
                               <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
                             </div>
                             <!-- /.modal-footer -->
@@ -99,7 +99,7 @@
                         <!-- /.modal-dialog -->
                       </div>
                       <!-- /.modal -->
-                    <?php endforeach ?>
+                    <?php endforeach;?>
                   </tbody>
                   <!-- /tbody -->
                 </table>
@@ -107,7 +107,7 @@
               </div>
               <?php else: ?>
                 <p class="text-center">Data tidak tersedia</p>
-              <?php endif ?>
+              <?php endif;?>
               <!-- /.table-responsive -->
             </div>
             <!-- /.card-body -->
@@ -115,6 +115,6 @@
           <!-- /.card -->
         </div>
       </div>
-      
+
     </div>
 <!-- /.page-section -->

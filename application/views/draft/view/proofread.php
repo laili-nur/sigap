@@ -1,4 +1,4 @@
-<?php $ceklevel = $this->session->userdata('level'); ?>
+<?php $ceklevel = $this->session->userdata('level');?>
 <!-- .card -->
 <section id="progress-proofread" class="card">
   <!-- .card-header -->
@@ -6,21 +6,21 @@
   <div class="list-group list-group-flush list-group-bordered" id="list-group-proofread">
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Tanggal masuk</span>
-      <strong><?= konversiTanggal($input->proofread_start_date) ?></strong>
+      <strong><?=konversiTanggal($input->proofread_start_date);?></strong>
     </div>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Tanggal jadi</span>
-      <strong><?= konversiTanggal($input->proofread_end_date) ?></strong>
+      <strong><?=konversiTanggal($input->proofread_end_date);?></strong>
     </div>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Status</span>
-      <?php if($input->is_proofread == 'y'): ?>
-      <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->proofread_status ?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Proofread Selesai</a>
-      <?php elseif($input->is_proofread == 'n' and $input->stts == 99): ?>
-      <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->proofread_status ?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Draft Ditolak</a>
+      <?php if ($input->is_proofread == 'y'): ?>
+      <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->proofread_status;?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Proofread Selesai</a>
+      <?php elseif ($input->is_proofread == 'n' and $input->stts == 99): ?>
+      <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->proofread_status;?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Draft Ditolak</a>
       <?php else: ?>
       -
-      <?php endif ?>
+      <?php endif;?>
     </div>
     <hr class="m-0">
   </div>
@@ -29,9 +29,9 @@
     <div class="el-example">
       <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
       <button title="Aksi admin" class="btn btn-secondary" data-toggle="modal" data-target="#proofread_aksi"><i class="fa fa-thumbs-up"></i> Aksi</button>
-      <?php endif ?>
-      <button type="button" class="btn <?=($input->proofread_notes!='' || $input->proofread_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#proofread" id="btn-tanggapan-proofread">Tanggapan Proofread
-        <?=($input->proofread_notes!='' || $input->proofread_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
+      <?php endif;?>
+      <button type="button" class="btn <?=($input->proofread_notes != '' || $input->proofread_notes_author != '') ? 'btn-success' : 'btn-outline-success';?>" data-toggle="modal" data-target="#proofread" id="btn-tanggapan-proofread">Tanggapan Proofread
+        <?=($input->proofread_notes != '' || $input->proofread_notes_author != '') ? '<i class="fa fa-check"></i>' : '';?></button>
       <!-- modal -->
       <div class="modal fade" id="proofread" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <!-- .modal-dialog -->
@@ -47,16 +47,16 @@
             <div class="modal-body">
               <p class="font-weight-bold">NASKAH</p>
               <!-- if upload ditampilkan di level tertentu -->
-              <?php if($ceklevel=='layouter' or $ceklevel=='editor' or ($ceklevel == 'author' and $author_order==1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+              <?php if ($ceklevel == 'layouter' or $ceklevel == 'editor' or ($ceklevel == 'author' and $author_order == 1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
               <div class="alert alert-info">Upload file naskah atau sertakan link naskah.</div>
-              <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/proofread_file', 'id="proofreadform"'); ?>
-              <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
+              <?=form_open_multipart('draft/upload_progress/' . $input->draft_id . '/proofread_file', 'id="proofreadform"');?>
+              <?=isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '';?>
               <!-- .form-group -->
               <div class="form-group">
                 <label for="proofread_file">File Naskah</label>
                 <!-- .input-group -->
                 <div class="custom-file">
-                  <?= form_upload('proofread_file','','class="custom-file-input naskah" id="proofread_file"') ?>
+                  <?=form_upload('proofread_file', '', 'class="custom-file-input naskah" id="proofread_file"');?>
                   <label class="custom-file-label" for="proofread_file">Choose file</label>
                 </div>
                 <small class="form-text text-muted">Tipe file upload  bertype : docx, doc, dan pdf.</small>
@@ -67,72 +67,72 @@
               <div class="form-group">
                 <label for="proofread_file_link">Link Naskah</label>
                 <div>
-                  <?= form_input('proofread_file_link', $input->proofread_file_link, 'class="form-control naskah" id="proofread_file_link"') ?>
+                  <?=form_input('proofread_file_link', $input->proofread_file_link, 'class="form-control naskah" id="proofread_file_link"');?>
                 </div>
-                <?= form_error('proofread_file_link') ?>
+                <?=form_error('proofread_file_link');?>
               </div>
               <!-- /.form-group -->
               <div class="form-group">
                 <button class="btn btn-primary " type="submit" value="Submit" id="btn-upload-proofread"><i class="fa fa-upload"></i> Upload</button>
               </div>
-              <?= form_close(); ?>
-              <?php endif ?>
+              <?=form_close();?>
+              <?php endif;?>
               <!-- endif upload ditampilkan di level tertentu -->
               <!-- keterangan last upload dan tombol download -->
               <div id="modal-proofread">
                 <p class="form-text text-muted">Last Upload :
-                  <?=konversiTanggal($input->proofread_upload_date) ?>,
+                  <?=konversiTanggal($input->proofread_upload_date);?>,
                   <br> by :
-                  <?=konversi_username_level($input->proofread_last_upload) ?>
-                  <?php  if($ceklevel !='author' and $ceklevel !='reviewer'):?>
-                  <em>(<?=$input->proofread_last_upload ?>)</em>
-                  <?php endif ?>
+                  <?=konversi_username_level($input->proofread_last_upload);?>
+                  <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer'): ?>
+                  <em>(<?=$input->proofread_last_upload;?>)</em>
+                  <?php endif;?>
                 </p>
-                <?=(!empty($input->proofread_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->proofread_file.'" href="'.base_url('draftfile/'.$input->proofread_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
-                <?=(!empty($input->proofread_file_link))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->proofread_file_link.'" href="'.$input->proofread_file_link.'" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
+                <?=(!empty($input->proofread_file)) ? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="' . $input->proofread_file . '" href="' . base_url('draftfile/' . $input->proofread_file) . '" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '';?>
+                <?=(!empty($input->proofread_file_link)) ? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="' . $input->proofread_file_link . '" href="' . $input->proofread_file_link . '" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '';?>
               </div>
               <hr class="my-3">
               <!-- .form -->
-              <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formproofread"') ?>
+              <?=form_open('draft/ubahnotes/' . $input->draft_id, 'id="formproofread"');?>
               <!-- .fieldset -->
               <fieldset>
                 <!-- .form-group -->
                 <div class="form-group">
                   <label for="cpr" class="font-weight-bold">Catatan Proofread</label>
-                  <?php 
-                      $optionscpr = array(
-                          'name' => 'proofread_notes',
-                          'class'=> 'form-control summernote-basic',
-                          'id'  => 'cpr',
-                          'rows' => '6',
-                          'value'=> $input->proofread_notes
-                      );
-                      if($ceklevel=='author'){
-                        echo '<div class="font-italic">'.nl2br($input->proofread_notes).'</div>';
-                      }else{
-                        echo form_textarea($optionscpr);
-                      }
-                      ?>
+                  <?php
+$optionscpr = array(
+    'name'  => 'proofread_notes',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'cpr',
+    'rows'  => '6',
+    'value' => $input->proofread_notes,
+);
+if ($ceklevel == 'author') {
+    echo '<div class="font-italic">' . nl2br($input->proofread_notes) . '</div>';
+} else {
+    echo form_textarea($optionscpr);
+}
+?>
                 </div>
                 <!-- /.form-group -->
                 <hr>
                 <!-- .form-group -->
                 <div class="form-group">
                   <label for="cprp" class="font-weight-bold">Catatan Penulis</label>
-                  <?php 
-                      $optionscprp = array(
-                          'name' => 'proofread_notes_author',
-                          'class'=> 'form-control summernote-basic',
-                          'id'  => 'cprp',
-                          'rows' => '6',
-                          'value'=> $input->proofread_notes_author
-                      );
-                      if($ceklevel!='author' or $author_order!=1){
-                        echo '<div class="font-italic">'.nl2br($input->proofread_notes_author).'</div>';
-                      }else{
-                        echo form_textarea($optionscprp);
-                      }
-                      ?>
+                  <?php
+$optionscprp = array(
+    'name'  => 'proofread_notes_author',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'cprp',
+    'rows'  => '6',
+    'value' => $input->proofread_notes_author,
+);
+if ($ceklevel != 'author' or $author_order != 1) {
+    echo '<div class="font-italic">' . nl2br($input->proofread_notes_author) . '</div>';
+} else {
+    echo form_textarea($optionscprp);
+}
+?>
                 </div>
                 <!-- /.form-group -->
               </fieldset>
@@ -141,10 +141,10 @@
             <!-- /.modal-body -->
             <!-- .modal-footer -->
             <div class="modal-footer">
-              <?php if($author_order!=0 or $ceklevel!='author'): ?>
+              <?php if ($author_order != 0 or $ceklevel != 'author'): ?>
               <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-proofread">Submit</button>
-              <?php endif ?>
-              <?=form_close(); ?>
+              <?php endif;?>
+              <?=form_close();?>
               <!-- /.form -->
               <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
             </div>
@@ -169,7 +169,7 @@
             <!-- .modal-body -->
             <div class="modal-body">
               <!-- .form -->
-              <?= form_open('draft/ubahnotes/'.$input->draft_id) ?>
+              <?=form_open('draft/ubahnotes/' . $input->draft_id);?>
               <!-- .fieldset -->
               <fieldset>
                 <!-- .form-group -->
@@ -178,26 +178,26 @@
                   <div class="alert alert-info">
                   Catatan admin dapat dilihat oleh semua user yang terkait dengan draft ini.
                 </div>
-                  <?php 
-                      $hidden_date = array(
-                          'type'  => 'hidden',
-                          'id'    => 'proofread_end_date',
-                          'value' => date('Y-m-d H:i:s')
-                      );
-                      echo form_input($hidden_date);
-                      $proofread_status = array(
-                          'name' => 'proofread_status',
-                          'class'=> 'form-control summernote-basic',
-                          'id'  => 'crp2',
-                          'rows' => '6',
-                          'value'=> $input->proofread_status
-                      );
-                      if($ceklevel!='superadmin' and $ceklevel!='admin_penerbitan'){
-                        echo '<div class="font-italic">'.nl2br($input->proofread_status).'</div>';
-                      }else{
-                        echo form_textarea($proofread_status);
-                      }
-                       ?>
+                  <?php
+$hidden_date = array(
+    'type'  => 'hidden',
+    'id'    => 'proofread_end_date',
+    'value' => date('Y-m-d H:i:s'),
+);
+echo form_input($hidden_date);
+$proofread_status = array(
+    'name'  => 'proofread_status',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'crp2',
+    'rows'  => '6',
+    'value' => $input->proofread_status,
+);
+if ($ceklevel != 'superadmin' and $ceklevel != 'admin_penerbitan') {
+    echo '<div class="font-italic">' . nl2br($input->proofread_status) . '</div>';
+} else {
+    echo form_textarea($proofread_status);
+}
+?>
                   <div class="alert alert-info">
                     Pilih salah satu tombol dibawah ini: <br>
                     Jika <strong class="text-success">Setuju</strong>, maka tahap proofread akan diakhiri dan tanggal selesai proofread akan dicatat <br>
@@ -216,7 +216,7 @@
               <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
             </div>
             <!-- /.modal-footer -->
-            <?=form_close(); ?>
+            <?=form_close();?>
             <!-- /.form -->
           </div>
           <!-- /.modal-content -->
@@ -232,7 +232,7 @@
 <script>
 $(document).ready(function() {
   //panggil setingan validasi di ugmpress js
-  setting_validasi();
+  validate_setting();
 
   //submit dan validasi
   $("#proofreadform").validate({
@@ -272,7 +272,7 @@ $(document).ready(function() {
         let id = $('[name=draft_id]').val();
         var formData = new FormData(form);
         $.ajax({
-          url: "<?php echo base_url('draft/upload_progress/') ?>" + id + "/proofread_file",
+          url: "<?php echo base_url('draft/upload_progress/'); ?>" + id + "/proofread_file",
           type: "post",
           data: formData,
           processData: false,
@@ -296,7 +296,7 @@ $(document).ready(function() {
         return false;
       }
     },
-    select2_validasi()
+   validate_select2()
   );
 
   $('#btn-submit-proofread').on('click', function() {
@@ -307,7 +307,7 @@ $(document).ready(function() {
     let cprp = $('#cprp').val();
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
+      url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id,
       datatype: "JSON",
       data: {
         proofread_notes: cpr,
@@ -337,7 +337,7 @@ $(document).ready(function() {
     let end_date = $('#proofread_end_date').val();
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
+      url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id,
       datatype: "JSON",
       data: {
         proofread_status: proofread_status,
@@ -374,7 +374,7 @@ $(document).ready(function() {
     console.log(end_date);
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
+      url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id,
       datatype: "JSON",
       data: {
         proofread_status: proofread_status,

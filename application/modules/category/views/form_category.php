@@ -1,196 +1,175 @@
-<!-- .page-title-bar -->
+<?php
+$category_type = [
+    '1' => 'Hibah Buku Karya',
+    '2' => 'Hibah Reguler',
+    '3' => 'Cetak Ulang',
+];
+?>
+
 <header class="page-title-bar">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a href="<?=base_url()?>"><span class="fa fa-home"></span></a>
-      </li>
-      <li class="breadcrumb-item">
-        <a href="<?=base_url()?>">Penerbitan</a>
-      </li>
-      <li class="breadcrumb-item">
-        <a href="<?=base_url('draft')?>">Draft</a>
-      </li>
-      <li class="breadcrumb-item ">
-        <a href="<?=base_url('category')?>">Kategori</a>
-      <li class="breadcrumb-item active">
-        <a class="text-muted">Form</a>
-      </li>
-      </li>
-    </ol>
-  </nav>
+   <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+         <li class="breadcrumb-item">
+            <a href="<?=base_url();?>"><span class="fa fa-home"></span></a>
+         </li>
+         <li class="breadcrumb-item ">
+            <a href="<?=base_url('category');?>">Kategori</a>
+         <li class="breadcrumb-item active">
+            <a class="text-muted">Form</a>
+         </li>
+         </li>
+      </ol>
+   </nav>
 </header>
-<!-- /.page-title-bar -->
-<!-- .page-section -->
 <div class="page-section">
-  <div class="row">
-    <div class="col-md-6">
-      <!-- .card -->
-      <section id="data-category" class="card">
-        <!-- .card-body -->
-        <div class="card-body">
-          <!-- .form -->
-          <?= form_open($form_action,'novalidate="" id="formcategory"') ?>
-          <!-- .fieldset -->
-          <fieldset>
-            <legend>Data Kategori</legend>
-            <?= isset($input->category_id) ? form_hidden('category_id', $input->category_id) : '' ?>
-            <!-- .form-group -->
-            <div class="form-group">
-              <label for="category_name">Judul Kategori
-              <abbr title="Required">*</abbr>
-              </label>
-              <?= form_input('category_name', $input->category_name, 'class="form-control" id="category_name" autofocus') ?>
-              <?= form_error('category_name') ?>
+   <div class="row">
+      <div class="col-md-6">
+         <section class="card">
+            <div class="card-body">
+               <?=form_open($form_action, 'novalidate="" id="form_category"');?>
+               <fieldset>
+                  <legend>Form Kategori</legend>
+                  <?=isset($input->category_id) ? form_hidden('category_id', $input->category_id) : '';?>
+
+                  <div class="form-group">
+                     <label for="category_name">
+                        <?=$this->lang->line('form_category_name');?>
+                        <abbr title="Required">*</abbr>
+                     </label>
+                     <?=form_input('category_name', $input->category_name, 'class="form-control" id="category_name" autofocus');?>
+                     <?=form_error('category_name');?>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="category_type">
+                        <?=$this->lang->line('form_category_type');?>
+                        <abbr title="Required">*</abbr>
+                     </label>
+                     <?=form_dropdown('category_type', $category_type, $input->category_type, 'id="category_type" class="form-control custom-select d-block"');?>
+                     <?=form_error('category_type');?>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="category_year">
+                        <?=$this->lang->line('form_category_year');?>
+                        <abbr title="Required">*</abbr>
+                     </label>
+                     <?=form_input('category_year', $input->category_year, 'class="form-control" id="category_year"');?>
+                     <?=form_error('category_year');?>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="date_open">
+                        <?=$this->lang->line('form_category_date_open');?>
+                        <abbr title="Required">*</abbr>
+                     </label>
+                     <?=form_input('date_open', $input->date_open, 'class="form-control" id="date_open" ');?>
+                     <?=form_error('date_open');?>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="date_close">
+                        <?=$this->lang->line('form_category_date_close');?>
+                        <abbr title="Required">*</abbr>
+                     </label>
+                     <?=form_input('date_close', $input->date_close, 'class="form-control" id="date_close" ');?>
+                     <?=form_error('date_close');?>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="category_note">
+                        <?=$this->lang->line('form_category_note');?>
+                     </label>
+                     <?=form_textarea('category_note', $input->category_note, 'class="form-control"');?>
+                     <?=form_error('category_note');?>
+                  </div>
+
+                  <div class="form-group">
+                     <label>
+                        <?=$this->lang->line('form_category_status');?>
+                        <abbr title="Required">*</abbr>
+                     </label>
+                     <div>
+                        <div class="form-group">
+                           <div class="custom-control custom-radio">
+                              <?=form_radio('category_status', 'y', isset($input->category_status) && ($input->category_status == 'y') ? true : false, ' class="custom-control-input" id="category_status1"');?>
+                              <label
+                                 class="custom-control-label"
+                                 for="category_status1"
+                              >Aktif</label>
+                           </div>
+                           <div class="custom-control custom-radio">
+                              <?=form_radio('category_status', 'n', isset($input->category_status) && ($input->category_status == 'n') ? true : false, 'class="custom-control-input" id="category_status2"');?>
+                              <label
+                                 class="custom-control-label"
+                                 for="category_status2"
+                              >Tidak aktif</label>
+                           </div>
+                        </div>
+                     </div>
+                     <?=form_error('category_status');?>
+                  </div>
+               </fieldset>
+               <hr>
+               <div class="form-actions">
+                  <button
+                     class="btn btn-primary ml-auto"
+                     type="submit"
+                  >Submit data</button>
+               </div>
+               </form>
             </div>
-            <!-- /.form-group -->
-            <!-- .form-group -->
-            <?php 
-              $category_type = [
-              '1' => 'Hibah buku karya',
-              '2' => 'Hibah Reguler',
-              '3' => 'Cetak Ulang',
-              ]; ?>
-            <div class="form-group">
-              <label for="category_type">Tipe Kategori
-              <abbr title="Required">*</abbr>
-              </label>
-              <?= form_dropdown('category_type', $category_type, $input->category_type, 'id="category_type" class="form-control custom-select d-block"') ?>
-              <?= form_error('category_type') ?>
-            </div>
-            <!-- /.form-group -->
-            <!-- .form-group -->
-            <div class="form-group">
-              <label for="category_year">Tahun Kategori
-              <abbr title="Required">*</abbr>
-              </label>
-              <?= form_input('category_year', $input->category_year, 'class="form-control" id="category_year"') ?>
-              <?= form_error('category_year') ?>
-            </div>
-            <!-- /.form-group -->
-            <!-- .form-group -->
-            <div class="form-group">
-              <label for="date_open">Tanggal Buka
-              <abbr title="Required">*</abbr>
-              </label>
-              <?= form_input('date_open', $input->date_open, 'class="form-control" id="date_open" ') ?>
-              <?= form_error('date_open') ?>
-            </div>
-            <!-- /.form-group -->
-            <!-- .form-group -->
-            <div class="form-group">
-              <label for="date_close">Tanggal Tutup
-              <abbr title="Required">*</abbr>
-              </label>
-              <?= form_input('date_close', $input->date_close, 'class="form-control" id="date_close" ') ?>
-              <?= form_error('date_close') ?>
-            </div>
-            <!-- /.form-group -->
-            <!-- .form-group -->
-            <div class="form-group">
-              <label for="category_note">Keterangan</label>
-              <?= form_textarea('category_note', $input->category_note, 'class="form-control"') ?>
-              <?= form_error('category_note') ?>
-            </div>
-            <!-- /.form-group -->
-            <!-- .form-group -->
-            <div class="form-group">
-              <label>Status
-              <abbr title="Required">*</abbr>
-              </label>
-              <div>
-                <!-- button radio -->
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                  <label class="btn btn-secondary <?=($input->category_status == 'y') ? 'active' : '' ?>">
-                  <?= form_radio('category_status', 'y',
-                    isset($input->category_status) && ($input->category_status == 'y') ? true : false,'required class="custom-control-input" id="blocked1"')?> Aktif</label>
-                  <label class="btn btn-secondary <?=($input->category_status == 'n') ? 'active' : '' ?>">
-                  <?= form_radio('category_status', 'n',
-                    isset($input->category_status) && ($input->category_status == 'n') ? true : false,' class="custom-control-input" id="blocked2"')?> Tidak Aktif</label>
-                </div>
-                <!-- /button radio -->
-              </div>
-              <?= form_error('category_status') ?>
-            </div>
-            <!-- /.form-group -->
-          </fieldset>
-          <!-- /.fieldset -->
-          <hr>
-          <!-- .form-actions -->
-          <div class="form-actions">
-            <button class="btn btn-primary ml-auto" type="submit">Submit data</button>
-          </div>
-          <!-- /.form-actions -->
-          </form>
-          <!-- /.form -->
-        </div>
-        <!-- /.card-body -->
-      </section>
-      <!-- /.card -->
-    </div>
-  </div>
+         </section>
+      </div>
+   </div>
 </div>
-<!-- /.page-section -->
+
 <script>
-  $(document).ready(function(){
-    $('#date_open').flatpickr({
+$(document).ready(function() {
+   $('#date_open').flatpickr({
       disableMobile: true,
       dateFormat: 'Y-m-d',
-    });
-    $('#date_close').flatpickr({
+   });
+
+   $('#date_close').flatpickr({
       disableMobile: true,
       dateFormat: 'Y-m-d',
-    });
-    $.validator.addMethod("endDate", function(value, element) {
+   });
+
+   $.validator.addMethod("endDate", function(value, element) {
       var startDate = $('#date_open').val();
       return Date.parse(startDate) <= Date.parse(value) || value == "";
-    }, "Tanggal tutup harus setelah tanggal buka");
-    setting_validasi();
-    $("#formcategory").validate({
-      rules: {
-        category_name : {
-          crequired :true,
-          alphanum : true,
-        },
-        category_year : {
-          crequired:true,
-          crange:[1900,2100],
-        },
-        date_open : {
-          crequired : true,
-          date : true
-        },
-        date_close : {
-          crequired : true,
-          date : true,
-          endDate: true
-        },
-        category_status : "crequired"
+   }, "<?=$this->lang->line('form_category_error_date_invalid');?>");
+
+   validate_setting();
+
+   $("#form_category").validate({
+         rules: {
+            category_name: {
+               crequired: true,
+               alphanum: true,
+            },
+            category_year: {
+               crequired: true,
+               crange: [1900, 2100],
+            },
+            date_open: {
+               crequired: true,
+               date: true
+            },
+            date_close: {
+               crequired: true,
+               date: true,
+               endDate: true
+            },
+            category_status: 'crequired'
+         },
+         errorElement: "div",
+         errorPlacement: function(error, element) {
+            error_validate_placement(error, element)
+         }
       },
-      errorElement: "span",
-      errorPlacement: function (error, element) {
-        error.addClass( "invalid-feedback" );
-        if (element.parent('.input-group').length) {
-            // input group
-            error.insertAfter(element.next('span.select2'));
-          } else if (element.hasClass("select2-hidden-accessible")){
-            // select2
-            error.insertAfter(element.next('span.select2'));
-          } else if (element.hasClass("custom-file-input")){
-            // fileinput custom
-            error.insertAfter(element.next('label.custom-file-label'));
-          } else if (element.hasClass("custom-control-input")){
-            // radio
-            error.insertAfter($(".custom-radio").last());
-          }else {
-            // default             
-            error.insertAfter(element);               
-          }
-        }
-      },
-      select2_validasi()
-      );
-    // $('[name=date_open]').next('input').attr("name","date_open");
-    // $('[name=date_close]').next('input').attr("name","date_close");
-  })
+      validate_select2()
+   );
+})
 </script>

@@ -3,16 +3,16 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="<?=base_url()?>"><span class="fa fa-home"></span></a>
+        <a href="<?=base_url();?>"><span class="fa fa-home"></span></a>
       </li>
       <li class="breadcrumb-item">
-        <a href="<?=base_url()?>">Penerbitan</a>
+        <a href="<?=base_url();?>">Penerbitan</a>
       </li>
       <li class="breadcrumb-item">
-        <a href="<?=base_url('draft')?>">Draft</a>
+        <a href="<?=base_url('draft');?>">Draft</a>
       </li>
       <li class="breadcrumb-item">
-        <a href="<?=base_url('theme')?>">Tema</a>
+        <a href="<?=base_url('theme');?>">Tema</a>
       </li>
       <li class="breadcrumb-item active">
         <a class="text-muted">Form</a>
@@ -30,18 +30,18 @@
     <!-- .card-body -->
     <div class="card-body">
       <!-- .form -->
-      <?= form_open($form_action,'id="formtheme" novalidate=""') ?>
+      <?=form_open($form_action, 'id="formtheme" novalidate=""');?>
         <!-- .fieldset -->
         <fieldset>
           <legend>Data Tema</legend>
-          <?= isset($input->theme_id) ? form_hidden('theme_id', $input->theme_id) : '' ?>
+          <?=isset($input->theme_id) ? form_hidden('theme_id', $input->theme_id) : '';?>
           <!-- .form-group -->
           <div class="form-group">
             <label for="theme_name">Tema
               <abbr title="Required">*</abbr>
             </label>
-            <?= form_input('theme_name', $input->theme_name, 'class="form-control" id="theme_name" autofocus') ?>
-            <?= form_error('theme_name') ?>
+            <?=form_input('theme_name', $input->theme_name, 'class="form-control" id="theme_name" autofocus');?>
+            <?=form_error('theme_name');?>
           </div>
           <!-- /.form-group -->
         </fieldset>
@@ -60,12 +60,12 @@
   <!-- /.card -->
     </div>
   </div>
-        
+
 </div>
 <!-- /.page-section -->
 <script>
   $(document).ready(function(){
-    setting_validasi();
+    validate_setting();
     $("#formtheme").validate({
         rules: {
           theme_name : {
@@ -76,7 +76,7 @@
         errorElement: "span",
         errorPlacement: function (error, element) {
            error.addClass( "invalid-feedback" );
-            if (element.parent('.input-group').length) { 
+            if (element.parent('.input-group').length) {
                 error.insertAfter(element.next('span.select2'));      // input group
             } else if (element.hasClass("select2-hidden-accessible")){
                 error.insertAfter(element.next('span.select2'));  // select2
@@ -84,12 +84,12 @@
                 error.insertAfter(element.next('label.custom-file-label'));  // fileinput custom
             } else if (element.hasClass("custom-control-input")){
                 error.insertAfter($(".custom-radio").last());  // radio
-            }else {                                      
+            }else {
                 error.insertAfter(element);               // default
             }
         }
       },
-      select2_validasi()
+     validate_select2()
      );
   })
 </script>

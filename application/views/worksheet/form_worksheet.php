@@ -3,13 +3,13 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="<?=base_url()?>"><span class="fa fa-home"></span></a>
+        <a href="<?=base_url();?>"><span class="fa fa-home"></span></a>
       </li>
       <li class="breadcrumb-item">
-        <a href="<?=base_url()?>">Penerbitan</a>
+        <a href="<?=base_url();?>">Penerbitan</a>
       </li>
       <li class="breadcrumb-item">
-        <a href="<?=base_url('worksheet')?>">Lembar kerja</a>
+        <a href="<?=base_url('worksheet');?>">Lembar kerja</a>
       </li>
       <li class="breadcrumb-item active">
         <a class="text-muted">Form</a>
@@ -27,26 +27,26 @@
         <!-- .card-body -->
         <div class="card-body">
           <!-- .form -->
-          <?= form_open($form_action,'novalidate="" id="formworksheet"') ?>
+          <?=form_open($form_action, 'novalidate="" id="formworksheet"');?>
           <!-- .fieldset -->
           <fieldset>
             <legend>Data Lembar Kerja</legend>
-            <?= isset($input->worksheet_id) ? form_hidden('worksheet_id', $input->worksheet_id) : '' ?>
-            <div class="alert alert-info">Last edited by : <strong><?= isset($input->worksheet_pic) ?$input->worksheet_pic : '' ?></strong> on <strong><?= isset($input->worksheet_ts) ? $input->worksheet_ts : '' ?></strong></div>
+            <?=isset($input->worksheet_id) ? form_hidden('worksheet_id', $input->worksheet_id) : '';?>
+            <div class="alert alert-info">Last edited by : <strong><?=isset($input->worksheet_pic) ? $input->worksheet_pic : '';?></strong> on <strong><?=isset($input->worksheet_ts) ? $input->worksheet_ts : '';?></strong></div>
             <!-- .form-group -->
             <div class="form-group">
               <label for="draft_id">Draft
               <abbr title="Required">*</abbr>
               </label>
-              <?php if($input->draft_id=='' or $this->uri->segment(2)=='add'): ?>
-              <?= form_dropdown('draft_id', getDropdownList('draft', ['draft_id', 'draft_title']), $input->draft_id, 'id="draft_id" class="form-control custom-select d-block "') ?>
-              <?= form_error('draft_id') ?>
+              <?php if ($input->draft_id == '' or $this->uri->segment(2) == 'add'): ?>
+              <?=form_dropdown('draft_id', getDropdownList('draft', ['draft_id', 'draft_title']), $input->draft_id, 'id="draft_id" class="form-control custom-select d-block "');?>
+              <?=form_error('draft_id');?>
               <?php else: ?>
-              <p class="font-weight-bold"><a href="<?=base_url('draft/view/'.$input->draft_id) ?>"><?=konversiID('draft','draft_id',$input->draft_id)->draft_title ?></a></p>
-              <?=(!empty($input->draft_file))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->draft_file.'" class="btn btn-success btn-xs m-0" href="'.base_url('draftfile/'.$input->draft_file).'"><i class="fa fa-download"></i> Download</a>' : '' ?>
-              <?=(!empty($input->draft_file_link))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->draft_file_link.'" class="btn btn-success btn-xs m-0" href="'.$input->draft_file_link.'"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
-              <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
-              <?php endif ?>
+              <p class="font-weight-bold"><a href="<?=base_url('draft/view/' . $input->draft_id);?>"><?=konversiID('draft', 'draft_id', $input->draft_id)->draft_title;?></a></p>
+              <?=(!empty($input->draft_file)) ? '<a data-toggle="tooltip" data-placement="right" title="' . $input->draft_file . '" class="btn btn-success btn-xs m-0" href="' . base_url('draftfile/' . $input->draft_file) . '"><i class="fa fa-download"></i> Download</a>' : '';?>
+              <?=(!empty($input->draft_file_link)) ? '<a data-toggle="tooltip" data-placement="right" title="' . $input->draft_file_link . '" class="btn btn-success btn-xs m-0" href="' . $input->draft_file_link . '"><i class="fa fa-external-link-alt"></i> External file</a>' : '';?>
+              <?=isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '';?>
+              <?php endif;?>
             </div>
             <!-- /.form-group -->
             <hr class="my-2">
@@ -61,9 +61,9 @@
                 <i class="fa fa-times-circle"></i>
                 </span>
                 </button>
-                <?= form_input('worksheet_num', $input->worksheet_num, 'class="form-control" id="worksheet_num"') ?>
+                <?=form_input('worksheet_num', $input->worksheet_num, 'class="form-control" id="worksheet_num"');?>
               </div>
-              <?= form_error('worksheet_num') ?>
+              <?=form_error('worksheet_num');?>
             </div>
             <div class="form-group">
               <label for="worksheet_num">Deadline Desk Screening
@@ -75,9 +75,9 @@
                 <i class="fa fa-times-circle"></i>
                 </span>
                 </button>
-                <?= form_input('worksheet_deadline', $input->worksheet_deadline, 'class="form-control mydate" id="worksheet_deadline"') ?>
+                <?=form_input('worksheet_deadline', $input->worksheet_deadline, 'class="form-control mydate" id="worksheet_deadline"');?>
               </div>
-              <?= form_error('worksheet_num') ?>
+              <?=form_error('worksheet_num');?>
             </div>
             <div class="form-group">
               <label for="worksheet_num">Tanggal Jadi Desk Screening
@@ -88,9 +88,9 @@
                 <i class="fa fa-times-circle"></i>
                 </span>
                 </button>
-                <?= form_input('worksheet_end_date', $input->worksheet_end_date, 'class="form-control mydate" id="worksheet_end_date"') ?>
+                <?=form_input('worksheet_end_date', $input->worksheet_end_date, 'class="form-control mydate" id="worksheet_end_date"');?>
               </div>
-              <?= form_error('worksheet_num') ?>
+              <?=form_error('worksheet_num');?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
@@ -103,9 +103,9 @@
                 <i class="fa fa-times-circle"></i>
                 </span>
                 </button>
-                <?= form_textarea('worksheet_notes', $input->worksheet_notes, 'class="form-control summernote-basic" id="worksheet_notes"') ?>
+                <?=form_textarea('worksheet_notes', $input->worksheet_notes, 'class="form-control summernote-basic" id="worksheet_notes"');?>
               </div>
-              <?= form_error('worksheet_notes') ?>
+              <?=form_error('worksheet_notes');?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
@@ -114,16 +114,16 @@
               <abbr title="Required">*</abbr>
               </label>
               <div class="custom-control custom-radio mb-1">
-                <?= form_radio('is_reprint', 'y',
-                  isset($input->is_reprint) && ($input->is_reprint == 'y') ? true : false,' class="custom-control-input" id="cetakulang"')?>
+                <?=form_radio('is_reprint', 'y',
+    isset($input->is_reprint) && ($input->is_reprint == 'y') ? true : false, ' class="custom-control-input" id="cetakulang"');?>
                 <label class="custom-control-label" for="cetakulang">Cetak Ulang</label>
               </div>
               <div class="custom-control custom-radio mb-1">
-                <?= form_radio('is_reprint', 'n',
-                  isset($input->is_reprint) && ($input->is_reprint == 'n') ? true : false,' class="custom-control-input" id="naskahbaru"')?>
+                <?=form_radio('is_reprint', 'n',
+    isset($input->is_reprint) && ($input->is_reprint == 'n') ? true : false, ' class="custom-control-input" id="naskahbaru"');?>
                 <label class="custom-control-label" for="naskahbaru">Naskah Baru</label>
               </div>
-              <?= form_error('is_reprint') ?>
+              <?=form_error('is_reprint');?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
@@ -132,16 +132,16 @@
               <abbr title="Required">*</abbr>
               </label>
               <div class="custom-control custom-radio mb-1">
-                <?= form_radio('is_revise', 'y',
-                  isset($input->is_revise) && ($input->is_revise == 'y') ? true : false,' class="custom-control-input" id="revisi"')?>
+                <?=form_radio('is_revise', 'y',
+    isset($input->is_revise) && ($input->is_revise == 'y') ? true : false, ' class="custom-control-input" id="revisi"');?>
                 <label class="custom-control-label" for="revisi">Revisi</label>
               </div>
               <div class="custom-control custom-radio mb-1">
-                <?= form_radio('is_revise', 'n',
-                  isset($input->is_revise) && ($input->is_revise == 'n') ? true : false,' class="custom-control-input" id="tidakrevisi"')?>
+                <?=form_radio('is_revise', 'n',
+    isset($input->is_revise) && ($input->is_revise == 'n') ? true : false, ' class="custom-control-input" id="tidakrevisi"');?>
                 <label class="custom-control-label" for="tidakrevisi">Tidak Revisi</label>
               </div>
-              <?= form_error('is_revise') ?>
+              <?=form_error('is_revise');?>
             </div>
             <!-- /.form-group -->
           </fieldset>
@@ -153,21 +153,21 @@
             <abbr title="Required">*</abbr>
             </label>
             <div class="custom-control custom-radio mb-1">
-              <?= form_radio('worksheet_status', '0',
-                isset($input->worksheet_status) && ($input->worksheet_status == '0') ? true : false,' class="custom-control-input" id="belum"')?>
+              <?=form_radio('worksheet_status', '0',
+    isset($input->worksheet_status) && ($input->worksheet_status == '0') ? true : false, ' class="custom-control-input" id="belum"');?>
               <label class="custom-control-label" for="belum">-</label>
             </div>
             <div class="custom-control custom-radio mb-1">
-              <?= form_radio('worksheet_status', '1',
-                isset($input->worksheet_status) && ($input->worksheet_status == '1') ? true : false,' class="custom-control-input" id="approve"')?>
+              <?=form_radio('worksheet_status', '1',
+    isset($input->worksheet_status) && ($input->worksheet_status == '1') ? true : false, ' class="custom-control-input" id="approve"');?>
               <label class="custom-control-label" for="approve">Setuju</label>
             </div>
             <div class="custom-control custom-radio mb-1">
-              <?= form_radio('worksheet_status', '2',
-                isset($input->worksheet_status) && ($input->worksheet_status == '2') ? true : false,' class="custom-control-input" id="reject"')?>
+              <?=form_radio('worksheet_status', '2',
+    isset($input->worksheet_status) && ($input->worksheet_status == '2') ? true : false, ' class="custom-control-input" id="reject"');?>
               <label class="custom-control-label" for="reject">Tolak</label>
             </div>
-            <?= form_error('worksheet_status') ?>
+            <?=form_error('worksheet_status');?>
           </div>
           <!-- /.form-group -->
           <hr>
@@ -188,7 +188,7 @@
 <!-- /.page-section -->
 <script>
   $(document).ready(function() {
-    setting_validasi();
+    validate_setting();
     $("#formworksheet").validate({
       rules: {
         draft_id : "crequired",
@@ -212,7 +212,7 @@
               }
             }
           },
-          select2_validasi()
+         validate_select2()
           );
 
     $("#draft_id").select2({

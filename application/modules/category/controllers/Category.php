@@ -6,21 +6,45 @@ class Category extends Operator_Controller
     {
         parent::__construct();
         $this->pages = 'category';
-        //akses khusus admin
-        $ceklevel = $this->session->userdata('level');
-        if ($ceklevel == 'author' || $ceklevel == 'reviewer' || $ceklevel == 'editor' || $ceklevel == 'layouter') {
-            redirect('home');
-        }
 
+        // akses khusus admin
+        check_if_admin();
+
+        // load modules model
         $this->load->model('Category_model', 'category');
+
+        // load toast message
+        $this->lang->load('toast', 'indonesian');
     }
 
     public function index($page = null)
     {
-        $categories = $this->category->order_by('category_name')->order_by('date_close', 'desc')->get_all();
-        $total      = count($categories);
-        $pages      = $this->pages;
-        $main_view  = 'category/index_category';
+        $cat = $this->category->order_by('category_name')->order_by('date_close', 'desc')->get_all();
+
+        $categories = array_map(function ($v) {
+            $sisa_waktu_buka = ceil((strtotime($v->date_open) - strtotime(date('Y-m-d H:i:s'))) / 86400);
+            // if ($sisa_waktu_buka >= 1) {
+            //     return $sisa_waktu_buka . ' hari';
+            // } else {
+            //     return '<span style="color:green">Sudah dibuka</span>';
+            // }
+
+            $sisa_waktu_tutup = ceil((strtotime($v->date_close) - strtotime(date('Y-m-d H:i:s'))) / 86400);
+            // if ($sisa_waktu_tutup <= 0) {
+            //     return '<span style="color:red">Berakhir</span>';
+            // } else {
+            //     return $sisa_waktu_tutup . ' hari';
+            // }
+
+            $v->sisa_waktu_buka  = $sisa_waktu_buka;
+            $v->sisa_waktu_tutup = $sisa_waktu_tutup;
+
+            return $v;
+        }, $cat);
+
+        $total     = count($categories);
+        $pages     = $this->pages;
+        $main_view = 'category/index_category';
         $this->load->view('template', compact('pages', 'main_view', 'categories', 'total'));
     }
 
@@ -42,9 +66,9 @@ class Category extends Operator_Controller
         }
 
         if ($this->category->insert($input)) {
-            $this->session->set_flashdata('success', 'Data saved');
+            $this->session->set_flashdata('success', $this->lang->line('toast_add_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to save');
+            $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
         }
 
         redirect('category');
@@ -54,7 +78,7 @@ class Category extends Operator_Controller
     {
         $category = $this->category->where('category_id', $id)->get();
         if (!$this) {
-            $this->session->set_flashdata('warning', 'Category data were not available');
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
             redirect('category');
         }
 
@@ -74,9 +98,9 @@ class Category extends Operator_Controller
         }
 
         if ($this->category->where('category_id', $id)->update($input)) {
-            $this->session->set_flashdata('success', 'Data saved');
+            $this->session->set_flashdata('success', $this->lang->line('toast_edit_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to save');
+            $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
         }
 
         redirect('category');
@@ -86,20 +110,20 @@ class Category extends Operator_Controller
     {
         $category = $this->category->where('category_id', $id)->get();
         if (!$category) {
-            $this->session->set_flashdata('warning', 'Category data were not available');
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
             redirect('category');
         }
 
         if ($this->category->where('category_id', $id)->delete()) {
-            $this->session->set_flashdata('success', 'Data deleted');
+            $this->session->set_flashdata('success', $this->lang->line('toast_delete_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to delete');
+            $this->session->set_flashdata('error', $this->lang->line('toast_delete_fail'));
         }
 
         redirect('category');
     }
 
-    //validasi format nama
+    // validasi format nama
     // public function alpha_numeric_coma_dash_dot_space($str)
     // {
     //    if ( !preg_match('/^[a-zA-Z0-9 .,\-]+$/i',$str) )
@@ -109,7 +133,7 @@ class Category extends Operator_Controller
     //    }
     // }
 
-    //validasi nama
+    // validasi nama unik
     public function unique_category_name()
     {
         $category_name = $this->input->post('category_name');
@@ -120,24 +144,25 @@ class Category extends Operator_Controller
         $category = $this->category->get();
 
         if ($category) {
-            $this->form_validation->set_message('unique_category_name', '%s has been used');
+            $this->form_validation->set_message('unique_category_name', $this->lang->line('toast_data_duplicate'));
             return false;
         }
+
         return true;
     }
 
-    //validasi format tanggal
+    // validasi format tanggal
     public function is_date_format_valid($str)
     {
         if (!preg_match('/([0-9]{4})-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])/', $str)) {
-            $this->form_validation->set_message('is_date_format_valid', 'Invalid date format (yyyy-mm-dd)');
+            $this->form_validation->set_message('is_date_format_valid', $this->lang->line('toast_data_date_invalid') . ' Format (yyyy-mm-dd)');
             return false;
         }
 
         return true;
     }
 
-    //validasi cek tanggal
+    // validasi cek tanggal
     public function check_date()
     {
         $date_close = $this->input->post('date_close');
@@ -147,7 +172,7 @@ class Category extends Operator_Controller
         $dateTimestamp2 = strtotime($date_open);
 
         if ($dateTimestamp1 < $dateTimestamp2) {
-            $this->form_validation->set_message('check_date', 'Deadline can not be set before opening date');
+            $this->form_validation->set_message('check_date', $this->lang->line('form_category_error_date_invalid'));
             return false;
         }
         return true;

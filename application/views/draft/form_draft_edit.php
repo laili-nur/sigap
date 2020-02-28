@@ -3,13 +3,13 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="<?=base_url()?>"><span class="fa fa-home"></span></a>
+        <a href="<?=base_url();?>"><span class="fa fa-home"></span></a>
       </li>
       <li class="breadcrumb-item">
-        <a href="<?=base_url()?>">Penerbitan</a>
+        <a href="<?=base_url();?>">Penerbitan</a>
       </li>
       <li class="breadcrumb-item">
-        <a href="<?=base_url('draft')?>">Draft</a>
+        <a href="<?=base_url('draft');?>">Draft</a>
       </li>
       <li class="breadcrumb-item">
         <a class="text-muted">Form</a>
@@ -27,11 +27,11 @@
         <!-- .card-body -->
         <div class="card-body">
           <!-- .form -->
-          <?= form_open_multipart($form_action,'novalidate="" id="formdraftedit"') ?>
+          <?=form_open_multipart($form_action, 'novalidate="" id="formdraftedit"');?>
           <!-- .fieldset -->
           <fieldset>
             <legend>Data Draft</legend>
-            <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
+            <?=isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '';?>
             <div class="alert alert-danger">
               <strong>Perhatian</strong>
               <p class="mb-0">1. Halaman ini digunakan untuk mengedit tanggal secara manual, namun pastikan sudah melakukan proses step-by-step dari halaman <a href="<?=base_url("draft/view/$input->draft_id");?>">view draft</a>.</p>
@@ -42,8 +42,8 @@
               <label for="category_id">Kategori
                 <abbr title="Required">*</abbr>
               </label>
-              <?= form_dropdown('category_id', getDropdownList('category', ['category_id', 'category_name']), $input->category_id, 'id="category" class="form-control custom-select d-block"') ?>
-              <?= form_error('category_id') ?>
+              <?=form_dropdown('category_id', getDropdownList('category', ['category_id', 'category_name']), $input->category_id, 'id="category" class="form-control custom-select d-block"');?>
+              <?=form_error('category_id');?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
@@ -51,8 +51,8 @@
               <label for="theme_id">Tema
                 <abbr title="Required">*</abbr>
               </label>
-              <?= form_dropdown('theme_id', getDropdownList('theme', ['theme_id', 'theme_name']), $input->theme_id, 'id="theme" class="form-control custom-select d-block"') ?>
-              <?= form_error('theme_id') ?>
+              <?=form_dropdown('theme_id', getDropdownList('theme', ['theme_id', 'theme_name']), $input->theme_id, 'id="theme" class="form-control custom-select d-block"');?>
+              <?=form_error('theme_id');?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
@@ -66,28 +66,28 @@
                         <i class="fa fa-times-circle"></i>
                       </span>
                 </button>
-                <?= form_input('draft_title', $input->draft_title, 'class="form-control" id="draft_title"') ?>
+                <?=form_input('draft_title', $input->draft_title, 'class="form-control" id="draft_title"');?>
               </div>
-              <?= form_error('draft_title') ?>
+              <?=form_error('draft_title');?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
             <div class="form-group">
               <label for="draft_file">File Draft</label>
               <div class="custom-file">
-                <?= form_upload('draft_file','','class="custom-file-input"') ?>
+                <?=form_upload('draft_file', '', 'class="custom-file-input"');?>
                 <label class="custom-file-label" for="draft_file">Choose file</label>
                 <div class="invalid-feedback">Field is required</div>
               </div>
               <small class="form-text text-muted">Hanya menerima file bertype : docx dan doc</small>
-              <?= fileFormError('draft_file', '<p class="text-danger">', '</p>'); ?>
+              <?=fileFormError('draft_file', '<p class="text-danger">', '</p>');?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
             <div class="form-group">
               <label for="draft_file_link">Link File Draft</label>
-              <?= form_input('draft_file_link', $input->draft_file_link, 'class="form-control" id="draft_file_link"') ?>
-              <?= form_error('draft_file_link') ?>
+              <?=form_input('draft_file_link', $input->draft_file_link, 'class="form-control" id="draft_file_link"');?>
+              <?=form_error('draft_file_link');?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
@@ -108,8 +108,8 @@
                         <i class="fa fa-times-circle"></i>
                       </span>
                 </button>
-                <?= form_input('entry_date', $input->entry_date, 'class="form-control tanggal_edit" ') ?>
-                <?= form_error('entry_date') ?>
+                <?=form_input('entry_date', $input->entry_date, 'class="form-control tanggal_edit" ');?>
+                <?=form_error('entry_date');?>
               </div>
             </div>
             <!-- /.form-group -->
@@ -122,8 +122,8 @@
                         <i class="fa fa-times-circle"></i>
                       </span>
                 </button>
-                <?= form_input('finish_date', $input->finish_date, 'class="form-control tanggal_edit" ') ?>
-                <?= form_error('finish_date') ?>
+                <?=form_input('finish_date', $input->finish_date, 'class="form-control tanggal_edit" ');?>
+                <?=form_error('finish_date');?>
               </div>
             </div>
             <!-- /.form-group -->
@@ -134,19 +134,19 @@
               <label>Status Review</label>
               <div class="mb-1">
                 <label>
-                  <?= form_radio('is_review', 'y',
-                        isset($input->is_review) && ($input->is_review == 'y') ? true : false)
-                    ?> <i class="fa fa-check text-success"></i> Sudah Review
+                  <?=form_radio('is_review', 'y',
+    isset($input->is_review) && ($input->is_review == 'y') ? true : false)
+;?> <i class="fa fa-check text-success"></i> Sudah Review
                 </label>
               </div>
               <div class="mb-1">
                 <label>
-                  <?= form_radio('is_review', 'n',
-                        isset($input->is_review) && ($input->is_review == 'n') ? true : false)
-                    ?> <i class="fa fa-times text-danger"></i> Belum Review
+                  <?=form_radio('is_review', 'n',
+    isset($input->is_review) && ($input->is_review == 'n') ? true : false)
+;?> <i class="fa fa-times text-danger"></i> Belum Review
                 </label>
               </div>
-              <?= form_error('is_review') ?>
+              <?=form_error('is_review');?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
@@ -159,8 +159,8 @@
                         <i class="fa fa-times-circle"></i>
                       </span>
                 </button>
-                <?= form_input('review_start_date', $input->review_start_date, 'class="form-control tanggal_edit"') ?>
-                <?= form_error('review_start_date') ?>
+                <?=form_input('review_start_date', $input->review_start_date, 'class="form-control tanggal_edit"');?>
+                <?=form_error('review_start_date');?>
               </div>
             </div>
             <!-- /.form-group -->
@@ -174,8 +174,8 @@
                         <i class="fa fa-times-circle"></i>
                       </span>
                 </button>
-                <?= form_input('review_end_date', $input->review_end_date, 'class="form-control tanggal_edit" ') ?>
-                <?= form_error('review_end_date') ?>
+                <?=form_input('review_end_date', $input->review_end_date, 'class="form-control tanggal_edit" ');?>
+                <?=form_error('review_end_date');?>
               </div>
             </div>
             <!-- /.form-group -->
@@ -186,19 +186,19 @@
               <label>Status Edit</label>
               <div class="mb-1">
                 <label>
-                  <?= form_radio('is_edit', 'y',
-                        isset($input->is_edit) && ($input->is_edit == 'y') ? true : false)
-                    ?><i class="fa fa-check text-success"></i> Sudah Edit
+                  <?=form_radio('is_edit', 'y',
+    isset($input->is_edit) && ($input->is_edit == 'y') ? true : false)
+;?><i class="fa fa-check text-success"></i> Sudah Edit
                 </label>
               </div>
               <div class="mb-1">
                 <label>
-                  <?= form_radio('is_edit', 'n',
-                        isset($input->is_edit) && ($input->is_edit == 'n') ? true : false)
-                    ?><i class="fa fa-times text-danger"></i> Belum Edit
+                  <?=form_radio('is_edit', 'n',
+    isset($input->is_edit) && ($input->is_edit == 'n') ? true : false)
+;?><i class="fa fa-times text-danger"></i> Belum Edit
                 </label>
               </div>
-              <?= form_error('is_edit') ?>
+              <?=form_error('is_edit');?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
@@ -211,8 +211,8 @@
                         <i class="fa fa-times-circle"></i>
                       </span>
                 </button>
-                <?= form_input('edit_start_date', $input->edit_start_date, 'class="form-control tanggal_edit" ') ?>
-                <?= form_error('edit_start_date') ?>
+                <?=form_input('edit_start_date', $input->edit_start_date, 'class="form-control tanggal_edit" ');?>
+                <?=form_error('edit_start_date');?>
               </div>
             </div>
             <!-- /.form-group -->
@@ -226,8 +226,8 @@
                         <i class="fa fa-times-circle"></i>
                       </span>
                 </button>
-                <?= form_input('edit_end_date', $input->edit_end_date, 'class="form-control tanggal_edit" ') ?>
-                <?= form_error('edit_end_date') ?>
+                <?=form_input('edit_end_date', $input->edit_end_date, 'class="form-control tanggal_edit" ');?>
+                <?=form_error('edit_end_date');?>
               </div>
             </div>
             <!-- /.form-group -->
@@ -238,19 +238,19 @@
               <label>Status Layout</label>
               <div class="mb-1">
                 <label>
-                  <?= form_radio('is_layout', 'y',
-                        isset($input->is_layout) && ($input->is_layout == 'y') ? true : false)
-                    ?><i class="fa fa-check text-success"></i> Sudah Layout
+                  <?=form_radio('is_layout', 'y',
+    isset($input->is_layout) && ($input->is_layout == 'y') ? true : false)
+;?><i class="fa fa-check text-success"></i> Sudah Layout
                 </label>
               </div>
               <div class="mb-1">
                 <label>
-                  <?= form_radio('is_layout', 'n',
-                        isset($input->is_layout) && ($input->is_layout == 'n') ? true : false)
-                    ?><i class="fa fa-times text-danger"></i> Belum Layout
+                  <?=form_radio('is_layout', 'n',
+    isset($input->is_layout) && ($input->is_layout == 'n') ? true : false)
+;?><i class="fa fa-times text-danger"></i> Belum Layout
                 </label>
               </div>
-              <?= form_error('is_layout') ?>
+              <?=form_error('is_layout');?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
@@ -263,8 +263,8 @@
                         <i class="fa fa-times-circle"></i>
                       </span>
                 </button>
-                <?= form_input('layout_start_date', $input->layout_start_date, 'class="form-control tanggal_edit" ') ?>
-                <?= form_error('layout_start_date') ?>
+                <?=form_input('layout_start_date', $input->layout_start_date, 'class="form-control tanggal_edit" ');?>
+                <?=form_error('layout_start_date');?>
               </div>
             </div>
             <!-- /.form-group -->
@@ -278,8 +278,8 @@
                         <i class="fa fa-times-circle"></i>
                       </span>
                 </button>
-                <?= form_input('layout_end_date', $input->layout_end_date, 'class="form-control tanggal_edit" ') ?>
-                <?= form_error('layout_end_date') ?>
+                <?=form_input('layout_end_date', $input->layout_end_date, 'class="form-control tanggal_edit" ');?>
+                <?=form_error('layout_end_date');?>
               </div>
             </div>
             <!-- /.form-group -->
@@ -290,19 +290,19 @@
               <label>Status Proofread</label>
               <div class="mb-1">
                 <label>
-                  <?= form_radio('is_proofread', 'y',
-                        isset($input->is_proofread) && ($input->is_proofread == 'y') ? true : false)
-                    ?><i class="fa fa-check text-success"></i> Sudah Proofread
+                  <?=form_radio('is_proofread', 'y',
+    isset($input->is_proofread) && ($input->is_proofread == 'y') ? true : false)
+;?><i class="fa fa-check text-success"></i> Sudah Proofread
                 </label>
               </div>
               <div class="mb-1">
                 <label>
-                  <?= form_radio('is_proofread', 'n',
-                        isset($input->is_proofread) && ($input->is_proofread == 'n') ? true : false)
-                    ?><i class="fa fa-times text-danger"></i> Belum Proofread
+                  <?=form_radio('is_proofread', 'n',
+    isset($input->is_proofread) && ($input->is_proofread == 'n') ? true : false)
+;?><i class="fa fa-times text-danger"></i> Belum Proofread
                 </label>
               </div>
-              <?= form_error('is_proofread') ?>
+              <?=form_error('is_proofread');?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
@@ -315,8 +315,8 @@
                         <i class="fa fa-times-circle"></i>
                       </span>
                 </button>
-                <?= form_input('proofread_start_date', $input->proofread_start_date, 'class="form-control tanggal_edit"  ') ?>
-                <?= form_error('proofread_start_date') ?>
+                <?=form_input('proofread_start_date', $input->proofread_start_date, 'class="form-control tanggal_edit"  ');?>
+                <?=form_error('proofread_start_date');?>
               </div>
             </div>
             <!-- /.form-group -->
@@ -330,8 +330,8 @@
                         <i class="fa fa-times-circle"></i>
                       </span>
                 </button>
-                <?= form_input('proofread_end_date', $input->proofread_end_date, 'class="form-control tanggal_edit"  ') ?>
-                <?= form_error('proofread_end_date') ?>
+                <?=form_input('proofread_end_date', $input->proofread_end_date, 'class="form-control tanggal_edit"  ');?>
+                <?=form_error('proofread_end_date');?>
               </div>
             </div>
             <!-- /.form-group -->
@@ -342,19 +342,19 @@
               <label>Status Cetak</label>
               <div class="mb-1">
                 <label>
-                  <?= form_radio('is_print', 'y',
-                        isset($input->is_print) && ($input->is_print == 'y') ? true : false)
-                    ?><i class="fa fa-check text-success"></i> Sudah Cetak
+                  <?=form_radio('is_print', 'y',
+    isset($input->is_print) && ($input->is_print == 'y') ? true : false)
+;?><i class="fa fa-check text-success"></i> Sudah Cetak
                 </label>
               </div>
               <div class="mb-1">
                 <label>
-                  <?= form_radio('is_print', 'n',
-                        isset($input->is_print) && ($input->is_print == 'n') ? true : false)
-                    ?><i class="fa fa-times text-danger"></i> Belum Cetak
+                  <?=form_radio('is_print', 'n',
+    isset($input->is_print) && ($input->is_print == 'n') ? true : false)
+;?><i class="fa fa-times text-danger"></i> Belum Cetak
                 </label>
               </div>
-              <?= form_error('is_print') ?>
+              <?=form_error('is_print');?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
@@ -367,8 +367,8 @@
                         <i class="fa fa-times-circle"></i>
                       </span>
                 </button>
-                <?= form_input('print_start_date', $input->print_start_date, 'class="form-control tanggal_edit" ') ?>
-                <?= form_error('print_start_date') ?>
+                <?=form_input('print_start_date', $input->print_start_date, 'class="form-control tanggal_edit" ');?>
+                <?=form_error('print_start_date');?>
               </div>
             </div>
             <!-- /.form-group -->
@@ -382,8 +382,8 @@
                         <i class="fa fa-times-circle"></i>
                       </span>
                 </button>
-                <?= form_input('print_end_date', $input->print_end_date, 'class="form-control tanggal_edit"') ?>
-                <?= form_error('print_end_date') ?>
+                <?=form_input('print_end_date', $input->print_end_date, 'class="form-control tanggal_edit"');?>
+                <?=form_error('print_end_date');?>
               </div>
             </div>
             <!-- /.form-group -->
@@ -395,7 +395,7 @@
             <button class="btn btn-primary ml-auto" type="submit">Submit data</button>
           </div>
           <!-- /.form-actions -->
-          <?php form_close(); ?>
+          <?php form_close();?>
           <!-- /.form -->
         </div>
         <!-- /.card-body -->
@@ -408,7 +408,7 @@
 
 <script>
   $(document).ready(function() {
-    setting_validasi();
+    validate_setting();
   $("#formdraftedit").validate({
       rules: {
         category_id: "crequired",
@@ -450,7 +450,7 @@
         $(element).addClass(validClass).removeClass(errorClass);
       }
     },
-    select2_validasi()
+   validate_select2()
   );
 
     $('.tanggal_edit').flatpickr({

@@ -1,7 +1,7 @@
 <?php
-  $ceklevel = $this->session->userdata('level');
-  $sisa_waktu_edit = ceil((strtotime($input->edit_deadline)-strtotime(date('Y-m-d H:i:s')))/86400);
-  ?>
+$ceklevel        = $this->session->userdata('level');
+$sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-d H:i:s'))) / 86400);
+?>
 <!-- .card -->
 <section id="progress-edit" class="card">
   <!-- .card-header -->
@@ -13,58 +13,58 @@
       <div class="card-header-control">
         <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
         <!-- .tombol add -->
-        <button type="button" class="d-inline btn <?=($editors==null)? 'btn-warning' : 'btn-secondary' ?>" data-toggle="modal" data-target="#piliheditor" title="Pilih editor"><i class="fas fa-user-plus fa-fw"></i><span class="d-none d-lg-inline"> Pilih Editor</span></button>
+        <button type="button" class="d-inline btn <?=($editors == null) ? 'btn-warning' : 'btn-secondary';?>" data-toggle="modal" data-target="#piliheditor" title="Pilih editor"><i class="fas fa-user-plus fa-fw"></i><span class="d-none d-lg-inline"> Pilih Editor</span></button>
         <button type="button" class="d-inline btn btn-secondary" data-toggle="modal" data-target="#edit_deadline" title="Ubah Deadline"><i class="fas fa-calendar-alt fa-fw"></i><span class="d-none d-lg-inline"> Ubah Deadline</span></button>
-        <?php endif ?>
-        <?php if($ceklevel == 'editor' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
-        <button title="Mulai proses editorial" type="button" class="d-inline btn btn-secondary" id="btn-mulai-editor" <?=(($input->edit_start_date==null or $input->edit_start_date=='0000-00-00 00:00:00') and $editors )? '' : 'disabled' ?>><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
-        <button title="Selesai proses editorial" type="button" class="d-inline btn btn-secondary" id="btn-selesai-editor" <?=($input->edit_end_date==null or $input->edit_end_date=='0000-00-00 00:00:00' and ($input->edit_start_date!=null and $input->edit_start_date!='0000-00-00 00:00:00'))? '' : 'disabled' ?>><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
-        <?php endif ?>
+        <?php endif;?>
+        <?php if ($ceklevel == 'editor' or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+        <button title="Mulai proses editorial" type="button" class="d-inline btn btn-secondary" id="btn-mulai-editor" <?=(($input->edit_start_date == null or $input->edit_start_date == '0000-00-00 00:00:00') and $editors) ? '' : 'disabled';?>><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
+        <button title="Selesai proses editorial" type="button" class="d-inline btn btn-secondary" id="btn-selesai-editor" <?=($input->edit_end_date == null or $input->edit_end_date == '0000-00-00 00:00:00' and ($input->edit_start_date != null and $input->edit_start_date != '0000-00-00 00:00:00')) ? '' : 'disabled';?>><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
+        <?php endif;?>
         <!-- /.tombol add -->
       </div>
       <!-- /.card-header-control -->
     </div>
     <!-- /.d-flex -->
   </header>
-  <?php if($editors == null and ($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan')): ?>
+  <?php if ($editors == null and ($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan')): ?>
   <div class="alert alert-warning"><strong>PERHATIAN!</strong> Pilih editor terlebih dahulu sebelum mulai proses editorial</div>
-  <?php endif ?>
+  <?php endif;?>
   <div class="list-group list-group-flush list-group-bordered" id="list-group-edit">
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Tanggal mulai</span>
       <strong>
-        <?= konversiTanggal($input->edit_start_date) ?></strong>
+        <?=konversiTanggal($input->edit_start_date);?></strong>
     </div>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Tanggal selesai</span>
       <strong>
-        <?= konversiTanggal($input->edit_end_date) ?></strong>
+        <?=konversiTanggal($input->edit_end_date);?></strong>
     </div>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Deadline</span>
       <strong>
-        <?= ($sisa_waktu_edit <= 0 and $input->edit_notes =='' and ($input->edit_start_date != "0000-00-00 00:00:00" and $input->edit_start_date !=null))? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">'.konversiTanggal($input->edit_deadline).'</span>' : konversiTanggal($input->edit_deadline) ?></strong>
+        <?=($sisa_waktu_edit <= 0 and $input->edit_notes == '' and ($input->edit_start_date != "0000-00-00 00:00:00" and $input->edit_start_date != null)) ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . konversiTanggal($input->edit_deadline) . '</span>' : konversiTanggal($input->edit_deadline);?></strong>
     </div>
-    <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer' ): ?>
+    <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer'): ?>
     <div class="list-group-item justify-content-between" id="reloadeditor">
       <span class="text-muted">Editor</span>
       <div>
         <?php if ($editors) {
-          foreach ($editors as $editor){
-            echo '<span class="badge badge-info p-1">'.$editor->username.'</span> ';
-          }}?>
+    foreach ($editors as $editor) {
+        echo '<span class="badge badge-info p-1">' . $editor->username . '</span> ';
+    }}?>
       </div>
     </div>
-    <?php endif ?>
+    <?php endif;?>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Status</span>
-      <?php if($input->is_edit == 'y'): ?>
-      <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->edit_status ?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Editorial Selesai</a>
-      <?php elseif($input->is_edit == 'n' and $input->stts == 99): ?>
-      <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->edit_status ?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Draft ditolak</a>
+      <?php if ($input->is_edit == 'y'): ?>
+      <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->edit_status;?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Editorial Selesai</a>
+      <?php elseif ($input->is_edit == 'n' and $input->stts == 99): ?>
+      <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->edit_status;?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Draft ditolak</a>
       <?php else: ?>
       -
-      <?php endif ?>
+      <?php endif;?>
     </div>
     <hr class="m-0">
   </div>
@@ -73,18 +73,18 @@
     <div class="el-example">
       <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
       <button title="Aksi admin" class="btn btn-secondary" data-toggle="modal" data-target="#edit_aksi"><i class="fa fa-thumbs-up"></i> Aksi</button>
-      <?php endif ?>
-      <button type="button" class="btn <?=($input->edit_notes!='' || $input->edit_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#edit" <?=($ceklevel=='editor' and $sisa_waktu_edit <=0 and $input->edit_notes =='')? 'disabled' : '' ?>>Tanggapan Editorial
-        <?=($input->edit_notes!='' || $input->edit_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
+      <?php endif;?>
+      <button type="button" class="btn <?=($input->edit_notes != '' || $input->edit_notes_author != '') ? 'btn-success' : 'btn-outline-success';?>" data-toggle="modal" data-target="#edit" <?=($ceklevel == 'editor' and $sisa_waktu_edit <= 0 and $input->edit_notes == '') ? 'disabled' : '';?>>Tanggapan Editorial
+        <?=($input->edit_notes != '' || $input->edit_notes_author != '') ? '<i class="fa fa-check"></i>' : '';?></button>
       <!-- tombol confidential tidak bisa diliat penulis -->
-      <?php if ($ceklevel != 'author' and  $ceklevel != 'layouter'): ?>
+      <?php if ($ceklevel != 'author' and $ceklevel != 'layouter'): ?>
       <button data-toggle="modal" data-target="#edit-confidential" class="btn btn-outline-dark"><i class="far fa-sticky-note"></i> Catatan</button>
-      <?php endif ?>
+      <?php endif;?>
       <?php if ($ceklevel != 'author'): ?>
-      <button data-toggle="modal" data-target="#edit-revisi" class="btn btn-outline-info"><i class="fa fa-tasks"></i> Revisi <span class="badge badge-info"><?=$tot_revisi['editor'] ?></span></button>
-      <?php endif ?>
+      <button data-toggle="modal" data-target="#edit-revisi" class="btn btn-outline-info"><i class="fa fa-tasks"></i> Revisi <span class="badge badge-info"><?=$tot_revisi['editor'];?></span></button>
+      <?php endif;?>
       <!-- peringatan disabled -->
-      <?=($ceklevel=='editor' and $sisa_waktu_edit <= 0 and $input->edit_notes =='' and ($input->edit_start_date != "0000-00-00 00:00:00" and $input->edit_start_date !=null))? '<span class="font-weight-bold text-danger" data-toggle="tooltip" data-placement="bottom" title="Hubungi admin untuk membuka draft ini"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>' : '' ?>
+      <?=($ceklevel == 'editor' and $sisa_waktu_edit <= 0 and $input->edit_notes == '' and ($input->edit_start_date != "0000-00-00 00:00:00" and $input->edit_start_date != null)) ? '<span class="font-weight-bold text-danger" data-toggle="tooltip" data-placement="bottom" title="Hubungi admin untuk membuka draft ini"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>' : '';?>
     </div>
     <!-- modal tanggapan edit -->
     <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -101,16 +101,16 @@
           <div class="modal-body">
             <p class="font-weight-bold">NASKAH</p>
             <!-- if upload ditampilkan di level tertentu -->
-            <?php if($ceklevel=='editor' or ($ceklevel == 'author' and $author_order==1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+            <?php if ($ceklevel == 'editor' or ($ceklevel == 'author' and $author_order == 1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
             <div class="alert alert-info">Upload file naskah atau sertakan link naskah.</div>
-            <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/edit_file', 'id="editform"'); ?>
-            <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
+            <?=form_open_multipart('draft/upload_progress/' . $input->draft_id . '/edit_file', 'id="editform"');?>
+            <?=isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '';?>
             <!-- .form-group -->
             <div class="form-group">
               <label for="edit_file">File Naskah</label>
               <!-- .input-group -->
               <div class="custom-file">
-                <?= form_upload('edit_file','','class="custom-file-input naskah" id="edit_file"') ?>
+                <?=form_upload('edit_file', '', 'class="custom-file-input naskah" id="edit_file"');?>
                 <label class="custom-file-label" for="edit_file">Choose file</label>
               </div>
               <small class="form-text text-muted">Tipe file upload bertype : docx, doc, pdf, zip, dan rar.</small>
@@ -121,56 +121,56 @@
             <div class="form-group">
               <label for="editor_file_link">Link Naskah</label>
               <div>
-                <?= form_input('editor_file_link', $input->editor_file_link, 'class="form-control naskah" id="editor_file_link"') ?>
+                <?=form_input('editor_file_link', $input->editor_file_link, 'class="form-control naskah" id="editor_file_link"');?>
               </div>
-              <?= form_error('editor_file_link') ?>
+              <?=form_error('editor_file_link');?>
             </div>
             <!-- /.form-group -->
             <div class="form-group">
               <button class="btn btn-primary " type="submit" value="Submit" id="btn-upload-edit"><i class="fa fa-upload"></i> Upload</button>
             </div>
-            <?= form_close(); ?>
-            <?php endif ?>
+            <?=form_close();?>
+            <?php endif;?>
             <!-- endif upload ditampilkan di level tertentu -->
             <!-- keterangan last upload dan tombol download -->
             <div id="modal-edit">
               <p>Last Upload :
-                <?=konversiTanggal($input->edit_upload_date) ?>,
+                <?=konversiTanggal($input->edit_upload_date);?>,
                 <br> by :
-                <?=konversi_username_level($input->edit_last_upload) ?>
-                <?php  if($ceklevel !='author' and $ceklevel !='reviewer'):?>
+                <?=konversi_username_level($input->edit_last_upload);?>
+                <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer'): ?>
                 <em>(
-                  <?=$input->edit_last_upload ?>)</em>
-                <?php endif ?>
+                  <?=$input->edit_last_upload;?>)</em>
+                <?php endif;?>
               </p>
-              <?=(!empty($input->edit_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->edit_file.'" href="'.base_url('draftfile/'.$input->edit_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
-              <?=(!empty($input->editor_file_link))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->editor_file_link.'" href="'.$input->editor_file_link.'" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
-              <?=(!empty($input->editor_file_link) or !empty($input->edit_file))? '<button data-toggle="tooltip" data-placement="right" title="" data-original-title="hapus file" class="btn btn-danger" id="btn-delete-edit"><i class="fa fa-trash"></i></button>' : '' ?>
+              <?=(!empty($input->edit_file)) ? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="' . $input->edit_file . '" href="' . base_url('draftfile/' . $input->edit_file) . '" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '';?>
+              <?=(!empty($input->editor_file_link)) ? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="' . $input->editor_file_link . '" href="' . $input->editor_file_link . '" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '';?>
+              <?=(!empty($input->editor_file_link) or !empty($input->edit_file)) ? '<button data-toggle="tooltip" data-placement="right" title="" data-original-title="hapus file" class="btn btn-danger" id="btn-delete-edit"><i class="fa fa-trash"></i></button>' : '';?>
             </div>
             <hr class="my-3">
             <!-- .form -->
-            <?= form_open('','id="formedit"') ?>
+            <?=form_open('', 'id="formedit"');?>
             <!-- .fieldset -->
             <fieldset>
               <!-- .form-group -->
               <div class="form-group">
                 <label for="ce" class="font-weight-bold">Catatan Editor</label>
                 <small class="text-muted" id="edit_last_notes">
-                  <?=konversiTanggal($input->edit_notes_date) ?></small>
+                  <?=konversiTanggal($input->edit_notes_date);?></small>
                 <?php
-                  $optionsce = array(
-                      'name' => 'edit_notes',
-                      'class'=> 'form-control summernote-basic',
-                      'id'  => 'ce',
-                      'rows' => '6',
-                      'value'=> $input->edit_notes
-                  );
-                  if($ceklevel!='editor'){
-                    echo '<div class="font-italic">'.nl2br($input->edit_notes).'</div>';
-                  }else{
-                    echo form_textarea($optionsce);
-                  }
-                  ?>
+$optionsce = array(
+    'name'  => 'edit_notes',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'ce',
+    'rows'  => '6',
+    'value' => $input->edit_notes,
+);
+if ($ceklevel != 'editor') {
+    echo '<div class="font-italic">' . nl2br($input->edit_notes) . '</div>';
+} else {
+    echo form_textarea($optionsce);
+}
+?>
               </div>
               <!-- /.form-group -->
               <hr>
@@ -178,19 +178,19 @@
               <div class="form-group">
                 <label for="cep" class="font-weight-bold">Catatan Penulis</label>
                 <?php
-                  $optionscep = array(
-                      'name' => 'edit_notes_author',
-                      'class'=> 'form-control summernote-basic',
-                      'id'  => 'cep',
-                      'rows' => '6',
-                      'value'=> $input->edit_notes_author
-                  );
-                  if($ceklevel!='author' or $author_order!=1){
-                    echo '<div class="font-italic">'.nl2br($input->edit_notes_author).'</div>';
-                  }else{
-                    echo form_textarea($optionscep);
-                  }
-                  ?>
+$optionscep = array(
+    'name'  => 'edit_notes_author',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'cep',
+    'rows'  => '6',
+    'value' => $input->edit_notes_author,
+);
+if ($ceklevel != 'author' or $author_order != 1) {
+    echo '<div class="font-italic">' . nl2br($input->edit_notes_author) . '</div>';
+} else {
+    echo form_textarea($optionscep);
+}
+?>
               </div>
               <!-- /.form-group -->
             </fieldset>
@@ -199,10 +199,10 @@
           <!-- /.modal-body -->
           <!-- .modal-footer -->
           <div class="modal-footer">
-            <?php if($author_order==1 and $ceklevel=='author' or $ceklevel=='editor'): ?>
+            <?php if ($author_order == 1 and $ceklevel == 'author' or $ceklevel == 'editor'): ?>
             <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-edit">Submit</button>
-            <?php endif ?>
-            <?= form_close(); ?>
+            <?php endif;?>
+            <?=form_close();?>
             <!-- /.form -->
             <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
           </div>
@@ -230,26 +230,26 @@
               Catatan dibawah ini tidak dapat dilihat oleh penulis.
             </div>
             <!-- .form -->
-            <?= form_open() ?>
+            <?=form_open();?>
             <!-- .fieldset -->
             <fieldset>
               <!-- .form-group -->
               <div class="form-group">
                 <label for="cecon" class="font-weight-bold">Catatan Editor</label>
                 <?php
-                  $optionscecon = array(
-                      'name' => 'edit_notes_confidential',
-                      'class'=> 'form-control summernote-basic',
-                      'id'  => 'cecon',
-                      'rows' => '6',
-                      'value'=> $input->edit_notes_confidential
-                  );
-                  if($ceklevel!='editor'){
-                    echo '<div class="font-italic">'.nl2br($input->edit_notes_confidential).'</div>';
-                  }else{
-                    echo form_textarea($optionscecon);
-                  }
-                  ?>
+$optionscecon = array(
+    'name'  => 'edit_notes_confidential',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'cecon',
+    'rows'  => '6',
+    'value' => $input->edit_notes_confidential,
+);
+if ($ceklevel != 'editor') {
+    echo '<div class="font-italic">' . nl2br($input->edit_notes_confidential) . '</div>';
+} else {
+    echo form_textarea($optionscecon);
+}
+?>
               </div>
               <!-- /.form-group -->
             </fieldset>
@@ -257,14 +257,14 @@
           </div>
           <!-- /.modal-body -->
           <!-- .modal-footer -->
-          <?php if($ceklevel == 'editor'): ?>
+          <?php if ($ceklevel == 'editor'): ?>
           <div class="modal-footer">
             <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-edit-confidential">Submit</button>
             <!-- /.form -->
             <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
           </div>
-          <?php endif ?>
-          <?= form_close(); ?>
+          <?php endif;?>
+          <?=form_close();?>
           <!-- /.modal-footer -->
         </div>
         <!-- /.modal-content -->
@@ -317,13 +317,13 @@
           <!-- .modal-body -->
           <div class="modal-body">
             <!-- .form -->
-            <?=form_open('', ''); ?>
+            <?=form_open('', '');?>
             <!-- .fieldset -->
             <fieldset>
               <!-- .form-group -->
               <div class="form-group" id="form-editor">
                 <label for="pilih_editor">Editor</label>
-                <?= form_dropdown('editor', getDropdownListEditor('user', ['user_id', 'username']), '', 'id="pilih_editor" class="form-control custom-select d-block"') ?>
+                <?=form_dropdown('editor', getDropdownListEditor('user', ['user_id', 'username']), '', 'id="pilih_editor" class="form-control custom-select d-block"');?>
               </div>
               <!-- /.form-group -->
             </fieldset>
@@ -334,28 +334,28 @@
             <hr>
             <p class="font-weight-bold">Editor Terpilih</p>
             <div id="reload-editor">
-              <?php if ($editors):?>
+              <?php if ($editors): ?>
               <!-- .table-responsive -->
               <div class="table-responsive">
                 <!-- .table -->
                 <table class="table table-bordered mb-0 nowrap">
                   <!-- tbody -->
                   <tbody>
-                    <?php foreach($editors as $editor): ?>
+                    <?php foreach ($editors as $editor): ?>
                     <!-- tr -->
                     <tr>
                       <td class="align-middle">
-                        <?= $editor->username ?>
+                        <?=$editor->username;?>
                       </td>
                       <td class="align-middle text-right" width="20px">
-                        <button data-toggle="tooltip" data-placement="right" title="Hapus" href="javascript" class="btn btn-sm btn-danger delete-editor" data="<?= $editor->responsibility_id ?>">
+                        <button data-toggle="tooltip" data-placement="right" title="Hapus" href="javascript" class="btn btn-sm btn-danger delete-editor" data="<?=$editor->responsibility_id;?>">
                           <i class="fa fa-trash-alt"></i>
                           <span class="sr-only">Delete</span>
                         </button>
                       </td>
                     </tr>
                     <!-- /tr -->
-                    <?php endforeach ?>
+                    <?php endforeach;?>
                   </tbody>
                   <!-- /tbody -->
                 </table>
@@ -364,7 +364,7 @@
               <!-- /.table-responsive -->
               <?php else: ?>
               <p>Editor belum dipilih</p>
-              <?php endif ?>
+              <?php endif;?>
             </div>
           </div>
           <!-- /.modal-body -->
@@ -373,7 +373,7 @@
             <button type="button" class="btn btn-light" id="btn-close-editor" data-dismiss="modal">Close</button>
           </div>
           <!-- /.modal-footer -->
-          <?= form_close(); ?>
+          <?=form_close();?>
         </div>
         <!-- /.modal-content -->
       </div>
@@ -394,17 +394,17 @@
           <!-- .modal-body -->
           <div class="modal-body">
             <!-- .form -->
-            <?= form_open('','') ?>
+            <?=form_open('', '');?>
             <!-- .fieldset -->
             <fieldset>
               <!-- .form-group -->
               <div class="form-group">
                 <!-- <label for="edit_deadline">Deadline Edit</label> -->
                 <div>
-                  <?= form_input('edit_deadline', $input->edit_deadline, 'class="form-control mydate_modal d-none" id="edit_deadline" required=""') ?>
+                  <?=form_input('edit_deadline', $input->edit_deadline, 'class="form-control mydate_modal d-none" id="edit_deadline" required=""');?>
                 </div>
                 <div class="invalid-feedback">Harap diisi</div>
-                <?= form_error('edit_deadline') ?>
+                <?=form_error('edit_deadline');?>
               </div>
               <!-- /.form-group -->
             </fieldset>
@@ -417,7 +417,7 @@
             <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
           </div>
           <!-- /.modal-footer -->
-          <?=form_close(); ?>
+          <?=form_close();?>
           <!-- /.form -->
         </div>
         <!-- /.modal-content -->
@@ -439,28 +439,28 @@
           <!-- .modal-body -->
           <div class="modal-body">
             <!-- .form -->
-            <?= form_open('','') ?>
+            <?=form_open('', '');?>
             <!-- .fieldset -->
             <fieldset>
               <input type="hidden" name="revision_id" id="revision_id" class="form-control" value="">
                <!-- .form-group -->
               <div class="form-group">
                 <div>
-                  <?= form_input('revision_edit_start_date', '', 'class="form-control mydate_modal d-none" id="revision_edit_start_date" required=""') ?>
+                  <?=form_input('revision_edit_start_date', '', 'class="form-control mydate_modal d-none" id="revision_edit_start_date" required=""');?>
                 </div>
               </div>
               <!-- /.form-group -->
                <!-- .form-group -->
               <div class="form-group">
                 <div>
-                  <?= form_input('revision_edit_end_date', '', 'class="form-control mydate_modal d-none" id="revision_edit_end_date" required=""') ?>
+                  <?=form_input('revision_edit_end_date', '', 'class="form-control mydate_modal d-none" id="revision_edit_end_date" required=""');?>
                 </div>
               </div>
               <!-- /.form-group -->
               <!-- .form-group -->
               <div class="form-group">
                 <div>
-                  <?= form_input('revision_edit_deadline', '', 'class="form-control mydate_modal d-none" id="revision_edit_deadline" required=""') ?>
+                  <?=form_input('revision_edit_deadline', '', 'class="form-control mydate_modal d-none" id="revision_edit_deadline" required=""');?>
                 </div>
               </div>
               <!-- /.form-group -->
@@ -474,7 +474,7 @@
             <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
           </div>
           <!-- /.modal-footer -->
-          <?=form_close(); ?>
+          <?=form_close();?>
           <!-- /.form -->
         </div>
         <!-- /.modal-content -->
@@ -496,7 +496,7 @@
           <!-- .modal-body -->
           <div class="modal-body">
             <!-- .form -->
-            <?= form_open('','') ?>
+            <?=form_open('', '');?>
             <!-- .fieldset -->
             <fieldset>
               <!-- .form-group -->
@@ -506,25 +506,25 @@
                   Catatan admin dapat dilihat oleh semua user yang terkait dengan draft ini.
                 </div>
                 <?php
-                  $hidden_date = array(
-                      'type'  => 'hidden',
-                      'id'    => 'edit_finish_date',
-                      'value' => date('Y-m-d H:i:s')
-                  );
-                  echo form_input($hidden_date);
-                  $edit_status = array(
-                      'name' => 'edit_status',
-                      'class'=> 'form-control summernote-basic',
-                      'id'  => 'crp2',
-                      'rows' => '6',
-                      'value'=> $input->edit_status
-                  );
-                  if($ceklevel!='superadmin' and $ceklevel!='admin_penerbitan'){
-                    echo '<div class="font-italic">'.nl2br($input->edit_status).'</div>';
-                  }else{
-                    echo form_textarea($edit_status);
-                  }
-                   ?>
+$hidden_date = array(
+    'type'  => 'hidden',
+    'id'    => 'edit_finish_date',
+    'value' => date('Y-m-d H:i:s'),
+);
+echo form_input($hidden_date);
+$edit_status = array(
+    'name'  => 'edit_status',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'crp2',
+    'rows'  => '6',
+    'value' => $input->edit_status,
+);
+if ($ceklevel != 'superadmin' and $ceklevel != 'admin_penerbitan') {
+    echo '<div class="font-italic">' . nl2br($input->edit_status) . '</div>';
+} else {
+    echo form_textarea($edit_status);
+}
+?>
                 <div class="alert alert-info">
                   Pilih salah satu tombol dibawah ini: <br>
                   Jika <strong class="text-success">Setuju</strong>, maka tahap edit akan diakhiri dan tanggal selesai edit akan dicatat <br>
@@ -543,7 +543,7 @@
             <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
           </div>
           <!-- /.modal-footer -->
-          <?=form_close(); ?>
+          <?=form_close();?>
           <!-- /.form -->
         </div>
         <!-- /.modal-content -->
@@ -559,7 +559,7 @@
 $(document).ready(function() {
 
   //panggil setingan validasi di ugmpress js
-  setting_validasi();
+  validate_setting();
 
   //submit dan validasi
   $("#editform").validate({
@@ -599,7 +599,7 @@ $(document).ready(function() {
         let id = $('[name=draft_id]').val();
         var formData = new FormData(form);
         $.ajax({
-          url: "<?php echo base_url('draft/upload_progress/') ?>" + id + "/edit_file",
+          url: "<?php echo base_url('draft/upload_progress/'); ?>" + id + "/edit_file",
           type: "post",
           data: formData,
           processData: false,
@@ -623,7 +623,7 @@ $(document).ready(function() {
         return false;
       }
     },
-    select2_validasi()
+   validate_select2()
   );
 
   //tombol hapus file
@@ -660,7 +660,7 @@ $(document).ready(function() {
     var editor = $('#pilih_editor').val();
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('responsibility/add/editor') ?>",
+      url: "<?php echo base_url('responsibility/add/editor'); ?>",
       datatype: "JSON",
       cache: false,
       data: {
@@ -695,7 +695,7 @@ $(document).ready(function() {
     var draft = $('input[name=draft_id]').val();
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('responsibility/mulai_proses/editor') ?>",
+      url: "<?php echo base_url('responsibility/mulai_proses/editor'); ?>",
       datatype: "JSON",
       cache: false,
       data: {
@@ -729,7 +729,7 @@ $(document).ready(function() {
     var draft = $('input[name=draft_id]').val();
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('responsibility/selesai_proses/editor') ?>",
+      url: "<?php echo base_url('responsibility/selesai_proses/editor'); ?>",
       datatype: "JSON",
       cache: false,
       data: {
@@ -762,7 +762,7 @@ $(document).ready(function() {
     var id = $(this).attr('data');
     console.log(id);
     $.ajax({
-      url: "<?php echo base_url('responsibility/delete/') ?>" + id,
+      url: "<?php echo base_url('responsibility/delete/'); ?>" + id,
       success: function(data) {
         console.log(data);
         $('#reload-editor').load(' #reload-editor');
@@ -780,7 +780,7 @@ $(document).ready(function() {
     let cep = $('#cep').val();
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
+      url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id,
       datatype: "JSON",
       data: {
         edit_notes: ce,
@@ -812,7 +812,7 @@ $(document).ready(function() {
     let cecon = $('#cecon').val();
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
+      url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id,
       datatype: "JSON",
       data: {
         edit_notes_confidential: cecon,
@@ -843,7 +843,7 @@ $(document).ready(function() {
     let end_date = $('#edit_finish_date').val();
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
+      url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id,
       datatype: "JSON",
       data: {
         edit_status: edit_status,
@@ -879,7 +879,7 @@ $(document).ready(function() {
     console.log(end_date);
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
+      url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id,
       datatype: "JSON",
       data: {
         edit_status: edit_status,
@@ -912,7 +912,7 @@ $(document).ready(function() {
     let ed = $('[name=edit_deadline]').val();
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
+      url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id,
       datatype: "JSON",
       data: {
         edit_deadline: ed

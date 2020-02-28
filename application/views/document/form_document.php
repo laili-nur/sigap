@@ -3,10 +3,10 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="<?=base_url()?>"><span class="fa fa-home"></span></a>
+        <a href="<?=base_url();?>"><span class="fa fa-home"></span></a>
       </li>
       <li class="breadcrumb-item">
-        <a href="<?=base_url('document')?>">Document</a>
+        <a href="<?=base_url('document');?>">Document</a>
       </li>
       <li class="breadcrumb-item">
         <a class="text-muted">Form</a>
@@ -24,25 +24,25 @@
         <!-- .card-body -->
         <div class="card-body">
           <!-- .form -->
-          <?= form_open_multipart($form_action,'id="formdocument" novalidate=""') ?>
+          <?=form_open_multipart($form_action, 'id="formdocument" novalidate=""');?>
           <!-- .fieldset -->
           <fieldset>
             <legend>Data Dokument</legend>
-            <?= isset($input->document_id) ? form_hidden('document_id', $input->document_id) : '' ?>
+            <?=isset($input->document_id) ? form_hidden('document_id', $input->document_id) : '';?>
             <!-- .form-group -->
             <div class="form-group">
               <label for="document_name">Nama Dokumen
               <abbr title="Required">*</abbr>
               </label>
-              <?= form_input('document_name', $input->document_name, 'class="form-control" id="document_name"') ?>
-              <?= form_error('document_name') ?>
+              <?=form_input('document_name', $input->document_name, 'class="form-control" id="document_name"');?>
+              <?=form_error('document_name');?>
             </div>
             <!-- /.form-group -->
              <!-- .form-group -->
             <div class="form-group">
               <label for="document_year">Tahun Dokumen</label>
-              <?= form_input('document_year', $input->document_year, 'class="form-control dokumen" id="document_year"') ?>
-              <?= form_error('document_year') ?>
+              <?=form_input('document_year', $input->document_year, 'class="form-control dokumen" id="document_year"');?>
+              <?=form_error('document_year');?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
@@ -59,18 +59,18 @@
             <!-- .form-group -->
             <div class="form-group">
               <label for="document_file_link">Link Dokumen</label>
-              <?= form_input('document_file_link', $input->document_file_link, 'class="form-control dokumen" id="document_file_link"') ?>
-              <?= form_error('document_file_link') ?>
+              <?=form_input('document_file_link', $input->document_file_link, 'class="form-control dokumen" id="document_file_link"');?>
+              <?=form_error('document_file_link');?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
             <div class="form-group">
               <label for="document_notes">Catatan Dokumen</label>
-              <?= form_textarea('document_notes', $input->document_notes, 'class="form-control summernote-basic" id="document_notes"') ?>
-              <?= form_error('document_notes') ?>
+              <?=form_textarea('document_notes', $input->document_notes, 'class="form-control summernote-basic" id="document_notes"');?>
+              <?=form_error('document_notes');?>
             </div>
             <!-- /.form-group -->
-            
+
           </fieldset>
           <!-- /.fieldset -->
           <hr>
@@ -91,7 +91,7 @@
 <!-- /.page-section -->
 <script>
   $(document).ready(function(){
-    setting_validasi();
+    validate_setting();
     $("#formdocument").validate({
         rules: {
           document_name : "crequired",
@@ -111,7 +111,7 @@
         errorElement: "span",
         errorPlacement: function (error, element) {
            error.addClass( "invalid-feedback" );
-            if (element.parent('.input-group').length) { 
+            if (element.parent('.input-group').length) {
                 error.insertAfter(element.next('span.select2'));      // input group
             } else if (element.hasClass("select2-hidden-accessible")){
                 error.insertAfter(element.next('span.select2'));  // select2
@@ -119,12 +119,12 @@
                 error.insertAfter(element.next('label.custom-file-label'));  // fileinput custom
             } else if (element.hasClass("custom-control-input")){
                 error.insertAfter($(".custom-radio").last());  // radio
-            }else {                                      
+            }else {
                 error.insertAfter(element);               // default
             }
         }
       },
-      select2_validasi()
+     validate_select2()
      );
   })
 </script>

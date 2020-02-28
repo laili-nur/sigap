@@ -11,6 +11,8 @@ class MY_Model extends CI_Model
         if (!$this->table) {
             $this->table = strtolower(str_replace('_model', '', get_class($this)));
         }
+
+        $this->lang->load('form', 'indonesian');
     }
 
     public function check_table($table)

@@ -1,8 +1,8 @@
-<?php 
-  $ceklevel = $this->session->userdata('level'); 
-  $sisa_waktu_rev1 = ceil((strtotime($input->review1_deadline)-strtotime(date('Y-m-d H:i:s')))/86400); 
-  $sisa_waktu_rev2 = ceil((strtotime($input->review2_deadline)-strtotime(date('Y-m-d H:i:s')))/86400); 
-  ?>
+<?php
+$ceklevel        = $this->session->userdata('level');
+$sisa_waktu_rev1 = ceil((strtotime($input->review1_deadline) - strtotime(date('Y-m-d H:i:s'))) / 86400);
+$sisa_waktu_rev2 = ceil((strtotime($input->review2_deadline) - strtotime(date('Y-m-d H:i:s'))) / 86400);
+?>
 <!-- .card -->
 <section id="progress-review" class="card">
   <!-- .card-header -->
@@ -15,7 +15,7 @@
         <!-- .tombol add -->
         <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#review_deadline">Atur Deadline</button>
         <!-- /.tombol add -->
-        <?php endif ?>
+        <?php endif;?>
       </div>
       <!-- /.card-header-control -->
     </div><!-- /.d-flex -->
@@ -23,69 +23,69 @@
   <div class="list-group list-group-flush list-group-bordered" id="list-group-review">
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Tanggal mulai</span>
-      <strong><?= konversiTanggal($input->review_start_date) ?></strong>
+      <strong><?=konversiTanggal($input->review_start_date);?></strong>
     </div>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Tanggal selesai</span>
-      <strong><?= konversiTanggal($input->review_end_date) ?></strong>
+      <strong><?=konversiTanggal($input->review_end_date);?></strong>
     </div>
-    <?php if($reviewer_order=='0' or $reviewer_order!='1'): ?>
+    <?php if ($reviewer_order == '0' or $reviewer_order != '1'): ?>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Deadline reviewer 1</span>
-      <strong><?= ( $sisa_waktu_rev1 <= 0 and $input->review1_flag =='')? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">'.konversiTanggal($input->review1_deadline).'</span>' : konversiTanggal($input->review1_deadline) ?></strong>
+      <strong><?=($sisa_waktu_rev1 <= 0 and $input->review1_flag == '') ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . konversiTanggal($input->review1_deadline) . '</span>' : konversiTanggal($input->review1_deadline);?></strong>
     </div>
-    <?php endif ?>
-    <?php if($reviewer_order=='1' or $reviewer_order!='0'): ?>
+    <?php endif;?>
+    <?php if ($reviewer_order == '1' or $reviewer_order != '0'): ?>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Deadline reviewer 2</span>
-      <strong><?= ( $sisa_waktu_rev2 <= 0 and $input->review2_flag =='')? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">'.konversiTanggal($input->review2_deadline).'</span>' : konversiTanggal($input->review2_deadline) ?></strong>
+      <strong><?=($sisa_waktu_rev2 <= 0 and $input->review2_flag == '') ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . konversiTanggal($input->review2_deadline) . '</span>' : konversiTanggal($input->review2_deadline);?></strong>
     </div>
-    <?php endif ?>
-    <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer' ): ?>
+    <?php endif;?>
+    <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer'): ?>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Reviewer</span>
       <div>
         <?php if ($reviewers) {
-          $i = 1;
-          foreach ($reviewers as $reviewer){
-            echo '<span class="badge badge-info p-1">'.$i.'. '.$reviewer->reviewer_name.'</span> ';
-            $i++;
-          }
-          }
-          ?>
+    $i = 1;
+    foreach ($reviewers as $reviewer) {
+        echo '<span class="badge badge-info p-1">' . $i . '. ' . $reviewer->reviewer_name . '</span> ';
+        $i++;
+    }
+}
+?>
       </div>
     </div>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Rekomendasi Reviewer</span>
       <div>
-        <?php 
-          if($input->review1_flag != ''){
-            if($input->review1_flag == 'y'){
-              echo '<span class="badge badge-success p-1">1. Setuju</span> ';
-            }else{
-              echo '<span class="badge badge-danger p-1">1. Menolak</span> ';
-            }
-          }
-          if($input->review2_flag != ''){
-            if($input->review2_flag == 'y'){
-              echo '<span class="badge badge-success p-1">2. Setuju</span> ';
-            }else{
-              echo '<span class="badge badge-danger p-1">2. Menolak</span> ';
-            }
-          }
-           ?>
+        <?php
+if ($input->review1_flag != '') {
+    if ($input->review1_flag == 'y') {
+        echo '<span class="badge badge-success p-1">1. Setuju</span> ';
+    } else {
+        echo '<span class="badge badge-danger p-1">1. Menolak</span> ';
+    }
+}
+if ($input->review2_flag != '') {
+    if ($input->review2_flag == 'y') {
+        echo '<span class="badge badge-success p-1">2. Setuju</span> ';
+    } else {
+        echo '<span class="badge badge-danger p-1">2. Menolak</span> ';
+    }
+}
+?>
       </div>
     </div>
-    <?php endif ?>
+    <?php endif;?>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Status</span>
-      <?php if($input->is_review == 'y'): ?>
-      <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->review_status ?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Review Selesai</a>
-      <?php elseif($input->is_review == 'n' and $input->stts == 99): ?>
-      <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->review_status ?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Draft ditolak</a>
+      <?php if ($input->is_review == 'y'): ?>
+      <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->review_status;?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Review Selesai</a>
+      <?php elseif ($input->is_review == 'n' and $input->stts == 99): ?>
+      <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->review_status;?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Draft ditolak</a>
       <?php else: ?>
       -
-      <?php endif ?>
+      <?php endif;?>
     </div>
     <hr class="m-0">
   </div>
@@ -95,19 +95,19 @@
       <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
       <button title="Aksi admin" class="btn btn-secondary" data-toggle="modal" data-target="#review_aksi"><i class="fa fa-thumbs-up"></i> Aksi</button>
       <!-- <button class="btn btn-danger" style="width:50px"><i class="fa fa-times"></i></button> -->
-      <?php endif ?>
-      <?php if($reviewer_order=='0' or $reviewer_order!='1'): ?>
-      <button type="button" class="btn <?=($input->review1_notes!='' || $input->review1_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#review1" <?=($ceklevel=='reviewer' and $sisa_waktu_rev1 <=0 and $input->review1_flag =='')? 'disabled' : '' ?>>Tanggapan Review 1
-        <?=($input->review1_notes!='' || $input->review1_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
+      <?php endif;?>
+      <?php if ($reviewer_order == '0' or $reviewer_order != '1'): ?>
+      <button type="button" class="btn <?=($input->review1_notes != '' || $input->review1_notes_author != '') ? 'btn-success' : 'btn-outline-success';?>" data-toggle="modal" data-target="#review1" <?=($ceklevel == 'reviewer' and $sisa_waktu_rev1 <= 0 and $input->review1_flag == '') ? 'disabled' : '';?>>Tanggapan Review 1
+        <?=($input->review1_notes != '' || $input->review1_notes_author != '') ? '<i class="fa fa-check"></i>' : '';?></button>
       <!-- peringatan disabled -->
-      <?=($ceklevel=='reviewer' and $sisa_waktu_rev1 <= 0 and $input->review1_flag =='')? '<span class="font-weight-bold text-danger" data-toggle="tooltip" data-placement="bottom" title="Hubungi admin untuk membuka draft ini"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>' : '' ?>
-      <?php endif ?>
-      <?php if($reviewer_order=='1' or $reviewer_order!='0'): ?>
-      <button type="button" class="btn <?=($input->review2_notes!='' || $input->review2_notes_author!='')? 'btn-success' : 'btn-outline-success' ?>" data-toggle="modal" data-target="#review2" <?=($ceklevel=='reviewer' and $sisa_waktu_rev2 <=0 and $input->review2_flag =='')? 'disabled' : '' ?>>Tanggapan Review 2
-        <?=($input->review2_notes!='' || $input->review2_notes_author!='')? '<i class="fa fa-check"></i>' : '' ?></button>
+      <?=($ceklevel == 'reviewer' and $sisa_waktu_rev1 <= 0 and $input->review1_flag == '') ? '<span class="font-weight-bold text-danger" data-toggle="tooltip" data-placement="bottom" title="Hubungi admin untuk membuka draft ini"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>' : '';?>
+      <?php endif;?>
+      <?php if ($reviewer_order == '1' or $reviewer_order != '0'): ?>
+      <button type="button" class="btn <?=($input->review2_notes != '' || $input->review2_notes_author != '') ? 'btn-success' : 'btn-outline-success';?>" data-toggle="modal" data-target="#review2" <?=($ceklevel == 'reviewer' and $sisa_waktu_rev2 <= 0 and $input->review2_flag == '') ? 'disabled' : '';?>>Tanggapan Review 2
+        <?=($input->review2_notes != '' || $input->review2_notes_author != '') ? '<i class="fa fa-check"></i>' : '';?></button>
       <!-- peringatan disabled -->
-      <?=($ceklevel=='reviewer' and $sisa_waktu_rev2 <= 0 and $input->review2_flag =='')? '<span class="font-weight-bold text-danger" data-toggle="tooltip" data-placement="bottom" title="Hubungi admin untuk membuka draft ini"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>' : '' ?>
-      <?php endif ?>
+      <?=($ceklevel == 'reviewer' and $sisa_waktu_rev2 <= 0 and $input->review2_flag == '') ? '<span class="font-weight-bold text-danger" data-toggle="tooltip" data-placement="bottom" title="Hubungi admin untuk membuka draft ini"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>' : '';?>
+      <?php endif;?>
     </div>
     <!-- modal tanggapan 1-->
     <div class="modal fade" id="review1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -124,16 +124,16 @@
           <div class="modal-body">
             <p class="font-weight-bold">NASKAH</p>
             <!-- if upload ditampilkan di level tertentu -->
-            <?php if($ceklevel=='reviewer' or ($ceklevel == 'author' and $author_order==1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+            <?php if ($ceklevel == 'reviewer' or ($ceklevel == 'author' and $author_order == 1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
             <div class="alert alert-info">Upload file naskah atau sertakan link naskah. Kosongi jika file naskah hard copy.</div>
-            <?= form_open_multipart('draft/upload_progress/'.$input->draft_id.'/review1_file', ' novalidate id="rev1form"'); ?>
-            <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
+            <?=form_open_multipart('draft/upload_progress/' . $input->draft_id . '/review1_file', ' novalidate id="rev1form"');?>
+            <?=isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '';?>
             <!-- .form-group -->
             <div class="form-group">
               <label for="review1_file">File Naskah</label>
               <!-- .input-group -->
               <div class="custom-file">
-                <?= form_upload('review1_file','','class="custom-file-input naskah" id="review1_file"') ?>
+                <?=form_upload('review1_file', '', 'class="custom-file-input naskah" id="review1_file"');?>
                 <label class="custom-file-label" for="review1_file">Choose file</label>
               </div>
               <small class="form-text text-muted">Tipe file upload  bertype : docx, doc, dan pdf.</small>
@@ -144,313 +144,313 @@
             <div class="form-group">
               <label for="reviewer1_file_link">Link Naskah</label>
               <div>
-                <?= form_input('reviewer1_file_link', $input->reviewer1_file_link, 'class="form-control naskah" id="reviewer1_file_link"') ?>
+                <?=form_input('reviewer1_file_link', $input->reviewer1_file_link, 'class="form-control naskah" id="reviewer1_file_link"');?>
               </div>
-              <?= form_error('reviewer1_file_link') ?>
+              <?=form_error('reviewer1_file_link');?>
             </div>
             <!-- /.form-group -->
             <div class="form-group">
               <button class="btn btn-primary " type="submit" value="Submit" id="btn-upload-review1"><i class="fa fa-upload"></i> Upload</button>
             </div>
-            <?= form_close(); ?>
-            <?php endif ?>
+            <?=form_close();?>
+            <?php endif;?>
             <!-- endif upload ditampilkan di level tertentu -->
             <!-- keterangan last upload dan tombol download -->
             <div id="modal-review1">
               <p>Last Upload :
-                <?=konversiTanggal($input->review1_upload_date) ?>,
+                <?=konversiTanggal($input->review1_upload_date);?>,
                 <br> by :
-                <?=konversi_username_level($input->review1_last_upload) ?>
-                <?php  if($ceklevel !='author' and $ceklevel !='reviewer'):?>
-                <em>(<?=$input->review1_last_upload ?>)</em>
-                <?php endif ?>
+                <?=konversi_username_level($input->review1_last_upload);?>
+                <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer'): ?>
+                <em>(<?=$input->review1_last_upload;?>)</em>
+                <?php endif;?>
               </p>
-              <?=(!empty($input->review1_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review1_file.'" href="'.base_url('draftfile/'.$input->review1_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
-              <?=(!empty($input->reviewer1_file_link))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->reviewer1_file_link.'" href="'.$input->reviewer1_file_link.'" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
+              <?=(!empty($input->review1_file)) ? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="' . $input->review1_file . '" href="' . base_url('draftfile/' . $input->review1_file) . '" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '';?>
+              <?=(!empty($input->reviewer1_file_link)) ? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="' . $input->reviewer1_file_link . '" href="' . $input->reviewer1_file_link . '" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '';?>
             </div>
-            <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formreview1_krit" novalidate=""'); ?>
+            <?=form_open('draft/ubahnotes/' . $input->draft_id, 'id="formreview1_krit" novalidate=""');?>
             <!-- review dari reviewer hanya bisa dibaca admin dan staff ugmpress -->
-            <?php if($ceklevel!='author'): ?>
+            <?php if ($ceklevel != 'author'): ?>
             <hr class="my-3">
             <p class="font-weight-bold">REVIEW</p>
-            <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
+            <?=isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '';?>
             <!-- .form-group -->
             <div class="alert alert-info">
               <label for="kriteria1_reviewer1" class="font-weight-bold">Substansi naskah (mencerminkan adanya kontribusi dan inovasi pada pengembangan iptek, seni, dan budaya) :</label>
               <div>
-                <?php 
-                  $kriteria1_reviewer1 = array(
-                      'name' => 'kriteria1_reviewer1',
-                      'class'=> 'form-control summernote-basic',
-                      'id'  => 'kriteria1_reviewer1',
-                      'rows' => '6',
-                      'value'=> $input->kriteria1_reviewer1
-                  );
-                  if($ceklevel=='reviewer'){
-                    echo form_textarea($kriteria1_reviewer1);
-                  }else{
-                    echo '<div class="font-italic">'.nl2br($input->kriteria1_reviewer1).'</div>';
-                  }
-                  ?>
+                <?php
+$kriteria1_reviewer1 = array(
+    'name'  => 'kriteria1_reviewer1',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'kriteria1_reviewer1',
+    'rows'  => '6',
+    'value' => $input->kriteria1_reviewer1,
+);
+if ($ceklevel == 'reviewer') {
+    echo form_textarea($kriteria1_reviewer1);
+} else {
+    echo '<div class="font-italic">' . nl2br($input->kriteria1_reviewer1) . '</div>';
+}
+?>
               </div>
-              <?php  if($ceklevel=='reviewer'): ?>
+              <?php if ($ceklevel == 'reviewer'): ?>
               <p class="m-0 p-0">Nilai</p>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_0', 1, isset($input->nilai_reviewer1[0]) && ($input->nilai_reviewer1[0] == 1) ? true : false,'required="" class="custom-control-input" id="nilai_kriteria1_reviewer1_1"')?>
+                <?=form_radio('nilai_reviewer1_0', 1, isset($input->nilai_reviewer1[0]) && ($input->nilai_reviewer1[0] == 1) ? true : false, 'required="" class="custom-control-input" id="nilai_kriteria1_reviewer1_1"');?>
                 <label class="custom-control-label" for="nilai_kriteria1_reviewer1_1">1</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_0', 2, isset($input->nilai_reviewer1[0]) && ($input->nilai_reviewer1[0] == 2) ? true : false,'required="" class="custom-control-input" id="nilai_kriteria1_reviewer1_2"')?>
+                <?=form_radio('nilai_reviewer1_0', 2, isset($input->nilai_reviewer1[0]) && ($input->nilai_reviewer1[0] == 2) ? true : false, 'required="" class="custom-control-input" id="nilai_kriteria1_reviewer1_2"');?>
                 <label class="custom-control-label" for="nilai_kriteria1_reviewer1_2">2</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_0', 3, isset($input->nilai_reviewer1[0]) && ($input->nilai_reviewer1[0] == 3) ? true : false,'required="" class="custom-control-input" id="nilai_kriteria1_reviewer1_3"')?>
+                <?=form_radio('nilai_reviewer1_0', 3, isset($input->nilai_reviewer1[0]) && ($input->nilai_reviewer1[0] == 3) ? true : false, 'required="" class="custom-control-input" id="nilai_kriteria1_reviewer1_3"');?>
                 <label class="custom-control-label" for="nilai_kriteria1_reviewer1_3">3</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_0', 4, isset($input->nilai_reviewer1[0]) && ($input->nilai_reviewer1[0] == 4) ? true : false,'required="" class="custom-control-input" id="nilai_kriteria1_reviewer1_4"')?>
+                <?=form_radio('nilai_reviewer1_0', 4, isset($input->nilai_reviewer1[0]) && ($input->nilai_reviewer1[0] == 4) ? true : false, 'required="" class="custom-control-input" id="nilai_kriteria1_reviewer1_4"');?>
                 <label class="custom-control-label" for="nilai_kriteria1_reviewer1_4">4</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_0', 5, isset($input->nilai_reviewer1[0]) && ($input->nilai_reviewer1[0] == 5) ? true : false,'required="" class="custom-control-input" id="nilai_kriteria1_reviewer1_5"')?>
+                <?=form_radio('nilai_reviewer1_0', 5, isset($input->nilai_reviewer1[0]) && ($input->nilai_reviewer1[0] == 5) ? true : false, 'required="" class="custom-control-input" id="nilai_kriteria1_reviewer1_5"');?>
                 <label class="custom-control-label" for="nilai_kriteria1_reviewer1_5">5</label>
               </div>
               <?php else: ?>
               <p class="m-0 p-0">Nilai =
-                <?=isset($input->nilai_reviewer1[0])?$input->nilai_reviewer1[0]:''; ?>
+                <?=isset($input->nilai_reviewer1[0]) ? $input->nilai_reviewer1[0] : '';?>
               </p>
-              <?php endif ?>
+              <?php endif;?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
             <div class="alert alert-info">
               <label for="kriteria2_reviewer1" class="font-weight-bold">Orisinalitas Karya dan bobot ilmiah :</label>
               <div>
-                <?php 
-                  $kriteria2_reviewer1 = array(
-                      'name' => 'kriteria2_reviewer1',
-                      'class'=> 'form-control summernote-basic',
-                      'id'  => 'kriteria2_reviewer1',
-                      'rows' => '6',
-                      'value'=> $input->kriteria2_reviewer1
-                  );
-                  if($ceklevel=='reviewer'){
-                    echo form_textarea($kriteria2_reviewer1);
-                  }else{
-                    echo '<div class="font-italic">'.nl2br($input->kriteria2_reviewer1).'</div>';
-                  }
-                  ?>
+                <?php
+$kriteria2_reviewer1 = array(
+    'name'  => 'kriteria2_reviewer1',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'kriteria2_reviewer1',
+    'rows'  => '6',
+    'value' => $input->kriteria2_reviewer1,
+);
+if ($ceklevel == 'reviewer') {
+    echo form_textarea($kriteria2_reviewer1);
+} else {
+    echo '<div class="font-italic">' . nl2br($input->kriteria2_reviewer1) . '</div>';
+}
+?>
               </div>
-              <?php  if($ceklevel=='reviewer'): ?>
+              <?php if ($ceklevel == 'reviewer'): ?>
               <p class="m-0 p-0">Nilai</p>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_1', 1, isset($input->nilai_reviewer1[1]) && ($input->nilai_reviewer1[1] == 1) ? true : false,'required class="custom-control-input" id="nilai_kriteria2_reviewer1_1"')?>
+                <?=form_radio('nilai_reviewer1_1', 1, isset($input->nilai_reviewer1[1]) && ($input->nilai_reviewer1[1] == 1) ? true : false, 'required class="custom-control-input" id="nilai_kriteria2_reviewer1_1"');?>
                 <label class="custom-control-label" for="nilai_kriteria2_reviewer1_1">1</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_1', 2, isset($input->nilai_reviewer1[1]) && ($input->nilai_reviewer1[1] == 2) ? true : false,'required class="custom-control-input" id="nilai_kriteria2_reviewer1_2"')?>
+                <?=form_radio('nilai_reviewer1_1', 2, isset($input->nilai_reviewer1[1]) && ($input->nilai_reviewer1[1] == 2) ? true : false, 'required class="custom-control-input" id="nilai_kriteria2_reviewer1_2"');?>
                 <label class="custom-control-label" for="nilai_kriteria2_reviewer1_2">2</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_1', 3, isset($input->nilai_reviewer1[1]) && ($input->nilai_reviewer1[1] == 3) ? true : false,'required class="custom-control-input" id="nilai_kriteria2_reviewer1_3"')?>
+                <?=form_radio('nilai_reviewer1_1', 3, isset($input->nilai_reviewer1[1]) && ($input->nilai_reviewer1[1] == 3) ? true : false, 'required class="custom-control-input" id="nilai_kriteria2_reviewer1_3"');?>
                 <label class="custom-control-label" for="nilai_kriteria2_reviewer1_3">3</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_1', 4, isset($input->nilai_reviewer1[1]) && ($input->nilai_reviewer1[1] == 4) ? true : false,'required class="custom-control-input" id="nilai_kriteria2_reviewer1_4"')?>
+                <?=form_radio('nilai_reviewer1_1', 4, isset($input->nilai_reviewer1[1]) && ($input->nilai_reviewer1[1] == 4) ? true : false, 'required class="custom-control-input" id="nilai_kriteria2_reviewer1_4"');?>
                 <label class="custom-control-label" for="nilai_kriteria2_reviewer1_4">4</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_1', 5, isset($input->nilai_reviewer1[1]) && ($input->nilai_reviewer1[1] == 5) ? true : false,'required class="custom-control-input" id="nilai_kriteria2_reviewer1_5"')?>
+                <?=form_radio('nilai_reviewer1_1', 5, isset($input->nilai_reviewer1[1]) && ($input->nilai_reviewer1[1] == 5) ? true : false, 'required class="custom-control-input" id="nilai_kriteria2_reviewer1_5"');?>
                 <label class="custom-control-label" for="nilai_kriteria2_reviewer1_5">5</label>
               </div>
               <?php else: ?>
               <p class="m-0 p-0">Nilai =
-                <?=isset($input->nilai_reviewer1[1])?$input->nilai_reviewer1[1]:''; ?>
+                <?=isset($input->nilai_reviewer1[1]) ? $input->nilai_reviewer1[1] : '';?>
               </p>
-              <?php endif ?>
+              <?php endif;?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
             <div class="alert alert-info">
               <label for="kriteria3_reviewer1" class="font-weight-bold">Kemutahiran Pustaka :</label>
               <div>
-                <?php 
-                  $kriteria3_reviewer1 = array(
-                      'name' => 'kriteria3_reviewer1',
-                      'class'=> 'form-control summernote-basic',
-                      'id'  => 'kriteria3_reviewer1',
-                      'rows' => '6',
-                      'value'=> $input->kriteria3_reviewer1
-                  );
-                  if($ceklevel=='reviewer'){
-                    echo form_textarea($kriteria3_reviewer1);
-                  }else{
-                    echo '<div class="font-italic">'.nl2br($input->kriteria3_reviewer1).'</div>';
-                  }
-                  ?>
+                <?php
+$kriteria3_reviewer1 = array(
+    'name'  => 'kriteria3_reviewer1',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'kriteria3_reviewer1',
+    'rows'  => '6',
+    'value' => $input->kriteria3_reviewer1,
+);
+if ($ceklevel == 'reviewer') {
+    echo form_textarea($kriteria3_reviewer1);
+} else {
+    echo '<div class="font-italic">' . nl2br($input->kriteria3_reviewer1) . '</div>';
+}
+?>
               </div>
-              <?php  if($ceklevel=='reviewer'): ?>
+              <?php if ($ceklevel == 'reviewer'): ?>
               <p class="m-0 p-0">Nilai</p>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_2', 1, isset($input->nilai_reviewer1[2]) && ($input->nilai_reviewer1[2] == 1) ? true : false,'required class="custom-control-input" id="nilai_kriteria3_reviewer1_1"')?>
+                <?=form_radio('nilai_reviewer1_2', 1, isset($input->nilai_reviewer1[2]) && ($input->nilai_reviewer1[2] == 1) ? true : false, 'required class="custom-control-input" id="nilai_kriteria3_reviewer1_1"');?>
                 <label class="custom-control-label" for="nilai_kriteria3_reviewer1_1">1</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_2', 2, isset($input->nilai_reviewer1[2]) && ($input->nilai_reviewer1[2] == 2) ? true : false,'required class="custom-control-input" id="nilai_kriteria3_reviewer1_2"')?>
+                <?=form_radio('nilai_reviewer1_2', 2, isset($input->nilai_reviewer1[2]) && ($input->nilai_reviewer1[2] == 2) ? true : false, 'required class="custom-control-input" id="nilai_kriteria3_reviewer1_2"');?>
                 <label class="custom-control-label" for="nilai_kriteria3_reviewer1_2">2</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_2', 3, isset($input->nilai_reviewer1[2]) && ($input->nilai_reviewer1[2] == 3) ? true : false,'required class="custom-control-input" id="nilai_kriteria3_reviewer1_3"')?>
+                <?=form_radio('nilai_reviewer1_2', 3, isset($input->nilai_reviewer1[2]) && ($input->nilai_reviewer1[2] == 3) ? true : false, 'required class="custom-control-input" id="nilai_kriteria3_reviewer1_3"');?>
                 <label class="custom-control-label" for="nilai_kriteria3_reviewer1_3">3</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_2', 4, isset($input->nilai_reviewer1[2]) && ($input->nilai_reviewer1[2] == 4) ? true : false,'required class="custom-control-input" id="nilai_kriteria3_reviewer1_4"')?>
+                <?=form_radio('nilai_reviewer1_2', 4, isset($input->nilai_reviewer1[2]) && ($input->nilai_reviewer1[2] == 4) ? true : false, 'required class="custom-control-input" id="nilai_kriteria3_reviewer1_4"');?>
                 <label class="custom-control-label" for="nilai_kriteria3_reviewer1_4">4</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_2', 5, isset($input->nilai_reviewer1[2]) && ($input->nilai_reviewer1[2] == 5) ? true : false,'required class="custom-control-input" id="nilai_kriteria3_reviewer1_5"')?>
+                <?=form_radio('nilai_reviewer1_2', 5, isset($input->nilai_reviewer1[2]) && ($input->nilai_reviewer1[2] == 5) ? true : false, 'required class="custom-control-input" id="nilai_kriteria3_reviewer1_5"');?>
                 <label class="custom-control-label" for="nilai_kriteria3_reviewer1_5">5</label>
               </div>
               <?php else: ?>
               <p class="m-0 p-0">Nilai =
-                <?=isset($input->nilai_reviewer1[2])?$input->nilai_reviewer1[2]:''; ?>
+                <?=isset($input->nilai_reviewer1[2]) ? $input->nilai_reviewer1[2] : '';?>
               </p>
-              <?php endif ?>
+              <?php endif;?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
             <div class="alert alert-info">
               <label for="kriteria4_reviewer1" class="font-weight-bold">Kelengkapan unsur (sebagai suatu naskah buku dan keterkaitan antarbab, sistematika) :</label>
               <div>
-                <?php 
-                  $kriteria4_reviewer1 = array(
-                      'name' => 'kriteria4_reviewer1',
-                      'class'=> 'form-control summernote-basic',
-                      'id'  => 'kriteria4_reviewer1',
-                      'rows' => '6',
-                      'value'=> $input->kriteria4_reviewer1
-                  );
-                  if($ceklevel=='reviewer'){
-                    echo form_textarea($kriteria4_reviewer1);
-                  }else{
-                    echo '<div class="font-italic">'.nl2br($input->kriteria4_reviewer1).'</div>';
-                  }
-                  ?>
+                <?php
+$kriteria4_reviewer1 = array(
+    'name'  => 'kriteria4_reviewer1',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'kriteria4_reviewer1',
+    'rows'  => '6',
+    'value' => $input->kriteria4_reviewer1,
+);
+if ($ceklevel == 'reviewer') {
+    echo form_textarea($kriteria4_reviewer1);
+} else {
+    echo '<div class="font-italic">' . nl2br($input->kriteria4_reviewer1) . '</div>';
+}
+?>
               </div>
-              <?php  if($ceklevel=='reviewer'): ?>
+              <?php if ($ceklevel == 'reviewer'): ?>
               <p class="m-0 p-0">Nilai</p>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_3', 1, isset($input->nilai_reviewer1[3]) && ($input->nilai_reviewer1[3] == 1) ? true : false,'required class="custom-control-input" id="nilai_kriteria4_reviewer1_1"')?>
+                <?=form_radio('nilai_reviewer1_3', 1, isset($input->nilai_reviewer1[3]) && ($input->nilai_reviewer1[3] == 1) ? true : false, 'required class="custom-control-input" id="nilai_kriteria4_reviewer1_1"');?>
                 <label class="custom-control-label" for="nilai_kriteria4_reviewer1_1">1</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_3', 2, isset($input->nilai_reviewer1[3]) && ($input->nilai_reviewer1[3] == 2) ? true : false,'required class="custom-control-input" id="nilai_kriteria4_reviewer1_2"')?>
+                <?=form_radio('nilai_reviewer1_3', 2, isset($input->nilai_reviewer1[3]) && ($input->nilai_reviewer1[3] == 2) ? true : false, 'required class="custom-control-input" id="nilai_kriteria4_reviewer1_2"');?>
                 <label class="custom-control-label" for="nilai_kriteria4_reviewer1_2">2</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_3', 3, isset($input->nilai_reviewer1[3]) && ($input->nilai_reviewer1[3] == 3) ? true : false,'required class="custom-control-input" id="nilai_kriteria4_reviewer1_3"')?>
+                <?=form_radio('nilai_reviewer1_3', 3, isset($input->nilai_reviewer1[3]) && ($input->nilai_reviewer1[3] == 3) ? true : false, 'required class="custom-control-input" id="nilai_kriteria4_reviewer1_3"');?>
                 <label class="custom-control-label" for="nilai_kriteria4_reviewer1_3">3</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_3', 4, isset($input->nilai_reviewer1[3]) && ($input->nilai_reviewer1[3] == 4) ? true : false,'required class="custom-control-input" id="nilai_kriteria4_reviewer1_4"')?>
+                <?=form_radio('nilai_reviewer1_3', 4, isset($input->nilai_reviewer1[3]) && ($input->nilai_reviewer1[3] == 4) ? true : false, 'required class="custom-control-input" id="nilai_kriteria4_reviewer1_4"');?>
                 <label class="custom-control-label" for="nilai_kriteria4_reviewer1_4">4</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer1_3', 5, isset($input->nilai_reviewer1[3]) && ($input->nilai_reviewer1[3] == 5) ? true : false,'required class="custom-control-input" id="nilai_kriteria4_reviewer1_5"')?>
+                <?=form_radio('nilai_reviewer1_3', 5, isset($input->nilai_reviewer1[3]) && ($input->nilai_reviewer1[3] == 5) ? true : false, 'required class="custom-control-input" id="nilai_kriteria4_reviewer1_5"');?>
                 <label class="custom-control-label" for="nilai_kriteria4_reviewer1_5">5</label>
               </div>
               <?php else: ?>
               <p class="m-0 p-0">Nilai =
-                <?=isset($input->nilai_reviewer1[3])?$input->nilai_reviewer1[3]:''; ?>
+                <?=isset($input->nilai_reviewer1[3]) ? $input->nilai_reviewer1[3] : '';?>
               </p>
-              <?php endif ?>
+              <?php endif;?>
             </div>
-            <?php if($ceklevel != 'author'): ?>
+            <?php if ($ceklevel != 'author'): ?>
             <div id="total_reviewer1">
-              <?php if(!empty($draft->nilai_total_reviewer1)){
-                if($draft->nilai_total_reviewer1 >=400){
-                  $hasil = '<div class="alert alert-success"><span class="badge badge-success">Naskah Lolos Review</span><br>';
-                  $hasil .= '<strong>Nilai total = '.$draft->nilai_total_reviewer1.'</strong><br>';
-                  $hasil .= 'Passing Grade = 400 <br>';
-                  $hasil .= '</div>';
-                }else{
-                  $hasil = '<div class="alert alert-danger"><span class="badge badge-danger">Naskah Tidak Lolos Review</span><br>';
-                  $hasil .= '<strong>Nilai total = '.$draft->nilai_total_reviewer1.'</strong><br>';
-                  $hasil .= 'Passing Grade = 400 <br>';
-                  $hasil .= '</div>';
-                }
-                  echo $hasil;
-                } 
-                ?>
+              <?php if (!empty($draft->nilai_total_reviewer1)) {
+    if ($draft->nilai_total_reviewer1 >= 400) {
+        $hasil = '<div class="alert alert-success"><span class="badge badge-success">Naskah Lolos Review</span><br>';
+        $hasil .= '<strong>Nilai total = ' . $draft->nilai_total_reviewer1 . '</strong><br>';
+        $hasil .= 'Passing Grade = 400 <br>';
+        $hasil .= '</div>';
+    } else {
+        $hasil = '<div class="alert alert-danger"><span class="badge badge-danger">Naskah Tidak Lolos Review</span><br>';
+        $hasil .= '<strong>Nilai total = ' . $draft->nilai_total_reviewer1 . '</strong><br>';
+        $hasil .= 'Passing Grade = 400 <br>';
+        $hasil .= '</div>';
+    }
+    echo $hasil;
+}
+?>
             </div>
-            <?php endif ?>
+            <?php endif;?>
             <!-- /.form-group -->
             <!-- endif review dari reviewer hanya bisa dibaca admin dan staff ugmpress -->
-            <?php endif ?>
+            <?php endif;?>
             <!-- .fieldset -->
             <fieldset>
-              <?php if($ceklevel!='author'): ?>
+              <?php if ($ceklevel != 'author'): ?>
               <hr class="my-3">
               <!-- .form-group -->
               <div class="form-group">
                 <label for="cr1" class="font-weight-bold">Catatan Reviewer 1</label>
-                <?php 
-                  $optionscr1 = array(
-                      'name' => 'review1_notes',
-                      'class'=> 'form-control summernote-basic',
-                      'id'  => 'cr1',
-                      'rows' => '6',
-                      'value'=> $input->review1_notes
-                  );
-                  if($ceklevel!='reviewer'){
-                    echo '<div class="font-italic">'.nl2br($input->review1_notes).'</div>';
-                  }else{
-                    echo form_textarea($optionscr1);
-                  }
-                  ?>
+                <?php
+$optionscr1 = array(
+    'name'  => 'review1_notes',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'cr1',
+    'rows'  => '6',
+    'value' => $input->review1_notes,
+);
+if ($ceklevel != 'reviewer') {
+    echo '<div class="font-italic">' . nl2br($input->review1_notes) . '</div>';
+} else {
+    echo form_textarea($optionscr1);
+}
+?>
               </div>
-              <?php endif ?>
+              <?php endif;?>
               <!-- /.form-group -->
-              <?php if($ceklevel=='superadmin' or $ceklevel=='admin_penerbitan' or $ceklevel=='author'): ?>
+              <?php if ($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan' or $ceklevel == 'author'): ?>
               <hr class="my-3">
               <!-- .form-group -->
               <div class="form-group">
                 <label for="cr1a" class="font-weight-bold">Catatan Admin untuk Penulis</label>
-                <?php 
-                  $optionscr1a = array(
-                      'name' => 'catatan_review1_admin',
-                      'class'=> 'form-control summernote-basic',
-                      'id'  => 'cr1a',
-                      'rows' => '6',
-                      'value'=> $input->catatan_review1_admin
-                  );
-                  if($ceklevel=='superadmin' or $ceklevel=='admin_penerbitan'){
-                    echo form_textarea($optionscr1a);
-                  }elseif($ceklevel=='author'){
-                    echo '<div class="font-italic">'.nl2br($input->catatan_review1_admin).'</div>';
-                  }else{}
-                  ?>
+                <?php
+$optionscr1a = array(
+    'name'  => 'catatan_review1_admin',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'cr1a',
+    'rows'  => '6',
+    'value' => $input->catatan_review1_admin,
+);
+if ($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan') {
+    echo form_textarea($optionscr1a);
+} elseif ($ceklevel == 'author') {
+    echo '<div class="font-italic">' . nl2br($input->catatan_review1_admin) . '</div>';
+} else {}
+?>
               </div>
-              <?php endif ?>
+              <?php endif;?>
               <!-- /.form-group -->
               <hr class="my-3">
               <!-- .form-group -->
               <div class="form-group">
                 <label for="crp1" class="font-weight-bold">Catatan Penulis</label>
-                <?php 
-                  $optionscrp1 = array(
-                      'name' => 'review1_notes_author',
-                      'class'=> 'form-control summernote-basic',
-                      'id'  => 'crp1',
-                      'rows' => '6',
-                      'value'=> $input->review1_notes_author
-                  );
-                  if($ceklevel!='author' or $author_order!=1){
-                    echo '<div class="font-italic">'.nl2br($input->review1_notes_author).'</div>';
-                  }else{
-                    echo form_textarea($optionscrp1);
-                  }
-                   ?>
+                <?php
+$optionscrp1 = array(
+    'name'  => 'review1_notes_author',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'crp1',
+    'rows'  => '6',
+    'value' => $input->review1_notes_author,
+);
+if ($ceklevel != 'author' or $author_order != 1) {
+    echo '<div class="font-italic">' . nl2br($input->review1_notes_author) . '</div>';
+} else {
+    echo form_textarea($optionscrp1);
+}
+?>
               </div>
               <!-- /.form-group -->
             </fieldset>
@@ -459,15 +459,15 @@
           <!-- /.modal-body -->
           <!-- .modal-footer -->
           <div class="modal-footer">
-            <?php if($ceklevel=='reviewer'): ?>
+            <?php if ($ceklevel == 'reviewer'): ?>
             <div class="card-footer-content text-muted p-0 m-0">
               <div class="mb-1 font-weight-bold">Rekomendasi</div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('review1_flag', 'y', isset($input->review1_flag) && ($input->review1_flag == 'y') ? true : false,'required class="custom-control-input" id="review1_flagy"')?>
+                <?=form_radio('review1_flag', 'y', isset($input->review1_flag) && ($input->review1_flag == 'y') ? true : false, 'required class="custom-control-input" id="review1_flagy"');?>
                 <label class="custom-control-label" for="review1_flagy">Setuju</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('review1_flag', 'n', isset($input->review1_flag) && ($input->review1_flag == 'n') ? true : false,'required class="custom-control-input" id="review1_flagn"')?>
+                <?=form_radio('review1_flag', 'n', isset($input->review1_flag) && ($input->review1_flag == 'n') ? true : false, 'required class="custom-control-input" id="review1_flagn"');?>
                 <label class="custom-control-label" for="review1_flagn">Tidak</label>
               </div>
             </div>
@@ -476,11 +476,11 @@
             <?php else: ?>
             <!-- submit untuk selain reviewer -->
             <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-review1-other">Submit</button>
-            <?php endif ?>
+            <?php endif;?>
             <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
           </div>
           <!-- /.modal-footer -->
-          <?= form_close(); ?>
+          <?=form_close();?>
         </div>
         <!-- /.modal-content -->
       </div>
@@ -502,16 +502,16 @@
           <div class="modal-body">
             <!-- if upload ditampilkan di level tertentu -->
             <p class="font-weight-bold">NASKAH</p>
-            <?php if($ceklevel=='reviewer' or ($ceklevel == 'author' and $author_order==1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
-            <?= form_open('draft/upload_progress/'.$input->draft_id.'/review2_file', 'novalidate id="rev2form"'); ?>
+            <?php if ($ceklevel == 'reviewer' or ($ceklevel == 'author' and $author_order == 1) or $ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+            <?=form_open('draft/upload_progress/' . $input->draft_id . '/review2_file', 'novalidate id="rev2form"');?>
             <div class="alert alert-info">Upload file naskah atau sertakan link naskah. Kosongi jika file naskah hard copy.</div>
-            <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : 'No data' ?>
+            <?=isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : 'No data';?>
             <!-- .form-group -->
             <div class="form-group">
               <label for="review2_file">File Naskah</label>
               <!-- .input-group -->
               <div class="custom-file">
-                <?= form_upload('review2_file','','class="custom-file-input naskah" id="review2_file"') ?>
+                <?=form_upload('review2_file', '', 'class="custom-file-input naskah" id="review2_file"');?>
                 <label class="custom-file-label" for="review2_file">Choose file</label>
               </div>
               <small class="form-text text-muted">Tipe file upload  bertype : docx, doc, dan pdf.</small>
@@ -522,313 +522,313 @@
             <div class="form-group">
               <label for="reviewer2_file_link">Link Naskah</label>
               <div>
-                <?= form_input('reviewer2_file_link', $input->reviewer2_file_link, 'class="form-control naskah" id="reviewer2_file_link"') ?>
+                <?=form_input('reviewer2_file_link', $input->reviewer2_file_link, 'class="form-control naskah" id="reviewer2_file_link"');?>
               </div>
-              <?= form_error('reviewer2_file_link') ?>
+              <?=form_error('reviewer2_file_link');?>
             </div>
             <!-- /.form-group -->
             <div class="form-group">
               <button class="btn btn-primary " type="submit" value="Submit" id="btn-upload-review2"><i class="fa fa-upload"></i> Upload</button>
             </div>
-            <?= form_close(); ?>
-            <?php endif ?>
+            <?=form_close();?>
+            <?php endif;?>
             <!-- endif upload ditampilkan di level tertentu -->
             <!-- keterangan last upload dan tombol download -->
             <div id="modal-review2">
               <p>Last Upload :
-                <?=konversiTanggal($input->review2_upload_date) ?>,
+                <?=konversiTanggal($input->review2_upload_date);?>,
                 <br> by :
-                <?=konversi_username_level($input->review2_last_upload) ?>
-                <?php  if($ceklevel !='author' and $ceklevel !='reviewer'):?>
-                <em>(<?=$input->review2_last_upload ?>)</em>
-                <?php endif ?>
+                <?=konversi_username_level($input->review2_last_upload);?>
+                <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer'): ?>
+                <em>(<?=$input->review2_last_upload;?>)</em>
+                <?php endif;?>
               </p>
-              <?=(!empty($input->review2_file))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->review2_file.'" href="'.base_url('draftfile/'.$input->review2_file).'" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '' ?>
-              <?=(!empty($input->reviewer2_file_link))? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="'.$input->reviewer2_file_link.'" href="'.$input->reviewer2_file_link.'" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
+              <?=(!empty($input->review2_file)) ? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="' . $input->review2_file . '" href="' . base_url('draftfile/' . $input->review2_file) . '" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : '';?>
+              <?=(!empty($input->reviewer2_file_link)) ? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="' . $input->reviewer2_file_link . '" href="' . $input->reviewer2_file_link . '" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : '';?>
             </div>
-            <?= form_open('draft/ubahnotes/'.$input->draft_id,'id="formreview2_krit" novalidate=""'); ?>
+            <?=form_open('draft/ubahnotes/' . $input->draft_id, 'id="formreview2_krit" novalidate=""');?>
             <!-- review dari reviewer hanya bisa dibaca admin dan staff ugmpress -->
-            <?php if($ceklevel!='author'): ?>
+            <?php if ($ceklevel != 'author'): ?>
             <hr class="my-3">
             <p class="font-weight-bold">REVIEW</p>
-            <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
+            <?=isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '';?>
             <!-- .form-group -->
             <div class="alert alert-info">
               <label for="kriteria1_reviewer2" class="font-weight-bold">Substansi naskah (mencerminkan adanya kontribusi dan inovasi pada pengembangan iptek, seni, dan budaya) :</label>
               <div>
-                <?php 
-                  $kriteria1_reviewer2 = array(
-                      'name' => 'kriteria1_reviewer2',
-                      'class'=> 'form-control summernote-basic',
-                      'id'  => 'kriteria1_reviewer2',
-                      'rows' => '6',
-                      'value'=> $input->kriteria1_reviewer2
-                  );
-                  if($ceklevel=='reviewer'){
-                    echo form_textarea($kriteria1_reviewer2);
-                  }else{
-                    echo '<div class="font-italic">'.nl2br($input->kriteria1_reviewer2).'</div>';
-                  }
-                  ?>
+                <?php
+$kriteria1_reviewer2 = array(
+    'name'  => 'kriteria1_reviewer2',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'kriteria1_reviewer2',
+    'rows'  => '6',
+    'value' => $input->kriteria1_reviewer2,
+);
+if ($ceklevel == 'reviewer') {
+    echo form_textarea($kriteria1_reviewer2);
+} else {
+    echo '<div class="font-italic">' . nl2br($input->kriteria1_reviewer2) . '</div>';
+}
+?>
               </div>
-              <?php  if($ceklevel=='reviewer'): ?>
+              <?php if ($ceklevel == 'reviewer'): ?>
               <p class="m-0 p-0">Nilai</p>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_0', 1, isset($input->nilai_reviewer2[0]) && ($input->nilai_reviewer2[0] == 1) ? true : false,'required="" class="custom-control-input" id="nilai_kriteria1_reviewer2_1"')?>
+                <?=form_radio('nilai_reviewer2_0', 1, isset($input->nilai_reviewer2[0]) && ($input->nilai_reviewer2[0] == 1) ? true : false, 'required="" class="custom-control-input" id="nilai_kriteria1_reviewer2_1"');?>
                 <label class="custom-control-label" for="nilai_kriteria1_reviewer2_1">1</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_0', 2, isset($input->nilai_reviewer2[0]) && ($input->nilai_reviewer2[0] == 2) ? true : false,'required="" class="custom-control-input" id="nilai_kriteria1_reviewer2_2"')?>
+                <?=form_radio('nilai_reviewer2_0', 2, isset($input->nilai_reviewer2[0]) && ($input->nilai_reviewer2[0] == 2) ? true : false, 'required="" class="custom-control-input" id="nilai_kriteria1_reviewer2_2"');?>
                 <label class="custom-control-label" for="nilai_kriteria1_reviewer2_2">2</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_0', 3, isset($input->nilai_reviewer2[0]) && ($input->nilai_reviewer2[0] == 3) ? true : false,'required="" class="custom-control-input" id="nilai_kriteria1_reviewer2_3"')?>
+                <?=form_radio('nilai_reviewer2_0', 3, isset($input->nilai_reviewer2[0]) && ($input->nilai_reviewer2[0] == 3) ? true : false, 'required="" class="custom-control-input" id="nilai_kriteria1_reviewer2_3"');?>
                 <label class="custom-control-label" for="nilai_kriteria1_reviewer2_3">3</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_0', 4, isset($input->nilai_reviewer2[0]) && ($input->nilai_reviewer2[0] == 4) ? true : false,'required="" class="custom-control-input" id="nilai_kriteria1_reviewer2_4"')?>
+                <?=form_radio('nilai_reviewer2_0', 4, isset($input->nilai_reviewer2[0]) && ($input->nilai_reviewer2[0] == 4) ? true : false, 'required="" class="custom-control-input" id="nilai_kriteria1_reviewer2_4"');?>
                 <label class="custom-control-label" for="nilai_kriteria1_reviewer2_4">4</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_0', 5, isset($input->nilai_reviewer2[0]) && ($input->nilai_reviewer2[0] == 5) ? true : false,'required="" class="custom-control-input" id="nilai_kriteria1_reviewer2_5"')?>
+                <?=form_radio('nilai_reviewer2_0', 5, isset($input->nilai_reviewer2[0]) && ($input->nilai_reviewer2[0] == 5) ? true : false, 'required="" class="custom-control-input" id="nilai_kriteria1_reviewer2_5"');?>
                 <label class="custom-control-label" for="nilai_kriteria1_reviewer2_5">5</label>
               </div>
               <?php else: ?>
               <p class="m-0 p-0">Nilai =
-                <?=isset($input->nilai_reviewer2[0])?$input->nilai_reviewer2[0]:''; ?>
+                <?=isset($input->nilai_reviewer2[0]) ? $input->nilai_reviewer2[0] : '';?>
               </p>
-              <?php endif ?>
+              <?php endif;?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
             <div class="alert alert-info">
               <label for="kriteria2_reviewer2" class="font-weight-bold">Orisinalitas Karya dan bobot ilmiah :</label>
               <div>
-                <?php 
-                  $kriteria2_reviewer2 = array(
-                      'name' => 'kriteria2_reviewer2',
-                      'class'=> 'form-control summernote-basic',
-                      'id'  => 'kriteria2_reviewer2',
-                      'rows' => '6',
-                      'value'=> $input->kriteria2_reviewer2
-                  );
-                  if($ceklevel=='reviewer'){
-                    echo form_textarea($kriteria2_reviewer2);
-                  }else{
-                    echo '<div class="font-italic">'.nl2br($input->kriteria2_reviewer2).'</div>';
-                  }
-                  ?>
+                <?php
+$kriteria2_reviewer2 = array(
+    'name'  => 'kriteria2_reviewer2',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'kriteria2_reviewer2',
+    'rows'  => '6',
+    'value' => $input->kriteria2_reviewer2,
+);
+if ($ceklevel == 'reviewer') {
+    echo form_textarea($kriteria2_reviewer2);
+} else {
+    echo '<div class="font-italic">' . nl2br($input->kriteria2_reviewer2) . '</div>';
+}
+?>
               </div>
-              <?php  if($ceklevel=='reviewer'): ?>
+              <?php if ($ceklevel == 'reviewer'): ?>
               <p class="m-0 p-0">Nilai</p>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_1', 1, isset($input->nilai_reviewer2[1]) && ($input->nilai_reviewer2[1] == 1) ? true : false,'required class="custom-control-input" id="nilai_kriteria2_reviewer2_1"')?>
+                <?=form_radio('nilai_reviewer2_1', 1, isset($input->nilai_reviewer2[1]) && ($input->nilai_reviewer2[1] == 1) ? true : false, 'required class="custom-control-input" id="nilai_kriteria2_reviewer2_1"');?>
                 <label class="custom-control-label" for="nilai_kriteria2_reviewer2_1">1</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_1', 2, isset($input->nilai_reviewer2[1]) && ($input->nilai_reviewer2[1] == 2) ? true : false,'required class="custom-control-input" id="nilai_kriteria2_reviewer2_2"')?>
+                <?=form_radio('nilai_reviewer2_1', 2, isset($input->nilai_reviewer2[1]) && ($input->nilai_reviewer2[1] == 2) ? true : false, 'required class="custom-control-input" id="nilai_kriteria2_reviewer2_2"');?>
                 <label class="custom-control-label" for="nilai_kriteria2_reviewer2_2">2</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_1', 3, isset($input->nilai_reviewer2[1]) && ($input->nilai_reviewer2[1] == 3) ? true : false,'required class="custom-control-input" id="nilai_kriteria2_reviewer2_3"')?>
+                <?=form_radio('nilai_reviewer2_1', 3, isset($input->nilai_reviewer2[1]) && ($input->nilai_reviewer2[1] == 3) ? true : false, 'required class="custom-control-input" id="nilai_kriteria2_reviewer2_3"');?>
                 <label class="custom-control-label" for="nilai_kriteria2_reviewer2_3">3</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_1', 4, isset($input->nilai_reviewer2[1]) && ($input->nilai_reviewer2[1] == 4) ? true : false,'required class="custom-control-input" id="nilai_kriteria2_reviewer2_4"')?>
+                <?=form_radio('nilai_reviewer2_1', 4, isset($input->nilai_reviewer2[1]) && ($input->nilai_reviewer2[1] == 4) ? true : false, 'required class="custom-control-input" id="nilai_kriteria2_reviewer2_4"');?>
                 <label class="custom-control-label" for="nilai_kriteria2_reviewer2_4">4</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_1', 5, isset($input->nilai_reviewer2[1]) && ($input->nilai_reviewer2[1] == 5) ? true : false,'required class="custom-control-input" id="nilai_kriteria2_reviewer2_5"')?>
+                <?=form_radio('nilai_reviewer2_1', 5, isset($input->nilai_reviewer2[1]) && ($input->nilai_reviewer2[1] == 5) ? true : false, 'required class="custom-control-input" id="nilai_kriteria2_reviewer2_5"');?>
                 <label class="custom-control-label" for="nilai_kriteria2_reviewer2_5">5</label>
               </div>
               <?php else: ?>
               <p class="m-0 p-0">Nilai =
-                <?=isset($input->nilai_reviewer2[1])?$input->nilai_reviewer2[1]:''; ?>
+                <?=isset($input->nilai_reviewer2[1]) ? $input->nilai_reviewer2[1] : '';?>
               </p>
-              <?php endif ?>
+              <?php endif;?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
             <div class="alert alert-info">
               <label for="kriteria3_reviewer2" class="font-weight-bold">Kemutahiran Pustaka :</label>
               <div>
-                <?php 
-                  $kriteria3_reviewer2 = array(
-                      'name' => 'kriteria3_reviewer2',
-                      'class'=> 'form-control summernote-basic',
-                      'id'  => 'kriteria3_reviewer2',
-                      'rows' => '6',
-                      'value'=> $input->kriteria3_reviewer2
-                  );
-                  if($ceklevel=='reviewer'){
-                    echo form_textarea($kriteria3_reviewer2);
-                  }else{
-                    echo '<div class="font-italic">'.nl2br($input->kriteria3_reviewer2).'</div>';
-                  }
-                  ?>
+                <?php
+$kriteria3_reviewer2 = array(
+    'name'  => 'kriteria3_reviewer2',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'kriteria3_reviewer2',
+    'rows'  => '6',
+    'value' => $input->kriteria3_reviewer2,
+);
+if ($ceklevel == 'reviewer') {
+    echo form_textarea($kriteria3_reviewer2);
+} else {
+    echo '<div class="font-italic">' . nl2br($input->kriteria3_reviewer2) . '</div>';
+}
+?>
               </div>
-              <?php  if($ceklevel=='reviewer'): ?>
+              <?php if ($ceklevel == 'reviewer'): ?>
               <p class="m-0 p-0">Nilai</p>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_2', 1, isset($input->nilai_reviewer2[2]) && ($input->nilai_reviewer2[2] == 1) ? true : false,'required class="custom-control-input" id="nilai_kriteria3_reviewer2_1"')?>
+                <?=form_radio('nilai_reviewer2_2', 1, isset($input->nilai_reviewer2[2]) && ($input->nilai_reviewer2[2] == 1) ? true : false, 'required class="custom-control-input" id="nilai_kriteria3_reviewer2_1"');?>
                 <label class="custom-control-label" for="nilai_kriteria3_reviewer2_1">1</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_2', 2, isset($input->nilai_reviewer2[2]) && ($input->nilai_reviewer2[2] == 2) ? true : false,'required class="custom-control-input" id="nilai_kriteria3_reviewer2_2"')?>
+                <?=form_radio('nilai_reviewer2_2', 2, isset($input->nilai_reviewer2[2]) && ($input->nilai_reviewer2[2] == 2) ? true : false, 'required class="custom-control-input" id="nilai_kriteria3_reviewer2_2"');?>
                 <label class="custom-control-label" for="nilai_kriteria3_reviewer2_2">2</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_2', 3, isset($input->nilai_reviewer2[2]) && ($input->nilai_reviewer2[2] == 3) ? true : false,'required class="custom-control-input" id="nilai_kriteria3_reviewer2_3"')?>
+                <?=form_radio('nilai_reviewer2_2', 3, isset($input->nilai_reviewer2[2]) && ($input->nilai_reviewer2[2] == 3) ? true : false, 'required class="custom-control-input" id="nilai_kriteria3_reviewer2_3"');?>
                 <label class="custom-control-label" for="nilai_kriteria3_reviewer2_3">3</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_2', 4, isset($input->nilai_reviewer2[2]) && ($input->nilai_reviewer2[2] == 4) ? true : false,'required class="custom-control-input" id="nilai_kriteria3_reviewer2_4"')?>
+                <?=form_radio('nilai_reviewer2_2', 4, isset($input->nilai_reviewer2[2]) && ($input->nilai_reviewer2[2] == 4) ? true : false, 'required class="custom-control-input" id="nilai_kriteria3_reviewer2_4"');?>
                 <label class="custom-control-label" for="nilai_kriteria3_reviewer2_4">4</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_2', 5, isset($input->nilai_reviewer2[2]) && ($input->nilai_reviewer2[2] == 5) ? true : false,'required class="custom-control-input" id="nilai_kriteria3_reviewer2_5"')?>
+                <?=form_radio('nilai_reviewer2_2', 5, isset($input->nilai_reviewer2[2]) && ($input->nilai_reviewer2[2] == 5) ? true : false, 'required class="custom-control-input" id="nilai_kriteria3_reviewer2_5"');?>
                 <label class="custom-control-label" for="nilai_kriteria3_reviewer2_5">5</label>
               </div>
               <?php else: ?>
               <p class="m-0 p-0">Nilai =
-                <?=isset($input->nilai_reviewer2[2])?$input->nilai_reviewer2[2]:''; ?>
+                <?=isset($input->nilai_reviewer2[2]) ? $input->nilai_reviewer2[2] : '';?>
               </p>
-              <?php endif ?>
+              <?php endif;?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->
             <div class="alert alert-info">
               <label for="kriteria4_reviewer2" class="font-weight-bold">Kelengkapan unsur (sebagai suatu naskah buku dan keterkaitan antarbab, sistematika) :</label>
               <div>
-                <?php 
-                  $kriteria4_reviewer2 = array(
-                      'name' => 'kriteria4_reviewer2',
-                      'class'=> 'form-control summernote-basic',
-                      'id'  => 'kriteria4_reviewer2',
-                      'rows' => '6',
-                      'value'=> $input->kriteria4_reviewer2
-                  );
-                  if($ceklevel=='reviewer'){
-                    echo form_textarea($kriteria4_reviewer2);
-                  }else{
-                    echo '<div class="font-italic">'.nl2br($input->kriteria4_reviewer2).'</div>';
-                  }
-                  ?>
+                <?php
+$kriteria4_reviewer2 = array(
+    'name'  => 'kriteria4_reviewer2',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'kriteria4_reviewer2',
+    'rows'  => '6',
+    'value' => $input->kriteria4_reviewer2,
+);
+if ($ceklevel == 'reviewer') {
+    echo form_textarea($kriteria4_reviewer2);
+} else {
+    echo '<div class="font-italic">' . nl2br($input->kriteria4_reviewer2) . '</div>';
+}
+?>
               </div>
-              <?php  if($ceklevel=='reviewer'): ?>
+              <?php if ($ceklevel == 'reviewer'): ?>
               <p class="m-0 p-0">Nilai</p>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_3', 1, isset($input->nilai_reviewer2[3]) && ($input->nilai_reviewer2[3] == 1) ? true : false,'required class="custom-control-input" id="nilai_kriteria4_reviewer2_1"')?>
+                <?=form_radio('nilai_reviewer2_3', 1, isset($input->nilai_reviewer2[3]) && ($input->nilai_reviewer2[3] == 1) ? true : false, 'required class="custom-control-input" id="nilai_kriteria4_reviewer2_1"');?>
                 <label class="custom-control-label" for="nilai_kriteria4_reviewer2_1">1</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_3', 2, isset($input->nilai_reviewer2[3]) && ($input->nilai_reviewer2[3] == 2) ? true : false,'required class="custom-control-input" id="nilai_kriteria4_reviewer2_2"')?>
+                <?=form_radio('nilai_reviewer2_3', 2, isset($input->nilai_reviewer2[3]) && ($input->nilai_reviewer2[3] == 2) ? true : false, 'required class="custom-control-input" id="nilai_kriteria4_reviewer2_2"');?>
                 <label class="custom-control-label" for="nilai_kriteria4_reviewer2_2">2</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_3', 3, isset($input->nilai_reviewer2[3]) && ($input->nilai_reviewer2[3] == 3) ? true : false,'required class="custom-control-input" id="nilai_kriteria4_reviewer2_3"')?>
+                <?=form_radio('nilai_reviewer2_3', 3, isset($input->nilai_reviewer2[3]) && ($input->nilai_reviewer2[3] == 3) ? true : false, 'required class="custom-control-input" id="nilai_kriteria4_reviewer2_3"');?>
                 <label class="custom-control-label" for="nilai_kriteria4_reviewer2_3">3</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_3', 4, isset($input->nilai_reviewer2[3]) && ($input->nilai_reviewer2[3] == 4) ? true : false,'required class="custom-control-input" id="nilai_kriteria4_reviewer2_4"')?>
+                <?=form_radio('nilai_reviewer2_3', 4, isset($input->nilai_reviewer2[3]) && ($input->nilai_reviewer2[3] == 4) ? true : false, 'required class="custom-control-input" id="nilai_kriteria4_reviewer2_4"');?>
                 <label class="custom-control-label" for="nilai_kriteria4_reviewer2_4">4</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('nilai_reviewer2_3', 5, isset($input->nilai_reviewer2[3]) && ($input->nilai_reviewer2[3] == 5) ? true : false,'required class="custom-control-input" id="nilai_kriteria4_reviewer2_5"')?>
+                <?=form_radio('nilai_reviewer2_3', 5, isset($input->nilai_reviewer2[3]) && ($input->nilai_reviewer2[3] == 5) ? true : false, 'required class="custom-control-input" id="nilai_kriteria4_reviewer2_5"');?>
                 <label class="custom-control-label" for="nilai_kriteria4_reviewer2_5">5</label>
               </div>
               <?php else: ?>
               <p class="m-0 p-0">Nilai =
-                <?=isset($input->nilai_reviewer2[3])?$input->nilai_reviewer2[3]:''; ?>
+                <?=isset($input->nilai_reviewer2[3]) ? $input->nilai_reviewer2[3] : '';?>
               </p>
-              <?php endif ?>
+              <?php endif;?>
             </div>
-            <?php if($ceklevel != 'author'): ?>
+            <?php if ($ceklevel != 'author'): ?>
             <div id="total_reviewer2">
-              <?php if(!empty($draft->nilai_total_reviewer2)){
-                if($draft->nilai_total_reviewer2 >=400){
-                  $hasil = '<div class="alert alert-success"><span class="badge badge-success">Naskah Lolos Review</span><br>';
-                  $hasil .= '<strong>Nilai total = '.$draft->nilai_total_reviewer2.'</strong><br>';
-                  $hasil .= 'Passing Grade = 400 <br>';
-                  $hasil .= '</div>';
-                }else{
-                  $hasil = '<div class="alert alert-danger"><span class="badge badge-danger">Naskah Tidak Lolos Review</span><br>';
-                  $hasil .= '<strong>Nilai total = '.$draft->nilai_total_reviewer2.'</strong><br>';
-                  $hasil .= 'Passing Grade = 400 <br>';
-                  $hasil .= '</div>';
-                }
-                  echo $hasil;
-                } 
-                ?>
+              <?php if (!empty($draft->nilai_total_reviewer2)) {
+    if ($draft->nilai_total_reviewer2 >= 400) {
+        $hasil = '<div class="alert alert-success"><span class="badge badge-success">Naskah Lolos Review</span><br>';
+        $hasil .= '<strong>Nilai total = ' . $draft->nilai_total_reviewer2 . '</strong><br>';
+        $hasil .= 'Passing Grade = 400 <br>';
+        $hasil .= '</div>';
+    } else {
+        $hasil = '<div class="alert alert-danger"><span class="badge badge-danger">Naskah Tidak Lolos Review</span><br>';
+        $hasil .= '<strong>Nilai total = ' . $draft->nilai_total_reviewer2 . '</strong><br>';
+        $hasil .= 'Passing Grade = 400 <br>';
+        $hasil .= '</div>';
+    }
+    echo $hasil;
+}
+?>
             </div>
-            <?php endif ?>
+            <?php endif;?>
             <!-- /.form-group -->
             <!-- endif review dari reviewer hanya bisa dibaca admin dan staff ugmpress -->
-            <?php endif ?>
+            <?php endif;?>
             <!-- .fieldset -->
             <fieldset>
-              <?php if($ceklevel!='author'): ?>
+              <?php if ($ceklevel != 'author'): ?>
               <hr class="my-3">
               <!-- .form-group -->
               <div class="form-group">
                 <label for="cr2" class="font-weight-bold">Catatan Reviewer 2</label>
-                <?php 
-                  $optionscr2 = array(
-                      'name' => 'review2_notes',
-                      'class'=> 'form-control summernote-basic',
-                      'id'  => 'cr2',
-                      'rows' => '6',
-                      'value'=> $input->review2_notes
-                  );
-                  if($ceklevel!='reviewer'){
-                    echo '<div class="font-italic">'.nl2br($input->review2_notes).'</div>';
-                  }else{
-                    echo form_textarea($optionscr2);
-                  }
-                  ?>
+                <?php
+$optionscr2 = array(
+    'name'  => 'review2_notes',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'cr2',
+    'rows'  => '6',
+    'value' => $input->review2_notes,
+);
+if ($ceklevel != 'reviewer') {
+    echo '<div class="font-italic">' . nl2br($input->review2_notes) . '</div>';
+} else {
+    echo form_textarea($optionscr2);
+}
+?>
               </div>
-              <?php endif ?>
+              <?php endif;?>
               <!-- /.form-group -->
-              <?php if($ceklevel=='superadmin' or $ceklevel=='admin_penerbitan' or $ceklevel=='author'): ?>
+              <?php if ($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan' or $ceklevel == 'author'): ?>
               <hr class="my-3">
               <!-- .form-group -->
               <div class="form-group">
                 <label for="cr2a" class="font-weight-bold">Catatan Admin untuk Penulis</label>
-                <?php 
-                  $optionscr2a = array(
-                      'name' => 'catatan_review2_admin',
-                      'class'=> 'form-control summernote-basic',
-                      'id'  => 'cr2a',
-                      'rows' => '6',
-                      'value'=> $input->catatan_review2_admin
-                  );
-                  if($ceklevel=='superadmin' or $ceklevel=='admin_penerbitan'){
-                    echo form_textarea($optionscr2a);
-                  }elseif($ceklevel=='author'){
-                    echo '<div class="font-italic">'.nl2br($input->catatan_review2_admin).'</div>';
-                  }else{}
-                  ?>
+                <?php
+$optionscr2a = array(
+    'name'  => 'catatan_review2_admin',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'cr2a',
+    'rows'  => '6',
+    'value' => $input->catatan_review2_admin,
+);
+if ($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan') {
+    echo form_textarea($optionscr2a);
+} elseif ($ceklevel == 'author') {
+    echo '<div class="font-italic">' . nl2br($input->catatan_review2_admin) . '</div>';
+} else {}
+?>
               </div>
-              <?php endif ?>
+              <?php endif;?>
               <!-- /.form-group -->
               <hr class="my-3">
               <!-- .form-group -->
               <div class="form-group">
                 <label for="crp2" class="font-weight-bold">Catatan Penulis</label>
-                <?php 
-                  $optionscrp2 = array(
-                      'name' => 'review2_notes_author ',
-                      'class'=> 'form-control summernote-basic',
-                      'id'  => 'crp2',
-                      'rows' => '6',
-                      'value'=> $input->review2_notes_author
-                  );
-                  if($ceklevel!='author' or $author_order!=1){
-                    echo '<div class="font-italic">'.nl2br($input->review2_notes_author).'</div>';
-                  }else{
-                    echo form_textarea($optionscrp2);
-                  }
-                   ?>
+                <?php
+$optionscrp2 = array(
+    'name'  => 'review2_notes_author ',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'crp2',
+    'rows'  => '6',
+    'value' => $input->review2_notes_author,
+);
+if ($ceklevel != 'author' or $author_order != 1) {
+    echo '<div class="font-italic">' . nl2br($input->review2_notes_author) . '</div>';
+} else {
+    echo form_textarea($optionscrp2);
+}
+?>
               </div>
               <!-- /.form-group -->
             </fieldset>
@@ -837,26 +837,26 @@
           <!-- /.modal-body -->
           <!-- .modal-footer -->
           <div class="modal-footer">
-            <?php if($ceklevel=='reviewer'): ?>
+            <?php if ($ceklevel == 'reviewer'): ?>
             <div class="card-footer-content text-muted p-0 m-0">
               <div class="mb-1 font-weight-bold">Rekomendasi</div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('review2_flag', 'y', isset($input->review2_flag) && ($input->review2_flag == 'y') ? true : false,'required class="custom-control-input" id="review2_flagy"')?>
+                <?=form_radio('review2_flag', 'y', isset($input->review2_flag) && ($input->review2_flag == 'y') ? true : false, 'required class="custom-control-input" id="review2_flagy"');?>
                 <label class="custom-control-label" for="review2_flagy">Setuju</label>
               </div>
               <div class="custom-control custom-control-inline custom-radio">
-                <?= form_radio('review2_flag', 'n', isset($input->review2_flag) && ($input->review2_flag == 'n') ? true : false,'required class="custom-control-input" id="review2_flagn"')?>
+                <?=form_radio('review2_flag', 'n', isset($input->review2_flag) && ($input->review2_flag == 'n') ? true : false, 'required class="custom-control-input" id="review2_flagn"');?>
                 <label class="custom-control-label" for="review2_flagn">Tidak</label>
               </div>
             </div>
             <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-review2-rev">Submit</button>
             <?php else: ?>
             <button class="btn btn-primary ml-auto" type="submit" value="Submit" id="btn-submit-review2-other">Submit</button>
-            <?php endif ?>
+            <?php endif;?>
             <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
           </div>
           <!-- /.modal-footer -->
-          <?= form_close(); ?>
+          <?=form_close();?>
         </div>
         <!-- /.modal-content -->
       </div>
@@ -877,27 +877,27 @@
           <!-- .modal-body -->
           <div class="modal-body">
             <!-- .form -->
-            <?= form_open('draft/ubahnotes/'.$input->draft_id) ?>
+            <?=form_open('draft/ubahnotes/' . $input->draft_id);?>
             <!-- .fieldset -->
             <fieldset>
               <!-- .form-group -->
               <div class="form-group">
                 <label for="review1_deadline">Deadline Reviewer 1</label>
                 <div>
-                  <?= form_input('review1_deadline', $input->review1_deadline, 'class="form-control mydate_modal d-none" id="review1_deadline" required=""') ?>
+                  <?=form_input('review1_deadline', $input->review1_deadline, 'class="form-control mydate_modal d-none" id="review1_deadline" required=""');?>
                 </div>
                 <div class="invalid-feedback">Harap diisi</div>
-                <?= form_error('review1_deadline') ?>
+                <?=form_error('review1_deadline');?>
               </div>
               <!-- /.form-group -->
               <!-- .form-group -->
               <div class="form-group">
                 <label for="review2_deadline">Deadline Reviewer 2</label>
                 <div>
-                  <?= form_input('review2_deadline', $input->review2_deadline, 'class="form-control mydate_modal d-none" id="review2_deadline" required="" ') ?>
+                  <?=form_input('review2_deadline', $input->review2_deadline, 'class="form-control mydate_modal d-none" id="review2_deadline" required="" ');?>
                 </div>
                 <div class="invalid-feedback">Harap diisi</div>
-                <?= form_error('review2_deadline') ?>
+                <?=form_error('review2_deadline');?>
               </div>
               <!-- /.form-group -->
             </fieldset>
@@ -910,7 +910,7 @@
             <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
           </div>
           <!-- /.modal-footer -->
-          <?=form_close(); ?>
+          <?=form_close();?>
           <!-- /.form -->
         </div>
         <!-- /.modal-content -->
@@ -932,7 +932,7 @@
           <!-- .modal-body -->
           <div class="modal-body">
             <!-- .form -->
-            <?= form_open('draft/ubahnotes/'.$input->draft_id) ?>
+            <?=form_open('draft/ubahnotes/' . $input->draft_id);?>
             <!-- .fieldset -->
             <fieldset>
               <!-- .form-group -->
@@ -941,26 +941,26 @@
                 <div class="alert alert-info">
                   Catatan admin dapat dilihat oleh semua user yang terkait dengan draft ini.
                 </div>
-                <?php 
-                  $hidden_date = array(
-                      'type'  => 'hidden',
-                      'id'    => 'review_end_date',
-                      'value' => date('Y-m-d H:i:s')
-                  );
-                  echo form_input($hidden_date);
-                  $review_status = array(
-                      'name' => 'review_status',
-                      'class'=> 'form-control summernote-basic',
-                      'id'  => 'crp2',
-                      'rows' => '6',
-                      'value'=> $input->review_status
-                  );
-                  if($ceklevel!='superadmin' and $ceklevel!='admin_penerbitan'){
-                    echo '<div class="font-italic">'.nl2br($input->review_status).'</div>';
-                  }else{
-                    echo form_textarea($review_status);
-                  }
-                   ?>
+                <?php
+$hidden_date = array(
+    'type'  => 'hidden',
+    'id'    => 'review_end_date',
+    'value' => date('Y-m-d H:i:s'),
+);
+echo form_input($hidden_date);
+$review_status = array(
+    'name'  => 'review_status',
+    'class' => 'form-control summernote-basic',
+    'id'    => 'crp2',
+    'rows'  => '6',
+    'value' => $input->review_status,
+);
+if ($ceklevel != 'superadmin' and $ceklevel != 'admin_penerbitan') {
+    echo '<div class="font-italic">' . nl2br($input->review_status) . '</div>';
+} else {
+    echo form_textarea($review_status);
+}
+?>
                 <div class="alert alert-info">
                   Pilih salah satu tombol dibawah ini: <br>
                   Jika <strong class="text-success">Setuju</strong>, maka tahap review akan diakhiri dan tanggal selesai review akan dicatat <br>
@@ -979,7 +979,7 @@
             <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
           </div>
           <!-- /.modal-footer -->
-          <?=form_close(); ?>
+          <?=form_close();?>
           <!-- /.form -->
         </div>
         <!-- /.modal-content -->
@@ -995,7 +995,7 @@
 <script>
 $(document).ready(function() {
   //panggil setingan validasi di ugmpress js
-  setting_validasi();
+  validate_setting();
 
   //validasi review1
   $("#rev1form").validate({
@@ -1035,7 +1035,7 @@ $(document).ready(function() {
         let id = $('[name=draft_id]').val();
         var formData = new FormData(form);
         $.ajax({
-          url: "<?php echo base_url('draft/upload_progress/') ?>" + id + "/review1_file",
+          url: "<?php echo base_url('draft/upload_progress/'); ?>" + id + "/review1_file",
           type: "post",
           data: formData,
           processData: false,
@@ -1059,7 +1059,7 @@ $(document).ready(function() {
         return false;
       }
     },
-    select2_validasi()
+   validate_select2()
   );
 
   //validasi review2
@@ -1100,7 +1100,7 @@ $(document).ready(function() {
         let id = $('[name=draft_id]').val();
         var formData = new FormData(form);
         $.ajax({
-          url: "<?php echo base_url('draft/upload_progress/') ?>" + id + "/review2_file",
+          url: "<?php echo base_url('draft/upload_progress/'); ?>" + id + "/review2_file",
           type: "post",
           data: formData,
           processData: false,
@@ -1124,7 +1124,7 @@ $(document).ready(function() {
         return false;
       }
     },
-    select2_validasi()
+   validate_select2()
   );
 
   $('#btn-submit-review1-rev').on('click', function() {
@@ -1153,7 +1153,7 @@ $(document).ready(function() {
     $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id + "/1",
+      url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id + "/1",
       datatype: "JSON",
       data: {
         review1_notes: cr1,
@@ -1191,7 +1191,7 @@ $(document).ready(function() {
     $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
+      url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id,
       datatype: "JSON",
       data: {
         catatan_review1_admin: cr1a,
@@ -1241,7 +1241,7 @@ $(document).ready(function() {
     $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id + "/2",
+      url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id + "/2",
       datatype: "JSON",
       data: {
         review2_notes: cr2,
@@ -1280,7 +1280,7 @@ $(document).ready(function() {
     $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
+      url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id,
       datatype: "JSON",
       data: {
         catatan_review2_admin: cr2a,
@@ -1314,7 +1314,7 @@ $(document).ready(function() {
     let end_date = $('#review_end_date').val();
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
+      url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id,
       datatype: "JSON",
       data: {
         review_status: review_status,
@@ -1351,7 +1351,7 @@ $(document).ready(function() {
     console.log(end_date);
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
+      url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id,
       datatype: "JSON",
       data: {
         review_status: review_status,
@@ -1386,7 +1386,7 @@ $(document).ready(function() {
     let rd2 = $('[name=review2_deadline]').val();
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
+      url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id,
       datatype: "JSON",
       data: {
         review1_deadline: rd1,

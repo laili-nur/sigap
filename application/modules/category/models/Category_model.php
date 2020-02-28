@@ -7,40 +7,39 @@ class Category_model extends MY_Model
         $validationRules = [
             [
                 'field' => 'category_name',
-                'label' => 'Category Name',
+                'label' => $this->lang->line('form_category_name'),
                 'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_category_name',
             ],
             [
                 'field' => 'category_type',
-                'label' => 'Category Type',
+                'label' => $this->lang->line('form_category_category'),
                 'rules' => 'trim|required',
             ],
             [
                 'field' => 'category_year',
-                'label' => 'Category Year',
+                'label' => $this->lang->line('form_category_year'),
                 'rules' => 'trim|required|exact_length[4]',
             ],
             [
                 'field' => 'category_note',
-                'label' => 'Category Note',
+                'label' => $this->lang->line('form_category_note'),
                 'rules' => 'trim|min_length[1]',
             ],
             [
                 'field' => 'date_open',
-                'label' => 'Date Open',
+                'label' => $this->lang->line('form_category_date_open'),
                 'rules' => 'trim|required|callback_is_date_format_valid',
             ],
             [
                 'field' => 'date_close',
-                'label' => 'Date Close',
+                'label' => $this->lang->line('form_category_date_close'),
                 'rules' => 'trim|required|callback_is_date_format_valid|callback_check_date',
             ],
             [
                 'field' => 'category_status',
-                'label' => 'Category Status',
+                'label' => $this->lang->line('form_category_status'),
                 'rules' => 'trim|required',
             ],
-
         ];
 
         return $validationRules;
@@ -55,7 +54,7 @@ class Category_model extends MY_Model
             'category_note'   => '',
             'date_open'       => '',
             'date_close'      => '',
-            'category_status' => 'y',
+            'category_status' => '',
         ];
     }
 }

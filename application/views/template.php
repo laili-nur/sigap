@@ -87,12 +87,6 @@
    </script>
    <!-- END THEME STYLES -->
 
-
-   <!-- BEGIN BASE STYLES -->
-   <!-- <link rel="stylesheet" href="<?=base_url('assets/vendor/open-iconic/css/open-iconic-bootstrap.min.css');?>"> -->
-   <!-- <link rel="stylesheet" href="<?=base_url('assets/vendor/font-awesome/css/fontawesome-all.min.css');?>"> -->
-   <!-- END BASE STYLES -->
-
    <!-- BEGIN PLUGINS STYLES -->
    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"> -->
    <!-- END PLUGINS STYLES -->

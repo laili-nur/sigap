@@ -1,39 +1,39 @@
-function doublescroll(){
-   $('.double-scroll').doubleScroll({
-      resetOnWindowResize: true,
-      onlyIfScroll: true,
-      timeToWaitForResize: 30
+function doublescroll() {
+    $('.double-scroll').doubleScroll({
+        resetOnWindowResize: true,
+        onlyIfScroll: true,
+        timeToWaitForResize: 30
 
-    }); 
+    });
 }
-    
+
 
 function preview_image(event) {
     var reader = new FileReader();
-    reader.onload = function() {
+    reader.onload = function () {
         var output = document.getElementById('output_image');
         output.src = reader.result;
     }
     reader.readAsDataURL(event.target.files[0]);
 };
 
-function setting_validasi() {
-    $.validator.addMethod("alphanum", function(value, element) {
+function validate_setting() {
+    $.validator.addMethod("alphanum", function (value, element) {
         return this.optional(element) || /^[\w., ]+$/i.test(value);
     }, "Hanya diperbolehkan menggunakan huruf, angka, underscore, titik, koma, dan spasi");
-    $.validator.addMethod("username", function(value, element) {
+    $.validator.addMethod("username", function (value, element) {
         return this.optional(element) || /^[\w.]+$/i.test(value);
     }, "Hanya diperbolehkan menggunakan huruf, angka, underscore dan titik");
-    $.validator.addMethod('filesize50', function(value, element, param) {
+    $.validator.addMethod('filesize50', function (value, element, param) {
         return this.optional(element) || (element.files[0].size <= param)
     }, 'File harus kurang dari 50MB');
-    $.validator.addMethod('filesize15', function(value, element, param) {
+    $.validator.addMethod('filesize15', function (value, element, param) {
         return this.optional(element) || (element.files[0].size <= param)
     }, 'File harus kurang dari 15MB');
-    $.validator.addMethod("huruf", function(value, element) {
+    $.validator.addMethod("huruf", function (value, element) {
         return this.optional(element) || /^[a-z ]+$/i.test(value);
     }, "Hanya diperbolehkan menggunakan huruf alfabet");
-    $.validator.addMethod("notEqualTo", function(value, element, param) {
+    $.validator.addMethod("notEqualTo", function (value, element, param) {
         return this.optional(element) || !$.validator.methods.equalTo.call(this, value, element, param);
     }, "Please enter a different value, values must not be the same.");
     $.validator.addMethod("require_from_group", $.validator.methods.require_from_group, "Wajib isi salah satu kolom ini");
@@ -46,8 +46,8 @@ function setting_validasi() {
     $.validator.addMethod("dokumen", $.validator.methods.extension, "Format/Ekstensi file salah");
 }
 
-function select2_validasi() {
-    $("select").on("select2:close", function(e) {
+functionvalidate_select2() {
+    $("select").on("select2:close", function (e) {
         $(this).valid();
     })
 }
@@ -134,7 +134,7 @@ function reviewerAutoComplete() {
             url: 'http://localhost/ugmpress/draftreviewer/reviewer_auto_complete',
             type: 'POST',
             data: { key: key },
-            success: function(data) {
+            success: function (data) {
                 $('#reviewer_list').show();
                 $('#reviewer_list').html(data);
             }

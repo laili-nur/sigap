@@ -1,14 +1,14 @@
 <?php
-$perPage = 10;
+$perPage  = 10;
 $keywords = $this->input->get('keywords');
 
 if (isset($keywords)) {
-  $page = $this->uri->segment(3);
+    $page = $this->uri->segment(3);
 } else {
-  $page = $this->uri->segment(2);
+    $page = $this->uri->segment(2);
 }
 
-    // data table series number
+// data table series number
 $i = isset($page) ? $page * $perPage - $perPage : 0;
 ?>
 
@@ -17,7 +17,7 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="<?=base_url()?>"><span class="fa fa-home"></span></a>
+        <a href="<?=base_url();?>"><span class="fa fa-home"></span></a>
       </li>
       <li class="breadcrumb-item">
         <a class="text-muted">User</a>
@@ -38,11 +38,11 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
         <header class="card-header">
           <!-- .d-flex -->
           <div class="d-flex align-items-center">
-            <span class="mr-auto">Tabel User <span class="badge badge-info"><?=$total ?></span></span>
+            <span class="mr-auto">Tabel User <span class="badge badge-info"><?=$total;?></span></span>
             <!-- .card-header-control -->
             <div class="card-header-control">
               <!-- .tombol add -->
-              <a href="<?=base_url('user/add') ?>" class="btn btn-primary btn-sm">Tambah User</a>
+              <a href="<?=base_url('user/add');?>" class="btn btn-primary btn-sm">Tambah User</a>
               <!-- /.tombol add -->
             </div>
             <!-- /.card-header-control -->
@@ -54,19 +54,19 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
         <div class="card-body p-0">
           <div class="p-3">
             <!-- .input-group -->
-            <?= form_open('user/search', ['method' => 'GET']) ?>
+            <?=form_open('user/search', ['method' => 'GET']);?>
             <div class="input-group input-group-alt">
-              <?= form_input('keywords', $this->input->get('keywords'), ['placeholder' => 'Cari Username', 'class' => 'form-control']) ?>
+              <?=form_input('keywords', $this->input->get('keywords'), ['placeholder' => 'Cari Username', 'class' => 'form-control']);?>
               <div class="input-group-append">
-               <?= form_button(['type' => 'submit', 'content' => 'Search', 'class' => 'btn btn-secondary']) ?>
+               <?=form_button(['type' => 'submit', 'content' => 'Search', 'class' => 'btn btn-secondary']);?>
              </div>
-             <?= form_close() ?>
+             <?=form_close();?>
            </div>
            <!-- /.input-group -->
          </div>
          <div class="tab-pane fade active show" id="card-tabel1">
           <!-- .table-responsive -->
-          <?php if ($users):?>
+          <?php if ($users): ?>
             <div class="table-responsive">
               <!-- .table -->
               <table class="table table-striped">
@@ -83,26 +83,26 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
                <!-- /thead -->
                <!-- tbody -->
                <tbody>
-                <?php foreach($users as $user): ?>
+                <?php foreach ($users as $user): ?>
                   <!-- tr -->
                   <tr>
-                    <td class="align-middle pl-4"><?= ++$i ?></td>
-                    <td class="align-middle"><?= $user->username ?></td>
-                    <td class="align-middle"><?= ucwords(str_replace('_', ' ', $user->level)) ?></td>
-                    <td class="align-middle"><?= $user->is_blocked == 'n' ? 'Not Blocked' : 'Blocked' ?></td>
+                    <td class="align-middle pl-4"><?=++$i;?></td>
+                    <td class="align-middle"><?=$user->username;?></td>
+                    <td class="align-middle"><?=ucwords(str_replace('_', ' ', $user->level));?></td>
+                    <td class="align-middle"><?=$user->is_blocked == 'n' ? 'Not Blocked' : 'Blocked';?></td>
                     <td class="align-middle text-right">
-                      <a href="<?= base_url('user/edit/'.$user->user_id.'') ?>" class="btn btn-sm btn-secondary">
+                      <a href="<?=base_url('user/edit/' . $user->user_id . '');?>" class="btn btn-sm btn-secondary">
                         <i class="fa fa-pencil-alt"></i>
                         <span class="sr-only">Edit</span>
                       </a>
-                      <?php if($user->username != 'superadmin') : ?>
-                        <button type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modalhapus-<?= $user->user_id ?>" ><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
-                      <?php endif ?>
+                      <?php if ($user->username != 'superadmin'): ?>
+                        <button type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modal-hapus-<?=$user->user_id;?>" ><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
+                      <?php endif;?>
                     </td>
                   </tr>
                   <!-- /tr -->
                   <!-- Alert Danger Modal -->
-                  <div class="modal modal-alert fade" id="modalhapus-<?= $user->user_id ?>" tabindex="-1" role="dialog" aria-labelledby="modalhapus" aria-hidden="true">
+                  <div class="modal modal-alert fade" id="modal-hapus-<?=$user->user_id;?>" tabindex="-1" role="dialog" aria-labelledby="modal-hapus" aria-hidden="true">
                     <!-- .modal-dialog -->
                     <div class="modal-dialog" role="document">
                       <!-- .modal-content -->
@@ -115,12 +115,12 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
                           <!-- /.modal-header -->
                           <!-- .modal-body -->
                           <div class="modal-body">
-                            <p>Apakah anda yakin akan menghapus user <span class="font-weight-bold"><?= $user->username ?></span>?</p>
+                            <p>Apakah anda yakin akan menghapus user <span class="font-weight-bold"><?=$user->username;?></span>?</p>
                           </div>
                           <!-- /.modal-body -->
                           <!-- .modal-footer -->
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" onclick="location.href='<?= base_url('user/delete/'.$user->user_id.'') ?>'" data-dismiss="modal">Hapus</button>
+                            <button type="button" class="btn btn-danger" onclick="location.href='<?=base_url('user/delete/' . $user->user_id . '');?>'" data-dismiss="modal">Hapus</button>
                             <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
                           </div>
                           <!-- /.modal-footer -->
@@ -130,7 +130,7 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
                       <!-- /.modal-dialog -->
                     </div>
                     <!-- /.modal -->
-                  <?php endforeach ?>
+                  <?php endforeach;?>
                 </tbody>
                 <!-- /tbody -->
               </table>
@@ -138,14 +138,14 @@ $i = isset($page) ? $page * $perPage - $perPage : 0;
             </div>
             <?php else: ?>
               <p class="text-center">Data tidak tersedia</p>
-            <?php endif ?>
+            <?php endif;?>
             <!-- /.table-responsive -->
             <!-- Pagination -->
             <?php if ($pagination): ?>
-              <?= $pagination ?>
+              <?=$pagination;?>
               <?php else: ?>
                 &nbsp;
-              <?php endif ?>
+              <?php endif;?>
               <!-- .pagination -->
             </div>
           </div>

@@ -37,7 +37,7 @@ class User_model extends MY_Model
             'username'   => '',
             'password'   => '',
             'level'      => '',
-            'is_blocked' => 'n',
+            'is_blocked' => '',
         ];
     }
 }
