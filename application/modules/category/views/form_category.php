@@ -89,25 +89,23 @@ $category_type = [
                         <?=$this->lang->line('form_category_status');?>
                         <abbr title="Required">*</abbr>
                      </label>
-                     <div>
-                        <div class="form-group">
-                           <div class="custom-control custom-radio">
-                              <?=form_radio('category_status', 'y', isset($input->category_status) && ($input->category_status == 'y') ? true : false, ' class="custom-control-input" id="category_status1"');?>
-                              <label
-                                 class="custom-control-label"
-                                 for="category_status1"
-                              >Aktif</label>
-                           </div>
-                           <div class="custom-control custom-radio">
-                              <?=form_radio('category_status', 'n', isset($input->category_status) && ($input->category_status == 'n') ? true : false, 'class="custom-control-input" id="category_status2"');?>
-                              <label
-                                 class="custom-control-label"
-                                 for="category_status2"
-                              >Tidak aktif</label>
-                           </div>
+                     <div class="form-group">
+                        <div class="custom-control custom-radio">
+                           <?=form_radio('category_status', 'y', isset($input->category_status) && ($input->category_status == 'y') ? true : false, ' class="custom-control-input" id="category_status1"');?>
+                           <label
+                              class="custom-control-label"
+                              for="category_status1"
+                           >Aktif</label>
                         </div>
+                        <div class="custom-control custom-radio">
+                           <?=form_radio('category_status', 'n', isset($input->category_status) && ($input->category_status == 'n') ? true : false, 'class="custom-control-input" id="category_status2"');?>
+                           <label
+                              class="custom-control-label"
+                              for="category_status2"
+                           >Tidak aktif</label>
+                        </div>
+                        <?=form_error('category_status');?>
                      </div>
-                     <?=form_error('category_status');?>
                   </div>
                </fieldset>
                <hr>
@@ -141,7 +139,7 @@ $(document).ready(function() {
       return Date.parse(startDate) <= Date.parse(value) || value == "";
    }, "<?=$this->lang->line('form_category_error_date_invalid');?>");
 
-   validate_setting();
+   loadValidateSetting();
 
    $("#form_category").validate({
          rules: {
@@ -165,11 +163,9 @@ $(document).ready(function() {
             category_status: 'crequired'
          },
          errorElement: "div",
-         errorPlacement: function(error, element) {
-            error_validate_placement(error, element)
-         }
+         errorPlacement: validateErrorPlacement
       },
-      validate_select2()
+      validateSelect2()
    );
 })
 </script>

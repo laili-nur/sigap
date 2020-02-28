@@ -290,7 +290,7 @@ if ($ceklevel != 'superadmin' and $ceklevel != 'admin_penerbitan') {
 <script>
 $(document).ready(function() {
   //panggil setingan validasi di ugmpress js
-  validate_setting();
+  loadValidateSetting();
 
   //submit dan validasi
   $("#printform").validate({
@@ -354,7 +354,7 @@ $(document).ready(function() {
         return false;
       }
     },
-   validate_select2()
+   validateSelect2()
   );
 
   $('#btn-submit-print').on('click', function() {

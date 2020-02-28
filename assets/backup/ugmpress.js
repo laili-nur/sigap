@@ -17,7 +17,7 @@ function preview_image(event) {
     reader.readAsDataURL(event.target.files[0]);
 };
 
-function validate_setting() {
+function loadValidateSetting() {
     $.validator.addMethod("alphanum", function (value, element) {
         return this.optional(element) || /^[\w., ]+$/i.test(value);
     }, "Hanya diperbolehkan menggunakan huruf, angka, underscore, titik, koma, dan spasi");

@@ -4,18 +4,18 @@ class Institute_model extends MY_Model
 {
     public function get_validation_rules()
     {
-        $validationRules = [
+        $validation_rules = [
             [
                 'field' => 'institute_name',
-                'label' => 'Insitute Name',
+                'label' => $this->lang->line('form_institute_name'),
                 'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_institute_name',
             ],
         ];
 
-        return $validationRules;
+        return $validation_rules;
     }
 
-    public function getDefaultValues()
+    public function get_default_values()
     {
         return [
             'institute_name' => '',

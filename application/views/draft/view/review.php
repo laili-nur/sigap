@@ -995,7 +995,7 @@ if ($ceklevel != 'superadmin' and $ceklevel != 'admin_penerbitan') {
 <script>
 $(document).ready(function() {
   //panggil setingan validasi di ugmpress js
-  validate_setting();
+  loadValidateSetting();
 
   //validasi review1
   $("#rev1form").validate({
@@ -1059,7 +1059,7 @@ $(document).ready(function() {
         return false;
       }
     },
-   validate_select2()
+   validateSelect2()
   );
 
   //validasi review2
@@ -1124,7 +1124,7 @@ $(document).ready(function() {
         return false;
       }
     },
-   validate_select2()
+   validateSelect2()
   );
 
   $('#btn-submit-review1-rev').on('click', function() {

@@ -29,7 +29,7 @@ class Reviewer extends Operator_Controller
     public function add()
     {
         if (!$_POST) {
-            $input = (object) $this->reviewer->getDefaultValues();
+            $input = (object) $this->reviewer->get_default_values();
         } else {
             $input = (object) $this->input->post(null, true);
         }

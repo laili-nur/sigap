@@ -6,12 +6,11 @@ class Theme extends Operator_Controller
     {
         parent::__construct();
         $this->pages = 'theme';
-        //khusus admin
-        $ceklevel = $this->session->userdata('level');
-        if ($ceklevel == 'author' || $ceklevel == 'reviewer' || $ceklevel == 'editor' || $ceklevel == 'layouter') {
-            redirect('home');
-        }
 
+        // akses khusus admin
+        check_if_admin();
+
+        // load modules model
         $this->load->model('Theme_model', 'theme');
     }
 
@@ -27,7 +26,7 @@ class Theme extends Operator_Controller
     public function add()
     {
         if (!$_POST) {
-            $input = (object) $this->theme->getDefaultValues();
+            $input = (object) $this->theme->get_default_values();
         } else {
             $input = (object) $this->input->post(null, true);
         }
@@ -39,9 +38,9 @@ class Theme extends Operator_Controller
             return;
         }
         if ($this->theme->insert($input)) {
-            $this->session->set_flashdata('success', 'Data saved');
+            $this->session->set_flashdata('success', $this->lang->line('toast_add_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to save');
+            $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
         }
         redirect('theme');
     }
@@ -50,7 +49,7 @@ class Theme extends Operator_Controller
     {
         $theme = $this->theme->where('theme_id', $id)->get();
         if (!$this) {
-            $this->session->set_flashdata('warning', 'Theme data were not available');
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
             redirect('theme');
         }
         if (!$_POST) {
@@ -66,9 +65,9 @@ class Theme extends Operator_Controller
             return;
         }
         if ($this->theme->where('theme_id', $id)->update($input)) {
-            $this->session->set_flashdata('success', 'Data saved');
+            $this->session->set_flashdata('success', $this->lang->line('toast_edit_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to save');
+            $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
         }
         redirect('theme');
     }
@@ -81,9 +80,9 @@ class Theme extends Operator_Controller
             redirect('theme');
         }
         if ($this->theme->where('theme_id', $id)->delete()) {
-            $this->session->set_flashdata('success', 'Data deleted');
+            $this->session->set_flashdata('success', $this->lang->line('toast_delete_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to delete');
+            $this->session->set_flashdata('error', $this->lang->line('toast_delete_fail'));
         }
         redirect('theme');
     }
@@ -96,7 +95,7 @@ class Theme extends Operator_Controller
         !$theme_id || $this->theme->where('theme_id !=', $theme_id);
         $theme = $this->theme->get();
         if ($theme) {
-            $this->form_validation->set_message('unique_theme_name', '%s has been used');
+            $this->form_validation->set_message('unique_theme_name', $this->lang->line('toast_data_duplicate'));
             return false;
         }
         return true;

@@ -559,7 +559,7 @@ if ($ceklevel != 'superadmin' and $ceklevel != 'admin_penerbitan') {
 $(document).ready(function() {
 
   //panggil setingan validasi di ugmpress js
-  validate_setting();
+  loadValidateSetting();
 
   //submit dan validasi
   $("#editform").validate({
@@ -623,7 +623,7 @@ $(document).ready(function() {
         return false;
       }
     },
-   validate_select2()
+   validateSelect2()
   );
 
   //tombol hapus file

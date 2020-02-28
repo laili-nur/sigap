@@ -15,7 +15,7 @@ function preview_image(event) {
     reader.readAsDataURL(event.target.files[0]);
 };
 
-function validate_setting() {
+function loadValidateSetting() {
     $.validator.addMethod("alphanum", function (value, element) {
         return this.optional(element) || /^[\w., ]+$/i.test(value);
     }, "Hanya diperbolehkan menggunakan huruf, angka, underscore, titik, koma, dan spasi");
@@ -44,13 +44,13 @@ function validate_setting() {
     $.validator.addMethod("dokumen", $.validator.methods.extension, "Format/Ekstensi file salah");
 }
 
-function validate_select2() {
+function validateSelect2() {
     $("select").on("select2:close", function (e) {
         $(this).valid();
     })
 }
 
-function error_validate_placement(error, element) {
+function validateErrorPlacement(error, element) {
     error.addClass("invalid-feedback");
     if (element.parent('.input-group').length) {
         // input group
@@ -64,7 +64,6 @@ function error_validate_placement(error, element) {
     } else if (element.hasClass("custom-control-input")) {
         // radio
         error.insertAfter($(".custom-radio").last());
-        error.insertAfter($(".btn-group-toggle"));
     } else {
         // default
         error.insertAfter(element);

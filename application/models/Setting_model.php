@@ -4,7 +4,7 @@ class Setting_model extends MY_Model
 {
     public function get_validation_rules()
     {
-        $validationRules = [
+        $validation_rules = [
             [
                 'field' => 'dashboard_head',
                 'label' => 'dashboard_head',
@@ -32,10 +32,10 @@ class Setting_model extends MY_Model
             ],
         ];
 
-        return $validationRules;
+        return $validation_rules;
     }
 
-    public function getDefaultValues()
+    public function get_default_values()
     {
         return [
             'dashboard_head'             => '',

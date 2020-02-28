@@ -29,7 +29,7 @@ class User extends Operator_Controller
             redirect('home');
         }
         if (!$_POST) {
-            $input = (object) $this->user->getDefaultValues();
+            $input = (object) $this->user->get_default_values();
         } else {
             $input = (object) $this->input->post(null, true);
         }

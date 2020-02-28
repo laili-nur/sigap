@@ -12,7 +12,7 @@ class Login extends MY_Controller
             redirect(base_url('home'));
         }
         if (!$_POST) {
-            $input = (object) $this->login->getDefaultValues();
+            $input = (object) $this->login->get_default_values();
         } else {
             $input = (object) $this->input->post(null, true);
         }

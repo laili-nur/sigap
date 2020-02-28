@@ -36,7 +36,7 @@ class Book extends Operator_Controller
     public function add()
     {
         if (!$_POST) {
-            $input = (object) $this->book->getDefaultValues();
+            $input = (object) $this->book->get_default_values();
         } else {
             $input = (object) $this->input->post(null, false);
         }

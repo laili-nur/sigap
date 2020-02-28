@@ -190,8 +190,8 @@ class MY_Model extends CI_Model
     {
         $this->load->library('form_validation');
         $this->form_validation->set_error_delimiters('<small class="text-danger">', '</small>');
-        $validationRules = $this->get_validation_rules(); // in child model
-        $this->form_validation->set_rules($validationRules);
+        $validation_rules = $this->get_validation_rules(); // in child model
+        $this->form_validation->set_rules($validation_rules);
         return $this->form_validation->run();
 
         // return false;

@@ -314,7 +314,7 @@ class Draft extends Operator_Controller
             }
         }
         if (!$_POST) {
-            $input              = (object) $this->draft->getDefaultValues();
+            $input              = (object) $this->draft->get_default_values();
             $input->category_id = $category;
         } else {
             $input = (object) $this->input->post(null, true);

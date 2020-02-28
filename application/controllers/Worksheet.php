@@ -48,7 +48,7 @@ class Worksheet extends Operator_Controller
     public function add()
     {
         if (!$_POST) {
-            $input = (object) $this->worksheet->getDefaultValues();
+            $input = (object) $this->worksheet->get_default_values();
         } else {
             $input = (object) $this->input->post(null, true);
         }

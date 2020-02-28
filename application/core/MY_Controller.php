@@ -24,6 +24,9 @@ class MY_Controller extends MX_Controller
         if (file_exists(APPPATH . 'models/' . $models . '_model.php')) {
             $this->load->model($model . '_model', $model, true);
         }
+
+        // load toast message
+        $this->lang->load('toast', 'indonesian');
     }
 
     public function _hmvc_fixes()

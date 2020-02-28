@@ -5,7 +5,7 @@ class Document_model extends MY_Model
     protected $perPage = 10;
     public function get_validation_rules()
     {
-        $validationRules = [
+        $validation_rules = [
             [
                 'field' => 'document_name',
                 'label' => 'document_name',
@@ -29,10 +29,10 @@ class Document_model extends MY_Model
 
         ];
 
-        return $validationRules;
+        return $validation_rules;
     }
 
-    public function getDefaultValues()
+    public function get_default_values()
     {
         return [
             'document_name'      => '',

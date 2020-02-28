@@ -1,3 +1,4 @@
+<?php $i = 0;?>
 <header class="page-title-bar">
    <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -16,7 +17,7 @@
          <section class="card card-fluid">
             <header class="card-header">
                <div class="d-flex align-items-center">
-                  <span class="mr-auto"><i class="fa fa-puzzle-piece"></i> Daftar Kategori</span>
+                  <span class="mr-auto">Kategori <span class="badge badge-info"><?=$total;?></span></span>
                   <div class="card-header-control">
                      <a
                         href="<?=base_url('category/add');?>"
@@ -28,9 +29,10 @@
             <div class="card-body p-0">
                <?php if ($categories): ?>
                <div class="double-scroll">
-                  <table class="table table-striped">
+                  <table class="table table-striped mb-0">
                      <thead>
                         <tr>
+                           <th scope="col">No</th>
                            <th
                               scope="col"
                               style="min-width:200px;"
@@ -47,6 +49,7 @@
                      <tbody>
                         <?php foreach ($categories as $category): ?>
                         <tr>
+                           <td class="align-middle"><?=++$i;?></td>
                            <td class="align-middle"><?=$category->category_name;?></td>
                            <td class="align-middle"><?=$category->category_year;?></td>
                            <td class="align-middle"><?=konversiTanggal($category->date_open, 'dateonly');?></td>

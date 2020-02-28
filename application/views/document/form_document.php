@@ -91,7 +91,7 @@
 <!-- /.page-section -->
 <script>
   $(document).ready(function(){
-    validate_setting();
+    loadValidateSetting();
     $("#formdocument").validate({
         rules: {
           document_name : "crequired",
@@ -124,7 +124,7 @@
             }
         }
       },
-     validate_select2()
+     validateSelect2()
      );
   })
 </script>

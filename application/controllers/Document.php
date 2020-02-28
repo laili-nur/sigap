@@ -38,7 +38,7 @@ class Document extends Admin_Controller
     public function add()
     {
         if (!$_POST) {
-            $input = (object) $this->document->getDefaultValues();
+            $input = (object) $this->document->get_default_values();
         } else {
             $input = (object) $this->input->post(null, true);
         }

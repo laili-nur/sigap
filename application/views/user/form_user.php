@@ -20,10 +20,7 @@
    <div class="row">
       <div class="col-md-6">
          <!-- .card -->
-         <section
-            id="data-author"
-            class="card"
-         >
+         <section class="card">
             <!-- .card-body -->
             <div class="card-body">
                <!-- .form -->
@@ -165,7 +162,7 @@ $('#hilang').hide();
 <?php endif;?>
 <script>
 $(document).ready(function() {
-   validate_setting();
+   loadValidateSetting();
    $("#formuser").validate({
          rules: {
             username: {
@@ -194,7 +191,7 @@ $(document).ready(function() {
             }
          }
       },
-      validate_select2()
+      validateSelect2()
    );
 })
 </script>

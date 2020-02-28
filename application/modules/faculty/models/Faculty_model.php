@@ -4,18 +4,18 @@ class Faculty_model extends MY_Model
 {
     public function get_validation_rules()
     {
-        $validationRules = [
+        $validation_rules = [
             [
                 'field' => 'faculty_name',
-                'label' => 'Faculty Name',
+                'label' => $this->lang->line('form_faculty_name'),
                 'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_faculty_name',
             ],
         ];
 
-        return $validationRules;
+        return $validation_rules;
     }
 
-    public function getDefaultValues()
+    public function get_default_values()
     {
         return [
             'faculty_name' => '',

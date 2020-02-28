@@ -25,7 +25,7 @@ class Draft_reviewer extends Operator_Controller
     {
         $data = array();
         if (!$_POST) {
-            $input = (object) $this->draft_reviewer->getDefaultValues();
+            $input = (object) $this->draft_reviewer->get_default_values();
         } else {
             $input = (object) $this->input->post(null, true);
         }

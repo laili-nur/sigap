@@ -12,9 +12,6 @@ class Category extends Operator_Controller
 
         // load modules model
         $this->load->model('Category_model', 'category');
-
-        // load toast message
-        $this->lang->load('toast', 'indonesian');
     }
 
     public function index($page = null)
@@ -22,22 +19,8 @@ class Category extends Operator_Controller
         $cat = $this->category->order_by('category_name')->order_by('date_close', 'desc')->get_all();
 
         $categories = array_map(function ($v) {
-            $sisa_waktu_buka = ceil((strtotime($v->date_open) - strtotime(date('Y-m-d H:i:s'))) / 86400);
-            // if ($sisa_waktu_buka >= 1) {
-            //     return $sisa_waktu_buka . ' hari';
-            // } else {
-            //     return '<span style="color:green">Sudah dibuka</span>';
-            // }
-
-            $sisa_waktu_tutup = ceil((strtotime($v->date_close) - strtotime(date('Y-m-d H:i:s'))) / 86400);
-            // if ($sisa_waktu_tutup <= 0) {
-            //     return '<span style="color:red">Berakhir</span>';
-            // } else {
-            //     return $sisa_waktu_tutup . ' hari';
-            // }
-
-            $v->sisa_waktu_buka  = $sisa_waktu_buka;
-            $v->sisa_waktu_tutup = $sisa_waktu_tutup;
+            $v->sisa_waktu_buka  = ceil((strtotime($v->date_open) - strtotime(date('Y-m-d H:i:s'))) / 86400);
+            $v->sisa_waktu_tutup = ceil((strtotime($v->date_close) - strtotime(date('Y-m-d H:i:s'))) / 86400);
 
             return $v;
         }, $cat);
@@ -51,7 +34,7 @@ class Category extends Operator_Controller
     public function add()
     {
         if (!$_POST) {
-            $input = (object) $this->category->getDefaultValues();
+            $input = (object) $this->category->get_default_values();
         } else {
             $input = (object) $this->input->post(null, true);
         }

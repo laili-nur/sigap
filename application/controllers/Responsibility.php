@@ -24,7 +24,7 @@ class Responsibility extends Operator_Controller
     {
         $data = array();
         if (!$_POST) {
-            $input = (object) $this->responsibility->getDefaultValues();
+            $input = (object) $this->responsibility->get_default_values();
         } else {
             $input = (object) $this->input->post(null, true);
         }

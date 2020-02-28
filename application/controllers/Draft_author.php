@@ -61,7 +61,7 @@ class Draft_author extends Operator_Controller
     {
         $data = array();
         if (!$_POST) {
-            $input = (object) $this->draft_author->getDefaultValues();
+            $input = (object) $this->draft_author->get_default_values();
         } else {
             $input = (object) $this->input->post(null, true);
         }

@@ -6,11 +6,9 @@ class Institute extends Operator_Controller
     {
         parent::__construct();
         $this->pages = 'institute';
-        //khusus admin
-        $ceklevel = $this->session->userdata('level');
-        if ($ceklevel == 'author' || $ceklevel == 'reviewer' || $ceklevel == 'editor' || $ceklevel == 'layouter') {
-            redirect('home');
-        }
+
+        // akses khusus admin
+        check_if_admin();
 
         $this->load->model('Institute_model', 'institute');
     }
@@ -27,7 +25,7 @@ class Institute extends Operator_Controller
     public function add()
     {
         if (!$_POST) {
-            $input = (object) $this->institute->getDefaultValues();
+            $input = (object) $this->institute->get_default_values();
         } else {
             $input = (object) $this->input->post(null, true);
         }
@@ -39,10 +37,11 @@ class Institute extends Operator_Controller
             return;
         }
         if ($this->institute->insert($input)) {
-            $this->session->set_flashdata('success', 'Data saved');
+            $this->session->set_flashdata('success', $this->lang->line('toast_add_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to save');
+            $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
         }
+
         redirect('institute');
     }
 
@@ -66,10 +65,11 @@ class Institute extends Operator_Controller
             return;
         }
         if ($this->institute->where('institute_id', $id)->update($input)) {
-            $this->session->set_flashdata('success', 'Data saved');
+            $this->session->set_flashdata('success', $this->lang->line('toast_edit_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to save');
+            $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
         }
+
         redirect('institute');
     }
 
@@ -81,10 +81,11 @@ class Institute extends Operator_Controller
             redirect('institute');
         }
         if ($this->institute->where('institute_id', $id)->delete()) {
-            $this->session->set_flashdata('success', 'Data deleted');
+            $this->session->set_flashdata('success', $this->lang->line('toast_delete_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to delete');
+            $this->session->set_flashdata('error', $this->lang->line('toast_delete_fail'));
         }
+
         redirect('institute');
     }
 
@@ -96,7 +97,7 @@ class Institute extends Operator_Controller
         !$institute_id || $this->institute->where('institute_id !=', $institute_id);
         $institute = $this->institute->get();
         if ($institute) {
-            $this->form_validation->set_message('unique_institute_name', '%s has been used');
+            $this->form_validation->set_message('unique_institute_name', $this->lang->line('toast_data_duplicate'));
             return false;
         }
         return true;

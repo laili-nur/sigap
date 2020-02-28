@@ -6,7 +6,7 @@ class Draft_author_model extends MY_Model
 
     public function get_validation_rules()
     {
-        $validationRules = [
+        $validation_rules = [
             [
                 'field' => 'draft_id',
                 'label' => 'Draft ID',
@@ -19,10 +19,10 @@ class Draft_author_model extends MY_Model
             ],
         ];
 
-        return $validationRules;
+        return $validation_rules;
     }
 
-    public function getDefaultValues()
+    public function get_default_values()
     {
         return [
             'draft_id'  => '',

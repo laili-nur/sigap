@@ -6,11 +6,9 @@ class Work_unit extends Operator_Controller
     {
         parent::__construct();
         $this->pages = 'work_unit';
-        //khusus admin
-        $ceklevel = $this->session->userdata('level');
-        if ($ceklevel == 'author' || $ceklevel == 'reviewer' || $ceklevel == 'editor' || $ceklevel == 'layouter') {
-            redirect('home');
-        }
+
+        // akses khusus admin
+        check_if_admin();
 
         $this->load->model('Work_unit_model', 'work_unit');
     }
@@ -27,7 +25,7 @@ class Work_unit extends Operator_Controller
     public function add()
     {
         if (!$_POST) {
-            $input = (object) $this->work_unit->getDefaultValues();
+            $input = (object) $this->work_unit->get_default_values();
         } else {
             $input = (object) $this->input->post(null, true);
         }
@@ -39,10 +37,11 @@ class Work_unit extends Operator_Controller
             return;
         }
         if ($this->work_unit->insert($input)) {
-            $this->session->set_flashdata('success', 'Data saved');
+            $this->session->set_flashdata('success', $this->lang->line('toast_add_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to save');
+            $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
         }
+
         redirect('workunit');
     }
 
@@ -66,10 +65,11 @@ class Work_unit extends Operator_Controller
             return;
         }
         if ($this->work_unit->where('work_unit_id', $id)->update($input)) {
-            $this->session->set_flashdata('success', 'Data saved');
+            $this->session->set_flashdata('success', $this->lang->line('toast_edit_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to save');
+            $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
         }
+
         redirect('workunit');
     }
 
@@ -81,10 +81,11 @@ class Work_unit extends Operator_Controller
             redirect('workunit');
         }
         if ($this->work_unit->where('work_unit_id', $id)->delete()) {
-            $this->session->set_flashdata('success', 'Data deleted');
+            $this->session->set_flashdata('success', $this->lang->line('toast_delete_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to delete');
+            $this->session->set_flashdata('error', $this->lang->line('toast_delete_fail'));
         }
+
         redirect('workunit');
     }
 
@@ -96,7 +97,7 @@ class Work_unit extends Operator_Controller
         !$work_unit_id || $this->work_unit->where('work_unit_id !=', $work_unit_id);
         $work_unit = $this->work_unit->get();
         if ($work_unit) {
-            $this->form_validation->set_message('unique_work_unit_name', '%s has been used');
+            $this->form_validation->set_message('unique_work_unit_name', $this->lang->line('toast_data_duplicate'));
             return false;
         }
         return true;

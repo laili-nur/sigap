@@ -6,11 +6,9 @@ class Faculty extends Operator_Controller
     {
         parent::__construct();
         $this->pages = 'faculty';
-        //khusus admin
-        $ceklevel = $this->session->userdata('level');
-        if ($ceklevel == 'author' || $ceklevel == 'reviewer' || $ceklevel == 'editor' || $ceklevel == 'layouter') {
-            redirect('home');
-        }
+
+        // akses khusus admin
+        check_if_admin();
 
         $this->load->model('Faculty_model', 'faculty');
     }
@@ -27,7 +25,7 @@ class Faculty extends Operator_Controller
     public function add()
     {
         if (!$_POST) {
-            $input = (object) $this->faculty->getDefaultValues();
+            $input = (object) $this->faculty->get_default_values();
         } else {
             $input = (object) $this->input->post(null, true);
         }
@@ -39,10 +37,11 @@ class Faculty extends Operator_Controller
             return;
         }
         if ($this->faculty->insert($input)) {
-            $this->session->set_flashdata('success', 'Data saved');
+            $this->session->set_flashdata('success', $this->lang->line('toast_add_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to save');
+            $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
         }
+
         redirect('faculty');
     }
 
@@ -66,10 +65,11 @@ class Faculty extends Operator_Controller
             return;
         }
         if ($this->faculty->where('faculty_id', $id)->update($input)) {
-            $this->session->set_flashdata('success', 'Data saved');
+            $this->session->set_flashdata('success', $this->lang->line('toast_edit_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to save');
+            $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
         }
+
         redirect('faculty');
     }
 
@@ -81,10 +81,11 @@ class Faculty extends Operator_Controller
             redirect('faculty');
         }
         if ($this->faculty->where('faculty_id', $id)->delete()) {
-            $this->session->set_flashdata('success', 'Data deleted');
+            $this->session->set_flashdata('success', $this->lang->line('toast_delete_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to delete');
+            $this->session->set_flashdata('error', $this->lang->line('toast_delete_fail'));
         }
+
         redirect('faculty');
     }
 
@@ -96,7 +97,7 @@ class Faculty extends Operator_Controller
         !$faculty_id || $this->faculty->where('faculty_id !=', $faculty_id);
         $faculty = $this->faculty->get();
         if ($faculty) {
-            $this->form_validation->set_message('unique_faculty_name', '%s has been used');
+            $this->form_validation->set_message('unique_faculty_name', $this->lang->line('toast_data_duplicate'));
             return false;
         }
         return true;

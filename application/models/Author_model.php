@@ -6,7 +6,7 @@ class Author_model extends MY_Model
 
     public function get_validation_rules()
     {
-        $validationRules = [
+        $validation_rules = [
             [
                 'field' => 'work_unit_id',
                 'label' => 'Work Unit ID',
@@ -80,10 +80,10 @@ class Author_model extends MY_Model
 
         ];
 
-        return $validationRules;
+        return $validation_rules;
     }
 
-    public function getDefaultValues()
+    public function get_default_values()
     {
         return [
             'work_unit_id'            => '',

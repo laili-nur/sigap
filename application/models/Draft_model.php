@@ -7,7 +7,7 @@ class Draft_model extends MY_Model
 
     public function get_validation_rules()
     {
-        $validationRules = [
+        $validation_rules = [
             [
                 'field' => 'category_id',
                 'label' => 'Category ID',
@@ -285,10 +285,10 @@ class Draft_model extends MY_Model
             ],
         ];
 
-        return $validationRules;
+        return $validation_rules;
     }
 
-    public function getDefaultValues()
+    public function get_default_values()
     {
         return [
             'category_id'            => '',
