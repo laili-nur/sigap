@@ -23,3 +23,20 @@ $lang['form_work_unit_name'] = 'Nama Unit Kerja';
 
 // Institute
 $lang['form_institute_name'] = 'Nama Institusi';
+
+// Author
+$lang['form_author_name']             = 'Nama Penulis';
+$lang['form_author_nip']              = 'NIP Penulis';
+$lang['form_author_degress_front']    = 'Gelar Depan Nama';
+$lang['form_author_degress_back']     = 'Gelar Belakang Nama';
+$lang['form_author_latest_education'] = 'Pendidikan Terakhir';
+$lang['form_author_address']          = 'Alamat';
+$lang['form_author_contact']          = 'Nomor HP';
+$lang['form_author_email']            = 'Email';
+$lang['form_author_saving_num']       = 'Nomor Rekening';
+$lang['form_author_heir_name']        = 'Ahli Waris';
+$lang['form_author_ktp']              = 'KTP Penulis';
+$lang['form_author_bank_name']        = 'Nama Bank';
+
+// User
+$lang['form_user_name'] = 'Akun Pengguna';

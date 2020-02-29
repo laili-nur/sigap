@@ -68,7 +68,7 @@ class Draft extends Operator_Controller
         $filter = $this->input->get('filter', true);
         //custom per page
         if ($this->input->get('per_page', true) != null) {
-            $this->draft->perPage = $this->input->get('per_page', true);
+            $this->draft->per_page = $this->input->get('per_page', true);
         }
         $this->db->group_by('draft.draft_id');
         if ($this->level == 'reviewer') {
@@ -309,7 +309,7 @@ class Draft extends Operator_Controller
         $cekrole = $this->session->userdata('role_id');
         if ($ceklevel == 'author') {
             if ($cekrole == 0) {
-                $this->session->set_flashdata('error', 'Choose category from dashboard');
+                $this->session->set_flashdata('error', 'Pilih category from dashboard');
                 redirect('home');
             }
         }
@@ -335,7 +335,7 @@ class Draft extends Operator_Controller
         //author tidak bisa coba2 url draft/add
         if ($ceklevel == 'author') {
             if (empty($input->category_id)) {
-                $this->session->set_flashdata('error', 'Choose category from dashboard');
+                $this->session->set_flashdata('error', 'Pilih category from dashboard');
                 redirect('home');
             }
         }

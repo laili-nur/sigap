@@ -1,8 +1,8 @@
 <?php $ceklevel = $this->session->userdata('level');?>
 <?php
-$perPage = $this->input->get('per_page');
-if (empty($perPage)) {
-    $perPage = 10;
+$per_page = $this->input->get('per_page');
+if (empty($per_page)) {
+    $per_page = 10;
 }
 $keywords = $this->input->get('keywords');
 $filter   = $this->input->get('filter');
@@ -12,7 +12,7 @@ if (isset($keywords) or isset($filter)) {
     $page = $this->uri->segment(2);
 }
 // data table series number
-$i = isset($page) ? $page * $perPage - $perPage : 0;
+$i = isset($page) ? $page * $per_page - $per_page : 0;
 ?>
 <!-- .page-title-bar -->
 <header class="page-title-bar">
@@ -205,25 +205,25 @@ $cetak_ulang_status = [
     }
     $authors = substr($authors, 0, -2);
     ?>
-	                <!-- tr -->
-	                <tr>
-	                  <td class="align-middle pl-3">
-	                    <?=++$i;?>
-	                  </td>
-	                  <td class="align-middle"><strong><a href="<?=base_url('draft/view/' . $draft->draft_id . '');?>">
-	                    <?=($draft->is_reprint == 'y') ? '<span class="badge badge-warning"><i class="fa fa-redo " data-toggle="tooltip" title="Cetak Ulang"></i></span>' : '';?>
-	                    <?=$draft->draft_title;?></a></strong></td>
-	                  <td class="align-middle">
-	                    <?=$draft->category_name;?>
-	                  </td>
-	                  <td class="align-middle">
-	                    <?=$draft->category_year;?>
-	                  </td>
-	                  <?php if ($ceklevel != 'reviewer'): ?>
-	                  <td class="align-middle">
-	                    <?=isset($draft->author[0]->author_name) ? $draft->author[0]->author_name : '-';?>
-	                  </td>
-	                  <?php endif;?>
+		                <!-- tr -->
+		                <tr>
+		                  <td class="align-middle pl-3">
+		                    <?=++$i;?>
+		                  </td>
+		                  <td class="align-middle"><strong><a href="<?=base_url('draft/view/' . $draft->draft_id . '');?>">
+		                    <?=($draft->is_reprint == 'y') ? '<span class="badge badge-warning"><i class="fa fa-redo " data-toggle="tooltip" title="Cetak Ulang"></i></span>' : '';?>
+		                    <?=$draft->draft_title;?></a></strong></td>
+		                  <td class="align-middle">
+		                    <?=$draft->category_name;?>
+		                  </td>
+		                  <td class="align-middle">
+		                    <?=$draft->category_year;?>
+		                  </td>
+		                  <?php if ($ceklevel != 'reviewer'): ?>
+		                  <td class="align-middle">
+		                    <?=isset($draft->author[0]->author_name) ? $draft->author[0]->author_name : '-';?>
+		                  </td>
+		                  <?php endif;?>
                   <td class="align-middle">
                     <?=konversiTanggal($draft->entry_date);?>
                   </td>

@@ -108,7 +108,7 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
               <!-- .input-group -->
               <div class="custom-file">
                 <?=form_upload('layout_file', '', 'class="custom-file-input naskah" id="layout_file"');?>
-                <label class="custom-file-label" for="layout_file">Choose file</label>
+                <label class="custom-file-label" for="layout_file">Pilih file</label>
               </div>
               <small class="form-text text-muted">Tipe file upload  bertype : idml, indd, indt, pdf, rar, dan zip.</small>
               <!-- /.input-group -->
@@ -237,7 +237,7 @@ if ($ceklevel != 'editor') {
               <!-- .input-group -->
               <div class="custom-file">
                 <?=form_upload('cover_file', '', 'class="custom-file-input naskah" id="cover_file"');?>
-                <label class="custom-file-label" for="cover_file">Choose file</label>
+                <label class="custom-file-label" for="cover_file">Pilih file</label>
               </div>
               <small class="form-text text-muted">Tipe file upload  bertype : jpg, jpeg, png, dan pdf.</small>
               <!-- /.input-group -->

@@ -60,10 +60,10 @@
                         <label
                            class="custom-file-label"
                            for="tf3"
-                        >Choose file</label>
+                        >Pilih file</label>
                      </div>
                      <small class="form-text text-muted">Hanya menerima file bertype : jpg, png, jpeg, dan pdf</small>
-                     <?=fileFormError('file_hak_cipta', '<p class="text-danger">', '</p>');?>
+                     <?=file_form_error('file_hak_cipta', '<p class="text-danger">', '</p>');?>
                   </div>
                   <!-- /.form-group -->
                   <!-- .form-group -->
@@ -160,7 +160,7 @@ $(document).ready(function() {
    );
 
    $("#draft_id").select2({
-      placeholder: '-- Choose --',
+      placeholder: '-- Pilih --',
       allowClear: true
    });
 });

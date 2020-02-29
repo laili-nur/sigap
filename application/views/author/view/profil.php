@@ -1,117 +1,86 @@
-<!-- .card -->
+<?php
+// penampil ktp
+$ktp_place = null;
+if (isset($author->author_ktp) && $author->author_ktp) {
+    if ($author->author_ktp) {
+        $getextension = explode(".", $author->author_ktp);
+    } else {
+        $getextension[1] = '';
+    }
+    // jika ekstensi pdf maka tampilkan link
+    if ($getextension[1] != 'pdf') {
+        $ktp_place = '<img class="uploaded-image" src="' . base_url('authorktp/' . $author->author_ktp) . '" width="30%"><br>';
+    } else {
+        $ktp_place = '<div align="middle"><a href="' . base_url('authorktp/' . $author->author_ktp) . '" class="btn btn-success><i class="fa fa-download"></i> Lihat KTP</a></div>';
+    }
+}
+?>
 <div class="card card-fluid">
-  <h6 class="card-header"> Profil </h6>
-  <!-- .card-body -->
-  <div class="card-body">
-    <!-- .table-responsive -->
-    <div class="table-responsive">
-      <!-- .table -->
-      <table class="table table-striped table-bordered mb-0 nowrap">
-        <!-- tbody -->
-        <tbody>
-          <!-- tr -->
-          <tr>
-            <td width="200px"> User ID </td>
-            <td><?= (!empty($input->user_id))? konversiID('user','user_id', $input->user_id)->username : '' ?> </td>
-          </tr>
-          <!-- /tr -->
-          <!-- tr -->
-          <tr>
-            <td width="200px"> NIP </td>
-            <td><?= $input->author_nip ?> </td>
-          </tr>
-          <!-- /tr -->
-          <!-- tr -->
-          <tr>
-            <td width="200px"> Nama </td>
-            <td><?= $input->author_name ?> </td>
-          </tr>
-          <!-- /tr -->
-          <!-- tr -->
-          <tr>
-            <td width="200px"> Gelar </td>
-            <td><?= $input->author_degree_front ?>, <?= $input->author_degree_back ?></td>
-          </tr>
-          <!-- /tr -->
-          <!-- tr -->
-          <tr>
-            <td width="200px"> Pendidikan Terakhir </td>
-            <td><?= ($input->author_latest_education == 's4')? 'Professor' : ucwords($input->author_latest_education) ?></td>
-          </tr>
-          <!-- /tr -->
-          <!-- tr -->
-          <tr>
-            <td width="200px"> Unit Kerja </td>
-            <td> <?= konversiID('work_unit','work_unit_id', $input->work_unit_id)->work_unit_name;?>  </td>
-          </tr>
-          <!-- /tr -->
-          <!-- tr -->
-          <tr>
-            <td width="200px"> Institusi </td>
-            <td> <?= konversiID('institute','institute_id', $input->institute_id)->institute_name;?>  </td>
-          </tr>
-          <!-- /tr -->
-          <!-- tr -->
-          <tr>
-            <td width="200px"> Alamat </td>
-            <td><?= $input->author_address ?> </td>
-          </tr>
-          <!-- /tr -->
-          <!-- tr -->
-          <tr>
-            <td width="200px"> No HP </td>
-            <td><?= $input->author_contact ?> </td>
-          </tr>
-          <!-- /tr -->
-          <!-- tr -->
-          <tr>
-            <td width="200px"> Email </td>
-            <td><?= $input->author_email ?>  </td>
-          </tr>
-          <!-- /tr -->
-          <!-- tr -->
-          <tr>
-            <td width="200px"> Ahli Waris </td>
-            <td> <?= $input->heir_name ?>  </td>
-          </tr>
-          <!-- /tr -->
-          <!-- tr -->
-          <tr>
-            <td width="200px"> KTP </td>
-            <td>
-            <?php
-                //liat ekstensi file 
-                if($input->author_ktp!=''){
-                  $getextension = explode(".", $input->author_ktp); 
-                }else{
-                  $getextension[1] = '';
-                }
-                if($input->author_ktp !=''){
-                //jika ekstensi pdf maka tampilkan link
-                  if($getextension[1]!='pdf'){
-                    echo '<img src="'.base_url('authorktp/'.$input->author_ktp).'" width="30%" class="previewxx"><br>';
-                  }else{
-                    echo '<div align="left"><a href="'.base_url('authorktp/'.$input->author_ktp).'" class="btn btn-success btn-sm previewxx"><i class="fa fa-download"></i> Lihat KTP</a></div>';
-                  }
-                }
-                ?>
-              </td>
-          </tr>
-          <!-- /tr -->
-        </tbody>
-        <!-- /tbody -->
-      </table>
-      <!-- /.table -->
-    </div>
-    <!-- /.table-responsive -->
-  </div>
-  <!-- /.card-body -->
-  <!-- .card-footer -->
-  <footer class="card-footer">
-    <div class="card-footer-content text-muted">
-      <a href="<?=base_url('author/edit/'.$input->author_id) ?>" class="btn btn-secondary">Edit Data</a>
-    </div>
-  </footer>
-  <!-- /.card-footer -->
+   <h6 class="card-header"> Profil </h6>
+   <div class="card-body">
+      <div class="table-responsive">
+         <table class="table table-striped table-bordered mb-0 nowrap">
+            <tbody>
+               <tr>
+                  <td width="200px"> <?=$this->lang->line('form_user_name');?> </td>
+                  <td><?=(!empty($author->user_id)) ? konversiID('user', 'user_id', $author->user_id)->username : '';?>
+                  </td>
+               </tr>
+               <tr>
+                  <td width="200px"> <?=$this->lang->line('form_author_nip');?> </td>
+                  <td><?=$author->author_nip;?> </td>
+               </tr>
+               <tr>
+                  <td width="200px"> <?=$this->lang->line('form_author_name');?> </td>
+                  <td><?=$author->author_degree_front;?> <?=$author->author_name;?> <?=$author->author_degree_back;?>
+                  </td>
+               </tr>
+               <tr>
+                  <td width="200px"> <?=$this->lang->line('form_author_latest_education');?> </td>
+                  <td>
+                     <?=($author->author_latest_education == 's4') ? 'Professor' : ucwords($author->author_latest_education);?>
+                  </td>
+               </tr>
+               <tr>
+                  <td width="200px"> <?=$this->lang->line('form_work_unit_name');?> </td>
+                  <td> <?=konversiID('work_unit', 'work_unit_id', $author->work_unit_id)->work_unit_name;?> </td>
+               </tr>
+               <tr>
+                  <td width="200px"> <?=$this->lang->line('form_institute_name');?> </td>
+                  <td> <?=konversiID('institute', 'institute_id', $author->institute_id)->institute_name;?> </td>
+               </tr>
+               <tr>
+                  <td width="200px"> <?=$this->lang->line('form_author_address');?> </td>
+                  <td><?=$author->author_address;?> </td>
+               </tr>
+               <tr>
+                  <td width="200px"> <?=$this->lang->line('form_author_contact');?> </td>
+                  <td><?=$author->author_contact;?> </td>
+               </tr>
+               <tr>
+                  <td width="200px"> <?=$this->lang->line('form_author_email');?> </td>
+                  <td><?=$author->author_email;?> </td>
+               </tr>
+               <tr>
+                  <td width="200px"> <?=$this->lang->line('form_author_heir_name');?> </td>
+                  <td> <?=$author->heir_name;?> </td>
+               </tr>
+               <tr>
+                  <td width="200px"> <?=$this->lang->line('form_author_ktp');?> </td>
+                  <td>
+                     <?=$ktp_place;?>
+                  </td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+   <footer class="card-footer">
+      <div class="card-footer-content text-muted">
+         <a
+            href="<?=base_url('author/edit/' . $author->author_id);?>"
+            class="btn btn-secondary"
+         >Edit Data</a>
+      </div>
+   </footer>
 </div>
-<!-- /.card -->

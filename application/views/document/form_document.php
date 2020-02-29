@@ -50,10 +50,10 @@
               <label for="document_file">File document</label>
               <div class="custom-file">
                 <?=form_upload('document_file', '', 'class="custom-file-input dokumen"');?>
-                <label class="custom-file-label" for="document_file">Choose file</label>
+                <label class="custom-file-label" for="document_file">Pilih file</label>
               </div>
               <small class="form-text text-muted">Tipe file upload bertype : txt, jpg, png, jpeg, docx, doc, xls, xlsx, zip, rar dan pdf. Maksimal 50 MB</small>
-              <?=fileFormError('document_file', '<p class="text-danger">', '</p>');?>
+              <?=file_form_error('document_file', '<p class="text-danger">', '</p>');?>
             </div>
             <!-- /.form-group -->
             <!-- .form-group -->

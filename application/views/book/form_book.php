@@ -121,10 +121,10 @@
                         <label
                            class="custom-file-label"
                            for="book_file"
-                        >Choose file</label>
+                        >Pilih file</label>
                      </div>
                      <small class="form-text text-muted">Hanya menerima file bertype : pdf, docx, dan doc</small>
-                     <?=fileFormError('book_file', '<p class="text-danger">', '</p>');?>
+                     <?=file_form_error('book_file', '<p class="text-danger">', '</p>');?>
                   </div>
                   <!-- /.form-group -->
                   <!-- .form-group -->
@@ -214,7 +214,7 @@ $(document).ready(function() {
       validateSelect2()
    );
    $("#draft_id").select2({
-      placeholder: '-- Choose --',
+      placeholder: '-- Pilih --',
       allowClear: true
    });
 });

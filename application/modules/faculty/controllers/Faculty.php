@@ -49,7 +49,7 @@ class Faculty extends Operator_Controller
     {
         $faculty = $this->faculty->where('faculty_id', $id)->get();
         if (!$this) {
-            $this->session->set_flashdata('warning', 'Faculty data were not available');
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
             redirect('faculty');
         }
         if (!$_POST) {
@@ -77,7 +77,7 @@ class Faculty extends Operator_Controller
     {
         $faculty = $this->faculty->where('faculty_id', $id)->get();
         if (!$faculty) {
-            $this->session->set_flashdata('warning', 'Faculty data were not available');
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
             redirect('faculty');
         }
         if ($this->faculty->where('faculty_id', $id)->delete()) {

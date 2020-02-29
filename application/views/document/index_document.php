@@ -7,7 +7,7 @@ if (isset($keywords) or isset($filter)) {
     $page = $this->uri->segment(2);
 }
 // data table series number
-$i = isset($page) ? $page * $perPage - $perPage : 0;
+$i = isset($page) ? $page * $per_page - $per_page : 0;
 ?>
 <!-- .page-title-bar -->
 <header class="page-title-bar">

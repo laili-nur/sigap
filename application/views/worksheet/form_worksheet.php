@@ -260,7 +260,7 @@ $(document).ready(function() {
    );
 
    $("#draft_id").select2({
-      placeholder: '-- Choose --',
+      placeholder: '-- Pilih --',
       allowClear: true
    });
 });

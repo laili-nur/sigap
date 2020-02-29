@@ -134,7 +134,7 @@ if ($input->review2_flag != '') {
               <!-- .input-group -->
               <div class="custom-file">
                 <?=form_upload('review1_file', '', 'class="custom-file-input naskah" id="review1_file"');?>
-                <label class="custom-file-label" for="review1_file">Choose file</label>
+                <label class="custom-file-label" for="review1_file">Pilih file</label>
               </div>
               <small class="form-text text-muted">Tipe file upload  bertype : docx, doc, dan pdf.</small>
               <!-- /.input-group -->
@@ -512,7 +512,7 @@ if ($ceklevel != 'author' or $author_order != 1) {
               <!-- .input-group -->
               <div class="custom-file">
                 <?=form_upload('review2_file', '', 'class="custom-file-input naskah" id="review2_file"');?>
-                <label class="custom-file-label" for="review2_file">Choose file</label>
+                <label class="custom-file-label" for="review2_file">Pilih file</label>
               </div>
               <small class="form-text text-muted">Tipe file upload  bertype : docx, doc, dan pdf.</small>
               <!-- /.input-group -->

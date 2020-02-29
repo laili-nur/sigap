@@ -7,12 +7,19 @@ function doublescroll() {
 }
 
 function preview_image(event) {
-    var reader = new FileReader();
-    reader.onload = function () {
-        var output = document.getElementById('output_image');
-        output.src = reader.result;
-    }
-    reader.readAsDataURL(event.target.files[0]);
+    $(document).ready(function () {
+        // hide uploaded image
+        let uploadedImage = document.querySelector('.uploaded-image');
+        if (uploadedImage) uploadedImage.style.display = "none";
+
+        // show temporary image
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('output_image');
+            output.src = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    })
 };
 
 function loadValidateSetting() {

@@ -6,58 +6,60 @@ class Author extends Operator_Controller
     {
         parent::__construct();
         $this->pages = 'author';
-        //khusus admin
-        $ceklevel = $this->session->userdata('level');
-        if ($ceklevel == 'author' || $ceklevel == 'reviewer' || $ceklevel == 'editor' || $ceklevel == 'layouter') {
-            redirect('home');
-        }
+
+        // akses khusus admin
+        check_if_admin();
     }
 
     public function index($page = null)
     {
-        $authors    = $this->author->join('work_unit')->join('institute')->join('bank')->join('user')->order_by('work_unit.work_unit_id')->order_by('institute.institute_id')->order_by('author_nip')->paginate($page)->get_all();
-        $tot        = $this->author->join('work_unit')->join('institute')->join('bank')->join('user')->order_by('work_unit.work_unit_id')->order_by('institute.institute_id')->order_by('author_nip')->get_all();
-        $total      = count($tot);
-        $pages      = $this->pages;
-        $main_view  = 'author/index_author';
-        $pagination = $this->author->make_pagination(site_url('author'), 2, $total);
+        $keywords   = $this->input->get('keywords', true);
+        $get_data   = $this->author->get_data($keywords, $page);
+        $authors    = $get_data['data'];
+        $total      = $get_data['count'];
+        $pagination = $this->author->make_pagination(site_url('author/'), 2, $total);
+        if (!$authors) {
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
+        }
+
         foreach ($authors as $author) {
+            // cek apakah author termasuk reviewer juga
             $author->is_author_reviewer = false;
             if ($author->user_id != 0) {
-                $data     = array('user_id' => $author->user_id);
-                $reviewer = $this->author->get_where($data, 'reviewer');
+                $reviewer = $this->author->get_where(['user_id' => $author->user_id], 'reviewer');
                 if (!is_null($reviewer)) {
                     $author->is_author_reviewer = true;
                 }
             }
         }
+
+        $pages     = $this->pages;
+        $main_view = 'author/index_author';
         $this->load->view('template', compact('pages', 'main_view', 'authors', 'pagination', 'total'));
     }
 
-    public function view($halaman, $id = null)
+    public function view($halaman = 'profil', $id = null)
     {
         if ($halaman and $id == null) {
             redirect('author');
         }
+
+        // author join ke user, untuk mengecek apakah author punya akun
         $author = $this->author->join3('user', 'author', 'user')->where('author_id', $id)->get();
         if (!$author) {
-            $this->session->set_flashdata('warning', 'Author data were not available');
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
             redirect('author');
         }
-        if (!$_POST) {
-            $input = (object) $author;
-        } else {
-            $input = (object) $this->input->post(null, true);
-        }
-        //total draft penulis
+
+        // total draft penulis
         $drafts = $this->author->select(['draft_author.author_id', 'author_name', 'draft_author.draft_id', 'draft_title', 'category_name', 'theme_name', 'entry_date', 'finish_date'])->join3('draft_author', 'author', 'author')->join3('draft', 'draft_author', 'draft')->join3('category', 'draft', 'category')->join3('theme', 'draft', 'theme')->where('draft_author.author_id', $id)->get_all();
-        //total riwayat draft
+        // total riwayat draft
         $total_draft = count($drafts);
         $books       = $this->author->join3('draft', 'book', 'draft')->join3('draft_author', 'draft', 'draft')->join3('author', 'draft_author', 'author')->where('draft_author.author_id', $id)->get_all('book');
         $total_book  = count($books);
         $main_view   = 'author/view_author';
         $pages       = $this->pages;
-        $this->load->view('template', compact('pages', 'main_view', 'drafts', 'input', 'total_draft', 'books', 'total_book'));
+        $this->load->view('template', compact('pages', 'main_view', 'drafts', 'author', 'total_draft', 'books', 'total_book'));
     }
 
     public function add()
@@ -67,13 +69,14 @@ class Author extends Operator_Controller
         } else {
             $input = (object) $this->input->post(null, true);
         }
+
+        // upload file hanya ketika validasi lolos
         if ($this->author->validate()) {
-            if (!empty($_FILES) && $_FILES['author_ktp']['size'] > 0) {
-                $getextension = explode(".", $_FILES['author_ktp']['name']);
-                $authorKTP    = str_replace(" ", "_", "KTP" . '_' . $input->author_name . '_' . date('YmdHis') . '.' . $getextension[1]); // author ktp name
-                $upload       = $this->author->uploadAuthorKTP('author_ktp', $authorKTP);
+            if (!empty($_FILES) && $ktp_file_name = $_FILES['author_ktp']['name']) {
+                $ktp_name = $this->_generate_ktp_name($ktp_file_name, $input->author_name);
+                $upload   = $this->author->upload_author_ktp('author_ktp', $ktp_name);
                 if ($upload) {
-                    $input->author_ktp = $authorKTP;
+                    $input->author_ktp = $ktp_name;
                 }
             }
         }
@@ -85,19 +88,21 @@ class Author extends Operator_Controller
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
-        if ($this->author->insert($input)) {
-            $this->session->set_flashdata('success', 'Data saved');
+
+        if ($author_id = $this->author->insert($input)) {
+            $this->session->set_flashdata('success', $this->lang->line('toast_add_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to save');
+            $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
         }
-        redirect('author');
+
+        redirect('author/view/profil/' . $author_id);
     }
 
     public function edit($id = null)
     {
         $author = $this->author->where('author_id', $id)->get();
         if (!$author) {
-            $this->session->set_flashdata('warning', 'Author data were not available');
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
             redirect('author');
         }
         if (!$_POST) {
@@ -107,15 +112,14 @@ class Author extends Operator_Controller
         }
 
         if ($this->author->validate()) {
-            if (!empty($_FILES) && $_FILES['author_ktp']['size'] > 0) {
-                $getextension = explode(".", $_FILES['author_ktp']['name']);
-                $authorKTP    = str_replace(" ", "_", "KTP" . '_' . $input->author_name . '_' . date('YmdHis') . '.' . $getextension[1]); // author ktp name
-                $upload       = $this->author->uploadAuthorKTP('author_ktp', $authorKTP);
+            if (!empty($_FILES) && $ktp_file_name = $_FILES['author_ktp']['name']) {
+                $ktp_name = $this->_generate_ktp_name($ktp_file_name, $input->author_name);
+                $upload   = $this->author->upload_author_ktp('author_ktp', $ktp_name);
                 if ($upload) {
-                    $input->author_ktp = "$authorKTP";
+                    $input->author_ktp = $ktp_name;
                     // Delete old KTP file
                     if ($author->author_ktp) {
-                        $this->author->deleteAuthorKTP($author->author_ktp);
+                        $this->author->delete_author_ktp($author->author_ktp);
                     }
                 }
             }
@@ -129,36 +133,37 @@ class Author extends Operator_Controller
             return;
         }
         if ($this->author->where('author_id', $id)->update($input)) {
-            $this->session->set_flashdata('success', 'Data updated');
+            $this->session->set_flashdata('success', $this->lang->line('toast_edit_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to update');
+            $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
         }
-        redirect('author');
+
+        redirect('author/view/profil/' . $id);
     }
 
     public function delete($id = null)
     {
         $author = $this->author->where('author_id', $id)->get();
         if (!$author) {
-            $this->session->set_flashdata('warning', 'Author data were not available');
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
             redirect('author');
         }
-        $get_user = array();
+
         $get_user = $this->author->select(['user.user_id', 'user.level'])->join('user')->where('author_id', $id)->get();
         if ($this->author->where('author_id', $id)->delete()) {
-            //deletektp
+            // deletektp
             if ($author->author_ktp != '') {
-                $this->author->deleteAuthorKTP($author->author_ktp);
+                $this->author->delete_author_ktp($author->author_ktp);
             }
-            //set ke level reviewer, jika akun author dihapus
+            // jika akun author-reviewer, set ke level reviewer, jika akun author dihapus
             if ($get_user->level == 'author_reviewer') {
-                $data_level = array('level' => 'reviewer');
-                $this->author->where('user_id', $get_user->user_id)->update($data_level, 'user');
+                $this->author->where('user_id', $get_user->user_id)->update(['level' => 'reviewer'], 'user');
             }
-            $this->session->set_flashdata('success', 'Data deleted');
+            $this->session->set_flashdata('success', $this->lang->line('toast_delete_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to delete');
+            $this->session->set_flashdata('error', $this->lang->line('toast_delete_fail'));
         }
+
         redirect('author');
     }
 
@@ -177,31 +182,12 @@ class Author extends Operator_Controller
         }
     }
 
-    public function search($page = null)
+    private function _generate_ktp_name($ktp_file_name, $author_name)
     {
-        $keywords   = $this->input->get('keywords', true);
-        $authors    = $this->author->like('work_unit_name', $keywords)->or_like('institute_name', $keywords)->or_like('author_nip', $keywords)->or_like('author_name', $keywords)->or_like('username', $keywords)->join('work_unit')->join('institute')->join('bank')->join('user')->order_by('work_unit.work_unit_id')->order_by('institute.institute_id')->order_by('author_name')->paginate($page)->get_all();
-        $total      = $this->author->like('work_unit_name', $keywords)->or_like('institute_name', $keywords)->or_like('author_nip', $keywords)->or_like('author_name', $keywords)->or_like('username', $keywords)->join('work_unit')->join('institute')->join('bank')->join('user')->order_by('work_unit.work_unit_id')->order_by('institute.institute_id')->order_by('author_name')->count();
-        $pagination = $this->author->make_pagination(site_url('author/search/'), 3, $total);
-        if (!$authors) {
-            $this->session->set_flashdata('warning', 'Data were not found');
-        }
-
-        foreach ($authors as $author) {
-            $author->is_author_reviewer = false;
-            if ($author->user_id != 0) {
-                $data     = array('user_id' => $author->user_id);
-                $reviewer = $this->author->get_where($data, 'reviewer');
-                if (!is_null($reviewer)) {
-                    $author->is_author_reviewer = true;
-                }
-            }
-        }
-
-        $pages     = $this->pages;
-        $main_view = 'author/index_author';
-        $this->load->view('template', compact('pages', 'main_view', 'authors', 'pagination', 'total'));
+        $get_extension = explode(".", $ktp_file_name)[1];
+        return str_replace(" ", "_", "KTP" . '_' . $author_name . '_' . date('YmdHis') . '.' . $get_extension); // author ktp name
     }
+
     //validasi nama
     //    public function alpha_coma_dash_dot_space($str)
     //    {
@@ -212,6 +198,7 @@ class Author extends Operator_Controller
     //        }
     //    }
     //
+
     public function unique_author_contact()
     {
         $author_contact = $this->input->post('author_contact');

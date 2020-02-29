@@ -2,7 +2,7 @@
 
 class Book_model extends MY_Model
 {
-    protected $perPage = 10;
+    protected $per_page = 10;
 
     public function get_validation_rules()
     {

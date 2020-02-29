@@ -1,8 +1,8 @@
 <?php
 class MY_Model extends CI_Model
 {
-    protected $table   = '';
-    protected $perPage = 0;
+    protected $table    = '';
+    protected $per_page = 0;
 
     public function __construct()
     {
@@ -47,6 +47,12 @@ class MY_Model extends CI_Model
         return $this->db->count_all_results($table);
     }
 
+    public function get_only($table = "")
+    {
+        $table = $this->check_table($table);
+        return $this->db->get($table);
+    }
+
     public function get($table = "")
     {
         $table = $this->check_table($table);
@@ -85,7 +91,7 @@ class MY_Model extends CI_Model
 
     public function paginate($page)
     {
-        $this->db->limit($this->perPage, $this->calculate_real_offset($page));
+        $this->db->limit($this->per_page, $this->calculate_real_offset($page));
         return $this;
     }
 
@@ -94,7 +100,7 @@ class MY_Model extends CI_Model
         if (is_null($page) || empty($page)) {
             $offset = 0;
         } else {
-            $offset = ($page * $this->perPage) - $this->perPage;
+            $offset = ($page * $this->per_page) - $this->per_page;
         }
 
         return $offset;
@@ -262,7 +268,7 @@ class MY_Model extends CI_Model
         $config = [
             'base_url'         => $baseURL,
             'uri_segment'      => $uriSegment,
-            'per_page'         => $this->perPage,
+            'per_page'         => $this->per_page,
             'total_rows'       => $totalRows,
             'use_page_numbers' => true,
             'num_links'        => 2,

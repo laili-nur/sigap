@@ -193,11 +193,11 @@ $(document).ready(function() {
    );
 
    $("#user_id").select2({
-      placeholder: '-- Choose --',
+      placeholder: '-- Pilih --',
       allowClear: true
    });
    $("#faculty_id").select2({
-      placeholder: '-- Choose --',
+      placeholder: '-- Pilih --',
       allowClear: true
    });
    $('#reviewer_expert option[value=""]').detach();

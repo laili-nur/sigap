@@ -3,7 +3,7 @@
 class Draft_model extends MY_Model
 {
 //bisa di override di controller
-    public $perPage = 10;
+    public $per_page = 10;
 
     public function get_validation_rules()
     {

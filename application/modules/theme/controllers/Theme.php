@@ -76,7 +76,7 @@ class Theme extends Operator_Controller
     {
         $theme = $this->theme->where('theme_id', $id)->get();
         if (!$theme) {
-            $this->session->set_flashdata('warning', 'Theme data were not available');
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
             redirect('theme');
         }
         if ($this->theme->where('theme_id', $id)->delete()) {

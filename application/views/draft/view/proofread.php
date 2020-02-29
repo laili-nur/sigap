@@ -57,7 +57,7 @@
                 <!-- .input-group -->
                 <div class="custom-file">
                   <?=form_upload('proofread_file', '', 'class="custom-file-input naskah" id="proofread_file"');?>
-                  <label class="custom-file-label" for="proofread_file">Choose file</label>
+                  <label class="custom-file-label" for="proofread_file">Pilih file</label>
                 </div>
                 <small class="form-text text-muted">Tipe file upload  bertype : docx, doc, dan pdf.</small>
                 <!-- /.input-group -->

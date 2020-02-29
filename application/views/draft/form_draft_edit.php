@@ -87,11 +87,11 @@
                         <label
                            class="custom-file-label"
                            for="draft_file"
-                        >Choose file</label>
+                        >Pilih file</label>
                         <div class="invalid-feedback">Field is required</div>
                      </div>
                      <small class="form-text text-muted">Hanya menerima file bertype : docx dan doc</small>
-                     <?=fileFormError('draft_file', '<p class="text-danger">', '</p>');?>
+                     <?=file_form_error('draft_file', '<p class="text-danger">', '</p>');?>
                   </div>
                   <!-- /.form-group -->
                   <!-- .form-group -->
@@ -525,11 +525,11 @@ $(document).ready(function() {
       time_24hr: true
    });
    $("#category").select2({
-      placeholder: '-- Choose --',
+      placeholder: '-- Pilih --',
       allowClear: true
    });
    $("#theme").select2({
-      placeholder: '-- Choose --',
+      placeholder: '-- Pilih --',
       allowClear: true
    });
 });

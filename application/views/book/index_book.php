@@ -1,6 +1,6 @@
 <?php $ceklevel = $this->session->userdata('level');?>
 <?php
-$perPage  = 10;
+$per_page = 10;
 $keywords = $this->input->get('keywords');
 
 if (isset($keywords)) {
@@ -10,7 +10,7 @@ if (isset($keywords)) {
 }
 
 // data table series number
-$i = isset($page) ? $page * $perPage - $perPage : 0;
+$i = isset($page) ? $page * $per_page - $per_page : 0;
 ?>
 <!-- .page-title-bar -->
 <header class="page-title-bar">

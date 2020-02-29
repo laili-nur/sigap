@@ -128,11 +128,11 @@
                         <label
                            class="custom-file-label"
                            for="draft_file"
-                        >Choose file</label>
+                        >Pilih file</label>
                      </div>
                      <small class="form-text text-muted">Tipe file upload bertype : docx, doc, dan pdf. Maksimal 50
                         MB</small>
-                     <?=fileFormError('draft_file', '<p class="text-danger">', '</p>');?>
+                     <?=file_form_error('draft_file', '<p class="text-danger">', '</p>');?>
                   </div>
                   <!-- /.form-group -->
                   <!-- .form-group -->
@@ -250,16 +250,16 @@ $(document).ready(function() {
 
    });
    $("#category").select2({
-      placeholder: '-- Choose --',
+      placeholder: '-- Pilih --',
       allowClear: true
    });
    $("#theme").select2({
-      placeholder: '-- Choose --',
+      placeholder: '-- Pilih --',
       allowClear: true
    });
    $('#author option[value=""]').detach();
    $("#author").select2({
-      placeholder: '-- Choose Multiple --',
+      placeholder: '-- Pilih Multiple --',
       multiple: true
    });
    //urut sesuai pilihan input

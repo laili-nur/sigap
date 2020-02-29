@@ -140,7 +140,7 @@ function getDropdownListBook($table, $columns)
     $query = $CI->db->select($columns)->from($table)->where('draft_status', '14')->get();
 
     if ($query->num_rows() >= 1) {
-        $options1 = ['' => '-- Choose --'];
+        $options1 = ['' => '-- Pilih --'];
         $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
         $options  = $options1 + $options2;
         return $options;
@@ -160,7 +160,7 @@ function getDropdownListReviewer($table, $columns)
     }
 
     if ($query->num_rows() >= 1) {
-        $options1 = ['' => '-- Choose --'];
+        $options1 = ['' => '-- Pilih --'];
         $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
         $options  = $options1 + $options2;
         return $options;
@@ -176,7 +176,7 @@ function getDropdownListAuthor($table, $columns)
     $query = $CI->db->select($columns)->where('level', 'author')->or_where('level', 'author_reviewer')->from($table)->get();
 
     if ($query->num_rows() >= 1) {
-        $options1 = ['' => '-- Choose --'];
+        $options1 = ['' => '-- Pilih --'];
         $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
         $options  = $options1 + $options2;
         return $options;
@@ -192,7 +192,7 @@ function getDropdownListEditor($table, $columns)
     $query = $CI->db->select($columns)->where('level', 'editor')->from($table)->get();
 
     if ($query->num_rows() >= 1) {
-        $options1 = ['' => '-- Choose --'];
+        $options1 = ['' => '-- Pilih --'];
         $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
         $options  = $options1 + $options2;
         return $options;
@@ -208,7 +208,7 @@ function getDropdownListLayouter($table, $columns)
     $query = $CI->db->select($columns)->where('level', 'layouter')->from($table)->get();
 
     if ($query->num_rows() >= 1) {
-        $options1 = ['' => '-- Choose --'];
+        $options1 = ['' => '-- Pilih --'];
         $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
         $options  = $options1 + $options2;
         return $options;
@@ -246,7 +246,7 @@ function getDropdownList($table, $columns)
     $query = $CI->db->select($columns)->from($table)->get();
 
     if ($query->num_rows() >= 1) {
-        $options1 = ['' => '-- Choose --'];
+        $options1 = ['' => '-- Pilih --'];
         $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
         $options  = $options1 + $options2;
         return $options;
@@ -280,7 +280,7 @@ function getMoreDropdownList($table, $columns)
     }
     if ($query->num_rows() >= 1) {
         $result   = $query->result_array();
-        $options1 = ['' => '-- Choose --'];
+        $options1 = ['' => '-- Pilih --'];
         $options2 = array_column($result, $columns[1], $columns[0]);
         if (count($columns) > 2) {
             $j = 0;
@@ -324,17 +324,17 @@ function getDropdownBankList($table, $columns)
     $query = $CI->db->select($columns)->from($table)->order_by("bank_name", "asc")->get();
 
     if ($query->num_rows() >= 1) {
-        $options1 = ['' => '- Choose -'];
+        $options1 = ['' => '- Pilih -'];
         $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
         $options  = $options1 + $options2;
         return $options;
     }
 
-    return $options = ['' => '- Choose -'];
+    return $options = ['' => '- Pilih -'];
 }
 
 // Show form error validation message for "file" input.
-function fileFormError($field, $prefix = '', $suffix = '')
+function file_form_error($field, $prefix = '', $suffix = '')
 {
     $CI          = &get_instance();
     $error_field = $CI->form_validation->error_array();
@@ -343,4 +343,27 @@ function fileFormError($field, $prefix = '', $suffix = '')
         return $prefix . $error_field[$field] . $suffix;
     }
     return '';
+}
+
+function highlight_keyword($str, $search)
+{
+    if (!$search) {
+        return $str;
+    }
+
+    $highlightcolor = "red";
+    $occurrences    = substr_count(strtolower($str), strtolower($search));
+    $newstring      = $str;
+    $match          = array();
+
+    for ($i = 0; $i < $occurrences; $i++) {
+        $match[$i] = stripos($str, $search, $i);
+        $match[$i] = substr($str, $match[$i], strlen($search));
+        $newstring = str_replace($match[$i], '[#]' . $match[$i] . '[@]', strip_tags($newstring));
+    }
+
+    $newstring = str_replace('[#]', '<span style="color: ' . $highlightcolor . ';">', $newstring);
+    $newstring = str_replace('[@]', '</span>', $newstring);
+    return $newstring;
+
 }

@@ -49,7 +49,7 @@ class Work_unit extends Operator_Controller
     {
         $work_unit = $this->work_unit->where('work_unit_id', $id)->get();
         if (!$this) {
-            $this->session->set_flashdata('warning', 'Work Unit data were not available');
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
             redirect('workunit');
         }
         if (!$_POST) {
@@ -77,7 +77,7 @@ class Work_unit extends Operator_Controller
     {
         $code = $this->work_unit->where('work_unit_id', $id)->get();
         if (!$code) {
-            $this->session->set_flashdata('warning', 'Work Unit data were not available');
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
             redirect('workunit');
         }
         if ($this->work_unit->where('work_unit_id', $id)->delete()) {
