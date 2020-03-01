@@ -9,14 +9,26 @@ function doublescroll() {
 function preview_image(event) {
     $(document).ready(function () {
         // hide uploaded image
-        let uploadedImage = document.querySelector('.uploaded-image');
-        if (uploadedImage) uploadedImage.style.display = "none";
+        let uploadedImage = document.querySelectorAll('.uploaded-file');
+        if (uploadedImage.length != 0) {
+            [...uploadedImage].forEach(e => {
+                e.style.display = "none"
+            })
+        }
 
         // show temporary image
-        var reader = new FileReader();
+        let reader = new FileReader();
+        let fileExtension;
         reader.onload = function () {
-            var output = document.getElementById('output_image');
-            output.src = reader.result;
+            fileExtension = reader.result.split(';')[0].split('/')[1];
+            // show preview only on this types
+            if (['jpg', 'jpeg', 'png'].includes(fileExtension)) {
+                document.getElementById('temp-image').style.display = 'block';
+                let output = document.getElementById('temp-image');
+                output.src = reader.result;
+            } else {
+                document.getElementById('temp-image').style.display = 'none';
+            }
         }
         reader.readAsDataURL(event.target.files[0]);
     })

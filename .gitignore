@@ -1,7 +1,8 @@
 # app document file
-authorktp/
+authorktp/*
 !authorktp/.gitkeep
-
+!authorktp/.htaccess
+!authorktp/index.html
 
 .env
 .env.development

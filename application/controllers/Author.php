@@ -41,18 +41,18 @@ class Author extends Operator_Controller
     public function view($halaman = 'profile', $id = null)
     {
         if ($id == null) {
-            redirect('author');
+            redirect($this->pages);
         }
 
         if ($halaman != 'profile' && $halaman != 'book_history' && $halaman != 'draft_history') {
-            redirect('author');
+            redirect($this->pages);
         }
 
         // author join ke user, untuk mengecek apakah author punya akun
         $author = $this->author->get_author_details($id);
         if (!$author) {
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
-            redirect('author');
+            redirect($this->pages);
         }
 
         // total draft
@@ -81,13 +81,8 @@ class Author extends Operator_Controller
             $this->session->set_flashdata('ktp_no_data', $this->lang->line('form_author_error_ktp_no_data'));
 
             // forced to null, instead empty string
-            if (!$input->user_id) {
-                $input->user_id = null;
-            }
-
-            if (!$input->bank_id) {
-                $input->bank_id = null;
-            }
+            $input->user_id = empty_to_null($input->user_id);
+            $input->bank_id = empty_to_null($input->bank_id);
         }
 
         // upload file hanya ketika validasi lolos
@@ -123,7 +118,7 @@ class Author extends Operator_Controller
         $author = $this->author->where('author_id', $id)->get();
         if (!$author) {
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
-            redirect('author');
+            redirect($this->pages);
         }
         if (!$_POST) {
             $input = (object) $author;
@@ -136,13 +131,8 @@ class Author extends Operator_Controller
             }
 
             // forced to null, instead empty string
-            if (!$input->user_id) {
-                $input->user_id = null;
-            }
-
-            if (!$input->bank_id) {
-                $input->bank_id = null;
-            }
+            $input->user_id = empty_to_null($input->user_id);
+            $input->bank_id = empty_to_null($input->bank_id);
         }
 
         if ($this->author->validate()) {
@@ -180,7 +170,7 @@ class Author extends Operator_Controller
         $author = $this->author->where('author_id', $id)->get();
         if (!$author) {
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
-            redirect('author');
+            redirect($this->pages);
         }
 
         $get_user = $this->author->select(['user.user_id', 'user.level'])->join('user')->where('author_id', $id)->get();
@@ -198,7 +188,7 @@ class Author extends Operator_Controller
             $this->session->set_flashdata('error', $this->lang->line('toast_delete_fail'));
         }
 
-        redirect('author');
+        redirect($this->pages);
     }
 
     public function copy_to_reviewer($user_id, $nip, $name)
@@ -212,7 +202,7 @@ class Author extends Operator_Controller
             redirect('reviewer/edit/-99');
         } else {
             $this->session->set_flashdata('warning', $this->lang->line('form_author_error_copy_reviewer'));
-            redirect('author');
+            redirect($this->pages);
         }
     }
 
@@ -220,6 +210,31 @@ class Author extends Operator_Controller
     {
         $get_extension = explode(".", $ktp_file_name)[1];
         return str_replace(" ", "_", "KTP" . '_' . $author_name . '_' . date('YmdHis') . '.' . $get_extension); // author ktp name
+    }
+
+    public function download_file($folder, $author_ktp, $redirect = null)
+    {
+        $file = realpath($folder) . "\\" . $author_ktp;
+        if (file_exists($file)) {
+            $data = file_get_contents($file);
+            force_download($author_ktp, $data);
+        } else {
+            redirect($redirect ?? $this->pages);
+        }
+    }
+
+    public function view_image($folder, $author_ktp)
+    {
+        $file = realpath($folder) . "\\" . $author_ktp;
+        if (file_exists($file)) {
+            ob_end_clean();
+            $data = file_get_contents($file);
+            $this->output
+                ->set_status_header(200)
+                ->set_content_type('image/jpeg')
+                ->set_output($data)
+                ->_display();
+        }
     }
 
     //validasi nama

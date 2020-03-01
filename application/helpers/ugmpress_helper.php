@@ -380,25 +380,17 @@ function highlight_keyword($str, $search)
 
 }
 
-function ktp_viewer($author_ktp_file_name)
+function check_file_extension($file_name)
 {
-    if (isset($author_ktp_file_name) && $author_ktp_file_name) {
-        if ($author_ktp_file_name) {
-            $getextension = explode(".", $author_ktp_file_name);
-        } else {
-            $getextension[1] = '';
-        }
-
-        //  jika ekstensi file tidak ada
-        if (count($getextension) != 1) {
-            // jika ekstensi pdf maka tampilkan link
-            if ($getextension[1] != 'pdf') {
-                return '<img class="uploaded-image" src="' . base_url('authorktp/' . $author_ktp_file_name) . '" width="100%"><br>';
-            } else {
-                return '<a href="' . base_url('authorktp/' . $author_ktp_file_name) . '" class="btn btn-success"><i class="fa fa-download"></i> Lihat KTP</a>';
-            }
-        }
+    if ($file_name) {
+        return pathinfo($file_name)['extension'];
     } else {
         return null;
     }
+}
+
+// memaksa variabel kosong agar disimpan sebagai 'null'
+function empty_to_null($v)
+{
+    return empty($v) ? null : $v;
 }

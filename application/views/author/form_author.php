@@ -160,12 +160,26 @@ $latest_education_options = [
                         MB</small>
                      <small class="text-danger"><?=$this->session->flashdata('ktp_no_data');?></small>
                      <?=file_form_error('author_ktp', '<p class="text-danger">', '</p>');?>
+                     <?php if ($input->author_ktp): ?>
                      <div class="mt-3">
-                        <?=ktp_viewer($input->author_ktp);?>
+                        <?php if (in_array(check_file_extension($input->author_ktp), ['jpg', 'png', 'jpeg'])): ?>
+                        <img
+                           class="uploaded-file"
+                           src="<?=base_url("author/view_image/authorktp/$input->author_ktp");?>"
+                           width="100%"
+                        >
+                        <?php endif;?>
+                        <a
+                           href="<?=base_url("author/download_file/authorktp/$input->author_ktp");?>"
+                           class="btn btn-success btn-sm my-2 uploaded-file"
+                        >Unduh ktp</a>
                      </div>
+                     <?php endif;?>
+
+                     <!-- temp image placeholder -->
                      <img
                         width="50%"
-                        id="output_image"
+                        id="temp-image"
                      />
                   </div>
                </fieldset>

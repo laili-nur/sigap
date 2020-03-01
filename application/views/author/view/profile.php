@@ -56,7 +56,17 @@
                   <td>
                      <div class="row">
                         <div class="col-md-6">
-                           <?=ktp_viewer($author->author_ktp);?>
+                           <?php if (in_array(check_file_extension($author->author_ktp), ['jpg', 'png', 'jpeg'])): ?>
+                           <img
+                              class="uploaded-file"
+                              src="<?=base_url("author/view_image/authorktp/$author->author_ktp");?>"
+                              width="100%"
+                           >
+                           <?php endif;?>
+                           <a
+                              href="<?=base_url("author/download_file/authorktp/$author->author_ktp");?>"
+                              class="btn btn-success btn-sm my-2"
+                           >Unduh ktp</a>
                         </div>
                      </div>
                   </td>
@@ -70,7 +80,7 @@
          <a
             href="<?=base_url('author/edit/' . $author->author_id);?>"
             class="btn btn-secondary"
-         >Edit Data</a>
+         >Ubah Data</a>
       </div>
    </footer>
 </div>
