@@ -49,7 +49,7 @@ class Author extends Operator_Controller
         }
 
         // author join ke user, untuk mengecek apakah author punya akun
-        $author = $this->author->join_table('user', 'author', 'user')->where('author_id', $id)->get();
+        $author = $this->author->get_author_details($id);
         if (!$author) {
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
             redirect('author');
@@ -73,6 +73,21 @@ class Author extends Operator_Controller
             $input = (object) $this->author->get_default_values();
         } else {
             $input = (object) $this->input->post(null, true);
+
+            // repopulate author_ktp ketika validasi form gagal
+            if (!isset($input->author_ktp)) {
+                $input->author_ktp = null;
+            }
+            $this->session->set_flashdata('ktp_no_data', $this->lang->line('form_author_error_ktp_no_data'));
+
+            // forced to null, instead empty string
+            if (!$input->user_id) {
+                $input->user_id = null;
+            }
+
+            if (!$input->bank_id) {
+                $input->bank_id = null;
+            }
         }
 
         // upload file hanya ketika validasi lolos
@@ -114,6 +129,20 @@ class Author extends Operator_Controller
             $input = (object) $author;
         } else {
             $input = (object) $this->input->post(null, true);
+
+            // repopulate author_ktp ketika validasi form gagal
+            if (!isset($input->author_ktp)) {
+                $input->author_ktp = $author->author_ktp;
+            }
+
+            // forced to null, instead empty string
+            if (!$input->user_id) {
+                $input->user_id = null;
+            }
+
+            if (!$input->bank_id) {
+                $input->bank_id = null;
+            }
         }
 
         if ($this->author->validate()) {

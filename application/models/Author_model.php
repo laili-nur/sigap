@@ -72,11 +72,6 @@ class Author_model extends MY_Model
                 'label' => $this->lang->line('form_author_heir_name'),
                 'rules' => 'trim|max_length[256]',
             ],
-            // [
-            //     'field' => 'bank_id',
-            //     'label' => 'Author Bank',
-            //     'rules' => 'trim|max_length[100]',
-            // ],
         ];
 
         return $validation_rules;
@@ -85,21 +80,21 @@ class Author_model extends MY_Model
     public function get_default_values()
     {
         return [
-            'work_unit_id'            => '',
-            'institute_id'            => '',
-            'author_nip'              => '',
-            'author_name'             => '',
-            'author_degree_front'     => '',
-            'author_degree_back'      => '',
-            'author_latest_education' => '',
-            'author_address'          => '',
-            'author_contact'          => '',
-            'author_email'            => '',
-            'bank_id'                 => '',
-            'author_saving_num'       => '',
-            'heir_name'               => '',
-            'user_id'                 => '',
-            'author_ktp'              => '',
+            'work_unit_id'            => null,
+            'institute_id'            => null,
+            'author_nip'              => null,
+            'author_name'             => null,
+            'author_degree_front'     => null,
+            'author_degree_back'      => null,
+            'author_latest_education' => null,
+            'author_address'          => null,
+            'author_contact'          => null,
+            'author_email'            => null,
+            'bank_id'                 => null,
+            'author_saving_num'       => null,
+            'heir_name'               => null,
+            'user_id'                 => null,
+            'author_ktp'              => null,
         ];
     }
 
@@ -133,6 +128,14 @@ class Author_model extends MY_Model
                 ->join('user')
                 ->count(),
         ];
+    }
+
+    public function get_author_details($author_id)
+    {
+        return $this->author
+            ->join_table('user', 'author', 'user')
+            ->where('author_id', $author_id)
+            ->get();
     }
 
     public function get_author_drafts($author_id)

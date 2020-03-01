@@ -15,24 +15,7 @@ $latest_education_options = [
     's4'    => 'Professor',
     'other' => 'Other',
 ];
-
-// penampil ktp
-$ktp_place = null;
-if (isset($input->author_ktp) && $input->author_ktp) {
-    if ($input->author_ktp) {
-        $getextension = explode(".", $input->author_ktp);
-    } else {
-        $getextension[1] = '';
-    }
-    // jika ekstensi pdf maka tampilkan link
-    if ($getextension[1] != 'pdf') {
-        $ktp_place = '<img class="uploaded-image" src="' . base_url('authorktp/' . $input->author_ktp) . '" width="100%"><br>';
-    } else {
-        $ktp_place = '<a href="' . base_url('authorktp/' . $input->author_ktp) . '" class="btn btn-success"><i class="fa fa-download"></i> Lihat KTP</a>';
-    }
-}
 ?>
-
 <header class="page-title-bar">
    <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -58,8 +41,8 @@ if (isset($input->author_ktp) && $input->author_ktp) {
                   <legend>Form Penulis</legend>
                   <?=isset($input->author_id) ? form_hidden('author_id', $input->author_id) : '';?>
                   <div class="form-group">
-                     <label for="user_id">Pilih akun untuk Login</label>
-                     <?=form_dropdown('user_id', getDropdownListAuthor('user', ['user_id', 'username']), $input->user_id, 'id="user_id" class="form-control custom-select d-block"');?>
+                     <label for="user_id">Pilih akun untuk login</label>
+                     <?=form_dropdown('user_id', get_dropdown_list_author('user', ['user_id', 'username']), $input->user_id, 'id="user_id" class="form-control custom-select d-block"');?>
                      <small class="form-text text-muted">Author dapat login ke sistem apabila mempunyai akun pengguna.
                         Kosongkan pilihan jika tidak menetapkan akun.</small>
                      <?=form_error('user_id');?>
@@ -175,14 +158,15 @@ if (isset($input->author_ktp) && $input->author_ktp) {
                      </div>
                      <small class="form-text text-muted">Hanya menerima file bertype : jpg, jpeg, png, pdf. Maksimal 15
                         MB</small>
+                     <small class="text-danger"><?=$this->session->flashdata('ktp_no_data');?></small>
                      <?=file_form_error('author_ktp', '<p class="text-danger">', '</p>');?>
                      <div class="mt-3">
-                        <?=$ktp_place;?>
-                        <img
-                           width="100%"
-                           id="output_image"
-                        />
+                        <?=ktp_viewer($input->author_ktp);?>
                      </div>
+                     <img
+                        width="50%"
+                        id="output_image"
+                     />
                   </div>
                </fieldset>
                <hr>
@@ -201,38 +185,38 @@ if (isset($input->author_ktp) && $input->author_ktp) {
 <script>
 $(document).ready(function() {
    loadValidateSetting();
-   // $("#form_author").validate({
-   //       rules: {
-   //          author_nip: {
-   //             crequired: true,
-   //             cminlength: 3,
-   //             cnumber: true
-   //          },
-   //          author_name: {
-   //             crequired: true,
-   //             huruf: true
-   //          },
-   //          work_unit_id: "crequired",
-   //          institute_id: "crequired",
-   //          author_contact: {
-   //             cnumber: true
-   //          },
-   //          author_email: {
-   //             cemail: true
-   //          },
-   //          heir_name: {
-   //             huruf: true
-   //          },
-   //          author_ktp: {
-   //             dokumen: "jpg|png|jpeg|pdf",
-   //             filesize15: 157280640
-   //          }
-   //       },
-   //       errorElement: "span",
-   //       errorPlacement: validateErrorPlacement
-   //    },
-   //    validateSelect2()
-   // );
+   $("#form_author").validate({
+         rules: {
+            author_nip: {
+               crequired: true,
+               cminlength: 3,
+               cnumber: true
+            },
+            author_name: {
+               crequired: true,
+               huruf: true
+            },
+            work_unit_id: "crequired",
+            institute_id: "crequired",
+            author_contact: {
+               cnumber: true
+            },
+            author_email: {
+               cemail: true
+            },
+            heir_name: {
+               huruf: true
+            },
+            author_ktp: {
+               dokumen: "jpg|png|jpeg|pdf",
+               filesize15: 157280640
+            }
+         },
+         errorElement: "span",
+         errorPlacement: validateErrorPlacement
+      },
+      validateSelect2()
+   );
 
    let select2Options = {
       placeholder: '-- Pilih --',

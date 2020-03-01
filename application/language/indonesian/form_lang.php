@@ -38,6 +38,8 @@ $lang['form_author_heir_name']           = 'Ahli Waris';
 $lang['form_author_ktp']                 = 'KTP Penulis';
 $lang['form_author_bank_name']           = 'Nama Bank';
 $lang['form_author_error_copy_reviewer'] = 'User telah memiliki role Author dan Reviewer';
+$lang['form_author_error_ktp_no_data']   = 'Pilih ulang file ktp, jika ingin mengunggah file baru';
 
 // User
-$lang['form_user_name'] = 'Akun Pengguna';
+$lang['form_user_name']  = 'Akun Pengguna';
+$lang['form_user_level'] = 'Level Akun';

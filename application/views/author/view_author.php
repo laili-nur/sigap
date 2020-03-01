@@ -1,5 +1,4 @@
 <?php $third_uri = $this->uri->segment(3);?>
-
 <header class="page-title-bar">
    <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -30,9 +29,9 @@
                   >
                </a>
                <h2 class="h4 mt-3 mb-0"> <?=$author->author_name;?> </h2>
-               <p class="text-muted mb-0">
+               <!-- <p class="text-muted mb-0">
                   <?=isset($author->level) ? ucwords(str_replace('_', ' ', $author->level)) : '<small class="text-danger">Penulis belum memiliki akun</small>';?>
-               </p>
+               </p> -->
             </div>
          </header>
          <nav class="page-navs mb-4">

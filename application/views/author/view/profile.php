@@ -1,20 +1,3 @@
-<?php
-// penampil ktp
-$ktp_place = null;
-if (isset($author->author_ktp) && $author->author_ktp) {
-    if ($author->author_ktp) {
-        $getextension = explode(".", $author->author_ktp);
-    } else {
-        $getextension[1] = '';
-    }
-    // jika ekstensi pdf maka tampilkan link
-    if ($getextension[1] != 'pdf') {
-        $ktp_place = '<img class="uploaded-image" src="' . base_url('authorktp/' . $author->author_ktp) . '" width="30%"><br>';
-    } else {
-        $ktp_place = '<a href="' . base_url('authorktp/' . $author->author_ktp) . '" class="btn btn-success"><i class="fa fa-download"></i> Lihat KTP</a>';
-    }
-}
-?>
 <div class="card card-fluid">
    <h6 class="card-header"> Profil </h6>
    <div class="card-body">
@@ -23,17 +6,20 @@ if (isset($author->author_ktp) && $author->author_ktp) {
             <tbody>
                <tr>
                   <td width="200px"> <?=$this->lang->line('form_user_name');?> </td>
-                  <td><?=(!empty($author->user_id)) ? konversiID('user', 'user_id', $author->user_id)->username : '';?>
+                  <td>
+                     <?=(!empty($author->user_id)) ? konversiID('user', 'user_id', $author->user_id)->username : '';?>
+                     <?=isset($author->level) ? '<span class="badge badge-primary">' . ucwords(str_replace('_', ' ', $author->level)) . '</span>' : '<span class="text-danger">Penulis belum memiliki akun.</span>';?>
                   </td>
                </tr>
+               <!-- <tr>
+                  <td width="200px"> <?=$this->lang->line('form_user_level');?> </td>
+                  <td>
+                     <?=isset($author->level) ? ucwords(str_replace('_', ' ', $author->level)) : '<span class="text-danger">Penulis belum memiliki akun.</span>';?>
+                  </td>
+               </tr> -->
                <tr>
                   <td width="200px"> <?=$this->lang->line('form_author_nip');?> </td>
                   <td><?=$author->author_nip;?> </td>
-               </tr>
-               <tr>
-                  <td width="200px"> <?=$this->lang->line('form_author_name');?> </td>
-                  <td><?=$author->author_degree_front;?> <?=$author->author_name;?> <?=$author->author_degree_back;?>
-                  </td>
                </tr>
                <tr>
                   <td width="200px"> <?=$this->lang->line('form_author_latest_education');?> </td>
@@ -68,7 +54,11 @@ if (isset($author->author_ktp) && $author->author_ktp) {
                <tr>
                   <td width="200px"> <?=$this->lang->line('form_author_ktp');?> </td>
                   <td>
-                     <?=$ktp_place;?>
+                     <div class="row">
+                        <div class="col-md-6">
+                           <?=ktp_viewer($author->author_ktp);?>
+                        </div>
+                     </div>
                   </td>
                </tr>
             </tbody>

@@ -178,10 +178,14 @@ function getDropdownListReviewer($table, $columns)
 }
 
 // Get list of editor
-function getDropdownListAuthor($table, $columns)
+function get_dropdown_list_author($table, $columns)
 {
     $CI    = &get_instance();
-    $query = $CI->db->select($columns)->where('level', 'author')->or_where('level', 'author_reviewer')->from($table)->get();
+    $query = $CI->db->select($columns)
+        ->where('level', 'author')
+        ->or_where('level', 'author_reviewer')
+        ->from($table)
+        ->get();
 
     if ($query->num_rows() >= 1) {
         $options1 = ['' => '-- Pilih --'];
@@ -374,4 +378,27 @@ function highlight_keyword($str, $search)
     $newstring = str_replace('[@]', '</span>', $newstring);
     return $newstring;
 
+}
+
+function ktp_viewer($author_ktp_file_name)
+{
+    if (isset($author_ktp_file_name) && $author_ktp_file_name) {
+        if ($author_ktp_file_name) {
+            $getextension = explode(".", $author_ktp_file_name);
+        } else {
+            $getextension[1] = '';
+        }
+
+        //  jika ekstensi file tidak ada
+        if (count($getextension) != 1) {
+            // jika ekstensi pdf maka tampilkan link
+            if ($getextension[1] != 'pdf') {
+                return '<img class="uploaded-image" src="' . base_url('authorktp/' . $author_ktp_file_name) . '" width="100%"><br>';
+            } else {
+                return '<a href="' . base_url('authorktp/' . $author_ktp_file_name) . '" class="btn btn-success"><i class="fa fa-download"></i> Lihat KTP</a>';
+            }
+        }
+    } else {
+        return null;
+    }
 }
