@@ -309,7 +309,7 @@ class Reporting extends Admin_Controller
         $count_cetak_ulang = 0;
         $year              = $this->input->get('droptahunhibah');
 
-        $result_ugm = $this->reporting->select(['category_type', 'is_reprint'])->join3('category', 'draft', 'category')->where('YEAR(entry_date)', $year)->get_all('draft');
+        $result_ugm = $this->reporting->select(['category_type', 'is_reprint'])->join_table('category', 'draft', 'category')->where('YEAR(entry_date)', $year)->get_all('draft');
         foreach ($result_ugm as $category_ugm) {
             if ($category_ugm->category_type == 1 and $category_ugm->is_reprint == 'n') {
                 $count_hibah++;

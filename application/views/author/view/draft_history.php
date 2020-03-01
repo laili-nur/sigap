@@ -25,7 +25,7 @@
                   <td class="align-middle"><?=konversiTanggal($draft->entry_date, 'dateonly');?></td>
                   <td class="align-middle"><?=konversiTanggal($draft->finish_date, 'dateonly');?></td>
                   <td class="align-middle">
-                     <?=isset($draft->finish_date) ? ceil((strtotime($draft->finish_date) - strtotime($draft->entry_date)) / 86400) . ' hari' : '-';?>
+                     <?=is_datetime_null($draft->finish_date) ? ceil((strtotime($draft->finish_date) - strtotime($draft->entry_date)) / 86400) . ' hari' : '-';?>
                   </td>
                </tr>
                <?php endforeach;?>

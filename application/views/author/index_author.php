@@ -8,7 +8,7 @@ if (isset($keywords)) {
     $page = $this->uri->segment(2);
 }
 
-// data table series number
+// nomor urut
 $i = isset($page) ? $page * $per_page - $per_page : 0;
 ?>
 
@@ -123,7 +123,7 @@ $i = isset($page) ? $page * $per_page - $per_page : 0;
                            <tr>
                               <td class="align-middle pl-4"><?=++$i;?></td>
                               <td class="align-middle"><a
-                                    href="<?=base_url('author/view/profil/' . $author->author_id);?>"
+                                    href="<?=base_url('author/view/profile/' . $author->author_id);?>"
                                  ><?=$author->author_degree_front;?>
                                     <?=ucwords(highlight_keyword($author->author_name, $keywords));?>
                                     <?=$author->author_degree_back;?></a></td>
@@ -137,7 +137,7 @@ $i = isset($page) ? $page * $per_page - $per_page : 0;
 
                                  <button
                                     title="Jadikan Reviewer"
-                                    onclick="location.href='<?=base_url('author/copyToReviewer/' . $author->user_id . '/' . $author->author_nip . '/' . $author->author_name);?>'"
+                                    onclick="location.href='<?=base_url('author/copy_to_reviewer/' . $author->user_id . '/' . $author->author_nip . '/' . $author->author_name);?>'"
                                     class="btn btn-sm btn-primary"
                                     <?=(!$author->user_id || $author->is_author_reviewer) ? 'disabled' : '';?>
                                  >

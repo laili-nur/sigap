@@ -194,13 +194,11 @@ class MY_Model extends CI_Model
 
     public function validate()
     {
-        $this->load->library('form_validation');
+        // $this->load->library('form_validation');
         $this->form_validation->set_error_delimiters('<small class="text-danger">', '</small>');
         $validation_rules = $this->get_validation_rules(); // in child model
         $this->form_validation->set_rules($validation_rules);
         return $this->form_validation->run();
-
-        // return false;
     }
 
     public function insert($data, $table = "")
@@ -229,18 +227,51 @@ class MY_Model extends CI_Model
         return $this;
     }
 
-    public function join3($table1, $table2, $column, $type = 'left')
+    /**
+     * Menggabungkan tabel secara fleksibel
+     *
+     * contoh:
+     * input:  join_table('draft_author', 'author', 'author')
+     * output: join('draft_author','draft_author.author_id == author.author_id')
+     *
+     * @param string $table_dest
+     * @param string $table_middle
+     * @return this
+     **/
+    public function join_table($table_to, $table_from, $column, $type = 'left')
     {
-        $this->db->join($table1, "$table1.{$column}_id = $table2.{$column}_id", $type);
+        $this->db->join($table_to, "$table_to.{$column}_id = $table_from.{$column}_id", $type);
         return $this;
     }
 
+    /**
+     * Menggabungkan tabel middle
+     *
+     * contoh:
+     * input: join_relation_middle('user', 'reviewer')
+     * output: join('reviewer','reviewer.user_id == user.user_id')
+     *
+     * @param string $table_dest
+     * @param string $table_middle
+     * @return this
+     **/
     public function join_relation_middle($table_dest, $table_middle)
     {
         $this->db->join($table_middle, "$table_dest.{$table_dest}_id = $table_middle.{$table_dest}_id", "left");
         return $this;
     }
 
+    /**
+     * Menggabungkan tabel destination
+     *
+     * contoh:
+     * input: join_relation_dest('reviewer', 'user')
+     * output: join('reviewer','reviewer.user_id == user.user_id')
+     *
+     * @param string $table_dest
+     * @param string $table_middle
+     * @return this
+     **/
     public function join_relation_dest($table_dest, $table_middle)
     {
         $this->db->join($table_dest, "$table_middle.{$table_dest}_id = $table_dest.{$table_dest}_id", "left");
@@ -357,6 +388,13 @@ class MY_Model extends CI_Model
         }
     }
 
+    /**
+     * Mencari reviewer_id atau author_id berdasarkan user_id dan tipe role
+     *
+     * @param int $user_id
+     * @param string $role ('reviewer' atau 'author')
+     * @return int
+     **/
     public function get_id_role_from_user_id($user_id, $role)
     {
         $id = 0;

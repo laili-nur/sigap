@@ -93,6 +93,14 @@ function konversi_username_level($username)
 
 }
 
+function is_datetime_null($datetime)
+{
+    if ($datetime == '' || $datetime == null || $datetime == '0000-00-00 00:00:00') {
+        return null;
+    }
+    return $datetime;
+}
+
 function konversiTanggal($input = null, $opsi = '')
 {
     if ($input == null || $input == '0000-00-00 00:00:00') {

@@ -15,7 +15,7 @@ class Book extends Operator_Controller
 
     public function index($page = null)
     {
-        $books = $this->book->join('draft')->join3('category', 'draft', 'category')->join3('draft_author', 'draft', 'draft')->join3('author', 'draft_author', 'author')->join3('work_unit', 'author', 'work_unit')->order_by('status_hak_cipta')->order_by('published_date')->order_by('book_title')->paginate($page)->get_all();
+        $books = $this->book->join('draft')->join_table('category', 'draft', 'category')->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('work_unit', 'author', 'work_unit')->order_by('status_hak_cipta')->order_by('published_date')->order_by('book_title')->paginate($page)->get_all();
         $tot   = $this->book->join('draft')->order_by('draft.draft_id')->order_by('book_id')->get_all();
         //tampilkan author
         foreach ($books as $key => $value) {
@@ -99,7 +99,7 @@ class Book extends Operator_Controller
 
         }
         // tabel author
-        $authors = $this->book->select(['draft_author.author_id', 'draft_author_id', 'author_name', 'author_nip', 'work_unit_name', 'institute_name', 'draft.draft_id'])->join3('draft_author', 'draft', 'draft')->join3('author', 'draft_author', 'author')->join3('work_unit', 'author', 'work_unit')->join3('institute', 'author', 'institute')->where('draft_author.draft_id', $book->draft_id)->get_all('draft');
+        $authors = $this->book->select(['draft_author.author_id', 'draft_author_id', 'author_name', 'author_nip', 'work_unit_name', 'institute_name', 'draft.draft_id'])->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('work_unit', 'author', 'work_unit')->join_table('institute', 'author', 'institute')->where('draft_author.draft_id', $book->draft_id)->get_all('draft');
         // get draft
         $draft = $this->book->where('draft_id', $input->draft_id)->get('draft');
         // If something wrong
@@ -263,8 +263,8 @@ class Book extends Operator_Controller
     {
         $keywords = $this->input->get('keywords', true);
         $this->db->group_by('draft.draft_id');
-        $books      = $this->book->like('book_code', $keywords)->or_like('draft_title', $keywords)->or_like('book_title', $keywords)->or_like('ISBN', $keywords)->or_like('author_name', $keywords)->join('draft')->join3('category', 'draft', 'category')->join3('draft_author', 'draft', 'draft')->join3('author', 'draft_author', 'author')->join3('work_unit', 'author', 'work_unit')->order_by('status_hak_cipta')->order_by('published_date')->order_by('book_title')->paginate($page)->get_all();
-        $tot        = $this->book->like('book_code', $keywords)->or_like('draft_title', $keywords)->or_like('book_title', $keywords)->or_like('ISBN', $keywords)->or_like('author_name', $keywords)->join('draft')->join3('category', 'draft', 'category')->join3('draft_author', 'draft', 'draft')->join3('author', 'draft_author', 'author')->join3('work_unit', 'author', 'work_unit')->order_by('status_hak_cipta')->order_by('published_date')->order_by('book_title')->get_all();
+        $books      = $this->book->like('book_code', $keywords)->or_like('draft_title', $keywords)->or_like('book_title', $keywords)->or_like('ISBN', $keywords)->or_like('author_name', $keywords)->join('draft')->join_table('category', 'draft', 'category')->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('work_unit', 'author', 'work_unit')->order_by('status_hak_cipta')->order_by('published_date')->order_by('book_title')->paginate($page)->get_all();
+        $tot        = $this->book->like('book_code', $keywords)->or_like('draft_title', $keywords)->or_like('book_title', $keywords)->or_like('ISBN', $keywords)->or_like('author_name', $keywords)->join('draft')->join_table('category', 'draft', 'category')->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('work_unit', 'author', 'work_unit')->order_by('status_hak_cipta')->order_by('published_date')->order_by('book_title')->get_all();
         $total      = count($tot);
         $pagination = $this->book->make_pagination(site_url('book/search/'), 3, $total);
         if (!$books) {

@@ -38,27 +38,32 @@ class Author extends Operator_Controller
         $this->load->view('template', compact('pages', 'main_view', 'authors', 'pagination', 'total'));
     }
 
-    public function view($halaman = 'profil', $id = null)
+    public function view($halaman = 'profile', $id = null)
     {
-        if ($halaman and $id == null) {
+        if ($id == null) {
+            redirect('author');
+        }
+
+        if ($halaman != 'profile' && $halaman != 'book_history' && $halaman != 'draft_history') {
             redirect('author');
         }
 
         // author join ke user, untuk mengecek apakah author punya akun
-        $author = $this->author->join3('user', 'author', 'user')->where('author_id', $id)->get();
+        $author = $this->author->join_table('user', 'author', 'user')->where('author_id', $id)->get();
         if (!$author) {
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
             redirect('author');
         }
 
-        // total draft penulis
-        $drafts = $this->author->select(['draft_author.author_id', 'author_name', 'draft_author.draft_id', 'draft_title', 'category_name', 'theme_name', 'entry_date', 'finish_date'])->join3('draft_author', 'author', 'author')->join3('draft', 'draft_author', 'draft')->join3('category', 'draft', 'category')->join3('theme', 'draft', 'theme')->where('draft_author.author_id', $id)->get_all();
-        // total riwayat draft
+        // total draft
+        $drafts      = $this->author->get_author_drafts($id);
         $total_draft = count($drafts);
-        $books       = $this->author->join3('draft', 'book', 'draft')->join3('draft_author', 'draft', 'draft')->join3('author', 'draft_author', 'author')->where('draft_author.author_id', $id)->get_all('book');
-        $total_book  = count($books);
-        $main_view   = 'author/view_author';
-        $pages       = $this->pages;
+        // total buku
+        $books      = $this->author->get_author_books($id);
+        $total_book = count($books);
+
+        $main_view = 'author/view_author';
+        $pages     = $this->pages;
         $this->load->view('template', compact('pages', 'main_view', 'drafts', 'author', 'total_draft', 'books', 'total_book'));
     }
 
@@ -95,7 +100,7 @@ class Author extends Operator_Controller
             $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
         }
 
-        redirect('author/view/profil/' . $author_id);
+        redirect('author/view/profile/' . $author_id);
     }
 
     public function edit($id = null)
@@ -138,7 +143,7 @@ class Author extends Operator_Controller
             $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
         }
 
-        redirect('author/view/profil/' . $id);
+        redirect('author/view/profile/' . $id);
     }
 
     public function delete($id = null)
@@ -167,7 +172,7 @@ class Author extends Operator_Controller
         redirect('author');
     }
 
-    public function copyToReviewer($user_id, $nip, $name)
+    public function copy_to_reviewer($user_id, $nip, $name)
     {
         $this->load->model('reviewer_model', 'reviewer', true);
         $reviewer_id = $this->reviewer->get_id_role_from_user_id($user_id, 'reviewer');
@@ -177,7 +182,7 @@ class Author extends Operator_Controller
             $this->session->reviewer_name_temp = urldecode($name);
             redirect('reviewer/edit/-99');
         } else {
-            $this->session->set_flashdata('warning', 'User telah memiliki role Author dan Reviewer');
+            $this->session->set_flashdata('warning', $this->lang->line('form_author_error_copy_reviewer'));
             redirect('author');
         }
     }
@@ -203,6 +208,7 @@ class Author extends Operator_Controller
     {
         $author_contact = $this->input->post('author_contact');
         $author_id      = $this->input->post('author_id');
+        // boleh kosong
         if ($author_contact == '') {
             return true;
         }
@@ -210,7 +216,7 @@ class Author extends Operator_Controller
         !$author_id || $this->author->where('author_id !=', $author_id);
         $author = $this->author->get();
         if ($author) {
-            $this->form_validation->set_message('unique_author_contact', '%s has been used');
+            $this->form_validation->set_message('unique_author_contact', $this->lang->line('toast_data_duplicate'));
             return false;
         }
         return true;
@@ -220,6 +226,7 @@ class Author extends Operator_Controller
     {
         $author_email = $this->input->post('author_email');
         $author_id    = $this->input->post('author_id');
+        // boleh kosong
         if ($author_email == '') {
             return true;
         }
@@ -227,7 +234,7 @@ class Author extends Operator_Controller
         !$author_id || $this->author->where('author_id !=', $author_id);
         $author = $this->author->get();
         if ($author) {
-            $this->form_validation->set_message('unique_author_email', '%s has been used');
+            $this->form_validation->set_message('unique_author_email', $this->lang->line('toast_data_duplicate'));
             return false;
         }
         return true;
@@ -237,6 +244,7 @@ class Author extends Operator_Controller
     {
         $author_saving_num = $this->input->post('author_saving_num');
         $author_id         = $this->input->post('author_id');
+        // boleh kosong
         if ($author_saving_num == '') {
             return true;
         }
@@ -244,7 +252,7 @@ class Author extends Operator_Controller
         !$author_id || $this->author->where('author_id !=', $author_id);
         $author = $this->author->get();
         if ($author) {
-            $this->form_validation->set_message('unique_author_saving_num', '%s has been used');
+            $this->form_validation->set_message('unique_author_saving_num', $this->lang->line('toast_data_duplicate'));
             return false;
         }
         return true;
@@ -258,7 +266,7 @@ class Author extends Operator_Controller
         !$author_id || $this->author->where('author_id !=', $author_id);
         $author = $this->author->get();
         if ($author) {
-            $this->form_validation->set_message('unique_author_nip', '%s has been used');
+            $this->form_validation->set_message('unique_author_nip', $this->lang->line('toast_data_duplicate'));
             return false;
         }
         return true;
@@ -268,7 +276,7 @@ class Author extends Operator_Controller
     {
         $user_id   = $this->input->post('user_id');
         $author_id = $this->input->post('author_id');
-        //boleh kosong
+        // boleh kosong
         if ($user_id == '') {
             return true;
         }
@@ -276,7 +284,7 @@ class Author extends Operator_Controller
         !$author_id || $this->author->where('author_id !=', $author_id);
         $author = $this->author->get();
         if ($author) {
-            $this->form_validation->set_message('unique_author_username', '%s has been used');
+            $this->form_validation->set_message('unique_author_username', $this->lang->line('toast_data_duplicate'));
             return false;
         }
         return true;

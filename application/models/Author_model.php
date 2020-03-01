@@ -135,6 +135,31 @@ class Author_model extends MY_Model
         ];
     }
 
+    public function get_author_drafts($author_id)
+    {
+        $this->load->model('draft_model', 'draft');
+        return $this->draft
+            ->select(['draft_author.draft_id', 'draft_title', 'category_name', 'theme_name', 'entry_date', 'finish_date'])
+            ->join('theme')
+            ->join('category')
+            ->join_table('draft_author', 'draft', 'draft')
+            ->join_table('author', 'draft_author', 'author')
+            ->where('draft_author.author_id', $author_id)
+            ->get_all();
+    }
+
+    public function get_author_books($author_id)
+    {
+        $this->load->model('book_model', 'book');
+        return $this->book
+            ->select(['book_title', 'book_edition', 'isbn', 'nomor_hak_cipta', 'published_date'])
+            ->join_table('draft', 'book', 'draft')
+            ->join_table('draft_author', 'draft', 'draft')
+            ->join_table('author', 'draft_author', 'author')
+            ->where('draft_author.author_id', $author_id)
+            ->get_all();
+    }
+
     public function upload_author_ktp($ktp_field_name, $ktp_name)
     {
         $config = [

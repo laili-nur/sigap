@@ -28,7 +28,7 @@ if (isset($input->author_ktp) && $input->author_ktp) {
     if ($getextension[1] != 'pdf') {
         $ktp_place = '<img class="uploaded-image" src="' . base_url('authorktp/' . $input->author_ktp) . '" width="100%"><br>';
     } else {
-        $ktp_place = '<div align="middle"><a href="' . base_url('authorktp/' . $input->author_ktp) . '" class="btn btn-success><i class="fa fa-download"></i> Lihat KTP</a></div>';
+        $ktp_place = '<a href="' . base_url('authorktp/' . $input->author_ktp) . '" class="btn btn-success"><i class="fa fa-download"></i> Lihat KTP</a>';
     }
 }
 ?>
@@ -176,7 +176,7 @@ if (isset($input->author_ktp) && $input->author_ktp) {
                      <small class="form-text text-muted">Hanya menerima file bertype : jpg, jpeg, png, pdf. Maksimal 15
                         MB</small>
                      <?=file_form_error('author_ktp', '<p class="text-danger">', '</p>');?>
-                     <div class="col-8 offset-2 mt-3">
+                     <div class="mt-3">
                         <?=$ktp_place;?>
                         <img
                            width="100%"

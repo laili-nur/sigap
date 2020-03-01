@@ -11,7 +11,7 @@ if (isset($author->author_ktp) && $author->author_ktp) {
     if ($getextension[1] != 'pdf') {
         $ktp_place = '<img class="uploaded-image" src="' . base_url('authorktp/' . $author->author_ktp) . '" width="30%"><br>';
     } else {
-        $ktp_place = '<div align="middle"><a href="' . base_url('authorktp/' . $author->author_ktp) . '" class="btn btn-success><i class="fa fa-download"></i> Lihat KTP</a></div>';
+        $ktp_place = '<a href="' . base_url('authorktp/' . $author->author_ktp) . '" class="btn btn-success"><i class="fa fa-download"></i> Lihat KTP</a>';
     }
 }
 ?>

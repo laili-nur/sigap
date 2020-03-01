@@ -1,20 +1,20 @@
-<?php $ceklevel = $this->session->userdata('level'); ?>
+<?php $ceklevel = $this->session->userdata('level');?>
 <!-- .page-title-bar -->
 <header class="page-title-bar">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="<?=base_url()?>"><span class="fa fa-home"></span></a>
+        <a href="<?=base_url();?>"><span class="fa fa-home"></span></a>
       </li>
       <li class="breadcrumb-item">
-        <a href="<?=base_url()?>">Penerbitan</a>
+        <a href="<?=base_url();?>">Penerbitan</a>
       </li>
       <li class="breadcrumb-item">
-        <a href="<?=base_url('draft')?>">Draft</a>
+        <a href="<?=base_url('draft');?>">Draft</a>
       </li>
       <li class="breadcrumb-item">
         <a class="text-muted">
-          <?= $input->draft_title ?></a>
+          <?=$input->draft_title;?></a>
       </li>
     </ol>
   </nav>
@@ -37,30 +37,30 @@
           <a class="nav-link active show" data-toggle="tab" href="#data-drafts">Data Draft</a>
         </li>
         <!-- if hilangkan data penulis di reviewer -->
-        <?php if($ceklevel != 'reviewer'): ?>
+        <?php if ($ceklevel != 'reviewer'): ?>
         <li class="nav-item">
           <a class="nav-link" data-toggle="tab" href="#data-penulis">Data Penulis</a>
         </li>
         <!-- endif hilangkan data penulis di reviewer -->
-        <?php endif ?>
+        <?php endif;?>
         <!-- if hilangkan tab data reviewer -->
-        <?php if($ceklevel != 'author' and $ceklevel != 'reviewer' and $desk->worksheet_status=='1'): ?>
+        <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer' and $desk->worksheet_status == '1'): ?>
         <li class="nav-item">
           <a class="nav-link" data-toggle="tab" href="#data-reviewer">Data Reviewer</a>
         </li>
         <!-- endif hilangkan tab data reviewer -->
-        <?php endif ?>
-        <?php if($ceklevel == 'author'): ?>
+        <?php endif;?>
+        <?php if ($ceklevel == 'author'): ?>
         <li class="nav-item">
           <a class="nav-link" data-toggle="tab" href="#data-buku">Data Buku</a>
         </li>
-        <?php endif ?>
+        <?php endif;?>
       </ul>
     </header>
     <!-- /.card-header -->
     <!-- .card-body -->
     <div class="card-body">
-      <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '' ?>
+      <?=isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '';?>
       <!-- .tab-content -->
       <div id="myTabCard" class="tab-content">
         <div class="tab-pane fade active show" id="data-drafts">
@@ -74,14 +74,14 @@
                 <tr>
                   <td width="200px"> Judul Draft </td>
                   <td><strong>
-                      <?= $input->draft_title ?></strong> </td>
+                      <?=$input->draft_title;?></strong> </td>
                 </tr>
                 <!-- /tr -->
                 <!-- tr -->
                 <tr>
                   <td width="200px"> Kategori </td>
                   <td>
-                    <?=isset($input->category_id)? konversiID('category','category_id', $input->category_id)->category_name : ''?>
+                    <?=isset($input->category_id) ? konversiID('category', 'category_id', $input->category_id)->category_name : '';?>
                   </td>
                 </tr>
                 <!-- /tr -->
@@ -89,7 +89,7 @@
                 <tr>
                   <td width="200px"> Tema </td>
                   <td>
-                    <?=isset($input->theme_id)? konversiID('theme','theme_id', $input->theme_id)->theme_name : ''?>
+                    <?=isset($input->theme_id) ? konversiID('theme', 'theme_id', $input->theme_id)->theme_name : '';?>
                   </td>
                 </tr>
                 <!-- /tr -->
@@ -97,15 +97,15 @@
                 <tr>
                   <td width="200px"> File Draft </td>
                   <td>
-                    <?=(!empty($input->draft_file))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->draft_file.'" class="btn btn-success btn-xs m-0" href="'.base_url('draftfile/'.$input->draft_file).'" target="_blank"><i class="fa fa-download"></i> Download</a>' : '' ?>
-                    <?=(!empty($input->draft_file_link))? '<a data-toggle="tooltip" data-placement="right" title="'.$input->draft_file_link.'" class="btn btn-success btn-xs m-0" href="'.$input->draft_file_link.'" target="_blank"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
+                    <?=(!empty($input->draft_file)) ? '<a data-toggle="tooltip" data-placement="right" title="' . $input->draft_file . '" class="btn btn-success btn-xs m-0" href="' . base_url('draftfile/' . $input->draft_file) . '" target="_blank"><i class="fa fa-download"></i> Download</a>' : '';?>
+                    <?=(!empty($input->draft_file_link)) ? '<a data-toggle="tooltip" data-placement="right" title="' . $input->draft_file_link . '" class="btn btn-success btn-xs m-0" href="' . $input->draft_file_link . '" target="_blank"><i class="fa fa-external-link-alt"></i> External file</a>' : '';?>
                   </td>
                 </tr>
                 <!-- /tr -->
                 <!-- tr -->
                 <tr>
                   <td width="200px"> Jumlah halaman</td>
-                  <td><?= $input->draft_pages?></td>
+                  <td><?=$input->draft_pages;?></td>
                 </tr>
                 <!-- /tr -->
                 <!-- tampilkan status rekomendasi pada level reviewer  masing2 -->
@@ -116,34 +116,34 @@
                   <td>
                     <?php if ($input->review1_flag == 'n'): ?>
                     <span class="badge badge-danger">Tolak</span>
-                    <?php elseif($input->review1_flag == 'y'): ?>
+                    <?php elseif ($input->review1_flag == 'y'): ?>
                     <span class="badge badge-success">Setuju</span>
-                    <?php endif ?>
+                    <?php endif;?>
                   </td>
                 </tr>
                 <!-- /tr -->
-                <?php elseif($ceklevel == 'reviewer' and $reviewer_order == 1): ?>
+                <?php elseif ($ceklevel == 'reviewer' and $reviewer_order == 1): ?>
                 <!-- tr -->
                 <tr>
                   <td width="200px"> Aksi Rekomendasi </td>
                   <td>
                     <?php if ($input->review2_flag == 'n'): ?>
                     <span class="badge badge-danger">Tolak</span>
-                    <?php elseif($input->review2_flag == 'y'): ?>
+                    <?php elseif ($input->review2_flag == 'y'): ?>
                     <span class="badge badge-success">Setuju</span>
-                    <?php endif ?>
+                    <?php endif;?>
                   </td>
                 </tr>
                 <!-- /tr -->
-                <?php endif ?>
-                <?php if($ceklevel != 'reviewer'): ?>
+                <?php endif;?>
+                <?php if ($ceklevel != 'reviewer'): ?>
                 <!-- tr -->
                 <tr>
                   <td width="200px"> Tanggal Masuk
-                    <?=($ceklevel==='superadmin' or $ceklevel==='admin_penerbitan')?'<button type="button" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#ubah_entry_date">Edit</button>':'' ?>
+                    <?=($ceklevel === 'superadmin' or $ceklevel === 'admin_penerbitan') ? '<button type="button" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#ubah_entry_date">Edit</button>' : '';?>
                   </td>
                   <td>
-                    <?= konversiTanggal($input->entry_date) ?>
+                    <?=konversiTanggal($input->entry_date);?>
                   </td>
                 </tr>
                 <!-- /tr -->
@@ -152,7 +152,7 @@
                   <td width="200px"> Diinput oleh </td>
                   <td>
                     <em>
-                      <?= $input->input_by ?></em>
+                      <?=$input->input_by;?></em>
                   </td>
                 </tr>
                 <!-- /tr -->
@@ -160,7 +160,7 @@
                 <tr>
                   <td width="200px"> Tanggal Selesai </td>
                   <td>
-                    <?= konversiTanggal($input->finish_date) ?>
+                    <?=konversiTanggal($input->finish_date);?>
                   </td>
                 </tr>
                 <!-- /tr -->
@@ -168,40 +168,40 @@
                 <tr>
                   <td width="200px"> Status Proses </td>
                   <td><span class="font-weight-bold">
-                      <?= $input->draft_status ?></span> </td>
+                      <?=$input->draft_status;?></span> </td>
                 </tr>
                 <!-- /tr -->
                 <!-- tr -->
                 <tr>
                   <td width="200px"> Status Naskah </td>
                   <td class="align-middle">
-                    <?= $input->is_reprint == 'y' ? '<span class="badge badge-warning mb-2">Cetak Ulang</span>' : '<span class="badge badge-success mb-2">Baru</span>' ?>
-                    <?php if($input->is_reprint == 'n'): ?>
+                    <?=$input->is_reprint == 'y' ? '<span class="badge badge-warning mb-2">Cetak Ulang</span>' : '<span class="badge badge-success mb-2">Baru</span>';?>
+                    <?php if ($input->is_reprint == 'n'): ?>
                     <div class="alert alert-info m-0 p-2">
-                      <?php ($input->stts != 14)? $atribut = 'disabled' : $atribut = '' ;?>
+                      <?php ($input->stts != 14) ? $atribut = 'disabled' : $atribut = '';?>
                       <p class="m-0 p-0">Draft dengan status proses final dapat di cetak ulang.</p>
-                      <?php if($ceklevel==='superadmin' or $ceklevel==='admin_penerbitan'): ?>
-                        <button <?=($atribut == 'disabled')? 'style="cursor:not-allowed" disabled' : '' ?> type="button" class="btn btn-info btn-xs <?=$atribut ?>" onClick="location.href='<?=base_url("draft/cetakUlang/$input->draft_id") ?>'">Cetak Ulang</button>
-                      <?php endif ?>
+                      <?php if ($ceklevel === 'superadmin' or $ceklevel === 'admin_penerbitan'): ?>
+                        <button <?=($atribut == 'disabled') ? 'style="cursor:not-allowed" disabled' : '';?> type="button" class="btn btn-info btn-xs <?=$atribut;?>" onClick="location.href='<?=base_url("draft/cetakUlang/$input->draft_id");?>'">Cetak Ulang</button>
+                      <?php endif;?>
                     </div>
-                    <?php endif ?>
+                    <?php endif;?>
                   </td>
                 </tr>
                 <!-- /tr -->
                 <!-- tr -->
                 <tr>
                   <td width="200px"> Catatan Draft
-                    <?=($ceklevel!='author' and $ceklevel!='reviewer')?'<button type="button" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#ubah_draft_notes">Edit</button>':'' ?>
+                    <?=($ceklevel != 'author' and $ceklevel != 'reviewer') ? '<button type="button" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#ubah_draft_notes">Edit</button>' : '';?>
                   </td>
                   <td>
                     <div class="font-weight-bold">
-                      <?= $input->draft_notes ?>
+                      <?=$input->draft_notes;?>
                     </div>
                   </td>
                 </tr>
                 <!-- /tr -->
                 <!-- endif data yang dilihat reviewer -->
-                <?php endif ?>
+                <?php endif;?>
               </tbody>
               <!-- /tbody -->
             </table>
@@ -223,16 +223,16 @@
               <!-- .modal-body -->
               <div class="modal-body">
                 <!-- .form -->
-                <?= form_open('draft/ubahnotes/'.$input->draft_id) ?>
+                <?=form_open('draft/ubahnotes/' . $input->draft_id);?>
                 <!-- .fieldset -->
                 <fieldset>
                   <!-- .form-group -->
                   <div class="form-group">
                     <!-- <label for="edit_deadline">Deadline Edit</label> -->
                     <div>
-                      <?= form_input('entry_date', $input->entry_date, 'class="form-control d-none" id="entry_date"') ?>
+                      <?=form_input('entry_date', $input->entry_date, 'class="form-control d-none" id="entry_date"');?>
                     </div>
-                    <?= form_error('entry_date') ?>
+                    <?=form_error('entry_date');?>
                   </div>
                   <!-- /.form-group -->
                 </fieldset>
@@ -245,7 +245,7 @@
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>
               <!-- /.modal-footer -->
-              <?=form_close(); ?>
+              <?=form_close();?>
               <!-- /.form -->
             </div>
             <!-- /.modal-content -->
@@ -267,15 +267,15 @@
               <!-- .modal-body -->
               <div class="modal-body">
                 <!-- .form -->
-                <?= form_open('draft/ubahnotes/'.$input->draft_id) ?>
+                <?=form_open('draft/ubahnotes/' . $input->draft_id);?>
                 <!-- .fieldset -->
                 <fieldset>
                   <!-- .form-group -->
                   <div class="form-group">
                     <div>
-                      <?= form_textarea('draft_notes', $input->draft_notes, 'class="form-control summernote-basic" id="draft_notes"') ?>
+                      <?=form_textarea('draft_notes', $input->draft_notes, 'class="form-control summernote-basic" id="draft_notes"');?>
                     </div>
-                    <?= form_error('draft_notes') ?>
+                    <?=form_error('draft_notes');?>
                   </div>
                   <!-- /.form-group -->
                 </fieldset>
@@ -288,7 +288,7 @@
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
               </div>
               <!-- /.modal-footer -->
-              <?=form_close(); ?>
+              <?=form_close();?>
               <!-- /.form -->
             </div>
             <!-- /.modal-content -->
@@ -305,10 +305,10 @@
           <div class="form-group">
             <button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#pilihauthor">Pilih Penulis</button>
           </div>
-          <?php endif ?>
+          <?php endif;?>
           <div id="reload-author">
-            <?php if ($authors):?>
-            <?php $i=1; ?>
+            <?php if ($authors): ?>
+            <?php $i = 1;?>
             <!-- .table-responsive -->
             <div class="table-responsive">
               <!-- .table -->
@@ -323,47 +323,47 @@
                     <th scope="col">Institusi</th>
                     <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
                     <th style="width:100px; min-width:100px;"> &nbsp; </th>
-                    <?php endif ?>
+                    <?php endif;?>
                   </tr>
                 </thead>
                 <!-- /thead -->
                 <!-- tbody -->
                 <tbody>
-                  <?php foreach($authors as $author): ?>
+                  <?php foreach ($authors as $author): ?>
                   <!-- tr -->
                   <tr>
                     <td class="align-middle">
-                      <?= $i++ ?>
+                      <?=$i++;?>
                     </td>
-                    <!-- jika admin maka ada linknya ke profil -->
+                    <!-- jika admin maka ada linknya ke profile -->
                     <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
-                    <td class="align-middle"><a href="<?= base_url('author/view/profil/'.$author->author_id) ?>">
-                        <?= $author->author_name ?></a></td>
+                    <td class="align-middle"><a href="<?=base_url('author/view/profile/' . $author->author_id);?>">
+                        <?=$author->author_name;?></a></td>
                     <?php else: ?>
                     <td class="align-middle">
-                      <?= $author->author_name ?>
+                      <?=$author->author_name;?>
                     </td>
-                    <?php endif ?>
+                    <?php endif;?>
                     <td class="align-middle">
-                      <?= $author->author_nip ?>
-                    </td>
-                    <td class="align-middle">
-                      <?= $author->work_unit_name ?>
+                      <?=$author->author_nip;?>
                     </td>
                     <td class="align-middle">
-                      <?= $author->institute_name ?>
+                      <?=$author->work_unit_name;?>
+                    </td>
+                    <td class="align-middle">
+                      <?=$author->institute_name;?>
                     </td>
                     <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
                     <td class="align-middle text-right">
-                      <button data-toggle="tooltip" data-placement="right" title="Hapus" href="javascript" class="btn btn-sm btn-danger delete-author" data="<?= $author->draft_author_id ?>">
+                      <button data-toggle="tooltip" data-placement="right" title="Hapus" href="javascript" class="btn btn-sm btn-danger delete-author" data="<?=$author->draft_author_id;?>">
                         <i class="fa fa-trash-alt"></i>
                         <span class="sr-only">Delete</span>
                       </button>
                     </td>
-                    <?php endif ?>
+                    <?php endif;?>
                   </tr>
                   <!-- /tr -->
-                  <?php endforeach ?>
+                  <?php endforeach;?>
                 </tbody>
                 <!-- /tbody -->
               </table>
@@ -372,7 +372,7 @@
             <!-- /.table-responsive -->
             <?php else: ?>
             <p>Penulis belum dipilih</p>
-            <?php endif ?>
+            <?php endif;?>
           </div>
         </div>
         <div class="tab-pane fade" id="data-reviewer">
@@ -385,10 +385,10 @@
           <div class="form-group">
             <button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#pilihreviewer">Pilih Reviewer</button>
           </div>
-          <?php endif ?>
+          <?php endif;?>
           <div id="reload-reviewer">
-            <?php if ($reviewers):?>
-            <?php $ii=1; ?>
+            <?php if ($reviewers): ?>
+            <?php $ii = 1;?>
             <!-- .table-responsive -->
             <div class="table-responsive">
               <!-- .table -->
@@ -402,38 +402,38 @@
                     <th scope="col">Fakultas</th>
                     <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
                     <th style="width:100px; min-width:100px;"> &nbsp; </th>
-                    <?php endif ?>
+                    <?php endif;?>
                   </tr>
                 </thead>
                 <!-- /thead -->
                 <!-- tbody -->
                 <tbody>
-                  <?php foreach($reviewers as $reviewer): ?>
+                  <?php foreach ($reviewers as $reviewer): ?>
                   <!-- tr -->
                   <tr>
                     <td class="align-middle">
-                      <?= $ii++ ?>
+                      <?=$ii++;?>
                     </td>
                     <td class="align-middle">
-                      <?= $reviewer->reviewer_name ?>
+                      <?=$reviewer->reviewer_name;?>
                     </td>
                     <td class="align-middle">
-                      <?= $reviewer->reviewer_nip ?>
+                      <?=$reviewer->reviewer_nip;?>
                     </td>
                     <td class="align-middle">
-                      <?= $reviewer->faculty_name ?>
+                      <?=$reviewer->faculty_name;?>
                     </td>
                     <?php if ($ceklevel == 'superadmin' || $ceklevel == 'admin_penerbitan'): ?>
                     <td class="align-middle text-right">
-                      <button data-toggle="tooltip" data-placement="right" title="Hapus" href="javascript" class="btn btn-sm btn-danger delete-reviewer" data="<?= $reviewer->draft_reviewer_id ?>">
+                      <button data-toggle="tooltip" data-placement="right" title="Hapus" href="javascript" class="btn btn-sm btn-danger delete-reviewer" data="<?=$reviewer->draft_reviewer_id;?>">
                         <i class="fa fa-trash-alt"></i>
                         <span class="sr-only">Delete</span>
                       </button>
                     </td>
-                    <?php endif ?>
+                    <?php endif;?>
                   </tr>
                   <!-- /tr -->
-                  <?php endforeach ?>
+                  <?php endforeach;?>
                 </tbody>
                 <!-- /tbody -->
               </table>
@@ -442,11 +442,11 @@
             <!-- /.table-responsive -->
             <?php else: ?>
             <p>Reviewer belum dipilih</p>
-            <?php endif ?>
+            <?php endif;?>
           </div>
         </div>
         <div class="tab-pane fade" id="data-buku">
-          <?php if ($books):?>
+          <?php if ($books): ?>
           <!-- .table-responsive -->
           <div class="table-responsive">
             <!-- .table -->
@@ -457,22 +457,22 @@
                 <tr>
                   <td width="200px"> Judul Buku </td>
                   <td><strong>
-                      <?= $books->book_title ?></strong> </td>
+                      <?=$books->book_title;?></strong> </td>
                 </tr>
                 <!-- /tr -->
                 <!-- tr -->
                 <tr>
                   <td width="200px"> Nomor Hak Cipta </td>
                   <td><strong>
-                      <?= $books->nomor_hak_cipta ?></strong> </td>
+                      <?=$books->nomor_hak_cipta;?></strong> </td>
                 </tr>
                 <!-- /tr -->
                 <!-- tr -->
                 <tr>
                   <td width="200px"> File hak cipta </td>
                   <td>
-                    <?=(!empty($books->file_hak_cipta))? '<a data-toggle="tooltip" data-placement="right" title="'.$books->file_hak_cipta.'" class="btn btn-success btn-xs m-0" href="'.base_url('hakcipta/'.$books->file_hak_cipta).'"><i class="fa fa-download"></i> Download</a>' : '' ?>
-                    <?=(!empty($books->file_hak_cipta_link))? '<a data-toggle="tooltip" data-placement="right" title="'.$books->file_hak_cipta_link.'" class="btn btn-success btn-xs m-0" href="'.$books->file_hak_cipta_link.'"><i class="fa fa-external-link-alt"></i> External file</a>' : '' ?>
+                    <?=(!empty($books->file_hak_cipta)) ? '<a data-toggle="tooltip" data-placement="right" title="' . $books->file_hak_cipta . '" class="btn btn-success btn-xs m-0" href="' . base_url('hakcipta/' . $books->file_hak_cipta) . '"><i class="fa fa-download"></i> Download</a>' : '';?>
+                    <?=(!empty($books->file_hak_cipta_link)) ? '<a data-toggle="tooltip" data-placement="right" title="' . $books->file_hak_cipta_link . '" class="btn btn-success btn-xs m-0" href="' . $books->file_hak_cipta_link . '"><i class="fa fa-external-link-alt"></i> External file</a>' : '';?>
                   </td>
                 </tr>
                 <!-- /tr -->
@@ -480,9 +480,9 @@
                 <tr>
                   <td width="200px"> Status Hak Cipta</td>
                   <td>
-                    <?= ($books->status_hak_cipta == '')? '-' : '' ?>
-                    <?= ($books->status_hak_cipta == 1)? '<span class="badge badge-info">Dalam Proses</span>' : '' ?>
-                    <?= ($books->status_hak_cipta == 2)? '<span class="badge badge-success">Sudah Jadi</span>' : '' ?>
+                    <?=($books->status_hak_cipta == '') ? '-' : '';?>
+                    <?=($books->status_hak_cipta == 1) ? '<span class="badge badge-info">Dalam Proses</span>' : '';?>
+                    <?=($books->status_hak_cipta == 2) ? '<span class="badge badge-success">Sudah Jadi</span>' : '';?>
                   </td>
                 </tr>
                 <!-- /tr -->
@@ -497,7 +497,7 @@
             Data akan tampil apabila draft telah disetujui untuk menjadi buku.
           </div>
           <p class="text-center my-4">Draft belum final</p>
-          <?php endif ?>
+          <?php endif;?>
         </div>
       </div>
       <!-- /.tab-content -->
@@ -525,7 +525,7 @@
               <!-- .form-group -->
               <div class="form-group" id="form-author">
                 <label for="user_id">Nama Penulis</label>
-                <?= form_dropdown('author', getMoreDropdownList('author', ['author_id', 'author_name', 'work_unit_name']), '', 'id="pilih_author" class="form-control custom-select d-block" required') ?>
+                <?=form_dropdown('author', getMoreDropdownList('author', ['author_id', 'author_name', 'work_unit_name']), '', 'id="pilih_author" class="form-control custom-select d-block" required');?>
               </div>
               <!-- /.form-group -->
             </fieldset>
@@ -567,7 +567,7 @@
               <!-- .form-group -->
               <div class="form-group" id="form-reviewer">
                 <label for="user_id">Nama Reviewer</label>
-                <?= form_dropdown('reviewer', getMoreDropdownList('reviewer', ['reviewer_id', 'reviewer_name','faculty_name','reviewer_expert']), '', 'id="pilih_reviewer" class="form-control custom-select d-block"') ?>
+                <?=form_dropdown('reviewer', getMoreDropdownList('reviewer', ['reviewer_id', 'reviewer_name', 'faculty_name', 'reviewer_expert']), '', 'id="pilih_reviewer" class="form-control custom-select d-block"');?>
               </div>
               <!-- /.form-group -->
             </fieldset>
@@ -588,24 +588,24 @@
     <!-- /.modal-dialog -->
   </div>
   <!-- /.modal -->
-  <?php if($ceklevel != 'reviewer'):?>
-  <?php $this->load->view('draft/view/desk_screening') ?>
-  <?php endif ?>
+  <?php if ($ceklevel != 'reviewer'): ?>
+  <?php $this->load->view('draft/view/desk_screening');?>
+  <?php endif;?>
   <!-- jika desk screening ditolak, maka progress tidak ditampilkan -->
   <?php if ($desk->worksheet_status == 1): ?>
   <!-- reviewer tidak bisa melihat progress draft -->
-  <?php if($ceklevel != 'reviewer'): ?>
+  <?php if ($ceklevel != 'reviewer'): ?>
   <!-- panel-progress -->
-  <?php $this->load->view('draft/view/progress'); ?>
-  <?php endif ?>
+  <?php $this->load->view('draft/view/progress');?>
+  <?php endif;?>
   <!-- endif reviewer tidak bisa melihat progress draft -->
   <!-- if hanya peringatan penulis kedua dst -->
-  <?php if($ceklevel == 'author' and $author_order!=1): ?>
+  <?php if ($ceklevel == 'author' and $author_order != 1): ?>
   <div class="alert alert-danger"><strong>PERHATIAN! </strong>Hanya penulis pertama yang dapat memberikan komentar dan catatan, penulis kedua hanya dapat melihat progress.</div>
-  <?php endif ?>
+  <?php endif;?>
   <!-- progress-review -->
-  <?php if($reviewers == null): ?>
-  <?php if($ceklevel == 'superadmin'): ?>
+  <?php if ($reviewers == null): ?>
+  <?php if ($ceklevel == 'superadmin'): ?>
   <div class="alert alert-warning">
     <strong>PERHATIAN!</strong> Pilih reviewer terlebih dahulu sebelum lanjut ke tahap selanjutnya. Apabila progress belum terbuka maka lakukan reload
     <p class="m-0 p-0 mt-2">
@@ -618,52 +618,52 @@
     <h5 class="alert-heading">Pencarian Reviewer</h5>
     Mohon ditunggu, Pihak admin sedang melakukan pencarian reviewer yang sesuai dengan draft anda.
   </div>
-  <?php endif ?>
+  <?php endif;?>
   <?php else: ?>
-  <?php $this->load->view('draft/view/review'); ?>
-  <?php endif ?>
+  <?php $this->load->view('draft/view/review');?>
+  <?php endif;?>
   <!-- reviewer tidak bisa melihat progress draft -->
-  <?php if($ceklevel != 'reviewer'): ?>
-  <?php if($input->is_review == 'y'): ?>
+  <?php if ($ceklevel != 'reviewer'): ?>
+  <?php if ($input->is_review == 'y'): ?>
   <!-- progress-edit -->
-  <?php $this->load->view('draft/view/edit'); ?>
-  <?php endif ?>
-  <?php if($input->is_edit == 'y'): ?>
+  <?php $this->load->view('draft/view/edit');?>
+  <?php endif;?>
+  <?php if ($input->is_edit == 'y'): ?>
   <!-- progress-layout -->
-  <?php $this->load->view('draft/view/layout'); ?>
-  <?php endif ?>
-  <?php if($input->is_layout == 'y'): ?>
+  <?php $this->load->view('draft/view/layout');?>
+  <?php endif;?>
+  <?php if ($input->is_layout == 'y'): ?>
   <!-- progress-proofread -->
-  <?php $this->load->view('draft/view/proofread'); ?>
-  <?php endif ?>
-  <?php if($input->is_proofread == 'y' and $ceklevel!='author' and $ceklevel!='reviewer'): ?>
+  <?php $this->load->view('draft/view/proofread');?>
+  <?php endif;?>
+  <?php if ($input->is_proofread == 'y' and $ceklevel != 'author' and $ceklevel != 'reviewer'): ?>
   <!-- progress-cetak -->
-  <?php $this->load->view('draft/view/print'); ?>
-  <?php elseif($input->is_proofread == 'y' and $input->is_print == 'n'  and $ceklevel=='author' or $ceklevel=='reviewer'): ?>
+  <?php $this->load->view('draft/view/print');?>
+  <?php elseif ($input->is_proofread == 'y' and $input->is_print == 'n' and $ceklevel == 'author' or $ceklevel == 'reviewer'): ?>
   <div class="alert alert-info">
     <h5 class="alert-heading">Proses Cetak</h5>
     Draft ini sedang dalam proses pencetakan.
   </div>
-  <?php elseif($input->is_print == 'y' and $input->stts != 14  and $ceklevel=='author' or $ceklevel=='reviewer'): ?>
+  <?php elseif ($input->is_print == 'y' and $input->stts != 14 and $ceklevel == 'author' or $ceklevel == 'reviewer'): ?>
   <div class="alert alert-info">
     <h5 class="alert-heading">Proses Final</h5>
     Draft ini sedang dalam proses finalisasi.
   </div>
-  <?php endif ?>
+  <?php endif;?>
   <!-- if tombol final tampilan admin -->
-  <?php if($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
+  <?php if ($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan'): ?>
   <div class="el-example mx-3 mx-md-0">
-    <?php 
-            $hidden_date = array(
-                'type'  => 'hidden',
-                'id'    => 'finish_date',
-                'value' => date('Y-m-d H:i:s')
-            );
-            echo form_input($hidden_date);?>
-    <?=($input->is_print == 'y')? '':'<div class="m-0"><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> Proses cetak belum disetujui</small></div>' ?>
-    <?=($input->print_file != '' or $input->print_file_link != '')? '':'<div class="m-0"><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> File/Link cetak belum ada</small></div>' ?>
-    <button class="btn btn-primary" data-toggle="modal" data-target="#modalsimpan" <?=($input->is_print == 'y' and ($input->print_file != '' or $input->print_file_link != ''))? '':'disabled' ?>>Simpan jadi buku</button>
-    <button class="btn btn-danger" data-toggle="modal" data-target="#modaltolak" <?=($input->is_print == 'y' and ($input->print_file != '' or $input->print_file_link != ''))? '':'disabled' ?>>Tolak</button>
+    <?php
+$hidden_date = array(
+    'type'  => 'hidden',
+    'id'    => 'finish_date',
+    'value' => date('Y-m-d H:i:s'),
+);
+echo form_input($hidden_date);?>
+    <?=($input->is_print == 'y') ? '' : '<div class="m-0"><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> Proses cetak belum disetujui</small></div>';?>
+    <?=($input->print_file != '' or $input->print_file_link != '') ? '' : '<div class="m-0"><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> File/Link cetak belum ada</small></div>';?>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#modalsimpan" <?=($input->is_print == 'y' and ($input->print_file != '' or $input->print_file_link != '')) ? '' : 'disabled';?>>Simpan jadi buku</button>
+    <button class="btn btn-danger" data-toggle="modal" data-target="#modaltolak" <?=($input->is_print == 'y' and ($input->print_file != '' or $input->print_file_link != '')) ? '' : 'disabled';?>>Tolak</button>
   </div>
   <!-- Alert Danger Modal -->
   <div class="modal modal-warning fade" id="modalsimpan" tabindex="-1" role="dialog" aria-labelledby="modalsimpan" aria-hidden="true">
@@ -681,13 +681,13 @@
         <!-- .modal-body -->
         <div class="modal-body">
           <p>Draft <span class="font-weight-bold">
-              <?= $input->draft_title ?></span> sudah final dan akan disimpan jadi buku?</p>
+              <?=$input->draft_title;?></span> sudah final dan akan disimpan jadi buku?</p>
           <div class="alert alert-warning">Tanggal selesai draft akan tercatat ketika klik Submit</div>
         </div>
         <!-- /.modal-body -->
         <!-- .modal-footer -->
         <div class="modal-footer">
-          <button class="btn btn-primary" id="draft-setuju" draft-title="<?=$draft->draft_title ?>" draft-file="<?=$draft->print_file ?>" value="14">Submit</button>
+          <button class="btn btn-primary" id="draft-setuju" draft-title="<?=$draft->draft_title;?>" draft-file="<?=$draft->print_file;?>" value="14">Submit</button>
           <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
         </div>
         <!-- /.modal-footer -->
@@ -713,7 +713,7 @@
         <!-- .modal-body -->
         <div class="modal-body">
           <p>Draft <span class="font-weight-bold">
-              <?= $input->draft_title ?></span> ditolak?</p>
+              <?=$input->draft_title;?></span> ditolak?</p>
         </div>
         <!-- /.modal-body -->
         <!-- .modal-footer -->
@@ -729,11 +729,11 @@
   </div>
   <!-- /.modal -->
   <!-- endif tombol final tampilan admin -->
-  <?php endif ?>
+  <?php endif;?>
   <!-- endif tampilan reviewer -->
-  <?php endif ?>
+  <?php endif;?>
   <!-- endif worksheet status -->
-  <?php endif ?>
+  <?php endif;?>
 </div>
 <!-- /.page-section -->
 <script>
@@ -787,7 +787,7 @@ $(document).ready(function() {
     var author = $('#pilih_author').val();
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draftauthor/add') ?>",
+      url: "<?php echo base_url('draftauthor/add'); ?>",
       datatype: "JSON",
       data: {
         draft_id: draft,
@@ -820,7 +820,7 @@ $(document).ready(function() {
     var reviewer = $('#pilih_reviewer').val();
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draftreviewer/add') ?>",
+      url: "<?php echo base_url('draftreviewer/add'); ?>",
       datatype: "JSON",
       data: {
         draft_id: draft,
@@ -854,7 +854,7 @@ $(document).ready(function() {
     var id = $(this).attr('data');
     console.log(id);
     $.ajax({
-      url: "<?php echo base_url('draftauthor/delete/') ?>" + id,
+      url: "<?php echo base_url('draftauthor/delete/'); ?>" + id,
       success: function(data) {
         $('#reload-author').load(' #reload-author');
 
@@ -870,7 +870,7 @@ $(document).ready(function() {
     var id = $(this).attr('data');
     console.log(id);
     $.ajax({
-      url: "<?php echo base_url('draftreviewer/delete/') ?>" + id,
+      url: "<?php echo base_url('draftreviewer/delete/'); ?>" + id,
       success: function(data) {
         $('#reload-reviewer').load(' #reload-reviewer');
         toastr_view('4');
@@ -889,7 +889,7 @@ $(document).ready(function() {
     console.log(entry_date)
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
+      url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id,
       datatype: "JSON",
       data: {
         entry_date: entry_date,
@@ -920,7 +920,7 @@ $(document).ready(function() {
     console.log(draft_notes)
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
+      url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id,
       datatype: "JSON",
       data: {
         draft_notes: draft_notes,
@@ -950,11 +950,11 @@ $(document).ready(function() {
     let draft_file = $this.attr('draft-file');
     let action = $('#draft-setuju').val();
     let finish_date = $('#finish_date').val();
-    let cek = '<?php echo base_url('draft/copyToBook/')?>' + id;
+    let cek = '<?php echo base_url('draft/copyToBook/'); ?>' + id;
     console.log(cek);
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
+      url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id,
       datatype: "JSON",
       data: {
         draft_status: action,
@@ -966,7 +966,7 @@ $(document).ready(function() {
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
           toastr_view('111');
-          location.href = '<?php echo base_url('draft/copyToBook/')?>' + id;
+          location.href = '<?php echo base_url('draft/copyToBook/'); ?>' + id;
         } else {
           toastr_view('000');
         }
@@ -986,7 +986,7 @@ $(document).ready(function() {
     console.log(action);
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url('draft/ubahnotes/') ?>" + id,
+      url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id,
       datatype: "JSON",
       data: {
         draft_status: action,
@@ -1000,7 +1000,7 @@ $(document).ready(function() {
         } else {
           toastr_view('000');
         }
-        location.href = '<?php echo base_url('draft/view/') ?>' + id;
+        location.href = '<?php echo base_url('draft/view/'); ?>' + id;
       }
     });
 
