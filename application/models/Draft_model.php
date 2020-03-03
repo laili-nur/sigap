@@ -447,6 +447,197 @@ class Draft_model extends MY_Model
         ];
     }
 
+    public function filter_draft_for_admin($category, $reprint, $progress, $page)
+    {
+        $drafts = $this
+            ->join('category')
+            ->when('progress', $progress)
+            ->when('reprint', $reprint)
+            ->when('category', $category)
+            ->order_by('draft_status')
+            ->order_by('draft_title')
+            ->paginate($page)
+            ->get_all();
+        $total = $this
+            ->when('progress', $progress)
+            ->when('reprint', $reprint)
+            ->when('category', $category)
+            ->count();
+
+        return [
+            'drafts' => $drafts,
+            'total'  => $total,
+        ];
+    }
+
+    public function when($params, $data)
+    {
+        // jika data null, maka skip
+        if ($data) {
+            if ($params == 'reprint') {
+                $this->where('is_reprint', $data);
+            }
+
+            if ($params == 'category') {
+                $this->where('draft.category_id', $data);
+            }
+
+            if ($params == 'progress') {
+                $this->resolve_progress($data);
+            }
+        }
+
+        return $this;
+    }
+
+    public function resolve_progress($progress)
+    {
+        switch ($progress) {
+            case 'desk_screening':
+                $this->group_start()
+                    ->where('draft_status', 0)
+                    ->or_where('draft_status', 1)
+                    ->group_end();
+                break;
+
+            case 'review':
+                $this->where('is_review', 'n')
+                    ->where('draft_status', '4');
+                break;
+
+            case 'edit':
+                $this->where('is_review', 'y')
+                    ->where('is_edit', 'n')
+                    ->where_not('draft_status', '99');
+                break;
+
+            case 'layout':
+                $this->where('is_review', 'y')
+                    ->where('is_edit', 'y')
+                    ->where('is_layout', 'n')
+                    ->where_not('draft_status', '99');
+                break;
+
+            case 'proofread':
+                $this->where('is_review', 'y')
+                    ->where('is_edit', 'y')
+                    ->where('is_layout', 'y')
+                    ->where('is_proofread', 'n')
+                    ->where_not('draft_status', '99');
+                break;
+
+            case 'cetak':
+                $this->where('is_review', 'y')
+                    ->where('is_edit', 'y')
+                    ->where('is_layout', 'y')
+                    ->where('is_proofread', 'y')
+                    ->group_start()
+                    ->where('is_print', 'n')
+                    ->or_where('is_print', 'y')
+                    ->group_end()
+                    ->where_not('draft_status', '99')
+                    ->where_not('draft_status', '14');
+                break;
+
+            case 'reject':
+                $this->group_start()
+                    ->where('draft_status', '99')
+                    ->or_where('draft_status', '2')
+                    ->group_end();
+                break;
+
+            case 'final':
+                $this->where('is_review', 'y')
+                    ->where('is_edit', 'y')
+                    ->where('is_layout', 'y')
+                    ->where('is_proofread', 'y')
+                    ->where('is_print', 'y')
+                    ->where('is_reprint', 'n')
+                    ->where('draft_status', '14');
+                break;
+
+            default:
+                # code...
+                break;
+        }
+        return $this;
+    }
+
+    public function checkStatus($code)
+    {
+        $status = "";
+        switch ($code) {
+            case 0:
+                $status = 'Desk Screening';
+                break;
+            case 1:
+                $status = 'Lolos Desk Screening';
+                break;
+            case 2:
+                $status = 'Tidak Lolos Desk Screening';
+                break;
+            case 3:
+                $status = 'Review Ditolak';
+                break;
+            case 4:
+                $status = 'Reviewing';
+                break;
+            case 5:
+                $status = 'Antri Edit';
+                break;
+            case 6:
+                $status = 'Editing';
+                break;
+            case 7:
+                $status = 'Editorial Selesai';
+                break;
+            case 8:
+                $status = 'Layouting';
+                break;
+            case 9:
+                $status = 'Layout selesai';
+                break;
+            case 10:
+                $status = 'Desain Cover';
+                break;
+            case 11:
+                $status = 'Cover Selesai';
+                break;
+            case 12:
+                $status = 'Proofreading';
+                break;
+            case 13:
+                $status = 'Proofread Selesai';
+                break;
+            case 14:
+                $status = 'Final';
+                break;
+            case 15:
+                $status = 'Cetak';
+                break;
+            case 16:
+                $status = 'Cetak Selesai';
+                break;
+            case 17:
+                $status = 'Revisi Edit';
+                break;
+            case 18:
+                $status = 'Revisi Layout';
+                break;
+            case 19:
+                $status = 'Selesai Revisi';
+                break;
+            case 99:
+                $status = 'Draft Ditolak';
+                break;
+            default:
+                # code...
+
+                break;
+        }
+        return $status;
+    }
+
     public function uploadDraftfile($fieldname, $draftFileName)
     {
         $config = [

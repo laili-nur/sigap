@@ -41,7 +41,7 @@ if ($level == 'reviewer') {
 } else {
     $filter_status = [
         ''               => '- Filter Status -',
-        'desk-screening' => 'Tahap Desk Screening',
+        'desk_screening' => 'Tahap Desk Screening',
         'review'         => 'Tahap Review',
         'edit'           => 'Tahap Editorial',
         'layout'         => 'Tahap Layout',
@@ -124,14 +124,14 @@ $reprint_options = [
                         <?=form_dropdown('reprint', $reprint_options, $this->input->get('reprint'), 'id="reprint" class="form-control custom-select d-block" title="Filter Naskah"');?>
                      </div>
                      <div class="col-12 col-lg-3 mb-3">
-                        <?=form_dropdown('filter', $filter_status, $progress, 'id="filter" class="form-control custom-select d-block" title="Filter Progress"');?>
+                        <?=form_dropdown('progress', $filter_status, $progress, 'id="progress" class="form-control custom-select d-block" title="Filter Progress"');?>
                      </div>
                      <div class="col-12 col-lg-3 mb-3">
                         <?=form_dropdown('category', getDropdownListCategory('category', ['category_id', 'category_name'], true), $this->input->get('category'), '" id="category" class="form-control custom-select d-block "');?>
                      </div>
                      <?php else: ?>
                      <div class="col-12 col-lg-9 mb-3">
-                        <?=form_dropdown('filter', $filter_status, $progress, ' id="filter" class="form-control custom-select d-block" title="Filter status"');?>
+                        <?=form_dropdown('progress', $filter_status, $progress, ' id="progress" class="form-control custom-select d-block" title="Filter status"');?>
                      </div>
                      <?php endif;?>
                      <div class="col-12 col-lg-2 mb-3">
@@ -418,7 +418,7 @@ $(document).ready(function() {
       placeholder: '-- Semua --',
       allowClear: true
    });
-   $("#filter").select2({
+   $("#progress").select2({
       placeholder: '-- Filter Progress --',
       allowClear: true
    });

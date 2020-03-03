@@ -176,95 +176,72 @@ class Draft extends Operator_Controller
                 redirect(base_url('draft'));
             }
         } else {
-            if ($progress == 'desk-screening') {
-                $drafts = $this->draft->join('category')->join('theme')->group_start()->where('draft_status', 1)->or_where('draft_status', 0)->group_end()->where($cek_reprint['cond_temp'], $cek_reprint['stts'])->where($kat['cond_temp'], $kat['category'])->order_by('draft_status')->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->group_start()->where('draft_status', 1)->or_where('draft_status', 0)->group_end()->where($cek_reprint['cond_temp'], $cek_reprint['stts'])->where($kat['cond_temp'], $kat['category'])->count();
-            } elseif ($progress == 'review') {
-                $drafts = $this->draft->join('category')->join('theme')->where('is_review', 'n')->where('draft_status', '4')->where($cek_reprint['cond_temp'], $cek_reprint['stts'])->where($kat['cond_temp'], $kat['category'])->order_by('draft_status')->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->where('is_review', 'n')->where('draft_status', '4')->where($cek_reprint['cond_temp'], $cek_reprint['stts'])->where($kat['cond_temp'], $kat['category'])->count();
-            } elseif ($progress == 'edit') {
-                $drafts = $this->draft->join('category')->join('theme')->where('is_review', 'y')->where('is_edit', 'n')->where_not('draft_status', '99')->where($cek_reprint['cond_temp'], $cek_reprint['stts'])->where($kat['cond_temp'], $kat['category'])->order_by('draft_status')->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->where('is_review', 'y')->where('is_edit', 'n')->where_not('draft_status', '99')->where($cek_reprint['cond_temp'], $cek_reprint['stts'])->where($kat['cond_temp'], $kat['category'])->count();
-            } elseif ($progress == 'layout') {
-                $drafts = $this->draft->join('category')->join('theme')->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'n')->where_not('draft_status', '99')->where($cek_reprint['cond_temp'], $cek_reprint['stts'])->where($kat['cond_temp'], $kat['category'])->order_by('draft_status')->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'n')->where_not('draft_status', '99')->where($cek_reprint['cond_temp'], $cek_reprint['stts'])->where($kat['cond_temp'], $kat['category'])->count();
-            } elseif ($progress == 'proofread') {
-                $drafts = $this->draft->join('category')->join('theme')->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'y')->where('is_proofread', 'n')->where_not('draft_status', '99')->where($cek_reprint['cond_temp'], $cek_reprint['stts'])->where($kat['cond_temp'], $kat['category'])->order_by('draft_status', 'desc')->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'y')->where('is_proofread', 'n')->where_not('draft_status', '99')->where($cek_reprint['cond_temp'], $cek_reprint['stts'])->where($kat['cond_temp'], $kat['category'])->count();
-            } elseif ($progress == 'cetak') {
-                $drafts = $this->draft->join('category')->join('theme')->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'y')->where('is_proofread', 'y')->group_start()->where('is_print', 'n')->or_where('is_print', 'y')->group_end()->where_not('draft_status', '99')->where_not('draft_status', '14')->where($cek_reprint['cond_temp'], $cek_reprint['stts'])->where($kat['cond_temp'], $kat['category'])->order_by('draft_status')->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'y')->where('is_proofread', 'y')->group_start()->where('is_print', 'n')->or_where('is_print', 'y')->group_end()->where_not('draft_status', '99')->where_not('draft_status', '14')->where($cek_reprint['cond_temp'], $cek_reprint['stts'])->where($kat['cond_temp'], $kat['category'])->count();
-            } elseif ($progress == 'reject') {
-                $drafts = $this->draft->join('category')->join('theme')->group_start()->where('draft_status', '99')->or_where('draft_status', '2')->group_end()->where($cek_reprint['cond_temp'], $cek_reprint['stts'])->where($kat['cond_temp'], $kat['category'])->order_by('draft_status')->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->group_start()->where('draft_status', '99')->or_where('draft_status', '2')->group_end()->where($cek_reprint['cond_temp'], $cek_reprint['stts'])->where($kat['cond_temp'], $kat['category'])->count();
-            } elseif ($progress == 'final') {
-                $drafts = $this->draft->join('category')->join('theme')->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'y')->where('is_proofread', 'y')->where('is_print', 'y')->where('is_reprint', 'n')->where('draft_status', '14')->where($cek_reprint['cond_temp'], $cek_reprint['stts'])->where($kat['cond_temp'], $kat['category'])->order_by('draft_status')->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'y')->where('is_proofread', 'y')->where('is_print', 'y')->where('is_reprint', 'n')->where('draft_status', '14')->where($cek_reprint['cond_temp'], $cek_reprint['stts'])->where($kat['cond_temp'], $kat['category'])->count();
-            } elseif ($progress == 'cetak-ulang') {
-                $drafts = $this->draft->join('category')->join('theme')->where('is_reprint', 'y')->where($kat['cond_temp'], $kat['category'])->order_by('draft_status')->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->where('is_reprint', 'y')->where($kat['cond_temp'], $kat['category'])->count();
-            } elseif ($progress == 'error') {
-                //inisialisasi array penampung kondisi not in
-                $desk_screening = [''];
-                $review         = [''];
-                $edit           = [''];
-                $layout         = [''];
-                $proofread      = [''];
-                $final          = [''];
-                $cetak_ulang    = [''];
-                $ditolak        = [''];
+            $get_data = $this->draft->filter_draft_for_admin($category, $reprint, $progress, $page);
+            $drafts   = $get_data['drafts'];
+            $total    = $get_data['total'];
 
-                //menghitung filter lain, untuk mencari draft yang error
-                $desk_screenings = $this->draft->select(['draft_id'])->where('draft_status', 1)->or_where('draft_status', 0)->get_all();
-                foreach ($desk_screenings as $value) {
-                    $desk_screening[] = $value->draft_id;
-                }
-                $reviews = $this->draft->select(['draft_id'])->where('is_review', 'n')->where('is_edit', 'n')->where('is_layout', 'n')->where('is_proofread', 'n')->where('is_print', 'n')->where('draft_status', '4')->get_all();
-                foreach ($reviews as $value) {
-                    $review[] = $value->draft_id;
-                }
-                $edits = $this->draft->select(['draft_id'])->where('is_review', 'y')->where('is_edit', 'n')->where('is_layout', 'n')->where('is_proofread', 'n')->where('is_print', 'n')->where_not('draft_status', '99')->get_all();
-                foreach ($edits as $value) {
-                    $edit[] = $value->draft_id;
-                }
-                $layouts = $this->draft->select(['draft_id'])->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'n')->where('is_proofread', 'n')->where('is_print', 'n')->where_not('draft_status', '99')->get_all();
-                foreach ($layouts as $value) {
-                    $layout[] = $value->draft_id;
-                }
-                $proofreads = $this->draft->select(['draft_id'])->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'y')->where('is_proofread', 'n')->where('is_print', 'n')->where_not('draft_status', '99')->get_all();
-                foreach ($proofreads as $value) {
-                    $proofread[] = $value->draft_id;
-                }
-                $prints = $this->draft->select(['draft_id'])->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'y')->where('is_proofread', 'y')->group_start()->where('is_print', 'n')->or_where('is_print', 'y')->group_end()->where_not('draft_status', '99')->where_not('draft_status', '14')->get_all();
-                foreach ($prints as $value) {
-                    $print[] = $value->draft_id;
-                }
-                $finals = $this->draft->select(['draft_id'])->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'y')->where('is_proofread', 'y')->where('is_print', 'y')->where('is_reprint', 'n')->where('draft_status', 14)->get_all();
-                foreach ($finals as $value) {
-                    $final[] = $value->draft_id;
-                }
-                $cetak_ulangs = $this->draft->select(['draft_id'])->where('is_reprint', 'y')->get_all();
-                foreach ($cetak_ulangs as $value) {
-                    $cetak_ulang[] = $value->draft_id;
-                }
-                $rejecteds = $this->draft->select(['draft_id'])->where('draft_status', 2)->or_where('draft_status', 99)->get_all();
-                foreach ($rejecteds as $value) {
-                    $rejected[] = $value->draft_id;
-                }
+            // if ($progress == 'error') {
+            //     //inisialisasi array penampung kondisi not in
+            //     $desk_screening = [''];
+            //     $review         = [''];
+            //     $edit           = [''];
+            //     $layout         = [''];
+            //     $proofread      = [''];
+            //     $final          = [''];
+            //     $cetak_ulang    = [''];
+            //     $ditolak        = [''];
 
-                $drafts = $this->draft->join('category')->join('theme')->where_not_in('draft_id', $desk_screening)->where_not_in('draft_id', $review)->where_not_in('draft_id', $edit)->where_not_in('draft_id', $layout)->where_not_in('draft_id', $proofread)->where_not_in('draft_id', $print)->where_not_in('draft_id', $final)->where_not_in('draft_id', $cetak_ulang)->where_not_in('draft_id', $rejected)->where($kat['cond_temp'], $kat['category'])->order_by('draft_status')->order_by('draft_title')->paginate($page)->get_all();
+            //     //menghitung filter lain, untuk mencari draft yang error
+            //     $desk_screenings = $this->draft->select(['draft_id'])->where('draft_status', 1)->or_where('draft_status', 0)->get_all();
+            //     foreach ($desk_screenings as $value) {
+            //         $desk_screening[] = $value->draft_id;
+            //     }
+            //     $reviews = $this->draft->select(['draft_id'])->where('is_review', 'n')->where('is_edit', 'n')->where('is_layout', 'n')->where('is_proofread', 'n')->where('is_print', 'n')->where('draft_status', '4')->get_all();
+            //     foreach ($reviews as $value) {
+            //         $review[] = $value->draft_id;
+            //     }
+            //     $edits = $this->draft->select(['draft_id'])->where('is_review', 'y')->where('is_edit', 'n')->where('is_layout', 'n')->where('is_proofread', 'n')->where('is_print', 'n')->where_not('draft_status', '99')->get_all();
+            //     foreach ($edits as $value) {
+            //         $edit[] = $value->draft_id;
+            //     }
+            //     $layouts = $this->draft->select(['draft_id'])->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'n')->where('is_proofread', 'n')->where('is_print', 'n')->where_not('draft_status', '99')->get_all();
+            //     foreach ($layouts as $value) {
+            //         $layout[] = $value->draft_id;
+            //     }
+            //     $proofreads = $this->draft->select(['draft_id'])->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'y')->where('is_proofread', 'n')->where('is_print', 'n')->where_not('draft_status', '99')->get_all();
+            //     foreach ($proofreads as $value) {
+            //         $proofread[] = $value->draft_id;
+            //     }
+            //     $prints = $this->draft->select(['draft_id'])->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'y')->where('is_proofread', 'y')->group_start()->where('is_print', 'n')->or_where('is_print', 'y')->group_end()->where_not('draft_status', '99')->where_not('draft_status', '14')->get_all();
+            //     foreach ($prints as $value) {
+            //         $print[] = $value->draft_id;
+            //     }
+            //     $finals = $this->draft->select(['draft_id'])->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'y')->where('is_proofread', 'y')->where('is_print', 'y')->where('is_reprint', 'n')->where('draft_status', 14)->get_all();
+            //     foreach ($finals as $value) {
+            //         $final[] = $value->draft_id;
+            //     }
+            //     $cetak_ulangs = $this->draft->select(['draft_id'])->where('is_reprint', 'y')->get_all();
+            //     foreach ($cetak_ulangs as $value) {
+            //         $cetak_ulang[] = $value->draft_id;
+            //     }
+            //     $rejecteds = $this->draft->select(['draft_id'])->where('draft_status', 2)->or_where('draft_status', 99)->get_all();
+            //     foreach ($rejecteds as $value) {
+            //         $rejected[] = $value->draft_id;
+            //     }
 
-                $total = $this->draft->where_not_in('draft_id', $desk_screening)->where_not_in('draft_id', $review)->where_not_in('draft_id', $edit)->where_not_in('draft_id', $layout)->where_not_in('draft_id', $proofread)->where_not_in('draft_id', $print)->where_not_in('draft_id', $final)->where_not_in('draft_id', $cetak_ulang)->where_not_in('draft_id', $rejected)->where($kat['cond_temp'], $kat['category'])->count();
-            } else {
-                //get semua draft jik filter gagal semua
-                $drafts = $this->draft->join('category')->join('theme')->join_relation_middle('draft', 'draft_author')->join_relation_dest('author', 'draft_author')->where($kat['cond_temp'], $kat['category'])->order_by('draft_status')->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->where($kat['cond_temp'], $kat['category'])->count();
-            }
+            //     $drafts = $this->draft->join('category')->join('theme')->where_not_in('draft_id', $desk_screening)->where_not_in('draft_id', $review)->where_not_in('draft_id', $edit)->where_not_in('draft_id', $layout)->where_not_in('draft_id', $proofread)->where_not_in('draft_id', $print)->where_not_in('draft_id', $final)->where_not_in('draft_id', $cetak_ulang)->where_not_in('draft_id', $rejected)->where($kat['cond_temp'], $kat['category'])->order_by('draft_status')->order_by('draft_title')->paginate($page)->get_all();
+
+            //     $total = $this->draft->where_not_in('draft_id', $desk_screening)->where_not_in('draft_id', $review)->where_not_in('draft_id', $edit)->where_not_in('draft_id', $layout)->where_not_in('draft_id', $proofread)->where_not_in('draft_id', $print)->where_not_in('draft_id', $final)->where_not_in('draft_id', $cetak_ulang)->where_not_in('draft_id', $rejected)->where($kat['cond_temp'], $kat['category'])->count();
+            // } else {
+            //     //get semua draft jik filter gagal semua
+            //     $drafts = $this->draft->join('category')->join('theme')->join_relation_middle('draft', 'draft_author')->join_relation_dest('author', 'draft_author')->where($kat['cond_temp'], $kat['category'])->order_by('draft_status')->order_by('draft_title')->paginate($page)->get_all();
+            //     $total  = $this->draft->where($kat['cond_temp'], $kat['category'])->count();
+            // }
         }
+
         $pagination = $this->draft->make_pagination(site_url('draft/filter/'), 3, $total);
         if (!$drafts) {
             $this->session->set_flashdata('warning', 'Data were not found');
-            //redirect($this->pages);
 
         } else {
             foreach ($drafts as $key => $value) {
@@ -1155,6 +1132,7 @@ class Draft extends Operator_Controller
         }
         return $draft_author_status;
     }
+
     public function checkStatus($code)
     {
         $status = "";
