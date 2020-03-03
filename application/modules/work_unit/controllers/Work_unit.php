@@ -1,14 +1,10 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
-class Work_unit extends Operator_Controller
+class Work_unit extends Admin_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
         $this->pages = 'work_unit';
-
-        // akses khusus admin
-        check_if_admin();
 
         $this->load->model('Work_unit_model', 'work_unit');
     }

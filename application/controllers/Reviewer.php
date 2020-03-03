@@ -1,14 +1,10 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
-class Reviewer extends Operator_Controller
+class Reviewer extends Admin_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
         $this->pages = 'reviewer';
-
-        // akses khusus admin
-        check_if_admin();
     }
 
     public function index($page = null)

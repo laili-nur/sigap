@@ -1,14 +1,10 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
-class Faculty extends Operator_Controller
+class Faculty extends Admin_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
         $this->pages = 'faculty';
-
-        // akses khusus admin
-        check_if_admin();
 
         $this->load->model('Faculty_model', 'faculty');
     }

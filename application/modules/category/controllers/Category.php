@@ -1,14 +1,11 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
-class Category extends Operator_Controller
+class Category extends Admin_Controller
 {
     public function __construct()
     {
         parent::__construct();
         $this->pages = 'category';
-
-        // akses khusus admin
-        check_if_admin();
 
         // load modules model
         $this->load->model('Category_model', 'category');

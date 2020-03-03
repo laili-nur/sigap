@@ -1,14 +1,10 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
-class Theme extends Operator_Controller
+class Theme extends Admin_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
         $this->pages = 'theme';
-
-        // akses khusus admin
-        check_if_admin();
 
         // load modules model
         $this->load->model('Theme_model', 'theme');

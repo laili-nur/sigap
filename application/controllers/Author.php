@@ -1,14 +1,10 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
-class Author extends Operator_Controller
+class Author extends Admin_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
         $this->pages = 'author';
-
-        // akses khusus admin
-        check_if_admin();
     }
 
     public function index($page = null)

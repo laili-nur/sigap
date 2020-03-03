@@ -13,13 +13,11 @@ class Admin_Controller extends MY_Controller
         $this->role_id    = $this->session->userdata('role_id');
 
         if (!$this->is_login) {
-            redirect(base_url('login'));
-            return;
+            redirect('login');
         }
 
-        if ($this->level !== 'superadmin') {
-            redirect(base_url());
-            return;
+        if ($this->level === 'author' || $this->level === 'reviewer' || $this->level === 'editor' || $this->level === 'layouter') {
+            redirect('');
         }
     }
 }
