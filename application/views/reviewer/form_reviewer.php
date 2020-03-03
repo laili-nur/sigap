@@ -139,60 +139,40 @@ $reviewer_contact = [
 <script>
 $(document).ready(function() {
    loadValidateSetting();
-   // $("#form_reviewer").validate({
-   //       rules: {
-   //          user_id: "crequired",
-   //          reviewer_nip: {
-   //             crequired: true,
-   //             cminlength: 3,
-   //             cnumber: true
-   //          },
-   //          reviewer_name: {
-   //             crequired: true,
-   //             huruf: true
-   //          },
-   //          faculty_id: "crequired",
-   //          "reviewer_expert[]": "crequired",
-   //          reviewer_contact: {
-   //             cnumber: true
-   //          },
-   //          reviewer_email: {
-   //             cemail: true
-   //          },
-   //       },
-   //       errorElement: "span",
-   //       errorPlacement: function(error, element) {
-   //          error.addClass("invalid-feedback");
-   //          if (element.parent('.input-group').length) {
-   //             error.insertAfter(element.next('span.select2')); // input group
-   //          } else if (element.hasClass("select2-hidden-accessible")) {
-   //             error.insertAfter(element.next('span.select2')); // select2
-   //          } else if (element.hasClass("custom-file-input")) {
-   //             error.insertAfter(element.next('label.custom-file-label')); // fileinput custom
-   //          } else if (element.hasClass("custom-control-input")) {
-   //             error.insertAfter($(".custom-radio").last()); // radio
-   //          } else {
-   //             error.insertAfter(element); // default
-   //          }
-   //       }
-   //    },
-   //    validateSelect2()
-   // );
+   $("#form_reviewer").validate({
+         rules: {
+            user_id: "crequired",
+            reviewer_nip: {
+               crequired: true,
+               cminlength: 3,
+               cnumber: true
+            },
+            reviewer_name: {
+               crequired: true,
+               huruf: true
+            },
+            faculty_id: "crequired",
+            "reviewer_expert[]": "crequired",
+            reviewer_contact: {
+               cnumber: true
+            },
+            reviewer_email: {
+               cemail: true
+            },
+         },
+         errorElement: "span",
+         errorPlacement: validateErrorPlacement
+      },
+      validateSelect2()
+   );
 
-   $("#user_id").select2({
-      placeholder: '-- Pilih --',
-      allowClear: true
-   });
-   $("#faculty_id").select2({
-      placeholder: '-- Pilih --',
-      allowClear: true
-   });
+   $("#user_id").select2(defaultSelect2Options);
+   $("#faculty_id").select2(defaultSelect2Options);
    $('#reviewer_expert option[value=""]').detach();
    $("#reviewer_expert").select2({
       tags: true,
       placeholder: '-- Multiple --',
       tokenSeparators: [',']
    });
-
 })
 </script>

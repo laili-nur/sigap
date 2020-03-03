@@ -34,6 +34,11 @@ function preview_image(event) {
     })
 };
 
+const defaultSelect2Options = {
+    placeholder: '-- Pilih --',
+    allowClear: true
+}
+
 function loadValidateSetting() {
     $.validator.addMethod("alphanum", function (value, element) {
         return this.optional(element) || /^[\w., ]+$/i.test(value);

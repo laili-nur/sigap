@@ -42,7 +42,8 @@ class Theme extends Operator_Controller
         } else {
             $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
         }
-        redirect('theme');
+
+        redirect($this->pages);
     }
 
     public function edit($id = null)
@@ -50,7 +51,7 @@ class Theme extends Operator_Controller
         $theme = $this->theme->where('theme_id', $id)->get();
         if (!$this) {
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
-            redirect('theme');
+            redirect($this->pages);
         }
         if (!$_POST) {
             $input = (object) $theme;
@@ -69,7 +70,8 @@ class Theme extends Operator_Controller
         } else {
             $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
         }
-        redirect('theme');
+
+        redirect($this->pages);
     }
 
     public function delete($id = null)
@@ -77,22 +79,22 @@ class Theme extends Operator_Controller
         $theme = $this->theme->where('theme_id', $id)->get();
         if (!$theme) {
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
-            redirect('theme');
+            redirect($this->pages);
         }
         if ($this->theme->where('theme_id', $id)->delete()) {
             $this->session->set_flashdata('success', $this->lang->line('toast_delete_success'));
         } else {
             $this->session->set_flashdata('error', $this->lang->line('toast_delete_fail'));
         }
-        redirect('theme');
+
+        redirect($this->pages);
     }
 
-    public function unique_theme_name()
+    public function unique_theme_name($theme_name)
     {
-        $theme_name = $this->input->post('theme_name');
-        $theme_id   = $this->input->post('theme_id');
+        $theme_id = $this->input->post('theme_id');
         $this->theme->where('theme_name', $theme_name);
-        !$theme_id || $this->theme->where('theme_id !=', $theme_id);
+        !$theme_id || $this->theme->where_not('theme_id', $theme_id);
         $theme = $this->theme->get();
         if ($theme) {
             $this->form_validation->set_message('unique_theme_name', $this->lang->line('toast_data_duplicate'));

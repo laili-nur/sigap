@@ -42,7 +42,7 @@ class Work_unit extends Operator_Controller
             $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
         }
 
-        redirect('workunit');
+        redirect($this->pages);
     }
 
     public function edit($id = null)
@@ -50,7 +50,7 @@ class Work_unit extends Operator_Controller
         $work_unit = $this->work_unit->where('work_unit_id', $id)->get();
         if (!$this) {
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
-            redirect('workunit');
+            redirect($this->pages);
         }
         if (!$_POST) {
             $input = (object) $work_unit;
@@ -70,7 +70,7 @@ class Work_unit extends Operator_Controller
             $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
         }
 
-        redirect('workunit');
+        redirect($this->pages);
     }
 
     public function delete($id = null)
@@ -78,7 +78,7 @@ class Work_unit extends Operator_Controller
         $code = $this->work_unit->where('work_unit_id', $id)->get();
         if (!$code) {
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
-            redirect('workunit');
+            redirect($this->pages);
         }
         if ($this->work_unit->where('work_unit_id', $id)->delete()) {
             $this->session->set_flashdata('success', $this->lang->line('toast_delete_success'));
@@ -86,15 +86,14 @@ class Work_unit extends Operator_Controller
             $this->session->set_flashdata('error', $this->lang->line('toast_delete_fail'));
         }
 
-        redirect('workunit');
+        redirect($this->pages);
     }
 
-    public function unique_work_unit_name()
+    public function unique_work_unit_name($work_unit_name)
     {
-        $work_unit_name = $this->input->post('work_unit_name');
-        $work_unit_id   = $this->input->post('work_unit_id');
+        $work_unit_id = $this->input->post('work_unit_id');
         $this->work_unit->where('work_unit_name', $work_unit_name);
-        !$work_unit_id || $this->work_unit->where('work_unit_id !=', $work_unit_id);
+        !$work_unit_id || $this->work_unit->where_not('work_unit_id', $work_unit_id);
         $work_unit = $this->work_unit->get();
         if ($work_unit) {
             $this->form_validation->set_message('unique_work_unit_name', $this->lang->line('toast_data_duplicate'));

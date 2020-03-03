@@ -10,7 +10,7 @@ class Author_model extends MY_Model
             [
                 'field' => 'user_id',
                 'label' => $this->lang->line('form_user_name'),
-                'rules' => 'trim|callback_unique_author_username',
+                'rules' => 'trim|callback_unique_data[user_id]',
             ],
             [
                 'field' => 'work_unit_id',
@@ -30,7 +30,7 @@ class Author_model extends MY_Model
             [
                 'field' => 'author_nip',
                 'label' => $this->lang->line('form_author_nip'),
-                'rules' => 'trim|required|numeric|min_length[3]|max_length[256]|callback_unique_author_nip',
+                'rules' => 'trim|required|numeric|min_length[3]|max_length[256]|callback_unique_data[author_nip]',
             ],
             [
                 'field' => 'author_degree_front',
@@ -55,17 +55,17 @@ class Author_model extends MY_Model
             [
                 'field' => 'author_contact',
                 'label' => $this->lang->line('form_author_contact'),
-                'rules' => 'trim|max_length[20]|callback_unique_author_contact',
+                'rules' => 'trim|max_length[20]|callback_unique_data[author_contact]',
             ],
             [
                 'field' => 'author_email',
                 'label' => $this->lang->line('form_author_email'),
-                'rules' => 'trim|valid_email|callback_unique_author_email',
+                'rules' => 'trim|valid_email|callback_unique_data[author_email]',
             ],
             [
                 'field' => 'author_saving_num',
                 'label' => $this->lang->line('form_author_saving_num'),
-                'rules' => 'trim|max_length[30]|callback_unique_author_saving_num',
+                'rules' => 'trim|max_length[30]|callback_unique_data[author_saving_num]',
             ],
             [
                 'field' => 'heir_name',

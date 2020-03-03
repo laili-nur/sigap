@@ -54,7 +54,7 @@ class Category extends Operator_Controller
             $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
         }
 
-        redirect('category');
+        redirect($this->pages);
     }
 
     public function edit($id = null)
@@ -62,7 +62,7 @@ class Category extends Operator_Controller
         $category = $this->category->where('category_id', $id)->get();
         if (!$this) {
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
-            redirect('category');
+            redirect($this->pages);
         }
 
         if (!$_POST) {
@@ -86,7 +86,7 @@ class Category extends Operator_Controller
             $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
         }
 
-        redirect('category');
+        redirect($this->pages);
     }
 
     public function delete($id = null)
@@ -94,7 +94,7 @@ class Category extends Operator_Controller
         $category = $this->category->where('category_id', $id)->get();
         if (!$category) {
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
-            redirect('category');
+            redirect($this->pages);
         }
 
         if ($this->category->where('category_id', $id)->delete()) {
@@ -103,7 +103,7 @@ class Category extends Operator_Controller
             $this->session->set_flashdata('error', $this->lang->line('toast_delete_fail'));
         }
 
-        redirect('category');
+        redirect($this->pages);
     }
 
     // validasi format nama
@@ -117,13 +117,12 @@ class Category extends Operator_Controller
     // }
 
     // validasi nama unik
-    public function unique_category_name()
+    public function unique_category_name($category_name)
     {
-        $category_name = $this->input->post('category_name');
-        $category_id   = $this->input->post('category_id');
+        $category_id = $this->input->post('category_id');
 
         $this->category->where('category_name', $category_name);
-        !$category_id || $this->category->where('category_id !=', $category_id);
+        !$category_id || $this->category->where_not('category_id', $category_id);
         $category = $this->category->get();
 
         if ($category) {

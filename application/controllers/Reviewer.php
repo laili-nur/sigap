@@ -191,63 +191,17 @@ class Reviewer extends Operator_Controller
         return $reviewer_expert_data;
     }
 
-    public function unique_reviewer_contact()
+    public function unique_data($str, $data_key)
     {
-        $reviewer_contact = $this->input->post('reviewer_contact');
-        $reviewer_id      = $this->input->post('reviewer_id');
-        if (!$reviewer_contact) {
-            return true;
-        }
-        $this->reviewer->where('reviewer_contact', $reviewer_contact);
-        !$reviewer_id || $this->reviewer->where_not('reviewer_id', $reviewer_id);
-        $reviewer = $this->reviewer->get();
-        if (!$reviewer) {
-            $this->form_validation->set_message('unique_reviewer_contact', $this->lang->line('toast_data_duplicate'));
-            return false;
-        }
-        return true;
-    }
-
-    public function unique_reviewer_email()
-    {
-        $reviewer_email = $this->input->post('reviewer_email');
-        $reviewer_id    = $this->input->post('reviewer_id');
-        if (!$reviewer_email) {
-            return true;
-        }
-        $this->reviewer->where('reviewer_email', $reviewer_email);
-        !$reviewer_id || $this->reviewer->where_not('reviewer_id', $reviewer_id);
-        $reviewer = $this->reviewer->get();
-        if (!$reviewer) {
-            $this->form_validation->set_message('unique_reviewer_email', $this->lang->line('toast_data_duplicate'));
-            return false;
-        }
-        return true;
-    }
-
-    public function unique_reviewer_nip()
-    {
-        $reviewer_nip = $this->input->post('reviewer_nip');
-        $reviewer_id  = $this->input->post('reviewer_id');
-        $this->reviewer->where('reviewer_nip', $reviewer_nip);
-        !$reviewer_id || $this->reviewer->where_not('reviewer_id', $reviewer_id);
-        $reviewer = $this->reviewer->get();
-        if (!$reviewer) {
-            $this->form_validation->set_message('unique_reviewer_nip', $this->lang->line('toast_data_duplicate'));
-            return false;
-        }
-        return true;
-    }
-
-    public function unique_reviewer_username()
-    {
-        $user_id     = $this->input->post('user_id');
         $reviewer_id = $this->input->post('reviewer_id');
-        $this->reviewer->where('user_id', $user_id);
-        !$reviewer_id || $this->reviewer->where('reviewer_id !=', $reviewer_id);
+        if (!$str) {
+            return true;
+        }
+        $this->reviewer->where($data_key, $str);
+        !$reviewer_id || $this->reviewer->where_not('reviewer_id', $reviewer_id);
         $reviewer = $this->reviewer->get();
-        if (!$reviewer) {
-            $this->form_validation->set_message('unique_reviewer_username', '%s has been used');
+        if ($reviewer) {
+            $this->form_validation->set_message('unique_data', $this->lang->line('toast_data_duplicate'));
             return false;
         }
         return true;

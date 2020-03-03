@@ -232,14 +232,9 @@ $(document).ready(function() {
       validateSelect2()
    );
 
-   let select2Options = {
-      placeholder: '-- Pilih --',
-      allowClear: true
-   }
-
-   $("#user_id").select2(select2Options);
-   $("#work_unit").select2(select2Options);
-   $("#institute").select2(select2Options);
-   $("#bank").select2(select2Options);
+   $("#user_id").select2(defaultSelect2Options);
+   $("#work_unit").select2(defaultSelect2Options);
+   $("#institute").select2(defaultSelect2Options);
+   $("#bank").select2(defaultSelect2Options);
 })
 </script>

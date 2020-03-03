@@ -8,7 +8,7 @@
             <a href="<?=base_url();?>">Penerbitan</a>
          </li>
          <li class="breadcrumb-item">
-            <a href="<?=base_url('workunit');?>">Unit Kerja</a>
+            <a href="<?=base_url('work_unit');?>">Unit Kerja</a>
          </li>
          <li class="breadcrumb-item">
             <a class="text-muted">Form</a>

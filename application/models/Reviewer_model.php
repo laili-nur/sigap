@@ -10,7 +10,7 @@ class Reviewer_model extends MY_Model
             [
                 'field' => 'user_id',
                 'label' => $this->lang->line('form_user_name'),
-                'rules' => 'trim|required|callback_unique_reviewer_username',
+                'rules' => 'trim|required|callback_unique_data[user_id]',
             ],
             [
                 'field' => 'faculty_id',
@@ -25,7 +25,7 @@ class Reviewer_model extends MY_Model
             [
                 'field' => 'reviewer_nip',
                 'label' => $this->lang->line('form_reviewer_nip'),
-                'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_reviewer_nip',
+                'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_data[reviewer_nip]',
             ],
             [
                 'field' => 'reviewer_degree_front',
@@ -40,12 +40,12 @@ class Reviewer_model extends MY_Model
             [
                 'field' => 'reviewer_contact',
                 'label' => $this->lang->line('form_reviewer_contact'),
-                'rules' => 'trim|max_length[20]|callback_unique_reviewer_contact',
+                'rules' => 'trim|max_length[20]|callback_unique_data[reviewer_contact]',
             ],
             [
                 'field' => 'reviewer_email',
                 'label' => $this->lang->line('form_reviewer_email'),
-                'rules' => 'trim|valid_email|callback_unique_reviewer_email',
+                'rules' => 'trim|valid_email|callback_unique_data[reviewer_email]',
             ],
             [
                 'field' => 'reviewer_expert[]',

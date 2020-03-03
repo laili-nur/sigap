@@ -42,7 +42,7 @@ class Faculty extends Operator_Controller
             $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
         }
 
-        redirect('faculty');
+        redirect($this->pages);
     }
 
     public function edit($id = null)
@@ -50,7 +50,7 @@ class Faculty extends Operator_Controller
         $faculty = $this->faculty->where('faculty_id', $id)->get();
         if (!$this) {
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
-            redirect('faculty');
+            redirect($this->pages);
         }
         if (!$_POST) {
             $input = (object) $faculty;
@@ -70,7 +70,7 @@ class Faculty extends Operator_Controller
             $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
         }
 
-        redirect('faculty');
+        redirect($this->pages);
     }
 
     public function delete($id = null)
@@ -78,7 +78,7 @@ class Faculty extends Operator_Controller
         $faculty = $this->faculty->where('faculty_id', $id)->get();
         if (!$faculty) {
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
-            redirect('faculty');
+            redirect($this->pages);
         }
         if ($this->faculty->where('faculty_id', $id)->delete()) {
             $this->session->set_flashdata('success', $this->lang->line('toast_delete_success'));
@@ -86,15 +86,14 @@ class Faculty extends Operator_Controller
             $this->session->set_flashdata('error', $this->lang->line('toast_delete_fail'));
         }
 
-        redirect('faculty');
+        redirect($this->pages);
     }
 
-    public function unique_faculty_name()
+    public function unique_faculty_name($faculty_name)
     {
-        $faculty_name = $this->input->post('faculty_name');
-        $faculty_id   = $this->input->post('faculty_id');
+        $faculty_id = $this->input->post('faculty_id');
         $this->faculty->where('faculty_name', $faculty_name);
-        !$faculty_id || $this->faculty->where('faculty_id !=', $faculty_id);
+        !$faculty_id || $this->faculty->where_not('faculty_id', $faculty_id);
         $faculty = $this->faculty->get();
         if ($faculty) {
             $this->form_validation->set_message('unique_faculty_name', $this->lang->line('toast_data_duplicate'));

@@ -67,12 +67,6 @@ $route['theme/(:num)']          = 'theme/index/$1';
 $route['book/(:num)']           = 'book/index/$1';
 $route['document/(:num)']       = 'document/index/$1';
 
-$route['workunit']               = 'work_unit';
-$route['workunit/(:num)']        = 'work_unit/index/$1';
-$route['workunit/add']           = 'work_unit/add';
-$route['workunit/edit/(:num)']   = 'work_unit/edit/$1';
-$route['workunit/delete/(:num)'] = 'work_unit/delete/$1';
-
 $route['draftauthor']          = 'draft_author';
 $route['draftauthor/addmulti'] = 'draft_author/addmulti';
 $route['draftauthor/(:num)']   = 'draft_author/index/$1';

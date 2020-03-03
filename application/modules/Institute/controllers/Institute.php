@@ -89,12 +89,11 @@ class Institute extends Operator_Controller
         redirect('institute');
     }
 
-    public function unique_institute_name()
+    public function unique_institute_name($institute_name)
     {
-        $institute_name = $this->input->post('institute_name');
-        $institute_id   = $this->input->post('institute_id');
+        $institute_id = $this->input->post('institute_id');
         $this->institute->where('institute_name', $institute_name);
-        !$institute_id || $this->institute->where('institute_id !=', $institute_id);
+        !$institute_id || $this->institute->where_not('institute_id', $institute_id);
         $institute = $this->institute->get();
         if ($institute) {
             $this->form_validation->set_message('unique_institute_name', $this->lang->line('toast_data_duplicate'));

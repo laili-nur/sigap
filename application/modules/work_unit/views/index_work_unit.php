@@ -20,7 +20,7 @@
                   <span class="mr-auto">Unit Kerja <span class="badge badge-info"><?=$total;?></span></span>
                   <div class="card-header-control">
                      <a
-                        href="<?=base_url('workunit/add');?>"
+                        href="<?=base_url('work_unit/add');?>"
                         class="btn btn-primary btn-sm"
                      ><i class="fa fa-plus fa-fw"></i> Tambah</a>
                   </div>

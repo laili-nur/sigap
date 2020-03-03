@@ -209,7 +209,7 @@ $i        = isset($page) ? $page * $per_page - $per_page : 0;
             <footer class="card-footer ">
                <div class="card-footer-content">
                   <a
-                     href="<?=base_url('workunit');?>"
+                     href="<?=base_url('work_unit');?>"
                      class="btn btn-secondary mr-2"
                   >Unit Kerja</a>
                   <a
