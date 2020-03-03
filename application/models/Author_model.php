@@ -8,6 +8,11 @@ class Author_model extends MY_Model
     {
         $validation_rules = [
             [
+                'field' => 'user_id',
+                'label' => $this->lang->line('form_user_name'),
+                'rules' => 'trim|callback_unique_author_username',
+            ],
+            [
                 'field' => 'work_unit_id',
                 'label' => $this->lang->line('form_work_unit_name'),
                 'rules' => 'trim|required',
@@ -18,9 +23,9 @@ class Author_model extends MY_Model
                 'rules' => 'trim|required',
             ],
             [
-                'field' => 'user_id',
-                'label' => $this->lang->line('form_user_name'),
-                'rules' => 'trim|callback_unique_author_username',
+                'field' => 'author_name',
+                'label' => $this->lang->line('form_author_name'),
+                'rules' => 'trim|required|min_length[1]|max_length[256]',
             ],
             [
                 'field' => 'author_nip',
@@ -28,18 +33,13 @@ class Author_model extends MY_Model
                 'rules' => 'trim|required|numeric|min_length[3]|max_length[256]|callback_unique_author_nip',
             ],
             [
-                'field' => 'author_name',
-                'label' => $this->lang->line('form_author_name'),
-                'rules' => 'trim|required|min_length[1]|max_length[256]',
-            ],
-            [
                 'field' => 'author_degree_front',
-                'label' => $this->lang->line('form_author_degress_front'),
+                'label' => $this->lang->line('form_author_degree_front'),
                 'rules' => 'trim|min_length[2]|max_length[256]',
             ],
             [
                 'field' => 'author_degree_back',
-                'label' => $this->lang->line('form_author_degress_back'),
+                'label' => $this->lang->line('form_author_degree_back'),
                 'rules' => 'trim|min_length[2]|max_length[256]',
             ],
             [

@@ -6,98 +6,119 @@ class Reviewer extends Operator_Controller
     {
         parent::__construct();
         $this->pages = 'reviewer';
-        //khusus admin
-        $ceklevel = $this->session->userdata('level');
-        if ($ceklevel == 'author' || $ceklevel == 'reviewer' || $ceklevel == 'editor' || $ceklevel == 'layouter') {
-            redirect('home');
-        }
+
+        // akses khusus admin
+        check_if_admin();
     }
 
     public function index($page = null)
     {
-        $reviewers  = $this->reviewer->join('faculty')->join('user')->order_by('faculty.faculty_name')->order_by('reviewer_nip')->paginate($page)->get_all();
-        $total      = $this->reviewer->join('faculty')->join('user')->order_by('faculty.faculty_name')->order_by('reviewer_nip')->count();
-        $pages      = $this->pages;
-        $main_view  = 'reviewer/index_reviewer';
-        $pagination = $this->reviewer->make_pagination(site_url('reviewer'), 2, $total);
+        $keywords   = $this->input->get('keywords', true);
+        $get_data   = $this->reviewer->get_data($keywords, $page);
+        $reviewers  = $get_data['data'];
+        $total      = $get_data['count'];
+        $pagination = $this->reviewer->make_pagination(site_url('reviewer/'), 2, $total);
+        if (!$reviewers) {
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
+        }
+
         foreach ($reviewers as $reviewer) {
             $reviewer->reviewer_expert = explode(",", $reviewer->reviewer_expert);
         }
+
+        $pages     = $this->pages;
+        $main_view = 'reviewer/index_reviewer';
         $this->load->view('template', compact('pages', 'main_view', 'reviewers', 'pagination', 'total'));
     }
 
-    public function add()
+    public function add($copy = false)
     {
-        if (!$_POST) {
-            $input = (object) $this->reviewer->get_default_values();
-        } else {
-            $input = (object) $this->input->post(null, true);
-        }
-        // untuk select2 tags sumber
-        $allexpert = $this->reviewer->select('reviewer_expert')->get_all();
-        if ($allexpert != null) {
-            foreach ($allexpert as $value) {
-                $pecah = explode(",", $value->reviewer_expert);
-                foreach ($pecah as $key => $value) {
-                    $input->sumber[$value] = $value;
-                }
+        if ($copy == 'copy') {
+            if (isset($this->session->user_id_temp)) {
+                $input                = (object) $this->reviewer->get_default_values();
+                $input->user_id       = $this->session->user_id_temp;
+                $input->reviewer_nip  = $this->session->reviewer_nip_temp;
+                $input->reviewer_name = $this->session->reviewer_name_temp;
             }
         } else {
-            $input->sumber = '';
+            if (!$_POST) {
+                $input = (object) $this->reviewer->get_default_values();
+            } else {
+                $input = (object) $this->input->post(null, true);
+
+                // repopulate reviewer_expert ketika validasi form gagal
+                if (!isset($input->reviewer_expert)) {
+                    $input->reviewer_expert = [];
+                }
+
+                // forced to null, instead empty string
+                $input->user_id    = empty_to_null($input->user_id);
+                $input->faculty_id = empty_to_null($input->faculty_id);
+            }
         }
-        // untuk select2 tags pilihan
-        //$input->pilih = [];
+
+        // select2 data expert
+        $input->reviewer_expert_data = $this->_generate_reviewer_expert_data($input->reviewer_expert);
+
         if (!$this->reviewer->validate()) {
-            //assign select tags pilihan
-            //$input->pilih = $input->reviewer_expert;
             $pages       = $this->pages;
             $main_view   = 'reviewer/form_reviewer';
             $form_action = 'reviewer/add';
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
-        //gabungkan array masuk ke db
+
+        // gabungkan array masuk ke db
         $input->reviewer_expert = implode(",", $input->reviewer_expert);
-        unset($input->sumber);
-        if ($this->reviewer->insert($input)) {
-            $this->session->set_flashdata('success', 'Data saved');
+        unset($input->reviewer_expert_data);
+
+        if ($copy == 'copy') {
+            if ($this->reviewer->insert($input) && $this->reviewer->where('user_id', $this->session->user_id_temp)->update(['level' => 'author_reviewer'], 'user')) {
+                $this->session->set_flashdata('success', $this->lang->line('toast_add_success'));
+            } else {
+                $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
+            }
+            unset($this->session->user_id_temp, $this->session->reviewer_nip_temp, $this->session->reviewer_name_temp);
         } else {
-            $this->session->set_flashdata('error', 'Data failed to save');
+            if ($this->reviewer->insert($input)) {
+                $this->session->set_flashdata('success', $this->lang->line('toast_add_success'));
+            } else {
+                $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
+            }
         }
-        redirect('reviewer');
+
+        redirect($this->pages);
     }
 
     public function edit($id = null)
     {
-        if ($id != -99) {
-            $reviewer = $this->reviewer->where('reviewer_id', $id)->get();
-            if (!$reviewer) {
-                $this->session->set_flashdata('warning', 'Reviewer data were not available');
-                redirect('reviewer');
-            }
-        } else {
-            if (isset($_SESSION['user_id_temp'])) {
-                $session_temp = array('user_id' => $this->session->user_id_temp, 'reviewer_nip' => $this->session->reviewer_nip_temp, 'reviewer_name' => $this->session->reviewer_name_temp, 'faculty_id' => '', 'reviewer_expert' => '', 'reviewer_degree_front' => '', 'reviewer_degree_back' => '', 'reviewer_contact' => '', 'reviewer_email' => '');
-                $reviewer     = (object) $session_temp;
-            }
+        $reviewer = $this->reviewer->where('reviewer_id', $id)->get();
+        if (!$reviewer) {
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
+            redirect($this->pages);
         }
-        // untuk select2 tags sumber
-        $allexpert = $this->reviewer->select('reviewer_expert')->get_all();
-        foreach ($allexpert as $value) {
-            $pecah = explode(",", $value->reviewer_expert);
-            foreach ($pecah as $key => $value) {
-                $reviewer->sumber[$value] = $value;
-            }
-        }
+
         // untuk select2 tags pilihan
-        $reviewer->reviewer_expert = explode(",", $reviewer->reviewer_expert);
         if (!$_POST) {
             $input = (object) $reviewer;
+            // pecah expert data string ketika ambil dari db
+            $input->reviewer_expert = explode(",", $input->reviewer_expert);
         } else {
-            $input         = (object) $this->input->post(null, true);
-            $input->sumber = $reviewer->sumber;
-            //$input->pilih = $input->reviewer_expert;
+            $input = (object) $this->input->post(null, true);
+
+            // repopulate reviewer_expert ketika validasi form gagal
+            if (!isset($input->reviewer_expert)) {
+                $input->reviewer_expert = [];
+            }
+
+            // forced to null, instead empty string
+            $input->user_id    = empty_to_null($input->user_id);
+            $input->faculty_id = empty_to_null($input->faculty_id);
         }
+
+        // select2 data expert
+        $input->reviewer_expert_data = $this->_generate_reviewer_expert_data($input->reviewer_expert);
+
         if (!$this->reviewer->validate()) {
             $pages       = $this->pages;
             $main_view   = 'reviewer/form_reviewer';
@@ -105,29 +126,18 @@ class Reviewer extends Operator_Controller
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
-        //gabungkan array masuk ke db
+
+        // gabungkan array masuk ke db
         $input->reviewer_expert = implode(",", $input->reviewer_expert);
-        if ($id == -99) {
-            $data_level = array('level' => 'author_reviewer');
-            if ($this->reviewer->insert($input) && $this->reviewer->where('user_id', $_SESSION['user_id_temp'])->update($data_level, 'user')) {
-                $status  = 'success';
-                $message = 'Data saved';
-            } else {
-                $status  = 'error';
-                $message = 'Data failed to save';
-            }
-            unset($_SESSION['user_id_temp'], $_SESSION['reviewer_nip_temp'], $_SESSION['reviewer_name_temp']);
+        unset($input->reviewer_expert_data);
+
+        if ($this->reviewer->where('reviewer_id', $id)->update($input)) {
+            $this->session->set_flashdata('success', $this->lang->line('toast_edit_success'));
         } else {
-            if ($this->reviewer->where('reviewer_id', $id)->update($input)) {
-                $status  = 'success';
-                $message = 'Data updated';
-            } else {
-                $status  = 'error';
-                $message = 'Data failed to update';
-            }
+            $this->session->set_flashdata('success', $this->lang->line('toast_fail_fail'));
         }
-        $this->session->set_flashdata($status, $message);
-        redirect('reviewer');
+
+        redirect($this->pages);
     }
 
     public function delete($id = null)
@@ -152,46 +162,47 @@ class Reviewer extends Operator_Controller
         redirect('reviewer');
     }
 
-    public function search($page = null)
+    /**
+     * Menghasilkan array kepakaran
+     *
+     * @param array $reviewer_expert_input
+     * @return array
+     */
+    public function _generate_reviewer_expert_data(array $reviewer_expert_input)
     {
-        $keywords   = $this->input->get('keywords', true);
-        $reviewers  = $this->reviewer->like('reviewer_nip', $keywords)->or_like('reviewer_name', $keywords)->or_like('faculty_name', $keywords)->or_like('reviewer_expert', $keywords)->or_like('username', $keywords)->join('faculty')->join('user')->order_by('faculty.faculty_id')->order_by('reviewer_name')->paginate($page)->get_all();
-        $tot        = $this->reviewer->like('reviewer_id', $keywords)->or_like('reviewer_name', $keywords)->or_like('reviewer_expert', $keywords)->join('faculty')->order_by('faculty.faculty_id')->order_by('reviewer_name')->get_all();
-        $total      = count($tot);
-        $pagination = $this->reviewer->make_pagination(site_url('reviewer/search/'), 3, $total);
-        if (!$reviewers) {
-            $this->session->set_flashdata('warning', 'Data were not found');
-        } else {
-            foreach ($reviewers as $reviewer) {
-                $reviewer->reviewer_expert = explode(",", $reviewer->reviewer_expert);
+        $reviewer_expert_data = [];
+        $all_expert           = $this->reviewer->select('reviewer_expert')->get_all();
+        if ($all_expert) {
+            foreach ($all_expert as $e) {
+                $reviewer_expert_arr = explode(",", $e->reviewer_expert);
+                foreach ($reviewer_expert_arr as $r) {
+                    $reviewer_expert_data[$r] = $r;
+                }
             }
+
+            // repopulate data baru yang belum ada di db
+            foreach ($reviewer_expert_input as $r) {
+                $reviewer_expert_data[$r] = $r;
+            }
+        } else {
+            $reviewer_expert_data = [];
         }
-        $pages     = $this->pages;
-        $main_view = 'reviewer/index_reviewer';
-        $this->load->view('template', compact('pages', 'main_view', 'reviewers', 'pagination', 'total'));
+
+        return $reviewer_expert_data;
     }
-    //    public function alpha_coma_dash_dot_space($str)
-    //    {
-    //        if ( !preg_match('/^[a-zA-Z .,\-]+$/i',$str) )
-    //        {
-    //            $this->form_validation->set_message('alpha_coma_dash_dot_space', 'Can only be filled with letters, numbers, dash(-), dot(.), and comma(,).');
-    //            return false;
-    //        }
-    //    }
-    //
 
     public function unique_reviewer_contact()
     {
         $reviewer_contact = $this->input->post('reviewer_contact');
         $reviewer_id      = $this->input->post('reviewer_id');
-        if ($reviewer_contact == '') {
+        if (!$reviewer_contact) {
             return true;
         }
         $this->reviewer->where('reviewer_contact', $reviewer_contact);
-        !$reviewer_id || $this->reviewer->where('reviewer_id !=', $reviewer_id);
+        !$reviewer_id || $this->reviewer->where_not('reviewer_id', $reviewer_id);
         $reviewer = $this->reviewer->get();
-        if (!is_null($reviewer) && count($reviewer)) {
-            $this->form_validation->set_message('unique_reviewer_contact', '%s has been used');
+        if (!$reviewer) {
+            $this->form_validation->set_message('unique_reviewer_contact', $this->lang->line('toast_data_duplicate'));
             return false;
         }
         return true;
@@ -201,14 +212,14 @@ class Reviewer extends Operator_Controller
     {
         $reviewer_email = $this->input->post('reviewer_email');
         $reviewer_id    = $this->input->post('reviewer_id');
-        if ($reviewer_email == '') {
+        if (!$reviewer_email) {
             return true;
         }
         $this->reviewer->where('reviewer_email', $reviewer_email);
-        !$reviewer_id || $this->reviewer->where('reviewer_id !=', $reviewer_id);
+        !$reviewer_id || $this->reviewer->where_not('reviewer_id', $reviewer_id);
         $reviewer = $this->reviewer->get();
-        if (!is_null($reviewer) && count($reviewer)) {
-            $this->form_validation->set_message('unique_reviewer_email', '%s has been used');
+        if (!$reviewer) {
+            $this->form_validation->set_message('unique_reviewer_email', $this->lang->line('toast_data_duplicate'));
             return false;
         }
         return true;
@@ -219,10 +230,10 @@ class Reviewer extends Operator_Controller
         $reviewer_nip = $this->input->post('reviewer_nip');
         $reviewer_id  = $this->input->post('reviewer_id');
         $this->reviewer->where('reviewer_nip', $reviewer_nip);
-        !$reviewer_id || $this->reviewer->where('reviewer_id !=', $reviewer_id);
+        !$reviewer_id || $this->reviewer->where_not('reviewer_id', $reviewer_id);
         $reviewer = $this->reviewer->get();
-        if (!is_null($reviewer) && count($reviewer)) {
-            $this->form_validation->set_message('unique_reviewer_nip', '%s has been used');
+        if (!$reviewer) {
+            $this->form_validation->set_message('unique_reviewer_nip', $this->lang->line('toast_data_duplicate'));
             return false;
         }
         return true;
@@ -235,7 +246,7 @@ class Reviewer extends Operator_Controller
         $this->reviewer->where('user_id', $user_id);
         !$reviewer_id || $this->reviewer->where('reviewer_id !=', $reviewer_id);
         $reviewer = $this->reviewer->get();
-        if (!is_null($reviewer) && count($reviewer)) {
+        if (!$reviewer) {
             $this->form_validation->set_message('unique_reviewer_username', '%s has been used');
             return false;
         }

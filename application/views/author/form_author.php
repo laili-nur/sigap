@@ -89,14 +89,14 @@ $latest_education_options = [
                   <div class="row">
                      <div class="col-md-6">
                         <div class="form-group">
-                           <label for="author_degree_front"><?=$this->lang->line('form_author_degress_front');?></label>
+                           <label for="author_degree_front"><?=$this->lang->line('form_author_degree_front');?></label>
                            <?=form_input('author_degree_front', $input->author_degree_front, 'class="form-control" id="author_degree_front" placeholder="contoh = Ir."');?>
                            <?=form_error('author_degree_front');?>
                         </div>
                      </div>
                      <div class="col-md-6">
                         <div class="form-group">
-                           <label for="author_degree_back"><?=$this->lang->line('form_author_degress_back');?></label>
+                           <label for="author_degree_back"><?=$this->lang->line('form_author_degree_back');?></label>
                            <?=form_input('author_degree_back', $input->author_degree_back, 'class="form-control" id="author_degree_back" placeholder="contoh = S.T"');?>
                            <?=form_error('author_degree_back');?>
                         </div>

@@ -26,8 +26,8 @@ class Author extends Operator_Controller
             // cek apakah author termasuk reviewer juga
             $author->is_author_reviewer = false;
             if ($author->user_id != 0) {
-                $reviewer = $this->author->get_where(['user_id' => $author->user_id], 'reviewer');
-                if (!is_null($reviewer)) {
+                $is_reviewer = $this->author->get_where(['user_id' => $author->user_id], 'reviewer');
+                if ($is_reviewer) {
                     $author->is_author_reviewer = true;
                 }
             }
@@ -194,12 +194,15 @@ class Author extends Operator_Controller
     public function copy_to_reviewer($user_id, $nip, $name)
     {
         $this->load->model('reviewer_model', 'reviewer', true);
-        $reviewer_id = $this->reviewer->get_id_role_from_user_id($user_id, 'reviewer');
-        if ($reviewer_id == 0) {
+
+        // cek apakah sudah ada reviewer menggunakan user_id yang terpasang di author
+        $reviewer_id = $this->reviewer->get_role_id_from_user_id($user_id, 'reviewer');
+
+        if (!$reviewer_id) {
             $this->session->user_id_temp       = $user_id;
             $this->session->reviewer_nip_temp  = $nip;
             $this->session->reviewer_name_temp = urldecode($name);
-            redirect('reviewer/edit/-99');
+            redirect('reviewer/add/copy');
         } else {
             $this->session->set_flashdata('warning', $this->lang->line('form_author_error_copy_reviewer'));
             redirect($this->pages);
@@ -257,7 +260,7 @@ class Author extends Operator_Controller
             return true;
         }
         $this->author->where('author_contact', $author_contact);
-        !$author_id || $this->author->where('author_id !=', $author_id);
+        !$author_id || $this->author->where_not('author_id', $author_id);
         $author = $this->author->get();
         if ($author) {
             $this->form_validation->set_message('unique_author_contact', $this->lang->line('toast_data_duplicate'));
@@ -271,11 +274,11 @@ class Author extends Operator_Controller
         $author_email = $this->input->post('author_email');
         $author_id    = $this->input->post('author_id');
         // boleh kosong
-        if ($author_email == '') {
+        if (!$author_email) {
             return true;
         }
         $this->author->where('author_email', $author_email);
-        !$author_id || $this->author->where('author_id !=', $author_id);
+        !$author_id || $this->author->where_not('author_id', $author_id);
         $author = $this->author->get();
         if ($author) {
             $this->form_validation->set_message('unique_author_email', $this->lang->line('toast_data_duplicate'));
@@ -289,11 +292,11 @@ class Author extends Operator_Controller
         $author_saving_num = $this->input->post('author_saving_num');
         $author_id         = $this->input->post('author_id');
         // boleh kosong
-        if ($author_saving_num == '') {
+        if (!$author_saving_num) {
             return true;
         }
         $this->author->where('author_saving_num', $author_saving_num);
-        !$author_id || $this->author->where('author_id !=', $author_id);
+        !$author_id || $this->author->where_not('author_id', $author_id);
         $author = $this->author->get();
         if ($author) {
             $this->form_validation->set_message('unique_author_saving_num', $this->lang->line('toast_data_duplicate'));
@@ -307,7 +310,7 @@ class Author extends Operator_Controller
         $author_nip = $this->input->post('author_nip');
         $author_id  = $this->input->post('author_id');
         $this->author->where('author_nip', $author_nip);
-        !$author_id || $this->author->where('author_id !=', $author_id);
+        !$author_id || $this->author->where_not('author_id', $author_id);
         $author = $this->author->get();
         if ($author) {
             $this->form_validation->set_message('unique_author_nip', $this->lang->line('toast_data_duplicate'));
@@ -321,11 +324,11 @@ class Author extends Operator_Controller
         $user_id   = $this->input->post('user_id');
         $author_id = $this->input->post('author_id');
         // boleh kosong
-        if ($user_id == '') {
+        if (!$user_id) {
             return true;
         }
         $this->author->where('user_id', $user_id);
-        !$author_id || $this->author->where('author_id !=', $author_id);
+        !$author_id || $this->author->where_not('author_id', $author_id);
         $author = $this->author->get();
         if ($author) {
             $this->form_validation->set_message('unique_author_username', $this->lang->line('toast_data_duplicate'));

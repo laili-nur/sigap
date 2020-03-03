@@ -49,7 +49,7 @@ class Login extends MY_Controller
                 $this->load->view('multilevel');
             } else {
                 $cekuserid = $this->session->userdata('user_id');
-                $role_id   = $this->login->get_id_role_from_user_id($cekuserid, $sesi);
+                $role_id   = $this->login->get_role_id_from_user_id($cekuserid, $sesi);
                 if ($sesi == 'author') {
                     $data = [
                         'level'   => $sesi,

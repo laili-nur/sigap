@@ -46,7 +46,7 @@ class Login_model extends MY_Model
         if (count($user)) {
             $role_id = $user->user_id;
             if ($user->level == "author" || $user->level == "reviewer") {
-                $role_id = $this->login->get_id_role_from_user_id($user->user_id, $user->level);
+                $role_id = $this->login->get_role_id_from_user_id($user->user_id, $user->level);
             }
             $data = [
                 'username'   => $user->username,

@@ -1,4 +1,19 @@
-<!-- .page-title-bar -->
+<?php
+$reviewer_nip = [
+    'type'  => 'number',
+    'name'  => 'reviewer_nip',
+    'id'    => 'reviewer_nip',
+    'value' => $input->reviewer_nip,
+    'class' => 'form-control',
+];
+$reviewer_contact = [
+    'type'  => 'number',
+    'name'  => 'reviewer_contact',
+    'id'    => 'reviewer_contact',
+    'value' => $input->reviewer_contact,
+    'class' => 'form-control',
+];
+?>
 <header class="page-title-bar">
    <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -6,35 +21,25 @@
             <a href="<?=base_url();?>"><span class="fa fa-home"></span></a>
          </li>
          <li class="breadcrumb-item">
-            <a href="<?=base_url();?>">Penerbitan</a>
-         </li>
-         <li class="breadcrumb-item">
             <a href="<?=base_url('reviewer');?>">Reviewer</a>
          </li>
-         <li class="breadcrumb-item">
+         <li class="breadcrumb-item active">
             <a class="text-muted">Form</a>
          </li>
       </ol>
    </nav>
 </header>
-<!-- /.page-title-bar -->
-<!-- .page-section -->
 <div class="page-section">
    <div class="row">
       <div class="col-md-6">
-         <!-- .card -->
          <section class="card">
-            <!-- .card-body -->
             <div class="card-body">
-               <!-- .form -->
-               <?=form_open($form_action, ' novalidate="" id="formreviewer"');?>
-               <!-- .fieldset -->
+               <?=form_open($form_action, ' novalidate="" id="form_reviewer"');?>
                <fieldset>
-                  <legend>Data Reviewer</legend>
+                  <legend>Form Reviewer</legend>
                   <?=isset($input->reviewer_id) ? form_hidden('reviewer_id', $input->reviewer_id) : '';?>
-                  <!-- .form-group -->
                   <div class="form-group">
-                     <label for="user_id">Pilih User ID untuk Login
+                     <label for="user_id">Pilih akun untuk login
                         <abbr title="Required">*</abbr>
                      </label>
                      <?=form_dropdown('user_id', getDropdownListReviewer('user', ['user_id', 'username']), $input->user_id, 'id="user_id" class="form-control custom-select d-block"');?>
@@ -42,49 +47,44 @@
                         <a href="<?=base_url('user/add');?>"><strong>sini</strong></a></small>
                      <?=form_error('user_id');?>
                   </div>
-                  <!-- /.form-group -->
                   <hr class="my-2">
-                  <!-- .form-group -->
                   <div class="form-group">
-                     <label for="reviewer_nip">NIP
+                     <label for="reviewer_nip">
+                        <?=$this->lang->line('form_reviewer_nip');?>
                         <abbr title="Required">*</abbr>
                      </label>
-                     <?=form_input('reviewer_nip', $input->reviewer_nip, 'class="form-control" id="reviewer_nip"');?>
+                     <?=form_input($reviewer_nip);?>
                      <?=form_error('reviewer_nip');?>
                   </div>
-                  <!-- /.form-group -->
-                  <!-- .form-group -->
                   <div class="form-group">
-                     <label for="reviewer_name">Nama
+                     <label for="reviewer_name">
+                        <?=$this->lang->line('form_reviewer_name');?>
                         <abbr title="Required">*</abbr>
                      </label>
                      <?=form_input('reviewer_name', $input->reviewer_name, 'class="form-control" id="reviewer_name"');?>
                      <?=form_error('reviewer_name');?>
                   </div>
-                  <!-- /.form-group -->
-                  <!-- .form-group -->
                   <div class="form-group">
-                     <label for="user_id">Fakultas
+                     <label for="user_id">
+                        <?=$this->lang->line('form_faculty_name');?>
                         <abbr title="Required">*</abbr>
                      </label>
                      <?=form_dropdown('faculty_id', getDropdownList('faculty', ['faculty_id', 'faculty_name']), $input->faculty_id, 'id="faculty_id" class="form-control custom-select d-block"');?>
                      <?=form_error('faculty_id');?>
                   </div>
-                  <!-- /.form-group -->
                   <div class="row">
                      <div class="col-md-6">
-                        <!-- .form-group -->
                         <div class="form-group">
-                           <label for="author_degree_front">Gelar Depan Nama</label>
+                           <label for="author_degree_front">
+                              <?=$this->lang->line('form_reviewer_degree_front');?></label>
                            <?=form_input('reviewer_degree_front', $input->reviewer_degree_front, 'class="form-control" id="reviewer_degree_front" placeholder="contoh = Ir."');?>
                            <?=form_error('reviewer_degree_front');?>
                         </div>
-                        <!-- /.form-group -->
                      </div>
                      <div class="col-md-6">
-                        <!-- .form-group -->
                         <div class="form-group">
-                           <label for="reviewer_degree_back">Gelar Belakang Nama</label>
+                           <label for="reviewer_degree_back">
+                              <?=$this->lang->line('form_reviewer_degree_back');?></label>
                            <div class="has-clearable">
                               <button
                                  type="button"
@@ -99,98 +99,85 @@
                            </div>
                            <?=form_error('reviewer_degree_back');?>
                         </div>
-                        <!-- /.form-group -->
                      </div>
                   </div>
-                  <!-- .form-group -->
                   <div class="form-group">
-                     <label for="reviewer_expert">Kepakaran
+                     <label for="reviewer_expert">
+                        <?=$this->lang->line('form_reviewer_expert');?>
                         <abbr title="Required">*</abbr>
                      </label>
-                     <?=form_dropdown('reviewer_expert[]', $input->sumber, $input->reviewer_expert, 'id="reviewer_expert" class="form-control custom-select d-block" multiple="multiple"');?>
+                     <?=form_dropdown('reviewer_expert[]', $input->reviewer_expert_data, $input->reviewer_expert, 'id="reviewer_expert" class="form-control custom-select d-block" multiple="multiple"');?>
                      <small class="form-text text-muted">Pilih kepakaran yang telah ada, atau tambahkan kepakaran baru
                         (Ketik lalu tekan enter)</small>
-                     <?=form_error('reviewer_expert');?>
+                     <?=form_error('reviewer_expert[]');?>
                   </div>
-                  <!-- /.form-group -->
                   <hr class="my-2">
-                  <!-- .form-group -->
                   <div class="form-group">
-                     <label for="reviewer_contact">No HP</label>
-                     <?=form_input('reviewer_contact', $input->reviewer_contact, 'class="form-control" id="reviewer_contact"');?>
+                     <label for="reviewer_contact"> <?=$this->lang->line('form_reviewer_contact');?></label>
+                     <?=form_input($reviewer_contact);?>
                      <?=form_error('reviewer_contact');?>
                   </div>
-                  <!-- /.form-group -->
-                  <!-- .form-group -->
                   <div class="form-group">
-                     <label for="reviewer_email">Email</label>
+                     <label for="reviewer_email"> <?=$this->lang->line('form_reviewer_email');?></label>
                      <?=form_input('reviewer_email', $input->reviewer_email, 'class="form-control" id="reviewer_email"');?>
                      <?=form_error('reviewer_email');?>
                   </div>
-                  <!-- /.form-group -->
                </fieldset>
-               <!-- /.fieldset -->
                <hr>
-               <!-- .form-actions -->
                <div class="form-actions">
                   <button
                      class="btn btn-primary ml-auto"
                      type="submit"
                   >Submit data</button>
                </div>
-               <!-- /.form-actions -->
                </form>
-               <!-- /.form -->
             </div>
-            <!-- /.card-body -->
          </section>
-         <!-- /.card -->
       </div>
    </div>
 </div>
-<!-- /.page-section -->
 <script>
 $(document).ready(function() {
    loadValidateSetting();
-   $("#formreviewer").validate({
-         rules: {
-            user_id: "crequired",
-            reviewer_nip: {
-               crequired: true,
-               cminlength: 3,
-               cnumber: true
-            },
-            reviewer_name: {
-               crequired: true,
-               huruf: true
-            },
-            faculty_id: "crequired",
-            "reviewer_expert[]": "crequired",
-            reviewer_contact: {
-               cnumber: true
-            },
-            reviewer_email: {
-               cemail: true
-            },
-         },
-         errorElement: "span",
-         errorPlacement: function(error, element) {
-            error.addClass("invalid-feedback");
-            if (element.parent('.input-group').length) {
-               error.insertAfter(element.next('span.select2')); // input group
-            } else if (element.hasClass("select2-hidden-accessible")) {
-               error.insertAfter(element.next('span.select2')); // select2
-            } else if (element.hasClass("custom-file-input")) {
-               error.insertAfter(element.next('label.custom-file-label')); // fileinput custom
-            } else if (element.hasClass("custom-control-input")) {
-               error.insertAfter($(".custom-radio").last()); // radio
-            } else {
-               error.insertAfter(element); // default
-            }
-         }
-      },
-      validateSelect2()
-   );
+   // $("#form_reviewer").validate({
+   //       rules: {
+   //          user_id: "crequired",
+   //          reviewer_nip: {
+   //             crequired: true,
+   //             cminlength: 3,
+   //             cnumber: true
+   //          },
+   //          reviewer_name: {
+   //             crequired: true,
+   //             huruf: true
+   //          },
+   //          faculty_id: "crequired",
+   //          "reviewer_expert[]": "crequired",
+   //          reviewer_contact: {
+   //             cnumber: true
+   //          },
+   //          reviewer_email: {
+   //             cemail: true
+   //          },
+   //       },
+   //       errorElement: "span",
+   //       errorPlacement: function(error, element) {
+   //          error.addClass("invalid-feedback");
+   //          if (element.parent('.input-group').length) {
+   //             error.insertAfter(element.next('span.select2')); // input group
+   //          } else if (element.hasClass("select2-hidden-accessible")) {
+   //             error.insertAfter(element.next('span.select2')); // select2
+   //          } else if (element.hasClass("custom-file-input")) {
+   //             error.insertAfter(element.next('label.custom-file-label')); // fileinput custom
+   //          } else if (element.hasClass("custom-control-input")) {
+   //             error.insertAfter($(".custom-radio").last()); // radio
+   //          } else {
+   //             error.insertAfter(element); // default
+   //          }
+   //       }
+   //    },
+   //    validateSelect2()
+   // );
 
    $("#user_id").select2({
       placeholder: '-- Pilih --',

@@ -27,8 +27,8 @@ $lang['form_institute_name'] = 'Nama Institusi';
 // Author
 $lang['form_author_name']                = 'Nama Penulis';
 $lang['form_author_nip']                 = 'NIP Penulis';
-$lang['form_author_degress_front']       = 'Gelar Depan Nama';
-$lang['form_author_degress_back']        = 'Gelar Belakang Nama';
+$lang['form_author_degree_front']        = 'Gelar Depan Nama';
+$lang['form_author_degree_back']         = 'Gelar Belakang Nama';
 $lang['form_author_latest_education']    = 'Pendidikan Terakhir';
 $lang['form_author_address']             = 'Alamat';
 $lang['form_author_contact']             = 'Nomor HP';
@@ -39,6 +39,15 @@ $lang['form_author_ktp']                 = 'KTP Penulis';
 $lang['form_author_bank_name']           = 'Nama Bank';
 $lang['form_author_error_copy_reviewer'] = 'User telah memiliki role Author dan Reviewer';
 $lang['form_author_error_ktp_no_data']   = 'Pilih ulang file ktp, jika ingin mengunggah file baru';
+
+// Reviewer
+$lang['form_reviewer_name']         = 'Nama Reviewer';
+$lang['form_reviewer_nip']          = 'NIP Reviewer';
+$lang['form_reviewer_degree_front'] = 'Gelar Depan Nama';
+$lang['form_reviewer_degree_back']  = 'Gelar Belakang Nama';
+$lang['form_reviewer_email']        = 'Email Reviewer';
+$lang['form_reviewer_contact']      = 'Nomor HP Reviewer';
+$lang['form_reviewer_expert']       = 'Kepakaran';
 
 // User
 $lang['form_user_name']  = 'Akun Pengguna';

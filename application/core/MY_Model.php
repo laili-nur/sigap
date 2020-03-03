@@ -392,23 +392,22 @@ class MY_Model extends CI_Model
      * Mencari reviewer_id atau author_id berdasarkan user_id dan tipe role
      *
      * @param int $user_id
-     * @param string $role ('reviewer' atau 'author')
+     * @param string $role ('reviewer' or 'author')
      * @return int
      **/
-    public function get_id_role_from_user_id($user_id, $role)
+    public function get_role_id_from_user_id($user_id, $role)
     {
-        $id = 0;
+        // $data = $this->select($role . '_id')
+        //     ->join_relation_dest('user', $role)
+        //     ->where_relation($role, $user_id, 'user')
+        //     ->get_row_array($role);
 
         $data = $this->select($role . '_id')
-            ->join_relation_dest('user', $role)
-            ->where_relation($role, $user_id, 'user')
+            ->join_table('user', $role, 'user')
+            ->where('user.user_id', $user_id)
             ->get_row_array($role);
 
-        if ($data) {
-            $id = $data[$role . '_id'];
-        }
-
-        return $id;
+        return $data ? $data[$role . '_id'] : null;
     }
 
     public function get_id_draft_from_draft_id($draft_id, $role)

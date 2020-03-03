@@ -1,15 +1,9 @@
 <?php
+// data number
 $per_page = 10;
 $keywords = $this->input->get('keywords');
-
-if (isset($keywords)) {
-    $page = $this->uri->segment(3);
-} else {
-    $page = $this->uri->segment(2);
-}
-
-// nomor urut
-$i = isset($page) ? $page * $per_page - $per_page : 0;
+$page     = $this->uri->segment(2);
+$i        = isset($page) ? $page * $per_page - $per_page : 0;
 ?>
 
 <header class="page-title-bar">
@@ -18,7 +12,7 @@ $i = isset($page) ? $page * $per_page - $per_page : 0;
          <li class="breadcrumb-item">
             <a href="<?=base_url();?>"><span class="fa fa-home"></span></a>
          </li>
-         <li class="breadcrumb-item">
+         <li class="breadcrumb-item active">
             <a class="text-muted">Penulis</a>
          </li>
       </ol>
@@ -29,7 +23,7 @@ $i = isset($page) ? $page * $per_page - $per_page : 0;
          <span class="badge badge-info">Total : <?=$total;?></span>
       </div>
       <a
-         href="<?=base_url('author/add');?>"
+         href="<?=base_url("$pages/add");?>"
          class="btn btn-primary btn-sm"
       ><i class="fa fa-plus fa-fw"></i> Tambah</a>
    </div>
@@ -60,7 +54,7 @@ $i = isset($page) ? $page * $per_page - $per_page : 0;
                   <span class="mr-auto">Tabel Penulis <span class="badge badge-info"><?=$total;?></span></span>
                   <div class="card-header-control">
                      <a
-                        href="<?=base_url('author/add');?>"
+                        href="<?=base_url("$pages/add");?>"
                         class="btn btn-primary btn-sm"
                      >Tambah Penulis</a>
                   </div>
@@ -72,23 +66,23 @@ $i = isset($page) ? $page * $per_page - $per_page : 0;
                   id="card-tabel1"
                >
                   <div class="p-3">
-                     <?=form_open('author', ['method' => 'GET']);?>
+                     <?=form_open($pages, ['method' => 'GET']);?>
                      <div class="input-group input-group-alt">
-                        <?=form_input('keywords', $this->input->get('keywords'), ['placeholder' => 'Cari berdasarkan Nama Penulis, Username, NIP, Unit Kerja atau Institusi', 'class' => 'form-control']);?>
+                        <?=form_input('keywords', $keywords, ['placeholder' => 'Cari berdasarkan Nama Penulis, Username, NIP, Unit Kerja atau Institusi', 'class' => 'form-control']);?>
                         <div class="input-group-append">
                            <button
                               type="button"
                               class="btn btn-secondary"
-                              onclick="location.href = '<?=base_url('author');?>'"
+                              onclick="location.href = '<?=base_url($pages);?>'"
                            >Reset</button>
-                           <?=form_button(['type' => 'submit', 'content' => 'Search', 'class' => 'btn btn-primary']);?>
+                           <?=form_button(['type' => 'submit', 'content' => '<i class="fa fa-search"></i>', 'class' => 'btn btn-primary']);?>
                         </div>
                         <?=form_close();?>
                      </div>
                   </div>
                   <?php if ($authors): ?>
                   <div class="double-scroll">
-                     <table class="table table-striped">
+                     <table class="table table-striped mb-0">
                         <thead>
                            <tr>
                               <th
@@ -102,7 +96,7 @@ $i = isset($page) ? $page * $per_page - $per_page : 0;
                               <th
                                  scope="col"
                                  style="min-width:100px;"
-                              >Username</th>
+                              >Akun</th>
                               <th
                                  scope="col"
                                  style="min-width:100px;"
@@ -130,16 +124,16 @@ $i = isset($page) ? $page * $per_page - $per_page : 0;
                               <td class="align-middle">
                                  <?=highlight_keyword($author->username, $keywords);?>
                               </td>
-                              <td class="align-middle"> <?=highlight_keyword($author->author_nip, $keywords);?>></td>
-                              <td class="align-middle"> <?=highlight_keyword($author->work_unit_name, $keywords);?></td>
-                              <td class="align-middle"> <?=highlight_keyword($author->institute_name, $keywords);?></td>
+                              <td class="align-middle"><?=highlight_keyword($author->author_nip, $keywords);?></td>
+                              <td class="align-middle"><?=highlight_keyword($author->work_unit_name, $keywords);?></td>
+                              <td class="align-middle"><?=highlight_keyword($author->institute_name, $keywords);?></td>
                               <td class="align-middle text-right">
 
                                  <button
                                     title="Jadikan Reviewer"
                                     onclick="location.href='<?=base_url('author/copy_to_reviewer/' . $author->user_id . '/' . $author->author_nip . '/' . $author->author_name);?>'"
-                                    class="btn btn-sm btn-primary"
-                                    <?=(!$author->user_id || $author->is_author_reviewer) ? 'disabled' : '';?>
+                                    class="btn btn-sm btn-primary <?=!$author->user_id ? 'd-none' : '';?>"
+                                    <?=($author->is_author_reviewer) ? 'disabled' : '';?>
                                  >
                                     <i class="fa fa-user-plus"></i>
                                     <span class="sr-only">Jadikan reviewer</span>
@@ -209,11 +203,7 @@ $i = isset($page) ? $page * $per_page - $per_page : 0;
                   <?php else: ?>
                   <p class="text-center">Data tidak tersedia</p>
                   <?php endif;?>
-                  <?php if ($pagination): ?>
-                  <?=$pagination;?>
-                  <?php else: ?>
-                  &nbsp;
-                  <?php endif;?>
+                  <?=$pagination ?? null;?>
                </div>
             </div>
             <footer class="card-footer ">
@@ -232,7 +222,8 @@ $i = isset($page) ? $page * $per_page - $per_page : 0;
       </div>
    </div>
 </div>
-<script type="text/javascript">
+
+<script>
 $(document).ready(function() {
    doublescroll();
 });
