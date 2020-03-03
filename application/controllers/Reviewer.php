@@ -13,7 +13,7 @@ class Reviewer extends Admin_Controller
         $get_data   = $this->reviewer->get_data($keywords, $page);
         $reviewers  = $get_data['data'];
         $total      = $get_data['count'];
-        $pagination = $this->reviewer->make_pagination(site_url('reviewer/'), 2, $total);
+        $pagination = $this->reviewer->make_pagination(site_url('reviewer'), 2, $total);
         if (!$reviewers) {
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
         }

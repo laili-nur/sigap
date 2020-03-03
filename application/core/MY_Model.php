@@ -336,13 +336,28 @@ class MY_Model extends CI_Model
         return $this->pagination->create_links();
     }
 
-    public function get_id_and_name($table_dest, $table_middle, $id_table_middle, $table_from = "")
+    /**
+     * Mencari id dan nama dari entitas $table_dest
+     *
+     * @param string $table_dest 'author', 'reviewer'
+     * @param string $table_middle 'draft_author','draft_reviewer'
+     * @param int $table_middle_id 'draft_id
+     * @param string $table_from
+     * @return void
+     */
+    public function get_id_and_name($table_dest, $table_middle, $table_middle_id, $table_from = "")
     {
+        // return $this->select("$table_dest.{$table_dest}_id")
+        // ->select("$table_dest.{$table_dest}_name")
+        // ->join_relation_middle($table_dest, $table_middle)
+        // ->where_relation($table_middle, $table_middle_id, $table)
+        // ->get_all($table_dest);
+
         $table = $this->check_table($table_from);
         return $this->select("$table_dest.{$table_dest}_id")
             ->select("$table_dest.{$table_dest}_name")
-            ->join_relation_middle($table_dest, $table_middle)
-            ->where_relation($table_middle, $id_table_middle, $table)
+            ->join_table($table_middle, $table_dest, $table_dest)
+            ->where("$table_middle.{$table}_id", $table_middle_id)
             ->get_all($table_dest);
     }
 

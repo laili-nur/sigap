@@ -99,7 +99,10 @@
    <div class="app">
       <?php $this->load->view('navbar');?>
       <?php $this->load->view('sidebar');?>
-      <main class="app-main">
+      <main
+         class="app-main"
+         id="bodyx"
+      >
          <div class="wrapper">
             <div class="page">
                <div class="page-inner">

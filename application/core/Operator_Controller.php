@@ -13,13 +13,12 @@ class Operator_Controller extends MY_Controller
         $this->role_id    = $this->session->userdata('role_id');
 
         if (!$this->is_login) {
-            redirect(base_url('login'));
-            return;
+            redirect('login');
         }
 
-        //jika belum milih level,gabisa masuk sistem
+        // jika belum milih level,gabisa masuk sistem
         if ($this->level == 'author_reviewer') {
-            redirect(base_url('login/multilevel'));
+            redirect('login/multilevel');
         }
     }
 }

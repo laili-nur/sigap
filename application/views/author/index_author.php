@@ -132,7 +132,7 @@ $i        = isset($page) ? $page * $per_page - $per_page : 0;
                                  <button
                                     title="Jadikan Reviewer"
                                     onclick="location.href='<?=base_url('author/copy_to_reviewer/' . $author->user_id . '/' . $author->author_nip . '/' . $author->author_name);?>'"
-                                    class="btn btn-sm btn-primary <?=!$author->user_id ? 'd-none' : '';?>"
+                                    class="btn btn-sm btn-primary <?=!$author->user_id ? 'd-none' : '';?> <?=($author->is_author_reviewer) ? 'btn-disabled' : '';?>"
                                     <?=($author->is_author_reviewer) ? 'disabled' : '';?>
                                  >
                                     <i class="fa fa-user-plus"></i>

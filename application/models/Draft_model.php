@@ -2,7 +2,7 @@
 
 class Draft_model extends MY_Model
 {
-//bisa di override di controller
+    // override default value
     public $per_page = 10;
 
     public function get_validation_rules()
@@ -291,66 +291,159 @@ class Draft_model extends MY_Model
     public function get_default_values()
     {
         return [
-            'category_id'            => '',
-            'theme_id'               => '',
-            'draft_title'            => '',
-            'draft_pages'            => '',
-            'author_id'              => '',
-            'draft_file'             => '',
-            'entry_date'             => '',
-            'finish_date'            => '',
-            'is_review'              => '',
-            'review_start_date'      => '',
-            'review_end_date'        => '',
-            'review1_file'           => '',
-            'reviewer1_file_link'    => '',
-            'review1_upload_date'    => '',
-            'review1_last_upload'    => '',
-            'review1_notes'          => '',
-            'review1_notes_author'   => '',
-            'review1_deadline'       => '',
-            'review2_file'           => '',
-            'reviewer2_file_link'    => '',
-            'review2_upload_date'    => '',
-            'review2_last_upload'    => '',
-            'review2_notes'          => '',
-            'review2_notes_author'   => '',
-            'review2_deadline'       => '',
-            'is_edit'                => '',
-            'edit_start_date'        => '',
-            'edit_end_date'          => '',
-            'edit_file'              => '',
-            'editor_file_link'       => '',
-            'edit_upload_date'       => '',
-            'edit_last_upload'       => '',
-            'edit_notes'             => '',
-            'edit_notes_author'      => '',
-            'is_layout'              => '',
-            'layout_start_date'      => '',
-            'layout_end_date'        => '',
-            'layout_file'            => '',
-            'layouter_file_link'     => '',
-            'layout_upload_date'     => '',
-            'layout_last_upload'     => '',
-            'layout_notes'           => '',
-            'layout_notes_author'    => '',
-            'cover_file'             => '',
-            'cover_file_link'        => '',
-            'cover_upload_date'      => '',
-            'cover_notes'            => '',
-            'cover_notes_author'     => '',
-            'is_proofread'           => '',
-            'proofread_start_date'   => '',
-            'proofread_end_date'     => '',
-            'proofread_file'         => '',
-            'proofread_file_link'    => '',
-            'proofread_upload_date'  => '',
-            'proofread_last_upload'  => '',
-            'proofread_notes'        => '',
-            'proofread_notes_author' => '',
-            'draft_status'           => '',
-            'draft_notes'            => '',
-            'draft_file_link'        => '',
+            'category_id'            => null,
+            'theme_id'               => null,
+            'draft_title'            => null,
+            'draft_pages'            => null,
+            'author_id'              => null,
+            'draft_file'             => null,
+            'entry_date'             => null,
+            'finish_date'            => null,
+            'is_review'              => null,
+            'review_start_date'      => null,
+            'review_end_date'        => null,
+            'review1_file'           => null,
+            'reviewer1_file_link'    => null,
+            'review1_upload_date'    => null,
+            'review1_last_upload'    => null,
+            'review1_notes'          => null,
+            'review1_notes_author'   => null,
+            'review1_deadline'       => null,
+            'review2_file'           => null,
+            'reviewer2_file_link'    => null,
+            'review2_upload_date'    => null,
+            'review2_last_upload'    => null,
+            'review2_notes'          => null,
+            'review2_notes_author'   => null,
+            'review2_deadline'       => null,
+            'is_edit'                => null,
+            'edit_start_date'        => null,
+            'edit_end_date'          => null,
+            'edit_file'              => null,
+            'editor_file_link'       => null,
+            'edit_upload_date'       => null,
+            'edit_last_upload'       => null,
+            'edit_notes'             => null,
+            'edit_notes_author'      => null,
+            'is_layout'              => null,
+            'layout_start_date'      => null,
+            'layout_end_date'        => null,
+            'layout_file'            => null,
+            'layouter_file_link'     => null,
+            'layout_upload_date'     => null,
+            'layout_last_upload'     => null,
+            'layout_notes'           => null,
+            'layout_notes_author'    => null,
+            'cover_file'             => null,
+            'cover_file_link'        => null,
+            'cover_upload_date'      => null,
+            'cover_notes'            => null,
+            'cover_notes_author'     => null,
+            'is_proofread'           => null,
+            'proofread_start_date'   => null,
+            'proofread_end_date'     => null,
+            'proofread_file'         => null,
+            'proofread_file_link'    => null,
+            'proofread_upload_date'  => null,
+            'proofread_last_upload'  => null,
+            'proofread_notes'        => null,
+            'proofread_notes_author' => null,
+            'draft_status'           => null,
+            'draft_notes'            => null,
+            'draft_file_link'        => null,
+        ];
+    }
+
+    public function get_draft_for_admin($page)
+    {
+        $drafts = $this->select(['draft.draft_id', 'draft_title', 'category_name', 'category_year', 'entry_date', 'draft_status', 'is_reprint'])
+            ->join('category')
+            ->order_by('draft_status')
+            ->order_by('entry_date', 'desc')
+            ->paginate($page)
+            ->get_all();
+
+        $total = $this->select(['draft_id'])
+            ->join('category')
+            ->order_by('draft_status')
+            ->order_by('entry_date', 'desc')
+            ->paginate($page)
+            ->count();
+
+        return [
+            'drafts' => $drafts,
+            'total'  => $total,
+        ];
+    }
+
+    public function get_draft_for_author($username, $page)
+    {
+        $drafts = $this->select(['draft.draft_id', 'draft_title', 'category_name', 'category_year', 'entry_date', 'draft_status', 'is_reprint'])
+            ->join('category')
+            ->join_table('draft_author', 'draft', 'draft')
+            ->join_table('author', 'draft_author', 'author')
+            ->join_table('user', 'author', 'user')
+            ->where('username', $username)
+            ->paginate($page)
+            ->get_all();
+
+        $total = $this->select(['draft_id'])
+            ->join_table('draft_author', 'draft', 'draft')
+            ->join_table('author', 'draft_author', 'author')
+            ->join_table('user', 'author', 'user')
+            ->where('username', $username)
+            ->count();
+
+        return [
+            'drafts' => $drafts,
+            'total'  => $total,
+        ];
+    }
+
+    public function get_draft_for_reviewer($username, $page)
+    {
+        $drafts = $this->select(['draft.draft_id', 'draft_title', 'category_name', 'category_year', 'entry_date', 'draft_status', 'is_reprint', 'review1_flag', 'review1_deadline', 'review2_flag', 'review2_deadline'])
+            ->join('category')
+            ->join_table('draft_reviewer', 'draft', 'draft')
+            ->join_table('reviewer', 'draft_reviewer', 'reviewer')
+            ->join_table('user', 'reviewer', 'user')
+            ->where('username', $username)
+            ->paginate($page)
+            ->get_all();
+
+        $total = $this
+            ->join_table('draft_reviewer', 'draft', 'draft')
+            ->join_table('reviewer', 'draft_reviewer', 'reviewer')
+            ->join_table('user', 'reviewer', 'user')
+            ->where('username', $username)
+            ->count();
+
+        return [
+            'drafts' => $drafts,
+            'total'  => $total,
+        ];
+    }
+
+    public function get_draft_for_staff($username, $page)
+    {
+        $drafts = $this
+            ->select(['draft.draft_id', 'draft_title', 'category_name', 'category_year', 'entry_date', 'draft_status', 'is_reprint', 'edit_start_date', 'edit_end_date'])
+            ->join('category')
+            ->join_table('responsibility', 'draft', 'draft')
+            ->join_table('user', 'responsibility', 'user')
+            ->where('username', $username)
+            ->paginate($page)
+            ->get_all();
+
+        $total = $this->select(['draft_id'])
+            ->join_table('responsibility', 'draft', 'draft')
+            ->join_table('user', 'responsibility', 'user')
+            ->where('username', $username)
+            ->count();
+
+        return [
+            'drafts' => $drafts,
+            'total'  => $total,
         ];
     }
 

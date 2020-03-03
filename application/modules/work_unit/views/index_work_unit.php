@@ -29,7 +29,7 @@
             <div class="card-body p-0">
                <?php if ($work_units): ?>
                <div class="table-responsive">
-                  <table class="table table-striped">
+                  <table class="table table-striped mb-0">
                      <thead>
                         <tr>
                            <th
