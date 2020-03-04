@@ -100,7 +100,6 @@ function expand($authors)
     $authors_list .= '</ul>';
     return $authors_list;
 }
-
 ?>
 <header class="page-title-bar">
    <nav aria-label="breadcrumb">
@@ -232,7 +231,7 @@ function expand($authors)
                               <strong>
                                  <a href="<?=base_url('draft/view/' . $draft->draft_id . '');?>">
                                     <?=($draft->is_reprint == 'y') ? '<span class="badge badge-warning"><i class="fa fa-redo" data-toggle="tooltip" title="Cetak Ulang"></i></span>' : '';?>
-                                    <?=$draft->draft_title;?>
+                                    <?=highlight_keyword($draft->draft_title, $keyword);?>
                                  </a>
                               </strong>
                            </td>
@@ -244,7 +243,7 @@ function expand($authors)
                            </td>
                            <?php if ($level != 'reviewer'): ?>
                            <td class="align-middle">
-                              <?=isset($draft->author_name) ? $draft->author_name : '-';?>
+                              <?=isset($draft->author_name) ? highlight_keyword($draft->author_name, $keyword) : '-';?>
                               <button
                                  type="button"
                                  class="btn btn-link btn-sm m-0 p-0 <?=count($draft->authors) == 1 ? 'd-none' : '';?>"

@@ -1,7 +1,9 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
+
+use Carbon\Carbon;
+
 class Draft extends Operator_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -44,18 +46,22 @@ class Draft extends Operator_Controller
                     $d->review_flag     = null;
                     $d->review_deadline = null;
                 }
-                $d->sisa_waktu = ceil((strtotime($d->review_deadline) - strtotime(date('Y-m-d H:i:s'))) / 86400);
+
+                $date          = Carbon::parse($d->review_deadline);
+                $d->sisa_waktu = $date->diffInDays();
             }
         } elseif ($this->level == 'editor') {
             $get_data = $this->draft->filter_draft_for_staff($filters, $this->username, $page);
 
             foreach ($get_data['drafts'] as $d) {
-                $d->sisa_waktu = ceil((strtotime($d->edit_deadline) - strtotime(date('Y-m-d H:i:s'))) / 86400);
+                $date          = Carbon::parse($d->edit_deadline);
+                $d->sisa_waktu = $date->diffInDays();
             }
         } elseif ($this->level == 'layouter') {
             $get_data = $this->draft->filter_draft_for_staff($filters, $this->username, $page);
             foreach ($get_data['drafts'] as $d) {
-                $d->sisa_waktu = ceil((strtotime($d->layout_deadline) - strtotime(date('Y-m-d H:i:s'))) / 86400);
+                $date          = Carbon::parse($d->layout_deadline);
+                $d->sisa_waktu = $date->diffInDays();
             }
         } elseif ($this->level == 'author') {
             $get_data = $this->draft->filter_draft_for_author($filters, $this->username, $page);
