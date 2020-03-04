@@ -354,99 +354,6 @@ class Draft_model extends MY_Model
         ];
     }
 
-    public function get_draft_for_admin($page)
-    {
-        $drafts = $this->select(['draft.draft_id', 'draft_title', 'category_name', 'category_year', 'entry_date', 'draft_status', 'is_reprint'])
-            ->join('category')
-            ->order_by('draft_status')
-            ->order_by('entry_date', 'desc')
-            ->paginate($page)
-            ->get_all();
-
-        $total = $this->select(['draft_id'])
-            ->join('category')
-            ->order_by('draft_status')
-            ->order_by('entry_date', 'desc')
-            ->paginate($page)
-            ->count();
-
-        return [
-            'drafts' => $drafts,
-            'total'  => $total,
-        ];
-    }
-
-    public function get_draft_for_author($username, $page)
-    {
-        $drafts = $this->select(['draft.draft_id', 'draft_title', 'category_name', 'category_year', 'entry_date', 'draft_status', 'is_reprint'])
-            ->join('category')
-            ->join_table('draft_author', 'draft', 'draft')
-            ->join_table('author', 'draft_author', 'author')
-            ->join_table('user', 'author', 'user')
-            ->where('username', $username)
-            ->paginate($page)
-            ->get_all();
-
-        $total = $this->select(['draft_id'])
-            ->join_table('draft_author', 'draft', 'draft')
-            ->join_table('author', 'draft_author', 'author')
-            ->join_table('user', 'author', 'user')
-            ->where('username', $username)
-            ->count();
-
-        return [
-            'drafts' => $drafts,
-            'total'  => $total,
-        ];
-    }
-
-    public function get_draft_for_reviewer($username, $page)
-    {
-        $drafts = $this->select(['draft.draft_id', 'draft_title', 'category_name', 'category_year', 'entry_date', 'draft_status', 'is_reprint', 'review1_flag', 'review1_deadline', 'review2_flag', 'review2_deadline'])
-            ->join('category')
-            ->join_table('draft_reviewer', 'draft', 'draft')
-            ->join_table('reviewer', 'draft_reviewer', 'reviewer')
-            ->join_table('user', 'reviewer', 'user')
-            ->where('username', $username)
-            ->paginate($page)
-            ->get_all();
-
-        $total = $this
-            ->join_table('draft_reviewer', 'draft', 'draft')
-            ->join_table('reviewer', 'draft_reviewer', 'reviewer')
-            ->join_table('user', 'reviewer', 'user')
-            ->where('username', $username)
-            ->count();
-
-        return [
-            'drafts' => $drafts,
-            'total'  => $total,
-        ];
-    }
-
-    public function get_draft_for_staff($username, $page)
-    {
-        $drafts = $this
-            ->select(['draft.draft_id', 'draft_title', 'category_name', 'category_year', 'entry_date', 'draft_status', 'is_reprint', 'edit_start_date', 'edit_end_date'])
-            ->join('category')
-            ->join_table('responsibility', 'draft', 'draft')
-            ->join_table('user', 'responsibility', 'user')
-            ->where('username', $username)
-            ->paginate($page)
-            ->get_all();
-
-        $total = $this->select(['draft_id'])
-            ->join_table('responsibility', 'draft', 'draft')
-            ->join_table('user', 'responsibility', 'user')
-            ->where('username', $username)
-            ->count();
-
-        return [
-            'drafts' => $drafts,
-            'total'  => $total,
-        ];
-    }
-
     public function filter_draft_for_admin($filters, $page)
     {
         $drafts = $this->select(['draft.draft_id', 'draft_title', 'category_name', 'category_year', 'entry_date', 'draft_status', 'is_reprint', 'author_name'])
@@ -463,14 +370,6 @@ class Draft_model extends MY_Model
             ->paginate($page)
             ->get_all();
 
-        // pasang author draft
-        foreach ($drafts as $d) {
-            $authors         = $this->get_id_and_name('author', 'draft_author', $d->draft_id);
-            $d->authors      = $authors;
-            $d->stts         = $d->draft_status;
-            $d->draft_status = $this->checkStatus($d->draft_status);
-        }
-
         $total = $this->select('draft.draft_id')
             ->when('keyword', $filters['keyword'])
             ->join_table('draft_author', 'draft', 'draft')
@@ -482,7 +381,7 @@ class Draft_model extends MY_Model
             ->count();
 
         return [
-            'drafts' => $drafts,
+            'drafts' => $this->_get_draft_authors_and_status($drafts),
             'total'  => $total,
         ];
     }
@@ -503,14 +402,6 @@ class Draft_model extends MY_Model
             ->paginate($page)
             ->get_all();
 
-        // pasang author draft
-        foreach ($drafts as $d) {
-            $authors         = $this->get_id_and_name('author', 'draft_author', $d->draft_id);
-            $d->authors      = $authors;
-            $d->stts         = $d->draft_status;
-            $d->draft_status = $this->checkStatus($d->draft_status);
-        }
-
         $total = $this->select('draft.draft_id')
             ->when('keyword', $filters['keyword'])
             ->join_table('draft_author', 'draft', 'draft')
@@ -522,7 +413,7 @@ class Draft_model extends MY_Model
             ->count();
 
         return [
-            'drafts' => $drafts,
+            'drafts' => $this->_get_draft_authors_and_status($drafts),
             'total'  => $total,
         ];
     }
@@ -575,14 +466,6 @@ class Draft_model extends MY_Model
             ->paginate($page)
             ->get_all();
 
-        // pasang author draft
-        foreach ($drafts as $d) {
-            $authors         = $this->get_id_and_name('author', 'draft_author', $d->draft_id);
-            $d->authors      = $authors;
-            $d->stts         = $d->draft_status;
-            $d->draft_status = $this->checkStatus($d->draft_status);
-        }
-
         $total = $this->select('draft.draft_id')
             ->when('keyword', $filters['keyword'])
             ->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')
@@ -594,7 +477,7 @@ class Draft_model extends MY_Model
             ->count();
 
         return [
-            'drafts' => $drafts,
+            'drafts' => $this->_get_draft_authors_and_status($drafts),
             'total'  => $total,
         ];
     }
@@ -616,10 +499,12 @@ class Draft_model extends MY_Model
             }
 
             if ($params == 'keyword') {
-                $this->group_start()
-                    ->like('draft_title', $data)
-                // ->or_like('author_name', $data)
-                    ->group_end();
+                $this->group_start();
+                $this->like('draft_title', $data);
+                if ($this->session->userdata('level') != 'reviewer') {
+                    $this->or_like('author_name', $data);
+                }
+                $this->group_end();
             }
 
             // if ($params == 'status') {
@@ -884,6 +769,18 @@ class Draft_model extends MY_Model
             }
         }
 
+    }
+
+    private function _get_draft_authors_and_status(array $drafts)
+    {
+        foreach ($drafts as $d) {
+            $authors         = $this->get_id_and_name('author', 'draft_author', $d->draft_id);
+            $d->authors      = $authors;
+            $d->stts         = $d->draft_status;
+            $d->draft_status = $this->checkStatus($d->draft_status);
+        }
+
+        return $drafts;
     }
 
 }

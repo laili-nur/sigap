@@ -101,17 +101,17 @@ function is_datetime_null($datetime)
     return $datetime;
 }
 
-function konversiTanggal($input = null, $opsi = '')
+function format_datetime($input = null, $opsi = '')
 {
     if ($input == null || $input == '0000-00-00 00:00:00') {
-        return "-";
+        return null;
     }
-    $timeStamp = $input;
-    if (!$opsi) {
-        return $timeStamp = date("d/m/Y H:i:s", strtotime($timeStamp));
-    } elseif ($opsi == 'dateonly') {
-        return $timeStamp = date("d/m/Y", strtotime($timeStamp));
-    } else {}
+
+    if ($opsi == 'dateonly') {
+        return date("d/m/Y H:i:s", strtotime($input));
+    } else {
+        return date("d/m/Y", strtotime($input));
+    }
 }
 
 //konversi date ke format tahun
@@ -243,25 +243,69 @@ function getDropdownListLayouter($table, $columns)
  * @param boolean $all
  * @return array
  */
-function get_dropdown_list_category($table, $columns, $all = false)
+// function get_dropdown_list_category($table, $columns, $all = false)
+// {
+//     $CI = &get_instance();
+//     if ($all == true) {
+//         // ambil semua kategori
+//         $CI->db->select($columns);
+//         $CI->db->from($table);
+//         where('category_status', 'n');
+//         $CI->db->order_by('category_name', 'asc');
+//         $query = $CI->db->get();
+//     } else {
+//         // ambil karegori yang aktif
+//         $query = $CI->db->select($columns)->from($table)->where('category_status', 'y')->get();
+//     }
+
+//     if ($query->num_rows() >= 1) {
+//         $options1 = ['' => '-- Semua --'];
+//         $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
+//         $options  = $options1 + $options2;
+//         return $options;
+//     }
+
+//     return $options = ['' => '- Empty -'];
+// }
+
+/**
+ * Membuat array category
+ *
+ * @param boolean $all_categories
+ * @return array
+ */
+function get_dropdown_list_category($all_categories = true)
+{
+    $condition = function () use ($all_categories) {
+        $CI = &get_instance();
+        if (!$all_categories) {
+            $CI->db->where('category_status', 'y');
+        }
+        $CI->db->order_by('category_name', 'asc');
+        return $CI;
+    };
+
+    return getdropdownListx('category', ['category_id', 'category_name'], $condition);
+}
+
+function getDropdownListx(string $table, array $columns, $condition = null)
 {
     $CI = &get_instance();
-    if ($all == true) {
-        // ambil semua kategori
-        $query = $CI->db->select($columns)->from($table)->order_by('category_name', 'asc')->get();
-    } else {
-        // ambil karegori yang aktif
-        $query = $CI->db->select($columns)->from($table)->where('category_status', 'y')->get();
+    $CI->db->select($columns);
+    $CI->db->from($table);
+    if ($condition) {
+        call_user_func($condition);
     }
+    $query = $CI->db->get();
 
     if ($query->num_rows() >= 1) {
-        $options1 = ['' => '-- Semua --'];
+        $options1 = ['' => '-- Pilih --'];
         $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
         $options  = $options1 + $options2;
         return $options;
     }
 
-    return $options = ['' => '- Empty -'];
+    return $options = ['' => '- Kosong -'];
 }
 
 // Get list of option for dropdown.

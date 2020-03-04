@@ -6,11 +6,11 @@
   <div class="list-group list-group-flush list-group-bordered" id="list-group-proofread">
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Tanggal masuk</span>
-      <strong><?=konversiTanggal($input->proofread_start_date);?></strong>
+      <strong><?=format_datetime($input->proofread_start_date);?></strong>
     </div>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Tanggal jadi</span>
-      <strong><?=konversiTanggal($input->proofread_end_date);?></strong>
+      <strong><?=format_datetime($input->proofread_end_date);?></strong>
     </div>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Status</span>
@@ -81,7 +81,7 @@
               <!-- keterangan last upload dan tombol download -->
               <div id="modal-proofread">
                 <p class="form-text text-muted">Last Upload :
-                  <?=konversiTanggal($input->proofread_upload_date);?>,
+                  <?=format_datetime($input->proofread_upload_date);?>,
                   <br> by :
                   <?=konversi_username_level($input->proofread_last_upload);?>
                   <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer'): ?>

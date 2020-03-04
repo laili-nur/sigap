@@ -22,8 +22,8 @@
                   <td class="align-middle"><a
                         href="<?=base_url('draft/view/' . $draft->draft_id);?>"><?=$draft->draft_title;?></a></td>
                   <td class="align-middle"><?=$draft->category_name;?></td>
-                  <td class="align-middle"><?=konversiTanggal($draft->entry_date, 'dateonly');?></td>
-                  <td class="align-middle"><?=konversiTanggal($draft->finish_date, 'dateonly');?></td>
+                  <td class="align-middle"><?=format_datetime($draft->entry_date, 'dateonly');?></td>
+                  <td class="align-middle"><?=format_datetime($draft->finish_date, 'dateonly');?></td>
                   <td class="align-middle">
                      <?=is_datetime_null($draft->finish_date) ? ceil((strtotime($draft->finish_date) - strtotime($draft->entry_date)) / 86400) . ' hari' : '-';?>
                   </td>

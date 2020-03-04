@@ -52,11 +52,11 @@
                            <td class="align-middle"><?=++$i;?></td>
                            <td class="align-middle"><?=$category->category_name;?></td>
                            <td class="align-middle"><?=$category->category_year;?></td>
-                           <td class="align-middle"><?=konversiTanggal($category->date_open, 'dateonly');?></td>
+                           <td class="align-middle"><?=format_datetime($category->date_open, 'dateonly');?></td>
                            <td class="align-middle">
                               <?=$category->sisa_waktu_buka >= 1 ? $category->sisa_waktu_buka . ' hari' : '<span style="color:green">Sudah dibuka</span>';?>
                            </td>
-                           <td class="align-middle"><?=konversiTanggal($category->date_close, 'dateonly');?></td>
+                           <td class="align-middle"><?=format_datetime($category->date_close, 'dateonly');?></td>
                            <td class="align-middle">
                               <?=$category->sisa_waktu_tutup <= 0 ? '<span style="color:red">Berakhir</span>' : $category->sisa_waktu_tutup . ' hari';?>
                            </td>

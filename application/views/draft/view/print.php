@@ -20,11 +20,11 @@
   <div class="list-group list-group-flush list-group-bordered" id="list-group-print">
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Tanggal masuk</span>
-      <strong><?=konversiTanggal($input->print_start_date);?></strong>
+      <strong><?=format_datetime($input->print_start_date);?></strong>
     </div>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Tanggal jadi</span>
-      <strong><?=konversiTanggal($input->print_end_date);?></strong>
+      <strong><?=format_datetime($input->print_end_date);?></strong>
     </div>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Status</span>
@@ -91,7 +91,7 @@
               <!-- keterangan last upload dan tombol download -->
               <div id="modal-print">
                 <p class="form-text text-muted">Last Upload :
-                  <?=konversiTanggal($input->print_upload_date);?>,
+                  <?=format_datetime($input->print_upload_date);?>,
                   <br> by :
                   <?=konversi_username_level($input->print_last_upload);?>
                   <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer'): ?>

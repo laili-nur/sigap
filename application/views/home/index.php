@@ -908,7 +908,7 @@ if ($sisa_waktu <= 0) {
                               <?=$category->category_note;?>
                            </td>
                            <td class="align-middle">
-                              <?=konversiTanggal($category->date_open, 'dateonly');?>
+                              <?=format_datetime($category->date_open, 'dateonly');?>
                            </td>
                            <td class="align-middle">
                               <?php
@@ -922,7 +922,7 @@ if ($sisa_waktu_buka >= 1) {
                            </td>
 
                            <td class="align-middle">
-                              <?=konversiTanggal($category->date_close, 'dateonly');?>
+                              <?=format_datetime($category->date_close, 'dateonly');?>
                            </td>
                            <td class="align-middle">
 

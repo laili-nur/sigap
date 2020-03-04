@@ -143,7 +143,7 @@
                     <?=($ceklevel === 'superadmin' or $ceklevel === 'admin_penerbitan') ? '<button type="button" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#ubah_entry_date">Edit</button>' : '';?>
                   </td>
                   <td>
-                    <?=konversiTanggal($input->entry_date);?>
+                    <?=format_datetime($input->entry_date);?>
                   </td>
                 </tr>
                 <!-- /tr -->
@@ -160,7 +160,7 @@
                 <tr>
                   <td width="200px"> Tanggal Selesai </td>
                   <td>
-                    <?=konversiTanggal($input->finish_date);?>
+                    <?=format_datetime($input->finish_date);?>
                   </td>
                 </tr>
                 <!-- /tr -->

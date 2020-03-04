@@ -32,15 +32,15 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
   <div class="list-group list-group-flush list-group-bordered" id="list-group-layout">
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Tanggal mulai</span>
-      <strong><?=konversiTanggal($input->layout_start_date);?></strong>
+      <strong><?=format_datetime($input->layout_start_date);?></strong>
     </div>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Tanggal selesai</span>
-      <strong><?=konversiTanggal($input->layout_end_date);?></strong>
+      <strong><?=format_datetime($input->layout_end_date);?></strong>
     </div>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Deadline</span>
-      <strong><?=($sisa_waktu_layout <= 0 and $input->layout_notes == '' and ($input->layout_start_date != "0000-00-00 00:00:00" and $input->layout_start_date != null)) ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . konversiTanggal($input->layout_deadline) . '</span>' : konversiTanggal($input->layout_deadline);?></strong>
+      <strong><?=($sisa_waktu_layout <= 0 and $input->layout_notes == '' and ($input->layout_start_date != "0000-00-00 00:00:00" and $input->layout_start_date != null)) ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . format_datetime($input->layout_deadline) . '</span>' : format_datetime($input->layout_deadline);?></strong>
     </div>
     <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer'): ?>
     <div class="list-group-item justify-content-between">
@@ -134,7 +134,7 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
             <!-- keterangan last upload dan tombol download -->
             <div id="modal-layout">
               <p>Last Upload :
-                <?=konversiTanggal($input->layout_upload_date);?>,
+                <?=format_datetime($input->layout_upload_date);?>,
                 <br> by :
                 <?=konversi_username_level($input->layout_last_upload);?>
                 <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer'): ?>
@@ -155,7 +155,7 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
               <!-- .form-group -->
               <div class="form-group">
                 <label for="cl" class="font-weight-bold">Catatan Layout</label>
-                <small class="text-muted" id="layout_last_notes"><?=konversiTanggal($input->layout_notes_date);?></small>
+                <small class="text-muted" id="layout_last_notes"><?=format_datetime($input->layout_notes_date);?></small>
                 <?php
 $optionscl = array(
     'name'  => 'layout_notes',
@@ -263,7 +263,7 @@ if ($ceklevel != 'editor') {
             <!-- keterangan last upload dan tombol download -->
             <div id="modal-cover">
               <p>Last Upload :
-                <?=konversiTanggal($input->cover_upload_date);?>
+                <?=format_datetime($input->cover_upload_date);?>
                 <br> by :
                 <?=konversi_username_level($input->cover_last_upload);?>
                 <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer'): ?>

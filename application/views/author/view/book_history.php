@@ -23,7 +23,7 @@
                   <td class="align-middle"><?=$book->book_edition;?></td>
                   <td class="align-middle"><?=$book->isbn;?></td>
                   <td class="align-middle"><?=$book->nomor_hak_cipta;?></td>
-                  <td class="align-middle"><?=konversiTanggal($book->published_date, 'dateonly');?></td>
+                  <td class="align-middle"><?=format_datetime($book->published_date, 'dateonly');?></td>
                </tr>
                <?php endforeach;?>
             </tbody>

@@ -163,7 +163,7 @@ function expand($authors)
                         <?=form_dropdown('reprint', $reprint_options, $reprint, 'id="reprint" class="form-control custom-select d-block" title="Filter Naskah"');?>
                      </div>
                      <div class="col-12 col-md-3 mb-3">
-                        <?=form_dropdown('category', get_dropdown_list_category('category', ['category_id', 'category_name'], true), $category, 'id="category" class="form-control custom-select d-block" title="Filter Kategori"');?>
+                        <?=form_dropdown('category', get_dropdown_list_category(), $category, 'id="category" class="form-control custom-select d-block" title="Filter Kategori"');?>
                      </div>
                      <?php endif;?>
                      <div class="col-12 col-md-10 mb-3">
@@ -217,10 +217,8 @@ function expand($authors)
                            <?php if ($level == 'reviewer' or $level == 'editor' or $level == 'layouter'): ?>
                            <th scope="col">Sisa Waktu</th>
                            <?php endif;?>
-                           <?php if ($level == 'superadmin' || $level == 'admin_penerbitan'): ?>
+                           <?php if (is_admin()): ?>
                            <th style="min-width:170px;"> &nbsp; </th>
-                           <?php else: ?>
-                           <th scope="col"> Aksi </th>
                            <?php endif;?>
                         </tr>
                      </thead>
@@ -230,11 +228,14 @@ function expand($authors)
                            <td class="align-middle pl-3">
                               <?=++$i;?>
                            </td>
-                           <td class="align-middle"><strong><a
-                                    href="<?=base_url('draft/view/' . $draft->draft_id . '');?>"
-                                 >
-                                    <?=($draft->is_reprint == 'y') ? '<span class="badge badge-warning"><i class="fa fa-redo " data-toggle="tooltip" title="Cetak Ulang"></i></span>' : '';?>
-                                    <?=$draft->draft_title;?></a></strong></td>
+                           <td class="align-middle">
+                              <strong>
+                                 <a href="<?=base_url('draft/view/' . $draft->draft_id . '');?>">
+                                    <?=($draft->is_reprint == 'y') ? '<span class="badge badge-warning"><i class="fa fa-redo" data-toggle="tooltip" title="Cetak Ulang"></i></span>' : '';?>
+                                    <?=$draft->draft_title;?>
+                                 </a>
+                              </strong>
+                           </td>
                            <td class="align-middle">
                               <?=$draft->category_name;?>
                            </td>
@@ -259,88 +260,61 @@ function expand($authors)
                            </td>
                            <?php endif;?>
                            <td class="align-middle">
-                              <?=konversiTanggal($draft->entry_date);?>
+                              <?=format_datetime($draft->entry_date);?>
                            </td>
                            <td class="align-middle">
-                              <?php
-if ($level == 'reviewer') {
-    if ($draft->review_flag != '') {
-        echo '<span class="badge badge-success">Sudah direview</span>';
-    } else {
-        echo '<span class="badge badge-danger">Belum direview</span>';
-    }
-} else {
-    echo $draft->draft_status;
-}
-?>
+                              <?php if ($level == 'reviewer'): ?>
+                              <?=$draft->review_flag ? '<span class="badge badge-success">Sudah direview</span>' : '<span class="badge badge-danger">Belum direview</span>';?>
+                              <?php else: ?>
+                              <?=$draft->draft_status;?>
+                              <?php endif;?>
                            </td>
                            <?php if ($level == 'reviewer'): ?>
                            <td class="align-middle">
-                              <?php
-$sisa_waktu = ceil((strtotime($draft->deadline) - strtotime(date('Y-m-d H:i:s'))) / 86400);
-if ($sisa_waktu <= 0 and $draft->review_flag == '') {
-    echo '<span class="font-weight-bold text-danger" ><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>';
-} elseif ($sisa_waktu <= 0 and $draft->review_flag != '') {
-    echo '-';
-} else {
-    echo $sisa_waktu . ' hari';
-}
-?>
+                              <?php if ($draft->sisa_waktu <= 0 and $draft->review_flag == ''): ?>
+                              <?='<span class="font-weight-bold text-danger"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>';?>
+                              <?php elseif ($draft->sisa_waktu <= 0 and $draft->review_flag != ''): ?>
+                              <?=null;?>
+                              <?php else: ?>
+                              <?=$draft->sisa_waktu . ' hari';?>
+                              <?php endif;?>
                            </td>
                            <?php elseif ($level == 'editor'): ?>
                            <td class="align-middle">
-                              <?php
-if (konversiTanggal($draft->edit_start_date) == '-') {
-    echo 'Belum Mulai';
-} elseif (konversiTanggal($draft->edit_end_date) != '-') {
-    echo 'Selesai';
-} else {
-    $sisa_waktu = ceil((strtotime($draft->edit_deadline) - strtotime(date('Y-m-d H:i:s'))) / 86400);
-    if ($sisa_waktu <= 0 and $draft->edit_notes == '') {
-        echo '<span class="font-weight-bold text-danger" ><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>';
-    } elseif ($sisa_waktu <= 0 and $draft->edit_notes != '') {
-        echo '-';
-    } else {
-        echo $sisa_waktu . ' hari';
-    }
-}
-
-?>
+                              <?php if (!format_datetime($draft->edit_start_date)): ?>
+                              <span>Belum mulai</span>
+                              <?php elseif (format_datetime($draft->edit_end_date)): ?>
+                              <span>Selesai</span>
+                              <?php else: ?>
+                              <?php if ($draft->sisa_waktu <= 0 and $draft->edit_notes == ''): ?>
+                              <?='<span class="font-weight-bold text-danger"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>';?>
+                              <?php elseif ($draft->sisa_waktu <= 0 and $draft->edit_notes != ''): ?>
+                              <?=null;?>
+                              <?php else: ?>
+                              <?=$draft->sisa_waktu . ' hari';?>
+                              <?php endif;?>
+                              <?php endif;?>
                            </td>
                            <?php elseif ($level == 'layouter'): ?>
                            <td class="align-middle">
-                              <?php
-if (konversiTanggal($draft->layout_start_date) == '-') {
-    echo 'Belum Mulai';
-} elseif (konversiTanggal($draft->layout_end_date) != '-') {
-    echo 'Selesai';
-} else {
-    $sisa_waktu = ceil((strtotime($draft->layout_deadline) - strtotime(date('Y-m-d H:i:s'))) / 86400);
-    if ($sisa_waktu <= 0 and $draft->layout_notes == '') {
-        echo '<span class="font-weight-bold text-danger" ><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>';
-    } elseif ($sisa_waktu <= 0 and $draft->layout_notes != '') {
-        echo '-';
-    } else {
-        echo $sisa_waktu . ' hari';
-    }
-}
-
-?>
+                              <?php if (!format_datetime($draft->layout_start_date)): ?>
+                              <span>Belum mulai</span>
+                              <?php elseif (format_datetime($draft->layout_end_date)): ?>
+                              <span>Selesai</span>
+                              <?php else: ?>
+                              <?php if ($draft->sisa_waktu <= 0 and $draft->layout_notes == ''): ?>
+                              <?='<span class="font-weight-bold text-danger"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>';?>
+                              <?php elseif ($draft->sisa_waktu <= 0 and $draft->layout_notes != ''): ?>
+                              <?=null;?>
+                              <?php else: ?>
+                              <?=$draft->sisa_waktu . ' hari';?>
+                              <?php endif;?>
+                              <?php endif;?>
                            </td>
-                           <?php else: ?>
-                           <?php $sisa_waktu = 1;
-$draft->review_flag                          = true;?>
                            <?php endif;?>
-                           <?php if ($level == 'superadmin' || $level == 'admin_penerbitan'): ?>
+
+                           <?php if (is_admin()): ?>
                            <td class="align-middle text-right">
-                              <a
-                                 title="View"
-                                 href="<?=base_url('draft/view/' . $draft->draft_id . '');?>"
-                                 class="btn btn-sm btn-secondary"
-                              >
-                                 <i class="fa fa-eye"></i> View
-                                 <span class="sr-only">View</span>
-                              </a>
                               <a
                                  title="Edit"
                                  href="<?=base_url('draft/edit/' . $draft->draft_id . '');?>"
@@ -355,7 +329,10 @@ $draft->review_flag                          = true;?>
                                  class="btn btn-sm btn-danger"
                                  data-toggle="modal"
                                  data-target="#modal-hapus-<?=$draft->draft_id;?>"
-                              ><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
+                              >
+                                 <i class="fa fa-trash-alt"></i>
+                                 <span class="sr-only">Delete</span>
+                              </button>
                               <div class="text-left">
                                  <div
                                     class="modal modal-alert fade"
@@ -376,7 +353,7 @@ $draft->review_flag                          = true;?>
                                                 Hapus</h5>
                                           </div>
                                           <div class="modal-body">
-                                             <p>Apakah anda yakin akan menghapus buku <span class="font-weight-bold">
+                                             <p>Apakah anda yakin akan menghapus draft <span class="font-weight-bold">
                                                    <?=$draft->draft_title;?></span>?</p>
                                           </div>
                                           <div class="modal-footer">
@@ -397,35 +374,16 @@ $draft->review_flag                          = true;?>
                                  </div>
                               </div>
                            </td>
-                           <?php else: ?>
-                           <td class="align-middle">
-                              <a
-                                 title="View"
-                                 href="<?=base_url('draft/view/' . $draft->draft_id . '');?>"
-                                 class="btn btn-sm btn-secondary"
-                              >
-                                 <i class="fa fa-eye"></i> View
-                                 <span class="sr-only">View</span>
-                              </a>
-
-                           </td>
                            <?php endif;?>
                         </tr>
-
-
                         <?php endforeach;?>
                      </tbody>
                   </table>
                </div>
-
                <?php else: ?>
                <p class="text-center">Data tidak tersedia</p>
                <?php endif;?>
-               <?php if ($pagination): ?>
-               <?=$pagination;?>
-               <?php else: ?>
-               &nbsp;
-               <?php endif;?>
+               <?=$pagination ?? null;?>
             </div>
          </section>
       </div>
@@ -433,12 +391,9 @@ $draft->review_flag                          = true;?>
 </div>
 
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
    doublescroll();
-   // $("#per_page").select2({
-   //    placeholder: '-- Semua --',
-   // });
    $("#category").select2({
       placeholder: '-- Filter Kategori --',
       allowClear: true

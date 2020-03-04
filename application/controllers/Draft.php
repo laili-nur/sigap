@@ -27,28 +27,36 @@ class Draft extends Operator_Controller
             $get_data = $this->draft->filter_draft_for_reviewer($filters, $this->username, $page);
 
             // user yang sedang login merupakan reviewer 1 atau 2
-            foreach ($get_data['drafts'] as $key => $value) {
-                $draft_reviewers = $this->draft->get_id_and_name('reviewer', 'draft_reviewer', $value->draft_id);
+            foreach ($get_data['drafts'] as $d) {
+                $draft_reviewers = $this->draft->get_id_and_name('reviewer', 'draft_reviewer', $d->draft_id);
                 $reviewer_key    = key(array_filter($draft_reviewers, function ($dr) {
                     return $dr->reviewer_id == $this->role_id;
                 }));
                 if ($reviewer_key == 0) {
                     // reviewer 1
-                    $value->review_flag = $value->review1_flag;
-                    $value->deadline    = $value->review1_deadline;
+                    $d->review_flag     = $d->review1_flag;
+                    $d->review_deadline = $d->review1_deadline;
                 } elseif ($reviewer_key == 1) {
                     // reviewer 2
-                    $value->review_flag = $value->review2_flag;
-                    $value->deadline    = $value->review2_deadline;
+                    $d->review_flag     = $d->review2_flag;
+                    $d->review_deadline = $d->review2_deadline;
                 } else {
-                    $value->review_flag = null;
-                    $value->deadline    = null;
+                    $d->review_flag     = null;
+                    $d->review_deadline = null;
                 }
+                $d->sisa_waktu = ceil((strtotime($d->review_deadline) - strtotime(date('Y-m-d H:i:s'))) / 86400);
             }
         } elseif ($this->level == 'editor') {
             $get_data = $this->draft->filter_draft_for_staff($filters, $this->username, $page);
+
+            foreach ($get_data['drafts'] as $d) {
+                $d->sisa_waktu = ceil((strtotime($d->edit_deadline) - strtotime(date('Y-m-d H:i:s'))) / 86400);
+            }
         } elseif ($this->level == 'layouter') {
             $get_data = $this->draft->filter_draft_for_staff($filters, $this->username, $page);
+            foreach ($get_data['drafts'] as $d) {
+                $d->sisa_waktu = ceil((strtotime($d->layout_deadline) - strtotime(date('Y-m-d H:i:s'))) / 86400);
+            }
         } elseif ($this->level == 'author') {
             $get_data = $this->draft->filter_draft_for_author($filters, $this->username, $page);
         } else {
@@ -512,14 +520,14 @@ class Draft extends Operator_Controller
             if (!empty($this->input->post('edit_notes_date'))) {
                 if ($ceklevel == 'editor') {
                     $input->edit_notes_date  = date('Y-m-d H:i:s');
-                    $data['edit_notes_date'] = konversiTanggal($input->edit_notes_date);
+                    $data['edit_notes_date'] = format_datetime($input->edit_notes_date);
                 }
             }
 
             if (!empty($this->input->post('layout_notes_date'))) {
                 if ($ceklevel == 'layouter') {
                     $input->layout_notes_date  = date('Y-m-d H:i:s');
-                    $data['layout_notes_date'] = konversiTanggal($input->layout_notes_date);
+                    $data['layout_notes_date'] = format_datetime($input->layout_notes_date);
                 }
             }
 
@@ -786,15 +794,15 @@ class Draft extends Operator_Controller
                     <div class="list-group list-group-flush list-group-bordered">
                         <div class="list-group-item justify-content-between">
                           <span class="text-muted">Tanggal mulai</span>
-                          <strong>' . konversiTanggal($value->revision_start_date) . '</strong>
+                          <strong>' . format_datetime($value->revision_start_date) . '</strong>
                         </div>
                         <div class="list-group-item justify-content-between">
                           <span class="text-muted">Tanggal selesai</span>
-                          <strong>' . konversiTanggal($value->revision_end_date) . '</strong>
+                          <strong>' . format_datetime($value->revision_end_date) . '</strong>
                         </div>
                         <div class="list-group-item justify-content-between">
                           <span class="text-muted">Deadline ' . $tombol_edit . '</span>
-                          <strong>' . konversiTanggal($value->revision_deadline) . '</strong>
+                          <strong>' . format_datetime($value->revision_deadline) . '</strong>
                         </div>
                         <div class="list-group-item mb-0 pb-0">
                           <span class="text-muted">Catatan ' . $role . '</span>

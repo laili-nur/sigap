@@ -263,25 +263,25 @@ if (!empty($input->book_file)) {
               <!-- tr -->
               <tr>
                 <td width="200px"> Tanggal Masuk Draft</td>
-                <td><?=konversiTanggal($input->entry_date);?>  </td>
+                <td><?=format_datetime($input->entry_date);?>  </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Tanggal Selesai Draft</td>
-                <td><?=konversiTanggal($input->finish_date);?>  </td>
+                <td><?=format_datetime($input->finish_date);?>  </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Tanggal Cetak </td>
-                <td><?=konversiTanggal($input->print_end_date);?>  </td>
+                <td><?=format_datetime($input->print_end_date);?>  </td>
               </tr>
               <!-- /tr -->
               <!-- tr -->
               <tr>
                 <td width="200px"> Tanggal Terbit </td>
-                <td><?=konversiTanggal($input->published_date);?>  </td>
+                <td><?=format_datetime($input->published_date);?>  </td>
               </tr>
               <!-- /tr -->
             </tbody>

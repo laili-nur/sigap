@@ -23,22 +23,22 @@ $sisa_waktu_rev2 = ceil((strtotime($input->review2_deadline) - strtotime(date('Y
   <div class="list-group list-group-flush list-group-bordered" id="list-group-review">
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Tanggal mulai</span>
-      <strong><?=konversiTanggal($input->review_start_date);?></strong>
+      <strong><?=format_datetime($input->review_start_date);?></strong>
     </div>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Tanggal selesai</span>
-      <strong><?=konversiTanggal($input->review_end_date);?></strong>
+      <strong><?=format_datetime($input->review_end_date);?></strong>
     </div>
     <?php if ($reviewer_order == '0' or $reviewer_order != '1'): ?>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Deadline reviewer 1</span>
-      <strong><?=($sisa_waktu_rev1 <= 0 and $input->review1_flag == '') ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . konversiTanggal($input->review1_deadline) . '</span>' : konversiTanggal($input->review1_deadline);?></strong>
+      <strong><?=($sisa_waktu_rev1 <= 0 and $input->review1_flag == '') ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . format_datetime($input->review1_deadline) . '</span>' : format_datetime($input->review1_deadline);?></strong>
     </div>
     <?php endif;?>
     <?php if ($reviewer_order == '1' or $reviewer_order != '0'): ?>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Deadline reviewer 2</span>
-      <strong><?=($sisa_waktu_rev2 <= 0 and $input->review2_flag == '') ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . konversiTanggal($input->review2_deadline) . '</span>' : konversiTanggal($input->review2_deadline);?></strong>
+      <strong><?=($sisa_waktu_rev2 <= 0 and $input->review2_flag == '') ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . format_datetime($input->review2_deadline) . '</span>' : format_datetime($input->review2_deadline);?></strong>
     </div>
     <?php endif;?>
     <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer'): ?>
@@ -158,7 +158,7 @@ if ($input->review2_flag != '') {
             <!-- keterangan last upload dan tombol download -->
             <div id="modal-review1">
               <p>Last Upload :
-                <?=konversiTanggal($input->review1_upload_date);?>,
+                <?=format_datetime($input->review1_upload_date);?>,
                 <br> by :
                 <?=konversi_username_level($input->review1_last_upload);?>
                 <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer'): ?>
@@ -536,7 +536,7 @@ if ($ceklevel != 'author' or $author_order != 1) {
             <!-- keterangan last upload dan tombol download -->
             <div id="modal-review2">
               <p>Last Upload :
-                <?=konversiTanggal($input->review2_upload_date);?>,
+                <?=format_datetime($input->review2_upload_date);?>,
                 <br> by :
                 <?=konversi_username_level($input->review2_last_upload);?>
                 <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer'): ?>

@@ -33,17 +33,17 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Tanggal mulai</span>
       <strong>
-        <?=konversiTanggal($input->edit_start_date);?></strong>
+        <?=format_datetime($input->edit_start_date);?></strong>
     </div>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Tanggal selesai</span>
       <strong>
-        <?=konversiTanggal($input->edit_end_date);?></strong>
+        <?=format_datetime($input->edit_end_date);?></strong>
     </div>
     <div class="list-group-item justify-content-between">
       <span class="text-muted">Deadline</span>
       <strong>
-        <?=($sisa_waktu_edit <= 0 and $input->edit_notes == '' and ($input->edit_start_date != "0000-00-00 00:00:00" and $input->edit_start_date != null)) ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . konversiTanggal($input->edit_deadline) . '</span>' : konversiTanggal($input->edit_deadline);?></strong>
+        <?=($sisa_waktu_edit <= 0 and $input->edit_notes == '' and ($input->edit_start_date != "0000-00-00 00:00:00" and $input->edit_start_date != null)) ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . format_datetime($input->edit_deadline) . '</span>' : format_datetime($input->edit_deadline);?></strong>
     </div>
     <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer'): ?>
     <div class="list-group-item justify-content-between" id="reloadeditor">
@@ -135,7 +135,7 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
             <!-- keterangan last upload dan tombol download -->
             <div id="modal-edit">
               <p>Last Upload :
-                <?=konversiTanggal($input->edit_upload_date);?>,
+                <?=format_datetime($input->edit_upload_date);?>,
                 <br> by :
                 <?=konversi_username_level($input->edit_last_upload);?>
                 <?php if ($ceklevel != 'author' and $ceklevel != 'reviewer'): ?>
@@ -156,7 +156,7 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
               <div class="form-group">
                 <label for="ce" class="font-weight-bold">Catatan Editor</label>
                 <small class="text-muted" id="edit_last_notes">
-                  <?=konversiTanggal($input->edit_notes_date);?></small>
+                  <?=format_datetime($input->edit_notes_date);?></small>
                 <?php
 $optionsce = array(
     'name'  => 'edit_notes',

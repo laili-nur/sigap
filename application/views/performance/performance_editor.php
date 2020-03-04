@@ -3,10 +3,10 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="<?=base_url()?>"><span class="fa fa-home"></span> Admin Panel</a>
+        <a href="<?=base_url();?>"><span class="fa fa-home"></span> Admin Panel</a>
       </li>
       <li class="breadcrumb-item">
-        <a href="<?=base_url('performance')?>">Performa</a>
+        <a href="<?=base_url('performance');?>">Performa</a>
       </li>
       <li class="breadcrumb-item active">
         <a class="text-muted">Performa Editor</a>
@@ -18,22 +18,22 @@
 <!-- Reporting buku -->
 
 <ul nav class="nav nav-tabs">
-  <li class="nav-item"><a class="nav-link active" href="<?= base_url('performance/index') ?>">Performa Editor</a></li>
-  <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/performa_layouter') ?>">Performa Layouter</a></li>
-  <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/index_edit_revise') ?>">Revisi Naskah</a></li>
-    <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/index_desk_screening') ?>">Performa Desk Screening</a></li>
+  <li class="nav-item"><a class="nav-link active" href="<?=base_url('performance/index');?>">Performa Editor</a></li>
+  <li class="nav-item"><a class="nav-link" href="<?=base_url('performance/performa_layouter');?>">Performa Layouter</a></li>
+  <li class="nav-item"><a class="nav-link" href="<?=base_url('performance/index_edit_revise');?>">Revisi Naskah</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?=base_url('performance/index_desk_screening');?>">Performa Desk Screening</a></li>
 </ul>
 <br/>
 <div class="dropdown">
   <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Performa Editor
   </button>
   <ul class="dropdown-menu">
-    <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/index') ?>">Performa Editor Process</a></li>
-    <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/index_final') ?>">Performa Editor Final</a></li>
-    <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/index_ontime') ?>">Performa Editor On Time</a></li>
-    <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/index_late') ?>">Performa Editor Late</a></li>
-    <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/index_error') ?>">Performa Editor Error</a></li>
-    <li class="nav-item"><a class="nav-link" href="<?= base_url('performance/index_null') ?>">Performa Editor Kosong</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?=base_url('performance/index');?>">Performa Editor Process</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?=base_url('performance/index_final');?>">Performa Editor Final</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?=base_url('performance/index_ontime');?>">Performa Editor On Time</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?=base_url('performance/index_late');?>">Performa Editor Late</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?=base_url('performance/index_error');?>">Performa Editor Error</a></li>
+    <li class="nav-item"><a class="nav-link" href="<?=base_url('performance/index_null');?>">Performa Editor Kosong</a></li>
   </ul>
 </div>
 
@@ -70,46 +70,42 @@ tr:nth-child(even) {
       </thead>
       <tbody>
         <?php
-        if($performance_editor)
-        {
-          foreach ($performance_editor as $row)
-          {
-            ?>
+if ($performance_editor) {
+    foreach ($performance_editor as $row) {
+        ?>
             <tr>
               <td><?php echo $row->username; ?></td>
-              <td class="align-middle"><strong><a href="<?= base_url('draft/view/' . $row->draft_id . '') ?>"><?= $row->draft_title ?></a></strong></td>
+              <td class="align-middle"><strong><a href="<?=base_url('draft/view/' . $row->draft_id . '');?>"><?=$row->draft_title;?></a></strong></td>
               <td><?php echo $row->category_name; ?></td>
-              <td><?php echo konversiTanggal($row->edit_start_date); ?></td>
-              <td><?php echo konversiTanggal($row->edit_deadline); ?></td>
-              <td><?php echo konversiTanggal($row->edit_end_date); ?></td>
+              <td><?php echo format_datetime($row->edit_start_date); ?></td>
+              <td><?php echo format_datetime($row->edit_deadline); ?></td>
+              <td><?php echo format_datetime($row->edit_end_date); ?></td>
               <td><?php
-              if($row->performance_status == NULL){
-                echo "-";
-              } elseif ($row->performance_status == 1){
-                echo '<p hidden> 1 </p>','<span class="badge badge-primary">ON PROCESS</span>';
-              } elseif ($row->performance_status == 2) {
-                echo '<p hidden> 2 </p>','<span class="badge badge-warning">FINAL</span>';
-              } elseif ($row->performance_status == 3) {
-                echo '<p hidden> 3 </p>','<span class="badge badge-success">ON TIME</span>';
-              } elseif ($row->performance_status == 4) {
-                echo '<p hidden> 4 </p>','<span class="badge badge-danger">LATE</span>';
-              } else {
-                echo '<p hidden> 5 </p>','<i class="fa fa-exclamation-triangle text-danger"></i>';
-              }
-              ?></td>
+if ($row->performance_status == null) {
+            echo "-";
+        } elseif ($row->performance_status == 1) {
+            echo '<p hidden> 1 </p>', '<span class="badge badge-primary">ON PROCESS</span>';
+        } elseif ($row->performance_status == 2) {
+            echo '<p hidden> 2 </p>', '<span class="badge badge-warning">FINAL</span>';
+        } elseif ($row->performance_status == 3) {
+            echo '<p hidden> 3 </p>', '<span class="badge badge-success">ON TIME</span>';
+        } elseif ($row->performance_status == 4) {
+            echo '<p hidden> 4 </p>', '<span class="badge badge-danger">LATE</span>';
+        } else {
+            echo '<p hidden> 5 </p>', '<i class="fa fa-exclamation-triangle text-danger"></i>';
+        }
+        ?></td>
             </tr>
             <?php
-          }
-        }
-        else
-        {
-          ?>
+}
+} else {
+    ?>
           <tr>
             <td colspan="3">No data found</td>
           </tr>
           <?php
-        }
-        ?>
+}
+?>
       </tbody>
     </table>
   </div>
