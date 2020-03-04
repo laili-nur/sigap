@@ -58,14 +58,21 @@ class Draft extends Operator_Controller
     public function filter($page = null)
     {
         // filter kategori
-        $category = $this->input->get('category', true);
-        $kat      = $this->check_filter($category);
-        // filter cetak ulang
-        $reprint     = $this->input->get('reprint', true);
-        $cek_reprint = $this->check_reprint($reprint);
+        // $category = $this->input->get('category', true);
+        // // $kat      = $this->check_filter($category);
 
-        // filter tahapan
-        $progress = $this->input->get('progress', true);
+        // // filter cetak ulang
+        // $reprint = $this->input->get('reprint', true);
+        // // $cek_reprint = $this->check_reprint($reprint);
+
+        // // filter tahapan
+        // $progress = $this->input->get('progress', true);
+
+        // // filter keyword
+        // $keyword = $this->input->get('keyword');
+
+        // all filter
+        $filters = $this->input->get(null, true);
 
         // custom per page
         if ($this->input->get('per_page', true) != null) {
@@ -176,9 +183,14 @@ class Draft extends Operator_Controller
                 redirect(base_url('draft'));
             }
         } else {
-            $get_data = $this->draft->filter_draft_for_admin($category, $reprint, $progress, $page);
+            $get_data = $this->draft->filter_draft_for_admin($filters, $page);
             $drafts   = $get_data['drafts'];
             $total    = $get_data['total'];
+
+            // echo '<pre>';
+            // print_r($get_data);
+            // echo '</pre>';
+            // die();
 
             // if ($progress == 'error') {
             //     //inisialisasi array penampung kondisi not in
@@ -244,12 +256,12 @@ class Draft extends Operator_Controller
             $this->session->set_flashdata('warning', 'Data were not found');
 
         } else {
-            foreach ($drafts as $key => $value) {
-                $authors             = $this->draft->get_id_and_name('author', 'draft_author', $value->draft_id);
-                $value->author       = $authors;
-                $value->stts         = $value->draft_status;
-                $value->draft_status = $this->checkStatus($value->draft_status);
-            }
+            // foreach ($drafts as $key => $value) {
+            //     $authors             = $this->draft->get_id_and_name('author', 'draft_author', $value->draft_id);
+            //     $value->author       = $authors;
+            //     $value->stts         = $value->draft_status;
+            //     $value->draft_status = $this->checkStatus($value->draft_status);
+            // }
         }
         $pages     = $this->pages;
         $main_view = 'draft/index_draft';

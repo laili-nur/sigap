@@ -5,9 +5,9 @@ $per_page = $this->input->get('per_page');
 if (empty($per_page)) {
     $per_page = 10;
 }
-$keywords = $this->input->get('keywords');
+$keyword  = $this->input->get('keyword');
 $progress = $this->input->get('progress');
-if (isset($keywords) or isset($progress)) {
+if (isset($keyword) or isset($progress)) {
     $page = $this->uri->segment(3);
 } else {
     $page = $this->uri->segment(2);
@@ -65,6 +65,27 @@ $reprint_options = [
     'n' => ' Naskah Baru',
     'y' => ' Naskah Cetak Ulang',
 ];
+
+// $authors = '';
+// foreach ($draft->authors as $key => $value) {
+//     $authors .= $value->author_name;
+//     $authors .= '<br>';
+// }
+; //  $authors = substr($authors, 0, -2);
+
+function au($authors)
+{
+    $authors_list = '<ul class="p-0 m-0" style="padding: 0;list-style-type: none;">';
+    foreach ($authors as $a) {
+        $authors_list .= '<li>';
+        $authors_list .= '<i class="fa fa-user fa-fw"></i> ';
+        $authors_list .= $a->author_name;
+        $authors_list .= '</li>';
+    }
+    $authors_list .= '</ul>';
+    return $authors_list;
+}
+
 ?>
 <header class="page-title-bar">
    <nav aria-label="breadcrumb">
@@ -129,6 +150,7 @@ $reprint_options = [
                      <div class="col-12 col-lg-3 mb-3">
                         <?=form_dropdown('category', getDropdownListCategory('category', ['category_id', 'category_name'], true), $this->input->get('category'), '" id="category" class="form-control custom-select d-block "');?>
                      </div>
+                     <?=form_input('keyword', $keyword, 'placeholder="Cari berdasarkan Judul, Kategori, atau Tema" class="form-control"');?>
                      <?php else: ?>
                      <div class="col-12 col-lg-9 mb-3">
                         <?=form_dropdown('progress', $filter_status, $progress, ' id="progress" class="form-control custom-select d-block" title="Filter status"');?>
@@ -148,7 +170,7 @@ $reprint_options = [
                         <?=form_open('draft/search', ['method' => 'GET']);?>
                         <?php $placeholder = ($level == 'superadmin') ? 'placeholder="Cari berdasarkan Judul, Kategori, atau Tema" class="form-control"' : 'placeholder="Enter Title" class="form-control"';?>
                         <div class="input-group input-group-alt">
-                           <?=form_input('keywords', $keywords, $placeholder);?>
+                           <?=form_input('keyword', $keyword, $placeholder);?>
                            <div class="input-group-append">
                               <button
                                  type="button"
@@ -208,14 +230,7 @@ $reprint_options = [
                         </tr>
                      </thead>
                      <tbody>
-                        <?php foreach ($drafts as $draft):
-    $authors = '';
-    foreach ($draft->author as $key => $value) {
-        $authors .= $value->author_name;
-        $authors .= '<br>';
-    }
-    $authors = substr($authors, 0, -2);
-    ?>
+                        <?php foreach ($drafts as $draft): ?>
                         <tr>
                            <td class="align-middle pl-3">
                               <?=++$i;?>
@@ -233,7 +248,19 @@ $reprint_options = [
                            </td>
                            <?php if ($level != 'reviewer'): ?>
                            <td class="align-middle">
-                              <?=isset($draft->author[0]->author_name) ? $draft->author[0]->author_name : '-';?>
+                              <?=isset($draft->author_name) ? $draft->author_name : '-';?>
+                              <button
+                                 type="button"
+                                 class="btn btn-link btn-sm m-0 p-0 <?=count($draft->authors) == 1 ? 'd-none' : '';?>"
+                                 data-container="body"
+                                 data-toggle="popover"
+                                 data-placement="right"
+                                 data-html="true"
+                                 data-trigger="hover"
+                                 data-content='<?=au($draft->authors);?>'
+                              >
+                                 <i class="fa fa-users"></i>
+                              </button>
                            </td>
                            <?php endif;?>
                            <td class="align-middle">

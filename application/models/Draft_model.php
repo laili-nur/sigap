@@ -447,21 +447,38 @@ class Draft_model extends MY_Model
         ];
     }
 
-    public function filter_draft_for_admin($category, $reprint, $progress, $page)
+    public function filter_draft_for_admin($filters, $page)
     {
-        $drafts = $this
+        $drafts = $this->select(['draft.draft_id', 'draft_title', 'category_name', 'category_year', 'entry_date', 'draft_status', 'is_reprint', 'author_name'])
+            ->when('keyword', $filters['keyword'])
             ->join('category')
-            ->when('progress', $progress)
-            ->when('reprint', $reprint)
-            ->when('category', $category)
+            ->join_table('draft_author', 'draft', 'draft')
+            ->join_table('author', 'draft_author', 'author')
+            ->when('progress', $filters['progress'])
+            ->when('reprint', $filters['reprint'])
+            ->when('category', $filters['category'])
             ->order_by('draft_status')
             ->order_by('draft_title')
+            ->group_by('draft_id')
             ->paginate($page)
             ->get_all();
-        $total = $this
-            ->when('progress', $progress)
-            ->when('reprint', $reprint)
-            ->when('category', $category)
+
+        // pasang author draft
+        foreach ($drafts as $d) {
+            $authors         = $this->get_id_and_name('author', 'draft_author', $d->draft_id);
+            $d->authors      = $authors;
+            $d->stts         = $d->draft_status;
+            $d->draft_status = $this->checkStatus($d->draft_status);
+        }
+
+        $total = $this->select('draft.draft_id')
+            ->when('keyword', $filters['keyword'])
+            ->join_table('draft_author', 'draft', 'draft')
+            ->join_table('author', 'draft_author', 'author')
+            ->when('progress', $filters['progress'])
+            ->when('reprint', $filters['reprint'])
+            ->when('category', $filters['category'])
+            ->group_by('draft_id')
             ->count();
 
         return [
@@ -484,6 +501,13 @@ class Draft_model extends MY_Model
 
             if ($params == 'progress') {
                 $this->resolve_progress($data);
+            }
+
+            if ($params == 'keyword') {
+                $this->group_start()
+                    ->like('draft_title', $data)
+                    ->or_like('author_name', $data)
+                    ->group_end();
             }
         }
 
