@@ -10,13 +10,21 @@ class Draft extends Operator_Controller
 
     public function index($page = null)
     {
-        // menampilkan sesuai level user
-        if ($this->level == 'author') {
-            $get_data = $this->draft->get_draft_for_author($this->username, $page);
-        } elseif ($this->level == 'editor' || $this->level == 'layouter') {
-            $get_data = $this->draft->get_draft_for_staff($this->username, $page);
-        } elseif ($this->level == 'reviewer') {
-            $get_data = $this->draft->get_draft_for_reviewer($this->username, $page);
+        // all filter
+        $filters = [
+            'category' => $this->input->get('category', true),
+            'reprint'  => $this->input->get('reprint', true),
+            'progress' => $this->input->get('progress', true),
+            'keyword'  => $this->input->get('keyword', true),
+        ];
+
+        // custom per page
+        if ($this->input->get('per_page', true) != null) {
+            $this->draft->per_page = $this->input->get('per_page', true);
+        }
+
+        if ($this->level == 'reviewer') {
+            $get_data = $this->draft->filter_draft_for_reviewer($filters, $this->username, $page);
 
             // user yang sedang login merupakan reviewer 1 atau 2
             foreach ($get_data['drafts'] as $key => $value) {
@@ -32,165 +40,19 @@ class Draft extends Operator_Controller
                     // reviewer 2
                     $value->review_flag = $value->review2_flag;
                     $value->deadline    = $value->review2_deadline;
-                }
-            }
-        } else {
-            $get_data = $this->draft->get_draft_for_admin($page);
-        }
-
-        $drafts = $get_data['drafts'];
-
-        // tampilkan author dan status draft
-        foreach ($drafts as $key => $value) {
-            $authors             = $this->draft->get_id_and_name('author', 'draft_author', $value->draft_id);
-            $value->author       = $authors;
-            $value->stts         = $value->draft_status;
-            $value->draft_status = $this->checkStatus($value->draft_status);
-        }
-
-        $total      = $get_data['total'];
-        $pages      = $this->pages;
-        $main_view  = 'draft/index_draft';
-        $pagination = $this->draft->make_pagination(site_url('draft'), 2, $total);
-        $this->load->view('template', compact('pages', 'main_view', 'drafts', 'pagination', 'total'));
-    }
-
-    public function filter($page = null)
-    {
-        // filter kategori
-        // $category = $this->input->get('category', true);
-        // // $kat      = $this->check_filter($category);
-
-        // // filter cetak ulang
-        // $reprint = $this->input->get('reprint', true);
-        // // $cek_reprint = $this->check_reprint($reprint);
-
-        // // filter tahapan
-        // $progress = $this->input->get('progress', true);
-
-        // // filter keyword
-        // $keyword = $this->input->get('keyword');
-
-        // all filter
-        $filters = $this->input->get(null, true);
-
-        // custom per page
-        if ($this->input->get('per_page', true) != null) {
-            $this->draft->per_page = $this->input->get('per_page', true);
-        }
-
-        // $this->db->group_by('draft.draft_id');
-
-        if ($this->level == 'reviewer') {
-            if ($progress == 'sudah') {
-                $drafts        = array();
-                $drafts_source = $this->draft->join('category')->join('theme')->join_table('draft_reviewer', 'draft', 'draft')->join_table('reviewer', 'draft_reviewer', 'reviewer')->join_table('user', 'reviewer', 'user')->where('user.username', $this->username)->order_by('draft_title')->paginate($page)->get_all();
-                //cari tau rev 1 atau rev 2 yg sedang login
-                foreach ($drafts_source as $key => $value) {
-                    $rev        = $this->draft->get_id_and_name('reviewer', 'draft_reviewer', $value->draft_id);
-                    $value->rev = key(array_filter($rev, function ($e) {
-                        return $e->reviewer_id == $this->session->userdata('role_id');
-                    }));
-                    if ($value->rev == 0) {
-                        $value->review_flag = $value->review1_flag;
-                    } elseif ($value->rev == 1) {
-                        $value->review_flag = $value->review2_flag;
-                    } else {
-                    }
-                    if ($value->review_flag != '') {
-                        $drafts[] = $value;
-                    }
-                    $total = count($drafts);
-                }
-            } elseif ($progress == 'belum') {
-                $drafts        = array();
-                $drafts_source = $this->draft->join('category')->join('theme')->join_table('draft_reviewer', 'draft', 'draft')->join_table('reviewer', 'draft_reviewer', 'reviewer')->join_table('user', 'reviewer', 'user')->where('user.username', $this->username)->order_by('draft_title')->paginate($page)->get_all();
-                //cari tau rev 1 atau rev 2 yg sedang login
-                foreach ($drafts_source as $key => $value) {
-                    $rev        = $this->draft->get_id_and_name('reviewer', 'draft_reviewer', $value->draft_id);
-                    $value->rev = key(array_filter($rev, function ($e) {
-                        return $e->reviewer_id == $this->session->userdata('role_id');
-                    }));
-                    if ($value->rev == 0) {
-                        $value->review_flag = $value->review1_flag;
-                    } elseif ($value->rev == 1) {
-                        $value->review_flag = $value->review2_flag;
-                    } else {
-                    }
-                    if ($value->review_flag == '') {
-                        $drafts[] = $value;
-                    }
-                    $total = count($drafts);
+                } else {
+                    $value->review_flag = null;
+                    $value->deadline    = null;
                 }
             }
         } elseif ($this->level == 'editor') {
-            if ($progress == 'sudah') {
-                $drafts = $this->draft->join('category')->join('theme')->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where_not('edit_notes', '')->where('user.username', $this->username)->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where_not('edit_notes', '')->where('user.username', $this->username)->count();
-            } elseif ($progress == 'belum') {
-                $drafts = $this->draft->join('category')->join('theme')->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('edit_notes', '')->where_not('draft_status', 99)->where('user.username', $this->username)->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('edit_notes', '')->where_not('draft_status', 99)->where('user.username', $this->username)->count();
-            } elseif ($progress == 'approve') {
-                $drafts = $this->draft->join('category')->join('theme')->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('is_edit', 'y')->where('user.username', $this->username)->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('is_edit', 'y')->where('user.username', $this->username)->count();
-            } elseif ($progress == 'reject') {
-                $drafts = $this->draft->join('category')->join('theme')->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('is_edit', 'n')->where('draft_status', 99)->where('user.username', $this->username)->order_by('draft_title')->paginate($page)->get_all();
-                $tot    = $this->draft->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('is_edit', 'n')->where('draft_status', 99)->where('user.username', $this->username)->get_all();
-                $total  = count($tot);
-            } else {
-                redirect(base_url('draft'));
-            }
+            $get_data = $this->draft->filter_draft_for_staff($filters, $this->username, $page);
         } elseif ($this->level == 'layouter') {
-            if ($progress == 'sudah') {
-                $drafts = $this->draft->join('category')->join('theme')->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where_not('layout_notes', '')->where('user.username', $this->username)->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where_not('layout_notes', '')->where('user.username', $this->username)->count();
-            } elseif ($progress == 'belum') {
-                $drafts = $this->draft->join('category')->join('theme')->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('layout_notes', '')->where_not('draft_status', 99)->where('user.username', $this->username)->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('layout_notes', '')->where_not('draft_status', 99)->where('user.username', $this->username)->count();
-            } elseif ($progress == 'approve') {
-                $drafts = $this->draft->join('category')->join('theme')->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('is_layout', 'y')->where('user.username', $this->username)->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('is_layout', 'y')->where('user.username', $this->username)->count();
-            } elseif ($progress == 'reject') {
-                $drafts = $this->draft->join('category')->join('theme')->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('is_layout', 'n')->where('draft_status', 99)->where('user.username', $this->username)->order_by('draft_title')->paginate($page)->get_all();
-                $tot    = $this->draft->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('is_layout', 'n')->where('draft_status', 99)->where('user.username', $this->username)->get_all();
-                $total  = count($tot);
-            } else {
-                redirect(base_url('draft'));
-            }
+            $get_data = $this->draft->filter_draft_for_staff($filters, $this->username, $page);
         } elseif ($this->level == 'author') {
-            if ($progress == 'desk-screening') {
-                $drafts = $this->draft->join('category')->join('theme')->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('draft_status', '0')->where('user.username', $this->username)->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('draft_status', '0')->where('user.username', $this->username)->count();
-            } elseif ($progress == 'review') {
-                $drafts = $this->draft->join('category')->join('theme')->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('is_review', 'n')->where('draft_status', '4')->where('user.username', $this->username)->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('is_review', 'n')->where('draft_status', '4')->where('user.username', $this->username)->count();
-            } elseif ($progress == 'edit') {
-                $drafts = $this->draft->join('category')->join('theme')->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('is_review', 'y')->where('is_edit', 'n')->where_not('draft_status', '99')->where('user.username', $this->username)->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('is_review', 'y')->where('is_edit', 'n')->where_not('draft_status', '99')->where('user.username', $this->username)->count();
-            } elseif ($progress == 'layout') {
-                $drafts = $this->draft->join('category')->join('theme')->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('is_edit', 'y')->where('is_layout', 'n')->where_not('draft_status', '99')->where('user.username', $this->username)->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('is_edit', 'y')->where('is_layout', 'n')->where_not('draft_status', '99')->where('user.username', $this->username)->count();
-            } elseif ($progress == 'proofread') {
-                $drafts = $this->draft->join('category')->join('theme')->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('is_proofread', 'n')->where('is_layout', 'y')->where_not('draft_status', '99')->where('user.username', $this->username)->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('is_proofread', 'n')->where('is_layout', 'y')->where_not('draft_status', '99')->where('user.username', $this->username)->count();
-            } elseif ($progress == 'reject') {
-                $drafts = $this->draft->join('category')->join('theme')->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('draft_status', '99')->where('user.username', $this->username)->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('draft_status', '99')->where('user.username', $this->username)->count();
-            } elseif ($progress == 'final') {
-                $drafts = $this->draft->join('category')->join('theme')->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('draft_status', '14')->where('user.username', $this->username)->order_by('draft_title')->paginate($page)->get_all();
-                $total  = $this->draft->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('draft_status', '14')->where('user.username', $this->username)->count();
-            } else {
-                redirect(base_url('draft'));
-            }
+            $get_data = $this->draft->filter_draft_for_author($filters, $this->username, $page);
         } else {
             $get_data = $this->draft->filter_draft_for_admin($filters, $page);
-            $drafts   = $get_data['drafts'];
-            $total    = $get_data['total'];
-
-            // echo '<pre>';
-            // print_r($get_data);
-            // echo '</pre>';
-            // die();
 
             // if ($progress == 'error') {
             //     //inisialisasi array penampung kondisi not in
@@ -251,18 +113,13 @@ class Draft extends Operator_Controller
             // }
         }
 
-        $pagination = $this->draft->make_pagination(site_url('draft/filter/'), 3, $total);
+        $drafts     = $get_data['drafts'];
+        $total      = $get_data['total'];
+        $pagination = $this->draft->make_pagination(site_url('draft'), 2, $total);
         if (!$drafts) {
-            $this->session->set_flashdata('warning', 'Data were not found');
-
-        } else {
-            // foreach ($drafts as $key => $value) {
-            //     $authors             = $this->draft->get_id_and_name('author', 'draft_author', $value->draft_id);
-            //     $value->author       = $authors;
-            //     $value->stts         = $value->draft_status;
-            //     $value->draft_status = $this->checkStatus($value->draft_status);
-            // }
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
         }
+
         $pages     = $this->pages;
         $main_view = 'draft/index_draft';
         $this->load->view('template', compact('pages', 'main_view', 'drafts', 'pagination', 'total'));
@@ -1044,64 +901,6 @@ class Draft extends Operator_Controller
         echo json_encode($data);
     }
 
-    public function search($page = null)
-    {
-        $cekusername = $this->session->userdata('username');
-        $keywords    = $this->input->get('keywords', true);
-        $this->db->group_by('draft.draft_id');
-        if ($this->level == 'superadmin' || $this->level == 'admin_penerbitan') {
-            $drafts = $this->draft->like('category_name', $keywords)->or_like('draft_title', $keywords)->or_like('author_name', $keywords)->join('category')->join('theme')->join_relation_middle('draft', 'draft_author')->join_relation_dest('author', 'draft_author')->order_by('category.category_id')->order_by('theme.theme_id')->order_by('draft_title')->paginate($page)->get_all();
-            $tot    = $this->draft->like('category_name', $keywords)->or_like('draft_title', $keywords)->or_like('author_name', $keywords)->join('category')->join('theme')->join_relation_middle('draft', 'draft_author')->join_relation_dest('author', 'draft_author')->order_by('category.category_id')->order_by('theme.theme_id')->order_by('draft_title')->get_all();
-            $total  = count($tot);
-        } elseif ($this->level == 'author') {
-            $drafts = $this->draft->join('category')->join('theme')->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('user.username', $cekusername)->like('draft_title', $keywords)->order_by('author.author_name')->order_by('draft_title')->order_by('category.category_id')->paginate($page)->get_all();
-            $tot    = $this->draft->join('category')->join('theme')->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('user.username', $cekusername)->like('draft_title', $keywords)->order_by('author.author_name')->order_by('draft_title')->order_by('category.category_id')->get_all();
-            $total  = count($tot);
-        } elseif ($this->level == 'reviewer') {
-            $drafts = $this->draft->join('category')->join('theme')->join_table('draft_reviewer', 'draft', 'draft')->join_table('reviewer', 'draft_reviewer', 'reviewer')->join_table('user', 'reviewer', 'user')->where('user.username', $cekusername)->like('draft_title', $keywords)->order_by('draft_title')->order_by('category.category_id')->paginate($page)->get_all();
-            $tot    = $this->draft->join('category')->join('theme')->join_table('draft_reviewer', 'draft', 'draft')->join_table('reviewer', 'draft_reviewer', 'reviewer')->join_table('user', 'reviewer', 'user')->where('user.username', $cekusername)->like('draft_title', $keywords)->order_by('draft_title')->order_by('category.category_id')->get_all();
-            $total  = count($tot);
-            //cari tau rev 1 atau rev 2 yg sedang login
-            foreach ($drafts as $key => $value) {
-                $rev        = $this->draft->get_id_and_name('reviewer', 'draft_reviewer', $value->draft_id);
-                $value->rev = key(array_filter($rev, function ($e) {
-                    return $e->reviewer_id == $this->session->userdata('role_id');
-                }));
-            }
-        } else {
-            $drafts = $this->draft->join('category')->join('theme')->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->where('user.username', $cekusername)->like('draft_title', $keywords)->order_by('author.author_name')->order_by('draft_title')->order_by('category.category_id')->paginate($page)->get_all();
-            $tot    = $this->draft->join('category')->join('theme')->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->where('user.username', $cekusername)->like('draft_title', $keywords)->order_by('author.author_name')->order_by('draft_title')->order_by('category.category_id')->get_all();
-            $total  = count($tot);
-        }
-        $pagination = $this->draft->make_pagination(site_url('draft/search/'), 3, $total);
-        if (!$drafts) {
-            $this->session->set_flashdata('warning', 'Data were not found');
-        } else {
-            foreach ($drafts as $key => $value) {
-                $authors             = $this->draft->get_id_and_name('author', 'draft_author', $value->draft_id);
-                $value->author       = $authors;
-                $value->draft_status = $this->checkStatus($value->draft_status);
-            }
-        }
-        //cari tau rev 1 atau rev 2 yg sedang login
-        foreach ($drafts as $key => $value) {
-            $rev        = $this->draft->get_id_and_name('reviewer', 'draft_reviewer', $value->draft_id);
-            $value->rev = key(array_filter($rev, function ($e) {
-                return $e->reviewer_id == $this->session->userdata('role_id');
-            }));
-            if ($value->rev == 0) {
-                $value->review_flag = $value->review1_flag;
-                $value->deadline    = $value->review1_deadline;
-            } elseif ($value->rev == 1) {
-                $value->review_flag = $value->review2_flag;
-                $value->deadline    = $value->review2_deadline;
-            } else {
-            }
-        }
-        $pages     = $this->pages;
-        $main_view = 'draft/index_draft';
-        $this->load->view('template', compact('pages', 'main_view', 'drafts', 'pagination', 'total'));
-    }
     public function endProgress($id, $status)
     {
         $this->draft->update_draft_status($id, array('draft_status' => $status + 1));
@@ -1218,33 +1017,6 @@ class Draft extends Operator_Controller
                 break;
         }
         return $status;
-    }
-
-    public function check_filter($category = '')
-    {
-        if (empty($category)) {
-            $data['category']  = null;
-            $data['cond_temp'] = 'draft.category_id !=';
-        } else {
-            $data['category']  = $category;
-            $data['cond_temp'] = 'draft.category_id';
-        }
-        return $data;
-    }
-
-    public function check_reprint($reprint = '')
-    {
-        if ($reprint == 'n') {
-            $data['stts']      = 'n';
-            $data['cond_temp'] = 'is_reprint';
-        } elseif ($reprint == 'y') {
-            $data['stts']      = 'y';
-            $data['cond_temp'] = 'is_reprint';
-        } else {
-            $data['stts']      = 'null';
-            $data['cond_temp'] = 'is_reprint !=';
-        }
-        return $data;
     }
     /*
     |-----------------------------------------------------------------

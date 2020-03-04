@@ -487,6 +487,118 @@ class Draft_model extends MY_Model
         ];
     }
 
+    public function filter_draft_for_author($filters, $username, $page)
+    {
+        $drafts = $this->select(['draft.draft_id', 'draft_title', 'category_name', 'category_year', 'entry_date', 'draft_status', 'is_reprint', 'author_name'])
+            ->when('keyword', $filters['keyword'])
+            ->join('category')
+            ->join_table('draft_author', 'draft', 'draft')
+            ->join_table('author', 'draft_author', 'author')
+            ->join_table('user', 'author', 'user')
+            ->where('username', $username)
+            ->when('progress', $filters['progress'])
+            ->order_by('draft_status')
+            ->order_by('draft_title')
+            ->group_by('draft_id')
+            ->paginate($page)
+            ->get_all();
+
+        // pasang author draft
+        foreach ($drafts as $d) {
+            $authors         = $this->get_id_and_name('author', 'draft_author', $d->draft_id);
+            $d->authors      = $authors;
+            $d->stts         = $d->draft_status;
+            $d->draft_status = $this->checkStatus($d->draft_status);
+        }
+
+        $total = $this->select('draft.draft_id')
+            ->when('keyword', $filters['keyword'])
+            ->join_table('draft_author', 'draft', 'draft')
+            ->join_table('author', 'draft_author', 'author')
+            ->join_table('user', 'author', 'user')
+            ->where('username', $username)
+            ->when('progress', $filters['progress'])
+            ->group_by('draft_id')
+            ->count();
+
+        return [
+            'drafts' => $drafts,
+            'total'  => $total,
+        ];
+    }
+
+    public function filter_draft_for_reviewer($filters, $username, $page)
+    {
+        $drafts = $this->select(['draft.draft_id', 'draft_title', 'category_name', 'category_year', 'entry_date', 'draft_status', 'is_reprint', 'review1_flag', 'review1_deadline', 'review2_flag', 'review2_deadline'])
+            ->join('category')
+            ->join_table('draft_reviewer', 'draft', 'draft')
+            ->join_table('reviewer', 'draft_reviewer', 'reviewer')
+            ->join_table('user', 'reviewer', 'user')
+            ->where('username', $username)
+            ->when('keyword', $filters['keyword'])
+            ->when('progress', $filters['progress'])
+            ->order_by('draft_status')
+            ->order_by('draft_title')
+            ->group_by('draft_id')
+            ->paginate($page)
+            ->get_all();
+
+        $total = $this->select('draft.draft_id')
+            ->join_table('draft_reviewer', 'draft', 'draft')
+            ->join_table('reviewer', 'draft_reviewer', 'reviewer')
+            ->join_table('user', 'reviewer', 'user')
+            ->where('username', $username)
+            ->when('keyword', $filters['keyword'])
+            ->when('progress', $filters['progress'])
+            ->group_by('draft_id')
+            ->count();
+
+        return [
+            'drafts' => $drafts,
+            'total'  => $total,
+        ];
+    }
+
+    public function filter_draft_for_staff($filters, $username, $page)
+    {
+        $drafts = $this->select(['draft.draft_id', 'draft_title', 'category_name', 'category_year', 'entry_date', 'draft_status', 'is_reprint', 'author_name', 'edit_start_date', 'edit_end_date'])
+            ->when('keyword', $filters['keyword'])
+            ->join('category')
+            ->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')
+            ->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')
+            ->where('username', $username)
+            ->when('progress', $filters['progress'])
+        // ->when('status', $filters['status'])
+            ->order_by('draft_status')
+            ->order_by('draft_title')
+            ->group_by('draft_id')
+            ->paginate($page)
+            ->get_all();
+
+        // pasang author draft
+        foreach ($drafts as $d) {
+            $authors         = $this->get_id_and_name('author', 'draft_author', $d->draft_id);
+            $d->authors      = $authors;
+            $d->stts         = $d->draft_status;
+            $d->draft_status = $this->checkStatus($d->draft_status);
+        }
+
+        $total = $this->select('draft.draft_id')
+            ->when('keyword', $filters['keyword'])
+            ->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')
+            ->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')
+            ->where('username', $username)
+            ->when('progress', $filters['progress'])
+        // ->when('status', $filters['status'])
+            ->group_by('draft_id')
+            ->count();
+
+        return [
+            'drafts' => $drafts,
+            'total'  => $total,
+        ];
+    }
+
     public function when($params, $data)
     {
         // jika data null, maka skip
@@ -506,9 +618,17 @@ class Draft_model extends MY_Model
             if ($params == 'keyword') {
                 $this->group_start()
                     ->like('draft_title', $data)
-                    ->or_like('author_name', $data)
+                // ->or_like('author_name', $data)
                     ->group_end();
             }
+
+            // if ($params == 'status') {
+            //     if ($data == 'y') {
+            //         $this->where_not('edit_notes', '');
+            //     } elseif ($data == 'n') {
+            //         $this->where('edit_notes', '');
+            //     }
+            // }
         }
 
         return $this;
@@ -559,8 +679,10 @@ class Draft_model extends MY_Model
                     ->where('is_print', 'n')
                     ->or_where('is_print', 'y')
                     ->group_end()
+                    ->group_start()
                     ->where_not('draft_status', '99')
-                    ->where_not('draft_status', '14');
+                    ->where_not('draft_status', '14')
+                    ->group_end();
                 break;
 
             case 'reject':

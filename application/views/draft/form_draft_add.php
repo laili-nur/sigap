@@ -46,7 +46,7 @@
     $atribut = '';
 }
 ?>
-                     <?=form_dropdown('category_id', getDropdownListCategory('category', ['category_id', 'category_name']), $input->category_id, 'id="category" class="form-control custom-select d-block ' . $atribut . '" ' . $atribut . '');?>
+                     <?=form_dropdown('category_id', get_dropdown_list_category('category', ['category_id', 'category_name']), $input->category_id, 'id="category" class="form-control custom-select d-block ' . $atribut . '" ' . $atribut . '');?>
                      <?=form_error('category_id');?>
                   </div>
                   <?php if (!empty($this->uri->segment(3))) {

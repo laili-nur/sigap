@@ -177,7 +177,13 @@ function getDropdownListReviewer($table, $columns)
     return $options = ['' => '- Empty -'];
 }
 
-// Get list of editor
+/**
+ * Membuat array author
+ *
+ * @param string $table
+ * @param string $columns
+ * @return array
+ */
 function get_dropdown_list_author($table, $columns)
 {
     $CI    = &get_instance();
@@ -229,15 +235,22 @@ function getDropdownListLayouter($table, $columns)
     return $options = ['' => '- Empty -'];
 }
 
-// Khusus untuk category, mengambil yang aktif saja
-function getDropdownListCategory($table, $columns, $all = false)
+/**
+ * Membuat array category
+ *
+ * @param string $table
+ * @param string $columns
+ * @param boolean $all
+ * @return array
+ */
+function get_dropdown_list_category($table, $columns, $all = false)
 {
     $CI = &get_instance();
     if ($all == true) {
-        //ambil semua kategori
+        // ambil semua kategori
         $query = $CI->db->select($columns)->from($table)->order_by('category_name', 'asc')->get();
     } else {
-        //ambil karegori yang aktif
+        // ambil karegori yang aktif
         $query = $CI->db->select($columns)->from($table)->where('category_status', 'y')->get();
     }
 

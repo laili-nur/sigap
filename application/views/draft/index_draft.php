@@ -6,7 +6,12 @@ if (empty($per_page)) {
     $per_page = 10;
 }
 $keyword  = $this->input->get('keyword');
+$reprint  = $this->input->get('reprint');
 $progress = $this->input->get('progress');
+$category = $this->input->get('category');
+
+$status = $this->input->get('status');
+
 if (isset($keyword) or isset($progress)) {
     $page = $this->uri->segment(3);
 } else {
@@ -16,42 +21,44 @@ if (isset($keyword) or isset($progress)) {
 $i = isset($page) ? $page * $per_page - $per_page : 0;
 
 // Pilihan dropdown per level
-if ($level == 'reviewer') {
-    $filter_status = [
-        ''      => '- Filter Review -',
-        'belum' => ' Belum Direview',
-        'sudah' => ' Sudah direview',
-    ];
-} elseif ($level == 'editor') {
-    $filter_status = [
-        ''        => '- Filter Edit -',
-        'belum'   => ' Belum Diedit',
-        'sudah'   => ' Sudah Diedit',
-        'approve' => ' Edit Diterima',
-        'reject'  => ' Edit Dtolak',
-    ];
-} elseif ($level == 'layouter') {
-    $filter_status = [
-        ''        => '- Filter Layout -',
-        'belum'   => ' Belum Dilayout',
-        'sudah'   => ' Sudah Dilayout',
-        'approve' => ' Layout Diterima',
-        'reject'  => ' Layout Dtolak',
-    ];
-} else {
-    $filter_status = [
-        ''               => '- Filter Status -',
-        'desk_screening' => 'Tahap Desk Screening',
-        'review'         => 'Tahap Review',
-        'edit'           => 'Tahap Editorial',
-        'layout'         => 'Tahap Layout',
-        'proofread'      => 'Tahap Proofread',
-        'cetak'          => 'Tahap Cetak',
-        'final'          => 'Final',
-        'reject'         => 'Ditolak',
-        'error'          => 'Draft Error',
-    ];
-}
+// if ($level == 'reviewer') {
+//     $progress_options = [
+//         ''      => '- Filter Review -',
+//         'belum' => ' Belum Direview',
+//         'sudah' => ' Sudah direview',
+//     ];
+// }
+// elseif ($level == 'editor') {
+//     $progress_options = [
+//         ''        => '- Filter Edit -',
+//         'belum'   => ' Belum Diedit',
+//         'sudah'   => ' Sudah Diedit',
+//         'approve' => ' Edit Diterima',
+//         'reject'  => ' Edit Dtolak',
+//     ];
+// }
+// elseif ($level == 'layouter') {
+//     $progress_options = [
+//         ''        => '- Filter Layout -',
+//         'belum'   => ' Belum Dilayout',
+//         'sudah'   => ' Sudah Dilayout',
+//         'approve' => ' Layout Diterima',
+//         'reject'  => ' Layout Dtolak',
+//     ];
+// } else {
+$progress_options = [
+    ''               => '- Filter Progress -',
+    'desk_screening' => 'Tahap Desk Screening',
+    'review'         => 'Tahap Review',
+    'edit'           => 'Tahap Editorial',
+    'layout'         => 'Tahap Layout',
+    'proofread'      => 'Tahap Proofread',
+    'cetak'          => 'Tahap Cetak',
+    'final'          => 'Final',
+    'reject'         => 'Ditolak',
+    'error'          => 'Draft Error',
+];
+// }
 
 $per_page_options = [
     '10'  => '10',
@@ -61,10 +68,18 @@ $per_page_options = [
 ];
 
 $reprint_options = [
-    ''  => '- Filter Naskah -',
+    ''  => '- Filter Tipe Naskah -',
     'n' => ' Naskah Baru',
     'y' => ' Naskah Cetak Ulang',
 ];
+
+// $status_options = [
+//     ''  => '- Filter Edit -',
+//     'n' => ' Belum Diedit',
+//     'y' => ' Sudah Diedit',
+//     //  'approve' => ' Edit Diterima',
+//     //  'reject'  => ' Edit Dtolak',
+// ];
 
 // $authors = '';
 // foreach ($draft->authors as $key => $value) {
@@ -73,7 +88,7 @@ $reprint_options = [
 // }
 ; //  $authors = substr($authors, 0, -2);
 
-function au($authors)
+function expand($authors)
 {
     $authors_list = '<ul class="p-0 m-0" style="padding: 0;list-style-type: none;">';
     foreach ($authors as $a) {
@@ -135,28 +150,26 @@ function au($authors)
                      </button>
                   </div>
                   <?php endif; // filter error?>
-                  <?=form_open('draft/filter', ['method' => 'GET']);?>
+                  <?=form_open('draft', ['method' => 'GET']);?>
                   <div class="row">
-                     <div class="col-12 col-lg-1 mb-3">
+                     <div class="col-12 col-md-2 mb-3">
                         <?=form_dropdown('per_page', $per_page_options, $per_page, 'id="per_page" class="form-control custom-select d-block" title="List per page"');?>
                      </div>
+                     <div class="col-12 mb-3 <?=is_admin() ? 'col-md-4' : 'col-md-10';?>">
+                        <?=form_dropdown('progress', $progress_options, $progress, 'id="progress" class="form-control custom-select d-block" title="Filter Progress"');?>
+                     </div>
                      <?php if ($level == 'superadmin'): ?>
-                     <div class="col-12 col-lg-3 mb-3">
-                        <?=form_dropdown('reprint', $reprint_options, $this->input->get('reprint'), 'id="reprint" class="form-control custom-select d-block" title="Filter Naskah"');?>
+                     <div class="col-12 col-md-3 mb-3">
+                        <?=form_dropdown('reprint', $reprint_options, $reprint, 'id="reprint" class="form-control custom-select d-block" title="Filter Naskah"');?>
                      </div>
-                     <div class="col-12 col-lg-3 mb-3">
-                        <?=form_dropdown('progress', $filter_status, $progress, 'id="progress" class="form-control custom-select d-block" title="Filter Progress"');?>
-                     </div>
-                     <div class="col-12 col-lg-3 mb-3">
-                        <?=form_dropdown('category', getDropdownListCategory('category', ['category_id', 'category_name'], true), $this->input->get('category'), '" id="category" class="form-control custom-select d-block "');?>
-                     </div>
-                     <?=form_input('keyword', $keyword, 'placeholder="Cari berdasarkan Judul, Kategori, atau Tema" class="form-control"');?>
-                     <?php else: ?>
-                     <div class="col-12 col-lg-9 mb-3">
-                        <?=form_dropdown('progress', $filter_status, $progress, ' id="progress" class="form-control custom-select d-block" title="Filter status"');?>
+                     <div class="col-12 col-md-3 mb-3">
+                        <?=form_dropdown('category', get_dropdown_list_category('category', ['category_id', 'category_name'], true), $category, 'id="category" class="form-control custom-select d-block" title="Filter Kategori"');?>
                      </div>
                      <?php endif;?>
-                     <div class="col-12 col-lg-2 mb-3">
+                     <div class="col-12 col-md-10 mb-3">
+                        <?=form_input('keyword', $keyword, 'placeholder="Cari berdasarkan Judul, Kategori, atau Tema" class="form-control"');?>
+                     </div>
+                     <div class="col-12 col-lg-2">
                         <button
                            class="btn btn-primary btn-block ml-auto"
                            type="submit"
@@ -165,24 +178,6 @@ function au($authors)
                      </div>
                   </div>
                   <?=form_close();?>
-                  <div class="row">
-                     <div class="col-12">
-                        <?=form_open('draft/search', ['method' => 'GET']);?>
-                        <?php $placeholder = ($level == 'superadmin') ? 'placeholder="Cari berdasarkan Judul, Kategori, atau Tema" class="form-control"' : 'placeholder="Enter Title" class="form-control"';?>
-                        <div class="input-group input-group-alt">
-                           <?=form_input('keyword', $keyword, $placeholder);?>
-                           <div class="input-group-append">
-                              <button
-                                 type="button"
-                                 class="btn btn-secondary"
-                                 onclick="location.href = '<?=base_url($pages);?>'"
-                              >Reset</button>
-                              <?=form_button(['type' => 'submit', 'content' => '<i class="fa fa-search"></i>', 'class' => 'btn btn-primary']);?>
-                           </div>
-                           <?=form_close();?>
-                        </div>
-                     </div>
-                  </div>
                </div>
                <?php if ($drafts): ?>
                <div class="double-scroll">
@@ -257,7 +252,7 @@ function au($authors)
                                  data-placement="right"
                                  data-html="true"
                                  data-trigger="hover"
-                                 data-content='<?=au($draft->authors);?>'
+                                 data-content='<?=expand($draft->authors);?>'
                               >
                                  <i class="fa fa-users"></i>
                               </button>
@@ -441,8 +436,11 @@ $draft->review_flag                          = true;?>
 <script type="text/javascript">
 $(document).ready(function() {
    doublescroll();
+   // $("#per_page").select2({
+   //    placeholder: '-- Semua --',
+   // });
    $("#category").select2({
-      placeholder: '-- Semua --',
+      placeholder: '-- Filter Kategori --',
       allowClear: true
    });
    $("#progress").select2({
