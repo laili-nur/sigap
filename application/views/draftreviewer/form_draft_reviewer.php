@@ -17,7 +17,7 @@
                      <label for="user_id">Nama Draft
                         <abbr title="Required">*</abbr>
                      </label>
-                     <?=form_dropdown('draft_id', getDropdownList('draft', ['draft_id', 'draft_title']), $input->draft_id, 'id="draft_id" class="form-control custom-select d-block"');?>
+                     <?=form_dropdown('draft_id', get_dropdown_list('draft', ['draft_id', 'draft_title']), $input->draft_id, 'id="draft_id" class="form-control custom-select d-block"');?>
                      <div class="invalid-feedback">erot</div>
                      <?=form_error('draft_id');?>
                   </div>
@@ -27,7 +27,7 @@
                      <label for="user_id">Nama Reviewer
                         <abbr title="Required">*</abbr>
                      </label>
-                     <?=form_dropdown('reviewer_id', getDropdownList('reviewer', ['reviewer_id', 'reviewer_name']), $input->reviewer_id, 'id="reviewer_id" class="form-control custom-select d-block"');?>
+                     <?=form_dropdown('reviewer_id', get_dropdown_list('reviewer', ['reviewer_id', 'reviewer_name']), $input->reviewer_id, 'id="reviewer_id" class="form-control custom-select d-block"');?>
                      <div class="invalid-feedback">erot</div>
                      <?=form_error('reviewer_id');?>
                   </div>

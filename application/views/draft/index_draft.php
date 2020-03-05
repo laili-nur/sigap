@@ -9,14 +9,8 @@ $keyword  = $this->input->get('keyword');
 $reprint  = $this->input->get('reprint');
 $progress = $this->input->get('progress');
 $category = $this->input->get('category');
-
-$status = $this->input->get('status');
-
-if (isset($keyword) or isset($progress)) {
-    $page = $this->uri->segment(3);
-} else {
-    $page = $this->uri->segment(2);
-}
+$status   = $this->input->get('status');
+$page     = $this->uri->segment(2);
 // data table series number
 $i = isset($page) ? $page * $per_page - $per_page : 0;
 

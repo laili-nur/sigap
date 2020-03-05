@@ -25,3 +25,9 @@ function check_level()
     $CI = &get_instance();
     return $CI->session->userdata('level');
 }
+
+function check_role()
+{
+    $CI = &get_instance();
+    return $CI->session->userdata('role');
+}

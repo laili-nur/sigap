@@ -323,7 +323,7 @@ if ($ceklevel != 'editor') {
               <!-- .form-group -->
               <div class="form-group" id="form-editor">
                 <label for="pilih_editor">Editor</label>
-                <?=form_dropdown('editor', getDropdownListEditor('user', ['user_id', 'username']), '', 'id="pilih_editor" class="form-control custom-select d-block"');?>
+                <?=form_dropdown('editor', get_dropdown_listEditor('user', ['user_id', 'username']), '', 'id="pilih_editor" class="form-control custom-select d-block"');?>
               </div>
               <!-- /.form-group -->
             </fieldset>

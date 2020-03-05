@@ -38,7 +38,6 @@ $lang['form_author_heir_name']           = 'Ahli Waris';
 $lang['form_author_ktp']                 = 'KTP Penulis';
 $lang['form_author_bank_name']           = 'Nama Bank';
 $lang['form_author_error_copy_reviewer'] = 'User telah memiliki role Author dan Reviewer';
-$lang['form_author_error_ktp_no_data']   = 'Pilih ulang file ktp, jika ingin mengunggah file baru';
 
 // Reviewer
 $lang['form_reviewer_name']         = 'Nama Reviewer';
@@ -52,3 +51,56 @@ $lang['form_reviewer_expert']       = 'Kepakaran';
 // User
 $lang['form_user_name']  = 'Akun Pengguna';
 $lang['form_user_level'] = 'Level Akun';
+
+// Draft
+$lang['form_draft_title']       = 'Judul Draft';
+$lang['form_draft_pages']       = 'Total Halaman Draft';
+$lang['form_draft_entry_date']  = 'Tanggal Masuk Draft';
+$lang['form_draft_finish_date'] = 'Tanggal Selesai Draft';
+$lang['form_draft_file_link']   = 'Link File Draft';
+$lang['form_draft_status']      = 'Status Draft';
+$lang['form_draft_notes']       = 'Catatan Draft';
+
+$lang['form_draft_is_review']            = 'Status Review Draft';
+$lang['form_draft_review_start_date']    = 'Tanggal Mulai Review';
+$lang['form_draft_review_end_date']      = 'Tanggal Selesai Review';
+$lang['form_draft_review1_file']         = 'File Reviewer 1';
+$lang['form_draft_review1_file_link']    = 'Link File Reviewer 1';
+$lang['form_draft_review1_upload_date']  = 'Tanggal Upload Reviewer 1';
+$lang['form_draft_review1_notes']        = 'Catatan Reviewer 1';
+$lang['form_draft_review1_notes_author'] = 'Catatan Tanggapan Author ke Reviewer 1';
+$lang['form_draft_review1_deadline']     = 'Deadline Reviewer 1';
+$lang['form_draft_review2_file']         = 'File Reviewer 2';
+$lang['form_draft_review2_file_link']    = 'Link File Reviewer 2';
+$lang['form_draft_review2_upload_date']  = 'Tanggal Upload Reviewer 2';
+$lang['form_draft_review2_notes']        = 'Catatan Reviewer 2';
+$lang['form_draft_review2_notes_author'] = 'Catatan Tanggapan Author ke Reviewer 2';
+$lang['form_draft_review2_deadline']     = 'Deadline Reviewer 2';
+
+$lang['form_draft_is_edit']           = 'Status Edit Draft';
+$lang['form_draft_edit_start_date']   = 'Tanggal Mulai Edit';
+$lang['form_draft_edit_end_date']     = 'Tanggal Selesai Edit';
+$lang['form_draft_edit_file']         = 'File Editor';
+$lang['form_draft_edit_file_link']    = 'Link File Editor';
+$lang['form_draft_edit_upload_date']  = 'Tanggal Upload Editor';
+$lang['form_draft_edit_notes']        = 'Catatan Editor';
+$lang['form_draft_edit_notes_author'] = 'Catatan Tanggapan Author ke Editor';
+$lang['form_draft_edit_deadline']     = 'Deadline Editor';
+
+$lang['form_draft_is_layout']           = 'Status Layout Draft';
+$lang['form_draft_layout_start_date']   = 'Tanggal Mulai Layout';
+$lang['form_draft_layout_end_date']     = 'Tanggal Selesai Layout';
+$lang['form_draft_layout_file']         = 'File Layouter';
+$lang['form_draft_layout_file_link']    = 'Link File Layouter';
+$lang['form_draft_layout_upload_date']  = 'Tanggal Upload Layouter';
+$lang['form_draft_layout_notes']        = 'Catatan Layouter';
+$lang['form_draft_layout_notes_author'] = 'Catatan Tanggapan Author ke Layouter';
+$lang['form_draft_layout_deadline']     = 'Deadline Layouter';
+
+$lang['form_draft_error_category_not_found']    = 'Kategori tidak dapat ditemukan';
+$lang['form_draft_error_category_not_opened']   = 'Kategori belum dibuka';
+$lang['form_draft_error_author_not_registered'] = 'Akun belum terdaftar sebagai penulis';
+
+// File
+$lang['form_error_file_no_data']  = 'Pilih ulang file, jika ingin mengunggah file';
+$lang['form_error_url_not_valid'] = 'URL yang dimasukkan tidak valid';

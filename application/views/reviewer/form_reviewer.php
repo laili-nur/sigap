@@ -42,7 +42,7 @@ $reviewer_contact = [
                      <label for="user_id">Pilih akun untuk login
                         <abbr title="Required">*</abbr>
                      </label>
-                     <?=form_dropdown('user_id', getDropdownListReviewer('user', ['user_id', 'username']), $input->user_id, 'id="user_id" class="form-control custom-select d-block"');?>
+                     <?=form_dropdown('user_id', get_dropdown_listReviewer('user', ['user_id', 'username']), $input->user_id, 'id="user_id" class="form-control custom-select d-block"');?>
                      <small class="form-text text-muted">Reviewer wajib memiliki akun. Jika belum ada, daftarkan akun di
                         <a href="<?=base_url('user/add');?>"><strong>sini</strong></a></small>
                      <?=form_error('user_id');?>
@@ -69,7 +69,7 @@ $reviewer_contact = [
                         <?=$this->lang->line('form_faculty_name');?>
                         <abbr title="Required">*</abbr>
                      </label>
-                     <?=form_dropdown('faculty_id', getDropdownList('faculty', ['faculty_id', 'faculty_name']), $input->faculty_id, 'id="faculty_id" class="form-control custom-select d-block"');?>
+                     <?=form_dropdown('faculty_id', get_dropdown_list('faculty', ['faculty_id', 'faculty_name']), $input->faculty_id, 'id="faculty_id" class="form-control custom-select d-block"');?>
                      <?=form_error('faculty_id');?>
                   </div>
                   <div class="row">

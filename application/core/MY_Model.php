@@ -12,6 +12,7 @@ class MY_Model extends CI_Model
             $this->table = strtolower(str_replace('_model', '', get_class($this)));
         }
 
+        // load form text
         $this->lang->load('form', 'indonesian');
     }
 

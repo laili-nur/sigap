@@ -41,7 +41,7 @@
                         <abbr title="Required">*</abbr>
                      </label>
                      <?php if ($input->draft_id == '' or $this->uri->segment(2) == 'add'): ?>
-                     <?=form_dropdown('draft_id', getDropdownList('draft', ['draft_id', 'draft_title']), $input->draft_id, 'id="draft_id" class="form-control custom-select d-block "');?>
+                     <?=form_dropdown('draft_id', get_dropdown_list('draft', ['draft_id', 'draft_title']), $input->draft_id, 'id="draft_id" class="form-control custom-select d-block "');?>
                      <?=form_error('draft_id');?>
                      <?php else: ?>
                      <p class="font-weight-bold"><a

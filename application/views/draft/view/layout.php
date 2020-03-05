@@ -420,7 +420,7 @@ if ($ceklevel != 'editor') {
               <!-- .form-group -->
               <div class="form-group" id="form-layouter">
                 <label for="sel1">Layouter</label>
-                <?=form_dropdown('layouter', getDropdownListLayouter('user', ['user_id', 'username']), '', 'id="pilih_layouter" class="form-control custom-select d-block"');?>
+                <?=form_dropdown('layouter', get_dropdown_listLayouter('user', ['user_id', 'username']), '', 'id="pilih_layouter" class="form-control custom-select d-block"');?>
                 <small class="form-text text-muted">1 untuk layouter dan 1 untuk desain cover</small>
               </div>
               <!-- /.form-group -->

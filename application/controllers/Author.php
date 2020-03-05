@@ -74,7 +74,7 @@ class Author extends Admin_Controller
             if (!isset($input->author_ktp)) {
                 $input->author_ktp = null;
             }
-            $this->session->set_flashdata('ktp_no_data', $this->lang->line('form_author_error_ktp_no_data'));
+            $this->session->set_flashdata('ktp_no_data', $this->lang->line('form_error_file_no_data'));
 
             // forced to null, instead empty string
             $input->user_id = empty_to_null($input->user_id);

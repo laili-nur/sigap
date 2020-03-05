@@ -73,7 +73,7 @@ $latest_education_options = [
                         <?=$this->lang->line('form_work_unit_name');?>
                         <abbr title="Required">*</abbr>
                      </label>
-                     <?=form_dropdown('work_unit_id', getDropdownList('work_unit', ['work_unit_id', 'work_unit_name']), $input->work_unit_id, 'id="work_unit" class="form-control custom-select d-block"');?>
+                     <?=form_dropdown('work_unit_id', get_dropdown_list('work_unit', ['work_unit_id', 'work_unit_name']), $input->work_unit_id, 'id="work_unit" class="form-control custom-select d-block"');?>
                      <?=form_error('work_unit_id');?>
                   </div>
 
@@ -82,7 +82,7 @@ $latest_education_options = [
                         <?=$this->lang->line('form_institute_name');?>
                         <abbr title="Required">*</abbr>
                      </label>
-                     <?=form_dropdown('institute_id', getDropdownList('institute', ['institute_id', 'institute_name']), $input->institute_id, 'id="institute" class="form-control custom-select d-block"');?>
+                     <?=form_dropdown('institute_id', get_dropdown_list('institute', ['institute_id', 'institute_name']), $input->institute_id, 'id="institute" class="form-control custom-select d-block"');?>
                      <?=form_error('institute_id');?>
                   </div>
 

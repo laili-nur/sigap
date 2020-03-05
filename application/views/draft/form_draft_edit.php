@@ -46,7 +46,7 @@
                      <label for="category_id">Kategori
                         <abbr title="Required">*</abbr>
                      </label>
-                     <?=form_dropdown('category_id', getDropdownList('category', ['category_id', 'category_name']), $input->category_id, 'id="category" class="form-control custom-select d-block"');?>
+                     <?=form_dropdown('category_id', get_dropdown_list('category', ['category_id', 'category_name']), $input->category_id, 'id="category" class="form-control custom-select d-block"');?>
                      <?=form_error('category_id');?>
                   </div>
                   <!-- /.form-group -->
@@ -55,7 +55,7 @@
                      <label for="theme_id">Tema
                         <abbr title="Required">*</abbr>
                      </label>
-                     <?=form_dropdown('theme_id', getDropdownList('theme', ['theme_id', 'theme_name']), $input->theme_id, 'id="theme" class="form-control custom-select d-block"');?>
+                     <?=form_dropdown('theme_id', get_dropdown_list('theme', ['theme_id', 'theme_name']), $input->theme_id, 'id="theme" class="form-control custom-select d-block"');?>
                      <?=form_error('theme_id');?>
                   </div>
                   <!-- /.form-group -->

@@ -106,6 +106,10 @@
          <div class="wrapper">
             <div class="page">
                <div class="page-inner">
+                  <?php echo '<pre>';
+print_r($this->session->all_userdata());
+echo '</pre>';
+?>
                   <!-- flash message -->
                   <?php $this->load->view('_partial/flash_message');?>
                   <!-- tampilan utama -->

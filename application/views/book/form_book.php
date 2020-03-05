@@ -38,7 +38,7 @@
                         <abbr title="Required">*</abbr>
                      </label>
                      <?php if ($input->draft_id == '' or $this->uri->segment(2) == 'add'): ?>
-                     <?=form_dropdown('draft_id', getDropdownListBook('draft', ['draft_id', 'draft_title']), $input->draft_id, 'id="draft_id" class="form-control custom-select d-block"');?>
+                     <?=form_dropdown('draft_id', get_dropdown_listBook('draft', ['draft_id', 'draft_title']), $input->draft_id, 'id="draft_id" class="form-control custom-select d-block"');?>
                      <small class="form-text text-muted">Hanya draft yang telah lolos proofread yang dapat
                         dipilih</small>
                      <?=form_error('draft_id');?>

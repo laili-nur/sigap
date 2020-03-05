@@ -142,7 +142,7 @@ function konversiID($table, $vars, $id)
 }
 
 // Get list of option for dropdown.
-function getDropdownListBook($table, $columns)
+function get_dropdown_listBook($table, $columns)
 {
     $CI    = &get_instance();
     $query = $CI->db->select($columns)->from($table)->where('draft_status', '14')->get();
@@ -158,7 +158,7 @@ function getDropdownListBook($table, $columns)
 }
 
 // Get list of editor
-function getDropdownListReviewer($table, $columns)
+function get_dropdown_listReviewer($table, $columns)
 {
     $CI = &get_instance();
     if (isset($_SESSION['user_id_temp'])) {
@@ -204,7 +204,7 @@ function get_dropdown_list_author($table, $columns)
 }
 
 // Get list of editor
-function getDropdownListEditor($table, $columns)
+function get_dropdown_listEditor($table, $columns)
 {
     $CI    = &get_instance();
     $query = $CI->db->select($columns)->where('level', 'editor')->from($table)->get();
@@ -220,7 +220,7 @@ function getDropdownListEditor($table, $columns)
 }
 
 // Get list of layouter
-function getDropdownListLayouter($table, $columns)
+function get_dropdown_listLayouter($table, $columns)
 {
     $CI    = &get_instance();
     $query = $CI->db->select($columns)->where('level', 'layouter')->from($table)->get();
@@ -285,10 +285,19 @@ function get_dropdown_list_category($all_categories = true)
         return $CI;
     };
 
-    return getdropdownListx('category', ['category_id', 'category_name'], $condition);
+    return get_dropdown_list('category', ['category_id', 'category_name'], $condition);
 }
 
-function getDropdownListx(string $table, array $columns, $condition = null)
+/**
+ * Membuat array untuk dropdown
+ * Bisa diextend menggunakan condition
+ *
+ * @param string $table
+ * @param array $columns
+ * @param callable $condition
+ * @return array
+ */
+function get_dropdown_list(string $table, array $columns, callable $condition = null)
 {
     $CI = &get_instance();
     $CI->db->select($columns);
@@ -309,20 +318,20 @@ function getDropdownListx(string $table, array $columns, $condition = null)
 }
 
 // Get list of option for dropdown.
-function getDropdownList($table, $columns)
-{
-    $CI    = &get_instance();
-    $query = $CI->db->select($columns)->from($table)->get();
+// function get_dropdown_list($table, $columns)
+// {
+//     $CI    = &get_instance();
+//     $query = $CI->db->select($columns)->from($table)->get();
 
-    if ($query->num_rows() >= 1) {
-        $options1 = ['' => '-- Pilih --'];
-        $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
-        $options  = $options1 + $options2;
-        return $options;
-    }
+//     if ($query->num_rows() >= 1) {
+//         $options1 = ['' => '-- Pilih --'];
+//         $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
+//         $options  = $options1 + $options2;
+//         return $options;
+//     }
 
-    return $options = ['' => '- Empty -'];
-}
+//     return $options = ['' => '- Empty -'];
+// }
 
 // Get list of option for dropdown with multi koolom
 function getMoreDropdownList($table, $columns)
@@ -450,4 +459,16 @@ function check_file_extension($file_name)
 function empty_to_null($v)
 {
     return empty($v) ? null : $v;
+}
+
+function get_allowed_file_types($field_name)
+{
+    if ($field_name == 'draft_file') {
+        $types = 'docx|doc|pdf|zip|rar';
+    }
+
+    return [
+        'types'   => $types,
+        'to_text' => str_replace("|", ", ", $types),
+    ];
 }

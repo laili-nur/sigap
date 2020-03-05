@@ -150,60 +150,74 @@ class Draft extends Operator_Controller
         }
     }
 
-    public function add($category = '')
+    public function add($category = null)
     {
+        // khusus admin dan author
+        if (!is_admin() && $this->level != 'author') {
+            redirect('home');
+        }
+
         // cek category tersedia dan aktif
-        if ($category != '') {
+        // untuk pendaftaran draft oleh author
+        if ($category) {
             $data            = array('category_id' => $category);
             $cekcategory     = $this->draft->get_where($data, 'category');
             $sisa_waktu_buka = ceil((strtotime($cekcategory->date_open) - strtotime(date('Y-m-d H:i:s'))) / 86400);
             if (!$cekcategory || $cekcategory->category_status == 'n') {
-                $this->session->set_flashdata('error', 'Failed, Category not found');
-                redirect('home');
+                $this->session->set_flashdata('error', $this->lang->line('form_draft_error_category_not_found')
+                );
+                redirect();
             } elseif ($sisa_waktu_buka >= 1) {
-                $this->session->set_flashdata('error', 'Failed, Category not yet opened');
-                redirect('home');
+                $this->session->set_flashdata('error', $this->lang->line('form_draft_error_category_not_opened'));
+                redirect();
             }
         }
-        //khusus admin dan author
-        $ceklevel = $this->session->userdata('level');
-        if ($ceklevel != 'author' and $ceklevel != 'admin_penerbitan' and $ceklevel != 'superadmin') {
-            redirect('home');
-        }
-        //jika user belum terdaftar sebagai penulis maka redirect
-        $cekrole = $this->session->userdata('role_id');
-        if ($ceklevel == 'author') {
-            if ($cekrole == 0) {
-                $this->session->set_flashdata('error', 'Pilih category from dashboard');
-                redirect('home');
+
+        // hanya untuk user level author yang terdaftar sebagai author
+        if ($this->level == 'author') {
+            if ($this->role_id == 0) {
+                $this->session->set_flashdata('error', $this->lang->line('form_draft_error_author_not_registered'));
+                redirect();
             }
         }
+
         if (!$_POST) {
             $input              = (object) $this->draft->get_default_values();
             $input->category_id = $category;
         } else {
             $input = (object) $this->input->post(null, true);
-            //catat orang yang menginput draft
-            $input->input_by = $this->session->userdata('username');
-        }
-        if ($this->draft->validate()) {
-            if (!empty($_FILES) && $_FILES['draft_file']['size'] > 0) {
-                $getextension  = explode(".", $_FILES['draft_file']['name']);
-                $draftFileName = str_replace(" ", "_", $input->draft_title . '_' . date('YmdHis') . "." . $getextension[1]); // draft file name
-                $upload        = $this->draft->uploadDraftfile('draft_file', $draftFileName);
-                if ($upload) {
-                    $input->draft_file = "$draftFileName"; // Data for column "draft".
+            // catat orang yang menginput draft
+            $input->input_by = $this->username;
 
+            // repopulate draft_file ketika validasi form gagal
+            if (!isset($input->draft_file)) {
+                $input->draft_file = null;
+            }
+            if (!isset($input->author_id)) {
+                $input->author_id = [];
+            }
+
+            $this->session->set_flashdata('draft_file_no_data', $this->lang->line('form_error_file_no_data'));
+        }
+
+        if ($this->draft->validate()) {
+            if (!empty($_FILES) && $df = $_FILES['draft_file']['name']) {
+                $draft_file_name = $this->_generate_draft_file_name($df, $input->draft_title);
+                $upload          = $this->draft->upload_draft_file('draft_file', $draft_file_name);
+                if ($upload) {
+                    $input->draft_file = $draft_file_name;
                 }
             }
         }
-        //author tidak bisa coba2 url draft/add
-        if ($ceklevel == 'author') {
-            if (empty($input->category_id)) {
-                $this->session->set_flashdata('error', 'Pilih category from dashboard');
-                redirect('home');
-            }
-        }
+
+        // author tidak bisa coba2 url draft/add
+        // if ($this->level == 'author') {
+        //     if (!$input->category_id) {
+        //         $this->session->set_flashdata('error', $this->lang->line('form_draft_error_author_not_registered'));
+        //         redirect();
+        //     }
+        // }
+
         if (!$this->draft->validate() || $this->form_validation->error_array()) {
             $pages       = $this->pages;
             $main_view   = 'draft/form_draft_add';
@@ -211,38 +225,56 @@ class Draft extends Operator_Controller
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
-        $draft_id  = $this->draft->insert($input);
-        $isSuccess = true;
-        if ($draft_id > 0) {
+
+        $draft_id = $this->draft->insert($input);
+
+        if ($draft_id) {
+            // hanya author pertama yang boleh edit draft
+            // author lain hanya bisa view only
             foreach ($input->author_id as $key => $value) {
-                $data_author = array('author_id' => $value, 'draft_id' => $draft_id);
-                if ($key == 0) {
-                    $data_author['draft_author_status'] = 1;
-                }
-                $draft_author_id = $this->draft->insert($data_author, 'draft_author');
-                if ($draft_author_id < 1) {
-                    $isSuccess = false;
-                    break;
+                $draft_author_id = $this->draft->insert([
+                    'author_id'           => $value,
+                    'draft_id'            => $draft_id,
+                    'draft_author_status' => $key == 0 ? 1 : 0, // author pertama, flag 1, artinya boleh edit draft
+                ], 'draft_author');
+
+                if (!$draft_author_id) {
+                    $is_success = false;
+                } else {
+                    $is_success = true;
                 }
             }
         } else {
-            $isSuccess = false;
+            $is_success = false;
         }
-        if ($isSuccess) {
-            $worksheet_num  = $this->generateWorksheetNumber();
-            $data_worksheet = array('draft_id' => $draft_id, 'worksheet_num' => $worksheet_num, 'worksheet_status' => 0);
-            $worksheet_id   = $this->draft->insert($data_worksheet, 'worksheet');
+
+        if ($is_success) {
+            // insert ke worksheet
+            $worksheet_num = $this->generate_worksheet_number();
+            $worksheet_id  = $this->draft->insert([
+                'draft_id'         => $draft_id,
+                'worksheet_num'    => $worksheet_num,
+                'worksheet_status' => 0,
+            ], 'worksheet');
             if ($worksheet_id < 1) {
-                $isSuccess = false;
+                $is_success = false;
             }
         }
-        if ($isSuccess) {
-            $this->session->set_flashdata('success', 'Data saved');
+
+        if ($is_success) {
+            $this->session->set_flashdata('success', $this->lang->line('toast_add_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data author failed to save');
+            $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
         }
         redirect('draft/view/' . $draft_id);
     }
+
+    private function _generate_draft_file_name($draft_file_name, $draft_title)
+    {
+        $get_extension = explode(".", $draft_file_name)[1];
+        return str_replace(" ", "_", $draft_title . '_' . date('YmdHis') . '.' . $get_extension); // draft file name
+    }
+
     public function view($id = null)
     {
         $draft = $this->draft->where('draft_id', $id)->get();
@@ -571,12 +603,12 @@ class Draft extends Operator_Controller
             if (!empty($_FILES) && $_FILES['draft_file']['size'] > 0) {
                 $getextension  = explode(".", $_FILES['draft_file']['name']);
                 $draftFileName = str_replace(" ", "_", $input->draft_title . '_' . date('YmdHis') . "." . $getextension[1]); // draft file name
-                $upload        = $this->draft->uploadDraftfile('draft_file', $draftFileName);
+                $upload        = $this->draft->upload_draft_file('draft_file', $draftFileName);
                 if ($upload) {
                     $input->draft_file = "$draftFileName";
                     // Delete old draft file
                     if ($draft->draft_file) {
-                        $this->draft->deleteDraftfile($draft->draft_file);
+                        $this->draft->delete_draft_file($draft->draft_file);
                     }
                 }
             }
@@ -623,26 +655,26 @@ class Draft extends Operator_Controller
             $this->session->set_flashdata('warning', 'Draft data were not available');
             redirect('draft');
         }
-        $isSuccess = true;
+        $is_success = true;
         $this->draft->where('draft_id', $id)->delete('draft_author');
         $affected_rows = $this->db->affected_rows();
         if ($affected_rows > 0) {
             if ($this->draft->where('draft_id', $id)->delete()) {
                 // Delete cover.
-                $this->draft->deleteDraftfile($draft->draft_file);
-                $this->draft->deleteDraftfile($draft->review1_file);
-                $this->draft->deleteDraftfile($draft->review2_file);
-                $this->draft->deleteDraftfile($draft->edit_file);
-                $this->draft->deleteDraftfile($draft->layout_file);
+                $this->draft->delete_draft_file($draft->draft_file);
+                $this->draft->delete_draft_file($draft->review1_file);
+                $this->draft->delete_draft_file($draft->review2_file);
+                $this->draft->delete_draft_file($draft->edit_file);
+                $this->draft->delete_draft_file($draft->layout_file);
                 $this->draft->deleteCoverfile($draft->cover_file);
-                $this->draft->deleteDraftfile($draft->proofread_file);
+                $this->draft->delete_draft_file($draft->proofread_file);
             } else {
-                $isSuccess = false;
+                $is_success = false;
             }
         } else {
-            $isSuccess = false;
+            $is_success = false;
         }
-        if ($isSuccess) {
+        if ($is_success) {
             $this->session->set_flashdata('success', 'Data deleted');
         } else {
             $this->session->set_flashdata('error', 'Data failed to delete');
@@ -702,8 +734,8 @@ class Draft extends Operator_Controller
         //     return;
         // }
 
-        $draft_id  = $this->draft->insert($input);
-        $isSuccess = true;
+        $draft_id   = $this->draft->insert($input);
+        $is_success = true;
         if ($draft_id > 0) {
             foreach ($input->author_id as $key => $value) {
                 $data_author = array('author_id' => $value, 'draft_id' => $draft_id);
@@ -712,22 +744,22 @@ class Draft extends Operator_Controller
                 }
                 $draft_author_id = $this->draft->insert($data_author, 'draft_author');
                 if ($draft_author_id < 1) {
-                    $isSuccess = false;
+                    $is_success = false;
                     break;
                 }
             }
         } else {
-            $isSuccess = false;
+            $is_success = false;
         }
-        if ($isSuccess) {
-            $worksheet_num  = $this->generateWorksheetNumber();
+        if ($is_success) {
+            $worksheet_num  = $this->generate_worksheet_number();
             $data_worksheet = array('draft_id' => $draft_id, 'worksheet_num' => $worksheet_num, 'worksheet_status' => 1, 'is_reprint' => 'y');
             $worksheet_id   = $this->draft->insert($data_worksheet, 'worksheet');
             if ($worksheet_id < 1) {
-                $isSuccess = false;
+                $is_success = false;
             }
         }
-        if ($isSuccess) {
+        if ($is_success) {
             $this->session->set_flashdata('success', 'Data saved');
         } else {
             $this->session->set_flashdata('error', 'Data failed to save');
@@ -930,7 +962,7 @@ class Draft extends Operator_Controller
         $this->draft->edit_draft_date($id, $column);
         $this->detail($id);
     }
-    public function generateWorksheetNumber()
+    public function generate_worksheet_number()
     {
         $date = date('Y-m');
         $this->db->limit(1);
@@ -1046,17 +1078,28 @@ class Draft extends Operator_Controller
     //        }
     //    }
     //
-    public function unique_draft_title()
+
+    public function unique_data($str, $data_key)
     {
-        $draft_title = $this->input->post('draft_title');
-        $draft_id    = $this->input->post('draft_id');
-        $this->draft->where('draft_title', $draft_title);
-        !$draft_id || $this->draft->where('draft_id !=', $draft_id);
+        $draft_id = $this->input->post('draft_id');
+        if (!$str) {
+            return true;
+        }
+        $this->draft->where($data_key, $str);
+        !$draft_id || $this->draft->where_not('draft_id', $draft_id);
         $draft = $this->draft->get();
-        if (count($draft)) {
-            $this->form_validation->set_message('unique_draft_title', '%s has been used');
+        if ($draft) {
+            $this->form_validation->set_message('unique_data', $this->lang->line('toast_data_duplicate'));
             return false;
         }
         return true;
+    }
+
+    public function valid_url($str)
+    {
+        if (!$str) {
+            return true;
+        }
+        return (bool) filter_var($str, FILTER_VALIDATE_URL);
     }
 }

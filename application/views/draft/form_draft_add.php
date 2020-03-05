@@ -1,14 +1,8 @@
-<?php $ceklevel = $this->session->userdata('level');?>
-<?php $cekrole  = $this->session->userdata('role_id');?>
-<!-- .page-title-bar -->
 <header class="page-title-bar">
    <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
          <li class="breadcrumb-item">
             <a href="<?=base_url();?>"><span class="fa fa-home"></span></a>
-         </li>
-         <li class="breadcrumb-item">
-            <a href="<?=base_url();?>">Penerbitan</a>
          </li>
          <li class="breadcrumb-item">
             <a href="<?=base_url('draft');?>">Draft</a>
@@ -19,89 +13,68 @@
       </ol>
    </nav>
 </header>
-<!-- /.page-title-bar -->
-<!-- .page-section -->
 <div class="page-section">
    <div class="row">
       <div class="col-md-8">
-         <!-- .card -->
          <section class="card">
-            <!-- .card-body -->
             <div class="card-body">
-               <!-- .form -->
-               <?=form_open_multipart($form_action, 'novalidate="" id="formdraft"');?>
-               <!-- .fieldset -->
+               <?=form_open_multipart($form_action, 'novalidate="" id="form_draft"');?>
                <fielsdet>
-                  <legend>Data Draft</legend>
+                  <legend>Form Draft</legend>
                   <?=isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '';?>
-                  <!-- .form-group -->
                   <div class="form-group">
-                     <label for="category">Jenis Kategori
+                     <label for="category">
+                        <?=$this->lang->line('form_category_name');?>
                         <abbr title="Required">*</abbr>
                      </label>
-                     <!-- cek parameter category, jika ada isinya maka disable pilihan category -->
-                     <?php if (!empty($this->uri->segment(3)) and $this->uri->segment(2) != 'cetakUlang') {
-    $atribut = 'disabled';
-} else {
-    $atribut = '';
-}
-?>
-                     <?=form_dropdown('category_id', get_dropdown_list_category('category', ['category_id', 'category_name']), $input->category_id, 'id="category" class="form-control custom-select d-block ' . $atribut . '" ' . $atribut . '');?>
+                     <?php $atribut = (!empty($this->uri->segment(3)) and $this->uri->segment(2) != 'cetakUlang') ? 'disabled' : '';?>
+                     <?=form_dropdown('category_id', get_dropdown_list_category(false), $input->category_id, 'id="category" class="form-control custom-select d-block ' . $atribut . '" ' . $atribut . '');?>
+                     <small class="form-text text-muted">Kategori yang tampil adalah kategori yang statusnya
+                        aktif</small>
                      <?=form_error('category_id');?>
                   </div>
-                  <?php if (!empty($this->uri->segment(3))) {
-    if (isset($input->category_id)) {
-        echo form_hidden('category_id', $input->category_id);
-    }
-}
-?>
-                  <!-- /.form-group -->
+                  <?=(!empty($this->uri->segment(3)) && isset($input->category_id)) ? form_hidden('category_id', $input->category_id) : '';?>
                   <hr class="my-2">
-                  <!-- .form-group -->
                   <div class="form-group">
-                     <label for="theme">Pilih Tema
+                     <label for="theme">
+                        <?=$this->lang->line('form_theme_name');?>
                         <abbr title="Required">*</abbr>
                      </label>
-                     <?=form_dropdown('theme_id', getDropdownList('theme', ['theme_id', 'theme_name']), $input->theme_id, 'id="theme" class="form-control custom-select d-block"');?>
+                     <?=form_dropdown('theme_id', get_dropdown_list('theme', ['theme_id', 'theme_name']), $input->theme_id, 'id="theme" class="form-control custom-select d-block"');?>
                      <?=form_error('theme_id');?>
                   </div>
-                  <!-- /.form-group -->
-                  <!-- .form-group -->
                   <div class="form-group">
-                     <label for="draft_title">Judul Draft
+                     <label for="draft_title">
+                        <?=$this->lang->line('form_draft_title');?>
                         <abbr title="Required">*</abbr>
                      </label>
                      <?=form_input('draft_title', $input->draft_title, 'class="form-control customer" id="draft_title"');?>
                      <?=form_error('draft_title');?>
                   </div>
-                  <!-- /.form-group -->
-                  <?php if ($ceklevel == 'author'): ?>
-                  <div class="form-group d-none cek">
-                     <label for="draft_title">Penulis
+                  <?php if (check_level() == 'author'): ?>
+                  <div class="form-group d-none">
+                     <label for="draft_title">
+                        <?=$this->lang->line('form_author_name');?>
                         <abbr title="Required">*</abbr>
                      </label>
-                     <?=form_dropdown('author_id[]', getDropdownList('author', ['author_id', 'author_name']), $cekrole, 'id="author" class="form-control custom-select" multiple="multiple"');?>
+                     <?=form_dropdown('author_id[]', get_dropdown_list('author', ['author_id', 'author_name']), check_role(), 'id="author" class="form-control custom-select" multiple="multiple"');?>
                      <?=form_error('author_id[]');?>
                   </div>
                   <?php else: ?>
-                  <!-- .form-group -->
-                  <div
-                     class="form-group"
-                     id="cek"
-                  >
+                  <div class="form-group">
                      <label for="author_id">Pilih Penulis
                         <abbr title="Required">*</abbr>
                      </label>
-                     <?=form_dropdown('author_id[]', getDropdownList('author', ['author_id', 'author_name']), isset($input->author_id) ? $input->author_id : '', 'id="author" class="form-control custom-select d-block" multiple="multiple"');?>
+                     <?=form_dropdown('author_id[]', get_dropdown_list('author', ['author_id', 'author_name']), $input->author_id, 'id="author" class="form-control custom-select d-block" multiple="multiple"');?>
                      <?=form_error('author_id[]');?>
-                     <!-- /.form-group -->
                      <div class="p-0 m-0">
-                        <small class="text-muted">Jika Penulis belum ada di list, tambahkan penulis di menu <a
+                        <small class="form-text text-muted">Jika Penulis belum ada di list, tambahkan penulis di menu <a
                               target="_blank"
                               href="<?=base_url('author/add');?>"
-                           >PENULIS</a>, lalu klik tombol reload berikut</small>
+                           >PENULIS</a>
+                        </small>
                      </div>
-                     <div class="p-0 m-0">
+                     <!-- <div class="p-0 m-0">
                         <button
                            id="callback"
                            type="button"
@@ -110,17 +83,14 @@
                               class="fa fa-sync"
                               id="ajax-reload-author"
                            ></i> Reload Penulis</button>
-                     </div>
+                     </div> -->
                   </div>
                   <?php endif;?>
-                  <!-- .form-group -->
-                  <div class="form-group">
+                  <!-- <div class="form-group">
                      <label for="draft_pages">Jumlah Halaman</label>
                      <?=form_input('draft_pages', $input->draft_pages, 'class="form-control" id="draft_pages"');?>
                      <?=form_error('draft_pages');?>
-                  </div>
-                  <!-- /.form-group -->
-                  <!-- .form-group -->
+                  </div> -->
                   <div class="form-group">
                      <label for="draft_file">File Draft</label>
                      <div class="custom-file">
@@ -130,23 +100,19 @@
                            for="draft_file"
                         >Pilih file</label>
                      </div>
-                     <small class="form-text text-muted">Tipe file upload bertype : docx, doc, dan pdf. Maksimal 50
-                        MB</small>
-                     <?=file_form_error('draft_file', '<p class="text-danger">', '</p>');?>
+                     <small class="form-text text-muted">Menerima tipe file :
+                        <?=get_allowed_file_types('draft_file')['to_text'];?>. Maksimal 50MB</small>
+                     <small class="text-danger"><?=$this->session->flashdata('draft_file_no_data');?></small>
+                     <?=file_form_error('draft_file', '<p class="small text-danger">', '</p>');?>
                   </div>
-                  <!-- /.form-group -->
-                  <!-- .form-group -->
                   <div class="form-group">
                      <label for="draft_file_link">Link File Draft</label>
                      <?=form_input('draft_file_link', $input->draft_file_link, 'class="form-control" id="draft_file_link"');?>
                      <small class="form-text text-muted">Isikan link external file draft</small>
                      <?=form_error('draft_file_link');?>
                   </div>
-                  <!-- /.form-group -->
                   </fieldset>
-                  <!-- /.fieldset -->
                   <hr>
-                  <!-- .form-actions -->
                   <div class="form-actions">
                      <button
                         class="btn btn-primary ml-auto"
@@ -155,67 +121,47 @@
                         id="btn-submit"
                      >Submit data</button>
                   </div>
-                  <!-- /.form-actions -->
                   <?=form_close();?>
-                  <!-- /.form -->
             </div>
-            <!-- /.card-body -->
          </section>
-         <!-- /.card -->
       </div>
    </div>
 </div>
-<!-- /.page-section -->
 <script>
 $(document).ready(function() {
    loadValidateSetting();
-   $("#formdraft").validate({
-         rules: {
-            category_id: "crequired",
-            theme_id: "crequired",
-            draft_title: {
-               crequired: true,
-               cminlength: 5,
-            },
-            "author_id[]": {
-               crequired: true,
-            },
-            draft_file: {
-               dokumen: "docx|doc|pdf",
-               filesize50: 52428200
-            },
-            draft_file_link: "curl"
+   // $("#form_draft").validate({
+   //       rules: {
+   //          category_id: "crequired",
+   //          theme_id: "crequired",
+   //          draft_title: {
+   //             crequired: true,
+   //             cminlength: 5,
+   //          },
+   //          "author_id[]": {
+   //             crequired: true,
+   //          },
+   //          draft_file: {
+   //             dokumen: "docx|doc|pdf",
+   //             filesize50: 52428200
+   //          },
+   //          draft_file_link: "curl"
 
-         },
-         messages: {},
-         errorElement: "span",
-         errorClass: "none",
-         validClass: "none",
-         errorPlacement: function(error, element) {
-            error.addClass("invalid-feedback");
-            if (element.parent('.input-group').length) {
-               error.insertAfter(element.next('span.select2')); // input group
-            } else if (element.hasClass("select2-hidden-accessible")) {
-               error.insertAfter(element.next('span.select2')); // select2
-            } else if (element.parent().parent().hasClass('input-group')) {
-               error.insertAfter(element.closest('.input-group')); // fileinput append
-            } else if (element.hasClass("custom-file-input")) {
-               error.insertAfter(element.next('label.custom-file-label')); // fileinput custom
-            } else if (element.hasClass("custom-control-input")) {
-               error.insertAfter($(".custom-radio").last()); // radio
-            } else {
-               error.insertAfter(element); // default
-            }
-         },
-         highlight: function(element, errorClass, validClass) {
-            $(element).addClass(errorClass).removeClass(validClass);
-         },
-         unhighlight: function(element, errorClass, validClass) {
-            $(element).addClass(validClass).removeClass(errorClass);
-         }
-      },
-      validateSelect2()
-   );
+   //       },
+   //       messages: {},
+   //       errorElement: "span",
+   //       errorClass: "none",
+   //       validClass: "none",
+   //       errorPlacement: validateErrorPlacement,
+   //       // highlight: function(element, errorClass, validClass) {
+   //       //    $(element).addClass(errorClass).removeClass(validClass);
+   //       // },
+   //       // unhighlight: function(element, errorClass, validClass) {
+   //       //    $(element).addClass(validClass).removeClass(errorClass);
+   //       // }
+   //    },
+   //    validateSelect2()
+   // );
 
    // $("#callback").on("click",function(){
    //   console.log("cekk bro");
@@ -227,42 +173,37 @@ $(document).ready(function() {
    // });
 
    //reload author yang baru ditambahkan
-   $("#callback").on("click", function() {
-      $("#ajax-reload-author").addClass("fa-spin");
-      $.get("<?php echo base_url('draft/ajax_reload_author/'); ?>",
-         function(data) {
-            var datax = JSON.parse(data);
-            // var tampil = [];
-            // for(i=0; i<datax.length; i++){
-            //   tampil[datax[i].author_id]=datax[i].author_name;
-            // }
+   // $("#callback").on("click", function() {
+   //    $("#ajax-reload-author").addClass("fa-spin");
+   //    $.get("<?php echo base_url('draft/ajax_reload_author/'); ?>",
+   //       function(data) {
+   //          var datax = JSON.parse(data);
+   //          // var tampil = [];
+   //          // for(i=0; i<datax.length; i++){
+   //          //   tampil[datax[i].author_id]=datax[i].author_name;
+   //          // }
 
-            $('#author').find('option').remove().end();
-            $.each(datax, (key, value) => {
-               $("<option/>", {
-                  "value": key,
-                  "text": value
-               }).appendTo($("#author"));
-            });
-            toastr_view("update_author");
-            $("#ajax-reload-author").removeClass("fa-spin");
-         });
+   //          $('#author').find('option').remove().end();
+   //          $.each(datax, (key, value) => {
+   //             $("<option/>", {
+   //                "value": key,
+   //                "text": value
+   //             }).appendTo($("#author"));
+   //          });
+   //          toastr_view("update_author");
+   //          $("#ajax-reload-author").removeClass("fa-spin");
+   //       });
+   // });
 
-   });
-   $("#category").select2({
-      placeholder: '-- Pilih --',
-      allowClear: true
-   });
-   $("#theme").select2({
-      placeholder: '-- Pilih --',
-      allowClear: true
-   });
+   $("#category").select2(defaultSelect2Options);
+   $("#theme").select2(defaultSelect2Options);
    $('#author option[value=""]').detach();
    $("#author").select2({
-      placeholder: '-- Pilih Multiple --',
+      placeholder: '-- Pilih --',
       multiple: true
    });
-   //urut sesuai pilihan input
+
+   // urut sesuai pilihan input
    $("#author").on("select2:select", function(evt) {
       var element = evt.params.data.element;
       var $element = $(element);
@@ -272,7 +213,7 @@ $(document).ready(function() {
       $(this).trigger("change");
    });
 
-   // $("#formdraft").submit(function(){
+   // $("#form_draft").submit(function(){
    //   $('#btn-submit').attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
    // });
 
