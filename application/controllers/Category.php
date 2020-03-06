@@ -1,30 +1,29 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 class Category extends Operator_Controller
 {
-	public function __construct()
+    public function __construct()
     {
         parent::__construct();
         $this->pages = 'category';
         //akses khusus admin
         $ceklevel = $this->session->userdata('level');
-        if ($ceklevel == 'author' || $ceklevel == 'reviewer' || $ceklevel == 'editor' || $ceklevel == 'layouter'){
+        if ($ceklevel == 'author' || $ceklevel == 'reviewer' || $ceklevel == 'editor' || $ceklevel == 'layouter') {
             redirect('home');
         }
     }
 
     public function index($page = null)
     {
-        $categories     = $this->category->orderBy('category_name')->orderBy('date_close','desc')->getAll();
-        $total    = count($categories);
-        $pages    = $this->pages;
+        $categories = $this->category->orderBy('category_name')->orderBy('date_close', 'desc')->getAll();
+        $total      = count($categories);
+        $pages      = $this->pages;
         $main_view  = 'category/index_category';
         $this->load->view('template', compact('pages', 'main_view', 'categories', 'total'));
     }
 
-
     public function add()
-    {                     
+    {
         if (!$_POST) {
             $input = (object) $this->category->getDefaultValues();
         } else {
@@ -32,7 +31,7 @@ class Category extends Operator_Controller
         }
 
         if (!$this->category->validate()) {
-            $pages   = $this->pages;
+            $pages       = $this->pages;
             $main_view   = 'category/form_category';
             $form_action = 'category/add';
 
@@ -64,7 +63,7 @@ class Category extends Operator_Controller
         }
 
         if (!$this->category->validate()) {
-            $pages     = $this->pages;
+            $pages       = $this->pages;
             $main_view   = 'category/form_category';
             $form_action = "category/edit/$id";
 
@@ -83,10 +82,10 @@ class Category extends Operator_Controller
 
     public function delete($id = null)
     {
-      $category = $this->category->where('category_id', $id)->get();
-      if (!$category) {
-        $this->session->set_flashdata('warning', 'Category data were not available');
-        redirect('category');
+        $category = $this->category->where('category_id', $id)->get();
+        if (!$category) {
+            $this->session->set_flashdata('warning', 'Category data were not available');
+            redirect('category');
         }
 
         if ($this->category->where('category_id', $id)->delete()) {
@@ -98,7 +97,6 @@ class Category extends Operator_Controller
         redirect('category');
     }
 
-
     //validasi format nama
     // public function alpha_numeric_coma_dash_dot_space($str)
     // {
@@ -108,7 +106,7 @@ class Category extends Operator_Controller
     //        return false;
     //    }
     // }
-    
+
     //validasi nama
     public function unique_category_name()
     {
@@ -119,38 +117,37 @@ class Category extends Operator_Controller
         !$category_id || $this->category->where('category_id !=', $category_id);
         $category = $this->category->get();
 
-        if (count($category)) {
+        if ($category) {
             $this->form_validation->set_message('unique_category_name', '%s has been used');
             return false;
         }
         return true;
     }
-    
-    //validasi format tanggal 
+
+    //validasi format tanggal
     public function is_date_format_valid($str)
     {
-        if(!preg_match('/([0-9]{4})-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])/', $str))
-        {   
+        if (!preg_match('/([0-9]{4})-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])/', $str)) {
             $this->form_validation->set_message('is_date_format_valid', 'Invalid date format (yyyy-mm-dd)');
-            return FALSE;
+            return false;
         }
 
-        return TRUE;
+        return true;
     }
-    
+
     //validasi cek tanggal
     public function check_date()
     {
         $date_close = $this->input->post('date_close');
-        $date_open   = $this->input->post('date_open');
-        
+        $date_open  = $this->input->post('date_open');
+
         $dateTimestamp1 = strtotime($date_close);
         $dateTimestamp2 = strtotime($date_open);
-        
-        if($dateTimestamp1 < $dateTimestamp2){
-            $this->form_validation->set_message('check_date', 'Deadline can not be set before opening date');   
-            return FALSE;
+
+        if ($dateTimestamp1 < $dateTimestamp2) {
+            $this->form_validation->set_message('check_date', 'Deadline can not be set before opening date');
+            return false;
         }
-        return TRUE;
+        return true;
     }
 }

@@ -1,7 +1,9 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
-class Author extends Operator_Controller {
-    
-    public function __construct() {
+<?php defined('BASEPATH') or exit('No direct script access allowed');
+class Author extends Operator_Controller
+{
+
+    public function __construct()
+    {
         parent::__construct();
         $this->pages = 'author';
         //khusus admin
@@ -10,18 +12,19 @@ class Author extends Operator_Controller {
             redirect('home');
         }
     }
-    
-    public function index($page = null) {
-        $authors = $this->author->join('work_unit')->join('institute')->join('bank')->join('user')->orderBy('work_unit.work_unit_id')->orderBy('institute.institute_id')->orderBy('author_nip')->paginate($page)->getAll();
-        $tot = $this->author->join('work_unit')->join('institute')->join('bank')->join('user')->orderBy('work_unit.work_unit_id')->orderBy('institute.institute_id')->orderBy('author_nip')->getAll();
-        $total = count($tot);
-        $pages = $this->pages;
-        $main_view = 'author/index_author';
+
+    public function index($page = null)
+    {
+        $authors    = $this->author->join('work_unit')->join('institute')->join('bank')->join('user')->orderBy('work_unit.work_unit_id')->orderBy('institute.institute_id')->orderBy('author_nip')->paginate($page)->getAll();
+        $tot        = $this->author->join('work_unit')->join('institute')->join('bank')->join('user')->orderBy('work_unit.work_unit_id')->orderBy('institute.institute_id')->orderBy('author_nip')->getAll();
+        $total      = count($tot);
+        $pages      = $this->pages;
+        $main_view  = 'author/index_author';
         $pagination = $this->author->makePagination(site_url('author'), 2, $total);
         foreach ($authors as $author) {
             $author->is_author_reviewer = false;
             if ($author->user_id != 0) {
-                $data = array('user_id' => $author->user_id);
+                $data     = array('user_id' => $author->user_id);
                 $reviewer = $this->author->getWhere($data, 'reviewer');
                 if (!is_null($reviewer)) {
                     $author->is_author_reviewer = true;
@@ -30,8 +33,9 @@ class Author extends Operator_Controller {
         }
         $this->load->view('template', compact('pages', 'main_view', 'authors', 'pagination', 'total'));
     }
-    
-    public function view($halaman, $id = null) {
+
+    public function view($halaman, $id = null)
+    {
         if ($halaman and $id == null) {
             redirect('author');
         }
@@ -41,32 +45,33 @@ class Author extends Operator_Controller {
             redirect('author');
         }
         if (!$_POST) {
-            $input = (object)$author;
+            $input = (object) $author;
         } else {
-            $input = (object)$this->input->post(null, true);
+            $input = (object) $this->input->post(null, true);
         }
         //total draft penulis
         $drafts = $this->author->select(['draft_author.author_id', 'author_name', 'draft_author.draft_id', 'draft_title', 'category_name', 'theme_name', 'entry_date', 'finish_date'])->join3('draft_author', 'author', 'author')->join3('draft', 'draft_author', 'draft')->join3('category', 'draft', 'category')->join3('theme', 'draft', 'theme')->where('draft_author.author_id', $id)->getAll();
         //total riwayat draft
         $total_draft = count($drafts);
-        $books = $this->author->join3('draft', 'book', 'draft')->join3('draft_author', 'draft', 'draft')->join3('author', 'draft_author', 'author')->where('draft_author.author_id', $id)->getAll('book');
-        $total_book = count($books);
-        $main_view = 'author/view_author';
-        $pages = $this->pages;
+        $books       = $this->author->join3('draft', 'book', 'draft')->join3('draft_author', 'draft', 'draft')->join3('author', 'draft_author', 'author')->where('draft_author.author_id', $id)->getAll('book');
+        $total_book  = count($books);
+        $main_view   = 'author/view_author';
+        $pages       = $this->pages;
         $this->load->view('template', compact('pages', 'main_view', 'drafts', 'input', 'total_draft', 'books', 'total_book'));
     }
-    
-    public function add() {
+
+    public function add()
+    {
         if (!$_POST) {
-            $input = (object)$this->author->getDefaultValues();
+            $input = (object) $this->author->getDefaultValues();
         } else {
-            $input = (object)$this->input->post(null, true);
+            $input = (object) $this->input->post(null, true);
         }
         if ($this->author->validate()) {
             if (!empty($_FILES) && $_FILES['author_ktp']['size'] > 0) {
                 $getextension = explode(".", $_FILES['author_ktp']['name']);
-                $authorKTP = str_replace(" ", "_", "KTP" . '_' . $input->author_name . '_' . date('YmdHis') . '.' . $getextension[1]); // author ktp name
-                $upload = $this->author->uploadAuthorKTP('author_ktp', $authorKTP);
+                $authorKTP    = str_replace(" ", "_", "KTP" . '_' . $input->author_name . '_' . date('YmdHis') . '.' . $getextension[1]); // author ktp name
+                $upload       = $this->author->uploadAuthorKTP('author_ktp', $authorKTP);
                 if ($upload) {
                     $input->author_ktp = $authorKTP;
                 }
@@ -74,8 +79,8 @@ class Author extends Operator_Controller {
         }
 
         if (!$this->author->validate() || $this->form_validation->error_array()) {
-            $pages = $this->pages;
-            $main_view = 'author/form_author';
+            $pages       = $this->pages;
+            $main_view   = 'author/form_author';
             $form_action = 'author/add';
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
@@ -87,24 +92,25 @@ class Author extends Operator_Controller {
         }
         redirect('author');
     }
-    
-    public function edit($id = null) {
+
+    public function edit($id = null)
+    {
         $author = $this->author->where('author_id', $id)->get();
         if (!$author) {
             $this->session->set_flashdata('warning', 'Author data were not available');
             redirect('author');
         }
         if (!$_POST) {
-            $input = (object)$author;
+            $input = (object) $author;
         } else {
-            $input = (object)$this->input->post(null, true);
+            $input = (object) $this->input->post(null, true);
         }
 
         if ($this->author->validate()) {
             if (!empty($_FILES) && $_FILES['author_ktp']['size'] > 0) {
                 $getextension = explode(".", $_FILES['author_ktp']['name']);
-                $authorKTP = str_replace(" ", "_", "KTP" . '_' . $input->author_name . '_' . date('YmdHis') . '.' . $getextension[1]); // author ktp name
-                $upload = $this->author->uploadAuthorKTP('author_ktp', $authorKTP);
+                $authorKTP    = str_replace(" ", "_", "KTP" . '_' . $input->author_name . '_' . date('YmdHis') . '.' . $getextension[1]); // author ktp name
+                $upload       = $this->author->uploadAuthorKTP('author_ktp', $authorKTP);
                 if ($upload) {
                     $input->author_ktp = "$authorKTP";
                     // Delete old KTP file
@@ -114,10 +120,10 @@ class Author extends Operator_Controller {
                 }
             }
         }
-        
+
         if (!$this->author->validate() || $this->form_validation->error_array()) {
-            $pages = $this->pages;
-            $main_view = 'author/form_author';
+            $pages       = $this->pages;
+            $main_view   = 'author/form_author';
             $form_action = "author/edit/$id";
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
@@ -130,7 +136,8 @@ class Author extends Operator_Controller {
         redirect('author');
     }
 
-    public function delete($id = null) {
+    public function delete($id = null)
+    {
         $author = $this->author->where('author_id', $id)->get();
         if (!$author) {
             $this->session->set_flashdata('warning', 'Author data were not available');
@@ -155,12 +162,13 @@ class Author extends Operator_Controller {
         redirect('author');
     }
 
-    public function copyToReviewer($user_id, $nip, $name) {
+    public function copyToReviewer($user_id, $nip, $name)
+    {
         $this->load->model('reviewer_model', 'reviewer', true);
         $reviewer_id = $this->reviewer->getIdRoleFromUserId($user_id, 'reviewer');
         if ($reviewer_id == 0) {
-            $this->session->user_id_temp = $user_id;
-            $this->session->reviewer_nip_temp = $nip;
+            $this->session->user_id_temp       = $user_id;
+            $this->session->reviewer_nip_temp  = $nip;
             $this->session->reviewer_name_temp = urldecode($name);
             redirect('reviewer/edit/-99');
         } else {
@@ -169,10 +177,11 @@ class Author extends Operator_Controller {
         }
     }
 
-    public function search($page = null) {
-        $keywords = $this->input->get('keywords', true);
-        $authors = $this->author->like('work_unit_name', $keywords)->orLike('institute_name', $keywords)->orLike('author_nip', $keywords)->orLike('author_name', $keywords)->orLike('username', $keywords)->join('work_unit')->join('institute')->join('bank')->join('user')->orderBy('work_unit.work_unit_id')->orderBy('institute.institute_id')->orderBy('author_name')->paginate($page)->getAll();
-        $total = $this->author->like('work_unit_name', $keywords)->orLike('institute_name', $keywords)->orLike('author_nip', $keywords)->orLike('author_name', $keywords)->orLike('username', $keywords)->join('work_unit')->join('institute')->join('bank')->join('user')->orderBy('work_unit.work_unit_id')->orderBy('institute.institute_id')->orderBy('author_name')->count();
+    public function search($page = null)
+    {
+        $keywords   = $this->input->get('keywords', true);
+        $authors    = $this->author->like('work_unit_name', $keywords)->orLike('institute_name', $keywords)->orLike('author_nip', $keywords)->orLike('author_name', $keywords)->orLike('username', $keywords)->join('work_unit')->join('institute')->join('bank')->join('user')->orderBy('work_unit.work_unit_id')->orderBy('institute.institute_id')->orderBy('author_name')->paginate($page)->getAll();
+        $total      = $this->author->like('work_unit_name', $keywords)->orLike('institute_name', $keywords)->orLike('author_nip', $keywords)->orLike('author_name', $keywords)->orLike('username', $keywords)->join('work_unit')->join('institute')->join('bank')->join('user')->orderBy('work_unit.work_unit_id')->orderBy('institute.institute_id')->orderBy('author_name')->count();
         $pagination = $this->author->makePagination(site_url('author/search/'), 3, $total);
         if (!$authors) {
             $this->session->set_flashdata('warning', 'Data were not found');
@@ -181,7 +190,7 @@ class Author extends Operator_Controller {
         foreach ($authors as $author) {
             $author->is_author_reviewer = false;
             if ($author->user_id != 0) {
-                $data = array('user_id' => $author->user_id);
+                $data     = array('user_id' => $author->user_id);
                 $reviewer = $this->author->getWhere($data, 'reviewer');
                 if (!is_null($reviewer)) {
                     $author->is_author_reviewer = true;
@@ -189,7 +198,7 @@ class Author extends Operator_Controller {
             }
         }
 
-        $pages = $this->pages;
+        $pages     = $this->pages;
         $main_view = 'author/index_author';
         $this->load->view('template', compact('pages', 'main_view', 'authors', 'pagination', 'total'));
     }
@@ -203,69 +212,74 @@ class Author extends Operator_Controller {
     //        }
     //    }
     //
-    public function unique_author_contact() {
+    public function unique_author_contact()
+    {
         $author_contact = $this->input->post('author_contact');
-        $author_id = $this->input->post('author_id');
+        $author_id      = $this->input->post('author_id');
         if ($author_contact == '') {
             return true;
         }
         $this->author->where('author_contact', $author_contact);
         !$author_id || $this->author->where('author_id !=', $author_id);
         $author = $this->author->get();
-        if (count($author)) {
+        if ($author) {
             $this->form_validation->set_message('unique_author_contact', '%s has been used');
             return false;
         }
         return true;
     }
 
-    public function unique_author_email() {
+    public function unique_author_email()
+    {
         $author_email = $this->input->post('author_email');
-        $author_id = $this->input->post('author_id');
+        $author_id    = $this->input->post('author_id');
         if ($author_email == '') {
             return true;
         }
         $this->author->where('author_email', $author_email);
         !$author_id || $this->author->where('author_id !=', $author_id);
         $author = $this->author->get();
-        if (count($author)) {
+        if ($author) {
             $this->form_validation->set_message('unique_author_email', '%s has been used');
             return false;
         }
         return true;
     }
 
-    public function unique_author_saving_num() {
+    public function unique_author_saving_num()
+    {
         $author_saving_num = $this->input->post('author_saving_num');
-        $author_id = $this->input->post('author_id');
+        $author_id         = $this->input->post('author_id');
         if ($author_saving_num == '') {
             return true;
         }
         $this->author->where('author_saving_num', $author_saving_num);
         !$author_id || $this->author->where('author_id !=', $author_id);
         $author = $this->author->get();
-        if (count($author)) {
+        if ($author) {
             $this->form_validation->set_message('unique_author_saving_num', '%s has been used');
             return false;
         }
         return true;
     }
 
-    public function unique_author_nip() {
+    public function unique_author_nip()
+    {
         $author_nip = $this->input->post('author_nip');
-        $author_id = $this->input->post('author_id');
+        $author_id  = $this->input->post('author_id');
         $this->author->where('author_nip', $author_nip);
         !$author_id || $this->author->where('author_id !=', $author_id);
         $author = $this->author->get();
-        if (count($author)) {
+        if ($author) {
             $this->form_validation->set_message('unique_author_nip', '%s has been used');
             return false;
         }
         return true;
     }
 
-    public function unique_author_username() {
-        $user_id = $this->input->post('user_id');
+    public function unique_author_username()
+    {
+        $user_id   = $this->input->post('user_id');
         $author_id = $this->input->post('author_id');
         //boleh kosong
         if ($user_id == '') {
@@ -274,7 +288,7 @@ class Author extends Operator_Controller {
         $this->author->where('user_id', $user_id);
         !$author_id || $this->author->where('author_id !=', $author_id);
         $author = $this->author->get();
-        if (count($author)) {
+        if ($author) {
             $this->form_validation->set_message('unique_author_username', '%s has been used');
             return false;
         }

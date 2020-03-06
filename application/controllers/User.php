@@ -1,37 +1,41 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
-class User extends Operator_Controller {
+<?php defined('BASEPATH') or exit('No direct script access allowed');
+class User extends Operator_Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->pages = 'user';
     }
 
-    public function index($page = null) {
+    public function index($page = null)
+    {
         $ceklevel = $this->session->userdata('level');
         if ($ceklevel != 'superadmin') {
             redirect('home');
         }
-        $users = $this->user->paginate($page)->orderBy('username')->orderBy('level')->getAll();
-        $total = $this->user->orderBy('level')->orderBy('username')->count();
-        $pages = $this->pages;
-        $main_view = 'user/index_user';
+        $users      = $this->user->paginate($page)->orderBy('username')->orderBy('level')->getAll();
+        $total      = $this->user->orderBy('level')->orderBy('username')->count();
+        $pages      = $this->pages;
+        $main_view  = 'user/index_user';
         $pagination = $this->user->makePagination(site_url('user'), 2, $total);
         $this->load->view('template', compact('pagination', 'pages', 'main_view', 'users', 'total'));
     }
 
-    public function add() {
+    public function add()
+    {
         $ceklevel = $this->session->userdata('level');
         if ($ceklevel != 'superadmin') {
             redirect('home');
         }
         if (!$_POST) {
-            $input = (object)$this->user->getDefaultValues();
+            $input = (object) $this->user->getDefaultValues();
         } else {
-            $input = (object)$this->input->post(null, true);
+            $input = (object) $this->input->post(null, true);
         }
         if (!$this->user->validate()) {
-            $pages = $this->pages;
-            $main_view = 'user/form_user';
+            $pages       = $this->pages;
+            $main_view   = 'user/form_user';
             $form_action = 'user/add';
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
@@ -46,7 +50,8 @@ class User extends Operator_Controller {
         redirect('user');
     }
 
-    public function edit($id = null) {
+    public function edit($id = null)
+    {
         $ceklevel = $this->session->userdata('level');
         if ($ceklevel != 'superadmin') {
             redirect('home');
@@ -57,14 +62,14 @@ class User extends Operator_Controller {
             redirect('user');
         }
         if (!$_POST) {
-            $input = (object)$user;
+            $input           = (object) $user;
             $input->password = '';
         } else {
-            $input = (object)$this->input->post(null, true);
+            $input = (object) $this->input->post(null, true);
         }
         if (!$this->user->validate()) {
-            $pages = $this->pages;
-            $main_view = 'user/form_user';
+            $pages       = $this->pages;
+            $main_view   = 'user/form_user';
             $form_action = "user/edit/$id";
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
@@ -83,9 +88,10 @@ class User extends Operator_Controller {
         redirect('user');
     }
 
-    public function changepassword($id = null) {
-        $ceklevel = $this->session->userdata('level');
-        $cekuri = $this->uri->segment(3);
+    public function changepassword($id = null)
+    {
+        $ceklevel  = $this->session->userdata('level');
+        $cekuri    = $this->uri->segment(3);
         $cekuserid = $this->session->userdata('user_id');
         if ($ceklevel != 'superadmin' and $cekuserid != $cekuri) {
             redirect('error404');
@@ -97,24 +103,24 @@ class User extends Operator_Controller {
             redirect('user');
         }
         if (!$_POST) {
-            $input = (object)$user;
+            $input           = (object) $user;
             $input->password = '';
         } else {
-            $input = (object)$this->input->post(null, true);
+            $input = (object) $this->input->post(null, true);
         }
         if (!$this->user->validate()) {
-            $pages = $this->pages;
-            $main_view = 'user/form_changepassword';
+            $pages       = $this->pages;
+            $main_view   = 'user/form_changepassword';
             $form_action = "user/changepassword/$id";
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
         //check password
-        $input->password = md5($input->password);
-        $input->newpassword = md5($input->newpassword);
+        $input->password        = md5($input->password);
+        $input->newpassword     = md5($input->newpassword);
         $input->confirmpassword = md5($input->confirmpassword);
-        $datax = array('user_id' => $this->session->userdata('user_id'));
-        $cekpass = $this->user->select(['password'])->getwhere($datax);
+        $datax                  = array('user_id' => $this->session->userdata('user_id'));
+        $cekpass                = $this->user->select(['password'])->getwhere($datax);
         if ($input->password == $cekpass->password) {
             if ($input->password != $input->newpassword) {
                 if ($input->newpassword == $input->confirmpassword) {
@@ -147,7 +153,8 @@ class User extends Operator_Controller {
         redirect('user/changepassword/' . $this->session->userdata('user_id'));
     }
 
-    public function delete($id = null) {
+    public function delete($id = null)
+    {
         $ceklevel = $this->session->userdata('level');
         if ($ceklevel != 'superadmin') {
             redirect('home');
@@ -169,25 +176,27 @@ class User extends Operator_Controller {
         redirect('user');
     }
 
-    public function search($page = null) {
+    public function search($page = null)
+    {
         $ceklevel = $this->session->userdata('level');
         if ($ceklevel != 'superadmin') {
             redirect('home');
         }
-        $keywords = $this->input->get('keywords', true);
-        $users = $this->user->like('username', $keywords)->orLike('level', $keywords)->orderBy('user_id')->orderBy('username')->orderBy('level')->paginate($page)->getAll();
-        $tot = $this->user->like('username', $keywords)->orLike('level', $keywords)->orderBy('user_id')->orderBy('username')->orderBy('level')->getAll();
-        $total = count($tot);
+        $keywords   = $this->input->get('keywords', true);
+        $users      = $this->user->like('username', $keywords)->orLike('level', $keywords)->orderBy('user_id')->orderBy('username')->orderBy('level')->paginate($page)->getAll();
+        $tot        = $this->user->like('username', $keywords)->orLike('level', $keywords)->orderBy('user_id')->orderBy('username')->orderBy('level')->getAll();
+        $total      = count($tot);
         $pagination = $this->user->makePagination(site_url('user/search/'), 3, $total);
         if (!$users) {
             $this->session->set_flashdata('warning', 'Data were not found');
         }
-        $pages = $this->pages;
+        $pages     = $this->pages;
         $main_view = 'user/index_user';
         $this->load->view('template', compact('pages', 'main_view', 'users', 'pagination', 'total'));
     }
 
-    public function is_password_required() {
+    public function is_password_required()
+    {
         $edit = $this->uri->segment(2);
         if ($edit != 'edit') {
             $password = $this->input->post('password', true);
@@ -198,13 +207,14 @@ class User extends Operator_Controller {
         }
         return true;
     }
-    public function unique_username() {
+    public function unique_username()
+    {
         $username = $this->input->post('username');
-        $user_id = $this->input->post('user_id');
+        $user_id  = $this->input->post('user_id');
         $this->user->where('username', $username);
         !$user_id || $this->user->where('user_id !=', $user_id);
         $user = $this->user->get();
-        if (count($user)) {
+        if ($user) {
             $this->form_validation->set_message('unique_username', '%s has been used');
             return false;
         }
