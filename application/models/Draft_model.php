@@ -453,7 +453,7 @@ class Draft_model extends MY_Model
 
     public function filter_draft_for_staff($filters, $username, $page)
     {
-        $drafts = $this->select(['draft.draft_id', 'draft_title', 'category_name', 'category_year', 'entry_date', 'draft_status', 'is_reprint', 'author_name', 'edit_start_date', 'edit_end_date'])
+        $drafts = $this->select(['draft.draft_id', 'draft_title', 'category_name', 'category_year', 'entry_date', 'draft_status', 'is_reprint', 'author_name', 'edit_start_date', 'edit_end_date', 'edit_deadline'])
             ->when('keyword', $filters['keyword'])
             ->join('category')
             ->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')
@@ -595,79 +595,30 @@ class Draft_model extends MY_Model
         return $this;
     }
 
-    public function checkStatus($code)
+    public function is_authorized($level, $username, $draft_id)
     {
-        $status = "";
-        switch ($code) {
-            case 0:
-                $status = 'Desk Screening';
-                break;
-            case 1:
-                $status = 'Lolos Desk Screening';
-                break;
-            case 2:
-                $status = 'Tidak Lolos Desk Screening';
-                break;
-            case 3:
-                $status = 'Review Ditolak';
-                break;
-            case 4:
-                $status = 'Reviewing';
-                break;
-            case 5:
-                $status = 'Antri Edit';
-                break;
-            case 6:
-                $status = 'Editing';
-                break;
-            case 7:
-                $status = 'Editorial Selesai';
-                break;
-            case 8:
-                $status = 'Layouting';
-                break;
-            case 9:
-                $status = 'Layout selesai';
-                break;
-            case 10:
-                $status = 'Desain Cover';
-                break;
-            case 11:
-                $status = 'Cover Selesai';
-                break;
-            case 12:
-                $status = 'Proofreading';
-                break;
-            case 13:
-                $status = 'Proofread Selesai';
-                break;
-            case 14:
-                $status = 'Final';
-                break;
-            case 15:
-                $status = 'Cetak';
-                break;
-            case 16:
-                $status = 'Cetak Selesai';
-                break;
-            case 17:
-                $status = 'Revisi Edit';
-                break;
-            case 18:
-                $status = 'Revisi Layout';
-                break;
-            case 19:
-                $status = 'Selesai Revisi';
-                break;
-            case 99:
-                $status = 'Draft Ditolak';
-                break;
-            default:
-                # code...
+        $this->select('draft.draft_id');
 
-                break;
+        if ($level == 'reviewer') {
+            $this->join_table('draft_reviewer', 'draft', 'draft')
+                ->join_table('reviewer', 'draft_reviewer', 'reviewer')
+                ->join_table('user', 'reviewer', 'user');
+        } elseif ($level == 'author') {
+            $this->join_table('draft_author', 'draft', 'draft')
+                ->join_table('author', 'draft_author', 'author')
+                ->join_table('user', 'author', 'user');
+        } elseif ($level == 'editor' || $level == 'layouter') {
+            $this->join_table('responsibility', 'draft', 'draft')
+                ->join_table('user', 'responsibility', 'user');
+        } else {
+            $is_authorized = true;
         }
-        return $status;
+
+        $is_authorized = $this->where('draft.draft_id', $draft_id)
+            ->where('username', $username)
+            ->count();
+
+        return !!$is_authorized;
     }
 
     public function upload_draft_file($field_name, $draft_file_name)
@@ -775,10 +726,7 @@ class Draft_model extends MY_Model
     private function _get_draft_authors_and_status(array $drafts)
     {
         foreach ($drafts as $d) {
-            $authors         = $this->get_id_and_name('author', 'draft_author', $d->draft_id);
-            $d->authors      = $authors;
-            $d->stts         = $d->draft_status;
-            $d->draft_status = $this->checkStatus($d->draft_status);
+            $d->authors = $this->get_id_and_name('author', 'draft_author', $d->draft_id);
         }
 
         return $drafts;

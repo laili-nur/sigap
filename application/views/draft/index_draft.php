@@ -259,7 +259,7 @@ function expand($authors)
                               <?php if ($level == 'reviewer'): ?>
                               <?=$draft->review_flag ? '<span class="badge badge-success">Sudah direview</span>' : '<span class="badge badge-danger">Belum direview</span>';?>
                               <?php else: ?>
-                              <?=$draft->draft_status;?>
+                              <?=draft_status_to_text($draft->draft_status);?>
                               <?php endif;?>
                            </td>
                            <?php if ($level == 'reviewer'): ?>

@@ -81,7 +81,7 @@ if ($input->review2_flag != '') {
       <span class="text-muted">Status</span>
       <?php if ($input->is_review == 'y'): ?>
       <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->review_status;?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Review Selesai</a>
-      <?php elseif ($input->is_review == 'n' and $input->stts == 99): ?>
+      <?php elseif ($input->is_review == 'n' and $input->draft_status == 99): ?>
       <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->review_status;?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Draft ditolak</a>
       <?php else: ?>
       -

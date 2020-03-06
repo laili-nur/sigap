@@ -40,4 +40,14 @@ class User_model extends MY_Model
             'is_blocked' => '',
         ];
     }
+
+    public function get_draft_staffs($draft_id, $staff_level)
+    {
+        return $this->select(['username', 'level', 'responsibility_id', 'responsibility.user_id'])
+            ->join_table('responsibility', 'user', 'user')
+            ->join_table('draft', 'responsibility', 'draft')
+            ->where('responsibility.draft_id', $draft_id)
+            ->where('level', $staff_level)
+            ->get_all();
+    }
 }

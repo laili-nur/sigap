@@ -98,4 +98,14 @@ class Reviewer_model extends MY_Model
                 ->count(),
         ];
     }
+
+    public function get_draft_reviewers($draft_id)
+    {
+        return $this->select(['draft_reviewer_id', 'draft_reviewer.reviewer_id', 'reviewer_name', 'reviewer_nip', 'faculty_name'])
+            ->join('faculty')
+            ->join_table('draft_reviewer', 'reviewer', 'reviewer')
+            ->join_table('draft', 'draft_reviewer', 'draft')
+            ->where('draft_reviewer.draft_id', $draft_id)
+            ->get_all();
+    }
 }

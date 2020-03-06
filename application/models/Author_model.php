@@ -132,8 +132,7 @@ class Author_model extends MY_Model
 
     public function get_author_details($author_id)
     {
-        return $this->author
-            ->join_table('user', 'author', 'user')
+        return $this->join_table('user', 'author', 'user')
             ->where('author_id', $author_id)
             ->get();
     }
@@ -160,6 +159,17 @@ class Author_model extends MY_Model
             ->join_table('draft_author', 'draft', 'draft')
             ->join_table('author', 'draft_author', 'author')
             ->where('draft_author.author_id', $author_id)
+            ->get_all();
+    }
+
+    public function get_draft_authors($draft_id)
+    {
+        return $this->select(['draft_author_id', 'draft_author.author_id', 'draft_author.draft_author_status', 'author_name', 'author_nip', 'work_unit_name', 'institute_name'])
+            ->join('institute')
+            ->join('work_unit')
+            ->join_table('draft_author', 'author', 'author')
+            ->join_table('draft', 'draft_author', 'draft')
+            ->where('draft_author.draft_id', $draft_id)
             ->get_all();
     }
 

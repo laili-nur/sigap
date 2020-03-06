@@ -31,3 +31,10 @@ function check_role()
     $CI = &get_instance();
     return $CI->session->userdata('role');
 }
+
+function is_authorized()
+{
+    $CI       = &get_instance();
+    $username = $CI->session->userdata('username');
+    $level    = $CI->session->userdata('level');
+}

@@ -472,3 +472,77 @@ function get_allowed_file_types($field_name)
         'to_text' => str_replace("|", ", ", $types),
     ];
 }
+
+function draft_status_to_text($code)
+{
+    $status = "";
+    switch ($code) {
+        case 0:
+            $status = 'Desk Screening';
+            break;
+        case 1:
+            $status = 'Lolos Desk Screening';
+            break;
+        case 2:
+            $status = 'Tidak Lolos Desk Screening';
+            break;
+        case 3:
+            $status = 'Review Ditolak';
+            break;
+        case 4:
+            $status = 'Reviewing';
+            break;
+        case 5:
+            $status = 'Antri Edit';
+            break;
+        case 6:
+            $status = 'Editing';
+            break;
+        case 7:
+            $status = 'Editorial Selesai';
+            break;
+        case 8:
+            $status = 'Layouting';
+            break;
+        case 9:
+            $status = 'Layout selesai';
+            break;
+        case 10:
+            $status = 'Desain Cover';
+            break;
+        case 11:
+            $status = 'Cover Selesai';
+            break;
+        case 12:
+            $status = 'Proofreading';
+            break;
+        case 13:
+            $status = 'Proofread Selesai';
+            break;
+        case 14:
+            $status = 'Final';
+            break;
+        case 15:
+            $status = 'Cetak';
+            break;
+        case 16:
+            $status = 'Cetak Selesai';
+            break;
+        case 17:
+            $status = 'Revisi Edit';
+            break;
+        case 18:
+            $status = 'Revisi Layout';
+            break;
+        case 19:
+            $status = 'Selesai Revisi';
+            break;
+        case 99:
+            $status = 'Draft Ditolak';
+            break;
+        default:
+            # code...
+            break;
+    }
+    return $status;
+}

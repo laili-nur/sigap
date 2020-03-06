@@ -59,7 +59,7 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
       <span class="text-muted">Status</span>
       <?php if ($input->is_layout == 'y'): ?>
       <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->layout_status;?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Layout Selesai</a>
-      <?php elseif ($input->is_layout == 'n' and $input->stts == 99): ?>
+      <?php elseif ($input->is_layout == 'n' and $input->draft_status == 99): ?>
       <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->layout_status;?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Draft Ditolak</a>
       <?php else: ?>
       -
@@ -78,7 +78,7 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
       <button type="button" class="btn <?=($input->cover_notes != '' || $input->cover_notes_author != '') ? 'btn-success' : 'btn-outline-success';?>" data-toggle="modal" data-target="#cover" <?=($ceklevel == 'layouter' and $sisa_waktu_layout <= 0 and $input->layout_notes == '') ? 'disabled' : '';?>>Tanggapan Cover
         <?=($input->cover_notes != '' || $input->cover_notes_author != '') ? '<i class="fa fa-check"></i>' : '';?></button>
       <?php if ($ceklevel != 'author'): ?>
-        <button data-toggle="modal" data-target="#layout-revisi" class="btn btn-outline-info"><i class="fa fa-tasks"></i> Revisi <span class="badge badge-info"><?=$tot_revisi['layouter'];?></span></button>
+        <button data-toggle="modal" data-target="#layout-revisi" class="btn btn-outline-info"><i class="fa fa-tasks"></i> Revisi <span class="badge badge-info"><?=$revision_total['layouter'];?></span></button>
       <?php endif;?>
       <!-- peringatan disabled -->
       <?=($ceklevel == 'layouter' and $sisa_waktu_layout <= 0 and $input->layout_notes == '' and ($input->layout_start_date != "0000-00-00 00:00:00" and $input->layout_start_date != null)) ? '<span class="font-weight-bold text-danger" data-toggle="tooltip" data-placement="bottom" title="Hubungi admin untuk membuka draft ini"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>' : '';?>

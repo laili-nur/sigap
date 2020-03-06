@@ -60,7 +60,7 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
       <span class="text-muted">Status</span>
       <?php if ($input->is_edit == 'y'): ?>
       <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->edit_status;?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Editorial Selesai</a>
-      <?php elseif ($input->is_edit == 'n' and $input->stts == 99): ?>
+      <?php elseif ($input->is_edit == 'n' and $input->draft_status == 99): ?>
       <a href="#" onclick="event.preventDefault()" class="font-weight-bold" data-toggle="popover" data-placement="left" data-container="body" auto="" right="" data-html="true" title="" data-trigger="hover" data-content="<?=$input->edit_status;?>" data-original-title="Catatan Admin"><i class="fa fa-info-circle"></i> Draft ditolak</a>
       <?php else: ?>
       -
@@ -81,7 +81,7 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
       <button data-toggle="modal" data-target="#edit-confidential" class="btn btn-outline-dark"><i class="far fa-sticky-note"></i> Catatan</button>
       <?php endif;?>
       <?php if ($ceklevel != 'author'): ?>
-      <button data-toggle="modal" data-target="#edit-revisi" class="btn btn-outline-info"><i class="fa fa-tasks"></i> Revisi <span class="badge badge-info"><?=$tot_revisi['editor'];?></span></button>
+      <button data-toggle="modal" data-target="#edit-revisi" class="btn btn-outline-info"><i class="fa fa-tasks"></i> Revisi <span class="badge badge-info"><?=$revision_total['editor'];?></span></button>
       <?php endif;?>
       <!-- peringatan disabled -->
       <?=($ceklevel == 'editor' and $sisa_waktu_edit <= 0 and $input->edit_notes == '' and ($input->edit_start_date != "0000-00-00 00:00:00" and $input->edit_start_date != null)) ? '<span class="font-weight-bold text-danger" data-toggle="tooltip" data-placement="bottom" title="Hubungi admin untuk membuka draft ini"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>' : '';?>

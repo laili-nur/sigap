@@ -130,38 +130,28 @@
 <script>
 $(document).ready(function() {
    loadValidateSetting();
-   // $("#form_draft").validate({
-   //       rules: {
-   //          category_id: "crequired",
-   //          theme_id: "crequired",
-   //          draft_title: {
-   //             crequired: true,
-   //             cminlength: 5,
-   //          },
-   //          "author_id[]": {
-   //             crequired: true,
-   //          },
-   //          draft_file: {
-   //             dokumen: "docx|doc|pdf",
-   //             filesize50: 52428200
-   //          },
-   //          draft_file_link: "curl"
-
-   //       },
-   //       messages: {},
-   //       errorElement: "span",
-   //       errorClass: "none",
-   //       validClass: "none",
-   //       errorPlacement: validateErrorPlacement,
-   //       // highlight: function(element, errorClass, validClass) {
-   //       //    $(element).addClass(errorClass).removeClass(validClass);
-   //       // },
-   //       // unhighlight: function(element, errorClass, validClass) {
-   //       //    $(element).addClass(validClass).removeClass(errorClass);
-   //       // }
-   //    },
-   //    validateSelect2()
-   // );
+   $("#form_draft").validate({
+         rules: {
+            category_id: "crequired",
+            theme_id: "crequired",
+            draft_title: {
+               crequired: true,
+               cminlength: 5,
+            },
+            "author_id[]": {
+               crequired: true,
+            },
+            draft_file: {
+               dokumen: "<?=get_allowed_file_types('draft_file')['types'];?>",
+               filesize50: 52428200
+            },
+            draft_file_link: "curl"
+         },
+         errorElement: "span",
+         errorPlacement: validateErrorPlacement,
+      },
+      validateSelect2()
+   );
 
    // $("#callback").on("click",function(){
    //   console.log("cekk bro");

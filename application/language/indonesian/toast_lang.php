@@ -18,3 +18,6 @@ $lang['toast_delete_fail']    = 'Hapus data gagal.';
 $lang['toast_data_not_available'] = 'Data tidak ditemukan.';
 $lang['toast_data_duplicate']     = 'Data yang dimasukkan sudah terdaftar di sistem.';
 $lang['toast_data_date_invalid']  = 'Tanggal yang dimasukkan tidak valid.';
+
+// Auth
+$lang['toast_error_not_authorized'] = 'Anda tidak memiliki otoritas untuk mengakses draft ini.';

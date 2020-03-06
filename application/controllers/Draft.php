@@ -139,22 +139,22 @@ class Draft extends Operator_Controller
         $this->load->view('template', compact('pages', 'main_view', 'drafts', 'pagination', 'total'));
     }
 
-    public function ajax_reload_author()
-    {
-        $data = $this->draft->select(['author_id', 'author_name'])->get_all('author');
-        if ($data) {
-            foreach ($data as $key => $value) {
-                $datax[$value->author_id] = $value->author_name;
-            }
-            echo json_encode($datax);
-        }
-    }
+    // public function ajax_reload_author()
+    // {
+    //     $data = $this->draft->select(['author_id', 'author_name'])->get_all('author');
+    //     if ($data) {
+    //         foreach ($data as $value) {
+    //             $datax[$value->author_id] = $value->author_name;
+    //         }
+    //         echo json_encode($datax);
+    //     }
+    // }
 
     public function add($category = null)
     {
         // khusus admin dan author
         if (!is_admin() && $this->level != 'author') {
-            redirect('home');
+            redirect();
         }
 
         // cek category tersedia dan aktif
@@ -269,135 +269,90 @@ class Draft extends Operator_Controller
         redirect('draft/view/' . $draft_id);
     }
 
-    private function _generate_draft_file_name($draft_file_name, $draft_title)
-    {
-        $get_extension = explode(".", $draft_file_name)[1];
-        return str_replace(" ", "_", $draft_title . '_' . date('YmdHis') . '.' . $get_extension); // draft file name
-    }
-
     public function view($id = null)
     {
+        if ($id == null) {
+            redirect($this->pages);
+        }
+
         $draft = $this->draft->where('draft_id', $id)->get();
         if (!$draft) {
-            $this->session->set_flashdata('warning', 'Draft data were not available');
-            redirect('draft');
+            die();
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
+            redirect($this->pages);
         }
-        //status draft
-        $draft->stts         = $draft->draft_status;
-        $draft->draft_status = $this->checkStatus($draft->draft_status);
+
+        if (!$this->draft->is_authorized($this->level, $this->username, $id)) {
+            $this->session->set_flashdata('error', $this->lang->line('toast_error_not_authorized'));
+            redirect($this->pages);
+        }
+
         // ambil tabel worksheet
-        $ambil_worksheet = ['draft_id' => $id];
-        $desk            = $this->draft->get_where($ambil_worksheet, 'worksheet');
-        // ambil tabel worksheet
-        $ambil_books = ['draft_id' => $id];
-        $books       = $this->draft->get_where($ambil_books, 'book');
-        //pecah data csv jadi array
-        if (!empty($draft->nilai_reviewer1)) {
-            $draft->nilai_reviewer1 = explode(",", $draft->nilai_reviewer1);
-        }
-        if (!empty($draft->nilai_reviewer2)) {
-            $draft->nilai_reviewer2 = explode(",", $draft->nilai_reviewer2);
-        }
-        //hitung bobot nilai
-        if (!empty($draft->nilai_reviewer1)) {
+        $desk = $this->draft->get_where(['draft_id' => $id], 'worksheet');
+        // ambil tabel books
+        $books = $this->draft->get_where(['draft_id' => $id], 'book');
+
+        // pecah data nilai, csv jadi array
+        // hitung bobot nilai
+        if ($draft->nilai_reviewer1) {
+            $draft->nilai_reviewer1       = explode(",", $draft->nilai_reviewer1);
             $draft->nilai_total_reviewer1 = 35 * $draft->nilai_reviewer1[0] + 25 * $draft->nilai_reviewer1[1] + 10 * $draft->nilai_reviewer1[2] + 30 * $draft->nilai_reviewer1[3];
         } else {
             $draft->nilai_total_reviewer1 = '';
         }
-        if (!empty($draft->nilai_reviewer2)) {
+        if ($draft->nilai_reviewer2) {
+            $draft->nilai_reviewer2       = explode(",", $draft->nilai_reviewer2);
             $draft->nilai_total_reviewer2 = 35 * $draft->nilai_reviewer2[0] + 25 * $draft->nilai_reviewer2[1] + 10 * $draft->nilai_reviewer2[2] + 30 * $draft->nilai_reviewer2[3];
         } else {
             $draft->nilai_total_reviewer2 = '';
         }
-        // $arrayapa = array($draft->nilai_reviewer1[0],$draft->nilai_reviewer1[1],$draft->nilai_reviewer1[2]);
-        // $draft->apa = implode(",",$arrayapa);
-        if (!$_POST) {
-            $input = (object) $draft;
-        } else {
-            $input             = (object) $this->input->post(null, true);
-            $input->draft_file = $draft->draft_file; // Set draft file for preview.
 
-        }
-        // tabel author
-        $authors = $this->draft->select(['draft_author.author_id', 'draft_author_id', 'draft_author.draft_author_status', 'author_name', 'author_nip', 'work_unit_name', 'institute_name', 'draft.draft_id'])->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('work_unit', 'author', 'work_unit')->join_table('institute', 'author', 'institute')->where('draft_author.draft_id', $id)->get_all();
-        //cari author yang pertama atau yang seterusnya
-        $author_order = array_filter($authors, function ($e) {
-            return $e->author_id == $this->role_id;
-        });
-        //ambil flag, 1 bisa edit, 0 yg view only
-        $author_order = isset(reset($author_order)->draft_author_status) ? reset($author_order)->draft_author_status : 'none';
-        // tabel reviewer
-        $reviewers = $this->draft->select(['draft_reviewer.reviewer_id', 'draft_reviewer_id', 'reviewer_name', 'reviewer_nip', 'faculty_name', 'username'])->join_table('draft_reviewer', 'draft', 'draft')->join_table('reviewer', 'draft_reviewer', 'reviewer')->join_table('faculty', 'reviewer', 'faculty')->join_table('user', 'reviewer', 'user')->where('draft_reviewer.draft_id', $id)->get_all();
-        //cari reviewer 1 dan 2
-        $reviewer_order = key(array_filter($reviewers, function ($e) {
-            return $e->username == $this->session->userdata('username');
-        }));
-        // tampilkan editor
-        $editors = $this->draft->select(['username', 'level', 'responsibility_id', 'responsibility.user_id'])->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('responsibility.draft_id', $id)->where('level', 'editor')->get_all();
-        // tampilkan layouter
-        $layouters = $this->draft->select(['username', 'level', 'responsibility_id', 'responsibility.user_id'])->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('responsibility.draft_id', $id)->where('level', 'layouter')->get_all();
+        // if ($draft->nilai_reviewer1) {
+        //     $draft->nilai_total_reviewer1 = 35 * $draft->nilai_reviewer1[0] + 25 * $draft->nilai_reviewer1[1] + 10 * $draft->nilai_reviewer1[2] + 30 * $draft->nilai_reviewer1[3];
+        // } else {
+        // }
+        // if ($draft->nilai_reviewer2) {
+        //     $draft->nilai_total_reviewer2 = 35 * $draft->nilai_reviewer2[0] + 25 * $draft->nilai_reviewer2[1] + 10 * $draft->nilai_reviewer2[2] + 30 * $draft->nilai_reviewer2[3];
+        // } else {
+        //     $draft->nilai_total_reviewer2 = '';
+        // }
 
-        //hitung jumlah revisi
-        $tot_revisi['editor']   = $this->draft->where('revision_role', 'editor')->where('draft_id', $id)->count('revision');
-        $tot_revisi['layouter'] = $this->draft->where('revision_role', 'layouter')->where('draft_id', $id)->count('revision');
+        $input = (object) $draft;
 
-        //prevent ganti link
-        if ($this->level == "reviewer") {
-            $prevent = count(array_filter($reviewers, function ($e) {
-                return $e->reviewer_id == $this->role_id;
-            }));
-            if ($prevent == 0) {
-                $this->session->set_flashdata('warning', 'Anda tidak memiliki akses ke draft ini');
-                redirect('draft');
-            };
-        }
-        if ($this->level == "author") {
-            $prevent = count(array_filter($authors, function ($e) {
-                return $e->author_id == $this->role_id;
-            }));
-            if ($prevent == 0) {
-                $this->session->set_flashdata('warning', 'Anda tidak memiliki akses ke draft ini');
-                redirect('draft');
-            };
-        }
-        if ($this->level == "editor") {
-            $prevent = count(array_filter($editors, function ($e) {
-                return $e->user_id == $this->role_id;
-            }));
-            if ($prevent == 0) {
-                $this->session->set_flashdata('warning', 'Anda tidak memiliki akses ke draft ini');
-                redirect('draft');
-            };
-        }
-        if ($this->level == "layouter") {
-            $prevent = count(array_filter($layouters, function ($e) {
-                return $e->user_id == $this->role_id;
-            }));
-            if ($prevent == 0) {
-                $this->session->set_flashdata('warning', 'Anda tidak memiliki akses ke draft ini');
-                redirect('draft');
-            };
-        }
-        // If something wrong
-        if (!$this->draft->validate() || $this->form_validation->error_array()) {
-            $pages       = $this->pages;
-            $main_view   = 'draft/view/view';
-            $form_action = "draft/edit/$id";
-            $this->load->view('template', compact('tot_revisi', 'books', 'author_order', 'draft', 'reviewer_order', 'desk', 'pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers', 'editors', 'layouters'));
-            return;
-        }
-        if ($this->draft->where('draft_id', $id)->update($input)) {
-            $this->session->set_flashdata('success', 'Data updated');
-        } else {
-            $this->session->set_flashdata('error', 'Data failed to update');
-        }
-        redirect('draft');
+        // ambil author
+        $this->load->model('author_model', 'author');
+        $authors = $this->author->get_draft_authors($id);
+        // cek author pertama, jika $author_order == 0
+        $author_order = array_search($this->role_id, array_column($authors, 'author_id')) == 0 ? true : false;
+
+        // ambil reviewer
+        $this->load->model('reviewer_model', 'reviewer');
+        $reviewers = $this->reviewer->get_draft_reviewers($id);
+        // cari reviewer pertama, jika $reviewer_order == 0
+        $reviewer_order = array_search($this->role_id, array_column($reviewers, 'reviewer_id'));
+
+        // ambil editor dan layouter
+        $this->load->model('user_model', 'user');
+        $editors   = $this->user->get_draft_staffs($id, 'editor');
+        $layouters = $this->user->get_draft_staffs($id, 'layout');
+
+        // hitung jumlah revisi
+        $this->load->model('revision_model', 'revision');
+        $revision_total['editor']   = $this->revision->count_revision($id, 'editor');
+        $revision_total['layouter'] = $this->revision->count_revision($id, 'layouter');
+
+        $pages       = $this->pages;
+        $main_view   = 'draft/view/view';
+        $form_action = "draft/edit/$id";
+        $this->load->view('template', compact('revision_total', 'books', 'author_order', 'draft', 'reviewer_order', 'desk', 'pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers', 'editors', 'layouters'));
     }
+
     public function download($path, $file_name)
     {
         $this->load->helper('download');
         force_download('./' . $path . '/' . $file_name, null);
     }
+
     public function upload_progress($id, $column)
     {
         $draft     = $this->draft->where('draft_id', $id)->get();
@@ -472,7 +427,7 @@ class Draft extends Operator_Controller
         //redirect('draft/view/'.$id);
 
     }
-    //hapus progress draft
+    // hapus progress draft
     public function delete_progress($id, $jenis)
     {
         $draft = $this->draft->where('draft_id', $id)->get();
@@ -511,7 +466,8 @@ class Draft extends Operator_Controller
 
         echo json_encode($data);
     }
-    //ubah notes - buat ubah deadline juga
+
+    // ubah notes - buat ubah deadline juga
     public function ubahnotes($id = null, $rev = null)
     {
         $ceklevel = $this->session->userdata('level');
@@ -580,6 +536,7 @@ class Draft extends Operator_Controller
         }
         echo json_encode($data);
     }
+
     public function edit($id = null)
     {
         //khusus admin
@@ -1101,5 +1058,11 @@ class Draft extends Operator_Controller
             return true;
         }
         return (bool) filter_var($str, FILTER_VALIDATE_URL);
+    }
+
+    private function _generate_draft_file_name($draft_file_name, $draft_title)
+    {
+        $get_extension = explode(".", $draft_file_name)[1];
+        return str_replace(" ", "_", $draft_title . '_' . date('YmdHis') . '.' . $get_extension); // draft file name
     }
 }
