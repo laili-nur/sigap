@@ -597,6 +597,10 @@ class Draft_model extends MY_Model
 
     public function is_authorized($level, $username, $draft_id)
     {
+        if (is_admin()) {
+            return true;
+        }
+
         $this->select('draft.draft_id');
 
         if ($level == 'reviewer') {
@@ -610,8 +614,6 @@ class Draft_model extends MY_Model
         } elseif ($level == 'editor' || $level == 'layouter') {
             $this->join_table('responsibility', 'draft', 'draft')
                 ->join_table('user', 'responsibility', 'user');
-        } else {
-            $is_authorized = true;
         }
 
         $is_authorized = $this->where('draft.draft_id', $draft_id)

@@ -4,6 +4,12 @@ authorktp/*
 !authorktp/.htaccess
 !authorktp/index.html
 
+# draft file
+draftfile/*
+!draftfile/.gitkeep
+!draftfile/.htaccess
+!draftfile/index.html
+
 .env
 .env.development
 .env.production

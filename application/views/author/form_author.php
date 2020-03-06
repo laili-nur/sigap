@@ -172,7 +172,7 @@ $latest_education_options = [
                         <a
                            href="<?=base_url("author/download_file/authorktp/$input->author_ktp");?>"
                            class="btn btn-success btn-sm my-2 uploaded-file"
-                        >Unduh ktp</a>
+                        ><i class="fa fa-download"></i> Download</a>
                      </div>
                      <?php endif;?>
 

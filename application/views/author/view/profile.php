@@ -54,6 +54,7 @@
                <tr>
                   <td width="200px"> <?=$this->lang->line('form_author_ktp');?> </td>
                   <td>
+                     <?php if ($author->author_ktp): ?>
                      <div class="row">
                         <div class="col-md-6">
                            <?php if (in_array(check_file_extension($author->author_ktp), ['jpg', 'png', 'jpeg'])): ?>
@@ -65,10 +66,12 @@
                            <?php endif;?>
                            <a
                               href="<?=base_url("author/download_file/authorktp/$author->author_ktp");?>"
+                              target="_blank"
                               class="btn btn-success btn-sm my-2"
-                           >Unduh ktp</a>
+                           ><i class="fa fa-download"></i> Download</a>
                         </div>
                      </div>
+                     <?php endif;?>
                   </td>
                </tr>
             </tbody>

@@ -15,9 +15,6 @@
       </ol>
    </nav>
 </header>
-<?php echo '<pre>';
-print_r($reviewer_order);
-echo '</pre>'; ?>
 <div class="page-section">
    <!-- segment detail draft, penulis, reviewer, buku -->
    <?php $this->load->view('draft/view/detail');?>

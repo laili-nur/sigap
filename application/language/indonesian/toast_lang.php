@@ -21,3 +21,4 @@ $lang['toast_data_date_invalid']  = 'Tanggal yang dimasukkan tidak valid.';
 
 // Auth
 $lang['toast_error_not_authorized'] = 'Anda tidak memiliki otoritas untuk mengakses draft ini.';
+$lang['toast_error_file_not_found'] = 'File tidak dapat ditemukan.';

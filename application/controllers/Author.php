@@ -211,17 +211,6 @@ class Author extends Admin_Controller
         return str_replace(" ", "_", "KTP" . '_' . $author_name . '_' . date('YmdHis') . '.' . $get_extension); // author ktp name
     }
 
-    public function download_file($folder, $author_ktp, $redirect = null)
-    {
-        $file = realpath($folder) . "\\" . $author_ktp;
-        if (file_exists($file)) {
-            $data = file_get_contents($file);
-            force_download($author_ktp, $data);
-        } else {
-            redirect($redirect ?? $this->pages);
-        }
-    }
-
     public function view_image($folder, $author_ktp)
     {
         $file = realpath($folder) . "\\" . $author_ktp;

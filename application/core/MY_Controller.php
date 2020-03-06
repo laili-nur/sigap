@@ -37,6 +37,19 @@ class MY_Controller extends MX_Controller
         $this->form_validation->CI = &$this;
     }
 
+    public function download_file($folder, $file_name)
+    {
+        $file = realpath($folder) . "\\" . $file_name;
+        if (file_exists($file)) {
+            $data = file_get_contents($file);
+            force_download($file_name, $data);
+        } else {
+            echo $this->lang->line('toast_error_file_not_found');
+            // $this->session->set_flashdata('warning', $this->lang->line('toast_error_file_not_found'));
+            // redirect($redirect ?? $this->pages);
+        }
+    }
+
 }
 
 /* End of file MY_Controller.php */
