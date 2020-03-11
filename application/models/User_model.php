@@ -11,12 +11,17 @@ class User_model extends MY_Model
             [
                 'field' => 'username',
                 'label' => $this->lang->line('form_user_name'),
-                'rules' => 'trim|required|min_length[4]|max_length[256]|callback_unique_username',
+                'rules' => 'trim|required|min_length[4]|max_length[256]|callback_unique_data[username]',
             ],
             [
                 'field' => 'password',
                 'label' => $this->lang->line('form_user_password'),
-                'rules' => 'trim|callback_is_password_required|min_length[4]|max_length[30]',
+                'rules' => 'trim|callback_required_when_add|min_length[4]|max_length[30]',
+            ],
+            [
+                'field' => 'email',
+                'label' => $this->lang->line('form_user_email'),
+                'rules' => 'trim|required|valid_email|callback_unique_data[email]',
             ],
             [
                 'field' => 'level',
@@ -26,7 +31,7 @@ class User_model extends MY_Model
             [
                 'field' => 'is_blocked',
                 'label' => $this->lang->line('form_user_is_blocked'),
-                'rules' => 'trim|required',
+                'rules' => 'trim|callback_required_when_edit',
             ],
         ];
 
@@ -38,16 +43,18 @@ class User_model extends MY_Model
         return [
             'username'   => null,
             'password'   => null,
+            'email'      => null,
             'level'      => null,
-            'is_blocked' => null,
+            'is_blocked' => 'n',
         ];
     }
 
     public function filter_data($filters, $page = null)
     {
-        $query = $this->select('user_id,username,level,is_blocked')
+        $query = $this->select('user_id,username,email,level,is_blocked')
             ->when('keyword', $filters['keyword'])
             ->when('level', $filters['level'])
+            ->when('status', $filters['status'])
             ->order_by('username')
             ->order_by('level');
 
@@ -56,6 +63,7 @@ class User_model extends MY_Model
             'count' => $this->select('user_id')
                 ->when('keyword', $filters['keyword'])
                 ->when('level', $filters['level'])
+                ->when('status', $filters['status'])
                 ->count(),
         ];
     }
@@ -73,8 +81,75 @@ class User_model extends MY_Model
                 $this->like('username', $data);
                 $this->group_end();
             }
+
+            if ($params == 'status') {
+                $this->where('is_blocked !=', $data);
+            }
         }
         return $this;
+    }
+
+    public function insert_data($input)
+    {
+        $email_data = clone $input;
+
+        $input->password = md5($input->password);
+        $insert_id       = $this->insert($input);
+
+        $mail_sent = $this->send_user_mail($email_data, 'email/create_user_template', 'Registrasi berhasil');
+        if (!$mail_sent) {
+            // jika email gagal terkirim, hapus user yang baru terbuat
+            $this->where('user_id', $insert_id);
+            $this->delete();
+            return false;
+        }
+
+        if ($insert_id) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function update_data($input, $user_id)
+    {
+        $email_data = clone $input;
+
+        // jika update password
+        if (!empty($input->password)) {
+            $input->password = md5($input->password);
+        } else {
+            unset($input->password);
+        }
+
+        $update_id = $this->where('user_id', $user_id)->update($input);
+
+        $this->send_user_mail($email_data, 'email/update_user_template', 'Update Data');
+
+        if ($update_id) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function send_user_mail($input, $email_template, $subject)
+    {
+        $email_subject = $subject;
+        $data          = [
+            'preheader' => null,
+            'username'  => $input->username,
+            'level'     => ucwords(str_replace('_', ' ', $input->level)),
+            'password'  => $input->password,
+        ];
+        $email_message = $this->load->view($email_template, $data, true);
+
+        $mail = $this->send_mail($input->email, $email_subject, $email_message);
+        if (!$mail['status']) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public function get_draft_staffs($draft_id, $staff_level)

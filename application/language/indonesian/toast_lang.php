@@ -22,3 +22,6 @@ $lang['toast_data_date_invalid']  = 'Tanggal yang dimasukkan tidak valid.';
 // Auth
 $lang['toast_error_not_authorized'] = 'Anda tidak diperbolehkan mengakses halaman ini.';
 $lang['toast_error_file_not_found'] = 'File tidak dapat ditemukan.';
+
+//
+$lang['toast_mail_send_fail'] = 'Gagal mengirim email.';

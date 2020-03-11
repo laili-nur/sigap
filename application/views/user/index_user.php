@@ -2,12 +2,13 @@
 $per_page = $this->input->get('per_page') ?? 10;
 $keyword  = $this->input->get('keyword');
 $level    = $this->input->get('level');
+$status   = $this->input->get('status');
 $page     = $this->uri->segment(2);
 // data table series number
 $i = isset($page) ? $page * $per_page - $per_page : 0;
 
 $level_options = [
-    ''                 => '- Filter Level -',
+    ''                 => '- Semua Level -',
     'superadmin'       => 'Superadmin',
     'admin_penerbitan' => 'Admin Penerbitan',
     'author'           => 'Author',
@@ -15,6 +16,12 @@ $level_options = [
     'editor'           => 'Editor',
     'layouter'         => 'Layouter',
     'author_reviewer'  => 'Author dan Reviewer',
+];
+
+$status_options = [
+    ''  => '- Semua Status -',
+    'y' => 'Aktif',
+    'n' => 'Nonaktif',
 ];
 ?>
 
@@ -51,18 +58,32 @@ $level_options = [
                      <div class="col-12 col-md-2 mb-3">
                         <?=form_dropdown('per_page', get_per_page_options(), $per_page, 'id="per_page" class="form-control custom-select d-block" title="List per page"');?>
                      </div>
-                     <div class="col-12 col-md-10 mb-3">
+                     <div class="col-12 col-md-6 mb-3">
                         <?=form_dropdown('level', $level_options, $level, 'id="level" class="form-control custom-select d-block" title="Filter Level"');?>
                      </div>
-                     <div class="col-12 col-lg-10 mb-3">
+                     <div class="col-12 col-md-4 mb-3">
+                        <?=form_dropdown('status', $status_options, $status, 'id="status" class="form-control custom-select d-block" title="Filter status"');?>
+                     </div>
+                     <div class="col-12 col-lg-9 mb-3">
                         <?=form_input('keyword', $keyword, ['placeholder' => 'Cari berdasarkan Nama Pengguna', 'class' => 'form-control']);?>
                      </div>
-                     <div class="col-12 col-lg-2">
-                        <button
-                           class="btn btn-primary btn-block ml-auto"
-                           type="submit"
-                           value="Submit"
-                        ><i class="fa fa-filter"></i> Filter</button>
+                     <div class="col-12 col-lg-3">
+                        <div
+                           class="btn-group btn-block"
+                           role="group"
+                           aria-label="Filter button"
+                        >
+                           <button
+                              class="btn btn-secondary"
+                              type="button"
+                              onclick="location.href = '<?=base_url($pages);?>'"
+                           > Reset</button>
+                           <button
+                              class="btn btn-primary"
+                              type="submit"
+                              value="Submit"
+                           ><i class="fa fa-filter"></i> Filter</button>
+                        </div>
                      </div>
                   </div>
                   <?=form_close();?>
@@ -77,6 +98,7 @@ $level_options = [
                               class="pl-4"
                            >No</th>
                            <th scope="col">Username</th>
+                           <th scope="col">Email</th>
                            <th scope="col">Level</th>
                            <th scope="col">Status</th>
                            <th style="width:100px; min-width:100px;"> &nbsp; </th>
@@ -87,8 +109,11 @@ $level_options = [
                         <tr>
                            <td class="align-middle pl-4"><?=++$i;?></td>
                            <td class="align-middle"><?=highlight_keyword($user->username, $keyword);?></td>
+                           <td class="align-middle"><?=highlight_keyword($user->email, $keyword);?></td>
                            <td class="align-middle"><?=ucwords(str_replace('_', ' ', $user->level));?></td>
-                           <td class="align-middle"><?=$user->is_blocked == 'n' ? 'Not Blocked' : 'Blocked';?></td>
+                           <td class="align-middle">
+                              <?=$user->is_blocked == 'n' ? '<span class="badge badge-success">Aktif</span>' : '<span class="badge badge-danger">Nonaktif</span>';?>
+                           </td>
                            <td class="align-middle text-right">
                               <a
                                  href="<?=base_url('user/edit/' . $user->user_id . '');?>"

@@ -1,4 +1,7 @@
-<!-- .page-title-bar -->
+<?php
+$is_add_user = $this->uri->segment(2) == 'add';
+?>
+
 <header class="page-title-bar">
    <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -14,47 +17,48 @@
       </ol>
    </nav>
 </header>
-<!-- /.page-title-bar -->
-<!-- .page-section -->
 <div class="page-section">
    <div class="row">
-      <div class="col-md-6">
-         <!-- .card -->
+      <div class="col-lg-8">
          <section class="card">
-            <!-- .card-body -->
             <div class="card-body">
-               <!-- .form -->
-               <?=form_open($form_action, 'id="formuser" novalidate=""');?>
-               <!-- .fieldset -->
+               <?=form_open($form_action, 'id="form_user" novalidate=""');?>
                <fieldset>
-                  <legend>Data User</legend>
+                  <legend>Form User</legend>
                   <?=isset($input->user_id) ? form_hidden('user_id', $input->user_id) : '';?>
-                  <!-- .form-group -->
                   <div class="form-group">
-                     <label for="username">Username
+                     <label for="username">
+                        <?=$this->lang->line('form_user_name');?>
                         <abbr title="Required">*</abbr>
                      </label>
                      <?=form_input('username', $input->username, 'class="form-control" id="username"');?>
                      <?=form_error('username');?>
                   </div>
-                  <!-- /.form-group -->
-                  <!-- .form-group -->
                   <div class="form-group">
-                     <label for="password">Password
+                     <label for="email">
+                        <?=$this->lang->line('form_user_email');?>
                         <abbr title="Required">*</abbr>
                      </label>
-                     <?=form_password('password', '', 'class="form-control" id="password"');?>
+                     <?=form_input('email', $input->email, 'class="form-control" id="email"');?>
+                     <?=form_error('email');?>
+                  </div>
+                  <div class="form-group">
+                     <label for="password">
+                        <?=$this->lang->line('form_user_password');?>
+                        <?=$is_add_user ? ' <abbr title="Required">*</abbr>' : null;?>
+                     </label>
+                     <?=form_password('password', null, 'class="form-control" id="password"');?>
+                     <small class="form-text text-muted <?=$is_add_user ? 'd-none' : null;?>">Kosongkan jika tidak ingin
+                        memperbarui password.</small>
                      <?=form_error('password');?>
                   </div>
-                  <!-- /.form-group -->
-                  <div
-                     class="row"
-                     id="hilang"
-                  >
+                  <div class="row">
                      <div class="col-md-6">
-                        <!-- .form-group -->
                         <div class="form-group">
-                           <label>Level</label>
+                           <label>
+                              <?=$this->lang->line('form_user_level');?>
+                              <abbr title="Required">*</abbr>
+                           </label>
                            <div class="custom-control custom-radio">
                               <?=form_radio('level', 'superadmin', isset($input->level) && ($input->level == 'superadmin') ? true : false, ' class="custom-control-input" id="level1"');?>
                               <label
@@ -106,92 +110,68 @@
                            </div>
                            <?=form_error('level');?>
                         </div>
-                        <!-- /.form-group -->
                      </div>
+                     <?php if (!$is_add_user): ?>
                      <div class="col-md-6">
-                        <!-- .form-group -->
                         <div class="form-group">
-                           <label>Status</label>
-                           <div>
-                              <!-- button radio -->
-                              <div
-                                 class="btn-group btn-group-toggle"
-                                 data-toggle="buttons"
-                              >
-                                 <label class="btn btn-secondary <?=($input->is_blocked == 'y') ? 'active' : '';?>">
-                                    <?=form_radio('is_blocked', 'y',
-    isset($input->is_blocked) && ($input->is_blocked == 'y') ? true : false, ' class="custom-control-input" id="blocked1"');?>
-                                    Blocked</label>
-                                 <label class="btn btn-secondary <?=($input->is_blocked == 'n') ? 'active' : '';?>">
-                                    <?=form_radio('is_blocked', 'n',
-    isset($input->is_blocked) && ($input->is_blocked == 'n') ? true : false, ' class="custom-control-input" id="blocked2"');?>
-                                    Not Blocked</label>
+                           <label>
+                              <?=$this->lang->line('form_user_is_blocked');?>
+                              <abbr title="Required">*</abbr>
+                           </label>
+                           <div class="form-group">
+                              <div class="custom-control custom-radio">
+                                 <?=form_radio('is_blocked', 'n', isset($input->is_blocked) && ($input->is_blocked == 'n') ? true : false, ' class="custom-control-input" id="category_status1"');?>
+                                 <label
+                                    class="custom-control-label"
+                                    for="category_status1"
+                                 >Aktif</label>
                               </div>
-                              <!-- /button radio -->
+                              <div class="custom-control custom-radio">
+                                 <?=form_radio('is_blocked', 'y', isset($input->is_blocked) && ($input->is_blocked == 'y') ? true : false, 'class="custom-control-input" id="category_status2"');?>
+                                 <label
+                                    class="custom-control-label"
+                                    for="category_status2"
+                                 >Tidak aktif</label>
+                              </div>
+                              <?=form_error('is_blocked');?>
                            </div>
-                           <?=form_error('is_blocked');?>
                         </div>
-                        <!-- /.form-group -->
                      </div>
+                     <?php endif;?>
                   </div>
                </fieldset>
-               <!-- /.fieldset -->
                <hr>
-               <!-- .form-actions -->
                <div class="form-actions">
                   <button
                      class="btn btn-primary ml-auto"
                      type="submit"
                   >Submit data</button>
                </div>
-               <!-- /.form-actions -->
                </form>
-               <!-- /.form -->
             </div>
-            <!-- /.card-body -->
          </section>
-         <!-- /.card -->
       </div>
    </div>
 </div>
-<!-- /.page-section -->
-<?php if ($input->username == 'superadmin'): ?>
-<script>
-$('#hilang').hide();
-</script>
-<?php endif;?>
 <script>
 $(document).ready(function() {
-   loadValidateSetting();
-   $("#formuser").validate({
-         rules: {
-            username: {
-               crequired: true,
-               username: true,
-            },
-            password: {
-               crequired: true,
-               cminlength: 4
-            },
-            level: "crequired"
-         },
-         errorElement: "span",
-         errorPlacement: function(error, element) {
-            error.addClass("invalid-feedback");
-            if (element.parent('.input-group').length) {
-               error.insertAfter(element.next('span.select2')); // input group
-            } else if (element.hasClass("select2-hidden-accessible")) {
-               error.insertAfter(element.next('span.select2')); // select2
-            } else if (element.hasClass("custom-file-input")) {
-               error.insertAfter(element.next('label.custom-file-label')); // fileinput custom
-            } else if (element.hasClass("custom-control-input")) {
-               error.insertAfter($(".custom-radio").last()); // radio
-            } else {
-               error.insertAfter(element); // default
-            }
-         }
-      },
-      validateSelect2()
-   );
+   // loadValidateSetting();
+   // $("#form_user").validate({
+   //       rules: {
+   //          username: {
+   //             crequired: true,
+   //             username: true,
+   //          },
+   //          password: {
+   //             crequired: true,
+   //             cminlength: 4
+   //          },
+   //          level: "crequired"
+   //       },
+   //       errorElement: "span",
+   //       errorPlacement: validateErrorPlacement
+   //    },
+   //    validateSelect2()
+   // );
 })
 </script>

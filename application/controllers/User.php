@@ -12,6 +12,7 @@ class User extends Admin_Controller
         $filters = [
             'keyword' => $this->input->get('keyword', true),
             'level'   => $this->input->get('level', true),
+            'status'  => $this->input->get('status', true),
         ];
 
         // custom per page
@@ -34,6 +35,7 @@ class User extends Admin_Controller
         } else {
             $input = (object) $this->input->post(null, true);
         }
+
         if (!$this->user->validate()) {
             $pages       = $this->pages;
             $main_view   = 'user/form_user';
@@ -41,33 +43,31 @@ class User extends Admin_Controller
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
-        //--hash password--
-        $input->password = md5($input->password);
-        if ($this->user->insert($input)) {
-            $this->session->set_flashdata('success', 'Data saved');
+
+        // hash password
+        if ($this->user->insert_data($input)) {
+            $this->session->set_flashdata('success', $this->lang->line('toast_add_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to save');
+            $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
         }
-        redirect('user');
+
+        redirect($this->pages);
     }
 
     public function edit($id = null)
     {
-        $ceklevel = $this->session->userdata('level');
-        if ($ceklevel != 'superadmin') {
-            redirect('home');
-        }
         $user = $this->user->where('user_id', $id)->get();
         if (!$user) {
-            $this->session->set_flashdata('warning', 'User data were not available');
-            redirect('user');
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
+            redirect($this->pages);
         }
+
         if (!$_POST) {
-            $input           = (object) $user;
-            $input->password = '';
+            $input = (object) $user;
         } else {
             $input = (object) $this->input->post(null, true);
         }
+
         if (!$this->user->validate()) {
             $pages       = $this->pages;
             $main_view   = 'user/form_user';
@@ -75,18 +75,14 @@ class User extends Admin_Controller
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
-        // Password
-        if (!empty($input->password)) {
-            $input->password = md5($input->password);
+
+        if ($this->user->update_data($input, $id)) {
+            $this->session->set_flashdata('success', $this->lang->line('toast_edit_success'));
         } else {
-            unset($input->password);
+            $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
         }
-        if ($this->user->where('user_id', $id)->update($input)) {
-            $this->session->set_flashdata('success', 'Data saved');
-        } else {
-            $this->session->set_flashdata('error', 'Data failed to save');
-        }
-        redirect('user');
+
+        redirect($this->pages);
     }
 
     public function changepassword($id = null)
@@ -177,27 +173,39 @@ class User extends Admin_Controller
         redirect('user');
     }
 
-    public function is_password_required()
+    public function required_when_add($str)
     {
-        $edit = $this->uri->segment(2);
-        if ($edit != 'edit') {
-            $password = $this->input->post('password', true);
-            if (empty($password)) {
-                $this->form_validation->set_message('is_password_required', '%s must be filled');
+        if ($this->uri->segment(2) == 'add') {
+            if (!$str) {
+                $this->form_validation->set_message('required_when_add', 'Bidang %s dibutuhkan');
                 return false;
             }
         }
         return true;
     }
-    public function unique_username()
+
+    public function required_when_edit($str)
     {
-        $username = $this->input->post('username');
-        $user_id  = $this->input->post('user_id');
-        $this->user->where('username', $username);
-        !$user_id || $this->user->where('user_id !=', $user_id);
+        if ($this->uri->segment(2) == 'edit') {
+            if (!$str) {
+                $this->form_validation->set_message('required_when_edit', 'Bidang %s dibutuhkan');
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function unique_data($str, $data_key)
+    {
+        $author_id = $this->input->post('user_id');
+        if (!$str) {
+            return true;
+        }
+        $this->user->where($data_key, $str);
+        !$author_id || $this->user->where_not('user_id', $author_id);
         $user = $this->user->get();
         if ($user) {
-            $this->form_validation->set_message('unique_username', '%s has been used');
+            $this->form_validation->set_message('unique_data', $this->lang->line('toast_data_duplicate'));
             return false;
         }
         return true;

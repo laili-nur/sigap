@@ -113,6 +113,7 @@ class Author extends Admin_Controller
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
             redirect($this->pages);
         }
+
         if (!$_POST) {
             $input = (object) $author;
         } else {

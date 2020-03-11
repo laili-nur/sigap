@@ -149,15 +149,26 @@ function expand($authors)
                         <?=form_dropdown('category', get_dropdown_list_category(), $category, 'id="category" class="form-control custom-select d-block" title="Filter Kategori"');?>
                      </div>
                      <?php endif;?>
-                     <div class="col-12 col-lg-10 mb-3">
+                     <div class="col-12 col-lg-9 mb-3">
                         <?=form_input('keyword', $keyword, 'placeholder="Cari berdasarkan Judul, Kategori, atau Tema" class="form-control"');?>
                      </div>
-                     <div class="col-12 col-lg-2">
-                        <button
-                           class="btn btn-primary btn-block ml-auto"
-                           type="submit"
-                           value="Submit"
-                        ><i class="fa fa-filter"></i> Filter</button>
+                     <div class="col-12 col-lg-3">
+                        <div
+                           class="btn-group btn-block"
+                           role="group"
+                           aria-label="Filter button"
+                        >
+                           <button
+                              class="btn btn-secondary"
+                              type="button"
+                              onclick="location.href = '<?=base_url($pages);?>'"
+                           > Reset</button>
+                           <button
+                              class="btn btn-primary"
+                              type="submit"
+                              value="Submit"
+                           ><i class="fa fa-filter"></i> Filter</button>
+                        </div>
                      </div>
                   </div>
                   <?=form_close();?>
