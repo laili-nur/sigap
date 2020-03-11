@@ -91,20 +91,14 @@ class User_model extends MY_Model
 
     public function insert_data($input)
     {
+        // clone data untuk dikirimkan vie email
         $email_data = clone $input;
 
         $input->password = md5($input->password);
-        $insert_id       = $this->insert($input);
 
-        $mail_sent = $this->send_user_mail($email_data, 'email/create_user_template', 'Registrasi berhasil');
-        if (!$mail_sent) {
-            // jika email gagal terkirim, hapus user yang baru terbuat
-            $this->where('user_id', $insert_id);
-            $this->delete();
-            return false;
-        }
-
-        if ($insert_id) {
+        if ($this->insert($input)) {
+            // jika sukses input data, kirim email ke user
+            $this->send_user_mail($email_data, 'email/create_user_email', 'Registrasi berhasil');
             return true;
         } else {
             return false;
@@ -113,6 +107,7 @@ class User_model extends MY_Model
 
     public function update_data($input, $user_id)
     {
+        // clone data untuk dikirimkan vie email
         $email_data = clone $input;
 
         // jika update password
@@ -122,27 +117,26 @@ class User_model extends MY_Model
             unset($input->password);
         }
 
-        $update_id = $this->where('user_id', $user_id)->update($input);
-
-        $this->send_user_mail($email_data, 'email/update_user_template', 'Update Data');
-
-        if ($update_id) {
+        if ($this->where('user_id', $user_id)->update($input)) {
+            $this->send_user_mail($email_data, 'email/update_user_email', 'Update Data Akun');
             return true;
         } else {
             return false;
         }
     }
 
-    public function send_user_mail($input, $email_template, $subject)
+    public function send_user_mail($input, $email_content, $subject)
     {
         $email_subject = $subject;
         $data          = [
-            'preheader' => null,
-            'username'  => $input->username,
-            'level'     => ucwords(str_replace('_', ' ', $input->level)),
-            'password'  => $input->password,
+            'preheader'     => null,
+            'username'      => $input->username,
+            'level'         => ucwords(str_replace('_', ' ', $input->level)),
+            'password'      => $input->password,
+            'status'        => $input->is_blocked == 'y' ? 'Nonaktif' : 'Aktif',
+            'email_content' => $email_content,
         ];
-        $email_message = $this->load->view($email_template, $data, true);
+        $email_message = $this->load->view('email/main_email_template', $data, true);
 
         $mail = $this->send_mail($input->email, $email_subject, $email_message);
         if (!$mail['status']) {

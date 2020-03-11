@@ -38,8 +38,6 @@
 
    table {
       border-collapse: separate;
-      mso-table-lspace: 0pt;
-      mso-table-rspace: 0pt;
       width: 100%;
    }
 
@@ -247,7 +245,6 @@
       max-width: 0;
       opacity: 0;
       overflow: hidden;
-      mso-hide: all;
       visibility: hidden;
       width: 0;
    }
@@ -382,56 +379,7 @@
                >
 
                   <!-- START MAIN CONTENT AREA -->
-                  <tr>
-                     <td class="wrapper">
-                        <table
-                           role="presentation"
-                           cellpadding="0"
-                           cellspacing="0"
-                        >
-                           <tr>
-                              <td>
-                                 <p>Halo <?=$username;?>,</p>
-                                 <p>Akun SIGAP anda telah berhasil dibuat dengan level
-                                    <strong><?=$level;?></strong>. Silakan login
-                                    menggunakan data berikut:</p>
-                                 <p>Username : <?=$username;?></p>
-                                 <?php if ($password): ?>
-                                 <p>Password : <?=$password;?></p>
-                                 <?php endif;?>
-                                 <br>
-                                 <table
-                                    role="presentation"
-                                    cellpadding="0"
-                                    cellspacing="0"
-                                    class="btn btn-primary"
-                                 >
-                                    <tbody>
-                                       <tr>
-                                          <td>
-                                             <table
-                                                role="presentation"
-                                                cellpadding="0"
-                                                cellspacing="0"
-                                             >
-                                                <tbody>
-                                                   <tr>
-                                                      <td> <a
-                                                            href="<?=base_url('login');?>"
-                                                            target="_blank"
-                                                         >Login ke sistem</a> </td>
-                                                   </tr>
-                                                </tbody>
-                                             </table>
-                                          </td>
-                                       </tr>
-                                    </tbody>
-                                 </table>
-                              </td>
-                           </tr>
-                        </table>
-                     </td>
-                  </tr>
+                  <?php $this->load->view($email_content);?>
 
                   <!-- END MAIN CONTENT AREA -->
                </table>
@@ -448,15 +396,11 @@
                         <td class="content-block">
                            <span class="apple-link">UGM Press, Jalan Sendok Pedukuhan Karanggayam Kelurahan,
                               Caturtunggal, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55281.</span>
-                           <br><br>
-                           <p>
-                              Ini merupakan email otomatis.
-                           </p>
                         </td>
                      </tr>
                      <tr>
                         <td class="content-block powered-by">
-                           Powered by <a href="<?=base_url('');?>">SIGAP System</a>.
+                           Powered by <a href="<?=base_url();?>"> SIGAP System</a>
                         </td>
                      </tr>
                   </table>
