@@ -157,6 +157,19 @@ class Draft extends Operator_Controller
             redirect();
         }
 
+        if ($this->level == 'author') {
+            // author tidak boleh daftar draft tanpa kategori
+            if (!$category) {
+                $this->session->set_flashdata('error', $this->lang->line('form_draft_error_category_not_found'));
+                redirect();
+            }
+            // hanya untuk user level author yang terdaftar sebagai author
+            if ($this->role_id == 0) {
+                $this->session->set_flashdata('error', $this->lang->line('form_draft_error_author_not_registered'));
+                redirect();
+            }
+        }
+
         // cek category tersedia dan aktif
         // untuk pendaftaran draft oleh author
         if ($category) {
@@ -169,14 +182,6 @@ class Draft extends Operator_Controller
                 redirect();
             } elseif ($sisa_waktu_buka >= 1) {
                 $this->session->set_flashdata('error', $this->lang->line('form_draft_error_category_not_opened'));
-                redirect();
-            }
-        }
-
-        // hanya untuk user level author yang terdaftar sebagai author
-        if ($this->level == 'author') {
-            if ($this->role_id == 0) {
-                $this->session->set_flashdata('error', $this->lang->line('form_draft_error_author_not_registered'));
                 redirect();
             }
         }
@@ -209,14 +214,6 @@ class Draft extends Operator_Controller
                 }
             }
         }
-
-        // author tidak bisa coba2 url draft/add
-        // if ($this->level == 'author') {
-        //     if (!$input->category_id) {
-        //         $this->session->set_flashdata('error', $this->lang->line('form_draft_error_author_not_registered'));
-        //         redirect();
-        //     }
-        // }
 
         if (!$this->draft->validate() || $this->form_validation->error_array()) {
             $pages       = $this->pages;
@@ -347,11 +344,11 @@ class Draft extends Operator_Controller
         $this->load->view('template', compact('revision_total', 'books', 'author_order', 'draft', 'reviewer_order', 'desk', 'pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers', 'editors', 'layouters'));
     }
 
-    public function download($path, $file_name)
-    {
-        $this->load->helper('download');
-        force_download('./' . $path . '/' . $file_name, null);
-    }
+    // public function download($path, $file_name)
+    // {
+    //     $this->load->helper('download');
+    //     force_download('./' . $path . '/' . $file_name, null);
+    // }
 
     public function upload_progress($id, $column)
     {

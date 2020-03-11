@@ -19,6 +19,13 @@ class MY_Controller extends MX_Controller
         parent::__construct();
         $this->_hmvc_fixes();
 
+        $this->username   = $this->session->userdata('username');
+        $this->level      = $this->session->userdata('level');
+        $this->level_asli = $this->session->userdata('level_asli');
+        $this->is_login   = $this->session->userdata('is_login');
+        $this->user_id    = $this->session->userdata('user_id');
+        $this->role_id    = $this->session->userdata('role_id');
+
         $model  = strtolower(get_class($this));
         $models = ucwords(get_class($this));
         if (file_exists(APPPATH . 'models/' . $models . '_model.php')) {
@@ -27,6 +34,12 @@ class MY_Controller extends MX_Controller
 
         // load toast message
         $this->lang->load('toast', 'indonesian');
+
+        // update user session in every page
+        if ($this->is_login) {
+            // $this->load->model('login_model', 'login');
+            $this->$model->update_session($this->username);
+        }
     }
 
     public function _hmvc_fixes()
@@ -49,7 +62,6 @@ class MY_Controller extends MX_Controller
             // redirect($redirect ?? $this->pages);
         }
     }
-
 }
 
 /* End of file MY_Controller.php */

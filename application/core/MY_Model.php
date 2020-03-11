@@ -441,4 +441,31 @@ class MY_Model extends CI_Model
 
         return $id;
     }
+
+    public function update_session(String $username)
+    {
+        // cari user yang login
+        $user = $this->where('username', $username)->get('user');
+
+        if ($user) {
+            // default role_id = user_id
+            // untuk author -> role_id = author_id
+            // untuk reviewer -> role_id = reviewer_id
+            $role_id = $user->user_id;
+            if ($user->level == "author" || $user->level == "reviewer") {
+                $role_id = $this->get_role_id_from_user_id($user->user_id, $user->level);
+            }
+
+            $this->session->set_userdata([
+                'username'   => $user->username,
+                'level'      => $user->level,
+                'level_asli' => $user->level,
+                'is_login'   => true,
+                'user_id'    => $user->user_id,
+                'role_id'    => $role_id,
+            ]);
+            return true;
+        }
+        return false;
+    }
 }

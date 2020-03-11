@@ -4,13 +4,19 @@
 
 class Login extends MY_Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function index()
     {
-        //jika sudah punya sesi, tidak bisa ke halaman login
-        $ceklogin = $this->session->userdata('is_login');
-        if ($ceklogin) {
-            redirect(base_url('home'));
+        // jika sudah punya sesi, tidak bisa ke halaman login
+        if ($this->is_login) {
+            $this->session->set_flashdata('success', "You are logged in");
+            redirect();
         }
+
         if (!$_POST) {
             $input = (object) $this->login->get_default_values();
         } else {
@@ -23,14 +29,13 @@ class Login extends MY_Controller
         }
 
         if ($this->login->login($input)) {
-            $ceklevel = $this->session->userdata('level');
-            if ($ceklevel == 'author_reviewer') {
+            if ($this->level == 'author_reviewer') {
                 redirect('login/multilevel/');
             } else {
-                redirect(base_url());
+                redirect();
             }
         } else {
-            $this->session->set_flashdata('error', 'Username atau password salah, atau akun anda sedang diblokir.');
+            $this->session->set_flashdata('error', $this->lang->line('form_login_error_cannot_login'));
         }
 
         redirect('login');
@@ -39,7 +44,7 @@ class Login extends MY_Controller
     public function logout()
     {
         $this->login->logout();
-        redirect(base_url());
+        redirect();
     }
 
     public function multilevel($sesi = '')
@@ -70,6 +75,5 @@ class Login extends MY_Controller
         } else {
             redirect('home');
         }
-
     }
 }

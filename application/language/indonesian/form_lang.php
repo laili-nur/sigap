@@ -101,6 +101,9 @@ $lang['form_draft_error_category_not_found']    = 'Kategori tidak dapat ditemuka
 $lang['form_draft_error_category_not_opened']   = 'Kategori belum dibuka';
 $lang['form_draft_error_author_not_registered'] = 'Akun belum terdaftar sebagai penulis';
 
-// File
+// Error
 $lang['form_error_file_no_data']  = 'Pilih ulang file, jika ingin mengunggah file';
 $lang['form_error_url_not_valid'] = 'URL yang dimasukkan tidak valid';
+
+// Login
+$lang['form_login_error_cannot_login'] = 'Username atau password salah, atau akun anda sedang diblokir.';

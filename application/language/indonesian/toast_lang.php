@@ -20,5 +20,5 @@ $lang['toast_data_duplicate']     = 'Data yang dimasukkan sudah terdaftar di sis
 $lang['toast_data_date_invalid']  = 'Tanggal yang dimasukkan tidak valid.';
 
 // Auth
-$lang['toast_error_not_authorized'] = 'Anda tidak memiliki otoritas untuk mengakses draft ini.';
+$lang['toast_error_not_authorized'] = 'Anda tidak diperbolehkan mengakses halaman ini.';
 $lang['toast_error_file_not_found'] = 'File tidak dapat ditemukan.';
