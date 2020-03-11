@@ -14,9 +14,6 @@ class Author extends Admin_Controller
         $authors    = $get_data['data'];
         $total      = $get_data['count'];
         $pagination = $this->author->make_pagination(site_url('author'), 2, $total);
-        if (!$authors) {
-            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
-        }
 
         foreach ($authors as $author) {
             // cek apakah author termasuk reviewer juga

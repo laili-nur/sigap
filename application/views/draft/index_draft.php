@@ -1,10 +1,7 @@
 <?php
 $level = check_level();
 
-$per_page = $this->input->get('per_page');
-if (empty($per_page)) {
-    $per_page = 10;
-}
+$per_page = $this->input->get('per_page') ?? 10;
 $keyword  = $this->input->get('keyword');
 $reprint  = $this->input->get('reprint');
 $progress = $this->input->get('progress');
@@ -53,13 +50,6 @@ $progress_options = [
     'error'          => 'Draft Error',
 ];
 // }
-
-$per_page_options = [
-    '10'  => '10',
-    '25'  => '25',
-    '50'  => '50',
-    '100' => '100',
-];
 
 $reprint_options = [
     ''  => '- Filter Tipe Naskah -',
@@ -143,10 +133,10 @@ function expand($authors)
                      </button>
                   </div>
                   <?php endif; // filter error?>
-                  <?=form_open('draft', ['method' => 'GET']);?>
+                  <?=form_open($pages, ['method' => 'GET']);?>
                   <div class="row">
                      <div class="col-12 col-md-2 mb-3">
-                        <?=form_dropdown('per_page', $per_page_options, $per_page, 'id="per_page" class="form-control custom-select d-block" title="List per page"');?>
+                        <?=form_dropdown('per_page', get_per_page_options(), $per_page, 'id="per_page" class="form-control custom-select d-block" title="List per page"');?>
                      </div>
                      <div class="col-12 mb-3 <?=is_admin() ? 'col-md-4' : 'col-md-10';?>">
                         <?=form_dropdown('progress', $progress_options, $progress, 'id="progress" class="form-control custom-select d-block" title="Filter Progress"');?>
@@ -159,7 +149,7 @@ function expand($authors)
                         <?=form_dropdown('category', get_dropdown_list_category(), $category, 'id="category" class="form-control custom-select d-block" title="Filter Kategori"');?>
                      </div>
                      <?php endif;?>
-                     <div class="col-12 col-md-10 mb-3">
+                     <div class="col-12 col-lg-10 mb-3">
                         <?=form_input('keyword', $keyword, 'placeholder="Cari berdasarkan Judul, Kategori, atau Tema" class="form-control"');?>
                      </div>
                      <div class="col-12 col-lg-2">

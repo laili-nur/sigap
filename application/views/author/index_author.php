@@ -1,5 +1,4 @@
 <?php
-// data number
 $per_page = 10;
 $keywords = $this->input->get('keywords');
 $page     = $this->uri->segment(2);

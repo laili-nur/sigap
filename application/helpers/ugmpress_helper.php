@@ -546,3 +546,13 @@ function draft_status_to_text($code)
     }
     return $status;
 }
+
+function get_per_page_options()
+{
+    return [
+        '10'  => '10',
+        '25'  => '25',
+        '50'  => '50',
+        '100' => '100',
+    ];
+}

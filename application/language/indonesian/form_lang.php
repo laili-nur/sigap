@@ -49,8 +49,10 @@ $lang['form_reviewer_contact']      = 'Nomor HP Reviewer';
 $lang['form_reviewer_expert']       = 'Kepakaran';
 
 // User
-$lang['form_user_name']  = 'Akun Pengguna';
-$lang['form_user_level'] = 'Level Akun';
+$lang['form_user_name']       = 'Akun Pengguna';
+$lang['form_user_password']   = 'Akun Pengguna';
+$lang['form_user_level']      = 'Level Akun';
+$lang['form_user_is_blocked'] = 'Blokir Akun';
 
 // Draft
 $lang['form_draft_title']       = 'Judul Draft';

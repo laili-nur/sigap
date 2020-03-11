@@ -1,160 +1,159 @@
 <?php
-$per_page = 10;
-$keywords = $this->input->get('keywords');
-
-if (isset($keywords)) {
-    $page = $this->uri->segment(3);
-} else {
-    $page = $this->uri->segment(2);
-}
-
+$per_page = $this->input->get('per_page') ?? 10;
+$keyword  = $this->input->get('keyword');
+$level    = $this->input->get('level');
+$page     = $this->uri->segment(2);
 // data table series number
 $i = isset($page) ? $page * $per_page - $per_page : 0;
+
+$level_options = [
+    ''                 => '- Filter Level -',
+    'superadmin'       => 'Superadmin',
+    'admin_penerbitan' => 'Admin Penerbitan',
+    'author'           => 'Author',
+    'reviewer'         => 'Reviewer',
+    'editor'           => 'Editor',
+    'layouter'         => 'Layouter',
+    'author_reviewer'  => 'Author dan Reviewer',
+];
 ?>
 
-<!-- .page-title-bar -->
 <header class="page-title-bar">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a href="<?=base_url();?>"><span class="fa fa-home"></span></a>
-      </li>
-      <li class="breadcrumb-item">
-        <a class="text-muted">User</a>
-      </li>
-    </ol>
-  </nav>
-</header>
-<!-- /.page-title-bar -->
-<!-- .page-section -->
-<div class="page-section">
-  <!-- grid row -->
-  <div class="row">
-    <!-- grid column -->
-    <div class="col-12">
-      <!-- .card -->
-      <section class="card card-fluid">
-        <!-- .card-header -->
-        <header class="card-header">
-          <!-- .d-flex -->
-          <div class="d-flex align-items-center">
-            <span class="mr-auto">Tabel User <span class="badge badge-info"><?=$total;?></span></span>
-            <!-- .card-header-control -->
-            <div class="card-header-control">
-              <!-- .tombol add -->
-              <a href="<?=base_url('user/add');?>" class="btn btn-primary btn-sm">Tambah User</a>
-              <!-- /.tombol add -->
-            </div>
-            <!-- /.card-header-control -->
-          </div>
-          <!-- /.d-flex -->
-        </header>
-        <!-- /.card-header -->
-        <!-- .card-body -->
-        <div class="card-body p-0">
-          <div class="p-3">
-            <!-- .input-group -->
-            <?=form_open('user/search', ['method' => 'GET']);?>
-            <div class="input-group input-group-alt">
-              <?=form_input('keywords', $this->input->get('keywords'), ['placeholder' => 'Cari Username', 'class' => 'form-control']);?>
-              <div class="input-group-append">
-               <?=form_button(['type' => 'submit', 'content' => 'Search', 'class' => 'btn btn-secondary']);?>
-             </div>
-             <?=form_close();?>
-           </div>
-           <!-- /.input-group -->
-         </div>
-         <div class="tab-pane fade active show" id="card-tabel1">
-          <!-- .table-responsive -->
-          <?php if ($users): ?>
-            <div class="table-responsive">
-              <!-- .table -->
-              <table class="table table-striped">
-                <!-- thead -->
-                <thead>
-                  <tr>
-                   <th scope="col" class="pl-4">No</th>
-                   <th scope="col">Username</th>
-                   <th scope="col">Level</th>
-                   <th scope="col">Status</th>
-                   <th style="width:100px; min-width:100px;"> &nbsp; </th>
-                 </tr>
-               </thead>
-               <!-- /thead -->
-               <!-- tbody -->
-               <tbody>
-                <?php foreach ($users as $user): ?>
-                  <!-- tr -->
-                  <tr>
-                    <td class="align-middle pl-4"><?=++$i;?></td>
-                    <td class="align-middle"><?=$user->username;?></td>
-                    <td class="align-middle"><?=ucwords(str_replace('_', ' ', $user->level));?></td>
-                    <td class="align-middle"><?=$user->is_blocked == 'n' ? 'Not Blocked' : 'Blocked';?></td>
-                    <td class="align-middle text-right">
-                      <a href="<?=base_url('user/edit/' . $user->user_id . '');?>" class="btn btn-sm btn-secondary">
-                        <i class="fa fa-pencil-alt"></i>
-                        <span class="sr-only">Edit</span>
-                      </a>
-                      <?php if ($user->username != 'superadmin'): ?>
-                        <button type="button" class="btn btn-sm btn-danger"  data-toggle="modal" data-target="#modal-hapus-<?=$user->user_id;?>" ><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
-                      <?php endif;?>
-                    </td>
-                  </tr>
-                  <!-- /tr -->
-                  <!-- Alert Danger Modal -->
-                  <div class="modal modal-alert fade" id="modal-hapus-<?=$user->user_id;?>" tabindex="-1" role="dialog" aria-labelledby="modal-hapus" aria-hidden="true">
-                    <!-- .modal-dialog -->
-                    <div class="modal-dialog" role="document">
-                      <!-- .modal-content -->
-                      <div class="modal-content">
-                        <!-- .modal-header -->
-                        <div class="modal-header">
-                          <h5 class="modal-title">
-                            <i class="fa fa-exclamation-triangle text-red mr-1"></i> Konfirmasi Hapus</h5>
-                          </div>
-                          <!-- /.modal-header -->
-                          <!-- .modal-body -->
-                          <div class="modal-body">
-                            <p>Apakah anda yakin akan menghapus user <span class="font-weight-bold"><?=$user->username;?></span>?</p>
-                          </div>
-                          <!-- /.modal-body -->
-                          <!-- .modal-footer -->
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" onclick="location.href='<?=base_url('user/delete/' . $user->user_id . '');?>'" data-dismiss="modal">Hapus</button>
-                            <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-                          </div>
-                          <!-- /.modal-footer -->
-                        </div>
-                        <!-- /.modal-content -->
-                      </div>
-                      <!-- /.modal-dialog -->
-                    </div>
-                    <!-- /.modal -->
-                  <?php endforeach;?>
-                </tbody>
-                <!-- /tbody -->
-              </table>
-              <!-- /.table -->
-            </div>
-            <?php else: ?>
-              <p class="text-center">Data tidak tersedia</p>
-            <?php endif;?>
-            <!-- /.table-responsive -->
-            <!-- Pagination -->
-            <?php if ($pagination): ?>
-              <?=$pagination;?>
-              <?php else: ?>
-                &nbsp;
-              <?php endif;?>
-              <!-- .pagination -->
-            </div>
-          </div>
-          <!-- /.card-body -->
-        </section>
-        <!-- /.card -->
+   <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+         <li class="breadcrumb-item">
+            <a href="<?=base_url();?>"><span class="fa fa-home"></span></a>
+         </li>
+         <li class="breadcrumb-item">
+            <a class="text-muted">User</a>
+         </li>
+      </ol>
+   </nav>
+   <div class="d-flex justify-content-between align-items-center">
+      <div>
+         <h1 class="page-title"> Akun User </h1>
+         <span class="badge badge-info">Total : <?=$total;?></span>
       </div>
-      <!-- /grid column -->
-    </div>
-    <!-- /grid row -->
-  </div>
-  <!-- /.page-section -->
+      <a
+         href="<?=base_url("$pages/add");?>"
+         class="btn btn-primary btn-sm"
+      ><i class="fa fa-plus fa-fw"></i> Tambah</a>
+   </div>
+</header>
+<div class="page-section">
+   <div class="row">
+      <div class="col-12">
+         <section class="card card-fluid">
+            <div class="card-body p-0">
+               <div class="p-3">
+                  <?=form_open($pages, ['method' => 'GET']);?>
+                  <div class="row">
+                     <div class="col-12 col-md-2 mb-3">
+                        <?=form_dropdown('per_page', get_per_page_options(), $per_page, 'id="per_page" class="form-control custom-select d-block" title="List per page"');?>
+                     </div>
+                     <div class="col-12 col-md-10 mb-3">
+                        <?=form_dropdown('level', $level_options, $level, 'id="level" class="form-control custom-select d-block" title="Filter Level"');?>
+                     </div>
+                     <div class="col-12 col-lg-10 mb-3">
+                        <?=form_input('keyword', $keyword, ['placeholder' => 'Cari berdasarkan Nama Pengguna', 'class' => 'form-control']);?>
+                     </div>
+                     <div class="col-12 col-lg-2">
+                        <button
+                           class="btn btn-primary btn-block ml-auto"
+                           type="submit"
+                           value="Submit"
+                        ><i class="fa fa-filter"></i> Filter</button>
+                     </div>
+                  </div>
+                  <?=form_close();?>
+               </div>
+               <?php if ($users): ?>
+               <div class="table-responsive">
+                  <table class="table table-striped mb-0">
+                     <thead>
+                        <tr>
+                           <th
+                              scope="col"
+                              class="pl-4"
+                           >No</th>
+                           <th scope="col">Username</th>
+                           <th scope="col">Level</th>
+                           <th scope="col">Status</th>
+                           <th style="width:100px; min-width:100px;"> &nbsp; </th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <?php foreach ($users as $user): ?>
+                        <tr>
+                           <td class="align-middle pl-4"><?=++$i;?></td>
+                           <td class="align-middle"><?=highlight_keyword($user->username, $keyword);?></td>
+                           <td class="align-middle"><?=ucwords(str_replace('_', ' ', $user->level));?></td>
+                           <td class="align-middle"><?=$user->is_blocked == 'n' ? 'Not Blocked' : 'Blocked';?></td>
+                           <td class="align-middle text-right">
+                              <a
+                                 href="<?=base_url('user/edit/' . $user->user_id . '');?>"
+                                 class="btn btn-sm btn-secondary"
+                              >
+                                 <i class="fa fa-pencil-alt"></i>
+                                 <span class="sr-only">Edit</span>
+                              </a>
+                              <?php if ($user->username != 'superadmin'): ?>
+                              <button
+                                 type="button"
+                                 class="btn btn-sm btn-danger"
+                                 data-toggle="modal"
+                                 data-target="#modal-hapus-<?=$user->user_id;?>"
+                              ><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
+                              <?php endif;?>
+                           </td>
+                        </tr>
+                        <div
+                           class="modal modal-alert fade"
+                           id="modal-hapus-<?=$user->user_id;?>"
+                           tabindex="-1"
+                           role="dialog"
+                           aria-labelledby="modal-hapus"
+                           aria-hidden="true"
+                        >
+                           <div
+                              class="modal-dialog"
+                              role="document"
+                           >
+                              <div class="modal-content">
+                                 <div class="modal-header">
+                                    <h5 class="modal-title">
+                                       <i class="fa fa-exclamation-triangle text-red mr-1"></i> Konfirmasi Hapus</h5>
+                                 </div>
+                                 <div class="modal-body">
+                                    <p>Apakah anda yakin akan menghapus user <span
+                                          class="font-weight-bold"><?=$user->username;?></span>?</p>
+                                 </div>
+                                 <div class="modal-footer">
+                                    <button
+                                       type="button"
+                                       class="btn btn-danger"
+                                       onclick="location.href='<?=base_url('user/delete/' . $user->user_id . '');?>'"
+                                       data-dismiss="modal"
+                                    >Hapus</button>
+                                    <button
+                                       type="button"
+                                       class="btn btn-light"
+                                       data-dismiss="modal"
+                                    >Close</button>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <?php endforeach;?>
+                     </tbody>
+                  </table>
+               </div>
+               <?php else: ?>
+               <p class="text-center">Data tidak tersedia</p>
+               <?php endif;?>
+               <?=$pagination ?? null;?>
+            </div>
+         </section>
+      </div>
+   </div>
+</div>

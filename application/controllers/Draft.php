@@ -21,9 +21,7 @@ class Draft extends Operator_Controller
         ];
 
         // custom per page
-        if ($this->input->get('per_page', true) != null) {
-            $this->draft->per_page = $this->input->get('per_page', true);
-        }
+        $this->draft->per_page = $this->input->get('per_page', true) ?? 10;
 
         if ($this->level == 'reviewer') {
             $get_data = $this->draft->filter_draft_for_reviewer($filters, $this->username, $page);
@@ -130,12 +128,8 @@ class Draft extends Operator_Controller
         $drafts     = $get_data['drafts'];
         $total      = $get_data['total'];
         $pagination = $this->draft->make_pagination(site_url('draft'), 2, $total);
-        if (!$drafts) {
-            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
-        }
-
-        $pages     = $this->pages;
-        $main_view = 'draft/index_draft';
+        $pages      = $this->pages;
+        $main_view  = 'draft/index_draft';
         $this->load->view('template', compact('pages', 'main_view', 'drafts', 'pagination', 'total'));
     }
 

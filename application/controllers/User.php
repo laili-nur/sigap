@@ -1,7 +1,6 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
-class User extends Operator_Controller
+class User extends Admin_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -10,12 +9,18 @@ class User extends Operator_Controller
 
     public function index($page = null)
     {
-        $ceklevel = $this->session->userdata('level');
-        if ($ceklevel != 'superadmin') {
-            redirect('home');
-        }
-        $users      = $this->user->paginate($page)->order_by('username')->order_by('level')->get_all();
-        $total      = $this->user->order_by('level')->order_by('username')->count();
+        $filters = [
+            'keyword' => $this->input->get('keyword', true),
+            'level'   => $this->input->get('level', true),
+        ];
+
+        // custom per page
+        $this->user->per_page = $this->input->get('per_page', true) ?? 10;
+
+        $get_data = $this->user->filter_data($filters, $page);
+
+        $users      = $get_data['data'];
+        $total      = $get_data['count'];
         $pages      = $this->pages;
         $main_view  = 'user/index_user';
         $pagination = $this->user->make_pagination(site_url('user'), 2, $total);
@@ -24,10 +29,6 @@ class User extends Operator_Controller
 
     public function add()
     {
-        $ceklevel = $this->session->userdata('level');
-        if ($ceklevel != 'superadmin') {
-            redirect('home');
-        }
         if (!$_POST) {
             $input = (object) $this->user->get_default_values();
         } else {
@@ -174,25 +175,6 @@ class User extends Operator_Controller
             $this->session->set_flashdata('error', 'Data failed to delete');
         }
         redirect('user');
-    }
-
-    public function search($page = null)
-    {
-        $ceklevel = $this->session->userdata('level');
-        if ($ceklevel != 'superadmin') {
-            redirect('home');
-        }
-        $keywords   = $this->input->get('keywords', true);
-        $users      = $this->user->like('username', $keywords)->or_like('level', $keywords)->order_by('user_id')->order_by('username')->order_by('level')->paginate($page)->get_all();
-        $tot        = $this->user->like('username', $keywords)->or_like('level', $keywords)->order_by('user_id')->order_by('username')->order_by('level')->get_all();
-        $total      = count($tot);
-        $pagination = $this->user->make_pagination(site_url('user/search/'), 3, $total);
-        if (!$users) {
-            $this->session->set_flashdata('warning', 'Data were not found');
-        }
-        $pages     = $this->pages;
-        $main_view = 'user/index_user';
-        $this->load->view('template', compact('pages', 'main_view', 'users', 'pagination', 'total'));
     }
 
     public function is_password_required()
