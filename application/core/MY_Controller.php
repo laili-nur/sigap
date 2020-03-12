@@ -37,8 +37,8 @@ class MY_Controller extends MX_Controller
 
         // update user session in every page
         if ($this->is_login) {
-            $this->load->model('login_model', 'login');
-            $this->login->update_session($this->username);
+            $this->load->model('auth_model', 'auth');
+            $this->auth->update_session($this->username);
         }
     }
 

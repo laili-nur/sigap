@@ -37,7 +37,7 @@
                               <tbody>
                                  <tr>
                                     <td> <a
-                                          href="<?=base_url('login');?>"
+                                          href="<?=base_url('auth');?>"
                                           target="_blank"
                                        >Login</a> </td>
                                  </tr>

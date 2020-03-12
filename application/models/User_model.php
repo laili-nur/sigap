@@ -91,14 +91,18 @@ class User_model extends MY_Model
 
     public function insert_data($input)
     {
-        // clone data untuk dikirimkan vie email
+        // clone data untuk dikirimkan via email
+        $send_mail  = $input->send_mail;
         $email_data = clone $input;
 
         $input->password = md5($input->password);
 
+        unset($input->send_mail);
         if ($this->insert($input)) {
             // jika sukses input data, kirim email ke user
-            $this->send_user_mail($email_data, 'email/create_user_email', 'Registrasi berhasil');
+            if ($send_mail) {
+                $this->send_user_mail($email_data, 'email/create_user_email', 'Registrasi berhasil');
+            }
             return true;
         } else {
             return false;
@@ -108,6 +112,7 @@ class User_model extends MY_Model
     public function update_data($input, $user_id)
     {
         // clone data untuk dikirimkan vie email
+        $send_mail  = $input->send_mail;
         $email_data = clone $input;
 
         // jika update password
@@ -117,8 +122,11 @@ class User_model extends MY_Model
             unset($input->password);
         }
 
+        unset($input->send_mail);
         if ($this->where('user_id', $user_id)->update($input)) {
-            $this->send_user_mail($email_data, 'email/update_user_email', 'Update Data Akun');
+            if ($send_mail) {
+                $this->send_user_mail($email_data, 'email/update_user_email', 'Update Data Akun');
+            }
             return true;
         } else {
             return false;

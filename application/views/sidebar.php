@@ -38,13 +38,13 @@ $ceklevelasli = $this->session->userdata('level_asli');
                <?php if ($ceklevel == 'author'): ?>
                <a
                   class="dropdown-item"
-                  href="<?=base_url('login/multilevel/reviewer');?>"
+                  href="<?=base_url('auth/multilevel/reviewer');?>"
                >
                   <span class="dropdown-icon fa fa-sign-in-alt"></span> Masuk sebagai Reviewer</a>
                <?php else: ?>
                <a
                   class="dropdown-item"
-                  href="<?=base_url('login/multilevel/author');?>"
+                  href="<?=base_url('auth/multilevel/author');?>"
                >
                   <span class="dropdown-icon fa fa-sign-in-alt"></span> Masuk sebagai Author</a>
                <?php endif;?>
@@ -58,7 +58,7 @@ $ceklevelasli = $this->session->userdata('level_asli');
                   <span class="dropdown-icon fa fa-cog"></span> Ganti Password</a>
                <a
                   class="dropdown-item"
-                  href="<?=base_url('login/logout');?>"
+                  href="<?=base_url('auth/logout');?>"
                >
                   <span class="dropdown-icon oi oi-account-logout"></span> Logout</a>
             </div>

@@ -1,7 +1,8 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
-class Login_model extends MY_Model
+class Auth_model extends MY_Model
 {
+    // set tabel untuk model ini
     public $table = 'user';
 
     public function get_validation_rules()
@@ -10,12 +11,12 @@ class Login_model extends MY_Model
             [
                 'field' => 'username',
                 'label' => $this->lang->line('form_user_name'),
-                'rules' => 'trim|required',
+                'rules' => 'trim',
             ],
             [
                 'field' => 'password',
                 'label' => $this->lang->line('form_user_password'),
-                'rules' => 'required',
+                'rules' => '',
             ],
         ];
 

@@ -99,7 +99,7 @@
             <a href="#">Hubungi Admin</a>
          </p> -->
       </header>
-      <?=form_open('login', 'class="auth-form"');?>
+      <?=form_open('auth', 'class="auth-form"');?>
       <?php if (!empty($this->session->flashdata('error'))): ?>
       <p class="alert alert-danger alert-dismissable"><?=$this->session->flashdata('error');?></p>
       <?php endif;?>

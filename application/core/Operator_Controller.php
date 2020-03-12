@@ -6,12 +6,12 @@ class Operator_Controller extends MY_Controller
         parent::__construct();
 
         if (!$this->is_login) {
-            redirect('login');
+            redirect('auth');
         }
 
         // jika belum milih level,gabisa masuk sistem
         if ($this->level == 'author_reviewer') {
-            redirect('login/multilevel');
+            redirect('auth/multilevel');
         }
     }
 }

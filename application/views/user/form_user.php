@@ -139,6 +139,16 @@ $is_add_user = $this->uri->segment(2) == 'add';
                      </div>
                      <?php endif;?>
                   </div>
+                  <hr>
+                  <div class="form-check">
+                     <?=form_checkbox('send_mail', true, isset($input->send_mail) ? true : false, 'id="send_mail"');?>
+                     <label
+                        class="form-check-label"
+                        for="send_mail"
+                     >
+                        Kirim email pemberitahuan ke user
+                     </label>
+                  </div>
                </fieldset>
                <hr>
                <div class="form-actions">
