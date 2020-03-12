@@ -114,22 +114,11 @@ class User extends Admin_Controller
         redirect($this->pages);
     }
 
-    public function required_when_add($str)
+    public function required_on($str, $condition)
     {
-        if ($this->uri->segment(2) == 'add') {
+        if ($this->uri->segment(2) == $condition) {
             if (!$str) {
-                $this->form_validation->set_message('required_when_add', 'Bidang %s dibutuhkan');
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public function required_when_edit($str)
-    {
-        if ($this->uri->segment(2) == 'edit') {
-            if (!$str) {
-                $this->form_validation->set_message('required_when_edit', 'Bidang %s dibutuhkan');
+                $this->form_validation->set_message('required_on', 'Bidang %s dibutuhkan');
                 return false;
             }
         }

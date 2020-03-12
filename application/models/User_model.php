@@ -16,7 +16,7 @@ class User_model extends MY_Model
             [
                 'field' => 'password',
                 'label' => $this->lang->line('form_user_password'),
-                'rules' => 'trim|callback_required_when_add|min_length[4]|max_length[30]',
+                'rules' => 'trim|callback_required_on[add]|min_length[4]|max_length[30]',
             ],
             [
                 'field' => 'email',
@@ -31,7 +31,7 @@ class User_model extends MY_Model
             [
                 'field' => 'is_blocked',
                 'label' => $this->lang->line('form_user_is_blocked'),
-                'rules' => 'trim|callback_required_when_edit',
+                'rules' => 'trim|callback_required_on[edit]',
             ],
         ];
 
