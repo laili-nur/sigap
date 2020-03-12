@@ -8,6 +8,13 @@ class Draft extends Operator_Controller
     {
         parent::__construct();
         $this->pages = 'draft';
+
+        $this->load->model('worksheet_model', 'worksheet');
+        $this->load->model('draft_author_model', 'draft_author');
+        $this->load->model('author_model', 'author');
+        $this->load->model('reviewer_model', 'reviewer');
+        $this->load->model('user_model', 'user');
+        $this->load->model('revision_model', 'revision');
     }
 
     public function index($page = null)
@@ -144,7 +151,7 @@ class Draft extends Operator_Controller
     //     }
     // }
 
-    public function add($category = null)
+    public function add(int $category_id = null)
     {
         // khusus admin dan author
         if (!is_admin() && $this->level != 'author') {
@@ -153,7 +160,7 @@ class Draft extends Operator_Controller
 
         if ($this->level == 'author') {
             // author tidak boleh daftar draft tanpa kategori
-            if (!$category) {
+            if (!$category_id) {
                 $this->session->set_flashdata('error', $this->lang->line('form_draft_error_category_not_found'));
                 redirect();
             }
@@ -166,13 +173,12 @@ class Draft extends Operator_Controller
 
         // cek category tersedia dan aktif
         // untuk pendaftaran draft oleh author
-        if ($category) {
-            $data            = array('category_id' => $category);
-            $cekcategory     = $this->draft->get_where($data, 'category');
-            $sisa_waktu_buka = ceil((strtotime($cekcategory->date_open) - strtotime(date('Y-m-d H:i:s'))) / 86400);
-            if (!$cekcategory || $cekcategory->category_status == 'n') {
-                $this->session->set_flashdata('error', $this->lang->line('form_draft_error_category_not_found')
-                );
+        if ($category_id) {
+            $category        = $this->draft->get_where(['category_id' => $category_id], 'category');
+            $sisa_waktu_buka = Carbon::parse(Carbon::today())->diffInDays($category->date_open, false);
+
+            if (!$category || $category->category_status == 'n') {
+                $this->session->set_flashdata('error', $this->lang->line('form_draft_error_category_not_found'));
                 redirect();
             } elseif ($sisa_waktu_buka >= 1) {
                 $this->session->set_flashdata('error', $this->lang->line('form_draft_error_category_not_opened'));
@@ -182,7 +188,7 @@ class Draft extends Operator_Controller
 
         if (!$_POST) {
             $input              = (object) $this->draft->get_default_values();
-            $input->category_id = $category;
+            $input->category_id = $category_id;
         } else {
             $input = (object) $this->input->post(null, true);
             // catat orang yang menginput draft
@@ -217,46 +223,38 @@ class Draft extends Operator_Controller
             return;
         }
 
+        // memastikan konsistensi data
+        $this->db->trans_begin();
+
+        // insert draft
         $draft_id = $this->draft->insert($input);
 
-        if ($draft_id) {
+        // insert draft author
+        foreach ($input->author_id as $key => $value) {
             // hanya author pertama yang boleh edit draft
             // author lain hanya bisa view only
-            foreach ($input->author_id as $key => $value) {
-                $draft_author_id = $this->draft->insert([
-                    'author_id'           => $value,
-                    'draft_id'            => $draft_id,
-                    'draft_author_status' => $key == 0 ? 1 : 0, // author pertama, flag 1, artinya boleh edit draft
-                ], 'draft_author');
-
-                if (!$draft_author_id) {
-                    $is_success = false;
-                } else {
-                    $is_success = true;
-                }
-            }
-        } else {
-            $is_success = false;
+            $this->draft_author->insert([
+                'author_id'           => $value,
+                'draft_id'            => $draft_id,
+                'draft_author_status' => $key == 0 ? 1 : 0, // author pertama, flag 1, artinya boleh edit draft
+            ]);
         }
 
-        if ($is_success) {
-            // insert ke worksheet
-            $worksheet_num = $this->generate_worksheet_number();
-            $worksheet_id  = $this->draft->insert([
-                'draft_id'         => $draft_id,
-                'worksheet_num'    => $worksheet_num,
-                'worksheet_status' => 0,
-            ], 'worksheet');
-            if ($worksheet_id < 1) {
-                $is_success = false;
-            }
-        }
+        // insert ke worksheet
+        $this->worksheet->insert([
+            'draft_id'         => $draft_id,
+            'worksheet_num'    => $this->_generate_worksheet_number(),
+            'worksheet_status' => 0,
+        ]);
 
-        if ($is_success) {
-            $this->session->set_flashdata('success', $this->lang->line('toast_add_success'));
-        } else {
+        if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
             $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
+        } else {
+            $this->db->trans_commit();
+            $this->session->set_flashdata('success', $this->lang->line('toast_add_success'));
         }
+
         redirect('draft/view/' . $draft_id);
     }
 
@@ -268,7 +266,6 @@ class Draft extends Operator_Controller
 
         $draft = $this->draft->where('draft_id', $id)->get();
         if (!$draft) {
-            die();
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
             redirect($this->pages);
         }
@@ -311,24 +308,20 @@ class Draft extends Operator_Controller
         $input = (object) $draft;
 
         // ambil author
-        $this->load->model('author_model', 'author');
         $authors = $this->author->get_draft_authors($id);
         // cek author pertama, jika $author_order == 0
         $author_order = array_search($this->role_id, array_column($authors, 'author_id')) == 0 ? true : false;
 
         // ambil reviewer
-        $this->load->model('reviewer_model', 'reviewer');
         $reviewers = $this->reviewer->get_draft_reviewers($id);
         // cari reviewer pertama, jika $reviewer_order == 0
         $reviewer_order = array_search($this->role_id, array_column($reviewers, 'reviewer_id'));
 
         // ambil editor dan layouter
-        $this->load->model('user_model', 'user');
         $editors   = $this->user->get_draft_staffs($id, 'editor');
         $layouters = $this->user->get_draft_staffs($id, 'layout');
 
         // hitung jumlah revisi
-        $this->load->model('revision_model', 'revision');
         $revision_total['editor']   = $this->revision->count_revision($id, 'editor');
         $revision_total['layouter'] = $this->revision->count_revision($id, 'layouter');
 
@@ -337,12 +330,6 @@ class Draft extends Operator_Controller
         $form_action = "draft/edit/$id";
         $this->load->view('template', compact('revision_total', 'books', 'author_order', 'draft', 'reviewer_order', 'desk', 'pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers', 'editors', 'layouters'));
     }
-
-    // public function download($path, $file_name)
-    // {
-    //     $this->load->helper('download');
-    //     force_download('./' . $path . '/' . $file_name, null);
-    // }
 
     public function upload_progress($id, $column)
     {
@@ -418,6 +405,7 @@ class Draft extends Operator_Controller
         //redirect('draft/view/'.$id);
 
     }
+
     // hapus progress draft
     public function delete_progress($id, $jenis)
     {
@@ -700,7 +688,7 @@ class Draft extends Operator_Controller
             $is_success = false;
         }
         if ($is_success) {
-            $worksheet_num  = $this->generate_worksheet_number();
+            $worksheet_num  = $this->_generate_worksheet_number();
             $data_worksheet = array('draft_id' => $draft_id, 'worksheet_num' => $worksheet_num, 'worksheet_status' => 1, 'is_reprint' => 'y');
             $worksheet_id   = $this->draft->insert($data_worksheet, 'worksheet');
             if ($worksheet_id < 1) {
@@ -910,22 +898,30 @@ class Draft extends Operator_Controller
         $this->draft->edit_draft_date($id, $column);
         $this->detail($id);
     }
-    public function generate_worksheet_number()
+
+    private function _generate_worksheet_number()
     {
-        $date = date('Y-m');
-        $this->db->limit(1);
-        $query = $this->draft->like('worksheet_num', $date, 'after')->order_by('draft_id', 'desc')->get('worksheet');
+        // format nomor worksheet
+        // 2020-03-44 >> tahun-bulan-urutan
+        $date  = date('Y-m');
+        $query = $this->worksheet->like('worksheet_num', $date)->order_by('draft_id', 'desc')->get();
+
         if ($query) {
-            $worksheet_num = $query->worksheet_num;
-            $worksheet_num = explode("-", $worksheet_num);
-            $num           = (int) $worksheet_num[2];
-            $num++;
-            $num = str_pad($num, 2, '0', STR_PAD_LEFT);
+            $worksheet_num = explode("-", $query->worksheet_num);
+            $num           = ((int) $worksheet_num[2]) + 1; // ambil digit belakang sendiri, lalu di increment
+            $num           = str_pad($num, 2, '0', STR_PAD_LEFT);
         } else {
             $num = '01';
         }
         return $date . '-' . $num;
     }
+
+    private function _generate_draft_file_name($draft_file_name, $draft_title)
+    {
+        $get_extension = explode(".", $draft_file_name)[1];
+        return str_replace(" ", "_", $draft_title . '_' . date('YmdHis') . '.' . $get_extension); // draft file name
+    }
+
     private function getDraftAuthorStatus($author_id, $draft_id)
     {
         $data   = array('author_id' => $author_id, 'draft_id' => $draft_id);
@@ -937,95 +933,6 @@ class Draft extends Operator_Controller
         }
         return $draft_author_status;
     }
-
-    public function checkStatus($code)
-    {
-        $status = "";
-        switch ($code) {
-            case 0:
-                $status = 'Desk Screening';
-                break;
-            case 1:
-                $status = 'Lolos Desk Screening';
-                break;
-            case 2:
-                $status = 'Tidak Lolos Desk Screening';
-                break;
-            case 3:
-                $status = 'Review Ditolak';
-                break;
-            case 4:
-                $status = 'Reviewing';
-                break;
-            case 5:
-                $status = 'Antri Edit';
-                break;
-            case 6:
-                $status = 'Editing';
-                break;
-            case 7:
-                $status = 'Editorial Selesai';
-                break;
-            case 8:
-                $status = 'Layouting';
-                break;
-            case 9:
-                $status = 'Layout selesai';
-                break;
-            case 10:
-                $status = 'Desain Cover';
-                break;
-            case 11:
-                $status = 'Cover Selesai';
-                break;
-            case 12:
-                $status = 'Proofreading';
-                break;
-            case 13:
-                $status = 'Proofread Selesai';
-                break;
-            case 14:
-                $status = 'Final';
-                break;
-            case 15:
-                $status = 'Cetak';
-                break;
-            case 16:
-                $status = 'Cetak Selesai';
-                break;
-            case 17:
-                $status = 'Revisi Edit';
-                break;
-            case 18:
-                $status = 'Revisi Layout';
-                break;
-            case 19:
-                $status = 'Selesai Revisi';
-                break;
-            case 99:
-                $status = 'Draft Ditolak';
-                break;
-            default:
-                # code...
-
-                break;
-        }
-        return $status;
-    }
-    /*
-    |-----------------------------------------------------------------
-    | Callback
-    |-----------------------------------------------------------------
-     */
-    //    public function alpha_coma_dash_dot_space($str)
-    //    {
-    //        if ( !preg_match('/^[a-zA-Z .,\-]+$/i',$str) )
-    //        {
-    //            $this->form_validation->set_message('alpha_coma_dash_dot_space', 'Can only be filled with letters, numbers, dash(-), dot(.), and comma(,).');
-    //            return false;
-    //        }
-    //    }
-    //
 
     public function unique_data($str, $data_key)
     {
@@ -1049,11 +956,5 @@ class Draft extends Operator_Controller
             return true;
         }
         return (bool) filter_var($str, FILTER_VALIDATE_URL);
-    }
-
-    private function _generate_draft_file_name($draft_file_name, $draft_title)
-    {
-        $get_extension = explode(".", $draft_file_name)[1];
-        return str_replace(" ", "_", $draft_title . '_' . date('YmdHis') . '.' . $get_extension); // draft file name
     }
 }

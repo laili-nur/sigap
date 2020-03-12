@@ -1,5 +1,7 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
+use Carbon\Carbon;
+
 class Category extends Admin_Controller
 {
     public function __construct()
@@ -16,8 +18,8 @@ class Category extends Admin_Controller
         $cat = $this->category->order_by('category_name')->order_by('date_close', 'desc')->get_all();
 
         $categories = array_map(function ($v) {
-            $v->sisa_waktu_buka  = ceil((strtotime($v->date_open) - strtotime(date('Y-m-d H:i:s'))) / 86400);
-            $v->sisa_waktu_tutup = ceil((strtotime($v->date_close) - strtotime(date('Y-m-d H:i:s'))) / 86400);
+            $v->sisa_waktu_buka  = Carbon::parse(Carbon::today())->diffInDays($v->date_open, false);
+            $v->sisa_waktu_tutup = Carbon::parse(Carbon::today())->diffInDays($v->date_close, false);
 
             return $v;
         }, $cat);
