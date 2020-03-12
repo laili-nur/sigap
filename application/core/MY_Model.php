@@ -457,12 +457,12 @@ class MY_Model extends CI_Model
             }
 
             $this->session->set_userdata([
-                'username'   => $user->username,
-                'level'      => $user->level,
-                'level_asli' => $user->level,
-                'is_login'   => true,
-                'user_id'    => $user->user_id,
-                'role_id'    => $role_id,
+                'username'     => $user->username,
+                'level'        => $user->level,
+                'level_native' => $user->level,
+                'is_login'     => true,
+                'user_id'      => $user->user_id,
+                'role_id'      => $role_id,
             ]);
             return true;
         }

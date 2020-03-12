@@ -1,8 +1,8 @@
 <?php
-$username     = ucwords($this->session->userdata('username'));
-$ceklevel     = $this->session->userdata('level');
-$level        = ucwords(str_replace('_', ' ', $ceklevel));
-$ceklevelasli = $this->session->userdata('level_asli');
+$username      = ucwords($this->session->userdata('username'));
+$level         = check_level();
+$level_to_text = ucwords(str_replace('_', ' ', $level));
+$level_native  = $this->session->userdata('level_native');
 ?>
 
 <header class="app-header app-header-dark">
@@ -117,15 +117,15 @@ $ceklevelasli = $this->session->userdata('level_asli');
                   </span>
                   <span class="account-summary pr-md-4 d-none d-md-block">
                      <span class="account-name"><?=$username;?></span>
-                     <span class="account-description"><?=$level;?></span>
+                     <span class="account-description"><?=$level_to_text;?></span>
                   </span>
                </button>
                <div class="dropdown-arrow dropdown-arrow-left"></div><!-- .dropdown-menu -->
                <div class="dropdown-menu">
                   <h6 class="dropdown-header d-none d-sm-block d-md-none"> <?=$username;?> </h6>
 
-                  <?php if ($ceklevelasli == 'author_reviewer'): ?>
-                  <?php if ($ceklevel == 'author'): ?>
+                  <?php if ($level_native == 'author_reviewer'): ?>
+                  <?php if ($level == 'author'): ?>
                   <a
                      class="dropdown-item"
                      href="<?=base_url('auth/multilevel/reviewer');?>"

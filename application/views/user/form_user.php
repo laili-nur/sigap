@@ -1,6 +1,8 @@
 <?php
 $is_add_user = $this->uri->segment(2) == 'add';
-?>
+
+$levels = ['superadmin']
+;?>
 
 <header class="page-title-bar">
    <nav aria-label="breadcrumb">
@@ -59,55 +61,15 @@ $is_add_user = $this->uri->segment(2) == 'add';
                               <?=$this->lang->line('form_user_level');?>
                               <abbr title="Required">*</abbr>
                            </label>
+                           <?php foreach (get_user_levels() as $level): ?>
                            <div class="custom-control custom-radio">
-                              <?=form_radio('level', 'superadmin', isset($input->level) && ($input->level == 'superadmin') ? true : false, ' class="custom-control-input" id="level1"');?>
+                              <?=form_radio('level', $level, isset($input->level) && ($input->level == $level) ? true : false, ' class="custom-control-input" id="' . $level . '"');?>
                               <label
                                  class="custom-control-label"
-                                 for="level1"
-                              >Superadmin</label>
+                                 for="<?=$level;?>"
+                              ><?=ucwords(str_replace('_', ' ', $level));?></label>
                            </div>
-                           <div class="custom-control custom-radio">
-                              <?=form_radio('level', 'admin_penerbitan', isset($input->level) && ($input->level == 'admin_penerbitan') ? true : false, 'class="custom-control-input" id="level2"');?>
-                              <label
-                                 class="custom-control-label"
-                                 for="level2"
-                              >Admin Penerbitan</label>
-                           </div>
-                           <div class="custom-control custom-radio">
-                              <?=form_radio('level', 'editor', isset($input->level) && ($input->level == 'editor') ? true : false, ' class="custom-control-input" id="level3"');?>
-                              <label
-                                 class="custom-control-label"
-                                 for="level3"
-                              >Editor</label>
-                           </div>
-                           <div class="custom-control custom-radio">
-                              <?=form_radio('level', 'layouter', isset($input->level) && ($input->level == 'layouter') ? true : false, ' class="custom-control-input" id="level4"');?>
-                              <label
-                                 class="custom-control-label"
-                                 for="level4"
-                              >Layouter</label>
-                           </div>
-                           <div class="custom-control custom-radio">
-                              <?=form_radio('level', 'author', isset($input->level) && ($input->level == 'author') ? true : false, ' class="custom-control-input" id="level5"');?>
-                              <label
-                                 class="custom-control-label"
-                                 for="level5"
-                              >Author</label>
-                           </div>
-                           <div class="custom-control custom-radio">
-                              <?=form_radio('level', 'reviewer', isset($input->level) && ($input->level == 'reviewer') ? true : false, ' class="custom-control-input" id="level6"');?>
-                              <label
-                                 class="custom-control-label"
-                                 for="level6"
-                              >Reviewer</label>
-                           </div>
-                           <div class="custom-control custom-radio">
-                              <?=form_radio('level', 'author_reviewer', isset($input->level) && ($input->level == 'author_reviewer') ? true : false, ' class="custom-control-input" id="level7"');?>
-                              <label
-                                 class="custom-control-label"
-                                 for="level7"
-                              >Author dan Reviewer</label>
-                           </div>
+                           <?php endforeach;?>
                            <?=form_error('level');?>
                         </div>
                      </div>
@@ -131,7 +93,7 @@ $is_add_user = $this->uri->segment(2) == 'add';
                                  <label
                                     class="custom-control-label"
                                     for="category_status2"
-                                 >Tidak aktif</label>
+                                 >Nonaktif</label>
                               </div>
                               <?=form_error('is_blocked');?>
                            </div>
@@ -165,23 +127,23 @@ $is_add_user = $this->uri->segment(2) == 'add';
 </div>
 <script>
 $(document).ready(function() {
-   // loadValidateSetting();
-   // $("#form_user").validate({
-   //       rules: {
-   //          username: {
-   //             crequired: true,
-   //             username: true,
-   //          },
-   //          password: {
-   //             crequired: true,
-   //             cminlength: 4
-   //          },
-   //          level: "crequired"
-   //       },
-   //       errorElement: "span",
-   //       errorPlacement: validateErrorPlacement
-   //    },
-   //    validateSelect2()
-   // );
+   loadValidateSetting();
+   $("#form_user").validate({
+         rules: {
+            username: {
+               crequired: true,
+               username: true,
+            },
+            password: {
+               crequired: true,
+               cminlength: 4
+            },
+            level: "crequired"
+         },
+         errorElement: "span",
+         errorPlacement: validateErrorPlacement
+      },
+      validateSelect2()
+   );
 })
 </script>

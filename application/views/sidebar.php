@@ -2,7 +2,7 @@
 $username     = ucwords($this->session->userdata('username'));
 $ceklevel     = $this->session->userdata('level');
 $level        = ucwords(str_replace('_', ' ', $ceklevel));
-$ceklevelasli = $this->session->userdata('level_asli');
+$ceklevelasli = $this->session->userdata('level_native');
 ?>
 
 <aside class="app-aside app-aside-expand-md app-aside-light">

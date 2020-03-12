@@ -47,7 +47,7 @@ class Auth extends MY_Controller
 
     public function multilevel($sesi = '')
     {
-        if ($this->session->userdata('level_asli') == 'author_reviewer') {
+        if ($this->session->userdata('level_native') == 'author_reviewer') {
             if (!$sesi) {
                 $this->load->view('multilevel');
             } else {

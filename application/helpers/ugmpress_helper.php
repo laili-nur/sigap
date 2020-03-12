@@ -556,3 +556,8 @@ function get_per_page_options()
         '100' => '100',
     ];
 }
+
+function get_user_levels()
+{
+    return ['superadmin', 'admin_penerbitan', 'author', 'reviewer', 'editor', 'layouter', 'author_reviewer'];
+}

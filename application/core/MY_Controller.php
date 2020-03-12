@@ -7,24 +7,24 @@ class MY_Controller extends MX_Controller
 {
     protected $pages = '';
 
-    protected $username   = '';
-    protected $level      = '';
-    protected $level_asli = '';
-    protected $is_login   = '';
-    protected $user_id    = '';
-    protected $role_id    = '';
+    protected $username     = '';
+    protected $level        = '';
+    protected $level_native = '';
+    protected $is_login     = '';
+    protected $user_id      = '';
+    protected $role_id      = '';
 
     public function __construct()
     {
         parent::__construct();
         $this->_hmvc_fixes();
 
-        $this->username   = $this->session->userdata('username');
-        $this->level      = $this->session->userdata('level');
-        $this->level_asli = $this->session->userdata('level_asli');
-        $this->is_login   = $this->session->userdata('is_login');
-        $this->user_id    = $this->session->userdata('user_id');
-        $this->role_id    = $this->session->userdata('role_id');
+        $this->username     = $this->session->userdata('username');
+        $this->level        = $this->session->userdata('level');
+        $this->level_native = $this->session->userdata('level_native');
+        $this->is_login     = $this->session->userdata('is_login');
+        $this->user_id      = $this->session->userdata('user_id');
+        $this->role_id      = $this->session->userdata('role_id');
 
         $model  = strtolower(get_class($this));
         $models = ucwords(get_class($this));

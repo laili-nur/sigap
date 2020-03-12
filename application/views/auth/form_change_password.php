@@ -60,40 +60,40 @@
 <script>
 $(document).ready(function() {
    loadValidateSetting();
-   // $("#form_change_password").validate({
-   //       rules: {
-   //          username: {
-   //             crequired: true,
-   //             username: true,
-   //          },
-   //          password: {
-   //             crequired: true,
-   //             cminlength: 4
-   //          },
-   //          new_password: {
-   //             crequired: true,
-   //             cminlength: 4,
-   //             notEqualTo: '#password'
-   //          },
-   //          confirm_password: {
-   //             crequired: true,
-   //             minlength: 4,
-   //             equalTo: '#new_password'
-   //          },
-   //          level: "crequired"
-   //       },
-   //       messages: {
-   //          new_password: {
-   //             notEqualTo: 'Password baru tidak boleh sama dengan password lama'
-   //          },
-   //          confirm_password: {
-   //             equalTo: "Kolom konfirmasi harus sama dengan kolom password baru"
-   //          }
-   //       },
-   //       errorElement: "span",
-   //       errorPlacement: validateErrorPlacement
-   //    },
-   //    validateSelect2()
-   // );
+   $("#form_change_password").validate({
+         rules: {
+            username: {
+               crequired: true,
+               username: true,
+            },
+            password: {
+               crequired: true,
+               cminlength: 4
+            },
+            new_password: {
+               crequired: true,
+               cminlength: 4,
+               notEqualTo: '#password'
+            },
+            confirm_password: {
+               crequired: true,
+               minlength: 4,
+               equalTo: '#new_password'
+            },
+            level: "crequired"
+         },
+         messages: {
+            new_password: {
+               notEqualTo: 'Password baru tidak boleh sama dengan password lama'
+            },
+            confirm_password: {
+               equalTo: "Kolom konfirmasi harus sama dengan kolom password baru"
+            }
+         },
+         errorElement: "span",
+         errorPlacement: validateErrorPlacement
+      },
+      validateSelect2()
+   );
 })
 </script>
