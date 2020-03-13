@@ -1046,9 +1046,9 @@ $(document).ready(function() {
             console.log(datax);
             $this.removeAttr("disabled").html("Upload");
             if (datax.status == true) {
-              toastr_view('111');
+              show_toast('111');
             } else {
-              toastr_view('000');
+              show_toast('000');
             }
             $('#modal-review1').load(' #modal-review1');
           }
@@ -1111,9 +1111,9 @@ $(document).ready(function() {
             console.log(datax);
             $this.removeAttr("disabled").html("Upload");
             if (datax.status == true) {
-              toastr_view('111');
+              show_toast('111');
             } else {
-              toastr_view('000');
+              show_toast('000');
             }
             $('#modal-review2').load(' #modal-review2');
           }
@@ -1143,11 +1143,11 @@ $(document).ready(function() {
     let nilai_reviewer1_3 = $('[name=nilai_reviewer1_3]:checked').val();
     let nilai_reviewer1 = [nilai_reviewer1_0, nilai_reviewer1_1, nilai_reviewer1_2, nilai_reviewer1_3];
     if (nilai_reviewer1_0 == null || nilai_reviewer1_1 == null || nilai_reviewer1_2 == null || nilai_reviewer1_3 == null) {
-      toastr_view('penilaian');
+      show_toast('penilaian');
       return false;
     }
     if (rev1_flag == null) {
-      toastr_view('flag');
+      show_toast('flag');
       return false;
     }
     $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
@@ -1170,9 +1170,9 @@ $(document).ready(function() {
         console.log(datax)
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#total_reviewer1').load(' #total_reviewer1');
         $('#review1').modal('toggle');
@@ -1204,9 +1204,9 @@ $(document).ready(function() {
         console.log(datax)
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-review').load(' #list-group-review');
         $('#review1').modal('toggle');
@@ -1231,11 +1231,11 @@ $(document).ready(function() {
     let nilai_reviewer2_3 = $('[name=nilai_reviewer2_3]:checked').val();
     let nilai_reviewer2 = [nilai_reviewer2_0, nilai_reviewer2_1, nilai_reviewer2_2, nilai_reviewer2_3];
     if (nilai_reviewer2_0 == null || nilai_reviewer2_1 == null || nilai_reviewer2_2 == null || nilai_reviewer2_3 == null) {
-      toastr_view('penilaian');
+      show_toast('penilaian');
       return false;
     }
     if (rev2_flag == null) {
-      toastr_view('flag');
+      show_toast('flag');
       return false;
     }
     $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
@@ -1259,9 +1259,9 @@ $(document).ready(function() {
         console.log(datax)
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#total_reviewer2').load(' #total_reviewer2');
         $('#review2').modal('toggle');
@@ -1293,9 +1293,9 @@ $(document).ready(function() {
         console.log(datax)
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-review').load(' #list-group-review');
         $('#review2').modal('toggle');
@@ -1327,9 +1327,9 @@ $(document).ready(function() {
         console.log(datax)
         $this.removeAttr("disabled").html("Setuju");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         //$('#list-group-review').load(' #list-group-review');
         location.reload();
@@ -1364,9 +1364,9 @@ $(document).ready(function() {
         console.log(datax);
         $this.removeAttr("disabled").html("Tolak");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         //$('#list-group-review').load(' #list-group-review');
         location.reload();
@@ -1397,9 +1397,9 @@ $(document).ready(function() {
         console.log(datax)
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-review').load(' #list-group-review');
         $('#review_deadline').modal('toggle');

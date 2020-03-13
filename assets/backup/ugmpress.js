@@ -53,7 +53,7 @@ functionvalidate_select2() {
 }
 
 
-function toastr_view(param) {
+function show_toast(param) {
     toastr.options = {
         "closeButton": true,
         "debug": false,

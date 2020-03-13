@@ -94,7 +94,7 @@ function validateErrorPlacement(error, element) {
     }
 }
 
-function toastr_view(param) {
+function show_toast(status, text = null) {
     toastr.options = {
         "closeButton": true,
         "debug": false,
@@ -112,47 +112,66 @@ function toastr_view(param) {
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
     };
-    if (param == '1') {
-        toastr.success('Penulis berhasil dipilih');
-    } else if (param == '2') {
-        toastr.success('Penulis dihapus');
-    } else if (param == '3') {
-        toastr.success('Reviewer berhasil dipilih');
-    } else if (param == '4') {
-        toastr.success('Reviewer dihapus');
-    } else if (param == '5') {
-        toastr.success('Editor berhasil dipilih');
-    } else if (param == '6') {
-        toastr.success('Editor dihapus');
-    } else if (param == '7') {
-        toastr.success('Layouter berhasil dipilih');
-    } else if (param == '8') {
-        toastr.success('Layouter dihapus');
-    } else if (param == '11') {
-        toastr.error('Penulis sudah terpilih');
-    } else if (param == '22') {
-        toastr.error('Reviewer sudah terpilih');
-    } else if (param == '33') {
-        toastr.error('Editor sudah terpilih');
-    } else if (param == '44') {
-        toastr.error('Layouter sudah terpilih');
-    } else if (param == '99') {
-        toastr.error('Reviewer max 2');
-    } else if (param == '98') {
-        toastr.error('Editor max 2');
-    } else if (param == '97') {
-        toastr.error('Layouter max 2');
-    } else if (param == '111') {
-        toastr.success('Data Saved');
-    } else if (param == '000') {
-        toastr.error('Failed to Save');
-    } else if (param == 'penilaian') {
-        toastr.error('Lengkapi nilai review');
-    } else if (param == 'flag') {
-        toastr.error('Rekomendasi dibutuhkan');
-    } else if (param == 'update_author') {
-        toastr.success('List Penulis berhasil diupdate');
+
+    if (text == null) {
+        if (status) {
+            toastr.success('Data berhasil tersimpan');
+        } else {
+            toastr.error('Data gagal tersimpan');
+        }
     }
+
+    if (text) {
+        if (status) {
+            toastr.success(text);
+        } else {
+            toastr.error(text);
+        }
+    }
+
+
+
+    // if (param == '1') {
+    //     toastr.success('Penulis berhasil dipilih');
+    // } else if (param == '2') {
+    //     toastr.success('Penulis dihapus');
+    // } else if (param == '3') {
+    //     toastr.success('Reviewer berhasil dipilih');
+    // } else if (param == '4') {
+    //     toastr.success('Reviewer dihapus');
+    // } else if (param == '5') {
+    //     toastr.success('Editor berhasil dipilih');
+    // } else if (param == '6') {
+    //     toastr.success('Editor dihapus');
+    // } else if (param == '7') {
+    //     toastr.success('Layouter berhasil dipilih');
+    // } else if (param == '8') {
+    //     toastr.success('Layouter dihapus');
+    // } else if (param == '11') {
+    //     toastr.error('Penulis sudah terpilih');
+    // } else if (param == '22') {
+    //     toastr.error('Reviewer sudah terpilih');
+    // } else if (param == '33') {
+    //     toastr.error('Editor sudah terpilih');
+    // } else if (param == '44') {
+    //     toastr.error('Layouter sudah terpilih');
+    // } else if (param == '99') {
+    //     toastr.error('Reviewer max 2');
+    // } else if (param == '98') {
+    //     toastr.error('Editor max 2');
+    // } else if (param == '97') {
+    //     toastr.error('Layouter max 2');
+    // } else if (param == '111') {
+    //     toastr.success('Data Saved');
+    // } else if (param == '000') {
+    //     toastr.error('Failed to Save');
+    // } else if (param == 'penilaian') {
+    //     toastr.error('Lengkapi nilai review');
+    // } else if (param == 'flag') {
+    //     toastr.error('Rekomendasi dibutuhkan');
+    // } else if (param == 'update_author') {
+    //     toastr.success('List Penulis berhasil diupdate');
+    // }
 }
 
 // // Datepicker

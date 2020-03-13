@@ -180,7 +180,7 @@ $(document).ready(function() {
    //                "text": value
    //             }).appendTo($("#author"));
    //          });
-   //          toastr_view("update_author");
+   //          show_toast("update_author");
    //          $("#ajax-reload-author").removeClass("fa-spin");
    //       });
    // });

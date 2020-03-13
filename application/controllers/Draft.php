@@ -258,27 +258,27 @@ class Draft extends Operator_Controller
         redirect('draft/view/' . $draft_id);
     }
 
-    public function view($id = null)
+    public function view($draft_id = null)
     {
-        if ($id == null) {
+        if ($draft_id == null) {
             redirect($this->pages);
         }
 
-        $draft = $this->draft->where('draft_id', $id)->get();
+        $draft = $this->draft->where('draft_id', $draft_id)->get();
         if (!$draft) {
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
             redirect($this->pages);
         }
 
-        if (!$this->draft->is_authorized($this->level, $this->username, $id)) {
+        if (!$this->draft->is_authorized($this->level, $this->username, $draft_id)) {
             $this->session->set_flashdata('error', $this->lang->line('toast_error_not_authorized'));
             redirect($this->pages);
         }
 
         // ambil tabel worksheet
-        $desk = $this->draft->get_where(['draft_id' => $id], 'worksheet');
+        $desk = $this->draft->get_where(['draft_id' => $draft_id], 'worksheet');
         // ambil tabel books
-        $books = $this->draft->get_where(['draft_id' => $id], 'book');
+        $books = $this->draft->get_where(['draft_id' => $draft_id], 'book');
 
         // pecah data nilai, csv jadi array
         // hitung bobot nilai
@@ -308,26 +308,26 @@ class Draft extends Operator_Controller
         $input = (object) $draft;
 
         // ambil author
-        $authors = $this->author->get_draft_authors($id);
+        $authors = $this->author->get_draft_authors($draft_id);
         // cek author pertama, jika $author_order == 0
         $author_order = array_search($this->role_id, array_column($authors, 'author_id')) == 0 ? true : false;
 
         // ambil reviewer
-        $reviewers = $this->reviewer->get_draft_reviewers($id);
+        $reviewers = $this->reviewer->get_draft_reviewers($draft_id);
         // cari reviewer pertama, jika $reviewer_order == 0
         $reviewer_order = array_search($this->role_id, array_column($reviewers, 'reviewer_id'));
 
         // ambil editor dan layouter
-        $editors   = $this->user->get_draft_staffs($id, 'editor');
-        $layouters = $this->user->get_draft_staffs($id, 'layout');
+        $editors   = $this->user->get_draft_staffs($draft_id, 'editor');
+        $layouters = $this->user->get_draft_staffs($draft_id, 'layout');
 
         // hitung jumlah revisi
-        $revision_total['editor']   = $this->revision->count_revision($id, 'editor');
-        $revision_total['layouter'] = $this->revision->count_revision($id, 'layouter');
+        $revision_total['editor']   = $this->revision->count_revision($draft_id, 'editor');
+        $revision_total['layouter'] = $this->revision->count_revision($draft_id, 'layouter');
 
         $pages       = $this->pages;
-        $main_view   = 'draft/view/view';
-        $form_action = "draft/edit/$id";
+        $main_view   = 'draft/view/overview';
+        $form_action = "draft/edit/$draft_id";
         $this->load->view('template', compact('revision_total', 'books', 'author_order', 'draft', 'reviewer_order', 'desk', 'pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers', 'editors', 'layouters'));
     }
 
@@ -388,7 +388,7 @@ class Draft extends Operator_Controller
             //If something wrong
             // if (!$this->draft->validate() || $this->form_validation->error_array()) {
             //     $pages    = $this->pages;
-            //     $main_view   = 'draft/view/view';
+            //     $main_view   = 'draft/view/overview';
             //     $form_action = "draft/edit/$id";
             //     $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             //     return;
@@ -447,40 +447,46 @@ class Draft extends Operator_Controller
     }
 
     // ubah notes - buat ubah deadline juga
-    public function ubahnotes($id = null, $rev = null)
+    public function ubahnotes($draft_id = null, $rev = null)
     {
-        $ceklevel = $this->session->userdata('level');
-        $data     = array();
-        $draft    = $this->draft->where('draft_id', $id)->get();
+        if ($draft_id == null) {
+            $message = 'ID draft kosong';
+            return $this->send_json_output(false, $message);
+        }
+
+        // apakah draft tersedia
+        $draft = $this->draft->where('draft_id', $draft_id)->get();
         if (!$draft) {
-            $this->session->set_flashdata('warning', 'Draft data were not available');
-            redirect('draft');
+            $message = $this->lang->line('toast_data_not_available');
+            return $this->send_json_output(false, $message, 404);
         }
-        $isCanAccess = false;
+
+        // hanya untuk user yang berkaitan dengan draft ini
+        if (!$this->draft->is_authorized($this->level, $this->username, $draft_id)) {
+            $message = $this->lang->line('toast_error_not_authorized');
+            return $this->send_json_output(false, $message);
+        }
+
+        // hanya untuk author pertama
         if ($this->level == 'author') {
-            $draft_author_status = $this->getDraftAuthorStatus($this->role_id, $id);
-            if ($draft_author_status < 1) {
-                $data['status'] = false;
-            } else {
-                $isCanAccess = true;
+            $draft_author_status = $this->getDraftAuthorStatus($this->role_id, $draft_id);
+            if ($draft_author_status == 0) {
+                $message = $this->lang->line('toast_error_not_authorized');
+                return $this->send_json_output(false, $message);
             }
-        } else {
-            $isCanAccess = true;
         }
-        if ($isCanAccess) {
-            if (!$_POST) {
-                $input = (object) $draft;
-            } else {
-                $input = (object) $this->input->post(null, false);
-            }
-            if (empty($input->files)) {
-                unset($input->files);
-            }
-            // If something wrong
-            // if (!$this->draft->validate() || $this->form_validation->error_array()) {
-            //     return;
-            // }
-            //gabungkan array menjadi csv
+
+        $input = (object) $this->input->post(null, false);
+        // if (empty($input->files)) {
+        //     unset($input->files);
+        // }
+
+        // if ($this->draft->validate($input) == false) {
+        //     return $this->send_json_output('validation errrors', false, 422);
+        // }
+
+        // gabungkan array menjadi csv
+        if ($this->level == 'reviewer') {
             if ($rev == 1) {
                 $input->nilai_reviewer1 = implode(",", $input->nilai_reviewer1);
             } elseif ($rev == 2) {
@@ -489,31 +495,29 @@ class Draft extends Operator_Controller
                 unset($input->nilai_reviewer1);
                 unset($input->nilai_reviewer2);
             }
+        }
 
-            if (!empty($this->input->post('edit_notes_date'))) {
-                if ($ceklevel == 'editor') {
-                    $input->edit_notes_date  = date('Y-m-d H:i:s');
-                    $data['edit_notes_date'] = format_datetime($input->edit_notes_date);
-                }
-            }
-
-            if (!empty($this->input->post('layout_notes_date'))) {
-                if ($ceklevel == 'layouter') {
-                    $input->layout_notes_date  = date('Y-m-d H:i:s');
-                    $data['layout_notes_date'] = format_datetime($input->layout_notes_date);
-                }
-            }
-
-            if ($this->draft->where('draft_id', $id)->update($input)) {
-                //$this->session->set_flashdata('success', 'Data updated');
-                $data['status'] = true;
-            } else {
-                $data['status'] = false;
-                //$this->session->set_flashdata('error', 'Data failed to update');
-
+        if (!empty($this->input->post('edit_notes_date'))) {
+            if ($this->level == 'editor') {
+                $input->edit_notes_date  = date('Y-m-d H:i:s');
+                $data['edit_notes_date'] = format_datetime($input->edit_notes_date);
             }
         }
-        echo json_encode($data);
+
+        if (!empty($this->input->post('layout_notes_date'))) {
+            if ($this->level == 'layouter') {
+                $input->layout_notes_date  = date('Y-m-d H:i:s');
+                $data['layout_notes_date'] = format_datetime($input->layout_notes_date);
+            }
+        }
+
+        if ($this->draft->where('draft_id', $draft_id)->update($input)) {
+            return $this->send_json_output(true, $this->lang->line('toast_edit_success'));
+        } else {
+            return $this->send_json_output(false, $this->lang->line('toast_edit_fail'));
+        }
+        // }
+        // echo json_encode($data);
     }
 
     public function edit($id = null)

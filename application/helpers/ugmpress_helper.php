@@ -184,7 +184,7 @@ function get_dropdown_listReviewer($table, $columns)
  * @param string $columns
  * @return array
  */
-function get_dropdown_list_author($table, $columns)
+function get_dropdown_list_user($table, $columns)
 {
     $CI    = &get_instance();
     $query = $CI->db->select($columns)
@@ -333,8 +333,8 @@ function get_dropdown_list(string $table, array $columns, callable $condition = 
 //     return $options = ['' => '- Empty -'];
 // }
 
-// Get list of option for dropdown with multi koolom
-function getMoreDropdownList($table, $columns)
+// Get list of option for dropdown untuk multi kolom
+function get_dropdown_list_multi_column($table, $columns)
 {
     $tables = array();
     for ($i = 0; $i < count($columns); $i++) {

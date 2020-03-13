@@ -32,9 +32,9 @@ function check_role()
     return $CI->session->userdata('role');
 }
 
-function is_authorized()
-{
-    $CI       = &get_instance();
-    $username = $CI->session->userdata('username');
-    $level    = $CI->session->userdata('level');
-}
+// function is_authorized()
+// {
+//     $CI       = &get_instance();
+//     $username = $CI->session->userdata('username');
+//     $level    = $CI->session->userdata('level');
+// }

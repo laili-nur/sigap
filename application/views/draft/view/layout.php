@@ -711,9 +711,9 @@ $(document).ready(function() {
             console.log(datax);
             $this.removeAttr("disabled").html("Upload");
             if (datax.status == true) {
-              toastr_view('111');
+              show_toast('111');
             } else {
-              toastr_view('000');
+              show_toast('000');
             }
             $('#modal-layout').load(' #modal-layout');
           }
@@ -776,9 +776,9 @@ $(document).ready(function() {
             console.log(datax);
             $this.removeAttr("disabled").html("Upload");
             if (datax.status == true) {
-              toastr_view('111');
+              show_toast('111');
             } else {
-              toastr_view('000');
+              show_toast('000');
             }
             $('#modal-cover').load(' #modal-cover');
           }
@@ -806,9 +806,9 @@ $(document).ready(function() {
         let datax = JSON.parse(data);
         console.log(datax);
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#modal-layout').load(' #modal-layout');
         $('#layouter_file_link').val('');
@@ -836,11 +836,11 @@ $(document).ready(function() {
         console.log(datalayouter);
         if (!datalayouter.validasi) {
           $('#form-layouter').append('<div class="text-danger help-block">layouter sudah dipilih</div>');
-          toastr_view('44');
+          show_toast('44');
         } else if (datalayouter.validasi == 'max') {
-          toastr_view('97');
+          show_toast('97');
         } else {
-          toastr_view('7');
+          show_toast('7');
         }
         $('[name=layouter]').val("");
         $('#reload-layouter').load(' #reload-layouter');
@@ -871,9 +871,9 @@ $(document).ready(function() {
         console.log(datax)
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-layout').load(' #list-group-layout');
         $this.removeAttr("disabled").html('<i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span>');
@@ -905,9 +905,9 @@ $(document).ready(function() {
         console.log(datax)
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-layout').load(' #list-group-layout');
         $this.removeAttr("disabled").html('<i class="fas fa-stop"></i><span class="d-none d-md-inline"> Selesai</span>');
@@ -930,7 +930,7 @@ $(document).ready(function() {
       success: function(data) {
         console.log(data);
         //$('#reload-layouter').load(' #reload-layouter');
-        toastr_view('8');
+        show_toast('8');
         //$('#list-group-layout').load(' #list-group-layout');
       }
 
@@ -957,9 +957,9 @@ $(document).ready(function() {
         console.log(datax)
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-layout').load(' #list-group-layout');
         $('#layout_last_notes').html(datax.layout_notes_date);
@@ -989,9 +989,9 @@ $(document).ready(function() {
         console.log(datax)
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-layout').load(' #list-group-layout');
         $('#cover').modal('toggle');
@@ -1023,9 +1023,9 @@ $(document).ready(function() {
         console.log(datax);
         $this.removeAttr("disabled").html("Setuju");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-layout').load(' #list-group-layout');
         location.reload();
@@ -1059,9 +1059,9 @@ $(document).ready(function() {
         console.log(datax);
         $this.removeAttr("disabled").html("Tolak");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-layout').load(' #list-group-layout');
         location.reload();
@@ -1090,9 +1090,9 @@ $(document).ready(function() {
         console.log(datax)
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-layout').load(' #list-group-layout');
         $('#layout_deadline').modal('toggle');
@@ -1145,9 +1145,9 @@ $(document).ready(function() {
             let datax = JSON.parse(data);
             console.log(datax);
             if (datax.status == true) {
-              toastr_view('111');
+              show_toast('111');
             } else {
-              toastr_view('000');
+              show_toast('000');
             }
             $('#layout-revisi-deadline').modal('toggle');
           }
@@ -1217,9 +1217,9 @@ $(document).ready(function() {
         let datax = JSON.parse(data);
         console.log(datax);
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         load_revisi_layout();
       }
@@ -1241,9 +1241,9 @@ $(document).ready(function() {
         let datax = JSON.parse(data);
         console.log(datax);
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
       }
     })
@@ -1259,9 +1259,9 @@ $(document).ready(function() {
         let datax = JSON.parse(data);
         console.log(datax);
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         load_revisi_layout();
       }
@@ -1285,9 +1285,9 @@ $(document).ready(function() {
         let datax = JSON.parse(data);
         console.log(datax);
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         load_revisi_layout();
       }

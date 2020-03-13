@@ -18,6 +18,8 @@
 <div class="page-section">
    <!-- segment detail draft, penulis, reviewer, buku -->
    <?php $this->load->view('draft/view/detail');?>
+
+   <!-- desk screening tidak bisa dilihat reviewer -->
    <?php if ($level != 'reviewer'): ?>
    <?php $this->load->view('draft/view/desk_screening');?>
    <?php endif;?>
@@ -191,6 +193,7 @@ echo form_input($hidden_date);?>
 
    <?php endif;?>
 </div>
+
 <script>
 $(document).ready(function() {
    $('#entry_date').flatpickr({
@@ -215,10 +218,9 @@ $(document).ready(function() {
       return false;
    });
 
-
-   $("#pilih_author").select2({
+   $("#author-id").select2({
       placeholder: '-- Pilih --',
-      dropdownParent: $('#pilihauthor'),
+      dropdownParent: $('#modal-select-author'),
       allowClear: true
    });
    $("#pilih_reviewer").select2({
@@ -235,172 +237,6 @@ $(document).ready(function() {
       placeholder: '-- Pilih --',
       dropdownParent: $('#pilihlayouter'),
       allowClear: true
-   });
-
-   //pilih reviewer
-   $('#btn-pilih-author').on('click', function() {
-      $('.help-block').remove();
-      var $this = $(this);
-      $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-      var draft = $('input[name=draft_id]').val();
-      var author = $('#pilih_author').val();
-      $.ajax({
-         type: "POST",
-         url: "<?php echo base_url('draftauthor/add'); ?>",
-         datatype: "JSON",
-         data: {
-            draft_id: draft,
-            author_id: author
-         },
-         success: function(data) {
-            var datapenulis = JSON.parse(data);
-            console.log(datapenulis);
-            if (!datapenulis.validasi) {
-               $('#form-author').append(
-                  '<div class="text-danger help-block">Penulis sudah dipilih</div>');
-               toastr_view('11');
-            } else {
-               $('#pilihauthor').modal('hide');
-               toastr_view('1');
-            }
-            $('[name=author]').val("");
-            $('#reload-author').load(' #reload-author');
-            $this.removeAttr("disabled").html("Pilih");
-         }
-      });
-      return false;
-   });
-
-   //pilih reviewer
-   $('#btn-pilih-reviewer').on('click', function() {
-      $('.help-block').remove();
-      var $this = $(this);
-      $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-      var draft = $('input[name=draft_id]').val();
-      var reviewer = $('#pilih_reviewer').val();
-      $.ajax({
-         type: "POST",
-         url: "<?php echo base_url('draftreviewer/add'); ?>",
-         datatype: "JSON",
-         data: {
-            draft_id: draft,
-            reviewer_id: reviewer
-         },
-         success: function(data) {
-            var datareviewer = JSON.parse(data);
-            console.log(datareviewer);
-            if (!datareviewer.validasi) {
-               $('#form-reviewer').append(
-                  '<div class="text-danger help-block">reviewer sudah dipilih</div>');
-               toastr_view('22');
-            } else if (datareviewer.validasi == 'max') {
-               toastr_view('99');
-            } else {
-               $('#pilihreviewer').modal('hide');
-               toastr_view('3');
-            }
-            $('[name=reviewer]').val("");
-            $('#reload-reviewer').load(' #reload-reviewer');
-            //$('#list-group-review').load(' #list-group-review');
-            $this.removeAttr("disabled").html("Pilih");
-         }
-      });
-      return false;
-   });
-
-
-   //hapus penulis
-   $('#data-penulis').on('click', '.delete-author', function() {
-      $(this).attr('disabled', 'disabled').html("<i class='fa fa-spinner fa-spin '></i>");
-      var id = $(this).attr('data');
-      console.log(id);
-      $.ajax({
-         url: "<?php echo base_url('draftauthor/delete/'); ?>" + id,
-         success: function(data) {
-            $('#reload-author').load(' #reload-author');
-
-            toastr_view('2');
-         }
-
-      })
-   });
-
-   // hapus reviewer
-   $('#data-reviewer').on('click', '.delete-reviewer', function() {
-      $(this).attr('disabled', 'disabled').html("<i class='fa fa-spinner fa-spin '></i>");
-      var id = $(this).attr('data');
-      console.log(id);
-      $.ajax({
-         url: "<?php echo base_url('draftreviewer/delete/'); ?>" + id,
-         success: function(data) {
-            $('#reload-reviewer').load(' #reload-reviewer');
-            toastr_view('4');
-         }
-
-      })
-   });
-
-
-   //ubah entry date
-   $('#btn-ubah_entry_date').on('click', function() {
-      var $this = $(this);
-      $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-      let id = $('[name=draft_id]').val();
-      let entry_date = $('[name=entry_date]').val();
-      console.log(entry_date)
-      $.ajax({
-         type: "POST",
-         url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id,
-         datatype: "JSON",
-         data: {
-            entry_date: entry_date,
-         },
-         success: function(data) {
-            let datax = JSON.parse(data);
-            console.log(datax)
-            $this.removeAttr("disabled").html("Submit");
-            if (datax.status == true) {
-               toastr_view('111');
-            } else {
-               toastr_view('000');
-            }
-            $('#data-drafts').load(' #data-drafts');
-            $('#ubah_entry_date').modal('toggle');
-         }
-
-      });
-      return false;
-   });
-
-   //ubah entry date
-   $('#btn-ubah_draft_notes').on('click', function() {
-      var $this = $(this);
-      $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-      let id = $('[name=draft_id]').val();
-      let draft_notes = $('[name=draft_notes]').val();
-      console.log(draft_notes)
-      $.ajax({
-         type: "POST",
-         url: "<?php echo base_url('draft/ubahnotes/'); ?>" + id,
-         datatype: "JSON",
-         data: {
-            draft_notes: draft_notes,
-         },
-         success: function(data) {
-            let datax = JSON.parse(data);
-            console.log(datax)
-            $this.removeAttr("disabled").html("Submit");
-            if (datax.status == true) {
-               toastr_view('111');
-            } else {
-               toastr_view('000');
-            }
-            $('#data-drafts').load(' #data-drafts');
-            $('#ubah_draft_notes').modal('toggle');
-         }
-
-      });
-      return false;
    });
 
    $('#draft-setuju').on('click', function() {
@@ -426,10 +262,10 @@ $(document).ready(function() {
             console.log(datax);
             $this.removeAttr("disabled").html("Submit");
             if (datax.status == true) {
-               toastr_view('111');
+               show_toast('111');
                location.href = '<?php echo base_url("draft/copyToBook/"); ?>' + id;
             } else {
-               toastr_view('000');
+               show_toast('000');
             }
          }
       });
@@ -457,9 +293,9 @@ $(document).ready(function() {
             console.log(datax);
             $this.removeAttr("disabled").html("Tolak");
             if (datax.status == true) {
-               toastr_view('111');
+               show_toast('111');
             } else {
-               toastr_view('000');
+               show_toast('000');
             }
             location.href = '<?php echo base_url("draft/view/"); ?>' + id;
          }

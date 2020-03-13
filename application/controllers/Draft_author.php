@@ -8,17 +8,17 @@ class Draft_author extends Operator_Controller
         $this->pages = 'draft_author';
     }
 
-    public function index($page = null)
-    {
-        $draft_authors = $this->draft_author->join('draft')->join('author')->order_by('draft.draft_id')->order_by('author.author_id')->order_by('draft_author_id')->paginate($page)->get_all();
-        $tot           = $this->draft_author->join('draft')->join('author')->order_by('draft.draft_id')->order_by('author.author_id')->order_by('draft_author_id')->get_all();
-        $total         = count($tot);
-        $pages         = $this->pages;
-        $main_view     = 'draftauthor/index_draft_author';
-        $pagination    = $this->draft_author->make_pagination(site_url('draftauthor'), 2, $total);
+    // public function index($page = null)
+    // {
+    //     $draft_authors = $this->draft_author->join('draft')->join('author')->order_by('draft.draft_id')->order_by('author.author_id')->order_by('draft_author_id')->paginate($page)->get_all();
+    //     $tot           = $this->draft_author->join('draft')->join('author')->order_by('draft.draft_id')->order_by('author.author_id')->order_by('draft_author_id')->get_all();
+    //     $total         = count($tot);
+    //     $pages         = $this->pages;
+    //     $main_view     = 'draftauthor/index_draft_author';
+    //     $pagination    = $this->draft_author->make_pagination(site_url('draftauthor'), 2, $total);
 
-        $this->load->view('template', compact('pages', 'main_view', 'draft_authors', 'pagination', 'total'));
-    }
+    //     $this->load->view('template', compact('pages', 'main_view', 'draft_authors', 'pagination', 'total'));
+    // }
 
     // public function addmulti($draft_id = null)
     // {
@@ -59,151 +59,117 @@ class Draft_author extends Operator_Controller
 
     public function add()
     {
-        $data = array();
-        if (!$_POST) {
-            $input = (object) $this->draft_author->get_default_values();
-        } else {
-            $input = (object) $this->input->post(null, true);
+        $input = (object) $this->input->post(null, true);
+
+        if (!$input->draft_id || !$input->author_id) {
+            return $this->send_json_output(false, $this->lang->line('toast_data_not_available'));
         }
 
+        // set penulis pertama menjadi status 1, agar bisa edit draft
         $draft_authors = $this->draft_author->where('draft_id', $input->draft_id)->get();
         if (!$draft_authors) {
             $input->draft_author_status = 1;
         }
 
         if (!$this->draft_author->validate()) {
-            $data['validasi'] = false;
-            echo json_encode($data);
-            // $pages     = $this->pages;
-            // $main_view   = 'draftauthor/form_draft_author';
-            // $form_action = 'draftauthor/add';
-            // $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
-            return;
+            return $this->send_json_output(false, $this->lang->line('toast_data_duplicate'), 422);
         }
 
         if ($this->draft_author->insert($input)) {
-            $data['validasi'] = true;
-            $data['status']   = true;
-            //$this->session->set_flashdata('success', 'Data saved');
+            return $this->send_json_output(true, $this->lang->line('toast_add_success'));
         } else {
-            $data['validasi'] = true;
-            $data['status']   = false;
-            //$this->session->set_flashdata('error', 'Data failed to save');
+            return $this->send_json_output(false, $this->lang->line('toast_add_fail'));
         }
-        echo json_encode($data);
-
     }
 
-    public function edit($id = null)
-    {
-        $draft_author = $this->draft_author->where('draft_author_id', $id)->get();
-        if (!$draft_author) {
-            $this->session->set_flashdata('warning', 'Draft Author data were not available');
-            redirect('draftauthor');
-        }
+    // public function edit($id = null)
+    // {
+    //     $draft_author = $this->draft_author->where('draft_author_id', $id)->get();
+    //     if (!$draft_author) {
+    //         $this->session->set_flashdata('warning', 'Draft Author data were not available');
+    //         redirect('draftauthor');
+    //     }
 
-        if (!$_POST) {
-            $input = (object) $draft_author;
-        } else {
-            $input = (object) $this->input->post(null, true);
-        }
+    //     if (!$_POST) {
+    //         $input = (object) $draft_author;
+    //     } else {
+    //         $input = (object) $this->input->post(null, true);
+    //     }
 
-        if (!$this->draft_author->validate()) {
-            $pages       = $this->pages;
-            $main_view   = 'draftauthor/form_draft_author';
-            $form_action = "draftauthor/edit/$id";
+    //     if (!$this->draft_author->validate()) {
+    //         $pages       = $this->pages;
+    //         $main_view   = 'draftauthor/form_draft_author';
+    //         $form_action = "draftauthor/edit/$id";
 
-            $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
-            return;
-        }
+    //         $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
+    //         return;
+    //     }
 
-        if ($this->draft_author->where('draft_author_id', $id)->update($input)) {
-            $this->session->set_flashdata('success', 'Data updated');
-        } else {
-            $this->session->set_flashdata('error', 'Data failed to update');
-        }
+    //     if ($this->draft_author->where('draft_author_id', $id)->update($input)) {
+    //         $this->session->set_flashdata('success', 'Data updated');
+    //     } else {
+    //         $this->session->set_flashdata('error', 'Data failed to update');
+    //     }
 
-        redirect('draftauthor');
-    }
+    //     redirect('draftauthor');
+    // }
 
     public function delete($id = null)
     {
-        $data         = array();
         $draft_author = $this->draft_author->where('draft_author_id', $id)->get();
         if (!$draft_author) {
-            $data['cek'] = false;
-            $this->session->set_flashdata('warning', 'Draft Author data were not available');
-            //redirect('draftauthor');
+            $message = $this->lang->line('toast_data_not_available');
+            return $this->send_json_output(false, $message, 404);
         }
+
         if ($this->draft_author->where('draft_author_id', $id)->delete()) {
-            $data['cek']    = true;
-            $data['status'] = true;
-            $this->session->set_flashdata('success', 'Data deleted');
+            return $this->send_json_output(true, $this->lang->line('toast_delete_success'));
         } else {
-            $data['cek']    = true;
-            $data['status'] = false;
-            $this->session->set_flashdata('error', 'Data failed to delete');
+            return $this->send_json_output(false, $this->lang->line('toast_delete_fail'));
         }
-
-        echo json_encode($data);
-
     }
 
-    public function search($page = null)
-    {
-        $keywords      = $this->input->get('keywords', true);
-        $draft_authors = $this->draft_author->like('draft_author_id', $keywords)
-            ->or_like('draft_title', $keywords)
-            ->or_like('author_name', $keywords)
-            ->or_like('author_nip', $keywords)
-            ->join('draft')
-            ->join('author')
-            ->order_by('draft_author_id')
-            ->order_by('draft.draft_title')
-            ->order_by('author.author_name')
-            ->order_by('author.author_nip')
-            ->paginate($page)
-            ->get_all();
-        $tot = $this->draft_author->like('draft_author_id', $keywords)
-            ->or_like('draft_title', $keywords)
-            ->or_like('author_name', $keywords)
-            ->or_like('author_nip', $keywords)
-            ->join('draft')
-            ->join('author')
-            ->order_by('draft_author_id')
-            ->order_by('draft.draft_title')
-            ->order_by('author.author_name')
-            ->order_by('author.author_nip')
-            ->get_all();
-        $total = count($tot);
+    // public function search($page = null)
+    // {
+    //     $keywords      = $this->input->get('keywords', true);
+    //     $draft_authors = $this->draft_author->like('draft_author_id', $keywords)
+    //         ->or_like('draft_title', $keywords)
+    //         ->or_like('author_name', $keywords)
+    //         ->or_like('author_nip', $keywords)
+    //         ->join('draft')
+    //         ->join('author')
+    //         ->order_by('draft_author_id')
+    //         ->order_by('draft.draft_title')
+    //         ->order_by('author.author_name')
+    //         ->order_by('author.author_nip')
+    //         ->paginate($page)
+    //         ->get_all();
+    //     $tot = $this->draft_author->like('draft_author_id', $keywords)
+    //         ->or_like('draft_title', $keywords)
+    //         ->or_like('author_name', $keywords)
+    //         ->or_like('author_nip', $keywords)
+    //         ->join('draft')
+    //         ->join('author')
+    //         ->order_by('draft_author_id')
+    //         ->order_by('draft.draft_title')
+    //         ->order_by('author.author_name')
+    //         ->order_by('author.author_nip')
+    //         ->get_all();
+    //     $total = count($tot);
 
-        $pagination = $this->draft_author->make_pagination(site_url('draft_author/search/'), 3, $total);
+    //     $pagination = $this->draft_author->make_pagination(site_url('draft_author/search/'), 3, $total);
 
-        if (!$draft_authors) {
-            $this->session->set_flashdata('warning', 'Data were not found');
-            redirect('draftauthor');
-        }
+    //     if (!$draft_authors) {
+    //         $this->session->set_flashdata('warning', 'Data were not found');
+    //         redirect('draftauthor');
+    //     }
 
-        $pages     = $this->pages;
-        $main_view = 'draftauthor/index_draft_author';
-        $this->load->view('template', compact('pages', 'main_view', 'draft_authors', 'pagination', 'total'));
-    }
+    //     $pages     = $this->pages;
+    //     $main_view = 'draftauthor/index_draft_author';
+    //     $this->load->view('template', compact('pages', 'main_view', 'draft_authors', 'pagination', 'total'));
+    // }
 
-    /*
-    |-----------------------------------------------------------------
-    | Callback
-    |-----------------------------------------------------------------
-     */
-//    public function alpha_coma_dash_dot_space($str)
-    //    {
-    //        if ( !preg_match('/^[a-zA-Z .,\-]+$/i',$str) )
-    //        {
-    //            $this->form_validation->set_message('alpha_coma_dash_dot_space', 'Can only be filled with letters, numbers, dash(-), dot(.), and comma(,).');
-    //            return false;
-    //        }
-    //    }
-    //
-    public function unique_draft_author_match()
+    public function unique_draft_author()
     {
         $author_id       = $this->input->post('author_id');
         $draft_id        = $this->input->post('draft_id');
@@ -211,11 +177,11 @@ class Draft_author extends Operator_Controller
 
         $this->draft_author->where('author_id', $author_id);
         $this->draft_author->where('draft_id', $draft_id);
-        !$draft_author_id || $this->draft_author->where('draft_author_id !=', $draft_author_id);
+        !$draft_author_id || $this->draft_author->where_not('draft_author_id', $draft_author_id);
         $draft_author = $this->draft_author->get();
 
-        if (count($draft_author)) {
-            $this->form_validation->set_message('unique_draft_author_match', 'Both of %s has been used');
+        if ($draft_author) {
+            $this->form_validation->set_message('unique_draft_author', $this->lang->line('toast_data_duplicate'));
             return false;
         }
         return true;

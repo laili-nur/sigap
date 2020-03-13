@@ -341,9 +341,9 @@ $(document).ready(function() {
             console.log(datax);
             $this.removeAttr("disabled").html("Upload");
             if (datax.status == true) {
-              toastr_view('111');
+              show_toast('111');
             } else {
-              toastr_view('000');
+              show_toast('000');
             }
             $('#modal-print').load(' #modal-print');
           }
@@ -381,9 +381,9 @@ $(document).ready(function() {
         console.log(datax)
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#print').modal('toggle');
       }
@@ -410,9 +410,9 @@ $(document).ready(function() {
         console.log(datax)
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-print').load(' #list-group-print');
         $this.removeAttr("disabled").html('<i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span>');
@@ -447,9 +447,9 @@ $(document).ready(function() {
         console.log(datax);
         $this.removeAttr("disabled").html("Setuju");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-print').load(' #list-group-print');
         location.reload();
@@ -484,9 +484,9 @@ $(document).ready(function() {
         console.log(datax);
         $this.removeAttr("disabled").html("Tolak");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-print').load(' #list-group-print');
         location.reload();

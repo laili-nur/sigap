@@ -164,7 +164,7 @@ class Author_model extends MY_Model
 
     public function get_draft_authors($draft_id)
     {
-        return $this->select(['draft_author_id', 'draft_author.author_id', 'draft_author.draft_author_status', 'author_name', 'author_nip', 'work_unit_name', 'institute_name'])
+        return $this->select(['draft_author_id', 'draft_author.author_id', 'draft_author_status', 'author_name', 'author_nip', 'work_unit_name', 'institute_name'])
             ->join('institute')
             ->join('work_unit')
             ->join_table('draft_author', 'author', 'author')

@@ -610,9 +610,9 @@ $(document).ready(function() {
             console.log(datax);
             $this.removeAttr("disabled").html("Upload");
             if (datax.status == true) {
-              toastr_view('111');
+              show_toast('111');
             } else {
-              toastr_view('000');
+              show_toast('000');
             }
             $('#modal-edit').load(' #modal-edit');
           }
@@ -641,9 +641,9 @@ $(document).ready(function() {
         let datax = JSON.parse(data);
         console.log(datax);
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#modal-edit').load(' #modal-edit');
         $('#editor_file_link').val('');
@@ -672,11 +672,11 @@ $(document).ready(function() {
         console.log(dataeditor);
         if (!dataeditor.validasi) {
           $('#form-editor').append('<div class="text-danger help-block">editor sudah dipilih</div>');
-          toastr_view('33');
+          show_toast('33');
         } else if (dataeditor.validasi == 'max') {
-          toastr_view('98');
+          show_toast('98');
         } else {
-          toastr_view('5');
+          show_toast('5');
         }
         $('[name=editor]').val("");
         $('#reload-editor').load(' #reload-editor');
@@ -707,9 +707,9 @@ $(document).ready(function() {
         console.log(datax)
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-edit').load(' #list-group-edit');
         $this.removeAttr("disabled").html('<i class="fas fa-play"></i><span class="d-none d-md-inline"> Mulai</span>');
@@ -741,9 +741,9 @@ $(document).ready(function() {
         console.log(datax)
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-edit').load(' #list-group-edit');
         $this.removeAttr("disabled").html('<i class="fas fa-stop"></i><span class="d-none d-md-inline"> Selesai</span>');
@@ -766,7 +766,7 @@ $(document).ready(function() {
       success: function(data) {
         console.log(data);
         $('#reload-editor').load(' #reload-editor');
-        toastr_view('6');
+        show_toast('6');
         //$('#list-group-edit').load(' #list-group-edit');
       }
     })
@@ -793,9 +793,9 @@ $(document).ready(function() {
 
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-edit').load(' #list-group-edit');
         $('#edit_last_notes').html(datax.edit_notes_date);
@@ -822,9 +822,9 @@ $(document).ready(function() {
         console.log(datax);
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#edit-confidential').modal('toggle');
       }
@@ -855,9 +855,9 @@ $(document).ready(function() {
         console.log(datax);
         $this.removeAttr("disabled").html("Setuju");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-edit').load(' #list-group-edit');
         location.reload();
@@ -891,9 +891,9 @@ $(document).ready(function() {
         console.log(datax);
         $this.removeAttr("disabled").html("Tolak");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-edit').load(' #list-group-edit');
         location.reload();
@@ -922,9 +922,9 @@ $(document).ready(function() {
         console.log(datax)
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-edit').load(' #list-group-edit');
         $('#edit_deadline').modal('toggle');
@@ -976,9 +976,9 @@ $(document).ready(function() {
             let datax = JSON.parse(data);
             console.log(datax);
             if (datax.status == true) {
-              toastr_view('111');
+              show_toast('111');
             } else {
-              toastr_view('000');
+              show_toast('000');
             }
             $('#edit-revisi-deadline').modal('toggle');
           }
@@ -1047,9 +1047,9 @@ $(document).ready(function() {
         let datax = JSON.parse(data);
         console.log(datax);
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         load_revisi_edit();
       }
@@ -1071,9 +1071,9 @@ $(document).ready(function() {
         let datax = JSON.parse(data);
         console.log(datax);
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
       }
     })
@@ -1089,9 +1089,9 @@ $(document).ready(function() {
         let datax = JSON.parse(data);
         console.log(datax);
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         load_revisi_edit();
       }
@@ -1115,9 +1115,9 @@ $(document).ready(function() {
         let datax = JSON.parse(data);
         console.log(datax);
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         load_revisi_edit();
       }

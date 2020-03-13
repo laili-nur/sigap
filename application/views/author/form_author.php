@@ -42,7 +42,7 @@ $latest_education_options = [
                   <?=isset($input->author_id) ? form_hidden('author_id', $input->author_id) : '';?>
                   <div class="form-group">
                      <label for="user_id">Pilih akun untuk login</label>
-                     <?=form_dropdown('user_id', get_dropdown_list_author('user', ['user_id', 'username']), $input->user_id, 'id="user_id" class="form-control custom-select d-block"');?>
+                     <?=form_dropdown('user_id', get_dropdown_list_user('user', ['user_id', 'username']), $input->user_id, 'id="user_id" class="form-control custom-select d-block"');?>
                      <small class="form-text text-muted">Author dapat login ke sistem apabila mempunyai akun pengguna.
                         Kosongkan pilihan jika tidak menetapkan akun.</small>
                      <?=form_error('user_id');?>

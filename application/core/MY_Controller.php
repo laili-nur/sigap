@@ -62,6 +62,35 @@ class MY_Controller extends MX_Controller
             // redirect($redirect ?? $this->pages);
         }
     }
+
+    // generate json output API
+    public function send_json_output(bool $status, $result, $status_header = null)
+    {
+        if ($status) {
+            // if success
+            if (!$status_header) {
+                $status_header = 200;
+            }
+
+            $output = [
+                'status' => $status,
+                'data'   => $result,
+            ];
+        } else {
+            if (!$status_header) {
+                $status_header = 400;
+            }
+            // if error
+            $output = [
+                'status'  => $status,
+                'message' => $result,
+            ];
+        };
+        return $this->output
+            ->set_status_header($status_header)
+            ->set_content_type('application/json')
+            ->set_output(json_encode($output, JSON_NUMERIC_CHECK));
+    }
 }
 
 /* End of file MY_Controller.php */

@@ -6,7 +6,7 @@
             <a
                class="nav-link active show"
                data-toggle="tab"
-               href="#data-drafts"
+               href="#data_draft"
             ><i class="fa fa-info-circle"></i> Detail Draft</a>
          </li>
          <?php if ($level != 'reviewer'): ?>
@@ -46,7 +46,7 @@
       <div class="tab-content">
          <div
             class="tab-pane fade active show"
-            id="data-drafts"
+            id="data_draft"
          >
             <div class="table-responsive">
                <table class="table table-striped table-bordered mb-0 nowrap">
@@ -105,7 +105,7 @@
                      <?php if ($level != 'reviewer'): ?>
                      <tr>
                         <td width="200px"> Tanggal Masuk
-                           <?=($level === 'superadmin' or $level === 'admin_penerbitan') ? '<button type="button" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#ubah_entry_date">Edit</button>' : '';?>
+                           <?=($level === 'superadmin' or $level === 'admin_penerbitan') ? '<button type="button" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#modal-entry-date">Edit</button>' : '';?>
                         </td>
                         <td>
                            <?=format_datetime($input->entry_date);?>
@@ -164,92 +164,7 @@
                </table>
             </div>
          </div>
-         <div
-            class="modal fade"
-            id="ubah_entry_date"
-            tabindex="-1"
-            role="dialog"
-            aria-labelledby="ubah_entry_date"
-            aria-hidden="true"
-         >
-            <div
-               class="modal-dialog"
-               role="document"
-            >
-               <div class="modal-content">
-                  <div class="modal-header">
-                     <h5 class="modal-title">Ubah Tanggal masuk</h5>
-                  </div>
-                  <div class="modal-body">
-                     <?=form_open('draft/ubahnotes/' . $input->draft_id);?>
-                     <fieldset>
-                        <div class="form-group">
-                           <div>
-                              <?=form_input('entry_date', $input->entry_date, 'class="form-control d-none" id="entry_date"');?>
-                           </div>
-                           <?=form_error('entry_date');?>
-                        </div>
-                     </fieldset>
-                  </div>
-                  <div class="modal-footer">
-                     <button
-                        class="btn btn-primary"
-                        type="submit"
-                        id="btn-ubah_entry_date"
-                     >Pilih</button>
-                     <button
-                        type="button"
-                        class="btn btn-light"
-                        data-dismiss="modal"
-                     >Close</button>
-                  </div>
-                  <?=form_close();?>
-               </div>
-            </div>
-         </div>
-         <div
-            class="modal fade"
-            id="ubah_draft_notes"
-            tabindex="-1"
-            role="dialog"
-            aria-labelledby="ubah_draft_notes"
-            aria-hidden="true"
-         >
-            <div
-               class="modal-dialog"
-               role="document"
-            >
-               <div class="modal-content">
-                  <div class="modal-header">
-                     <h5 class="modal-title">Ubah Catatan Draft</h5>
-                  </div>
-                  <div class="modal-body">
-                     <?=form_open('draft/ubahnotes/' . $input->draft_id);?>
-                     <fieldset>
-                        <div class="form-group">
-                           <div>
-                              <?=form_textarea('draft_notes', $input->draft_notes, 'class="form-control summernote-basic" id="draft_notes"');?>
-                           </div>
-                           <?=form_error('draft_notes');?>
-                        </div>
-                     </fieldset>
-                  </div>
-                  <div class="modal-footer">
-                     <button
-                        class="btn btn-primary"
-                        type="submit"
-                        id="btn-ubah_draft_notes"
-                     >Pilih</button>
-                     <button
-                        type="button"
-                        class="btn btn-light"
-                        data-dismiss="modal"
-                     >Close</button>
-                  </div>
-                  <?=form_close();?>
-               </div>
-            </div>
-         </div>
+
          <div
             class="tab-pane fade"
             id="data-penulis"
@@ -269,11 +184,11 @@
                   type="button"
                   class="btn btn-success mr-2"
                   data-toggle="modal"
-                  data-target="#pilihauthor"
+                  data-target="#modal-select-author"
                >Pilih Penulis</button>
             </div>
             <?php endif;?>
-            <div id="reload-author">
+            <div id="author-list">
                <?php if ($authors): ?>
                <?php $i = 1;?>
                <div class="table-responsive">
@@ -285,6 +200,7 @@
                            <th scope="col">NIP</th>
                            <th scope="col">Unit Kerja</th>
                            <th scope="col">Institusi</th>
+                           <th scope="col">Status</th>
                            <?php if ($level == 'superadmin' || $level == 'admin_penerbitan'): ?>
                            <th style="width:100px; min-width:100px;"> &nbsp; </th>
                            <?php endif;?>
@@ -315,14 +231,13 @@
                            <td class="align-middle">
                               <?=$author->institute_name;?>
                            </td>
+                           <td class="align-middle">
+                              <?=$author->draft_author_status;?>
+                           </td>
                            <?php if ($level == 'superadmin' || $level == 'admin_penerbitan'): ?>
                            <td class="align-middle text-right">
                               <button
-                                 data-toggle="tooltip"
-                                 data-placement="right"
-                                 title="Hapus"
-                                 href="javascript"
-                                 class="btn btn-sm btn-danger delete-author"
+                                 class="btn btn-sm btn-danger btn-delete-author"
                                  data="<?=$author->draft_author_id;?>"
                               >
                                  <i class="fa fa-trash-alt"></i>
@@ -336,10 +251,11 @@
                   </table>
                </div>
                <?php else: ?>
-               <p>Penulis belum dipilih</p>
+               <div class="text-center my-3">Penulis belum dipilih</div>
                <?php endif;?>
             </div>
          </div>
+
          <div
             class="tab-pane fade"
             id="data-reviewer"
@@ -419,6 +335,7 @@
                <?php endif;?>
             </div>
          </div>
+
          <div
             class="tab-pane fade"
             id="data-buku"
@@ -470,11 +387,97 @@
 </section>
 
 <div
+   id="modal-entry-date"
    class="modal fade"
-   id="pilihauthor"
    tabindex="-1"
    role="dialog"
-   aria-labelledby="exampleModalLabel"
+   aria-labelledby="modal-entry-date"
+   aria-hidden="true"
+>
+   <div
+      class="modal-dialog"
+      role="document"
+   >
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title">Edit Tanggal Masuk</h5>
+         </div>
+         <div class="modal-body">
+            <fieldset>
+               <div class="form-group">
+                  <div>
+                     <?=form_input('entry_date', $input->entry_date, 'class="form-control d-none" id="entry_date"');?>
+                  </div>
+                  <?=form_error('entry_date');?>
+               </div>
+            </fieldset>
+         </div>
+         <div class="modal-footer">
+            <button
+               id="btn-change-entry-date"
+               class="btn btn-primary"
+               type="button"
+            >Pilih</button>
+            <button
+               type="button"
+               class="btn btn-light"
+               data-dismiss="modal"
+            >Close</button>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div
+   id="ubah_draft_notes"
+   class="modal fade"
+   tabindex="-1"
+   role="dialog"
+   aria-labelledby="ubah_draft_notes"
+   aria-hidden="true"
+>
+   <div
+      class="modal-dialog"
+      role="document"
+   >
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title">Edit Catatan Draft</h5>
+         </div>
+         <div class="modal-body">
+            <?=form_open('draft/ubahnotes/' . $input->draft_id);?>
+            <fieldset>
+               <div class="form-group">
+                  <div>
+                     <?=form_textarea('draft_notes', $input->draft_notes, 'class="form-control summernote-basic" id="draft_notes"');?>
+                  </div>
+                  <?=form_error('draft_notes');?>
+               </div>
+            </fieldset>
+         </div>
+         <div class="modal-footer">
+            <button
+               id="btn_change_draft_notes"
+               class="btn btn-primary"
+               type="submit"
+            >Pilih</button>
+            <button
+               type="button"
+               class="btn btn-light"
+               data-dismiss="modal"
+            >Close</button>
+         </div>
+         <?=form_close();?>
+      </div>
+   </div>
+</div>
+
+<div
+   class="modal fade"
+   id="modal-select-author"
+   tabindex="-1"
+   role="dialog"
+   aria-labelledby="modal-select-author"
    aria-hidden="true"
 >
    <div
@@ -493,14 +496,14 @@
                      id="form-author"
                   >
                      <label for="user_id">Nama Penulis</label>
-                     <?=form_dropdown('author', getMoreDropdownList('author', ['author_id', 'author_name', 'work_unit_name']), '', 'id="pilih_author" class="form-control custom-select d-block" required');?>
+                     <?=form_dropdown('author', get_dropdown_list_multi_column('author', ['author_id', 'author_name', 'work_unit_name']), '', 'id="author-id" class="form-control custom-select d-block" required');?>
                   </div>
                </fieldset>
          </div>
          <div class="modal-footer">
             <button
                class="btn btn-primary"
-               id="btn-pilih-author"
+               id="btn-select-author"
                type="submit"
             >Pilih</button>
             <button
@@ -538,7 +541,7 @@
                      id="form-reviewer"
                   >
                      <label for="user_id">Nama Reviewer</label>
-                     <?=form_dropdown('reviewer', getMoreDropdownList('reviewer', ['reviewer_id', 'reviewer_name', 'faculty_name', 'reviewer_expert']), '', 'id="pilih_reviewer" class="form-control custom-select d-block"');?>
+                     <?=form_dropdown('reviewer', get_dropdown_list_multi_column('reviewer', ['reviewer_id', 'reviewer_name', 'faculty_name', 'reviewer_expert']), '', 'id="pilih_reviewer" class="form-control custom-select d-block"');?>
                   </div>
                </fieldset>
          </div>
@@ -546,7 +549,7 @@
             <button
                class="btn btn-primary"
                type="submit"
-               id="btn-pilih-reviewer"
+               id="btn_select_reviewer"
             >Pilih</button>
             <button
                type="button"
@@ -558,3 +561,171 @@
       </div>
    </div>
 </div>
+
+<script>
+// ubah entry date
+$('#btn-change-entry-date').on('click', function() {
+   const $this = $(this);
+   $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
+   const id = $('[name=draft_id]').val();
+   const entry_date = $('[name=entry_date]').val();
+   const category_id = $('[name=category_id]').val();
+
+   $.ajax({
+      type: "POST",
+      url: "<?=base_url('draft/ubahnotes/');?>" + id,
+      datatype: "JSON",
+      data: {
+         entry_date,
+         category_id
+      },
+      success: function(res) {
+         show_toast(true, res.data);
+      },
+      error: function(err) {
+         show_toast(false, err.responseJSON.message);
+      },
+      complete: function() {
+         $this.removeAttr("disabled").html("Submit");
+         $('#data_draft').load(' #data_draft');
+         $('#modal-entry-date').modal('toggle');
+      }
+   });
+});
+
+// ubah catatan draft
+$('#btn_change_draft_notes').on('click', function() {
+   const $this = $(this);
+   $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+   const id = $('[name=draft_id]').val();
+   const draft_notes = $('[name=draft_notes]').val();
+
+   $.ajax({
+      type: "POST",
+      url: "<?=base_url('draft/ubahnotes/');?>" + id,
+      datatype: "JSON",
+      data: {
+         draft_notes,
+      },
+      success: function(res) {
+         show_toast(true, res.data);
+      },
+      error: function(err) {
+         show_toast(false, err.responseJSON.message);
+      },
+      complete: function() {
+         $this.removeAttr("disabled").html("Submit");
+         $('#data_draft').load(' #data_draft');
+         $('#ubah_draft_notes').modal('toggle');
+      }
+   });
+});
+
+// pilih author
+$('#btn-select-author').on('click', function() {
+   $('.help-block').remove();
+   const $this = $(this);
+   $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+   const draft_id = $('input[name=draft_id]').val();
+   const author_id = $('#author-id').val();
+
+   $.ajax({
+      type: "POST",
+      url: "<?=base_url('draftauthor/add');?>",
+      datatype: "JSON",
+      data: {
+         draft_id,
+         author_id
+      },
+      success: function(res) {
+         show_toast(true, res.data);
+      },
+      error: function(err) {
+         show_toast(false, err.responseJSON.message);
+      },
+      complete: function() {
+         $this.removeAttr("disabled").html("Submit");
+         $('[name=author]').val(null).trigger('change');
+         $('#author-list').load(' #author-list');
+         $('#modal-select-author').modal('toggle');
+      },
+   });
+});
+
+// hapus penulis
+$('#data-penulis').on('click', '.btn-delete-author', function() {
+   $(this).attr('disabled', 'disabled').html("<i class='fa fa-spinner fa-spin '></i>");
+   let id = $(this).attr('data');
+
+   $.ajax({
+      url: "<?=base_url('draftauthor/delete/');?>" + id,
+      success: function(res) {
+         show_toast(true, res.data);
+      },
+      error: function(err) {
+         show_toast(false, err.responseJSON.message);
+      },
+      complete: function() {
+         $('#author-list').load(' #author-list');
+      },
+
+      // success: function(data) {
+      //    $('#reload-author').load(' #reload-author');
+      //    show_toast('2');
+      // }
+
+   })
+});
+
+// hapus reviewer
+$('#data-reviewer').on('click', '.delete-reviewer', function() {
+   $(this).attr('disabled', 'disabled').html("<i class='fa fa-spinner fa-spin '></i>");
+   var id = $(this).attr('data');
+   console.log(id);
+   $.ajax({
+      url: "<?php echo base_url('draftreviewer/delete/'); ?>" + id,
+      success: function(data) {
+         $('#reload-reviewer').load(' #reload-reviewer');
+         show_toast('4');
+      }
+
+   })
+});
+
+// pilih reviewer
+$('#btn_select_reviewer').on('click', function() {
+   $('.help-block').remove();
+   var $this = $(this);
+   $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+   var draft = $('input[name=draft_id]').val();
+   var reviewer = $('#pilih_reviewer').val();
+   $.ajax({
+      type: "POST",
+      url: "<?php echo base_url('draftreviewer/add'); ?>",
+      datatype: "JSON",
+      data: {
+         draft_id: draft,
+         reviewer_id: reviewer
+      },
+      success: function(data) {
+         var datareviewer = JSON.parse(data);
+         console.log(datareviewer);
+         if (!datareviewer.validasi) {
+            $('#form-reviewer').append(
+               '<div class="text-danger help-block">reviewer sudah dipilih</div>');
+            show_toast('22');
+         } else if (datareviewer.validasi == 'max') {
+            show_toast('99');
+         } else {
+            $('#pilihreviewer').modal('hide');
+            show_toast('3');
+         }
+         $('[name=reviewer]').val("");
+         $('#reload-reviewer').load(' #reload-reviewer');
+         //$('#list-group-review').load(' #list-group-review');
+         $this.removeAttr("disabled").html("Pilih");
+      }
+   });
+   return false;
+});
+</script>

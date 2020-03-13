@@ -283,9 +283,9 @@ $(document).ready(function() {
             console.log(datax);
             $this.removeAttr("disabled").html("Upload");
             if (datax.status == true) {
-              toastr_view('111');
+              show_toast('111');
             } else {
-              toastr_view('000');
+              show_toast('000');
             }
             $('#modal-proofread').load(' #modal-proofread');
           }
@@ -318,9 +318,9 @@ $(document).ready(function() {
         console.log(datax)
         $this.removeAttr("disabled").html("Submit");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#proofread').modal('toggle');
       }
@@ -350,9 +350,9 @@ $(document).ready(function() {
         console.log(datax);
         $this.removeAttr("disabled").html("Setuju");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-proofread').load(' #list-group-proofread');
         location.reload();
@@ -387,9 +387,9 @@ $(document).ready(function() {
         console.log(datax);
         $this.removeAttr("disabled").html("Tolak");
         if (datax.status == true) {
-          toastr_view('111');
+          show_toast('111');
         } else {
-          toastr_view('000');
+          show_toast('000');
         }
         $('#list-group-proofread').load(' #list-group-proofread');
         location.reload();
