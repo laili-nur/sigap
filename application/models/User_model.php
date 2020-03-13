@@ -2,7 +2,7 @@
 
 class User_model extends MY_Model
 {
-    // set public if want to ovveride per_page
+    // set public if want to override per_page
     public $per_page;
 
     public function get_validation_rules()

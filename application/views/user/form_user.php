@@ -1,8 +1,6 @@
 <?php
 $is_add_user = $this->uri->segment(2) == 'add';
-
-$levels = ['superadmin']
-;?>
+?>
 
 <header class="page-title-bar">
    <nav aria-label="breadcrumb">

@@ -389,16 +389,16 @@ function expand($authors)
 $(document).ready(function() {
    doublescroll();
    $("#category").select2({
-      placeholder: '-- Filter Kategori --',
+      placeholder: '- Filter Kategori -',
       allowClear: true
    });
-   $("#progress").select2({
-      placeholder: '-- Filter Progress --',
-      allowClear: true
-   });
-   $("#reprint").select2({
-      placeholder: '-- Filter Naskah --',
-      allowClear: true
-   });
+   // $("#progress").select2({
+   //    placeholder: '-- Filter Progress --',
+   //    allowClear: true
+   // });
+   // $("#reprint").select2({
+   //    placeholder: '-- Filter Naskah --',
+   //    allowClear: true
+   // });
 });
 </script>

@@ -110,3 +110,12 @@ $lang['form_error_url_not_valid'] = 'URL yang dimasukkan tidak valid';
 
 // Login
 $lang['form_login_error_cannot_login'] = 'Username atau password salah, atau akun anda sedang diblokir.';
+
+// Worksheet
+$lang['form_worksheet_num']        = 'Nomor Lembar Kerja';
+$lang['form_worksheet_notes']      = 'Catatan Lembar Kerja';
+$lang['form_worksheet_is_reprint'] = 'Status Cetak Ulang';
+$lang['form_worksheet_is_revise']  = 'Status Revisi';
+$lang['form_worksheet_status']     = 'Status Lembar Kerja';
+$lang['form_worksheet_deadline']   = 'Deadline Desk Screening';
+$lang['form_worksheet_end_date']   = 'Tanggal Selesai Desk Screening';

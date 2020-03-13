@@ -1,12 +1,16 @@
-<!-- .page-title-bar -->
+<?php
+$worksheet_status_options = [
+    0 => 'Menunggu Desk Screening',
+    1 => 'Diterima',
+    2 => 'Ditolak',
+]
+
+;?>
 <header class="page-title-bar">
    <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
          <li class="breadcrumb-item">
             <a href="<?=base_url();?>"><span class="fa fa-home"></span></a>
-         </li>
-         <li class="breadcrumb-item">
-            <a href="<?=base_url();?>">Penerbitan</a>
          </li>
          <li class="breadcrumb-item">
             <a href="<?=base_url('worksheet');?>">Lembar kerja</a>
@@ -17,46 +21,27 @@
       </ol>
    </nav>
 </header>
-<!-- /.page-title-bar -->
-<!-- .page-section -->
 <div class="page-section">
    <div class="row">
       <div class="col-md-6">
-         <!-- .card -->
          <section class="card">
-            <!-- .card-body -->
             <div class="card-body">
-               <!-- .form -->
-               <?=form_open($form_action, 'novalidate="" id="formworksheet"');?>
-               <!-- .fieldset -->
+               <?=form_open($form_action, 'novalidate="" id="form-worksheet"');?>
                <fieldset>
-                  <legend>Data Lembar Kerja</legend>
+                  <legend>Form Lembar Kerja</legend>
                   <?=isset($input->worksheet_id) ? form_hidden('worksheet_id', $input->worksheet_id) : '';?>
-                  <div class="alert alert-info">Last edited by :
-                     <strong><?=isset($input->worksheet_pic) ? $input->worksheet_pic : '';?></strong> on
-                     <strong><?=isset($input->worksheet_ts) ? $input->worksheet_ts : '';?></strong></div>
-                  <!-- .form-group -->
                   <div class="form-group">
-                     <label for="draft_id">Draft
-                        <abbr title="Required">*</abbr>
-                     </label>
-                     <?php if ($input->draft_id == '' or $this->uri->segment(2) == 'add'): ?>
-                     <?=form_dropdown('draft_id', get_dropdown_list('draft', ['draft_id', 'draft_title']), $input->draft_id, 'id="draft_id" class="form-control custom-select d-block "');?>
-                     <?=form_error('draft_id');?>
-                     <?php else: ?>
-                     <p class="font-weight-bold"><a
-                           href="<?=base_url('draft/view/' . $input->draft_id);?>"><?=konversiID('draft', 'draft_id', $input->draft_id)->draft_title;?></a>
+                     <p class="font-weight-bold">
+                        <a href="<?=base_url('draft/view/' . $input->draft_id);?>"><?=$draft->draft_title;?></a>
                      </p>
-                     <?=(!empty($input->draft_file)) ? '<a data-toggle="tooltip" data-placement="right" title="' . $input->draft_file . '" class="btn btn-success btn-xs m-0" href="' . base_url('draftfile/' . $input->draft_file) . '"><i class="fa fa-download"></i> Download</a>' : '';?>
-                     <?=(!empty($input->draft_file_link)) ? '<a data-toggle="tooltip" data-placement="right" title="' . $input->draft_file_link . '" class="btn btn-success btn-xs m-0" href="' . $input->draft_file_link . '"><i class="fa fa-external-link-alt"></i> External file</a>' : '';?>
+                     <?=($draft->draft_file) ? '<a data-toggle="tooltip" data-placement="right" title="' . $draft->draft_file . '" class="btn btn-success btn-xs m-0" href="' . base_url('draftfile/' . $draft->draft_file) . '"><i class="fa fa-download"></i> Download</a>' : '';?>
+                     <?=($draft->draft_file_link) ? '<a data-toggle="tooltip" data-placement="right" title="' . $draft->draft_file_link . '" class="btn btn-success btn-xs m-0" href="' . $draft->draft_file_link . '"><i class="fa fa-external-link-alt"></i> External file</a>' : '';?>
                      <?=isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : '';?>
-                     <?php endif;?>
                   </div>
-                  <!-- /.form-group -->
                   <hr class="my-2">
-                  <!-- .form-group -->
                   <div class="form-group">
-                     <label for="worksheet_num">Nomor Lembar Kerja
+                     <label for="worksheet_num">
+                        <?=$this->lang->line('form_worksheet_num');?>
                         <abbr title="Required">*</abbr>
                      </label>
                      <div class="has-clearable">
@@ -74,44 +59,8 @@
                      <?=form_error('worksheet_num');?>
                   </div>
                   <div class="form-group">
-                     <label for="worksheet_num">Deadline Desk Screening
-                        <abbr title="Required">*</abbr>
-                     </label>
-                     <div class="has-clearable">
-                        <button
-                           type="button"
-                           class="close"
-                           aria-label="Close"
-                        >
-                           <span aria-hidden="true">
-                              <i class="fa fa-times-circle"></i>
-                           </span>
-                        </button>
-                        <?=form_input('worksheet_deadline', $input->worksheet_deadline, 'class="form-control mydate" id="worksheet_deadline"');?>
-                     </div>
-                     <?=form_error('worksheet_num');?>
-                  </div>
-                  <div class="form-group">
-                     <label for="worksheet_num">Tanggal Jadi Desk Screening
-                     </label>
-                     <div class="has-clearable">
-                        <button
-                           type="button"
-                           class="close"
-                           aria-label="Close"
-                        >
-                           <span aria-hidden="true">
-                              <i class="fa fa-times-circle"></i>
-                           </span>
-                        </button>
-                        <?=form_input('worksheet_end_date', $input->worksheet_end_date, 'class="form-control mydate" id="worksheet_end_date"');?>
-                     </div>
-                     <?=form_error('worksheet_num');?>
-                  </div>
-                  <!-- /.form-group -->
-                  <!-- .form-group -->
-                  <div class="form-group">
-                     <label for="worksheet_notes">Catatan Desk Screening
+                     <label for="worksheet_notes">
+                        <?=$this->lang->line('form_worksheet_notes');?>
                      </label>
                      <div class="has-clearable">
                         <button
@@ -127,47 +76,20 @@
                      </div>
                      <?=form_error('worksheet_notes');?>
                   </div>
-                  <!-- /.form-group -->
-                  <!-- .form-group -->
                   <div class="form-group">
-                     <label>Jenis Naskah
+                     <label>
+                        <?=$this->lang->line('form_worksheet_is_revise');?>
                         <abbr title="Required">*</abbr>
                      </label>
                      <div class="custom-control custom-radio mb-1">
-                        <?=form_radio('is_reprint', 'y',
-    isset($input->is_reprint) && ($input->is_reprint == 'y') ? true : false, ' class="custom-control-input" id="cetakulang"');?>
-                        <label
-                           class="custom-control-label"
-                           for="cetakulang"
-                        >Cetak Ulang</label>
-                     </div>
-                     <div class="custom-control custom-radio mb-1">
-                        <?=form_radio('is_reprint', 'n',
-    isset($input->is_reprint) && ($input->is_reprint == 'n') ? true : false, ' class="custom-control-input" id="naskahbaru"');?>
-                        <label
-                           class="custom-control-label"
-                           for="naskahbaru"
-                        >Naskah Baru</label>
-                     </div>
-                     <?=form_error('is_reprint');?>
-                  </div>
-                  <!-- /.form-group -->
-                  <!-- .form-group -->
-                  <div class="form-group">
-                     <label>Naskah Revisi
-                        <abbr title="Required">*</abbr>
-                     </label>
-                     <div class="custom-control custom-radio mb-1">
-                        <?=form_radio('is_revise', 'y',
-    isset($input->is_revise) && ($input->is_revise == 'y') ? true : false, ' class="custom-control-input" id="revisi"');?>
+                        <?=form_radio('is_revise', 'y', isset($input->is_revise) && ($input->is_revise == 'y') ? true : false, ' class="custom-control-input" id="revisi"');?>
                         <label
                            class="custom-control-label"
                            for="revisi"
                         >Revisi</label>
                      </div>
                      <div class="custom-control custom-radio mb-1">
-                        <?=form_radio('is_revise', 'n',
-    isset($input->is_revise) && ($input->is_revise == 'n') ? true : false, ' class="custom-control-input" id="tidakrevisi"');?>
+                        <?=form_radio('is_revise', 'n', isset($input->is_revise) && ($input->is_revise == 'n') ? true : false, ' class="custom-control-input" id="tidakrevisi"');?>
                         <label
                            class="custom-control-label"
                            for="tidakrevisi"
@@ -175,93 +97,90 @@
                      </div>
                      <?=form_error('is_revise');?>
                   </div>
-                  <!-- /.form-group -->
+
+                  <div class="form-group">
+                     <label>
+                        <?=$this->lang->line('form_worksheet_status');?>
+                        <abbr title="Required">*</abbr>
+                     </label>
+                     <?php foreach ($worksheet_status_options as $key => $val): ?>
+                     <div class="custom-control custom-radio">
+                        <?=form_radio('worksheet_status', $key, isset($input->worksheet_status) && ($input->worksheet_status == $key) ? true : false, ' class="custom-control-input" id="' . $val . '"');?>
+                        <label
+                           class="custom-control-label"
+                           for="<?=$val;?>"
+                        ><?=$val;?></label>
+                     </div>
+                     <?php endforeach;?>
+                     <?=form_error('worksheet_status');?>
+                  </div>
+                  <div class="form-group">
+                     <label for="worksheet_deadline">
+                        <?=$this->lang->line('form_worksheet_deadline');?>
+                     </label>
+                     <div class="has-clearable">
+                        <button
+                           type="button"
+                           class="close"
+                           aria-label="Close"
+                        >
+                           <span aria-hidden="true">
+                              <i class="fa fa-times-circle"></i>
+                           </span>
+                        </button>
+                        <?=form_input('worksheet_deadline', $input->worksheet_deadline, 'class="form-control mydate" id="worksheet_deadline"');?>
+                     </div>
+                     <?=form_error('worksheet_deadline');?>
+                  </div>
+                  <div class="form-group">
+                     <label for="worksheet_end_date">
+                        <?=$this->lang->line('form_worksheet_end_date');?>
+                     </label>
+                     <div class="has-clearable">
+                        <button
+                           type="button"
+                           class="close"
+                           aria-label="Close"
+                        >
+                           <span aria-hidden="true">
+                              <i class="fa fa-times-circle"></i>
+                           </span>
+                        </button>
+                        <?=form_input('worksheet_end_date', $input->worksheet_end_date, 'class="form-control mydate" id="worksheet_end_date"');?>
+                     </div>
+                     <?=form_error('worksheet_end_date');?>
+                  </div>
                </fieldset>
-               <!-- /.fieldset -->
                <hr>
-               <!-- .form-group -->
-               <div class="form-group">
-                  <label>Aksi
-                     <abbr title="Required">*</abbr>
-                  </label>
-                  <div class="custom-control custom-radio mb-1">
-                     <?=form_radio('worksheet_status', '0',
-    isset($input->worksheet_status) && ($input->worksheet_status == '0') ? true : false, ' class="custom-control-input" id="belum"');?>
-                     <label
-                        class="custom-control-label"
-                        for="belum"
-                     >-</label>
-                  </div>
-                  <div class="custom-control custom-radio mb-1">
-                     <?=form_radio('worksheet_status', '1',
-    isset($input->worksheet_status) && ($input->worksheet_status == '1') ? true : false, ' class="custom-control-input" id="approve"');?>
-                     <label
-                        class="custom-control-label"
-                        for="approve"
-                     >Setuju</label>
-                  </div>
-                  <div class="custom-control custom-radio mb-1">
-                     <?=form_radio('worksheet_status', '2',
-    isset($input->worksheet_status) && ($input->worksheet_status == '2') ? true : false, ' class="custom-control-input" id="reject"');?>
-                     <label
-                        class="custom-control-label"
-                        for="reject"
-                     >Tolak</label>
-                  </div>
-                  <?=form_error('worksheet_status');?>
+               <div class="text-muted">Diperbarui :
+                  <?=$input->worksheet_pic ? 'oleh ' . "<strong>$input->worksheet_pic</strong>" : '';?>
+                  <?=$input->worksheet_ts ? 'pada ' . "<strong>$input->worksheet_ts</strong>" : '';?>
                </div>
-               <!-- /.form-group -->
-               <hr>
-               <!-- .form-actions -->
                <div class="form-actions">
                   <button
                      class="btn btn-primary ml-auto"
                      type="submit"
                   >Submit data</button>
                </div>
-               <!-- /.form-actions -->
                </form>
-               <!-- /.form -->
             </div>
-            <!-- /.card-body -->
          </section>
-         <!-- /.card -->
       </div>
    </div>
 </div>
-<!-- /.page-section -->
 <script>
 $(document).ready(function() {
    loadValidateSetting();
-   $("#formworksheet").validate({
+   $("#form-worksheet").validate({
          rules: {
-            draft_id: "crequired",
             worksheet_num: "crequired",
-            is_reprint: "crequired",
+            is_revise: "crequired",
             worksheet_status: "crequired",
          },
          errorElement: "span",
-         errorPlacement: function(error, element) {
-            error.addClass("invalid-feedback");
-            if (element.parent('.input-group').length) {
-               error.insertAfter(element.next('span.select2')); // input group
-            } else if (element.hasClass("select2-hidden-accessible")) {
-               error.insertAfter(element.next('span.select2')); // select2
-            } else if (element.hasClass("custom-file-input")) {
-               error.insertAfter(element.next('label.custom-file-label')); // fileinput custom
-            } else if (element.hasClass("custom-control-input")) {
-               error.insertAfter($(".custom-radio").last()); // radio
-            } else {
-               error.insertAfter(element); // default
-            }
-         }
+         errorPlacement: validateErrorPlacement
       },
       validateSelect2()
    );
-
-   $("#draft_id").select2({
-      placeholder: '-- Pilih --',
-      allowClear: true
-   });
 });
 </script>
