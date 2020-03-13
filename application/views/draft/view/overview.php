@@ -218,16 +218,6 @@ $(document).ready(function() {
       return false;
    });
 
-   $("#author-id").select2({
-      placeholder: '-- Pilih --',
-      dropdownParent: $('#modal-select-author'),
-      allowClear: true
-   });
-   $("#pilih_reviewer").select2({
-      placeholder: '-- Pilih --',
-      dropdownParent: $('#pilihreviewer'),
-      allowClear: true
-   });
    $("#pilih_editor").select2({
       placeholder: '-- Pilih --',
       dropdownParent: $('#piliheditor'),

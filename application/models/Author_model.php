@@ -173,6 +173,19 @@ class Author_model extends MY_Model
             ->get_all();
     }
 
+    public function api_get_authors()
+    {
+        return $this->select('author_id,author_nip,author_name,author_degree_front,author_degree_back,work_unit_name,institute_name,username,author.user_id')
+            ->join('work_unit')
+            ->join('institute')
+            ->join('bank')
+            ->join('user')
+            ->order_by('author.work_unit_id')
+            ->order_by('author.institute_id')
+            ->order_by('author_name')
+            ->get_all();
+    }
+
     public function upload_author_ktp($ktp_field_name, $ktp_name)
     {
         $config = [

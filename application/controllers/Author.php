@@ -31,6 +31,12 @@ class Author extends Admin_Controller
         $this->load->view('template', compact('pages', 'main_view', 'authors', 'pagination', 'total'));
     }
 
+    public function api_get_authors()
+    {
+        $authors = $this->author->api_get_authors();
+        return $this->send_json_output(true, $authors);
+    }
+
     public function view($halaman = 'profile', $id = null)
     {
         if ($id == null) {

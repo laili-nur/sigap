@@ -177,32 +177,6 @@ function get_dropdown_listReviewer($table, $columns)
     return $options = ['' => '- Empty -'];
 }
 
-/**
- * Membuat array author
- *
- * @param string $table
- * @param string $columns
- * @return array
- */
-function get_dropdown_list_user($table, $columns)
-{
-    $CI    = &get_instance();
-    $query = $CI->db->select($columns)
-        ->where('level', 'author')
-        ->or_where('level', 'author_reviewer')
-        ->from($table)
-        ->get();
-
-    if ($query->num_rows() >= 1) {
-        $options1 = ['' => '-- Pilih --'];
-        $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
-        $options  = $options1 + $options2;
-        return $options;
-    }
-
-    return $options = ['' => '- Empty -'];
-}
-
 // Get list of editor
 function get_dropdown_listEditor($table, $columns)
 {
@@ -286,6 +260,24 @@ function get_dropdown_list_category($all_categories = true)
     };
 
     return get_dropdown_list('category', ['category_id', 'category_name'], $condition);
+}
+
+/**
+ * Membuat array user
+ *
+ * @return array
+ */
+function get_dropdown_list_user()
+{
+    $condition = function () {
+        $CI = &get_instance();
+        $CI->db->where('level', 'author');
+        $CI->db->or_where('level', 'author');
+        $CI->db->order_by('username', 'asc');
+        return $CI;
+    };
+
+    return get_dropdown_list('user', ['user_id', 'username'], $condition);
 }
 
 /**

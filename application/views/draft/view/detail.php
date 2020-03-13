@@ -181,10 +181,9 @@
             </div>
             <div class="form-group">
                <button
+                  id="btn-modal-select-author"
                   type="button"
                   class="btn btn-success mr-2"
-                  data-toggle="modal"
-                  data-target="#modal-select-author"
                >Pilih Penulis</button>
             </div>
             <?php endif;?>
@@ -481,7 +480,7 @@
    aria-hidden="true"
 >
    <div
-      class="modal-dialog"
+      class="modal-dialog modal-dialog-centered"
       role="document"
    >
       <div class="modal-content">
@@ -496,7 +495,12 @@
                      id="form-author"
                   >
                      <label for="user_id">Nama Penulis</label>
-                     <?=form_dropdown('author', get_dropdown_list_multi_column('author', ['author_id', 'author_name', 'work_unit_name']), '', 'id="author-id" class="form-control custom-select d-block" required');?>
+                     <select
+                        id="author-id"
+                        name="author"
+                        class="form-control custom-select d-block"
+                        required
+                     ></select>
                   </div>
                </fieldset>
          </div>
@@ -563,6 +567,34 @@
 </div>
 
 <script>
+$(document).ready(function() {
+   $("#author-id").select2({
+      placeholder: '-- Pilih --',
+      dropdownParent: $('#modal-select-author'),
+      allowClear: true
+   });
+   $("#pilih_reviewer").select2({
+      placeholder: '-- Pilih --',
+      dropdownParent: $('#pilihreviewer'),
+      allowClear: true
+   });
+})
+
+// ambil data ketika buka modal pilih penulis
+$('#btn-modal-select-author').on('click', function() {
+   $.get("<?=base_url('author/api_get_authors');?>",
+      function(res) {
+         $('#author-id')
+         const authors = res.data.map((a) => {
+            return `<option value="${a.author_id}">${a.author_name} - ${a.work_unit_name} - ${a.institute_name}</option>`
+         })
+         $('#author-id').html(authors)
+         $('[name=author]').val(null).trigger('change');
+      }
+   )
+   $('#modal-select-author').modal('toggle')
+})
+
 // ubah entry date
 $('#btn-change-entry-date').on('click', function() {
    const $this = $(this);
