@@ -7,8 +7,8 @@ $lang['toast_add_success'] = 'Tambah data sukses.';
 $lang['toast_add_fail']    = 'Tambah data gagal.';
 
 // Edit
-$lang['toast_edit_success'] = 'Edit data sukses.';
-$lang['toast_edit_fail']    = 'Edit data gagal.';
+$lang['toast_edit_success'] = 'Update data sukses.';
+$lang['toast_edit_fail']    = 'Update data gagal.';
 
 // Delete
 $lang['toast_delete_success'] = 'Hapus data sukses.';

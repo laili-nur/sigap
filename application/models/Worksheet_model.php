@@ -11,12 +11,12 @@ class Worksheet_model extends MY_Model
             [
                 'field' => 'draft_id',
                 'label' => $this->lang->line('form_draft_title'),
-                'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_worksheet_draft',
+                'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_data[draft_id]',
             ],
             [
                 'field' => 'worksheet_num',
                 'label' => $this->lang->line('form_worksheet_num'),
-                'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_worksheet_num',
+                'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_data[worksheet_num]',
             ],
             [
                 'field' => 'worksheet_notes',

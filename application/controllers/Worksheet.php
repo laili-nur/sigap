@@ -33,54 +33,6 @@ class Worksheet extends Operator_Controller
         $this->load->view('template', compact('pages', 'main_view', 'worksheets', 'pagination', 'total'));
     }
 
-    // public function filter($page = null)
-    // {
-    //     $filter = $this->input->get('filter', true);
-    //     $this->db->group_by('worksheet.worksheet_id');
-    //     if ($filter == 'waiting') {
-    //         $worksheets = $this->worksheet->join('draft')->where('draft_status', 0)->order_by('worksheet_num')->paginate($page)->get_all();
-    //         $total      = $this->worksheet->join('draft')->where('draft_status', 0)->count();
-    //     } elseif ($filter == 'approved') {
-    //         $worksheets = $this->worksheet->join('draft')->where_not('draft_status', 0)->where_not('draft_status', 2)->order_by('worksheet_num')->paginate($page)->get_all();
-    //         $total      = $this->worksheet->join('draft')->where_not('draft_status', 0)->where_not('draft_status', 2)->count();
-    //     } elseif ($filter == 'rejected') {
-    //         $worksheets = $this->worksheet->join('draft')->where('draft_status', 2)->order_by('worksheet_num')->paginate($page)->get_all();
-    //         $total      = $this->worksheet->join('draft')->where('draft_status', 2)->count();
-    //     } else {
-    //         redirect(base_url('worksheet'));
-    //     }
-    //     $pagination = $this->worksheet->make_pagination(site_url('worksheet/filter/'), 3, $total);
-    //     if (!$worksheets) {
-    //         $this->session->set_flashdata('warning', 'Data were not found');
-    //         redirect($this->pages);
-    //     }
-    //     $pages     = $this->pages;
-    //     $main_view = 'worksheet/index_worksheet';
-    //     $this->load->view('template', compact('pages', 'main_view', 'worksheets', 'pagination', 'total'));
-    // }
-
-    // public function add()
-    // {
-    //     if (!$_POST) {
-    //         $input = (object) $this->worksheet->get_default_values();
-    //     } else {
-    //         $input = (object) $this->input->post(null, true);
-    //     }
-    //     if (!$this->worksheet->validate()) {
-    //         $pages       = $this->pages;
-    //         $main_view   = 'worksheet/form_worksheet';
-    //         $form_action = 'worksheet/add';
-    //         $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
-    //         return;
-    //     }
-    //     if ($this->worksheet->insert($input)) {
-    //         $this->session->set_flashdata('success', 'Data saved');
-    //     } else {
-    //         $this->session->set_flashdata('error', 'Data failed to save');
-    //     }
-    //     redirect('worksheet');
-    // }
-
     public function edit($id = null)
     {
         $worksheet = $this->worksheet->where('worksheet_id', $id)->get();
@@ -130,76 +82,45 @@ class Worksheet extends Operator_Controller
         redirect($this->pages);
     }
 
+    // untuk menyetujui atau menolak draft
     public function action($id, $action)
     {
         $worksheet = $this->worksheet->where('worksheet_id', $id)->get();
         if (!$worksheet) {
-            $this->session->set_flashdata('warning', 'Worksheet data were not available');
-            redirect('worksheet');
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
+            redirect($this->pages);
         }
-        $data = array('worksheet_status' => $action, 'worksheet_pic' => $this->username);
-        if ($this->worksheet->where('worksheet_id', $id)->update($data)) {
-            $status = array('draft_status' => $action);
-            $this->worksheet->update_draft_status($worksheet->draft_id, $status);
-            $affected_rows = $this->db->affected_rows();
-            if ($affected_rows > 0) {
-                $actionMessage = 'Approved';
-                if ($action == '2') {
-                    $actionMessage = 'Rejected';
-                }
-                $this->session->set_flashdata('success', "Worksheet $actionMessage");
-            } else {
-                $this->session->set_flashdata('warning', "Worksheet Failed Update");
-            }
+
+        $this->db->trans_begin();
+
+        $this->worksheet->where('worksheet_id', $id)->update([
+            'worksheet_status' => $action,
+            'worksheet_pic'    => $this->username,
+        ]);
+        $this->worksheet->update_draft_status($worksheet->draft_id, ['draft_status' => $action]);
+
+        if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
+            $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
         } else {
-            $this->session->set_flashdata('warning', 'Worksheet Failed Update');
+            $this->db->trans_commit();
+            $this->session->set_flashdata('success', $this->lang->line('toast_edit_success'));
         }
+
         redirect($this->pages);
     }
 
-    //  penghapusan worksheet mengikuti draft
-    //  public function delete($id = null)
-    //  {
-    //  $worksheet = $this->worksheet->where('worksheet_id', $id)->get();
-    //        if (!$worksheet) {
-    //            $this->session->set_flashdata('warning', 'Worksheet data were not available');
-    //            redirect('worksheet');
-    //        }
-    //
-    //        if ($this->worksheet->where('worksheet_id', $id)->delete()) {
-    //  $this->session->set_flashdata('success', 'Data deleted');
-    //      } else {
-    //            $this->session->set_flashdata('error', 'Data failed to delete');
-    //        }
-    //
-    //      redirect('worksheet');
-    //  }
-
-    // validasi nomor lembar kerja
-    public function unique_worksheet_num()
+    public function unique_data($str, $data_key)
     {
-        $worksheet_num = $this->input->post('worksheet_num');
-        $worksheet_id  = $this->input->post('worksheet_id');
-        $this->worksheet->where('worksheet_num', $worksheet_num);
-        !$worksheet_id || $this->worksheet->where('worksheet_id !=', $worksheet_id);
-        $worksheet = $this->worksheet->get();
-        if ($worksheet) {
-            $this->form_validation->set_message('unique_worksheet_num', '%s has been used');
-            return false;
-        }
-        return true;
-    }
-
-    // validasi draft lembar kerja
-    public function unique_worksheet_draft()
-    {
-        $draft_id     = $this->input->post('draft_id');
         $worksheet_id = $this->input->post('worksheet_id');
-        $this->worksheet->where('draft_id', $draft_id);
-        !$worksheet_id || $this->worksheet->where('worksheet_id !=', $worksheet_id);
+        if (!$str) {
+            return true;
+        }
+        $this->worksheet->where($data_key, $str);
+        !$worksheet_id || $this->worksheet->where_not('worksheet_id', $worksheet_id);
         $worksheet = $this->worksheet->get();
         if ($worksheet) {
-            $this->form_validation->set_message('unique_worksheet_draft', '%s has been used');
+            $this->form_validation->set_message('unique_data', $this->lang->line('toast_data_duplicate'));
             return false;
         }
         return true;
