@@ -27,6 +27,12 @@ class Reviewer extends Admin_Controller
         $this->load->view('template', compact('pages', 'main_view', 'reviewers', 'pagination', 'total'));
     }
 
+    public function api_get_reviewers()
+    {
+        $reviewers = $this->reviewer->api_get_reviewers();
+        return $this->send_json_output(true, $reviewers);
+    }
+
     public function add($copy = false)
     {
         if ($copy == 'copy') {

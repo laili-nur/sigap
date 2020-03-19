@@ -108,4 +108,14 @@ class Reviewer_model extends MY_Model
             ->where('draft_reviewer.draft_id', $draft_id)
             ->get_all();
     }
+
+    public function api_get_reviewers()
+    {
+        return $this->select('reviewer_id,reviewer_nip,reviewer_name,reviewer_degree_front,reviewer_degree_back,faculty_name,username,reviewer.user_id')
+            ->join('faculty')
+            ->join('user')
+            ->order_by('reviewer.faculty_id')
+            ->order_by('reviewer_name')
+            ->get_all();
+    }
 }
