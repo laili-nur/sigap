@@ -1,7 +1,7 @@
 <?php $level = check_level();?>
 <hr class="my-5">
 <section class="card card-fluid">
-    <header class="card-header"><i class="oi oi-pencil"></i> Desk Screening</header>
+    <header class="card-header">Desk Screening</header>
     <div class="card-body">
         <?php if ($desk->worksheet_status == 1): ?>
         <div class="alert alert-success">

@@ -155,7 +155,7 @@ $(document).ready(function() {
                     data: res.data.map(a => {
                         return {
                             id: a.author_id,
-                            text: `${a.author_name} - ${a.work_unit_name} = ${a.institute_name}`,
+                            text: `${a.author_name} - ${a.work_unit_name} - ${a.institute_name}`,
                             work_unit: a.work_unit_name,
                             institute: a.institute_name
                         }

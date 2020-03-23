@@ -108,9 +108,9 @@ function format_datetime($input = null, $opsi = '')
     }
 
     if ($opsi == 'dateonly') {
-        return date("d/m/Y H:i:s", strtotime($input));
-    } else {
         return date("d/m/Y", strtotime($input));
+    } else {
+        return date("d/m/Y H:i:s", strtotime($input));
     }
 }
 
