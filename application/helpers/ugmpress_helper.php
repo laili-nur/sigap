@@ -482,19 +482,19 @@ function draft_status_to_text($code)
             $status = 'Review Ditolak';
             break;
         case 4:
-            $status = 'Reviewing';
+            $status = 'Proses Review';
             break;
         case 5:
             $status = 'Antri Edit';
             break;
         case 6:
-            $status = 'Editing';
+            $status = 'Proses Edit';
             break;
         case 7:
             $status = 'Editorial Selesai';
             break;
         case 8:
-            $status = 'Layouting';
+            $status = 'Proses Layout';
             break;
         case 9:
             $status = 'Layout selesai';
@@ -506,7 +506,7 @@ function draft_status_to_text($code)
             $status = 'Cover Selesai';
             break;
         case 12:
-            $status = 'Proofreading';
+            $status = 'Proses Proofread';
             break;
         case 13:
             $status = 'Proofread Selesai';

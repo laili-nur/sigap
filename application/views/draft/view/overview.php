@@ -21,47 +21,27 @@
 
     <!-- desk screening tidak bisa dilihat reviewer -->
     <?php if ($level != 'reviewer'): ?>
-    <?php $this->load->view('draft/view/desk_screening');?>
+    <?php $this->load->view('draft/view/desk_screening_progress');?>
     <?php endif;?>
 
-    <?php if ($desk->worksheet_status == 1): ?>
+    <?php //if ($desk->worksheet_status == 1): ;;;;;;;;;;;;?>
 
+    <!-- sembunyikan semua progress jika tidak lolos desk screening -->
+    <?php if ($desk->worksheet_status != 1) {die();}?>
+
+    <!-- progress tidak bisa dilihat reviewer -->
     <?php if ($level != 'reviewer'): ?>
     <?php $this->load->view('draft/view/progress');?>
     <?php endif;?>
 
-    <?php if ($level == 'author' and $author_order != 1): ?>
-    <div class="alert alert-danger"><strong>PERHATIAN! </strong>Hanya penulis pertama yang dapat memberikan komentar dan
+    <!-- alert otorisasi penulis -->
+    <?php if ($level == 'author'): ?>
+    <div class="alert alert-danger"><strong>PERHATIAN! </strong>Penulis pertama dapat memberikan komentar dan
         catatan, penulis kedua hanya dapat melihat progress.</div>
     <?php endif;?>
 
-    <?php if ($reviewers == null): ?>
-    <?php if ($level == 'superadmin'): ?>
-    <div class="alert alert-warning">
-        <strong>PERHATIAN!</strong> Pilih reviewer terlebih dahulu sebelum lanjut ke tahap selanjutnya. Apabila progress
-        belum terbuka maka lakukan reload
-        <p class="m-0 p-0 mt-2">
-            <button
-                class="btn btn-warning btn-xs"
-                type="button"
-                id="pil-rev"
-            ><i class="fa fa-user-graduate"></i> Pilih reviewer</button>
-            <button
-                class="btn btn-warning btn-xs"
-                type="button"
-                onClick="window.location.reload()"
-            ><i class="fa fa-sync"></i> Reload</button>
-        </p>
-    </div>
-    <?php else: ?>
-    <div class="alert alert-info">
-        <h5 class="alert-heading">Pencarian Reviewer</h5>
-        Mohon ditunggu, Pihak admin sedang melakukan pencarian reviewer yang sesuai dengan draft anda.
-    </div>
-    <?php endif;?>
-    <?php else: ?>
-    <?php $this->load->view('draft/view/review');?>
-    <?php endif;?>
+    <!-- progress review -->
+    <?php $this->load->view('draft/view/review_progress');?>
 
     <?php if ($level != 'reviewer'): ?>
     <?php if ($input->is_review == 'y'): ?>
@@ -191,7 +171,7 @@ echo form_input($hidden_date);?>
     <?php endif;?>
     <?php endif;?>
 
-    <?php endif;?>
+    <?php //endif;;;;;;;;;;;;;;;?>
 </div>
 
 <script>

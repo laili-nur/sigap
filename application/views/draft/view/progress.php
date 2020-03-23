@@ -96,30 +96,32 @@ if ($input->is_review == 'y' && $input->is_edit == 'y' && $input->is_layout == '
 
 <hr class="my-5">
 <section
-    id="progress"
+    id="progress-list-wrapper"
     class="card"
 >
-    <header class="card-header">Progress</header>
-    <div class="card-body">
-        <ol class="progress-list mb-0 mb-sm-4">
+    <div id="progress-list">
+        <header class="card-header">Progress</header>
+        <div class="card-body">
+            <ol class="progress-list mb-0 mb-sm-4">
 
-            <?php foreach ($progress_list as $progress): ?>
-            <li class="<?=${"{$progress}_class"}?>">
-                <button
-                    data-html="true"
-                    type="button"
-                    data-toggle="tooltip"
-                    title="<?=${"{$progress}_title"};?>"
-                >
-                    <span
-                        width="300px"
-                        class="progress-indicator"
-                    ></span>
-                </button>
-                <span class="progress-label d-none d-sm-inline-block"><?=$progress;?></span>
-            </li>
-            <?php endforeach;?>
-        </ol>
+                <?php foreach ($progress_list as $progress): ?>
+                <li class="<?=${"{$progress}_class"}?>">
+                    <button
+                        data-html="true"
+                        type="button"
+                        data-toggle="tooltip"
+                        title="<?=${"{$progress}_title"};?>"
+                    >
+                        <span
+                            width="300px"
+                            class="progress-indicator"
+                        ></span>
+                    </button>
+                    <span class="progress-label d-none d-sm-inline-block"><?=$progress;?></span>
+                </li>
+                <?php endforeach;?>
+            </ol>
+        </div>
     </div>
 </section>
 

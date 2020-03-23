@@ -1,7 +1,12 @@
 <?php $level = check_level();?>
 <hr class="my-5">
 <section class="card card-fluid">
-    <header class="card-header">Desk Screening</header>
+    <header class="card-header">Desk Screening
+        <a
+            href="<?=base_url('worksheet/edit/' . $desk->worksheet_id);?>"
+            target="_blank"
+        ><i class="fa fa-external-link-alt"></i></a>
+    </header>
     <div class="card-body">
         <?php if ($desk->worksheet_status == 1): ?>
         <div class="alert alert-success">

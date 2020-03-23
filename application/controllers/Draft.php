@@ -331,6 +331,50 @@ class Draft extends Operator_Controller
         $this->load->view('template', compact('revision_total', 'books', 'author_order', 'draft', 'reviewer_order', 'desk', 'pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers', 'editors', 'layouters'));
     }
 
+    public function start_progress($draft_id)
+    {
+        if ($draft_id == null) {
+            $message = 'ID draft kosong';
+            return $this->send_json_output(false, $message);
+        }
+
+        // apakah draft tersedia
+        $draft = $this->draft->where('draft_id', $draft_id)->get();
+        if (!$draft) {
+            $message = $this->lang->line('toast_data_not_available');
+            return $this->send_json_output(false, $message, 404);
+        }
+
+        // hanya untuk user yang berkaitan dengan draft ini
+        if (!$this->draft->is_authorized($this->level, $this->username, $draft_id)) {
+            $message = $this->lang->line('toast_error_not_authorized');
+            return $this->send_json_output(false, $message);
+        }
+
+        // berisi 'progress' untuk conditional dibawah
+        $input = (object) $this->input->post(null, false);
+
+        $this->db->trans_begin();
+        if ($input->progress == 'review') {
+            $this->draft->edit_draft_date($draft_id, 'review_start_date');
+            $this->draft->update_draft_status($draft_id, ['draft_status' => 4]);
+        } else if ($input->progress == 'edit') {
+            $this->draft->edit_draft_date($draft_id, 'edit_start_date');
+        } else if ($input->progress == 'layout') {
+            $this->draft->edit_draft_date($draft_id, 'layout_start_date');
+        } else if ($input->progress == 'proofread') {
+            $this->draft->edit_draft_date($draft_id, 'proofread_start_date');
+        }
+
+        if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
+            return $this->send_json_output(false, $this->lang->line('toast_edit_fail'));
+        } else {
+            $this->db->trans_commit();
+            return $this->send_json_output(true, $this->lang->line('toast_edit_success'));
+        }
+    }
+
     public function upload_progress($id, $column)
     {
         $draft     = $this->draft->where('draft_id', $id)->get();
@@ -516,8 +560,6 @@ class Draft extends Operator_Controller
         } else {
             return $this->send_json_output(false, $this->lang->line('toast_edit_fail'));
         }
-        // }
-        // echo json_encode($data);
     }
 
     public function edit($id = null)

@@ -1,122 +1,125 @@
 <?php $level = check_level();?>
+
 <div
+    id="draft-data-wrapper"
     class="tab-pane fade active show"
-    id="draft_data"
 >
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered mb-0 nowrap">
-            <tbody>
-                <tr>
-                    <td width="200px"> Judul Draft </td>
-                    <td><strong>
-                            <?=$input->draft_title;?></strong> </td>
-                </tr>
-                <tr>
-                    <td width="200px"> Kategori </td>
-                    <td>
-                        <?=isset($input->category_id) ? konversiID('category', 'category_id', $input->category_id)->category_name : '';?>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="200px"> Tema </td>
-                    <td>
-                        <?=isset($input->theme_id) ? konversiID('theme', 'theme_id', $input->theme_id)->theme_name : '';?>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="200px"> File Draft </td>
-                    <td>
-                        <?=($input->draft_file) ? '<a data-toggle="tooltip" data-placement="right" title="' . $input->draft_file . '" class="btn btn-success btn-xs m-0" href="' . base_url('draft/download_file/draftfile/' . $input->draft_file) . '" target="_blank"><i class="fa fa-download"></i> Download</a>' : '';?>
-                        <?=($input->draft_file_link) ? '<a data-toggle="tooltip" data-placement="right" title="' . $input->draft_file_link . '" class="btn btn-success btn-xs m-0" href="' . $input->draft_file_link . '" target="_blank"><i class="fa fa-external-link-alt"></i> External file</a>' : '';?>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="200px"> Jumlah halaman</td>
-                    <td><?=$input->draft_pages;?></td>
-                </tr>
-                <?php if ($level == 'reviewer' and $reviewer_order == 0): ?>
-                <tr>
-                    <td width="200px"> Aksi Rekomendasi </td>
-                    <td>
-                        <?php if ($input->review1_flag == 'n'): ?>
-                        <span class="badge badge-danger">Tolak</span>
-                        <?php elseif ($input->review1_flag == 'y'): ?>
-                        <span class="badge badge-success">Setuju</span>
-                        <?php endif;?>
-                    </td>
-                </tr>
-                <?php elseif ($level == 'reviewer' and $reviewer_order == 1): ?>
-                <tr>
-                    <td width="200px"> Aksi Rekomendasi </td>
-                    <td>
-                        <?php if ($input->review2_flag == 'n'): ?>
-                        <span class="badge badge-danger">Tolak</span>
-                        <?php elseif ($input->review2_flag == 'y'): ?>
-                        <span class="badge badge-success">Setuju</span>
-                        <?php endif;?>
-                    </td>
-                </tr>
-                <?php endif;?>
-                <?php if ($level != 'reviewer'): ?>
-                <tr>
-                    <td width="200px"> Tanggal Masuk
-                        <?=($level === 'superadmin' or $level === 'admin_penerbitan') ? '<button type="button" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#modal-entry-date">Edit</button>' : '';?>
-                    </td>
-                    <td>
-                        <?=format_datetime($input->entry_date);?>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="200px"> Diinput oleh </td>
-                    <td>
-                        <em>
-                            <?=$input->input_by;?></em>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="200px"> Tanggal Selesai </td>
-                    <td>
-                        <?=format_datetime($input->finish_date);?>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="200px"> Status Proses </td>
-                    <td><span class="font-weight-bold">
-                            <?=draft_status_to_text($input->draft_status);?></span> </td>
-                </tr>
-                <tr>
-                    <td width="200px"> Status Naskah </td>
-                    <td class="align-middle">
-                        <?=$input->is_reprint == 'y' ? '<span class="badge badge-warning mb-2">Cetak Ulang</span>' : '<span class="badge badge-success mb-2">Baru</span>';?>
-                        <?php if ($input->is_reprint == 'n'): ?>
-                        <div class="alert alert-info m-0 p-2">
-                            <?php ($input->draft_status != 14) ? $atribut = 'disabled' : $atribut = '';?>
-                            <p class="m-0 p-0">Draft dengan status proses final dapat di cetak ulang.</p>
-                            <?php if ($level === 'superadmin' or $level === 'admin_penerbitan'): ?>
-                            <button
-                                <?=($atribut == 'disabled') ? 'style="cursor:not-allowed" disabled' : '';?>
-                                type="button"
-                                class="btn btn-info btn-xs <?=$atribut;?>"
-                                onClick="location.href='<?=base_url("draft/cetakUlang/$input->draft_id");?>'"
-                            >Cetak Ulang</button>
+    <div id="draft-data">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered mb-0 nowrap">
+                <tbody>
+                    <tr>
+                        <td width="200px"> Judul Draft </td>
+                        <td><strong>
+                                <?=$input->draft_title;?></strong> </td>
+                    </tr>
+                    <tr>
+                        <td width="200px"> Kategori </td>
+                        <td>
+                            <?=isset($input->category_id) ? konversiID('category', 'category_id', $input->category_id)->category_name : '';?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200px"> Tema </td>
+                        <td>
+                            <?=isset($input->theme_id) ? konversiID('theme', 'theme_id', $input->theme_id)->theme_name : '';?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200px"> File Draft </td>
+                        <td>
+                            <?=($input->draft_file) ? '<a data-toggle="tooltip" data-placement="right" title="' . $input->draft_file . '" class="btn btn-success btn-xs m-0" href="' . base_url('draft/download_file/draftfile/' . $input->draft_file) . '" target="_blank"><i class="fa fa-download"></i> Download</a>' : '';?>
+                            <?=($input->draft_file_link) ? '<a data-toggle="tooltip" data-placement="right" title="' . $input->draft_file_link . '" class="btn btn-success btn-xs m-0" href="' . $input->draft_file_link . '" target="_blank"><i class="fa fa-external-link-alt"></i> External file</a>' : '';?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200px"> Jumlah halaman</td>
+                        <td><?=$input->draft_pages;?></td>
+                    </tr>
+                    <?php if ($level == 'reviewer' and $reviewer_order == 0): ?>
+                    <tr>
+                        <td width="200px"> Aksi Rekomendasi </td>
+                        <td>
+                            <?php if ($input->review1_flag == 'n'): ?>
+                            <span class="badge badge-danger">Tolak</span>
+                            <?php elseif ($input->review1_flag == 'y'): ?>
+                            <span class="badge badge-success">Setuju</span>
                             <?php endif;?>
-                        </div>
-                        <?php endif;?>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="200px"> Catatan Draft
-                        <?=($level != 'author' and $level != 'reviewer') ? '<button type="button" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#modal-draft-notes">Edit</button>' : '';?>
-                    </td>
-                    <td>
-                        <div class="font-weight-bold">
-                            <?=$input->draft_notes;?>
-                        </div>
-                    </td>
-                </tr>
-                <?php endif;?>
-            </tbody>
-        </table>
+                        </td>
+                    </tr>
+                    <?php elseif ($level == 'reviewer' and $reviewer_order == 1): ?>
+                    <tr>
+                        <td width="200px"> Aksi Rekomendasi </td>
+                        <td>
+                            <?php if ($input->review2_flag == 'n'): ?>
+                            <span class="badge badge-danger">Tolak</span>
+                            <?php elseif ($input->review2_flag == 'y'): ?>
+                            <span class="badge badge-success">Setuju</span>
+                            <?php endif;?>
+                        </td>
+                    </tr>
+                    <?php endif;?>
+                    <?php if ($level != 'reviewer'): ?>
+                    <tr>
+                        <td width="200px"> Tanggal Masuk
+                            <?=($level === 'superadmin' or $level === 'admin_penerbitan') ? '<button type="button" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#modal-entry-date">Edit</button>' : '';?>
+                        </td>
+                        <td>
+                            <?=format_datetime($input->entry_date);?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200px"> Diinput oleh </td>
+                        <td>
+                            <em>
+                                <?=$input->input_by;?></em>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200px"> Tanggal Selesai </td>
+                        <td>
+                            <?=format_datetime($input->finish_date);?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200px"> Status Proses </td>
+                        <td><span class="font-weight-bold">
+                                <?=draft_status_to_text($input->draft_status);?></span> </td>
+                    </tr>
+                    <tr>
+                        <td width="200px"> Status Naskah </td>
+                        <td class="align-middle">
+                            <?=$input->is_reprint == 'y' ? '<span class="badge badge-warning mb-2">Cetak Ulang</span>' : '<span class="badge badge-success mb-2">Baru</span>';?>
+                            <?php if ($input->is_reprint == 'n'): ?>
+                            <div class="alert alert-info m-0 p-2">
+                                <?php ($input->draft_status != 14) ? $atribut = 'disabled' : $atribut = '';?>
+                                <p class="m-0 p-0">Draft dengan status proses final dapat di cetak ulang.</p>
+                                <?php if ($level === 'superadmin' or $level === 'admin_penerbitan'): ?>
+                                <button
+                                    <?=($atribut == 'disabled') ? 'style="cursor:not-allowed" disabled' : '';?>
+                                    type="button"
+                                    class="btn btn-info btn-xs <?=$atribut;?>"
+                                    onClick="location.href='<?=base_url("draft/cetakUlang/$input->draft_id");?>'"
+                                >Cetak Ulang</button>
+                                <?php endif;?>
+                            </div>
+                            <?php endif;?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200px"> Catatan Draft
+                            <?=($level != 'author' and $level != 'reviewer') ? '<button type="button" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#modal-draft-notes">Edit</button>' : '';?>
+                        </td>
+                        <td>
+                            <div class="font-weight-bold">
+                                <?=$input->draft_notes;?>
+                            </div>
+                        </td>
+                    </tr>
+                    <?php endif;?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -232,7 +235,7 @@ $(document).ready(function() {
             },
             complete: function() {
                 $this.removeAttr("disabled").html("Submit");
-                $('#draft_data').load(' #draft_data');
+                $('#draft-data').load(' #draft-data');
                 $('#modal-entry-date').modal('toggle');
             }
         });
@@ -260,7 +263,7 @@ $(document).ready(function() {
             },
             complete: function() {
                 $this.removeAttr("disabled").html("Submit");
-                $('#draft_data').load(' #draft_data');
+                $('#draft-data').load(' #draft-data');
                 $('#modal-draft-notes').modal('toggle');
             }
         });
