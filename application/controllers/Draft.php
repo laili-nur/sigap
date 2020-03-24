@@ -52,21 +52,18 @@ class Draft extends Operator_Controller
                     $d->review_deadline = null;
                 }
 
-                $date          = Carbon::parse($d->review_deadline);
-                $d->sisa_waktu = $date->diffInDays();
+                $d->sisa_waktu = Carbon::parse(Carbon::today())->diffInDays($d->review_deadline, false);
             }
         } elseif ($this->level == 'editor') {
             $get_data = $this->draft->filter_draft_for_staff($filters, $this->username, $page);
 
             foreach ($get_data['drafts'] as $d) {
-                $date          = Carbon::parse($d->edit_deadline);
-                $d->sisa_waktu = $date->diffInDays();
+                $d->sisa_waktu = Carbon::parse(Carbon::today())->diffInDays($d->edit_deadline, false);
             }
         } elseif ($this->level == 'layouter') {
             $get_data = $this->draft->filter_draft_for_staff($filters, $this->username, $page);
             foreach ($get_data['drafts'] as $d) {
-                $date          = Carbon::parse($d->layout_deadline);
-                $d->sisa_waktu = $date->diffInDays();
+                $d->sisa_waktu = Carbon::parse(Carbon::today())->diffInDays($d->layout_deadline, false);
             }
         } elseif ($this->level == 'author') {
             $get_data = $this->draft->filter_draft_for_author($filters, $this->username, $page);
@@ -309,13 +306,22 @@ class Draft extends Operator_Controller
 
         // ambil author
         $authors = $this->author->get_draft_authors($draft_id);
-        // cek author pertama, jika $author_order == 0
-        $author_order = array_search($this->role_id, array_column($authors, 'author_id')) == 0 ? true : false;
+        // cek author yang login
+        // author pertama adalah jika author_order = 0
+        if ($this->level == 'author') {
+            $author_order = array_search($this->role_id, array_column($authors, 'author_id')) == 0 ? true : false;
+        } else {
+            $author_order = null;
+        }
 
         // ambil reviewer
         $reviewers = $this->reviewer->get_draft_reviewers($draft_id);
-        // cari reviewer pertama, jika $reviewer_order == 0
-        $reviewer_order = array_search($this->role_id, array_column($reviewers, 'reviewer_id'));
+        // cek reviewer yang sedang login
+        if ($this->level == 'reviewer') {
+            $reviewer_order = array_search($this->role_id, array_column($reviewers, 'reviewer_id'));
+        } else {
+            $reviewer_order = null;
+        }
 
         // ambil editor dan layouter
         $editors   = $this->user->get_draft_staffs($draft_id, 'editor');
@@ -331,7 +337,7 @@ class Draft extends Operator_Controller
         $this->load->view('template', compact('revision_total', 'books', 'author_order', 'draft', 'reviewer_order', 'desk', 'pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers', 'editors', 'layouters'));
     }
 
-    public function start_progress($draft_id)
+    public function api_start_progress($draft_id)
     {
         if ($draft_id == null) {
             $message = 'ID draft kosong';
@@ -490,9 +496,55 @@ class Draft extends Operator_Controller
         echo json_encode($data);
     }
 
-    // ubah notes - buat ubah deadline juga
-    public function ubahnotes($draft_id = null, $rev = null)
+    // update draft, kirim update via post
+    public function api_action_progress($draft_id)
     {
+        if ($draft_id == null) {
+            $message = 'ID draft kosong';
+            return $this->send_json_output(false, $message);
+        }
+
+        // apakah draft tersedia
+        $draft = $this->draft->where('draft_id', $draft_id)->get();
+        if (!$draft) {
+            $message = $this->lang->line('toast_data_not_available');
+            return $this->send_json_output(false, $message, 404);
+        }
+
+        // hanya untuk user yang berkaitan dengan draft ini
+        if (!$this->draft->is_authorized($this->level, $this->username, $draft_id)) {
+            $message = $this->lang->line('toast_error_not_authorized');
+            return $this->send_json_output(false, $message);
+        }
+
+        $input = (object) $this->input->post(null, false);
+
+        if ($input->progress == 'review') {
+            $input->{"{$input->progress}_status"} = $input->action_status;
+            $input->draft_status = filter_boolean($input->accept) ? 5 : 99;
+            $input->{"is_$input->progress"} = filter_boolean($input->accept) ? 'y' : 'n';
+            $input->{"{$input->progress}_end_date"} = now();
+        }
+
+        // hilangkan property pembantu yang tidak ada di db
+        unset($input->action_status);
+        unset($input->progress);
+        unset($input->accept);
+
+        if ($this->draft->where('draft_id', $draft_id)->update($input)) {
+            return $this->send_json_output(true, $this->lang->line('toast_edit_success'));
+        } else {
+            return $this->send_json_output(false, $this->lang->line('toast_edit_fail'));
+        }
+    }
+
+    // update draft, kirim update via post
+    public function api_update_draft($draft_id = null, $rev = null)
+    {
+        // $input = $this->input->post(null, false);
+        // $input['accept'] = filter_boolean($input['accept']);
+        // return $this->send_json_output(true, $input);
+
         if ($draft_id == null) {
             $message = 'ID draft kosong';
             return $this->send_json_output(false, $message);

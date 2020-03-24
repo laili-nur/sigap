@@ -8,7 +8,6 @@ function lihatEkstensi($ext = '')
     } else {
         return false;
     }
-
 }
 
 function getYearsDocument()
@@ -90,7 +89,6 @@ function konversi_username_level($username)
             }
         }
     }
-
 }
 
 function is_datetime_null($datetime)
@@ -138,7 +136,6 @@ function konversiID($table, $vars, $id)
             return "";
         }
     }
-
 }
 
 // Get list of option for dropdown.
@@ -435,7 +432,6 @@ function highlight_keyword($str, $search)
     $newstring = str_replace('[#]', '<span style="color: ' . $highlightcolor . ';">', $newstring);
     $newstring = str_replace('[@]', '</span>', $newstring);
     return $newstring;
-
 }
 
 function check_file_extension($file_name)
@@ -552,4 +548,14 @@ function get_per_page_options()
 function get_user_levels()
 {
     return ['superadmin', 'admin_penerbitan', 'author', 'reviewer', 'editor', 'layouter', 'author_reviewer'];
+}
+
+function filter_boolean($data)
+{
+    return filter_var($data, FILTER_VALIDATE_BOOLEAN);
+}
+
+function now()
+{
+    return date('Y-m-d H:i:s');
 }

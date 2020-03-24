@@ -20,6 +20,16 @@ function is_superadmin()
     return false;
 }
 
+function is_staff()
+{
+    $CI    = &get_instance();
+    $level = $CI->session->userdata('level');
+    if (is_admin() || $level === 'editor' || $level === 'layouter') {
+        return true;
+    }
+    return false;
+}
+
 function check_level()
 {
     $CI = &get_instance();

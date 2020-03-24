@@ -1,0 +1,114 @@
+<?php $level = check_level() ?>
+<div
+    class="modal fade"
+    id="modal-action-<?= $progress ?>"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="modal-action-<?= $progress ?>"
+    aria-hidden="true"
+>
+    <div
+        class="modal-dialog"
+        role="document"
+    >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Aksi <?= $progress ?></h5>
+            </div>
+            <div class="modal-body">
+                <fieldset>
+                    <div class="form-group">
+                        <label
+                            for="action_status"
+                            class="font-weight-bold"
+                        >Catatan Admin</label>
+                        <div class="alert alert-info">
+                            Catatan admin dapat dilihat oleh semua user yang terkait dengan draft ini.
+                        </div>
+                        <?php
+                        if (!is_admin()) {
+                            echo '<div class="font-italic">' . nl2br($input->review_status) . '</div>';
+                        } else {
+                            echo form_textarea([
+                                'name'  => 'action_status',
+                                'class' => 'form-control summernote-basic',
+                                'id'    => 'crp2',
+                                'rows'  => '6',
+                                'value' => $input->review_status,
+                            ]);
+                        }
+                        ?>
+                        <div class="alert alert-info">
+                            Pilih salah satu tombol dibawah ini: <br>
+                            Jika <strong class="text-success">Setuju</strong>, maka tahap review akan
+                            diakhiri
+                            dan tanggal selesai review akan dicatat <br>
+                            Jika <strong class="text-danger">Tolak</strong> maka proses draft akan diakhiri
+                            sampai tahap ini.
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button
+                    id="<?= $progress ?>-accept"
+                    class="btn btn-success"
+                    type="button"
+                >Setuju</button>
+                <button
+                    id="<?= $progress ?>-decline"
+                    class="btn btn-danger"
+                    type="button"
+                >Tolak</button>
+                <button
+                    type="button"
+                    class="btn btn-light"
+                    data-dismiss="modal"
+                >Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// contoh progress = 'review','edit','layout','proofread','print'
+const progress = "<?= $progress; ?>"
+
+function send_action_data(accept) {
+    this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+    const draft_id = $('[name=draft_id]').val();
+    const action_status = $('[name=action_status]').val();
+
+    $.ajax({
+        type: "POST",
+        url: "<?= base_url('draft/api_action_progress/'); ?>" + draft_id,
+        // datatype: "JSON",
+        data: {
+            progress,
+            accept: accept,
+            action_status,
+        },
+        success: function(res) {
+            console.log(res);
+            show_toast(true, res.data);
+        },
+        error: function(err) {
+            console.log(err);
+            show_toast(false, err.responseJSON.message);
+        },
+        complete: function() {
+            location.reload()
+        },
+    });
+}
+
+// aksi setuju
+$('#review-progress-wrapper').on('click', `#${progress}-accept`, function() {
+    send_action_data.call($(this), true)
+});
+
+// aksi tolak
+$('#review-progress-wrapper').on('click', `#${progress}-decline`, function() {
+    send_action_data.call($(this), false)
+});
+</script>
