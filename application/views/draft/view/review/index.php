@@ -26,16 +26,6 @@ $data['keren'] = 'mantap jiwa jos gandos';
                         title="Pilih Reviewer"
                     ><i class="fas fa-user-plus fa-fw"></i><span class="d-none d-lg-inline"> Pilih
                             Reviewer</span></button>
-                    <button
-                        type="button"
-                        title="Ubah deadline"
-                        class="btn btn-secondary <?= empty($reviewers) ? 'btn-disabled' : ''; ?>"
-                        data-toggle="modal"
-                        data-target="#review_deadline"
-                        <?= empty($reviewers) ? 'disabled' : ''; ?>
-                    >
-                        <i class="fas fa-calendar-alt fa-fw"></i><span class="d-none d-lg-inline"> Deadline</span>
-                    </button>
                     <?php endif; ?>
                     <?php if ($level == 'reviewer' || is_admin()) : ?>
                     <button
@@ -81,7 +71,18 @@ $data['keren'] = 'mantap jiwa jos gandos';
             <!-- staff/admin bisa melihat semua -->
             <?php if (is_null($reviewer_order) || $reviewer_order == 0) : ?>
             <div class="list-group-item justify-content-between">
-                <span class="text-muted">Deadline reviewer 1</span>
+                <?php if (is_admin()) : ?>
+                <a
+                    href="#"
+                    id="btn-modal-deadline-review"
+                    title="Ubah deadline"
+                    data-toggle="modal"
+                    data-target="#modal-deadline-review"
+                    data-identifier="review1"
+                >Deadline reviewer #1 <i class="fas fa-edit fa-fw"></i></a>
+                <?php else : ?>
+                <span>Deadline reviewer #1</span>
+                <?php endif ?>
                 <strong>
                     <?= ($review1_remaining_time <= 0 and $input->review1_flag == '')
                             ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . format_datetime($input->review1_deadline) . '</span>'
@@ -93,8 +94,19 @@ $data['keren'] = 'mantap jiwa jos gandos';
             <!-- reviewer 2 hanya bisa melihat deadline reviewer 2 -->
             <!-- staff/admin bisa melihat semua -->
             <?php if (is_null($reviewer_order) || $reviewer_order == 1) : ?>
-            <div class="list-group-item justify-content-between aasdasd adasdaasd asdasdasdasd">
-                <span class="text-muted">Deadline reviewer 2</span>
+            <div class="list-group-item justify-content-between">
+                <?php if (is_admin()) : ?>
+                <a
+                    href="#"
+                    id="btn-modal-deadline-review"
+                    title="Ubah deadline"
+                    data-toggle="modal"
+                    data-target="#modal-deadline-review"
+                    data-identifier="review2"
+                >Deadline reviewer #2 <i class="fas fa-edit fa-fw"></i></a>
+                <?php else : ?>
+                <span>Deadline reviewer #2</span>
+                <?php endif ?>
                 <strong>
                     <?= ($review2_remaining_time <= 0 and $input->review2_flag == '')
                             ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . format_datetime($input->review2_deadline) . '</span>'
@@ -1129,143 +1141,15 @@ $data['keren'] = 'mantap jiwa jos gandos';
                     </div>
                 </div>
             </div> -->
-            <!-- <div
-                class="modal fade"
-                id="review_deadline"
-                tabindex="-1"
-                role="dialog"
-                aria-labelledby="exampleModalLabel"
-                aria-hidden="true"
-            >
-                <div
-                    class="modal-dialog"
-                    role="document"
-                >
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Deadline Review</h5>
-                        </div>
-                        <div class="modal-body">
-                            <?= form_open('draft/api_update_draft/' . $input->draft_id); ?>
-                            <fieldset>
-                                <div class="form-group">
-                                    <label for="review1_deadline">Deadline Reviewer 1</label>
-                                    <div>
-                                        <?= form_input('review1_deadline', $input->review1_deadline, 'class="form-control mydate_modal d-none" id="review1_deadline" required=""'); ?>
-                                    </div>
-                                    <div class="invalid-feedback">Harap diisi</div>
-                                    <?= form_error('review1_deadline'); ?>
-                                </div>
-                                <div class="form-group">
-                                    <label for="review2_deadline">Deadline Reviewer 2</label>
-                                    <div>
-                                        <?= form_input('review2_deadline', $input->review2_deadline, 'class="form-control mydate_modal d-none" id="review2_deadline" required="" '); ?>
-                                    </div>
-                                    <div class="invalid-feedback">Harap diisi</div>
-                                    <?= form_error('review2_deadline'); ?>
-                                </div>
-                            </fieldset>
-                        </div>
-                        <div class="modal-footer">
-                            <button
-                                class="btn btn-primary"
-                                type="submit"
-                                id="btn-review-deadline"
-                            >Pilih</button>
-                            <button
-                                type="button"
-                                class="btn btn-light"
-                                data-dismiss="modal"
-                            >Close</button>
-                        </div>
-                        <?= form_close(); ?>
-                    </div>
-                </div>
-            </div> -->
-            <!-- <div
-                class="modal fade"
-                id="modal-action-review"
-                tabindex="-1"
-                role="dialog"
-                aria-labelledby="exampleModalLabel"
-                aria-hidden="true"
-            >
-                <div
-                    class="modal-dialog"
-                    role="document"
-                >
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Aksi</h5>
-                        </div>
-                        <div class="modal-body">
-                            <?= form_open('draft/api_update_draft/' . $input->draft_id); ?>
-                            <fieldset>
-                                <div class="form-group">
-                                    <label
-                                        for="review_status"
-                                        class="font-weight-bold"
-                                    >Catatan Admin</label>
-                                    <div class="alert alert-info">
-                                        Catatan admin dapat dilihat oleh semua user yang terkait dengan draft ini.
-                                    </div>
-                                    <?php
-                                    $hidden_date = array(
-                                        'type'  => 'hidden',
-                                        'id'    => 'review_end_date',
-                                        'value' => date('Y-m-d H:i:s'),
-                                    );
-                                    echo form_input($hidden_date);
-                                    $review_status = array(
-                                        'name'  => 'review_status',
-                                        'class' => 'form-control summernote-basic',
-                                        'id'    => 'crp2',
-                                        'rows'  => '6',
-                                        'value' => $input->review_status,
-                                    );
-                                    if ($level != 'superadmin' and $level != 'admin_penerbitan') {
-                                        echo '<div class="font-italic">' . nl2br($input->review_status) . '</div>';
-                                    } else {
-                                        echo form_textarea($review_status);
-                                    }
-                                    ?>
-                                    <div class="alert alert-info">
-                                        Pilih salah satu tombol dibawah ini: <br>
-                                        Jika <strong class="text-success">Setuju</strong>, maka tahap review akan
-                                        diakhiri
-                                        dan tanggal selesai review akan dicatat <br>
-                                        Jika <strong class="text-danger">Tolak</strong> maka proses draft akan diakhiri
-                                        sampai tahap ini.
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </div>
-                        <div class="modal-footer">
-                            <button
-                                class="btn btn-success"
-                                type="submit"
-                                id="review-setuju"
-                                value="5"
-                            >Setuju</button>
-                            <button
-                                class="btn btn-danger"
-                                type="submit"
-                                id="review-tolak"
-                                value="99"
-                            >Tolak</button>
-                            <button
-                                type="button"
-                                class="btn btn-light"
-                                data-dismiss="modal"
-                            >Close</button>
-                        </div>
-                        <?= form_close(); ?>
-                    </div>
-                </div>
-            </div> -->
 
-            <!-- modal aksi review -->
-            <?php $this->load->view('draft/view/review/modal_action', [
+            <?php
+            // modal deadline review
+            $this->load->view('draft/view/review/modal_deadline', [
+                'progress' => 'review',
+            ]);
+
+            // modal aksi review
+            $this->load->view('draft/view/review/modal_action', [
                 'progress' => 'review'
             ]);
             ?>
@@ -1283,7 +1167,7 @@ $data['keren'] = 'mantap jiwa jos gandos';
     aria-hidden="true"
 >
     <div
-        class="modal-dialog modal-lg"
+        class="modal-dialog modal-lg modal-dialog-centered"
         role="document"
     >
         <div class="modal-content">
@@ -1831,37 +1715,6 @@ $(document).ready(function() {
                 }
                 $('#list-group-review').load(' #list-group-review');
                 $('#review2').modal('toggle');
-            }
-        });
-        return false;
-    });
-
-    //review deadline
-    $('#btn-review-deadline').on('click', function() {
-        var $this = $(this);
-        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-        let id = $('[name=draft_id]').val();
-        let rd1 = $('[name=review1_deadline]').val();
-        let rd2 = $('[name=review2_deadline]').val();
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('draft/api_update_draft/'); ?>" + id,
-            datatype: "JSON",
-            data: {
-                review1_deadline: rd1,
-                review2_deadline: rd2,
-            },
-            success: function(data) {
-                let datax = JSON.parse(data);
-                console.log(datax)
-                $this.removeAttr("disabled").html("Submit");
-                if (datax.status == true) {
-                    show_toast('111');
-                } else {
-                    show_toast('000');
-                }
-                $('#list-group-review').load(' #list-group-review');
-                $('#review_deadline').modal('toggle');
             }
         });
         return false;

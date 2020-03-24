@@ -8,7 +8,7 @@
     aria-hidden="true"
 >
     <div
-        class="modal-dialog"
+        class="modal-dialog modal-dialog-centered"
         role="document"
     >
         <div class="modal-content">
@@ -27,22 +27,22 @@
                         </div>
                         <?php
                         if (!is_admin()) {
-                            echo '<div class="font-italic">' . nl2br($input->review_status) . '</div>';
+                            echo '<div class="font-italic">' . nl2br($input->{"{$progress}_status"}) . '</div>';
                         } else {
                             echo form_textarea([
                                 'name'  => 'action_status',
                                 'class' => 'form-control summernote-basic',
                                 'id'    => 'crp2',
                                 'rows'  => '6',
-                                'value' => $input->review_status,
+                                'value' => $input->{"{$progress}_status"},
                             ]);
                         }
                         ?>
                         <div class="alert alert-info">
                             Pilih salah satu tombol dibawah ini: <br>
-                            Jika <strong class="text-success">Setuju</strong>, maka tahap review akan
+                            Jika <strong class="text-success">Setuju</strong>, maka tahap <?= $progress ?> akan
                             diakhiri
-                            dan tanggal selesai review akan dicatat <br>
+                            dan tanggal selesai <?= $progress ?> akan dicatat <br>
                             Jika <strong class="text-danger">Tolak</strong> maka proses draft akan diakhiri
                             sampai tahap ini.
                         </div>
@@ -51,12 +51,12 @@
             </div>
             <div class="modal-footer">
                 <button
-                    id="<?= $progress ?>-accept"
+                    id="btn-<?= $progress ?>-accept"
                     class="btn btn-success"
                     type="button"
                 >Setuju</button>
                 <button
-                    id="<?= $progress ?>-decline"
+                    id="btn-<?= $progress ?>-decline"
                     class="btn btn-danger"
                     type="button"
                 >Tolak</button>
@@ -72,7 +72,7 @@
 
 <script>
 // contoh progress = 'review','edit','layout','proofread','print'
-const progress = "<?= $progress; ?>"
+var progress = "<?= $progress ?>"
 
 function send_action_data(accept) {
     this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
@@ -103,12 +103,12 @@ function send_action_data(accept) {
 }
 
 // aksi setuju
-$('#review-progress-wrapper').on('click', `#${progress}-accept`, function() {
+$(`#${progress}-progress-wrapper`).on('click', `#btn-${progress}-accept`, function() {
     send_action_data.call($(this), true)
 });
 
 // aksi tolak
-$('#review-progress-wrapper').on('click', `#${progress}-decline`, function() {
+$(`#${progress}-progress-wrapper`).on('click', `#btn-${progress}-decline`, function() {
     send_action_data.call($(this), false)
 });
 </script>

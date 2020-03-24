@@ -1,3 +1,16 @@
+function init_flatpickr_modal() {
+    return flatpickr('.flatpickr_modal', {
+        disableMobile: true,
+        altInput: true,
+        altFormat: 'j F Y',
+        dateFormat: 'Y-m-d H:i',
+        inline: true,
+        enableTime: true,
+        time_24hr: true
+    });
+}
+
+
 function doublescroll() {
     $('.double-scroll').doubleScroll({
         resetOnWindowResize: true,

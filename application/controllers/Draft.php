@@ -542,7 +542,7 @@ class Draft extends Operator_Controller
     public function api_update_draft($draft_id = null, $rev = null)
     {
         // $input = $this->input->post(null, false);
-        // $input['accept'] = filter_boolean($input['accept']);
+        // // $input['accept'] = filter_boolean($input['accept']);
         // return $this->send_json_output(true, $input);
 
         if ($draft_id == null) {
