@@ -1271,12 +1271,23 @@ $data['keren'] = 'mantap jiwa jos gandos';
 $(document).ready(function() {
     const draft_id = $('input[name=draft_id]').val();
 
-    // ambil data ketika buka modal pilih penulis
+    // inisialisasi segment
+    reload_review_segment()
+
+    // ketika load segment, re-initialize call function-nya
+    function reload_review_segment() {
+        $('#review-progress-wrapper').load(' #review-progress', function() {
+            // reinitiate modal after load
+            init_flatpickr_modal()
+        });
+    }
+
+    // get data ketika buka modal pilih penulis
     $('#review-progress-wrapper').on('click', '#btn-modal-select-reviewer', function() {
         //  open modal
         $('#modal-select-reviewer').modal('toggle')
 
-        // get data
+        // get data semua reviewer
         $.get("<?= base_url('reviewer/api_get_reviewers'); ?>",
             function(res) {
                 //  inisialisasi select2
@@ -1330,7 +1341,7 @@ $(document).ready(function() {
                 // reload segemen daftar reviewer
                 $('#reviewer-list-wrapper').load(' #reviewer-list');
                 // reload segmen review
-                $('#review-progress-wrapper').load(' #review-progress');
+                reload_review_segment()
                 $this.removeAttr("disabled").html("Submit");
             },
         });
@@ -1353,7 +1364,7 @@ $(document).ready(function() {
                 // reload segemen daftar reviewer
                 $('#reviewer-list-wrapper').load(' #reviewer-list');
                 // reload segmen review
-                $('#review-progress-wrapper').load(' #review-progress');
+                reload_review_segment()
             },
         })
     });
@@ -1377,7 +1388,7 @@ $(document).ready(function() {
                 // reload segmen daftar reviewer
                 $('#reviewer-list-wrapper').load(' #reviewer-list');
                 // reload segmen review
-                $('#review-progress-wrapper').load(' #review-progress');
+                reload_review_segment()
                 // reload progress
                 $('#progress-list-wrapper').load(' #progress-list');
                 // reload data draft

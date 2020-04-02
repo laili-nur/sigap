@@ -82,7 +82,6 @@ function send_action_data(accept) {
     $.ajax({
         type: "POST",
         url: "<?= base_url('draft/api_action_progress/'); ?>" + draft_id,
-        // datatype: "JSON",
         data: {
             progress,
             accept: accept,

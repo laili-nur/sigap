@@ -48,9 +48,6 @@
 </div>
 <script>
 $(document).ready(function() {
-    // memanggil flatpickr
-    init_flatpickr_modal()
-
     // contoh progress = 'review','edit','layout','proofread','print'
     var progress = "<?= $progress ?>"
     // identifier khusus untuk progress review
@@ -109,7 +106,16 @@ $(document).ready(function() {
                 show_toast(false, err.responseJSON.message);
             },
             complete: function() {
-                location.reload()
+                $(`#${progress}-progress-wrapper`).load(` #${progress}-progress`,
+                    function() {
+                        // reinitiate flatpickr modal after load
+                        init_flatpickr_modal()
+                    });
+
+                // trick to force close modal, when caller function reloaded
+                $('#modal-deadline-review').modal('hide');
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
             },
         });
     });
