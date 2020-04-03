@@ -381,79 +381,83 @@ class Draft extends Operator_Controller
         }
     }
 
-    public function upload_progress($id, $column)
+    public function upload_progress($draft_id)
     {
-        $draft     = $this->draft->where('draft_id', $id)->get();
-        $datatitle = ['draft_id' => $id];
-        $title     = $this->draft->get_where($datatitle);
-        if (!$draft) {
-            $this->session->set_flashdata('warning', 'Draft data were not available');
-            redirect('draft');
-        }
-        $isCanAccess = false;
-        if ($this->level == 'author') {
-            $draft_author_status = $this->getDraftAuthorStatus($this->role_id, $id);
-            if ($draft_author_status < 1) {
-                $data['status'] = false;
-            } else {
-                $isCanAccess = true;
-            }
-        } else {
-            $isCanAccess = true;
-        }
-        if ($isCanAccess) {
-            if (!$_POST) {
-                $input = (object) $draft;
-            } else {
-                $input          = (object) $this->input->post(null, true);
-                $input->$column = $draft->$column; // Set draft file for preview.
+        // return $this->send_json_output(true, $_FILES);
+        // die();
 
+        if ($draft_id == null) {
+            $message = 'ID draft kosong';
+            return $this->send_json_output(false, $message);
+        }
+
+        // apakah draft tersedia
+        $draft = $this->draft->where('draft_id', $draft_id)->get();
+        if (!$draft) {
+            $message = $this->lang->line('toast_data_not_available');
+            return $this->send_json_output(false, $message, 404);
+        }
+
+        // hanya untuk author pertama
+        if ($this->level == 'author') {
+            $draft_author_status = $this->getDraftAuthorStatus($this->role_id, $draft_id);
+            if ($draft_author_status == 0) {
+                $message = $this->lang->line('toast_error_not_authorized');
+                return $this->send_json_output(false, $message);
             }
-            //tiap upload, update upload date
-            $tahap = explode('_', $column);
-            $this->draft->edit_draft_date($id, $tahap[0] . '_upload_date');
-            $last_upload         = $tahap[0] . '_last_upload';
-            $input->$last_upload = $this->username;
-            if (!empty($_FILES) && $_FILES[$column]['size'] > 0) {
-                // Upload new draft (if any)
-                $getextension  = explode(".", $_FILES[$column]['name']);
-                $draftFileName = str_replace(" ", "_", $title->draft_title . '_' . $column . '_' . date('YmdHis') . "." . $getextension[1]); // draft file name
-                if ($column == 'cover_file') {
-                    $upload = $this->draft->uploadProgressCover($column, $draftFileName);
-                } else {
-                    $upload = $this->draft->uploadProgress($column, $draftFileName);
-                }
-                if ($upload) {
-                    $input->$column = "$draftFileName";
-                    // Delete old draft file
-                    if ($draft->$column) {
-                        if ($column == 'cover_file') {
-                            $this->draft->deleteProgressCover($draft->$column);
-                        } else {
-                            $this->draft->deleteProgress($draft->$column);
-                        }
+        }
+
+        $input          = (object) $this->input->post(null, true);
+
+        if ($input->identifier) {
+            $progress = "{$input->progress}{$input->identifier}";
+        } else {
+            $progress = $input->progress;
+        }
+
+        // return $this->send_json_output(true, $_FILES);
+        // die();
+
+
+        // tiap upload, update upload date
+        // $tahap = explode('_', $column);
+        $this->draft->edit_draft_date($draft_id, $progress . '_upload_date');
+        $last_upload_field         = $progress . '_last_upload';
+        $input->$last_upload_field = $this->username;
+        $column = "{$progress}_file";
+
+        if (!empty($_FILES) && $file_name = $_FILES[$column]['name']) {
+            // Upload new draft (if any)
+            // $getextension  = explode(".", $_FILES[$column]['name']);
+            // $draftFileName = str_replace(" ", "_", $draft->draft_title . '_' . $column . '_' . date('YmdHis') . "." . $getextension[1]); // draft file name
+
+            $draft_file_name = $this->_generate_draft_file_name($file_name, $draft->draft_title, $column);
+            if ($column == 'cover_file') {
+                $upload = $this->draft->uploadProgressCover($column, $draft_file_name);
+            } else {
+                $upload = $this->draft->uploadProgress($column, $draft_file_name);
+            }
+            if ($upload) {
+                $input->$column = $draft_file_name;
+                // Delete old draft file
+                if ($draft->$column) {
+                    if ($column == 'cover_file') {
+                        $this->draft->deleteProgressCover($draft->$column);
+                    } else {
+                        $this->draft->deleteProgress($draft->$column);
                     }
                 }
             }
-            //If something wrong
-            // if (!$this->draft->validate() || $this->form_validation->error_array()) {
-            //     $pages    = $this->pages;
-            //     $main_view   = 'draft/view/overview';
-            //     $form_action = "draft/edit/$id";
-            //     $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
-            //     return;
-            // }
-            if ($this->draft->where('draft_id', $id)->update($input)) {
-                //$this->session->set_flashdata('success', 'Upload Success');
-                $data['status'] = true;
-            } else {
-                //$this->session->set_flashdata('error', 'Upload Failed');
-                $data['status'] = false;
-            }
         }
-        echo json_encode($data);
-        //redirect('draft/view/'.$id);
 
+        // unset unnecesary data
+        unset($input->progress);
+        unset($input->identifier);
+        if ($this->draft->where('draft_id', $draft_id)->update($input)) {
+            return $this->send_json_output(true, $this->lang->line('toast_edit_success'));
+        } else {
+            return $this->send_json_output(false, $this->lang->line('toast_edit_fail'));
+        }
     }
 
     // hapus progress draft
@@ -582,16 +586,16 @@ class Draft extends Operator_Controller
         // }
 
         // gabungkan array menjadi csv
-        if ($this->level == 'reviewer') {
-            if ($rev == 1) {
-                $input->nilai_reviewer1 = implode(",", $input->nilai_reviewer1);
-            } elseif ($rev == 2) {
-                $input->nilai_reviewer2 = implode(",", $input->nilai_reviewer2);
-            } else {
-                unset($input->nilai_reviewer1);
-                unset($input->nilai_reviewer2);
-            }
-        }
+        // if ($this->level == 'reviewer') {
+        //     if ($rev == 1) {
+        //         $input->nilai_reviewer1 = implode(",", $input->nilai_reviewer1);
+        //     } elseif ($rev == 2) {
+        //         $input->nilai_reviewer2 = implode(",", $input->nilai_reviewer2);
+        //     } else {
+        //         unset($input->nilai_reviewer1);
+        //         unset($input->nilai_reviewer2);
+        //     }
+        // }
 
         if (!empty($this->input->post('edit_notes_date'))) {
             if ($this->level == 'editor') {
@@ -1014,10 +1018,14 @@ class Draft extends Operator_Controller
         return $date . '-' . $num;
     }
 
-    private function _generate_draft_file_name($draft_file_name, $draft_title)
+    private function _generate_draft_file_name($draft_file_name, $draft_title, $progress = null)
     {
         $get_extension = explode(".", $draft_file_name)[1];
-        return str_replace(" ", "_", $draft_title . '_' . date('YmdHis') . '.' . $get_extension); // draft file name
+        if ($progress) {
+            return str_replace(" ", "_", $draft_title . '_' . $progress . '_' . date('YmdHis') . '.' . $get_extension); // progress file name
+        } else {
+            return str_replace(" ", "_", $draft_title . '_' . date('YmdHis') . '.' . $get_extension); // draft file name
+        }
     }
 
     private function getDraftAuthorStatus($author_id, $draft_id)
