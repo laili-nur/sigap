@@ -235,7 +235,6 @@ $data['keren'] = 'mantap jiwa jos gandos';
             ?>
         </div>
     </div>
-    </div>
 </section>
 
 <div
@@ -562,70 +561,70 @@ $(document).ready(function() {
     // );
 
     //validasi review2
-    $("#rev2form").validate({
-            rules: {
-                review2_file: {
-                    require_from_group: [1, ".naskah"],
-                    dokumen: "docx|doc|pdf",
-                    filesize50: 52428200
-                },
-                reviewer2_file_link: {
-                    curl: true,
-                    require_from_group: [1, ".naskah"]
-                }
-            },
-            errorElement: "span",
-            errorClass: "none",
-            validClass: "none",
-            errorPlacement: function(error, element) {
-                error.addClass("invalid-feedback");
-                if (element.parent('.input-group').length) {
-                    error.insertAfter(element.next('span.select2')); // input group
-                } else if (element.hasClass("select2-hidden-accessible")) {
-                    error.insertAfter(element.next('span.select2')); // select2
-                } else if (element.parent().parent().hasClass('input-group')) {
-                    error.insertAfter(element.closest('.input-group')); // fileinput append
-                } else if (element.hasClass("custom-file-input")) {
-                    error.insertAfter(element.next('label.custom-file-label')); // fileinput custom
-                } else if (element.hasClass("custom-control-input")) {
-                    error.insertAfter($(".custom-radio").last()); // radio
-                } else {
-                    error.insertAfter(element); // default
-                }
-            },
-            submitHandler: function(form) {
-                var $this = $('#btn-upload-review2');
-                $this.attr("disabled", "disabled").html(
-                    "<i class='fa fa-spinner fa-spin '></i> Uploading ");
-                let id = $('[name=draft_id]').val();
-                var formData = new FormData(form);
-                $.ajax({
-                    url: "<?php echo base_url('draft/upload_progress/'); ?>" + id +
-                        "/review2_file",
-                    type: "post",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    success: function(data) {
-                        let datax = JSON.parse(data);
-                        console.log(datax);
-                        $this.removeAttr("disabled").html("Upload");
-                        if (datax.status == true) {
-                            show_toast('111');
-                        } else {
-                            show_toast('000');
-                        }
-                        $('#modal-review2').load(' #modal-review2');
-                    }
-                });
-                $resetform = $('#review2_file');
-                $resetform.val('');
-                $resetform.next('label.custom-file-label').html('');
-                return false;
-            }
-        },
-        validateSelect2()
-    );
+    // $("#rev2form").validate({
+    //         rules: {
+    //             review2_file: {
+    //                 require_from_group: [1, ".naskah"],
+    //                 dokumen: "docx|doc|pdf",
+    //                 filesize50: 52428200
+    //             },
+    //             reviewer2_file_link: {
+    //                 curl: true,
+    //                 require_from_group: [1, ".naskah"]
+    //             }
+    //         },
+    //         errorElement: "span",
+    //         errorClass: "none",
+    //         validClass: "none",
+    //         errorPlacement: function(error, element) {
+    //             error.addClass("invalid-feedback");
+    //             if (element.parent('.input-group').length) {
+    //                 error.insertAfter(element.next('span.select2')); // input group
+    //             } else if (element.hasClass("select2-hidden-accessible")) {
+    //                 error.insertAfter(element.next('span.select2')); // select2
+    //             } else if (element.parent().parent().hasClass('input-group')) {
+    //                 error.insertAfter(element.closest('.input-group')); // fileinput append
+    //             } else if (element.hasClass("custom-file-input")) {
+    //                 error.insertAfter(element.next('label.custom-file-label')); // fileinput custom
+    //             } else if (element.hasClass("custom-control-input")) {
+    //                 error.insertAfter($(".custom-radio").last()); // radio
+    //             } else {
+    //                 error.insertAfter(element); // default
+    //             }
+    //         },
+    //         submitHandler: function(form) {
+    //             var $this = $('#btn-upload-review2');
+    //             $this.attr("disabled", "disabled").html(
+    //                 "<i class='fa fa-spinner fa-spin '></i> Uploading ");
+    //             let id = $('[name=draft_id]').val();
+    //             var formData = new FormData(form);
+    //             $.ajax({
+    //                 url: "<?php echo base_url('draft/upload_progress/'); ?>" + id +
+    //                     "/review2_file",
+    //                 type: "post",
+    //                 data: formData,
+    //                 processData: false,
+    //                 contentType: false,
+    //                 cache: false,
+    //                 success: function(data) {
+    //                     let datax = JSON.parse(data);
+    //                     console.log(datax);
+    //                     $this.removeAttr("disabled").html("Upload");
+    //                     if (datax.status == true) {
+    //                         show_toast('111');
+    //                     } else {
+    //                         show_toast('000');
+    //                     }
+    //                     $('#modal-review2').load(' #modal-review2');
+    //                 }
+    //             });
+    //             $resetform = $('#review2_file');
+    //             $resetform.val('');
+    //             $resetform.next('label.custom-file-label').html('');
+    //             return false;
+    //         }
+    //     },
+    //     validateSelect2()
+    // );
 })
 </script>

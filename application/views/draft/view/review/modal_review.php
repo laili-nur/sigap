@@ -41,7 +41,7 @@ $all_criteria = [
             <div class="modal-body">
 
                 <div id="review-upload-segment">
-                    <?= form_open_multipart('', 'id="rev1form"'); ?>
+                    <?= form_open_multipart('', 'id="review-form"'); ?>
                     <p class="font-weight-bold">NASKAH</p>
                     <?php if ($level == 'reviewer' || ($level == 'author' && $author_order == 1) || is_admin()) : ?>
                     <div class="alert alert-info">Upload file naskah atau sertakan link naskah. Kosongkan jika file
@@ -49,23 +49,23 @@ $all_criteria = [
                         hard copy.</div>
                     <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : ''; ?>
                     <div class="form-group">
-                        <label for="review_file">File Naskah</label>
+                        <label for="review-file">File Naskah</label>
                         <div class="custom-file">
-                            <?= form_upload('review_file', '', 'class="custom-file-input naskah" id="review_file"'); ?>
+                            <?= form_upload('review-file', '', 'class="custom-file-input naskah" id="review-file"'); ?>
                             <label
                                 class="custom-file-label"
-                                for="review_file"
+                                for="review-file"
                             >Pilih file</label>
                         </div>
                         <small class="form-text text-muted">Tipe file upload bertype : docx, doc, dan
                             pdf.</small>
                     </div>
                     <div class="form-group">
-                        <label for="reviewer_file_link">Link Naskah</label>
+                        <label for="reviewer-file-link">Link Naskah</label>
                         <div>
-                            <?= form_input('reviewer_file_link', $input->reviewer1_file_link, 'class="form-control naskah" id="reviewer_file_link"'); ?>
+                            <?= form_input('reviewer-file-link', $input->reviewer1_file_link, 'class="form-control naskah" id="reviewer-file-link"'); ?>
                         </div>
-                        <?= form_error('reviewer_file_link'); ?>
+                        <?= form_error('reviewer-file-link'); ?>
                     </div>
                     <div class="form-group">
                         <button
@@ -73,34 +73,39 @@ $all_criteria = [
                             class="btn btn-primary"
                             type="submit"
                         ><i class="fa fa-upload"></i> Upload</button>
-                        <button
-                            id="btn-upload-review-button"
-                            class="btn btn-primary"
-                            type="button"
-                        ><i class="fa fa-upload"></i> Upload button</button>
                     </div>
                     <?= form_close(); ?>
                     <?php endif; ?>
 
 
-                    <div class="file-info">
-                        <p>Last Upload :
-                            <?= format_datetime($input->review1_upload_date); ?>,
-                            <br> by :
-                            <?= konversi_username_level($input->review1_last_upload); ?>
-                            <?php if ($level != 'author' and $level != 'reviewer') : ?>
-                            <em>(<?= $input->review1_last_upload; ?>)</em>
-                            <?php endif; ?>
+                    <div id="review-file-info">
+                        <p>
+                            <p class="review-upload-date"></p>
+                            <p class="review-last-upload"></p>
                         </p>
-                        <?= (!empty($input->review1_file)) ? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="' . $input->review1_file . '" href="' . base_url('draftfile/' . $input->review1_file) . '" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : ''; ?>
-                        <?= (!empty($input->reviewer1_file_link)) ? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="' . $input->reviewer1_file_link . '" href="' . $input->reviewer1_file_link . '" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : ''; ?>
+                        <a
+                            data-toggle="tooltip"
+                            data-placement="right"
+                            title=""
+                            data-original-title=""
+                            href=""
+                            class="btn btn-success review-download-file"
+                        ><i class="fa fa-download"></i> Download</a>
+                        <a
+                            data-toggle="tooltip"
+                            data-placement="right"
+                            title=""
+                            data-original-title=""
+                            href=""
+                            class="btn btn-primary review-download-file-link"
+                        ><i class="fa fa-external-link-alt"></i> External file</a>
                     </div>
                 </div>
 
 
 
 
-                <?= form_open('draft/api_update_draft/' . $input->draft_id, 'id="formreview1_krit" novalidate=""'); ?>
+                <?= form_open('', 'id="formreview1_krit" novalidate=""'); ?>
                 <?php if ($level != 'author') : ?>
                 <hr class="my-3">
                 <p class="font-weight-bold">REVIEW</p>
@@ -289,6 +294,8 @@ $(document).ready(function() {
         identifier = $(this).data('identifier');
 
         let nilaiReviewer;
+
+        // jika buka modal review 1
         if (identifier == 'review1') {
             // populate catatan kriteria
             $('#kriteria1').val('<?= $input->kriteria1_reviewer1 ?>')
@@ -334,8 +341,16 @@ $(document).ready(function() {
                     $(`#nilai${nilai}-kriteria${kriteria}`).prop('checked', nilaiReviewer == nilai)
                 }
             }
+
+            // load file info review 1
+            $('#review-file-info .review-upload-date').text('<?= $input->review1_upload_date ?>')
+            $('#review-file-info .review-last-upload').text('<?= $input->review1_last_upload ?>')
+            $('#review-file-info .review-download-file').attr('href', '<?= base_url("draft/download_file/draftfile/{$input->review1_file}") ?>')
+            $('#review-file-info .review-download-file-link').attr('href', '<?= $input->reviewer1_file_link ?>')
+            $('#reviewer-file-link').val('<?= $input->reviewer1_file_link ?>')
         }
 
+        // jika buka modal review 2
         if (identifier == 'review2') {
             // populate catatan kriteria
             $('#kriteria1').val('<?= $input->kriteria1_reviewer2 ?>')
@@ -381,12 +396,21 @@ $(document).ready(function() {
                     $(`#nilai${nilai}-kriteria${kriteria}`).prop('checked', nilaiReviewer == nilai)
                 }
             }
+
+            // load file info review 2
+            $('#review-file-info .review-upload-date').text('<?= $input->review2_upload_date ?>')
+            $('#review-file-info .review-last-upload').text('<?= $input->review2_last_upload ?>')
+            $('#review-file-info .review-download-file').attr('href', '<?= base_url("draft/download_file/draftfile/{$input->review2_file}") ?>')
+            $('#review-file-info .review-download-file-link').attr('href', '<?= $input->reviewer2_file_link ?>')
+            $('#reviewer-file-link').val('<?= $input->reviewer2_file_link ?>')
         }
     })
 
+
+
     // submit progress review
-    $('#btn-submit-review').on('click', function() {
-        var $this = $(this);
+    $('#review-progress-wrapper').on('click', '#btn-submit-review', function() {
+        const $this = $(this);
         const draftId = $('[name=draft_id]').val();
 
         // catatan
@@ -458,76 +482,76 @@ $(document).ready(function() {
         });
     });
 
+    $('#review-progress-wrapper').on('submit', '#review-form', function(e) {
+        e.preventDefault()
 
-    $("#rev1form")
-        .submit(function(e) {
-            e.preventDefault();
-        })
-        .validate({
-                rules: {
-                    'review_file': {
-                        require_from_group: [1, ".naskah"],
-                        dokumen: "docx|doc|pdf",
-                        filesize50: 52428200
-                    },
-                    'reviewer_file_link': {
-                        curl: true,
-                        require_from_group: [1, ".naskah"]
-                    }
+        // validasi form
+        $(this).validate({
+            debug: true,
+            rules: {
+                'review-file': {
+                    require_from_group: [1, ".naskah"],
+                    dokumen: "docx|doc|pdf",
+                    filesize50: 52428200
                 },
-                errorElement: "span",
-                errorClass: "none",
-                validClass: "none",
-                errorPlacement: validateErrorPlacement,
-                submitHandler: function(form) {
-                    const $this = $('#btn-upload-review');
-                    $this.attr("disabled", "disabled").html(
-                        "<i class='fa fa-spinner fa-spin '></i> Uploading ");
-                    const draftId = $('[name=draft_id]').val();
-
-                    // form data
-                    const formData = new FormData(form);
-                    formData.append('progress', 'review')
-                    formData.append('identifier', 1)
-
-                    if (identifier == 'review1') {
-                        formData.append('review1_file', formData.get('review_file'))
-                        formData.append('reviewer1_file_link', formData.get('reviewer_file_link'))
-                    } else {
-                        formData.append('review2_file', formData.get('review_file'))
-                        formData.append('reviewer2_file_link', formData.get('reviewer_file_link'))
-                    }
-                    formData.delete('review_file')
-                    formData.delete('reviewer_file_link')
-
-
-
-
-                    $.ajax({
-                        url: "<?php echo base_url('draft/upload_progress/'); ?>" + draftId,
-                        type: "post",
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        cache: false,
-                        success: function(res) {
-                            console.log(res);
-                            show_toast(true, res.data);
-                            $resetform = $('#review_file');
-                            $resetform.val('');
-                            $resetform.next('label.custom-file-label').html('');
-                            $this.removeAttr("disabled").html("Upload");
-                            $('#review-upload-segment').load(' #review-upload-segment');
-                        },
-                        error: function(err) {
-                            console.log(err);
-                            show_toast(false, err.responseJSON.message);
-                        },
-                    });
-
+                'reviewer-file-link': {
+                    curl: true,
+                    require_from_group: [1, ".naskah"]
                 }
             },
-            validateSelect2()
-        );
+            errorElement: "span",
+            errorClass: "none",
+            validClass: "none",
+            errorPlacement: validateErrorPlacement,
+            submitHandler: function(form) {
+
+                const $this = $('#btn-upload-review');
+                $this.attr("disabled", "disabled").html('<i class="fa fa-spinner fa-spin "></i> Uploading ');
+                const draftId = $('[name=draft_id]').val();
+
+                // prepare form data
+                const formData = new FormData(form);
+                formData.append('progress', 'review')
+                if (identifier == 'review1') {
+                    formData.append('identifier', 1)
+                    formData.append('review1_file', formData.get('review-file'))
+                    formData.append('reviewer1_file_link', formData.get('reviewer-file-link'))
+                } else {
+                    formData.append('identifier', 2)
+                    formData.append('review2_file', formData.get('review-file'))
+                    formData.append('reviewer2_file_link', formData.get('reviewer-file-link'))
+                }
+                formData.delete('review-file')
+                formData.delete('reviewer-file-link')
+
+                // send data
+                $.ajax({
+                    url: "<?= base_url('draft/upload_progress/'); ?>" + draftId,
+                    type: "post",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function(res) {
+                        console.log(res);
+                        show_toast(true, res.data);
+                        $resetform = $('#review-file');
+                        $resetform.val('');
+                        $resetform.next('label.custom-file-label').html('');
+                        $this.removeAttr("disabled").html("Upload");
+
+                        location.reload()
+                    },
+                    error: function(err) {
+                        console.log(err);
+                        show_toast(false, err.responseJSON.message);
+                    },
+                });
+            }
+        });
+
+        // trigger submit handler
+        $(this).submit()
+    })
 })
 </script>
