@@ -34,6 +34,7 @@
                                 name="<?= "{$progress}_deadline" ?>"
                                 id="<?= "{$progress}_deadline" ?>"
                                 class="form-control flatpickr_modal d-none"
+                                value="<?= $input->{$progress . '_deadline'} ?>"
                             />
                         </div>
                     </div>
@@ -46,7 +47,7 @@
                     data-dismiss="modal"
                 >Close</button>
                 <button
-                    id="btn-submit-deadline"
+                    id="btn-submit-deadline-<?= $progress ?>"
                     class="btn btn-primary"
                     type="button"
                 >Submit</button>
@@ -56,54 +57,23 @@
 </div>
 <script>
 $(document).ready(function() {
-    // contoh progress = 'review','edit','layout','proofread','print'
-    var progress = "<?= $progress ?>"
+    // contoh progress = 'review1','review2,'edit','layout','proofread','print'
+    const progress = "<?= $progress == 'review1' || $progress == 'review2' ? 'review' : $progress ?>"
     // identifier khusus untuk progress review
-    // menandakan review1_deadline atau review2_deadline
-    // selain pada progress review maka = edit_deadline, layout_deadline
-    let identifier;
-
-    // menandakan review1 dan review2
-    $(`#${progress}-progress-wrapper`).on('click', `#btn-modal-deadline-${progress}`, function() {
-        const getIdentifier = $(this).data('identifier');
-        identifier = $(this).data('identifier') ? `${getIdentifier}_deadline` : `${progress}_deadline`
-
-        // ubah title modal deadline
-        if (getIdentifier == 'review1') {
-            $(`#modal-title-${progress}`).html('Deadline reviewer 1')
-        } else if (getIdentifier == 'review2') {
-            $(`#modal-title-${progress}`).html('Deadline reviewer 2')
-        } else {
-            $(`#modal-title-${progress}`).html(`Deadline ${progress}`)
-        }
-
-        // cari tanggal untuk repopulate form
-        let date;
-        if (progress == 'review' && getIdentifier == 'review1') {
-            date = '<?= $input->review1_deadline ?>'
-        } else if (progress == 'review' && getIdentifier == 'review2') {
-            date = '<?= $input->review2_deadline ?>'
-        } else {
-            date = null
-        }
-
-        // populate flatpickr dari data server
-        document.querySelector(`#${progress}_deadline`)._flatpickr.setDate(date);
-    })
+    // selain progress review, identifier == progress
+    const identifier = '<?= $progress ?>'
 
     // submit deadline
-    $(`#${progress}-progress-wrapper`).on('click', `#btn-submit-deadline`, function() {
+    $(`#${progress}-progress-wrapper`).on('click', `#btn-submit-deadline-${identifier}`, function() {
         const $this = $(this);
-        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
         const draft_id = $('[name=draft_id]').val();
-        window[identifier] = $(`[name=${progress}_deadline]`).val();
 
         $.ajax({
             type: "POST",
-            url: "<?php echo base_url('draft/api_update_draft/'); ?>" + draft_id,
-            // datatype: "JSON",
+            url: "<?= base_url('draft/api_update_draft/'); ?>" + draft_id,
             data: {
-                [identifier]: window[identifier],
+                [`${identifier}_deadline`]: $(`#${identifier}_deadline`).val(),
             },
             success: function(res) {
                 console.log(res);
@@ -114,16 +84,17 @@ $(document).ready(function() {
                 show_toast(false, err.responseJSON.message);
             },
             complete: function() {
-                $(`#${progress}-progress-wrapper`).load(` #${progress}-progress`,
-                    function() {
+                // trik mengatasi close modal, ketika file di load ulang
+                $(`#modal-deadline-${identifier}`).modal('hide');
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+
+                $(`#modal-deadline-${identifier}`).on('hidden.bs.modal', function(e) {
+                    $(`#${progress}-progress-wrapper`).load(` #${progress}-progress`, function() {
                         // reinitiate flatpickr modal after load
                         init_flatpickr_modal()
                     });
-
-                // trick to force close modal, when caller function reloaded
-                $('#modal-deadline-review').modal('hide');
-                $('body').removeClass('modal-open');
-                $('.modal-backdrop').remove();
+                })
             },
         });
     });

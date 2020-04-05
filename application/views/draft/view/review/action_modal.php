@@ -83,7 +83,7 @@
 var progress = "<?= $progress ?>"
 
 function send_action_data(accept) {
-    this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+    this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
     const draft_id = $('[name=draft_id]').val();
     const action_status = $('[name=action_status]').val();
 

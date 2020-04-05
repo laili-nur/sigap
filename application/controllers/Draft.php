@@ -279,25 +279,25 @@ class Draft extends Operator_Controller
 
         // pecah data nilai, csv jadi array
         // hitung bobot nilai
-        if ($draft->nilai_reviewer1) {
-            $draft->nilai_reviewer1       = explode(",", $draft->nilai_reviewer1);
-            $draft->nilai_total_reviewer1 = 35 * $draft->nilai_reviewer1[0] + 25 * $draft->nilai_reviewer1[1] + 10 * $draft->nilai_reviewer1[2] + 30 * $draft->nilai_reviewer1[3];
+        if ($draft->review1_score) {
+            $draft->review1_score       = explode(",", $draft->review1_score);
+            $draft->review1_total_score = 35 * $draft->review1_score[0] + 25 * $draft->review1_score[1] + 10 * $draft->review1_score[2] + 30 * $draft->review1_score[3];
         } else {
-            $draft->nilai_total_reviewer1 = '';
+            $draft->review1_total_score = '';
         }
-        if ($draft->nilai_reviewer2) {
-            $draft->nilai_reviewer2       = explode(",", $draft->nilai_reviewer2);
-            $draft->nilai_total_reviewer2 = 35 * $draft->nilai_reviewer2[0] + 25 * $draft->nilai_reviewer2[1] + 10 * $draft->nilai_reviewer2[2] + 30 * $draft->nilai_reviewer2[3];
+        if ($draft->review2_score) {
+            $draft->review2_score       = explode(",", $draft->review2_score);
+            $draft->review2_total_score = 35 * $draft->review2_score[0] + 25 * $draft->review2_score[1] + 10 * $draft->review2_score[2] + 30 * $draft->review2_score[3];
         } else {
-            $draft->nilai_total_reviewer2 = '';
+            $draft->review2_total_score = '';
         }
 
-        // if ($draft->nilai_reviewer1) {
-        //     $draft->nilai_total_reviewer1 = 35 * $draft->nilai_reviewer1[0] + 25 * $draft->nilai_reviewer1[1] + 10 * $draft->nilai_reviewer1[2] + 30 * $draft->nilai_reviewer1[3];
+        // if ($draft->review1_score) {
+        //     $draft->nilai_total_reviewer1 = 35 * $draft->review1_score[0] + 25 * $draft->review1_score[1] + 10 * $draft->review1_score[2] + 30 * $draft->review1_score[3];
         // } else {
         // }
-        // if ($draft->nilai_reviewer2) {
-        //     $draft->nilai_total_reviewer2 = 35 * $draft->nilai_reviewer2[0] + 25 * $draft->nilai_reviewer2[1] + 10 * $draft->nilai_reviewer2[2] + 30 * $draft->nilai_reviewer2[3];
+        // if ($draft->review2_score) {
+        //     $draft->nilai_total_reviewer2 = 35 * $draft->review2_score[0] + 25 * $draft->review2_score[1] + 10 * $draft->review2_score[2] + 30 * $draft->review2_score[3];
         // } else {
         //     $draft->nilai_total_reviewer2 = '';
         // }
@@ -364,11 +364,11 @@ class Draft extends Operator_Controller
         if ($input->progress == 'review') {
             $this->draft->edit_draft_date($draft_id, 'review_start_date');
             $this->draft->update_draft_status($draft_id, ['draft_status' => 4]);
-        } else if ($input->progress == 'edit') {
+        } elseif ($input->progress == 'edit') {
             $this->draft->edit_draft_date($draft_id, 'edit_start_date');
-        } else if ($input->progress == 'layout') {
+        } elseif ($input->progress == 'layout') {
             $this->draft->edit_draft_date($draft_id, 'layout_start_date');
-        } else if ($input->progress == 'proofread') {
+        } elseif ($input->progress == 'proofread') {
             $this->draft->edit_draft_date($draft_id, 'proofread_start_date');
         }
 
@@ -383,9 +383,6 @@ class Draft extends Operator_Controller
 
     public function upload_progress($draft_id)
     {
-        // return $this->send_json_output(true, $_FILES);
-        // die();
-
         if ($draft_id == null) {
             $message = 'ID draft kosong';
             return $this->send_json_output(false, $message);
@@ -407,15 +404,8 @@ class Draft extends Operator_Controller
             }
         }
 
-        $input          = (object) $this->input->post(null, true);
-
-
-        if ($input->identifier) {
-            $progress = "{$input->progress}{$input->identifier}";
-        } else {
-            $progress = $input->progress;
-        }
-
+        $input = (object) $this->input->post(null, true);
+        $progress = $input->progress;
 
         // tiap upload, update upload date
         $this->draft->edit_draft_date($draft_id, $progress . '_upload_date');
@@ -451,7 +441,7 @@ class Draft extends Operator_Controller
 
         // unset unnecesary data
         unset($input->progress);
-        unset($input->identifier);
+
         if ($this->draft->where('draft_id', $draft_id)->update($input)) {
             return $this->send_json_output(true, $this->lang->line('toast_edit_success'));
         } else {
@@ -601,12 +591,12 @@ class Draft extends Operator_Controller
         // gabungkan array menjadi csv
         // if ($this->level == 'reviewer') {
         //     if ($rev == 1) {
-        //         $input->nilai_reviewer1 = implode(",", $input->nilai_reviewer1);
+        //         $input->review1_score = implode(",", $input->review1_score);
         //     } elseif ($rev == 2) {
-        //         $input->nilai_reviewer2 = implode(",", $input->nilai_reviewer2);
+        //         $input->review2_score = implode(",", $input->review2_score);
         //     } else {
-        //         unset($input->nilai_reviewer1);
-        //         unset($input->nilai_reviewer2);
+        //         unset($input->review1_score);
+        //         unset($input->review2_score);
         //     }
         // }
 
@@ -648,7 +638,6 @@ class Draft extends Operator_Controller
         } else {
             $input = (object) $this->input->post(null, false);
             //$input->draft_file = $draft->draft_file; // Set draft file for preview.
-
         }
         if ($this->draft->validate()) {
             if (!empty($_FILES) && $_FILES['draft_file']['size'] > 0) {
@@ -755,7 +744,6 @@ class Draft extends Operator_Controller
 
     public function cetakUlang($id = '')
     {
-
         $draft = $this->draft->where('draft_id', $id)->get();
         if (!$draft) {
             $this->session->set_flashdata('warning', 'Draft data were not available');
