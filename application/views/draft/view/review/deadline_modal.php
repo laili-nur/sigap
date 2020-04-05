@@ -63,6 +63,17 @@ $(document).ready(function() {
     // selain progress review, identifier == progress
     const identifier = '<?= $progress ?>'
 
+    // reload segmen ketika modal diclose
+    $(`#${progress}-progress-wrapper`).on('shown.bs.modal', `#modal-deadline-${identifier}`, function() {
+        // reload ketika modal diclose
+        $(`#modal-deadline-${identifier}`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
+            $(`#${progress}-progress-wrapper`).load(' #review-progress', function() {
+                // reinitiate flatpickr modal after load
+                init_flatpickr_modal()
+            });
+        })
+    })
+
     // submit deadline
     $(`#${progress}-progress-wrapper`).on('click', `#btn-submit-deadline-${identifier}`, function() {
         const $this = $(this);
@@ -84,17 +95,11 @@ $(document).ready(function() {
                 show_toast(false, err.responseJSON.message);
             },
             complete: function() {
+                $this.removeAttr("disabled").html("Submit");
                 // trik mengatasi close modal, ketika file di load ulang
-                $(`#modal-deadline-${identifier}`).modal('hide');
-                $('body').removeClass('modal-open');
-                $('.modal-backdrop').remove();
-
-                $(`#modal-deadline-${identifier}`).on('hidden.bs.modal', function(e) {
-                    $(`#${progress}-progress-wrapper`).load(` #${progress}-progress`, function() {
-                        // reinitiate flatpickr modal after load
-                        init_flatpickr_modal()
-                    });
-                })
+                // $(`#modal-deadline-${identifier}`).modal('hide');
+                // $('body').removeClass('modal-open');
+                // $('.modal-backdrop').remove();
             },
         });
     });

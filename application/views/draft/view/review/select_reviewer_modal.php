@@ -44,54 +44,54 @@
                     <div id="reviewer-list">
                         <p>Daftar Reviewer</p>
                         <?php if ($reviewers) : ?>
-                        <?php $ii = 1; ?>
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered mb-0 nowrap">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">No</th>
-                                        <th scope="col">Nama</th>
-                                        <th scope="col">NIP</th>
-                                        <th scope="col">Fakultas</th>
-                                        <?php if ($level == 'superadmin' || $level == 'admin_penerbitan') : ?>
-                                        <th style="width:100px; min-width:100px;"> &nbsp; </th>
-                                        <?php endif; ?>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($reviewers as $reviewer) : ?>
-                                    <tr>
-                                        <td class="align-middle">
-                                            <?= $ii++; ?>
-                                        </td>
-                                        <td class="align-middle">
-                                            <?= $reviewer->reviewer_name; ?>
-                                        </td>
-                                        <td class="align-middle">
-                                            <?= $reviewer->reviewer_nip; ?>
-                                        </td>
-                                        <td class="align-middle">
-                                            <?= $reviewer->faculty_name; ?>
-                                        </td>
-                                        <?php if ($level == 'superadmin' || $level == 'admin_penerbitan') : ?>
-                                        <td class="align-middle text-right">
-                                            <button
-                                                title="Hapus"
-                                                class="btn btn-sm btn-danger btn-delete-reviewer"
-                                                data="<?= $reviewer->draft_reviewer_id; ?>"
-                                            >
-                                                <i class="fa fa-trash-alt"></i>
-                                                <span class="sr-only">Delete</span>
-                                            </button>
-                                        </td>
-                                        <?php endif; ?>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
+                            <?php $ii = 1; ?>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered mb-0 nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">No</th>
+                                            <th scope="col">Nama</th>
+                                            <th scope="col">NIP</th>
+                                            <th scope="col">Fakultas</th>
+                                            <?php if ($level == 'superadmin' || $level == 'admin_penerbitan') : ?>
+                                                <th style="width:100px; min-width:100px;"> &nbsp; </th>
+                                            <?php endif; ?>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($reviewers as $reviewer) : ?>
+                                            <tr>
+                                                <td class="align-middle">
+                                                    <?= $ii++; ?>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <?= $reviewer->reviewer_name; ?>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <?= $reviewer->reviewer_nip; ?>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <?= $reviewer->faculty_name; ?>
+                                                </td>
+                                                <?php if ($level == 'superadmin' || $level == 'admin_penerbitan') : ?>
+                                                    <td class="align-middle text-right">
+                                                        <button
+                                                            title="Hapus"
+                                                            class="btn btn-sm btn-danger btn-delete-reviewer"
+                                                            data="<?= $reviewer->draft_reviewer_id; ?>"
+                                                        >
+                                                            <i class="fa fa-trash-alt"></i>
+                                                            <span class="sr-only">Delete</span>
+                                                        </button>
+                                                    </td>
+                                                <?php endif; ?>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         <?php else : ?>
-                        <p class="text-center text-muted my-3">Reviewer belum dipilih</p>
+                            <p class="text-center text-muted my-3">Reviewer belum dipilih</p>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -114,6 +114,16 @@ $(document).ready(function() {
 
     // get data ketika buka modal pilih penulis
     $('#review-progress-wrapper').on('click', '#btn-modal-select-reviewer', function() {
+
+        // reload segmen ketika modal diclose
+        $('#modal-select-reviewer').off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
+            // location.reload()
+            $('#review-progress-wrapper').load(' #review-progress', function() {
+                // reinitiate flatpickr modal after load
+                init_flatpickr_modal()
+            });
+        })
+
         //  open modal
         $('#modal-select-reviewer').modal('toggle')
 
@@ -138,7 +148,7 @@ $(document).ready(function() {
                 $('[name=reviewer]').val(null).trigger('change');
 
                 //  event ketika data di select
-                $('#reviewer-id').on('select2:select', function(e) {
+                $('#reviewer-id').off('select2:select').on('select2:select', function(e) {
                     var data = e.params.data;
                     console.log(data);
                 });

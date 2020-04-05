@@ -187,28 +187,28 @@ $is_review_started      = format_datetime($input->review_start_date);
             <?php if (is_null($reviewer_order) || $reviewer_order == 0) : ?>
                 <button
                     type="button"
-                    class="btn-modal-review1 btn <?= ($input->review1_notes != '' || $input->review1_notes_author != '') ? 'btn-success' : 'btn-outline-success'; ?> <?= !$is_review_started ? 'btn-disabled' : ''; ?>"
+                    class="btn-modal-review1 btn <?= $input->review1_flag ? 'btn-success' : 'btn-outline-success'; ?> <?= !$is_review_started ? 'btn-disabled' : ''; ?>"
                     data-toggle="modal"
                     data-target="#modal-review1"
                     <?= !$is_review_started ? 'disabled' : ''; ?>
-                    <?= ($level == 'reviewer' and $review1_remaining_time <= 0 and $input->review1_flag == '') ? 'disabled' : ''; ?>
-                >Review #1
-                    <?= ($input->review1_notes != '' || $input->review1_notes_author != '') ? '<i class="fa fa-check"></i>' : ''; ?></button>
-                <?= ($level == 'reviewer' and $review1_remaining_time <= 0 and $input->review1_flag == '') ? '<span class="font-weight-bold text-danger" data-toggle="tooltip" data-placement="bottom" title="Hubungi admin untuk membuka draft ini"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>' : ''; ?>
+                    <?= ($level == 'reviewer' && $review1_remaining_time <= 0 && $input->review1_flag == '') ? 'disabled' : ''; ?>
+                >
+                    <span> Review #1 </span>
+                </button>
             <?php endif; ?>
 
             <!-- button tanggapan review 2 -->
             <?php if (is_null($reviewer_order) || $reviewer_order == 1) : ?>
                 <button
                     type="button"
-                    class="btn-modal-review2 btn <?= ($input->review2_notes != '' || $input->review2_notes_author != '') ? 'btn-success' : 'btn-outline-success'; ?> <?= !$is_review_started ? 'btn-disabled' : ''; ?>"
+                    class="btn-modal-review2 btn <?= $input->review2_flag ? 'btn-success' : 'btn-outline-success'; ?> <?= !$is_review_started ? 'btn-disabled' : ''; ?>"
                     data-toggle="modal"
                     data-target="#modal-review2"
                     <?= !$is_review_started ? 'disabled' : ''; ?>
                     <?= ($level == 'reviewer' and $review2_remaining_time <= 0 and $input->review2_flag == '') ? 'disabled' : ''; ?>
-                >Review #2
-                    <?= ($input->review2_notes != '' || $input->review2_notes_author != '') ? '<i class="fa fa-check"></i>' : ''; ?></button>
-                <?= ($level == 'reviewer' and $review2_remaining_time <= 0 and $input->review2_flag == '') ? '<span class="font-weight-bold text-danger" data-toggle="tooltip" data-placement="bottom" title="Hubungi admin untuk membuka draft ini"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>' : ''; ?>
+                >
+                    <span>Review #2 </span>
+                </button>
             <?php endif; ?>
 
             <?php

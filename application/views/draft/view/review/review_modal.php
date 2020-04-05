@@ -334,6 +334,17 @@ $(document).ready(function() {
 
     const draftId = $('[name=draft_id]').val();
 
+    // reload segmen ketika modal diclose
+    $('#review-progress-wrapper').on('shown.bs.modal', `#modal-${identifier}`, function() {
+        // reload ketika modal diclose
+        $(`#modal-${identifier}`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
+            $('#review-progress-wrapper').load(' #review-progress', function() {
+                // reinitiate flatpickr modal after load
+                init_flatpickr_modal()
+            });
+        })
+    })
+
     // submit progress review
     $('#review-progress-wrapper').on('click', `#btn-submit-${identifier}`, function() {
         const $this = $(this);
