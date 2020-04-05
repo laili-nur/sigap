@@ -30,8 +30,7 @@ class Draft_model extends MY_Model
             ],
             [
                 'field' => 'draft_file_link',
-                'label' => $this->lang->line('form_draft_file_link')
-                ,
+                'label' => $this->lang->line('form_draft_file_link'),
                 'rules' => 'trim|callback_valid_url',
             ],
             // [
@@ -81,7 +80,7 @@ class Draft_model extends MY_Model
             //     'rules' => 'trim',
             // ],
             // [
-            //     'field' => 'reviewer1_file_link',
+            //     'field' => 'review1_file_link',
             //     'label' => 'Reviewer1 File Link',
             //     'rules' => 'trim',
             // ],
@@ -111,7 +110,7 @@ class Draft_model extends MY_Model
             //     'rules' => 'trim',
             // ],
             // [
-            //     'field' => 'reviewer2_file_link',
+            //     'field' => 'review2_file_link',
             //     'label' => 'Reviewer2 File Link',
             //     'rules' => 'trim',
             // ],
@@ -304,16 +303,16 @@ class Draft_model extends MY_Model
             'review_start_date'      => null,
             'review_end_date'        => null,
             'review1_file'           => null,
-            'reviewer1_file_link'    => null,
+            'review1_file_link'    => null,
             'review1_upload_date'    => null,
-            'review1_last_upload'    => null,
+            'review1_upload_by'    => null,
             'review1_notes'          => null,
             'review1_notes_author'   => null,
             'review1_deadline'       => null,
             'review2_file'           => null,
-            'reviewer2_file_link'    => null,
+            'review2_file_link'    => null,
             'review2_upload_date'    => null,
-            'review2_last_upload'    => null,
+            'review2_upload_by'    => null,
             'review2_notes'          => null,
             'review2_notes_author'   => null,
             'review2_deadline'       => null,
@@ -460,7 +459,7 @@ class Draft_model extends MY_Model
             ->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')
             ->where('username', $username)
             ->when('progress', $filters['progress'])
-        // ->when('status', $filters['status'])
+            // ->when('status', $filters['status'])
             ->order_by('draft_status')
             ->order_by('draft_title')
             ->group_by('draft_id')
@@ -473,7 +472,7 @@ class Draft_model extends MY_Model
             ->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')
             ->where('username', $username)
             ->when('progress', $filters['progress'])
-        // ->when('status', $filters['status'])
+            // ->when('status', $filters['status'])
             ->group_by('draft_id')
             ->count();
 
@@ -711,7 +710,6 @@ class Draft_model extends MY_Model
                 unlink("./draftfile/$draftFile");
             }
         }
-
     }
 
     public function deleteProgressCover($draftFile)
@@ -721,7 +719,6 @@ class Draft_model extends MY_Model
                 unlink("./coverfile/$draftFile");
             }
         }
-
     }
 
     private function _get_draft_authors_and_status(array $drafts)
@@ -732,5 +729,4 @@ class Draft_model extends MY_Model
 
         return $drafts;
     }
-
 }

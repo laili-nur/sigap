@@ -16,6 +16,14 @@
                     class="modal-title"
                     id="modal-title-<?= $progress ?>"
                 >Deadline <?= $progress ?></h5>
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <fieldset>
@@ -33,15 +41,15 @@
             </div>
             <div class="modal-footer">
                 <button
-                    id="btn-submit-deadline"
-                    class="btn btn-primary"
-                    type="button"
-                >Submit</button>
-                <button
                     type="button"
                     class="btn btn-light"
                     data-dismiss="modal"
                 >Close</button>
+                <button
+                    id="btn-submit-deadline"
+                    class="btn btn-primary"
+                    type="button"
+                >Submit</button>
             </div>
         </div>
     </div>

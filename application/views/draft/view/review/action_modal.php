@@ -14,6 +14,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Aksi <?= $progress ?></h5>
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <fieldset>
@@ -51,20 +59,20 @@
             </div>
             <div class="modal-footer">
                 <button
-                    id="btn-<?= $progress ?>-accept"
-                    class="btn btn-success"
                     type="button"
-                >Setuju</button>
+                    class="btn btn-light"
+                    data-dismiss="modal"
+                >Close</button>
                 <button
                     id="btn-<?= $progress ?>-decline"
                     class="btn btn-danger"
                     type="button"
                 >Tolak</button>
                 <button
+                    id="btn-<?= $progress ?>-accept"
+                    class="btn btn-success"
                     type="button"
-                    class="btn btn-light"
-                    data-dismiss="modal"
-                >Close</button>
+                >Setuju</button>
             </div>
         </div>
     </div>

@@ -381,8 +381,8 @@ $(document).ready(function() {
 
             // load file info review 1
             $('#review-file-info .review-upload-date').text('<?= $input->review1_upload_date ?>')
-            $('#review-file-info .review-last-upload').text('<?= $input->review1_last_upload ?>')
-            $('#reviewer-file-link').val('<?= $input->reviewer1_file_link ?>')
+            $('#review-file-info .review-last-upload').text('<?= $input->review1_upload_by ?>')
+            $('#reviewer-file-link').val('<?= $input->review1_file_link ?>')
 
             if ('<?= $input->review1_file ?>') {
                 $('#review-file-info .review-download-file').attr('href', '<?= base_url("draft/download_file/draftfile/{$input->review1_file}") ?>')
@@ -397,8 +397,8 @@ $(document).ready(function() {
                 $('#review-file-info .review-delete-file').hide()
             }
 
-            if ('<?= $input->reviewer1_file_link ?>') {
-                $('#review-file-info .review-download-file-link').attr('href', '<?= $input->reviewer1_file_link ?>')
+            if ('<?= $input->review1_file_link ?>') {
+                $('#review-file-info .review-download-file-link').attr('href', '<?= $input->review1_file_link ?>')
                 $('#review-file-info .review-download-file-link').show()
             } else {
                 $('#review-file-info .review-download-file-link').hide()
@@ -455,8 +455,8 @@ $(document).ready(function() {
 
             // load file info review 1
             $('#review-file-info .review-upload-date').text('<?= $input->review2_upload_date ?>')
-            $('#review-file-info .review-last-upload').text('<?= $input->review2_last_upload ?>')
-            $('#reviewer-file-link').val('<?= $input->reviewer2_file_link ?>')
+            $('#review-file-info .review-last-upload').text('<?= $input->review2_upload_by ?>')
+            $('#reviewer-file-link').val('<?= $input->review2_file_link ?>')
 
             if ('<?= $input->review2_file ?>') {
                 $('#review-file-info .review-download-file').attr('href', '<?= base_url("draft/download_file/draftfile/{$input->review2_file}") ?>')
@@ -471,8 +471,8 @@ $(document).ready(function() {
                 $('#review-file-info .review-delete-file').hide()
             }
 
-            if ('<?= $input->reviewer2_file_link ?>') {
-                $('#review-file-info .review-download-file-link').attr('href', '<?= $input->reviewer2_file_link ?>')
+            if ('<?= $input->review2_file_link ?>') {
+                $('#review-file-info .review-download-file-link').attr('href', '<?= $input->review2_file_link ?>')
                 $('#review-file-info .review-download-file-link').show()
             } else {
                 $('#review-file-info .review-download-file-link').hide()
@@ -583,11 +583,11 @@ $(document).ready(function() {
                 if (identifier == 'review1') {
                     formData.append('identifier', 1)
                     formData.append('review1_file', formData.get('review-file'))
-                    formData.append('reviewer1_file_link', formData.get('reviewer-file-link'))
+                    formData.append('review1_file_link', formData.get('reviewer-file-link'))
                 } else {
                     formData.append('identifier', 2)
                     formData.append('review2_file', formData.get('review-file'))
-                    formData.append('reviewer2_file_link', formData.get('reviewer-file-link'))
+                    formData.append('review2_file_link', formData.get('reviewer-file-link'))
                 }
                 formData.delete('review-file')
                 formData.delete('reviewer-file-link')

@@ -419,8 +419,8 @@ class Draft extends Operator_Controller
 
         // tiap upload, update upload date
         $this->draft->edit_draft_date($draft_id, $progress . '_upload_date');
-        $last_upload_field         = $progress . '_last_upload';
-        $input->$last_upload_field = $this->username;
+        $upload_by_field         = $progress . '_upload_by';
+        $input->$upload_by_field = $this->username;
         $column = "{$progress}_file";
 
         if (!empty($_FILES) && $file_name = $_FILES[$column]['name']) {
@@ -498,7 +498,7 @@ class Draft extends Operator_Controller
         //     }
         // }
         $draft->{$input->type . '_upload_date'} = null;
-        $draft->{$input->type . '_last_upload'} = '';
+        $draft->{$input->type . '_upload_by'} = '';
         $draft->{$input->type . '_file'}        = '';
         // if ($input->type == 'edit') {
         //     $draft->editor_file_link = '';
