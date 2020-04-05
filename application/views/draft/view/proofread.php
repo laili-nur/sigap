@@ -239,7 +239,7 @@
         rules: {
           proofread_file: {
             require_from_group: [1, ".naskah"],
-            dokumen: "docx|doc|pdf",
+            extension: "docx|doc|pdf",
             filesize50: 52428200
           },
           proofread_file_link: {

@@ -29,258 +29,293 @@ $all_criteria = [
     aria-labelledby="modal-review1"
     aria-hidden="true"
 >
-
     <div
         class="modal-dialog modal-lg modal-dialog-overflow"
         role="document"
     >
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> Progress Review 1</h5>
-            </div>
-            <div class="modal-body">
-
-                <div id="review-upload-segment">
-                    <?= form_open_multipart('', 'id="review-form"'); ?>
-                    <p class="font-weight-bold">NASKAH</p>
-                    <?php if ($level == 'reviewer' || ($level == 'author' && $author_order == 1) || is_admin()) : ?>
-                    <div class="alert alert-info">Upload file naskah atau sertakan link naskah. Kosongkan jika file
-                        naskah
-                        hard copy.</div>
-                    <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : ''; ?>
-                    <div class="form-group">
-                        <label for="review-file">File Naskah</label>
-                        <div class="custom-file">
-                            <?= form_upload('review-file', '', 'class="custom-file-input naskah" id="review-file"'); ?>
-                            <label
-                                class="custom-file-label"
-                                for="review-file"
-                            >Pilih file</label>
-                        </div>
-                        <small class="form-text text-muted">Tipe file upload bertype : docx, doc, dan
-                            pdf.</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="reviewer-file-link">Link Naskah</label>
-                        <div>
-                            <?= form_input('reviewer-file-link', $input->reviewer1_file_link, 'class="form-control naskah" id="reviewer-file-link"'); ?>
-                        </div>
-                        <?= form_error('reviewer-file-link'); ?>
-                    </div>
-                    <div class="form-group">
-                        <button
-                            id="btn-upload-review"
-                            class="btn btn-primary"
-                            type="submit"
-                        ><i class="fa fa-upload"></i> Upload</button>
-                    </div>
-                    <?= form_close(); ?>
-                    <?php endif; ?>
-
-
-                    <div id="review-file-info">
-                        <p>
-                            <p class="review-upload-date"></p>
-                            <p class="review-last-upload"></p>
-                        </p>
-                        <a
-                            data-toggle="tooltip"
-                            data-placement="right"
-                            title=""
-                            data-original-title=""
-                            href=""
-                            class="btn btn-success review-download-file"
-                        ><i class="fa fa-download"></i> Download</a>
-                        <a
-                            data-toggle="tooltip"
-                            data-placement="right"
-                            title=""
-                            data-original-title=""
-                            href=""
-                            class="btn btn-primary review-download-file-link"
-                        ><i class="fa fa-external-link-alt"></i> External file</a>
-                    </div>
-                </div>
-
-
-
-
-                <?= form_open('', 'id="formreview1_krit" novalidate=""'); ?>
-                <?php if ($level != 'author') : ?>
-                <hr class="my-3">
-                <p class="font-weight-bold">REVIEW</p>
-                <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : ''; ?>
-                <div>
-                    <?php foreach ($all_criteria as $criteria) : ?>
-                    <div class="alert alert-info">
-                        <label class="font-weight-bold"><?= $criteria['title'] ?></label>
-                        <textarea
-                            type="textarea"
-                            name="<?= "kriteria{$criteria['number']}" ?>"
-                            id="<?= "kriteria{$criteria['number']}" ?>"
-                            class="form-control summernote-basic"
-                            rows="6"
-                            <?php ($level == 'reviewer' || is_admin()) ? '' : 'disabled'  ?>
-                        ></textarea>
-
-                        <p class="m-0 p-0">Nilai</p>
-                        <?php for ($j = 1; $j <= 5; $j++) :  ?>
-                        <div class="custom-control custom-control-inline custom-radio">
-                            <input
-                                id="<?= "nilai{$j}-kriteria{$criteria['number']}" ?>"
-                                name="<?= "nilai-kriteria{$criteria['number']}" ?>"
-                                value="<?= $j ?>"
-                                type="radio"
-                                <?php ($level == 'reviewer' || is_admin()) ? '' : 'disabled'  ?>
-                                class="custom-control-input"
-                            />
-                            <label
-                                class="custom-control-label"
-                                for="<?= "nilai{$j}-kriteria{$criteria['number']}" ?>"
-                            ><?= $j ?></label>
-                        </div>
-                        <?php endfor ?>
-                    </div>
-                    <?php endforeach ?>
-
-                    <div id="nilai-wrapper">
-                        <div class="alert alert-success">
-                            <p class="badge badge-success">Naskah Lolos Review</p>
-                            <p class="mb-0">
-                                <span>Nilai total :</span>
-                                <strong class="total-nilai">0</strong>
-                            </p>
-                            <p class="mb-0">Passing Grade = 400</p>
-                        </div>
-                        <div class="alert alert-danger">
-                            <p class="badge badge-danger">Naskah Tidak Lolos Review</p>
-                            <p class="mb-0">
-                                <span>Nilai total :</span>
-                                <strong class="total-nilai">0</strong>
-                            </p>
-                            <p class="mb-0">Passing Grade = 400</p>
-                        </div>
-                    </div>
-                    <?php endif; ?>
-
-
-                    <fieldset>
-                        <!-- CATATAN REVIEWER UNTUK STAFF/ADMIN -->
-                        <?php if ($level != 'author') : ?>
-                        <hr class="my-3">
-                        <div class="form-group">
-                            <label
-                                for="reviewer-review-notes"
-                                class="font-weight-bold"
-                            >Catatan Reviewer untuk Admin</label>
-                            <?php
-                                if (!is_admin() && $level != 'reviewer') {
-                                    echo '<div class="font-italic" id="reviewer-review-notes"></div>';
-                                } else {
-                                    echo form_textarea([
-                                        'name'  => 'reviewer-review-notes',
-                                        'class' => 'form-control summernote-basic',
-                                        'id'    => 'reviewer-review-notes',
-                                        'rows'  => '6',
-                                    ]);
-                                }
-                                ?>
-                        </div>
-                        <?php endif; ?>
-
-
-                        <!-- CATATAN ADMIN UNTUK AUTHOR -->
-                        <?php if (is_admin() || $level == 'author') : ?>
-                        <hr class="my-3">
-                        <div class="form-group">
-                            <label
-                                for="admin-review-notes"
-                                class="font-weight-bold"
-                            >Catatan Admin untuk Penulis</label>
-                            <?php
-                                if (!is_admin() && $level != 'reviewer') {
-                                    echo '<div class="font-italic" id="admin-review-notes"></div>';
-                                } else {
-                                    echo form_textarea([
-                                        'name'  => 'admin-review-notes',
-                                        'class' => 'form-control summernote-basic',
-                                        'id'    => 'admin-review-notes',
-                                        'rows'  => '6',
-                                    ]);
-                                }
-                                ?>
-                        </div>
-                        <?php endif; ?>
-
-
-                        <hr class="my-3">
-                        <div class="form-group">
-                            <label
-                                for="author-review-notes"
-                                class="font-weight-bold"
-                            >Catatan Penulis</label>
-                            <?php
-                            if (!is_admin() && ($level != 'author' || $author_order != 1)) {
-                                echo '<div class="font-italic" id="author-review-notes"></div>';
-                            } else {
-                                echo form_textarea([
-                                    'name'  => 'author-review-notes',
-                                    'class' => 'form-control summernote-basic',
-                                    'id'    => 'author-review-notes',
-                                    'rows'  => '6',
-                                ]);
-                            }
-                            ?>
-                        </div>
-                    </fieldset>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <?php if (is_admin() || $level == 'reviewer') : ?>
-                <div class="card-footer-content text-muted p-0 m-0">
-                    <div class="mb-1 font-weight-bold">Rekomendasi</div>
-                    <div class="custom-control custom-control-inline custom-radio">
-                        <input
-                            type="radio"
-                            name="review-flag"
-                            id="review-flag-accept"
-                            class="custom-control-input"
-                            value="y"
-                        />
-                        <label
-                            class="custom-control-label"
-                            for="review-flag-accept"
-                        >Setuju</label>
-                    </div>
-
-                    <div class="custom-control custom-control-inline custom-radio">
-                        <input
-                            type="radio"
-                            name="review-flag"
-                            id="review-flag-decline"
-                            class="custom-control-input"
-                            value="n"
-                        />
-                        <label
-                            class="custom-control-label"
-                            for="review-flag-decline"
-                        >Tolak</label>
-                    </div>
-                </div>
-                <?php endif; ?>
-                <button
-                    id="btn-submit-review"
-                    class="btn btn-primary ml-auto"
-                    type="button"
-                >Submit</button>
+                <h5 class="modal-title"> //populated from jquery// </h5>
                 <button
                     type="button"
-                    class="btn btn-light"
+                    class="close"
                     data-dismiss="modal"
-                >Close</button>
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <?= form_close(); ?>
+            <ul
+                class="nav nav-tabs"
+                id="review-tab-wrapper"
+                role="tablist"
+            >
+                <li class="nav-item">
+                    <a
+                        class="nav-link active"
+                        id="review-file-tab"
+                        data-toggle="tab"
+                        href="#review-file-tab-content"
+                        role="tab"
+                        aria-controls="review-file-tab-content"
+                        aria-selected="true"
+                    >File</a>
+                </li>
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        id="review-comment-tab"
+                        data-toggle="tab"
+                        href="#review-comment-tab-content"
+                        role="tab"
+                        aria-controls="review-comment-tab-content"
+                        aria-selected="false"
+                    >Tanggapan</a>
+                </li>
+            </ul>
+            <div class="modal-body py-3">
+                <div
+                    class="tab-content"
+                    id="review-tab-content-wrapper"
+                >
+                    <div
+                        class="tab-pane fade show active"
+                        id="review-file-tab-content"
+                        role="tabpanel"
+                        aria-labelledby="review-file-tab"
+                    >
+                        <div
+                            id="review-file-info"
+                            class="alert alert-info"
+                        >
+                            <p class="alert-heading font-weight-bold">File Tersimpan</p>
+                            <a class="btn btn-success review-download-file"><i class="fa fa-download"></i> Download</a>
+                            <button
+                                type="button"
+                                class="btn btn-danger review-delete-file"
+                            ><i class="fa fa-trash"></i> Delete</button>
+                            <a class="btn btn-primary review-download-file-link"><i class="fa fa-external-link-alt"></i> External file</a>
+                            <p>
+                                <div>Terakhir diubah: <span class="review-upload-date"></span></div>
+                                <div>Oleh: <span class="review-last-upload"></span></div>
+                            </p>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <?php if ($level == 'reviewer' || ($level == 'author' && $author_order == 1) || is_admin()) : ?>
+                        <form
+                            id="review-form"
+                            method="post"
+                            enctype="multipart/form-data"
+                        >
+                            <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : ''; ?>
+                            <div class="form-group">
+                                <label for="review-file">Upload File Naskah</label>
+                                <div class="custom-file">
+                                    <?= form_upload('review-file', '', 'class="custom-file-input document" id="review-file"'); ?>
+                                    <label
+                                        class="custom-file-label"
+                                        for="review-file"
+                                    >Pilih file</label>
+                                </div>
+                                <small class="form-text text-muted">Tipe file upload bertype : <?= get_allowed_file_types('draft_file')['to_text']; ?></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="reviewer-file-link">Link Naskah</label>
+                                <div>
+                                    <?= form_input('reviewer-file-link', '', 'class="form-control document" id="reviewer-file-link"'); ?>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button
+                                    id="btn-upload-review"
+                                    class="btn btn-primary"
+                                    type="submit"
+                                > Update</button>
+                            </div>
+                        </form>
+                        <?php endif; ?>
+                    </div>
+                    <div
+                        class="tab-pane fade"
+                        id="review-comment-tab-content"
+                        role="tabpanel"
+                        aria-labelledby="review-comment-tab"
+                    >
+                        <div id="kriteria-reviewer">
+                            <?php if ($level != 'author') : ?>
+                            <p class="font-weight-bold">KONTEN REVIEW</p>
+                            <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : ''; ?>
+                            <?php foreach ($all_criteria as $criteria) : ?>
+                            <div class="alert alert-info">
+                                <label class="font-weight-bold"><?= $criteria['title'] ?></label>
+                                <textarea
+                                    type="textarea"
+                                    name="<?= "kriteria{$criteria['number']}" ?>"
+                                    id="<?= "kriteria{$criteria['number']}" ?>"
+                                    class="form-control summernote-basic"
+                                    rows="6"
+                                    <?php ($level == 'reviewer' || is_admin()) ? '' : 'disabled'  ?>
+                                ></textarea>
+
+                                <hr class="my-3">
+
+                                <p class="m-0 p-0">Nilai</p>
+                                <?php for ($j = 1; $j <= 5; $j++) :  ?>
+                                <div class="custom-control custom-control-inline custom-radio">
+                                    <input
+                                        id="<?= "nilai{$j}-kriteria{$criteria['number']}" ?>"
+                                        name="<?= "nilai-kriteria{$criteria['number']}" ?>"
+                                        value="<?= $j ?>"
+                                        type="radio"
+                                        <?php ($level == 'reviewer' || is_admin()) ? '' : 'disabled'  ?>
+                                        class="custom-control-input"
+                                    />
+                                    <label
+                                        class="custom-control-label"
+                                        for="<?= "nilai{$j}-kriteria{$criteria['number']}" ?>"
+                                    ><?= $j ?></label>
+                                </div>
+                                <?php endfor ?>
+                            </div>
+                            <?php endforeach ?>
+
+                            <div id="nilai-wrapper">
+                                <div class="alert alert-success">
+                                    <p class="badge badge-success">Naskah Lolos Review</p>
+                                    <p class="mb-0">
+                                        <span>Nilai total :</span>
+                                        <strong class="total-nilai">0</strong>
+                                    </p>
+                                    <p class="mb-0">Passing Grade = 400</p>
+                                </div>
+                                <div class="alert alert-danger">
+                                    <p class="badge badge-danger">Naskah Tidak Lolos Review</p>
+                                    <p class="mb-0">
+                                        <span>Nilai total :</span>
+                                        <strong class="total-nilai">0</strong>
+                                    </p>
+                                    <p class="mb-0">Passing Grade = 400</p>
+                                </div>
+                            </div>
+                            <?php endif; ?>
+
+
+                            <fieldset>
+                                <!-- CATATAN REVIEWER UNTUK STAFF/ADMIN -->
+                                <?php if ($level != 'author') : ?>
+                                <hr class="my-3">
+                                <div class="form-group">
+                                    <label
+                                        for="reviewer-review-notes"
+                                        class="font-weight-bold"
+                                    >Catatan Reviewer untuk Admin</label>
+                                    <?php
+                                        if (!is_admin() && $level != 'reviewer') {
+                                            echo '<div class="font-italic" id="reviewer-review-notes"></div>';
+                                        } else {
+                                            echo form_textarea([
+                                                'name'  => 'reviewer-review-notes',
+                                                'class' => 'form-control summernote-basic',
+                                                'id'    => 'reviewer-review-notes',
+                                                'rows'  => '6',
+                                            ]);
+                                        }
+                                        ?>
+                                </div>
+                                <?php endif; ?>
+
+
+                                <!-- CATATAN ADMIN UNTUK AUTHOR -->
+                                <?php if (is_admin() || $level == 'author') : ?>
+                                <hr class="my-3">
+                                <div class="form-group">
+                                    <label
+                                        for="admin-review-notes"
+                                        class="font-weight-bold"
+                                    >Catatan Admin untuk Penulis</label>
+                                    <?php
+                                        if (!is_admin() && $level != 'reviewer') {
+                                            echo '<div class="font-italic" id="admin-review-notes"></div>';
+                                        } else {
+                                            echo form_textarea([
+                                                'name'  => 'admin-review-notes',
+                                                'class' => 'form-control summernote-basic',
+                                                'id'    => 'admin-review-notes',
+                                                'rows'  => '6',
+                                            ]);
+                                        }
+                                        ?>
+                                </div>
+                                <?php endif; ?>
+
+
+                                <hr class="my-3">
+                                <div class="form-group">
+                                    <label
+                                        for="author-review-notes"
+                                        class="font-weight-bold"
+                                    >Catatan Penulis</label>
+                                    <?php
+                                    if (!is_admin() && ($level != 'author' || $author_order != 1)) {
+                                        echo '<div class="font-italic" id="author-review-notes"></div>';
+                                    } else {
+                                        echo form_textarea([
+                                            'name'  => 'author-review-notes',
+                                            'class' => 'form-control summernote-basic',
+                                            'id'    => 'author-review-notes',
+                                            'rows'  => '6',
+                                        ]);
+                                    }
+                                    ?>
+                                </div>
+                            </fieldset>
+
+                            <?php if (is_admin() || $level == 'reviewer') : ?>
+                            <div class="card-footer-content text-muted p-0 m-0">
+                                <div class="mb-1 font-weight-bold">Rekomendasi</div>
+                                <div class="custom-control custom-control-inline custom-radio">
+                                    <input
+                                        type="radio"
+                                        name="review-flag"
+                                        id="review-flag-accept"
+                                        class="custom-control-input"
+                                        value="y"
+                                    />
+                                    <label
+                                        class="custom-control-label"
+                                        for="review-flag-accept"
+                                    >Setuju</label>
+                                </div>
+
+                                <div class="custom-control custom-control-inline custom-radio">
+                                    <input
+                                        type="radio"
+                                        name="review-flag"
+                                        id="review-flag-decline"
+                                        class="custom-control-input"
+                                        value="n"
+                                    />
+                                    <label
+                                        class="custom-control-label"
+                                        for="review-flag-decline"
+                                    >Tolak</label>
+                                </div>
+                            </div>
+                            <?php endif; ?>
+
+                            <div class="d-flex justify-content-end">
+                                <button
+                                    id="btn-submit-review"
+                                    class="btn btn-primary ml-auto"
+                                    type="button"
+                                >Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -288,6 +323,7 @@ $all_criteria = [
 <script>
 $(document).ready(function() {
     let identifier;
+    const draftId = $('[name=draft_id]').val();
 
     // populate data review
     $('#review-progress-wrapper').on('click', '.btn-modal-review', function() {
@@ -297,6 +333,7 @@ $(document).ready(function() {
 
         // jika buka modal review 1
         if (identifier == 'review1') {
+            $('#modal-review .modal-title').html('Progress Review 1')
             // populate catatan kriteria
             $('#kriteria1').val('<?= $input->kriteria1_reviewer1 ?>')
             $('#kriteria2').val('<?= $input->kriteria2_reviewer1 ?>')
@@ -345,13 +382,32 @@ $(document).ready(function() {
             // load file info review 1
             $('#review-file-info .review-upload-date').text('<?= $input->review1_upload_date ?>')
             $('#review-file-info .review-last-upload').text('<?= $input->review1_last_upload ?>')
-            $('#review-file-info .review-download-file').attr('href', '<?= base_url("draft/download_file/draftfile/{$input->review1_file}") ?>')
-            $('#review-file-info .review-download-file-link').attr('href', '<?= $input->reviewer1_file_link ?>')
             $('#reviewer-file-link').val('<?= $input->reviewer1_file_link ?>')
+
+            if ('<?= $input->review1_file ?>') {
+                $('#review-file-info .review-download-file').attr('href', '<?= base_url("draft/download_file/draftfile/{$input->review1_file}") ?>')
+                $('#review-file-info .review-download-file').show()
+            } else {
+                $('#review-file-info .review-download-file').hide()
+            }
+
+            if ('<?= $input->review1_file ?>') {
+                $('#review-file-info .review-delete-file').show()
+            } else {
+                $('#review-file-info .review-delete-file').hide()
+            }
+
+            if ('<?= $input->reviewer1_file_link ?>') {
+                $('#review-file-info .review-download-file-link').attr('href', '<?= $input->reviewer1_file_link ?>')
+                $('#review-file-info .review-download-file-link').show()
+            } else {
+                $('#review-file-info .review-download-file-link').hide()
+            }
         }
 
         // jika buka modal review 2
         if (identifier == 'review2') {
+            $('#modal-review .modal-title').html('Progress Review 2')
             // populate catatan kriteria
             $('#kriteria1').val('<?= $input->kriteria1_reviewer2 ?>')
             $('#kriteria2').val('<?= $input->kriteria2_reviewer2 ?>')
@@ -397,12 +453,30 @@ $(document).ready(function() {
                 }
             }
 
-            // load file info review 2
+            // load file info review 1
             $('#review-file-info .review-upload-date').text('<?= $input->review2_upload_date ?>')
             $('#review-file-info .review-last-upload').text('<?= $input->review2_last_upload ?>')
-            $('#review-file-info .review-download-file').attr('href', '<?= base_url("draft/download_file/draftfile/{$input->review2_file}") ?>')
-            $('#review-file-info .review-download-file-link').attr('href', '<?= $input->reviewer2_file_link ?>')
             $('#reviewer-file-link').val('<?= $input->reviewer2_file_link ?>')
+
+            if ('<?= $input->review2_file ?>') {
+                $('#review-file-info .review-download-file').attr('href', '<?= base_url("draft/download_file/draftfile/{$input->review2_file}") ?>')
+                $('#review-file-info .review-download-file').show()
+            } else {
+                $('#review-file-info .review-download-file').hide()
+            }
+
+            if ('<?= $input->review2_file ?>') {
+                $('#review-file-info .review-delete-file').show()
+            } else {
+                $('#review-file-info .review-delete-file').hide()
+            }
+
+            if ('<?= $input->reviewer2_file_link ?>') {
+                $('#review-file-info .review-download-file-link').attr('href', '<?= $input->reviewer2_file_link ?>')
+                $('#review-file-info .review-download-file-link').show()
+            } else {
+                $('#review-file-info .review-download-file-link').hide()
+            }
         }
     })
 
@@ -411,7 +485,6 @@ $(document).ready(function() {
     // submit progress review
     $('#review-progress-wrapper').on('click', '#btn-submit-review', function() {
         const $this = $(this);
-        const draftId = $('[name=draft_id]').val();
 
         // catatan
         const reviewNotes = $('#reviewer-review-notes').val();
@@ -471,13 +544,11 @@ $(document).ready(function() {
             success: function(res) {
                 console.log(res);
                 show_toast(true, res.data);
+                location.reload()
             },
             error: function(err) {
                 console.log(err);
                 show_toast(false, err.responseJSON.message);
-            },
-            complete: function() {
-                location.reload()
             },
         });
     });
@@ -490,13 +561,12 @@ $(document).ready(function() {
             debug: true,
             rules: {
                 'review-file': {
-                    require_from_group: [1, ".naskah"],
-                    dokumen: "docx|doc|pdf",
-                    filesize50: 52428200
+                    require_from_group: [1, ".document"],
+                    extension: "<?= get_allowed_file_types('draft_file')['types']; ?>",
                 },
                 'reviewer-file-link': {
                     curl: true,
-                    require_from_group: [1, ".naskah"]
+                    require_from_group: [1, ".document"]
                 }
             },
             errorElement: "span",
@@ -504,10 +574,8 @@ $(document).ready(function() {
             validClass: "none",
             errorPlacement: validateErrorPlacement,
             submitHandler: function(form) {
-
                 const $this = $('#btn-upload-review');
-                $this.attr("disabled", "disabled").html('<i class="fa fa-spinner fa-spin "></i> Uploading ');
-                const draftId = $('[name=draft_id]').val();
+                $this.attr("disabled", "disabled").html('<i class="fa fa-spinner fa-spin "></i>');
 
                 // prepare form data
                 const formData = new FormData(form);
@@ -535,16 +603,15 @@ $(document).ready(function() {
                     success: function(res) {
                         console.log(res);
                         show_toast(true, res.data);
-                        $resetform = $('#review-file');
-                        $resetform.val('');
-                        $resetform.next('label.custom-file-label').html('');
-                        $this.removeAttr("disabled").html("Upload");
-
                         location.reload()
                     },
                     error: function(err) {
                         console.log(err);
                         show_toast(false, err.responseJSON.message);
+                        $resetform = $('#review-file');
+                        $resetform.val('');
+                        $resetform.next('label.custom-file-label').html('');
+                        $this.removeAttr("disabled").html("Update");
                     },
                 });
             }
@@ -552,6 +619,30 @@ $(document).ready(function() {
 
         // trigger submit handler
         $(this).submit()
+    })
+
+    $('#review-progress-wrapper').on('click', '.review-delete-file', function(e) {
+        const $this = $(this)
+        $this.attr("disabled", "disabled").html('<i class="fa fa-spinner fa-spin "></i>');
+
+        // send data
+        $.ajax({
+            url: "<?= base_url('draft/delete_progress/'); ?>" + draftId,
+            type: "post",
+            data: {
+                type: identifier
+            },
+            success: function(res) {
+                console.log(res);
+                show_toast(true, res.data);
+                location.reload()
+            },
+            error: function(err) {
+                console.log(err);
+                show_toast(false, err.responseJSON.message);
+                $this.removeAttr("disabled").html("Update");
+            },
+        });
     })
 })
 </script>

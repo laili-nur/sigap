@@ -667,7 +667,7 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
         rules: {
           layout_file: {
             require_from_group: [1, ".naskah"],
-            dokumen: "idml|indd|indt|pdf|zip|rar",
+            extension: "idml|indd|indt|pdf|zip|rar",
             filesize50: 52428200
           },
           layouter_file_link: {
@@ -732,7 +732,7 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
         rules: {
           cover_file: {
             require_from_group: [1, ".naskah"],
-            dokumen: "jpg|jpeg|png|pdf",
+            extension: "jpg|jpeg|png|pdf",
             filesize50: 52428200
           },
           cover_file_link: {

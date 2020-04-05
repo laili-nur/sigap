@@ -409,28 +409,21 @@ class Draft extends Operator_Controller
 
         $input          = (object) $this->input->post(null, true);
 
+
         if ($input->identifier) {
             $progress = "{$input->progress}{$input->identifier}";
         } else {
             $progress = $input->progress;
         }
 
-        // return $this->send_json_output(true, $_FILES);
-        // die();
-
 
         // tiap upload, update upload date
-        // $tahap = explode('_', $column);
         $this->draft->edit_draft_date($draft_id, $progress . '_upload_date');
         $last_upload_field         = $progress . '_last_upload';
         $input->$last_upload_field = $this->username;
         $column = "{$progress}_file";
 
         if (!empty($_FILES) && $file_name = $_FILES[$column]['name']) {
-            // Upload new draft (if any)
-            // $getextension  = explode(".", $_FILES[$column]['name']);
-            // $draftFileName = str_replace(" ", "_", $draft->draft_title . '_' . $column . '_' . date('YmdHis') . "." . $getextension[1]); // draft file name
-
             $draft_file_name = $this->_generate_draft_file_name($file_name, $draft->draft_title, $column);
             if ($column == 'cover_file') {
                 $upload = $this->draft->uploadProgressCover($column, $draft_file_name);
@@ -448,7 +441,13 @@ class Draft extends Operator_Controller
                     }
                 }
             }
+
+            // validasi jenis file sesuai model
+            if ($this->upload->display_errors()) {
+                return $this->send_json_output(false, $this->upload->display_errors(), 422);
+            }
         }
+
 
         // unset unnecesary data
         unset($input->progress);
@@ -461,43 +460,57 @@ class Draft extends Operator_Controller
     }
 
     // hapus progress draft
-    public function delete_progress($id, $jenis)
+    public function delete_progress($draft_id)
     {
-        $draft = $this->draft->where('draft_id', $id)->get();
-        if ($jenis == 'edit') {
-            if (file_exists("./draftfile/$draft->edit_file")) {
-                unlink("./draftfile/$draft->edit_file");
-                $flag = true;
-            } else {
-                $data['status'] = false;
-            }
-        } elseif ($jenis == 'layout') {
-            if (file_exists("./draftfile/$draft->layout_file")) {
-                unlink("./draftfile/$draft->layout_file");
-                $flag = true;
-            } else {
-                $data['status'] = false;
-            }
+        if ($draft_id == null) {
+            $message = 'ID draft kosong';
+            return $this->send_json_output(false, $message);
         }
 
-        if ($flag) {
-            $draft->{$jenis . '_upload_date'} = null;
-            $draft->{$jenis . '_last_upload'} = '';
-            $draft->{$jenis . '_file'}        = '';
-            if ($jenis == 'edit') {
-                $draft->editor_file_link = '';
-            } elseif ($jenis == 'layout') {
-                $draft->layouter_file_link = '';
-            }
-
-            if ($this->draft->where('draft_id', $id)->update($draft)) {
-                $data['status'] = true;
-            } else {
-                $data['status'] = false;
-            }
+        // apakah draft tersedia
+        $draft = $this->draft->where('draft_id', $draft_id)->get();
+        if (!$draft) {
+            $message = $this->lang->line('toast_data_not_available');
+            return $this->send_json_output(false, $message, 404);
         }
 
-        echo json_encode($data);
+        $input          = (object) $this->input->post(null, true);
+
+        if (file_exists("./draftfile/" . $draft->{$input->type . "_file"})) {
+            unlink("./draftfile/" . $draft->{$input->type . "_file"});
+        } else {
+            return $this->send_json_output(false, $this->lang->line('toast_delete_fail'));
+        }
+
+        // if ($input->type == 'edit') {
+        //     if (file_exists("./draftfile/$draft->edit_file")) {
+        //         unlink("./draftfile/$draft->edit_file");
+        //         $flag = true;
+        //     } else {
+        //         $data['status'] = false;
+        //     }
+        // } elseif ($input->type == 'layout') {
+        //     if (file_exists("./draftfile/$draft->layout_file")) {
+        //         unlink("./draftfile/$draft->layout_file");
+        //         $flag = true;
+        //     } else {
+        //         $data['status'] = false;
+        //     }
+        // }
+        $draft->{$input->type . '_upload_date'} = null;
+        $draft->{$input->type . '_last_upload'} = '';
+        $draft->{$input->type . '_file'}        = '';
+        // if ($input->type == 'edit') {
+        //     $draft->editor_file_link = '';
+        // } elseif ($input->type == 'layout') {
+        //     $draft->layouter_file_link = '';
+        // }
+
+        if ($this->draft->where('draft_id', $draft_id)->update($draft)) {
+            return $this->send_json_output(true, $this->lang->line('toast_delete_success'));
+        } else {
+            return $this->send_json_output(false, $this->lang->line('toast_delete_fail'));
+        }
     }
 
     // update draft, kirim update via post

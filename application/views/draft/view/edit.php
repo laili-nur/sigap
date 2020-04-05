@@ -567,7 +567,7 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
         rules: {
           edit_file: {
             require_from_group: [1, ".naskah"],
-            dokumen: "docx|doc|pdf|zip|rar",
+            extension: "docx|doc|pdf|zip|rar",
             filesize50: 52428200
           },
           editor_file_link: {
