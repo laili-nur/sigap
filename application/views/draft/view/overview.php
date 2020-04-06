@@ -21,7 +21,7 @@
 
     <!-- desk screening tidak bisa dilihat reviewer -->
     <?php if ($level != 'reviewer') : ?>
-    <?php $this->load->view('draft/view/desk_screening_progress'); ?>
+        <?php $this->load->view('draft/view/desk_screening_progress'); ?>
     <?php endif; ?>
 
 
@@ -32,146 +32,145 @@
 
     <!-- progress tidak bisa dilihat reviewer -->
     <?php if ($level != 'reviewer') : ?>
-    <?php $this->load->view('draft/view/progress'); ?>
+        <?php $this->load->view('draft/view/progress'); ?>
     <?php endif; ?>
 
     <!-- alert otorisasi penulis -->
     <?php if ($level == 'author') : ?>
-    <div class="alert alert-danger"><strong>PERHATIAN! </strong>Penulis pertama dapat memberikan komentar dan
-        catatan, penulis kedua hanya dapat melihat progress.</div>
+        <div class="alert alert-danger"><strong>PERHATIAN! </strong>Penulis pertama dapat memberikan komentar dan
+            catatan, penulis kedua hanya dapat melihat progress.</div>
     <?php endif; ?>
 
     <!-- progress review -->
     <?php $this->load->view('draft/view/review/index'); ?>
 
     <?php if ($level != 'reviewer') : ?>
-    <?php if ($input->is_review == 'y') : ?>
-    <?php $this->load->view('draft/view/edit'); ?>
-    <?php endif; ?>
-    <?php if ($input->is_edit == 'y') : ?>
-    <?php $this->load->view('draft/view/layout'); ?>
-    <?php endif; ?>
-    <?php if ($input->is_layout == 'y') : ?>
-    <?php $this->load->view('draft/view/proofread'); ?>
-    <?php endif; ?>
-    <?php if ($input->is_proofread == 'y' and $level != 'author' and $level != 'reviewer') : ?>
-    <?php $this->load->view('draft/view/print'); ?>
-    <?php elseif ($input->is_proofread == 'y' and $input->is_print == 'n' and $level == 'author' or $level == 'reviewer') : ?>
-    <div class="alert alert-info">
-        <h5 class="alert-heading">Proses Cetak</h5>
-        Draft ini sedang dalam proses pencetakan.
-    </div>
-    <?php elseif ($input->is_print == 'y' and $input->draft_status != 14 and $level == 'author' or $level == 'reviewer') : ?>
-    <div class="alert alert-info">
-        <h5 class="alert-heading">Proses Final</h5>
-        Draft ini sedang dalam proses finalisasi.
-    </div>
-    <?php endif; ?>
-    <?php if ($level == 'superadmin' or $level == 'admin_penerbitan') : ?>
-    <div class="el-example mx-3 mx-md-0">
-        <?php
+        <?php if ($input->is_review == 'y') : ?>
+            <?php $this->load->view('draft/view/edit/index'); ?>
+        <?php endif; ?>
+        <?php if ($input->is_edit == 'y') : ?>
+            <?php $this->load->view('draft/view/layout'); ?>
+        <?php endif; ?>
+        <?php if ($input->is_layout == 'y') : ?>
+            <?php $this->load->view('draft/view/proofread'); ?>
+        <?php endif; ?>
+        <?php if ($input->is_proofread == 'y' and $level != 'author' and $level != 'reviewer') : ?>
+            <?php $this->load->view('draft/view/print'); ?>
+        <?php elseif ($input->is_proofread == 'y' and $input->is_print == 'n' and $level == 'author' or $level == 'reviewer') : ?>
+            <div class="alert alert-info">
+                <h5 class="alert-heading">Proses Cetak</h5>
+                Draft ini sedang dalam proses pencetakan.
+            </div>
+        <?php elseif ($input->is_print == 'y' and $input->draft_status != 14 and $level == 'author' or $level == 'reviewer') : ?>
+            <div class="alert alert-info">
+                <h5 class="alert-heading">Proses Final</h5>
+                Draft ini sedang dalam proses finalisasi.
+            </div>
+        <?php endif; ?>
+        <?php if ($level == 'superadmin' or $level == 'admin_penerbitan') : ?>
+            <div class="el-example mx-3 mx-md-0">
+                <?php
                 $hidden_date = array(
                     'type'  => 'hidden',
                     'id'    => 'finish_date',
                     'value' => date('Y-m-d H:i:s'),
                 );
                 echo form_input($hidden_date); ?>
-        <?= ($input->is_print == 'y') ? '' : '<div class="m-0"><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> Proses cetak belum disetujui</small></div>'; ?>
-        <?= ($input->print_file != '' or $input->print_file_link != '') ? '' : '<div class="m-0"><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> File/Link cetak belum ada</small></div>'; ?>
-        <button
-            class="btn btn-primary"
-            data-toggle="modal"
-            data-target="#modalsimpan"
-            <?= ($input->is_print == 'y' and ($input->print_file != '' or $input->print_file_link != '')) ? '' : 'disabled'; ?>
-        >Simpan jadi buku</button>
-        <button
-            class="btn btn-danger"
-            data-toggle="modal"
-            data-target="#modaltolak"
-            <?= ($input->is_print == 'y' and ($input->print_file != '' or $input->print_file_link != '')) ? '' : 'disabled'; ?>
-        >Tolak</button>
-    </div>
-    <div
-        class="modal modal-warning fade"
-        id="modalsimpan"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="modalsimpan"
-        aria-hidden="true"
-    >
-        <div
-            class="modal-dialog"
-            role="document"
-        >
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
+                <?= ($input->is_print == 'y') ? '' : '<div class="m-0"><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> Proses cetak belum disetujui</small></div>'; ?>
+                <?= ($input->print_file != '' or $input->print_file_link != '') ? '' : '<div class="m-0"><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> File/Link cetak belum ada</small></div>'; ?>
+                <button
+                    class="btn btn-primary"
+                    data-toggle="modal"
+                    data-target="#modalsimpan"
+                    <?= ($input->is_print == 'y' and ($input->print_file != '' or $input->print_file_link != '')) ? '' : 'disabled'; ?>
+                >Simpan jadi buku</button>
+                <button
+                    class="btn btn-danger"
+                    data-toggle="modal"
+                    data-target="#modaltolak"
+                    <?= ($input->is_print == 'y' and ($input->print_file != '' or $input->print_file_link != '')) ? '' : 'disabled'; ?>
+                >Tolak</button>
+            </div>
+            <div
+                class="modal modal-warning fade"
+                id="modalsimpan"
+                tabindex="-1"
+                role="dialog"
+                aria-labelledby="modalsimpan"
+                aria-hidden="true"
+            >
+                <div
+                    class="modal-dialog"
+                    role="document"
+                >
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
                         <i class="fa fa-bullhorn text-yellow mr-1"></i> Konfirmasi Draft Final
                     </h5>
-                </div>
-                <div class="modal-body">
-                    <p>Draft <span class="font-weight-bold">
+                        </div>
+                        <div class="modal-body">
+                            <p>Draft <span class="font-weight-bold">
                             <?= $input->draft_title; ?></span> sudah final dan akan disimpan jadi buku?</p>
-                    <div class="alert alert-warning">Tanggal selesai draft akan tercatat ketika klik Submit</div>
-                </div>
-                <div class="modal-footer">
-                    <button
-                        class="btn btn-primary"
-                        id="draft-setuju"
-                        draft-title="<?= $draft->draft_title; ?>"
-                        draft-file="<?= $draft->print_file; ?>"
-                        value="14"
-                    >Submit</button>
-                    <button
-                        type="button"
-                        class="btn btn-light"
-                        data-dismiss="modal"
-                    >Close</button>
+                            <div class="alert alert-warning">Tanggal selesai draft akan tercatat ketika klik Submit</div>
+                        </div>
+                        <div class="modal-footer">
+                            <button
+                                class="btn btn-primary"
+                                id="draft-setuju"
+                                draft-title="<?= $draft->draft_title; ?>"
+                                draft-file="<?= $draft->print_file; ?>"
+                                value="14"
+                            >Submit</button>
+                            <button
+                                type="button"
+                                class="btn btn-light"
+                                data-dismiss="modal"
+                            >Close</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div
-        class="modal modal-alert fade"
-        id="modaltolak"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="modaltolak"
-        aria-hidden="true"
-    >
-        <div
-            class="modal-dialog"
-            role="document"
-        >
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
+            <div
+                class="modal modal-alert fade"
+                id="modaltolak"
+                tabindex="-1"
+                role="dialog"
+                aria-labelledby="modaltolak"
+                aria-hidden="true"
+            >
+                <div
+                    class="modal-dialog"
+                    role="document"
+                >
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
                         <i class="fa fa-exclamation-triangle text-red mr-1"></i> Tolak Draft
                     </h5>
-                </div>
-                <div class="modal-body">
-                    <p>Draft <span class="font-weight-bold">
+                        </div>
+                        <div class="modal-body">
+                            <p>Draft <span class="font-weight-bold">
                             <?= $input->draft_title; ?></span> ditolak?</p>
-                </div>
-                <div class="modal-footer">
-                    <button
-                        class="btn btn-danger"
-                        type="submit"
-                        id="draft-tolak"
-                        value="99"
-                    >Tolak</button>
-                    <button
-                        type="button"
-                        class="btn btn-light"
-                        data-dismiss="modal"
-                    >Close</button>
+                        </div>
+                        <div class="modal-footer">
+                            <button
+                                class="btn btn-danger"
+                                type="submit"
+                                id="draft-tolak"
+                                value="99"
+                            >Tolak</button>
+                            <button
+                                type="button"
+                                class="btn btn-light"
+                                data-dismiss="modal"
+                            >Close</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+        <?php endif; ?>
     <?php endif; ?>
-    <?php endif; ?>
-
 </div>
 
 <script>

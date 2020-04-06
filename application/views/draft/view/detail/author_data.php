@@ -1,90 +1,90 @@
-<?php $level = check_level();?>
+<?php $level = check_level(); ?>
 <div
     class="tab-pane fade"
-    id="data-penulis"
+    id="author-data"
 >
-    <?php if ($level == 'superadmin' || $level == 'admin_penerbitan'): ?>
-    <div class="alert alert-warning">
-        Pastikan penulis sudah ada pada tabel <strong>Penulis</strong> agar dapat dipilih, Apabila belum
-        maka
-        <a
-            href="<?=base_url('author/add');?>"
-            target="_blank"
-        ><strong>Tambahkan Penulis</strong></a><br>
-        Penulis pertama dapat memberikan tanggapan, komentar, dan upload file. Sedangkan penulis kedua dst
-        hanya dapat melihat progress draft.
-    </div>
-    <div class="form-group">
-        <button
-            id="btn-modal-select-author"
-            type="button"
-            class="btn btn-success mr-2"
-        >Pilih Penulis</button>
-    </div>
-    <?php endif;?>
-    <div id="author-list">
-        <?php if ($authors): ?>
-        <?php $i = 1;?>
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered mb-0 nowrap">
-                <thead>
-                    <tr>
-                        <th scope="col">No</th>
-                        <th scope="col">Nama</th>
-                        <th scope="col">NIP</th>
-                        <th scope="col">Unit Kerja</th>
-                        <th scope="col">Institusi</th>
-                        <th scope="col">Status</th>
-                        <?php if ($level == 'superadmin' || $level == 'admin_penerbitan'): ?>
-                        <th style="width:100px; min-width:100px;"> &nbsp; </th>
-                        <?php endif;?>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($authors as $author): ?>
-                    <tr>
-                        <td class="align-middle">
-                            <?=$i++;?>
-                        </td>
-                        <?php if ($level == 'superadmin' || $level == 'admin_penerbitan'): ?>
-                        <td class="align-middle"><a href="<?=base_url('author/view/profile/' . $author->author_id);?>">
-                                <?=$author->author_name;?></a></td>
-                        <?php else: ?>
-                        <td class="align-middle">
-                            <?=$author->author_name;?>
-                        </td>
-                        <?php endif;?>
-                        <td class="align-middle">
-                            <?=$author->author_nip;?>
-                        </td>
-                        <td class="align-middle">
-                            <?=$author->work_unit_name;?>
-                        </td>
-                        <td class="align-middle">
-                            <?=$author->institute_name;?>
-                        </td>
-                        <td class="align-middle">
-                            <?=$author->draft_author_status;?>
-                        </td>
-                        <?php if ($level == 'superadmin' || $level == 'admin_penerbitan'): ?>
-                        <td class="align-middle text-right">
-                            <button
-                                class="btn btn-sm btn-danger btn-delete-author"
-                                data="<?=$author->draft_author_id;?>"
-                            >
-                                <i class="fa fa-trash-alt"></i>
-                                <span class="sr-only">Delete</span>
-                            </button>
-                        </td>
-                        <?php endif;?>
-                    </tr>
-                    <?php endforeach;?>
-                </tbody>
-            </table>
+    <?php if ($level == 'superadmin' || $level == 'admin_penerbitan') : ?>
+        <div class="alert alert-warning">
+            Pastikan penulis sudah ada pada tabel <strong>Penulis</strong> agar dapat dipilih, Apabila belum
+            maka
+            <a
+                href="<?= base_url('author/add'); ?>"
+                target="_blank"
+            ><strong>Tambahkan Penulis</strong></a><br>
+            Penulis pertama dapat memberikan tanggapan, komentar, dan upload file. Sedangkan penulis kedua dst
+            hanya dapat melihat progress draft.
         </div>
-        <?php else: ?>
-        <div class="text-center text-muted my-3">Penulis belum dipilih</div>
-        <?php endif;?>
+        <div class="form-group">
+            <button
+                id="btn-modal-select-author"
+                type="button"
+                class="btn btn-success mr-2"
+            >Pilih Penulis</button>
+        </div>
+    <?php endif; ?>
+    <div id="author-list">
+        <?php if ($authors) : ?>
+            <?php $i = 1; ?>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered mb-0 nowrap">
+                    <thead>
+                        <tr>
+                            <th scope="col">No</th>
+                            <th scope="col">Nama</th>
+                            <th scope="col">NIP</th>
+                            <th scope="col">Unit Kerja</th>
+                            <th scope="col">Institusi</th>
+                            <th scope="col">Status</th>
+                            <?php if ($level == 'superadmin' || $level == 'admin_penerbitan') : ?>
+                                <th style="width:100px; min-width:100px;"> &nbsp; </th>
+                            <?php endif; ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($authors as $author) : ?>
+                            <tr>
+                                <td class="align-middle">
+                                    <?= $i++; ?>
+                                </td>
+                                <?php if ($level == 'superadmin' || $level == 'admin_penerbitan') : ?>
+                                    <td class="align-middle"><a href="<?= base_url('author/view/profile/' . $author->author_id); ?>">
+                                            <?= $author->author_name; ?></a></td>
+                                <?php else : ?>
+                                    <td class="align-middle">
+                                        <?= $author->author_name; ?>
+                                    </td>
+                                <?php endif; ?>
+                                <td class="align-middle">
+                                    <?= $author->author_nip; ?>
+                                </td>
+                                <td class="align-middle">
+                                    <?= $author->work_unit_name; ?>
+                                </td>
+                                <td class="align-middle">
+                                    <?= $author->institute_name; ?>
+                                </td>
+                                <td class="align-middle">
+                                    <?= $author->draft_author_status; ?>
+                                </td>
+                                <?php if ($level == 'superadmin' || $level == 'admin_penerbitan') : ?>
+                                    <td class="align-middle text-right">
+                                        <button
+                                            class="btn btn-sm btn-danger btn-delete-author"
+                                            data="<?= $author->draft_author_id; ?>"
+                                        >
+                                            <i class="fa fa-trash-alt"></i>
+                                            <span class="sr-only">Delete</span>
+                                        </button>
+                                    </td>
+                                <?php endif; ?>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php else : ?>
+            <div class="text-center text-muted my-3">Penulis belum dipilih</div>
+        <?php endif; ?>
     </div>
 </div>
 
@@ -146,7 +146,7 @@ $(document).ready(function() {
         $('#modal-select-author').modal('toggle')
 
         // get data
-        $.get("<?=base_url('author/api_get_authors');?>",
+        $.get("<?= base_url('author/api_get_authors'); ?>",
             function(res) {
                 $("#author-id").select2({
                     placeholder: '-- Pilih --',
@@ -183,7 +183,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: "POST",
-            url: "<?=base_url('draftauthor/add');?>",
+            url: "<?= base_url('draftauthor/add'); ?>",
             datatype: "JSON",
             data: {
                 draft_id,
@@ -205,12 +205,12 @@ $(document).ready(function() {
     });
 
     // hapus penulis
-    $('#data-penulis').on('click', '.btn-delete-author', function() {
+    $('#author-data').on('click', '.btn-delete-author', function() {
         $(this).attr('disabled', 'disabled').html("<i class='fa fa-spinner fa-spin '></i>");
         let id = $(this).attr('data');
 
         $.ajax({
-            url: "<?=base_url('draftauthor/delete/');?>" + id,
+            url: "<?= base_url('draftauthor/delete/'); ?>" + id,
             success: function(res) {
                 show_toast(true, res.data);
             },

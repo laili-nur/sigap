@@ -25,6 +25,7 @@
             </div>
             <div class="modal-body">
                 <fieldset>
+                    <?= form_hidden('progress', $progress) ?>
                     <div class="form-group">
                         <label
                             for="action_status"
@@ -38,9 +39,9 @@
                             echo '<div class="font-italic">' . nl2br($input->{"{$progress}_status"}) . '</div>';
                         } else {
                             echo form_textarea([
-                                'name'  => 'action_status',
+                                'name'  => "{$progress}_status",
                                 'class' => 'form-control summernote-basic',
-                                'id'    => 'crp2',
+                                'id'    => "{$progress}_status",
                                 'rows'  => '6',
                                 'value' => $input->{"{$progress}_status"},
                             ]);
@@ -79,43 +80,46 @@
 </div>
 
 <script>
-// contoh progress = 'review','edit','layout','proofread','print'
-var progress = "<?= $progress ?>"
+$(document).ready(function() {
+    // contoh progress = 'review','edit','layout','proofread','print'
+    const progress = '<?= $progress ?>'
+    console.log(progress);
 
-function send_action_data(accept) {
-    this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
-    const draft_id = $('[name=draft_id]').val();
-    const action_status = $('[name=action_status]').val();
+    function send_action_data(accept) {
+        this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
+        const draft_id = $('[name=draft_id]').val();
 
-    $.ajax({
-        type: "POST",
-        url: "<?= base_url('draft/api_action_progress/'); ?>" + draft_id,
-        data: {
-            progress,
-            accept: accept,
-            action_status,
-        },
-        success: function(res) {
-            console.log(res);
-            show_toast(true, res.data);
-        },
-        error: function(err) {
-            console.log(err);
-            show_toast(false, err.responseJSON.message);
-        },
-        complete: function() {
-            location.reload()
-        },
+
+        $.ajax({
+            type: "POST",
+            url: "<?= base_url('draft/api_action_progress/'); ?>" + draft_id,
+            data: {
+                progress,
+                accept: accept,
+                [`${progress}_status`]: $(`#${progress}_status`).val()
+            },
+            success: function(res) {
+                console.log(res);
+                show_toast(true, res.data);
+            },
+            error: function(err) {
+                console.log(err);
+                show_toast(false, err.responseJSON.message);
+            },
+            complete: function() {
+                location.reload()
+            },
+        });
+    }
+
+    // aksi setuju
+    $(`#${progress}-progress-wrapper`).on('click', `#btn-${progress}-accept`, function() {
+        send_action_data.call($(this), true)
     });
-}
 
-// aksi setuju
-$(`#${progress}-progress-wrapper`).on('click', `#btn-${progress}-accept`, function() {
-    send_action_data.call($(this), true)
-});
-
-// aksi tolak
-$(`#${progress}-progress-wrapper`).on('click', `#btn-${progress}-decline`, function() {
-    send_action_data.call($(this), false)
-});
+    // aksi tolak
+    $(`#${progress}-progress-wrapper`).on('click', `#btn-${progress}-decline`, function() {
+        send_action_data.call($(this), false)
+    });
+})
 </script>

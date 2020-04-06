@@ -366,10 +366,54 @@ class Draft extends Operator_Controller
             $this->draft->update_draft_status($draft_id, ['draft_status' => 4]);
         } elseif ($input->progress == 'edit') {
             $this->draft->edit_draft_date($draft_id, 'edit_start_date');
+            $this->draft->update_draft_status($draft_id, ['draft_status' => 6]);
         } elseif ($input->progress == 'layout') {
             $this->draft->edit_draft_date($draft_id, 'layout_start_date');
         } elseif ($input->progress == 'proofread') {
             $this->draft->edit_draft_date($draft_id, 'proofread_start_date');
+        }
+
+        if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
+            return $this->send_json_output(false, $this->lang->line('toast_edit_fail'));
+        } else {
+            $this->db->trans_commit();
+            return $this->send_json_output(true, $this->lang->line('toast_edit_success'));
+        }
+    }
+
+    public function api_finish_progress($draft_id)
+    {
+        if ($draft_id == null) {
+            $message = 'ID draft kosong';
+            return $this->send_json_output(false, $message);
+        }
+
+        // apakah draft tersedia
+        $draft = $this->draft->where('draft_id', $draft_id)->get();
+        if (!$draft) {
+            $message = $this->lang->line('toast_data_not_available');
+            return $this->send_json_output(false, $message, 404);
+        }
+
+        // hanya untuk user yang berkaitan dengan draft ini
+        if (!$this->draft->is_authorized($this->level, $this->username, $draft_id)) {
+            $message = $this->lang->line('toast_error_not_authorized');
+            return $this->send_json_output(false, $message);
+        }
+
+        // berisi 'progress' untuk conditional dibawah
+        $input = (object) $this->input->post(null, false);
+
+        $this->db->trans_begin();
+        if ($input->progress == 'review') {
+            $this->draft->edit_draft_date($draft_id, 'review_end_date');
+        } elseif ($input->progress == 'edit') {
+            $this->draft->edit_draft_date($draft_id, 'edit_end_date');
+        } elseif ($input->progress == 'layout') {
+            $this->draft->edit_draft_date($draft_id, 'layout_end_date');
+        } elseif ($input->progress == 'proofread') {
+            $this->draft->edit_draft_date($draft_id, 'proofread_end_date');
         }
 
         if ($this->db->trans_status() === false) {
@@ -527,14 +571,16 @@ class Draft extends Operator_Controller
         $input = (object) $this->input->post(null, false);
 
         if ($input->progress == 'review') {
-            $input->{"{$input->progress}_status"} = $input->action_status;
             $input->draft_status = filter_boolean($input->accept) ? 5 : 99;
-            $input->{"is_$input->progress"} = filter_boolean($input->accept) ? 'y' : 'n';
-            $input->{"{$input->progress}_end_date"} = now();
+            // $input->{"{$input->progress}_end_date"} = now(); //dicatat saat finish progress
+        } elseif ($input->progress == 'edit') {
+            $input->draft_status = filter_boolean($input->accept) ? 7 : 99;
         }
 
+        $input->{"is_$input->progress"} = filter_boolean($input->accept) ? 'y' : 'n';
+
+
         // hilangkan property pembantu yang tidak ada di db
-        unset($input->action_status);
         unset($input->progress);
         unset($input->accept);
 

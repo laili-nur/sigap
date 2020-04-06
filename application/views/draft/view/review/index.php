@@ -20,10 +20,9 @@ $is_review_started      = format_datetime($input->review_start_date);
                         <button
                             id="btn-modal-select-reviewer"
                             type="button"
-                            class="d-inline btn <?= (empty($reviewers)) ? 'btn-warning' : 'btn-secondary'; ?>"
+                            class="d-inline btn <?= empty($reviewers) ? 'btn-warning' : 'btn-secondary'; ?>"
                             title="Pilih Reviewer"
-                        ><i class="fas fa-user-plus fa-fw"></i><span class="d-none d-lg-inline"> Pilih
-                            Reviewer</span></button>
+                        ><i class="fas fa-user-plus fa-fw"></i><span class="d-none d-lg-inline"> Pilih Reviewer</span></button>
                     <?php endif; ?>
                     <?php if ($level == 'reviewer' || is_admin()) : ?>
                         <button
@@ -32,7 +31,7 @@ $is_review_started      = format_datetime($input->review_start_date);
                             type="button"
                             class="d-inline btn <?= !$is_review_started ? 'btn-warning' : 'btn-secondary'; ?> <?= empty($reviewers) || $is_review_started ? 'btn-disabled' : ''; ?>"
                             <?= empty($reviewers) || $is_review_started ? 'disabled' : ''; ?>
-                        ><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span> </button>
+                        ><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
                     <?php endif; ?>
                 </div>
         </header>
@@ -81,10 +80,10 @@ $is_review_started      = format_datetime($input->review_start_date);
                         <span>Deadline reviewer #1</span>
                     <?php endif ?>
                     <strong>
-                    <?= ($review1_remaining_time <= 0 and $input->review1_flag == '')
+                    <?= ($review1_remaining_time <= 0 && $input->review1_flag == '')
                         ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . format_datetime($input->review1_deadline) . '</span>'
                         : format_datetime($input->review1_deadline); ?>
-                </strong>
+                    </strong>
                 </div>
             <?php endif; ?>
 
@@ -147,6 +146,7 @@ $is_review_started      = format_datetime($input->review_start_date);
                 <span class="text-muted">Status</span>
                 <a
                     href="#"
+                    onclick="event.preventDefault()"
                     class="font-weight-bold"
                     data-toggle="popover"
                     data-placement="left"
@@ -210,34 +210,34 @@ $is_review_started      = format_datetime($input->review_start_date);
                     <span>Review #2 </span>
                 </button>
             <?php endif; ?>
-
-            <?php
-            // modal deadline review1
-            $this->load->view('draft/view/review/deadline_modal', [
-                'progress' => 'review1',
-            ]);
-            // modal deadline review2
-            $this->load->view('draft/view/review/deadline_modal', [
-                'progress' => 'review2',
-            ]);
-
-            // modal aksi review
-            $this->load->view('draft/view/review/action_modal', [
-                'progress' => 'review'
-            ]);
-
-            // modal progress review
-            $this->load->view('draft/view/review/review_modal', [
-                'progress' => 'review1'
-            ]);
-            $this->load->view('draft/view/review/review_modal', [
-                'progress' => 'review2'
-            ]);
-
-            // modal pilih reviewer
-            $this->load->view('draft/view/review/select_reviewer_modal');
-            ?>
         </div>
+
+        <?php
+        // modal deadline review1
+        $this->load->view('draft/view/common/deadline_modal', [
+            'progress' => 'review1',
+        ]);
+        // modal deadline review2
+        $this->load->view('draft/view/common/deadline_modal', [
+            'progress' => 'review2',
+        ]);
+
+        // modal aksi review
+        $this->load->view('draft/view/common/action_modal', [
+            'progress' => 'review'
+        ]);
+
+        // modal progress review
+        $this->load->view('draft/view/review/review_modal', [
+            'progress' => 'review1'
+        ]);
+        $this->load->view('draft/view/review/review_modal', [
+            'progress' => 'review2'
+        ]);
+
+        // modal pilih reviewer
+        $this->load->view('draft/view/review/select_reviewer_modal');
+        ?>
     </div>
 </section>
 
@@ -273,7 +273,7 @@ $(document).ready(function() {
             },
             complete: function() {
                 // reload segmen daftar reviewer
-                $('#reviewer-list-wrapper').load(' #reviewer-list');
+                // $('#reviewer-list-wrapper').load(' #reviewer-list');
                 // reload segmen review
                 reload_review_segment()
                 // reload progress

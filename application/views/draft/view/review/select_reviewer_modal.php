@@ -22,7 +22,7 @@
                             class="form-group"
                             id="form-reviewer"
                         >
-                            <label for="user_id">Nama Reviewer</label>
+                            <label for="reviewer-id">Nama Reviewer</label>
                             <select
                                 id="reviewer-id"
                                 name="reviewer"
@@ -32,9 +32,9 @@
                     </fieldset>
                     <div class="d-flex justify-content-end">
                         <button
+                            id="btn-select-reviewer"
                             class="btn btn-primary"
                             type="button"
-                            id="btn-select-reviewer"
                         >Pilih</button>
                     </div>
                 </form>

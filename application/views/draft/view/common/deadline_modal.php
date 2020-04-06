@@ -67,7 +67,7 @@ $(document).ready(function() {
     $(`#${progress}-progress-wrapper`).on('shown.bs.modal', `#modal-deadline-${identifier}`, function() {
         // reload ketika modal diclose
         $(`#modal-deadline-${identifier}`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
-            $(`#${progress}-progress-wrapper`).load(' #review-progress', function() {
+            $(`#${progress}-progress-wrapper`).load(` #${progress}-progress`, function() {
                 // reinitiate flatpickr modal after load
                 init_flatpickr_modal()
             });

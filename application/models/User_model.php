@@ -163,4 +163,12 @@ class User_model extends MY_Model
             ->where('level', $staff_level)
             ->get_all();
     }
+
+    public function api_get_editors()
+    {
+        return $this->select('user_id,username,level')
+            ->where('level', 'editor')
+            ->order_by('username')
+            ->get_all();
+    }
 }
