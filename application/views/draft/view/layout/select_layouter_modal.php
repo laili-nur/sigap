@@ -1,9 +1,9 @@
 <div
     class="modal fade"
-    id="modal-select-editor"
+    id="modal-select-layouter"
     tabindex="-1"
     role="dialog"
-    aria-labelledby="modal-select-editor"
+    aria-labelledby="modal-select-layouter"
     aria-hidden="true"
 >
     <div
@@ -12,28 +12,27 @@
     >
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> Pilih Editor </h5>
+                <h5 class="modal-title"> Pilih Layouter </h5>
             </div>
             <div class="modal-body">
                 <form>
                     <fieldset>
                         <div
                             class="form-group"
-                            id="form-editor"
+                            id="form-layouter"
                         >
-                            <label for="editor-id">Nama Editor</label>
+                            <label for="layouter-id">Nama Layouter</label>
                             <select
-                                id="editor-id"
-                                name="editor"
+                                id="layouter-id"
+                                name="layouter"
                                 class="form-control custom-select d-block"
                             ></select>
-                            <!-- <label for="pilih_editor">Editor</label>
-                            <?= form_dropdown('editor', get_dropdown_listEditor('user', ['user_id', 'username']), '', 'id="pilih_editor" class="form-control custom-select d-block"'); ?> -->
+                            <small class="form-text text-muted">1 akun layouter dan 1 akun desain cover</small>
                         </div>
                     </fieldset>
                     <div class="d-flex">
                         <button
-                            id="btn-select-editor"
+                            id="btn-select-layouter"
                             class="btn btn-primary ml-auto"
                             type="button"
                         >Pilih</button>
@@ -41,17 +40,17 @@
                 </form>
                 <hr>
 
-                <div id="editor-list-wrapper">
-                    <div id="editor-list">
-                        <p class="font-weight-bold">Editor Terpilih</p>
-                        <?php if ($editors) : ?>
+                <div id="layouter-list-wrapper">
+                    <div id="layouter-list">
+                        <p class="font-weight-bold">Layouter Terpilih</p>
+                        <?php if ($layouters) : ?>
                             <div class="table-responsive">
                                 <table class="table table-bordered mb-0 nowrap">
                                     <tbody>
-                                        <?php foreach ($editors as $editor) : ?>
+                                        <?php foreach ($layouters as $layouter) : ?>
                                             <tr>
                                                 <td class="align-middle">
-                                                    <?= $editor->username; ?>
+                                                    <?= $layouter->username; ?>
                                                 </td>
                                                 <td
                                                     class="align-middle text-right"
@@ -60,8 +59,8 @@
                                                     <button
                                                         title="Hapus"
                                                         href="javascript"
-                                                        class="btn btn-sm btn-danger btn-delete-editor"
-                                                        data="<?= $editor->responsibility_id; ?>"
+                                                        class="btn btn-sm btn-danger btn-delete-layouter"
+                                                        data="<?= $layouter->responsibility_id; ?>"
                                                     >
                                                         <i class="fa fa-trash-alt"></i>
                                                         <span class="sr-only">Delete</span>
@@ -73,7 +72,7 @@
                                 </table>
                             </div>
                         <?php else : ?>
-                            <p class="text-center text-muted my-3">Editor belum dipilih</p>
+                            <p class="text-center text-muted my-3">Layouter belum dipilih</p>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -92,27 +91,27 @@
 $(document).ready(function() {
     const draft_id = $('input[name=draft_id]').val();
 
-    // get data ketika buka modal select editor
-    $('#edit-progress-wrapper').on('click', '#btn-modal-select-editor', function() {
+    // get data ketika buka modal select layouter
+    $('#layout-progress-wrapper').on('click', '#btn-modal-select-layouter', function() {
 
         // reload segmen ketika modal diclose
-        $('#modal-select-editor').off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
-            $('#edit-progress-wrapper').load(' #edit-progress', function() {
+        $('#modal-select-layouter').off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
+            $('#layout-progress-wrapper').load(' #layout-progress', function() {
                 // reinitiate flatpickr modal after load
                 init_flatpickr_modal()
             });
         })
 
         // open modal
-        $('#modal-select-editor').modal('toggle')
+        $('#modal-select-layouter').modal('toggle')
 
-        // get data semua editor
-        $.get("<?= base_url('user/api_get_staffs/editor'); ?>",
+        // get data semua layouter
+        $.get("<?= base_url('user/api_get_staffs/layouter'); ?>",
             function(res) {
                 //  inisialisasi select2
-                $('#editor-id').select2({
+                $('#layouter-id').select2({
                     placeholder: '-- Pilih --',
-                    dropdownParent: $('#modal-select-editor'),
+                    dropdownParent: $('#modal-select-layouter'),
                     allowClear: true,
                     data: res.data.map(r => {
                         return {
@@ -123,10 +122,10 @@ $(document).ready(function() {
                 });
 
                 //  reset selected data
-                $('[name=editor]').val(null).trigger('change');
+                $('[name=layouter]').val(null).trigger('change');
 
                 //  event ketika data di select
-                $('#editor-id').off('select2:select').on('select2:select', function(e) {
+                $('#layouter-id').off('select2:select').on('select2:select', function(e) {
                     var data = e.params.data;
                     console.log(data);
                 });
@@ -134,42 +133,44 @@ $(document).ready(function() {
         )
     })
 
-    // pilih editor
-    $('#edit-progress-wrapper').on('click', '#btn-select-editor', function() {
+    // pilih layouter
+    $('#layout-progress-wrapper').on('click', '#btn-select-layouter', function() {
         const $this = $(this);
-        const user_id = $('#editor-id').val();
+        const user_id = $('#layouter-id').val();
 
         if (!user_id) {
-            show_toast(false, 'Pilih editor dahulu');
+            show_toast(false, 'Pilih layouter dahulu');
             return
         }
 
         $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
         $.ajax({
             type: "POST",
-            url: "<?= base_url('responsibility/add/editor'); ?>",
+            url: "<?= base_url('responsibility/add/layouter'); ?>",
             data: {
                 draft_id,
                 user_id
             },
             success: function(res) {
+                console.log(res);
                 show_toast(true, res.data);
             },
             error: function(err) {
+                console.log(err);
                 show_toast(false, err.responseJSON.message);
             },
             complete: function() {
-                $('[name=editor]').val(null).trigger('change');
-                // reload segemen daftar editor
-                $('#editor-list-wrapper').load(' #editor-list');
+                $('[name=layouter]').val(null).trigger('change');
+                // reload segemen daftar layouter
+                $('#layouter-list-wrapper').load(' #layouter-list');
 
                 $this.removeAttr("disabled").html("Submit");
             },
         });
     });
 
-    // hapus editor
-    $('#edit-progress-wrapper').on('click', '.btn-delete-editor', function() {
+    // hapus layouter
+    $('#layout-progress-wrapper').on('click', '.btn-delete-layouter', function() {
         $(this).attr('disabled', 'disabled').html("<i class='fa fa-spinner fa-spin '></i>");
         const id = $(this).attr('data');
 
@@ -182,8 +183,8 @@ $(document).ready(function() {
                 show_toast(false, err.responseJSON.message);
             },
             complete: function() {
-                // reload segmen daftar editor
-                $('#editor-list-wrapper').load(' #editor-list');
+                // reload segmen daftar layouter
+                $('#layouter-list-wrapper').load(' #layouter-list');
             },
         })
     });

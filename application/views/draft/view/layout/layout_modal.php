@@ -1,16 +1,16 @@
 <?php $level = check_level() ?>
 <div
     class="modal fade"
-    id="modal-edit"
+    id="modal-layout"
     tabindex="-1"
     role="dialog"
-    aria-labelledby="modal-edit"
+    aria-labelledby="modal-layout"
     aria-hidden="true"
 >
     <div class="modal-dialog modal-lg modal-dialog-overflow">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> Progress Edit</h5>
+                <h5 class="modal-title"> Progress Layout</h5>
                 <button
                     type="button"
                     class="close"
@@ -23,28 +23,28 @@
 
             <ul
                 class="nav nav-tabs"
-                id="edit-tab-wrapper"
+                id="layout-tab-wrapper"
                 role="tablist"
             >
                 <li class="nav-item">
                     <a
                         class="nav-link active"
-                        id="edit-file-tab"
+                        id="layout-file-tab"
                         data-toggle="tab"
-                        href="#edit-file-tab-content"
+                        href="#layout-file-tab-content"
                         role="tab"
-                        aria-controls="edit-file-tab-content"
+                        aria-controls="layout-file-tab-content"
                         aria-selected="true"
                     >File</a>
                 </li>
                 <li class="nav-item">
                     <a
                         class="nav-link"
-                        id="edit-comment-tab"
+                        id="layout-comment-tab"
                         data-toggle="tab"
-                        href="#edit-comment-tab-content"
+                        href="#layout-comment-tab-content"
                         role="tab"
-                        aria-controls="edit-comment-tab-content"
+                        aria-controls="layout-comment-tab-content"
                         aria-selected="false"
                     >Tanggapan</a>
                 </li>
@@ -53,64 +53,64 @@
             <div class="modal-body py-3">
                 <div
                     class="tab-content"
-                    id="edit-tab-content-wrapper"
+                    id="layout-tab-content-wrapper"
                 >
                     <div
                         class="tab-pane fade show active"
-                        id="edit-file-tab-content"
+                        id="layout-file-tab-content"
                         role="tabpanel"
-                        aria-labelledby="edit-file-tab"
+                        aria-labelledby="layout-file-tab"
                     >
-                        <div id="edit-file-info">
+                        <div id="layout-file-info">
                             <div class="alert alert-info">
                                 <p class="alert-heading font-weight-bold">File Tersimpan</p>
-                                <?php if ($input->edit_file) : ?>
+                                <?php if ($input->layout_file) : ?>
                                     <a
-                                        href="<?= base_url("draft/download_file/draftfile/{$input->edit_file}") ?>"
+                                        href="<?= base_url("draft/download_file/draftfile/{$input->layout_file}") ?>"
                                         class="btn btn-success"
                                     ><i class="fa fa-download"></i> Download</a>
                                     <button
                                         type="button"
-                                        class="btn btn-danger edit-delete-file"
+                                        class="btn btn-danger layout-delete-file"
                                     ><i class="fa fa-trash"></i> Delete</button>
                                 <?php endif ?>
-                                <?php if ($input->edit_file_link) : ?>
+                                <?php if ($input->layout_file_link) : ?>
                                     <a
-                                        href="<?= $input->edit_file_link ?>"
+                                        href="<?= $input->layout_file_link ?>"
                                         class="btn btn-primary"
                                         target="_blank"
                                     ><i class="fa fa-external-link-alt"></i> External file</a>
                                 <?php endif ?>
                                 <p>
-                                    <div>Terakhir diubah: <span><?= $input->edit_upload_date ?></span></div>
-                                    <div>Oleh: <span><?= $input->edit_upload_by ?></span></div>
+                                    <div>Terakhir diubah: <span><?= $input->layout_upload_date ?></span></div>
+                                    <div>Oleh: <span><?= $input->layout_upload_by ?></span></div>
                                 </p>
                             </div>
 
                             <hr class="my-4">
 
-                            <?php if ($level == 'editor' || ($level == 'author' && $author_order == 1) || is_admin()) : ?>
+                            <?php if ($level == 'layouter' || ($level == 'author' && $author_order == 1) || is_admin()) : ?>
                                 <form
-                                    id="edit-upload-form"
+                                    id="layout-upload-form"
                                     method="post"
                                     enctype="multipart/form-data"
                                 >
                                     <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : ''; ?>
                                     <div class="form-group">
-                                        <label for="edit-file">Upload File Naskah</label>
+                                        <label for="layout-file">Upload File Naskah</label>
                                         <div class="custom-file">
-                                            <?= form_upload("edit_file", '', "class='custom-file-input document' id='edit-file'"); ?>
+                                            <?= form_upload("layout_file", '', "class='custom-file-input document' id='layout-file'"); ?>
                                             <label
                                                 class="custom-file-label"
-                                                for="edit-file"
+                                                for="layout-file"
                                             >Pilih file</label>
                                         </div>
                                         <small class="form-text text-muted">Tipe file upload bertype : <?= get_allowed_file_types('draft_file')['to_text']; ?></small>
                                     </div>
                                     <div class="form-group">
-                                        <label for="edit-file-link">Link Naskah</label>
+                                        <label for="layout-file-link">Link Naskah</label>
                                         <div>
-                                            <?= form_input("edit_file_link", $input->{"edit_file_link"}, "class='form-control document' id='edit-file-link'"); ?>
+                                            <?= form_input("layout_file_link", $input->{"layout_file_link"}, "class='form-control document' id='layout-file-link'"); ?>
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-end">
@@ -120,7 +120,7 @@
                                             data-dismiss="modal"
                                         >Close</button>
                                         <button
-                                            id="btn-upload-edit"
+                                            id="btn-upload-layout"
                                             class="btn btn-primary"
                                             type="submit"
                                         > Update</button>
@@ -131,29 +131,29 @@
                     </div>
                     <div
                         class="tab-pane fade"
-                        id="edit-comment-tab-content"
+                        id="layout-comment-tab-content"
                         role="tabpanel"
-                        aria-labelledby="edit-comment-tab"
+                        aria-labelledby="layout-comment-tab"
                     >
-                        <div id="edit-comment-info">
+                        <div id="layout-comment-info">
                             <fieldset>
-                                <!-- CATATAN EDITOR UNTUK STAFF/ADMIN/AUTHOR -->
+                                <!-- CATATAN LAYOUTER UNTUK STAFF/ADMIN/AUTHOR -->
                                 <?php if ($level != 'author') : ?>
                                     <div class="form-group">
                                         <label
-                                            for="editor-edit-notes"
+                                            for="layouter-layout-notes"
                                             class="font-weight-bold"
-                                        >Catatan Editor untuk Admin</label>
+                                        >Catatan Layouter untuk Admin</label>
                                         <?php
-                                        if (!is_admin() && $level != 'editor') {
-                                            echo "<div class='font-italic' id='editor-edit-notes'>" . $input->edit_notes . "</div>";
+                                        if (!is_admin() && $level != 'layouter') {
+                                            echo "<div class='font-italic' id='layouter-layout-notes'>" . $input->layout_notes . "</div>";
                                         } else {
                                             echo form_textarea([
-                                                'name'  => "editor-edit-notes",
+                                                'name'  => "layouter-layout-notes",
                                                 'class' => 'form-control summernote-basic',
-                                                'id'    => "editor-edit-notes",
+                                                'id'    => "layouter-layout-notes",
                                                 'rows'  => '6',
-                                                'value' => $input->edit_notes
+                                                'value' => $input->layout_notes
                                             ]);
                                         }
                                         ?>
@@ -165,19 +165,19 @@
                                 <!-- CATATAN AUTHOR UNTUK STAFF/ADMIN -->
                                 <div class="form-group">
                                     <label
-                                        for="author-edit-notes"
+                                        for="author-layout-notes"
                                         class="font-weight-bold"
                                     >Catatan Penulis</label>
                                     <?php
                                     if (!is_admin() && ($level != 'author' || $author_order != 1)) {
-                                        echo "<div class='font-italic' id='author-edit-notes'>" . $input->edit_notes_author . "</div>";
+                                        echo "<div class='font-italic' id='author-layout-notes'>" . $input->layout_notes_author . "</div>";
                                     } else {
                                         echo form_textarea([
-                                            'name'  => "author-edit-notes",
+                                            'name'  => "author-layout-notes",
                                             'class' => 'form-control summernote-basic',
-                                            'id'    => "author-edit-notes",
+                                            'id'    => "author-layout-notes",
                                             'rows'  => '6',
-                                            'value' => $input->edit_notes_author
+                                            'value' => $input->layout_notes_author
 
                                         ]);
                                     }
@@ -192,7 +192,7 @@
                                     data-dismiss="modal"
                                 >Close</button>
                                 <button
-                                    id="btn-submit-edit"
+                                    id="btn-submit-layout"
                                     class="btn btn-primary"
                                     type="button"
                                 >Submit</button>
@@ -210,23 +210,23 @@ $(document).ready(function() {
     const draftId = $('[name=draft_id]').val();
 
     // reload segmen ketika modal diclose
-    $('#edit-progress-wrapper').on('shown.bs.modal', `#modal-edit`, function() {
+    $('#layout-progress-wrapper').on('shown.bs.modal', `#modal-layout`, function() {
         // reload ketika modal diclose
-        $(`#modal-edit`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
-            $('#edit-progress-wrapper').load(' #edit-progress', function() {
+        $(`#modal-layout`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
+            $('#layout-progress-wrapper').load(' #layout-progress', function() {
                 // reinitiate flatpickr modal after load
                 init_flatpickr_modal()
             });
         })
     })
 
-    // submit progress edit
-    $('#edit-progress-wrapper').on('click', `#btn-submit-edit`, function() {
+    // submit progress layout
+    $('#layout-progress-wrapper').on('click', `#btn-submit-layout`, function() {
         const $this = $(this);
 
-        const editData = {
-            [`edit_notes`]: $(`#editor-edit-notes`).val(),
-            [`edit_notes_author`]: $(`#author-edit-notes`).val(),
+        const layoutData = {
+            [`layout_notes`]: $(`#layouter-layout-notes`).val(),
+            [`layout_notes_author`]: $(`#author-layout-notes`).val(),
         }
 
         $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
@@ -234,11 +234,11 @@ $(document).ready(function() {
             type: "POST",
             url: "<?php echo base_url('draft/api_update_draft/'); ?>" + draftId,
             datatype: "JSON",
-            data: editData,
+            data: layoutData,
             success: function(res) {
                 console.log(res);
                 show_toast(true, res.data);
-                $(`#edit-comment-tab-content`).load(` #edit-comment-info`)
+                $(`#layout-comment-tab-content`).load(` #layout-comment-info`)
             },
             error: function(err) {
                 console.log(err);
@@ -247,19 +247,19 @@ $(document).ready(function() {
         });
     });
 
-    // upload progress
-    $('#edit-progress-wrapper').on('submit', `#edit-upload-form`, function(e) {
+    // upload file
+    $('#layout-progress-wrapper').on('submit', `#layout-upload-form`, function(e) {
         e.preventDefault()
 
         // validasi form
         $(this).validate({
             debug: true,
             rules: {
-                [`edit_file`]: {
+                [`layout_file`]: {
                     require_from_group: [1, ".document"],
                     extension: "<?= get_allowed_file_types('draft_file')['types']; ?>",
                 },
-                [`edit_file_link`]: {
+                [`layout_file_link`]: {
                     curl: true,
                     require_from_group: [1, ".document"]
                 }
@@ -269,12 +269,12 @@ $(document).ready(function() {
             validClass: "none",
             errorPlacement: validateErrorPlacement,
             submitHandler: function(form) {
-                const $this = $(`#btn-upload-edit`);
+                const $this = $(`#btn-upload-layout`);
                 $this.attr("disabled", "disabled").html('<i class="fa fa-spinner fa-spin "></i>');
 
                 // prepare form data
                 const formData = new FormData(form);
-                formData.append('progress', 'edit')
+                formData.append('progress', 'layout')
 
                 // send data
                 $.ajax({
@@ -287,12 +287,12 @@ $(document).ready(function() {
                     success: function(res) {
                         console.log(res);
                         show_toast(true, res.data);
-                        $(`#edit-file-tab-content`).load(` #edit-file-info`)
+                        $(`#layout-file-tab-content`).load(` #layout-file-info`)
                     },
                     error: function(err) {
                         console.log(err);
                         show_toast(false, err.responseJSON.message);
-                        $resetform = $(`#edit-file`);
+                        $resetform = $(`#layout-file`);
                         $resetform.val('');
                         $resetform.next('label.custom-file-label').html('');
                         $this.removeAttr("disabled").html("Update");
@@ -306,7 +306,7 @@ $(document).ready(function() {
     })
 
     // delete file
-    $('#edit-progress-wrapper').on('click', `.edit-delete-file`, function(e) {
+    $('#layout-progress-wrapper').on('click', `.layout-delete-file`, function(e) {
         const $this = $(this)
         $this.attr("disabled", "disabled").html('<i class="fa fa-spinner fa-spin "></i>');
 
@@ -315,12 +315,12 @@ $(document).ready(function() {
             url: "<?= base_url('draft/delete_progress/'); ?>" + draftId,
             type: "post",
             data: {
-                type: 'edit'
+                type: 'layout'
             },
             success: function(res) {
                 console.log(res);
                 show_toast(true, res.data);
-                $(`#edit-file-tab-content`).load(` #edit-file-info`)
+                $(`#layout-file-tab-content`).load(` #layout-file-info`)
             },
             error: function(err) {
                 console.log(err);

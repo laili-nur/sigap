@@ -28,10 +28,10 @@ class User extends Admin_Controller
         $this->load->view('template', compact('pagination', 'pages', 'main_view', 'users', 'total'));
     }
 
-    public function api_get_editors()
+    public function api_get_staffs($level)
     {
-        $editors = $this->user->api_get_editors();
-        return $this->send_json_output(true, $editors);
+        $staffs = $this->user->get_all_staffs($level);
+        return $this->send_json_output(true, $staffs);
     }
 
     public function add()

@@ -172,44 +172,46 @@ $is_review_started      = format_datetime($input->review_start_date);
 
 
         <div class="card-body">
-            <!-- button aksi -->
-            <?php if (is_admin()) : ?>
-                <button
-                    title="Aksi admin"
-                    class="btn btn-secondary <?= !$is_review_started ? 'btn-disabled' : ''; ?>"
-                    data-toggle="modal"
-                    data-target="#modal-action-review"
-                    <?= !$is_review_started ? 'disabled' : ''; ?>
-                ><i class="fa fa-thumbs-up"></i> Aksi</button>
-            <?php endif; ?>
+            <div class="card-button">
+                <!-- button aksi -->
+                <?php if (is_admin()) : ?>
+                    <button
+                        title="Aksi admin"
+                        class="btn btn-secondary <?= !$is_review_started ? 'btn-disabled' : ''; ?>"
+                        data-toggle="modal"
+                        data-target="#modal-action-review"
+                        <?= !$is_review_started ? 'disabled' : ''; ?>
+                    ><i class="fa fa-thumbs-up"></i> Aksi</button>
+                <?php endif; ?>
 
-            <!-- button tanggapan review 1 -->
-            <?php if (is_null($reviewer_order) || $reviewer_order == 0) : ?>
-                <button
-                    type="button"
-                    class="btn-modal-review1 btn <?= $input->review1_flag ? 'btn-success' : 'btn-outline-success'; ?> <?= !$is_review_started ? 'btn-disabled' : ''; ?>"
-                    data-toggle="modal"
-                    data-target="#modal-review1"
-                    <?= !$is_review_started ? 'disabled' : ''; ?>
-                    <?= ($level == 'reviewer' && $review1_remaining_time <= 0 && $input->review1_flag == '') ? 'disabled' : ''; ?>
-                >
-                    <span> Review #1 </span>
-                </button>
-            <?php endif; ?>
+                <!-- button tanggapan review 1 -->
+                <?php if (is_null($reviewer_order) || $reviewer_order == 0) : ?>
+                    <button
+                        type="button"
+                        class="btn-modal-review1 btn <?= $input->review1_flag ? 'btn-success' : 'btn-outline-success'; ?> <?= !$is_review_started ? 'btn-disabled' : ''; ?>"
+                        data-toggle="modal"
+                        data-target="#modal-review1"
+                        <?= !$is_review_started ? 'disabled' : ''; ?>
+                        <?= ($level == 'reviewer' && $review1_remaining_time <= 0 && $input->review1_flag == '') ? 'disabled' : ''; ?>
+                    >
+                        <span>Progress Review #1</span>
+                    </button>
+                <?php endif; ?>
 
-            <!-- button tanggapan review 2 -->
-            <?php if (is_null($reviewer_order) || $reviewer_order == 1) : ?>
-                <button
-                    type="button"
-                    class="btn-modal-review2 btn <?= $input->review2_flag ? 'btn-success' : 'btn-outline-success'; ?> <?= !$is_review_started ? 'btn-disabled' : ''; ?>"
-                    data-toggle="modal"
-                    data-target="#modal-review2"
-                    <?= !$is_review_started ? 'disabled' : ''; ?>
-                    <?= ($level == 'reviewer' and $review2_remaining_time <= 0 and $input->review2_flag == '') ? 'disabled' : ''; ?>
-                >
-                    <span>Review #2 </span>
-                </button>
-            <?php endif; ?>
+                <!-- button tanggapan review 2 -->
+                <?php if (is_null($reviewer_order) || $reviewer_order == 1) : ?>
+                    <button
+                        type="button"
+                        class="btn-modal-review2 btn <?= $input->review2_flag ? 'btn-success' : 'btn-outline-success'; ?> <?= !$is_review_started ? 'btn-disabled' : ''; ?>"
+                        data-toggle="modal"
+                        data-target="#modal-review2"
+                        <?= !$is_review_started ? 'disabled' : ''; ?>
+                        <?= ($level == 'reviewer' and $review2_remaining_time <= 0 and $input->review2_flag == '') ? 'disabled' : ''; ?>
+                    >
+                        <span>Progress Review #2</span>
+                    </button>
+                <?php endif; ?>
+            </div>
         </div>
 
         <?php

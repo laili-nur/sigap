@@ -477,7 +477,7 @@ $(document).ready(function() {
             error: function(err) {
                 console.log(err);
                 show_toast(false, err.responseJSON.message);
-                $this.removeAttr("disabled").html("Update");
+                $this.removeAttr("disabled").html("Delete");
             },
         });
     })

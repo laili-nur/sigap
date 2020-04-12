@@ -164,10 +164,10 @@ class User_model extends MY_Model
             ->get_all();
     }
 
-    public function api_get_editors()
+    public function get_all_staffs($level)
     {
         return $this->select('user_id,username,level')
-            ->where('level', 'editor')
+            ->where('level', $level)
             ->order_by('username')
             ->get_all();
     }

@@ -197,7 +197,7 @@ class Draft_model extends MY_Model
             //     'rules' => 'trim',
             // ],
             // [
-            //     'field' => 'layouter_file_link',
+            //     'field' => 'layout_file_link',
             //     'label' => 'Layouter File Link',
             //     'rules' => 'trim',
             // ],
@@ -329,9 +329,9 @@ class Draft_model extends MY_Model
             'layout_start_date'      => null,
             'layout_end_date'        => null,
             'layout_file'            => null,
-            'layouter_file_link'     => null,
+            'layout_file_link'     => null,
             'layout_upload_date'     => null,
-            'layout_last_upload'     => null,
+            'layout_upload_by'     => null,
             'layout_notes'           => null,
             'layout_notes_author'    => null,
             'cover_file'             => null,
@@ -650,21 +650,21 @@ class Draft_model extends MY_Model
             }
         }
     }
-    public function deleteCoverfile($draftFile)
-    {
-        if ($draftFile != "") {
-            if (file_exists("./coverfile/$draftFile")) {
-                unlink("./coverfile/$draftFile");
-            }
-        }
-    }
+    // public function deleteCoverfile($draftFile)
+    // {
+    //     if ($draftFile != "") {
+    //         if (file_exists("./coverfile/$draftFile")) {
+    //             unlink("./coverfile/$draftFile");
+    //         }
+    //     }
+    // }
 
-    public function uploadProgress($field_name, $draft_file_name)
+    public function upload_file($field_name, $draft_file_name)
     {
         $config = [
             'upload_path'      => './draftfile/',
             'file_name'        => $draft_file_name,
-            'allowed_types'    => 'docx|doc|pdf|idml|indd|indt|zip|rar', // docx dan indesign
+            'allowed_types'    => 'docx|doc|pdf|idml|indd|indt|zip|rar|jpg|jpeg|png', // docx dan indesign
             'max_size'         => 151200,
             'overwrite'        => true,
             'file_ext_tolower' => true,
@@ -681,45 +681,47 @@ class Draft_model extends MY_Model
         }
     }
 
-    public function uploadProgressCover($field_name, $draft_file_name)
-    {
-        $config = [
-            'upload_path'      => './coverfile/',
-            'file_name'        => $draft_file_name,
-            'allowed_types'    => 'pdf|jpg|jpeg|png|zip|rar', // image only
-            'max_size'         => 20480, // 20MB
-            'overwrite'        => true,
-            'file_ext_tolower' => true,
-        ];
+    // public function uploadProgressCover($field_name, $draft_file_name)
+    // {
+    //     $config = [
+    //         'upload_path'      => './coverfile/',
+    //         'file_name'        => $draft_file_name,
+    //         'allowed_types'    => 'pdf|jpg|jpeg|png|zip|rar', // image only
+    //         'max_size'         => 20480, // 20MB
+    //         'overwrite'        => true,
+    //         'file_ext_tolower' => true,
+    //     ];
 
-        $this->load->library('upload', $config);
-        if ($this->upload->do_upload($field_name)) {
-            // Upload OK, return uploaded file info.
-            return $this->upload->data();
-        } else {
-            // Add error to $_error_array
-            $this->form_validation->add_to_error_array($field_name, $this->upload->display_errors('', ''));
+    //     $this->load->library('upload', $config);
+    //     if ($this->upload->do_upload($field_name)) {
+    //         // Upload OK, return uploaded file info.
+    //         return $this->upload->data();
+    //     } else {
+    //         // Add error to $_error_array
+    //         $this->form_validation->add_to_error_array($field_name, $this->upload->display_errors('', ''));
+    //         return false;
+    //     }
+    // }
+
+    public function delete_file($draft_file)
+    {
+        if ($draft_file) {
+            if (file_exists("./draftfile/$draft_file")) {
+                unlink("./draftfile/$draft_file");
+                return true;
+            }
             return false;
         }
     }
 
-    public function deleteProgress($draftFile)
-    {
-        if ($draftFile != "") {
-            if (file_exists("./draftfile/$draftFile")) {
-                unlink("./draftfile/$draftFile");
-            }
-        }
-    }
-
-    public function deleteProgressCover($draftFile)
-    {
-        if ($draftFile != "") {
-            if (file_exists("./coverfile/$draftFile")) {
-                unlink("./coverfile/$draftFile");
-            }
-        }
-    }
+    // public function deleteProgressCover($draftFile)
+    // {
+    //     if ($draftFile != "") {
+    //         if (file_exists("./coverfile/$draftFile")) {
+    //             unlink("./coverfile/$draftFile");
+    //         }
+    //     }
+    // }
 
     private function _get_draft_authors_and_status(array $drafts)
     {

@@ -123,42 +123,44 @@ $is_edit_started      = format_datetime($input->edit_start_date);
         </div>
 
         <div class="card-body">
-            <!-- button aksi -->
-            <?php if (is_admin()) : ?>
-                <button
-                    title="Aksi admin"
-                    class="btn btn-secondary <?= !$is_edit_started ? 'btn-disabled' : ''; ?>"
-                    data-toggle="modal"
-                    data-target="#modal-action-edit"
-                ><i class="fa fa-thumbs-up"></i> Aksi</button>
-            <?php endif; ?>
+            <div class="card-button">
+                <!-- button aksi -->
+                <?php if (is_admin()) : ?>
+                    <button
+                        title="Aksi admin"
+                        class="btn btn-secondary <?= !$is_edit_started ? 'btn-disabled' : ''; ?>"
+                        data-toggle="modal"
+                        data-target="#modal-action-edit"
+                    ><i class="fa fa-thumbs-up"></i> Aksi</button>
+                <?php endif; ?>
 
-            <!-- button tanggapan edit -->
-            <button
-                type="button"
-                class="btn <?= ($input->edit_notes) ? 'btn-success' : 'btn-outline-success'; ?>"
-                data-toggle="modal"
-                data-target="#modal-edit"
-                <?= ($level == 'editor' and $edit_remaining_time <= 0 and $input->edit_notes == '') ? 'disabled' : ''; ?>
-            >Editorial</button>
-            <?php if ($level != 'author' and $level != 'layouter') : ?>
+                <!-- button tanggapan edit -->
                 <button
+                    type="button"
+                    class="btn <?= ($input->edit_notes) ? 'btn-success' : 'btn-outline-success'; ?>"
                     data-toggle="modal"
-                    data-target="#modal-edit-confidential"
-                    class="btn btn-outline-dark"
-                ><i class="far fa-sticky-note"></i> Catatan</button>
-            <?php endif; ?>
-            <?php if ($level != 'author') : ?>
-                <button
-                    data-toggle="modal"
-                    data-target="#modal-edit-revision"
-                    class="btn btn-outline-info"
-                ><i class="fa fa-tasks"></i> Revisi <span class="badge badge-info"><?= $revision_total['editor']; ?></span></button>
-            <?php endif; ?>
+                    data-target="#modal-edit"
+                    <?= ($level == 'editor' and $edit_remaining_time <= 0 and $input->edit_notes == '') ? 'disabled' : ''; ?>
+                >Progress Edit</button>
+                <?php if ($level != 'author' and $level != 'layouter') : ?>
+                    <button
+                        data-toggle="modal"
+                        data-target="#modal-edit-confidential"
+                        class="btn btn-outline-dark"
+                    ><i class="far fa-sticky-note"></i> Catatan</button>
+                <?php endif; ?>
+                <?php if ($level != 'author') : ?>
+                    <button
+                        data-toggle="modal"
+                        data-target="#modal-edit-revision"
+                        class="btn btn-outline-info"
+                    ><i class="fa fa-tasks"></i> Revisi <span class="badge badge-info"><?= $revision_total['editor']; ?></span></button>
+                <?php endif; ?>
+            </div>
         </div>
 
         <?php
-        // modal deadline review1
+        // modal deadline edit
         $this->load->view('draft/view/common/deadline_modal', [
             'progress' => 'edit',
         ]);
@@ -171,7 +173,7 @@ $is_edit_started      = format_datetime($input->edit_start_date);
         // modal progress edit
         $this->load->view('draft/view/edit/edit_modal');
 
-        // modal pilih reviewer
+        // modal pilih edit
         $this->load->view('draft/view/edit/select_editor_modal');
 
         // modal catatan confidential
@@ -203,10 +205,6 @@ $(document).ready(function() {
                     // reinitiate modal after load
                     init_flatpickr_modal()
                 });
-                // reload segmen daftar editor
-                // $('#editor-list-wrapper').load(' #editor-list');
-                // reload segmen review
-                // reload_review_segment()
                 // reload progress
                 $('#progress-list-wrapper').load(' #progress-list');
             },
@@ -232,10 +230,6 @@ $(document).ready(function() {
                     // reinitiate modal after load
                     init_flatpickr_modal()
                 });
-                // reload segmen daftar editor
-                // $('#editor-list-wrapper').load(' #editor-list');
-                // reload segmen review
-                // reload_review_segment()
                 // reload progress
                 $('#progress-list-wrapper').load(' #progress-list');
             },

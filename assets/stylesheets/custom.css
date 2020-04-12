@@ -1,11 +1,13 @@
 /* put your own styles to customize and override the theme */
 
 /* select2 responsive fix */
+
 .select2-container {
    width: 100% !important;
 }
 
 /* tombol info kecil di pojokan card dashboard */
+
 .info-home {
    position: absolute;
    top: 5px;
@@ -14,6 +16,10 @@
    color: #346CB0;
 }
 
-.btn-disabled{
-   cursor : not-allowed;
+.btn-disabled {
+   cursor: not-allowed;
+}
+
+.card-button>.btn {
+   margin: 4px 2px;
 }

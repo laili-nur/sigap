@@ -325,7 +325,7 @@ class Draft extends Operator_Controller
 
         // ambil editor dan layouter
         $editors   = $this->user->get_draft_staffs($draft_id, 'editor');
-        $layouters = $this->user->get_draft_staffs($draft_id, 'layout');
+        $layouters = $this->user->get_draft_staffs($draft_id, 'layouter');
 
         // hitung jumlah revisi
         $revision_total['editor']   = $this->revision->count_revision($draft_id, 'editor');
@@ -369,8 +369,10 @@ class Draft extends Operator_Controller
             $this->draft->update_draft_status($draft_id, ['draft_status' => 6]);
         } elseif ($input->progress == 'layout') {
             $this->draft->edit_draft_date($draft_id, 'layout_start_date');
+            $this->draft->update_draft_status($draft_id, ['draft_status' => 8]);
         } elseif ($input->progress == 'proofread') {
             $this->draft->edit_draft_date($draft_id, 'proofread_start_date');
+            $this->draft->update_draft_status($draft_id, ['draft_status' => 12]);
         }
 
         if ($this->db->trans_status() === false) {
@@ -459,20 +461,20 @@ class Draft extends Operator_Controller
 
         if (!empty($_FILES) && $file_name = $_FILES[$column]['name']) {
             $draft_file_name = $this->_generate_draft_file_name($file_name, $draft->draft_title, $column);
-            if ($column == 'cover_file') {
-                $upload = $this->draft->uploadProgressCover($column, $draft_file_name);
-            } else {
-                $upload = $this->draft->uploadProgress($column, $draft_file_name);
-            }
+            // if ($column == 'cover_file') {
+            //     $upload = $this->draft->uploadProgressCover($column, $draft_file_name);
+            // } else {
+            $upload = $this->draft->upload_file($column, $draft_file_name);
+            // }
             if ($upload) {
                 $input->$column = $draft_file_name;
                 // Delete old draft file
                 if ($draft->$column) {
-                    if ($column == 'cover_file') {
-                        $this->draft->deleteProgressCover($draft->$column);
-                    } else {
-                        $this->draft->deleteProgress($draft->$column);
-                    }
+                    // if ($column == 'cover_file') {
+                    //     $this->draft->deleteProgressCover($draft->$column);
+                    // } else {
+                    $this->draft->delete_file($draft->$column);
+                    // }
                 }
             }
 
@@ -481,7 +483,6 @@ class Draft extends Operator_Controller
                 return $this->send_json_output(false, $this->upload->display_errors(), 422);
             }
         }
-
 
         // unset unnecesary data
         unset($input->progress);
@@ -510,9 +511,7 @@ class Draft extends Operator_Controller
 
         $input          = (object) $this->input->post(null, true);
 
-        if (file_exists("./draftfile/" . $draft->{$input->type . "_file"})) {
-            unlink("./draftfile/" . $draft->{$input->type . "_file"});
-        } else {
+        if (!$this->draft->delete_file($draft->{$input->type . "_file"})) {
             return $this->send_json_output(false, $this->lang->line('toast_delete_fail'));
         }
 
@@ -537,7 +536,7 @@ class Draft extends Operator_Controller
         // if ($input->type == 'edit') {
         //     $draft->edit_file_link = '';
         // } elseif ($input->type == 'layout') {
-        //     $draft->layouter_file_link = '';
+        //     $draft->layout_file_link = '';
         // }
 
         if ($this->draft->where('draft_id', $draft_id)->update($draft)) {
@@ -699,21 +698,23 @@ class Draft extends Operator_Controller
                 }
             }
         }
-        if ($this->draft->validate()) {
-            if (!empty($_FILES) && $_FILES['cover_file']['size'] > 0) {
-                // Upload new draft (if any)
-                $getextension  = explode(".", $_FILES['cover_file']['name']);
-                $coverFileName = str_replace(" ", "_", $input->draft_title . '_' . date('YmdHis') . "." . $getextension[1]); // cover file name
-                $upload        = $this->draft->uploadCoverfile('cover_file', $coverFileName);
-                if ($upload) {
-                    $input->cover_file = "$coverFileName";
-                    // Delete old cover file
-                    if ($draft->cover_file) {
-                        $this->draft->deleteCoverfile($draft->cover_file);
-                    }
-                }
-            }
-        }
+
+        // if ($this->draft->validate()) {
+        //     if (!empty($_FILES) && $_FILES['cover_file']['size'] > 0) {
+        //         // Upload new draft (if any)
+        //         $getextension  = explode(".", $_FILES['cover_file']['name']);
+        //         $coverFileName = str_replace(" ", "_", $input->draft_title . '_' . date('YmdHis') . "." . $getextension[1]); // cover file name
+        //         $upload        = $this->draft->uploadCoverfile('cover_file', $coverFileName);
+        //         if ($upload) {
+        //             $input->cover_file = "$coverFileName";
+        //             // Delete old cover file
+        //             if ($draft->cover_file) {
+        //                 $this->draft->deleteCoverfile($draft->cover_file);
+        //             }
+        //         }
+        //     }
+        // }
+
         // If something wrong
         if (!$this->draft->validate() || $this->form_validation->error_array()) {
             $pages       = $this->pages;
@@ -729,6 +730,7 @@ class Draft extends Operator_Controller
         }
         redirect('draft');
     }
+
     public function delete($id = null)
     {
         //khusus admin
@@ -752,7 +754,8 @@ class Draft extends Operator_Controller
                 $this->draft->delete_draft_file($draft->review2_file);
                 $this->draft->delete_draft_file($draft->edit_file);
                 $this->draft->delete_draft_file($draft->layout_file);
-                $this->draft->deleteCoverfile($draft->cover_file);
+                $this->draft->delete_draft_file($draft->cover_file);
+                // $this->draft->deleteCoverfile($draft->cover_file);
                 $this->draft->delete_draft_file($draft->proofread_file);
             } else {
                 $is_success = false;

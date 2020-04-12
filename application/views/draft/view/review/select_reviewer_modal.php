@@ -13,7 +13,7 @@
     >
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> REVIEWER </h5>
+                <h5 class="modal-title"> Pilih Reviewer </h5>
             </div>
             <div class="modal-body">
                 <form>
