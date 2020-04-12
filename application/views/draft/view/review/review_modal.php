@@ -25,7 +25,7 @@ $all_criteria = [
     id="modal-<?= $progress ?>"
     tabindex="-1"
     role="dialog"
-    aria-labelledby="modal-review1"
+    aria-labelledby="modal-<?= $progress ?>"
     aria-hidden="true"
 >
     <div
@@ -44,6 +44,7 @@ $all_criteria = [
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+
             <ul
                 class="nav nav-tabs"
                 id="<?= $progress ?>-tab-wrapper"
@@ -72,6 +73,7 @@ $all_criteria = [
                     >Tanggapan</a>
                 </li>
             </ul>
+
             <div class="modal-body py-3">
                 <div
                     class="tab-content"
@@ -134,6 +136,11 @@ $all_criteria = [
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-end">
+                                        <button
+                                            type="button"
+                                            class="btn btn-light ml-auto"
+                                            data-dismiss="modal"
+                                        >Close</button>
                                         <button
                                             id="btn-upload-<?= $progress ?>"
                                             class="btn btn-primary"
@@ -311,8 +318,13 @@ $all_criteria = [
 
                             <div class="d-flex justify-content-end">
                                 <button
+                                    type="button"
+                                    class="btn btn-light ml-auto"
+                                    data-dismiss="modal"
+                                >Close</button>
+                                <button
                                     id="btn-submit-<?= $progress ?>"
-                                    class="btn btn-primary ml-auto"
+                                    class="btn btn-primary"
                                     type="button"
                                 >Submit</button>
                             </div>

@@ -535,7 +535,7 @@ class Draft extends Operator_Controller
         $draft->{$input->type . '_upload_by'} = '';
         $draft->{$input->type . '_file'}        = '';
         // if ($input->type == 'edit') {
-        //     $draft->editor_file_link = '';
+        //     $draft->edit_file_link = '';
         // } elseif ($input->type == 'layout') {
         //     $draft->layouter_file_link = '';
         // }

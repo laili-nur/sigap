@@ -158,9 +158,6 @@ $is_edit_started      = format_datetime($input->edit_start_date);
         </div>
 
         <?php
-        // modal pilih reviewer
-        $this->load->view('draft/view/edit/select_editor_modal');
-
         // modal deadline review1
         $this->load->view('draft/view/common/deadline_modal', [
             'progress' => 'edit',
@@ -170,6 +167,15 @@ $is_edit_started      = format_datetime($input->edit_start_date);
         $this->load->view('draft/view/common/action_modal', [
             'progress' => 'edit'
         ]);
+
+        // modal progress edit
+        $this->load->view('draft/view/edit/edit_modal');
+
+        // modal pilih reviewer
+        $this->load->view('draft/view/edit/select_editor_modal');
+
+        // modal catatan confidential
+        $this->load->view('draft/view/edit/confidential_modal');
         ?>
     </div>
 </section>
@@ -183,7 +189,6 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: "<?= base_url('draft/api_start_progress/'); ?>" + draft_id,
-            datatype: "JSON",
             data: {
                 progress: 'edit'
             },
@@ -213,7 +218,6 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: "<?= base_url('draft/api_finish_progress/'); ?>" + draft_id,
-            // datatype: "JSON",
             data: {
                 progress: 'edit'
             },
@@ -250,580 +254,208 @@ $(document).ready(function() {
 
 
 
-    // ------------------------------------------------------------------
-    //panggil setingan validasi di ugmpress js
-    loadValidateSetting();
+    //     // ------------------------------------------------------------------
+    //     //panggil setingan validasi di ugmpress js
+    //     loadValidateSetting();
 
-    //submit dan validasi
-    $("#editform").validate({
-            rules: {
-                edit_file: {
-                    require_from_group: [1, ".naskah"],
-                    extension: "docx|doc|pdf|zip|rar",
-                    filesize50: 52428200
-                },
-                editor_file_link: {
-                    curl: true,
-                    require_from_group: [1, ".naskah"]
-                }
-            },
-            errorElement: "span",
-            errorClass: "none",
-            validClass: "none",
-            errorPlacement: function(error, element) {
-                error.addClass("invalid-feedback");
-                if (element.parent('.input-group').length) {
-                    error.insertAfter(element.next('span.select2')); // input group
-                } else if (element.hasClass("select2-hidden-accessible")) {
-                    error.insertAfter(element.next('span.select2')); // select2
-                } else if (element.parent().parent().hasClass('input-group')) {
-                    error.insertAfter(element.closest('.input-group')); // fileinput append
-                } else if (element.hasClass("custom-file-input")) {
-                    error.insertAfter(element.next('label.custom-file-label')); // fileinput custom
-                } else if (element.hasClass("custom-control-input")) {
-                    error.insertAfter($(".custom-radio").last()); // radio
-                } else {
-                    error.insertAfter(element); // default
-                }
-            },
-            submitHandler: function(form) {
-                var $this = $('#btn-upload-edit');
-                $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Uploading ");
-                let id = $('[name=draft_id]').val();
-                var formData = new FormData(form);
-                $.ajax({
-                    url: "<?php echo base_url('draft/upload_progress/'); ?>" + id + "/edit_file",
-                    type: "post",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    success: function(data) {
-                        let datax = JSON.parse(data);
-                        console.log(datax);
-                        $this.removeAttr("disabled").html("Upload");
-                        if (datax.status == true) {
-                            show_toast('111');
-                        } else {
-                            show_toast('000');
-                        }
-                        $('#modal-edit').load(' #modal-edit');
-                    }
-                });
-                $resetform = $('#edit_file');
-                $resetform.val('');
-                $resetform.next('label.custom-file-label').html('');
-                return false;
-            }
-        },
-        validateSelect2()
-    );
+    //     //load data ketika modal dibuka
+    //     $('#edit-revisi').on('shown.bs.modal', function(e) {
+    //         load_revisi_edit();
+    //     })
 
-    //tombol hapus file
-    $('#modal-edit').on('click', '#btn-delete-edit', function() {
-        var $this = $(this);
-        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
-        var id = $('input[name=draft_id]').val();
+    //     //kosongkan modal ketika close
+    //     $('#edit-revisi').on('hidden.bs.modal', function(e) {
+    //         $('#accordion-editor').html('');
+    //     })
 
-        var jenis = 'edit';
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('draft/delete_progress/'); ?>" + id + "/" + jenis,
-            datatype: "JSON",
-            success: function(data) {
-                let datax = JSON.parse(data);
-                console.log(datax);
-                if (datax.status == true) {
-                    show_toast('111');
-                } else {
-                    show_toast('000');
-                }
-                $('#modal-edit').load(' #modal-edit');
-                $('#editor_file_link').val('');
-            }
-        })
-    });
+    //     //gantian modal revisi dan deadline revisi
+    //     // $('#edit-revisi-deadline').on('shown.bs.modal', function (e) {
+    //     //   $('#edit-revisi').modal('toggle');
+    //     // })
+    //     $('#edit-revisi-deadline').on('hidden.bs.modal', function(e) {
+    //         load_revisi_edit();
+    //     })
 
-    //tombol pilih editor
-    $('#btn-pilih-editor').on('click', function() {
-        $('.help-block').remove();
-        var $this = $(this);
-        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-        var draft = $('input[name=draft_id]').val();
-        var editor = $('#pilih_editor').val();
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('responsibility/add/editor'); ?>",
-            datatype: "JSON",
-            cache: false,
-            data: {
-                draft_id: draft,
-                user_id: editor
-            },
-            success: function(data) {
-                var dataeditor = JSON.parse(data);
-                console.log(dataeditor);
-                if (!dataeditor.validasi) {
-                    $('#form-editor').append('<div class="text-danger help-block">editor sudah dipilih</div>');
-                    show_toast('33');
-                } else if (dataeditor.validasi == 'max') {
-                    show_toast('98');
-                } else {
-                    show_toast('5');
-                }
-                $('[name=editor]').val("");
-                $('#reload-editor').load(' #reload-editor');
-                //$('#list-group-edit').load(' #list-group-edit');
-                $this.removeAttr("disabled").html("Pilih");
-            }
+    //     $('#accordion-editor').on('click', '.trigger-edit-revisi-deadline', function(e) {
+    //         var revision_id = $(this).attr('data');
+    //         $('#revision_id').val(revision_id);
+    //     });
 
-        });
-        return false;
-    });
+    //     $('#btn-edit-revisi-deadline').on('click', function(e) {
+    //         var revision_id = $('#revision_id').val();
+    //         e.preventDefault();
+    //         let revision_edit_deadline = $('[name=revision_edit_deadline]').val();
+    //         let revision_edit_start_date = $('[name=revision_edit_start_date]').val();
+    //         let revision_edit_end_date = $('[name=revision_edit_end_date]').val();
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "<?php echo base_url('draft/deadlineRevision'); ?>",
+    //             datatype: "JSON",
+    //             data: {
+    //                 revision_id: revision_id,
+    //                 revision_deadline: revision_edit_deadline,
+    //                 revision_start_date: revision_edit_start_date,
+    //                 revision_end_date: revision_edit_end_date,
+    //             },
+    //             success: function(data) {
+    //                 let datax = JSON.parse(data);
+    //                 console.log(datax);
+    //                 if (datax.status == true) {
+    //                     show_toast('111');
+    //                 } else {
+    //                     show_toast('000');
+    //                 }
+    //                 $('#edit-revisi-deadline').modal('toggle');
+    //             }
+    //         })
+    //     })
 
-    //tombol mulai proses editor
-    $('#btn-mulai-editor').on('click', function() {
-        var $this = $(this);
-        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-        var draft = $('input[name=draft_id]').val();
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('responsibility/mulai_proses/editor'); ?>",
-            datatype: "JSON",
-            cache: false,
-            data: {
-                draft_id: draft,
-                col: 'edit_start_date'
-            },
-            success: function(data) {
-                let datax = JSON.parse(data);
-                console.log(datax)
-                $this.removeAttr("disabled").html("Submit");
-                if (datax.status == true) {
-                    show_toast('111');
-                } else {
-                    show_toast('000');
-                }
-                $('#list-group-edit').load(' #list-group-edit');
-                $this.removeAttr("disabled").html('<i class="fas fa-play"></i><span class="d-none d-md-inline"> Mulai</span>');
-                $this.addClass('disabled');
-                $this.attr("disabled", "disabled");
-                location.reload();
-            }
+    //     function load_revisi_edit() {
+    //         let draft_id = $('[name=draft_id]').val();
+    //         $('#accordion-editor').html('<i class="fa fa-spinner fa-spin"></i> Loading data...');
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "<?php echo base_url('draft/getRevision'); ?>",
+    //             datatype: "JSON",
+    //             data: {
+    //                 draft_id: draft_id,
+    //                 role: 'editor'
+    //             },
+    //             success: function(data) {
+    //                 let datax = JSON.parse(data);
+    //                 console.log(datax.flag);
+    //                 if (datax.flag != true) {
+    //                     $('#mulai-revisi-editor').removeAttr('disabled');
+    //                 }
+    //                 var i;
+    //                 if (datax.revisi.length > 0) {
+    //                     for (i = 0; i < datax.revisi.length; i++) {
+    //                         $('#accordion-editor').html(datax.revisi);
+    //                         $('.summernote-basic').summernote({
+    //                             placeholder: 'Write here...',
+    //                             height: 100,
+    //                             disableDragAndDrop: true,
+    //                             toolbar: [
+    //                                 ['style', ['bold', 'italic', 'underline', 'clear']],
+    //                                 ['font', ['strikethrough']],
+    //                                 ['fontsize', ['fontsize', 'height']],
+    //                                 ['color', ['color']],
+    //                                 ['para', ['ul', 'ol', 'paragraph']],
+    //                                 ['height', ['height']],
+    //                                 ['view', ['codeview']],
+    //                             ]
+    //                         });
+    //                     }
+    //                 } else {
+    //                     $('#accordion-editor').html(datax.revisi);
+    //                 }
 
-        });
-        return false;
-    });
-
-    //tombol selesai proses editor
-    $('#btn-selesai-editor').on('click', function() {
-        var $this = $(this);
-        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-        var draft = $('input[name=draft_id]').val();
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('responsibility/selesai_proses/editor'); ?>",
-            datatype: "JSON",
-            cache: false,
-            data: {
-                draft_id: draft,
-                col: 'edit_end_date'
-            },
-            success: function(data) {
-                let datax = JSON.parse(data);
-                console.log(datax)
-                $this.removeAttr("disabled").html("Submit");
-                if (datax.status == true) {
-                    show_toast('111');
-                } else {
-                    show_toast('000');
-                }
-                $('#list-group-edit').load(' #list-group-edit');
-                $this.removeAttr("disabled").html('<i class="fas fa-stop"></i><span class="d-none d-md-inline"> Selesai</span>');
-                $this.addClass('disabled');
-                $this.attr("disabled", "disabled");
-                //location.reload();
-            }
-
-        });
-        return false;
-    });
-
-    //hapus editor
-    $('#reload-editor').on('click', '.delete-editor', function() {
-        $(this).attr('disabled', 'disabled').html("<i class='fa fa-spinner fa-spin '></i>");
-        var id = $(this).attr('data');
-        console.log(id);
-        $.ajax({
-            url: "<?php echo base_url('responsibility/delete/'); ?>" + id,
-            success: function(data) {
-                console.log(data);
-                $('#reload-editor').load(' #reload-editor');
-                show_toast('6');
-                //$('#list-group-edit').load(' #list-group-edit');
-            }
-        })
-    });
-
-    $('#btn-submit-edit').on('click', function() {
-        var $this = $(this);
-        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-        let id = $('[name=draft_id]').val();
-        let ce = $('#ce').val();
-        let cep = $('#cep').val();
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('draft/api_update_draft/'); ?>" + id,
-            datatype: "JSON",
-            data: {
-                edit_notes: ce,
-                edit_notes_date: true,
-                edit_notes_author: cep
-            },
-            success: function(data) {
-                let datax = JSON.parse(data);
-                console.log(datax);
-
-                $this.removeAttr("disabled").html("Submit");
-                if (datax.status == true) {
-                    show_toast('111');
-                } else {
-                    show_toast('000');
-                }
-                $('#list-group-edit').load(' #list-group-edit');
-                $('#edit_last_notes').html(datax.edit_notes_date);
-                $('#edit').modal('toggle');
-            }
-        });
-        return false;
-    });
-
-    $('#btn-submit-edit-confidential').on('click', function() {
-        var $this = $(this);
-        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-        let id = $('[name=draft_id]').val();
-        let cecon = $('#cecon').val();
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('draft/api_update_draft/'); ?>" + id,
-            datatype: "JSON",
-            data: {
-                edit_notes_confidential: cecon,
-            },
-            success: function(data) {
-                let datax = JSON.parse(data);
-                console.log(datax);
-                $this.removeAttr("disabled").html("Submit");
-                if (datax.status == true) {
-                    show_toast('111');
-                } else {
-                    show_toast('000');
-                }
-                $('#edit-confidential').modal('toggle');
-            }
-        });
-        return false;
-    });
+    //             }
+    //         });
+    //     }
 
 
 
-    $('#edit-setuju').on('click', function() {
-        var $this = $(this);
-        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-        let id = $('[name=draft_id]').val();
-        let edit_status = $('[name=edit_status]').val();
-        let action = $('#edit-setuju').val();
-        let end_date = $('#edit_finish_date').val();
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('draft/api_update_draft/'); ?>" + id,
-            datatype: "JSON",
-            data: {
-                edit_status: edit_status,
-                draft_status: action,
-                is_edit: 'y'
-            },
-            success: function(data) {
-                let datax = JSON.parse(data);
-                console.log(datax);
-                $this.removeAttr("disabled").html("Setuju");
-                if (datax.status == true) {
-                    show_toast('111');
-                } else {
-                    show_toast('000');
-                }
-                $('#list-group-edit').load(' #list-group-edit');
-                location.reload();
-            }
-        });
+    //     $('#accordion-editor').on('click', '.selesai-revisi', function() {
+    //         $(this).attr("disabled", "disabled");
+    //         var revision_id = $(this).attr('data');
+    //         let draft_id = $('[name=draft_id]').val();
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "<?php echo base_url('draft/endRevision'); ?>",
+    //             datatype: "JSON",
+    //             data: {
+    //                 revision_id: revision_id,
+    //                 draft_id: draft_id
+    //             },
+    //             success: function(data) {
+    //                 let datax = JSON.parse(data);
+    //                 console.log(datax);
+    //                 if (datax.status == true) {
+    //                     show_toast('111');
+    //                 } else {
+    //                     show_toast('000');
+    //                 }
+    //                 load_revisi_edit();
+    //             }
+    //         })
+    //     });
 
-        // $('#edit_aksi').modal('hide');
-        return false;
-    });
+    //     $('#accordion-editor').on('click', '.submit-revisi', function() {
+    //         var revision_id = $(this).attr('data');
+    //         var revision_notes = $('#revisi' + revision_id).val();
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "<?php echo base_url('draft/submitRevision'); ?>",
+    //             datatype: "JSON",
+    //             data: {
+    //                 revision_id: revision_id,
+    //                 revision_notes: revision_notes
+    //             },
+    //             success: function(data) {
+    //                 let datax = JSON.parse(data);
+    //                 console.log(datax);
+    //                 if (datax.status == true) {
+    //                     show_toast('111');
+    //                 } else {
+    //                     show_toast('000');
+    //                 }
+    //             }
+    //         })
+    //     });
 
-    $('#edit-tolak').on('click', function() {
-        var $this = $(this);
-        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-        let id = $('[name=draft_id]').val();
-        let edit_status = $('[name=edit_status]').val();
-        let action = $('#edit-tolak').val();
-        let end_date = $('#edit_finish_date').val();
-
-        console.log(end_date);
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('draft/api_update_draft/'); ?>" + id,
-            datatype: "JSON",
-            data: {
-                edit_status: edit_status,
-                draft_status: action,
-                is_edit: 'n'
-            },
-            success: function(data) {
-                let datax = JSON.parse(data);
-                console.log(datax);
-                $this.removeAttr("disabled").html("Tolak");
-                if (datax.status == true) {
-                    show_toast('111');
-                } else {
-                    show_toast('000');
-                }
-                $('#list-group-edit').load(' #list-group-edit');
-                location.reload();
-            }
-        });
-
-        // $('#edit_aksi').modal('hide');
-        return false;
-    });
-
-    //edit deadline
-    $('#btn-edit-deadline').on('click', function() {
-        var $this = $(this);
-        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-        let id = $('[name=draft_id]').val();
-        let ed = $('[name=edit_deadline]').val();
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('draft/api_update_draft/'); ?>" + id,
-            datatype: "JSON",
-            data: {
-                edit_deadline: ed
-            },
-            success: function(data) {
-                let datax = JSON.parse(data);
-                console.log(datax)
-                $this.removeAttr("disabled").html("Submit");
-                if (datax.status == true) {
-                    show_toast('111');
-                } else {
-                    show_toast('000');
-                }
-                $('#list-group-edit').load(' #list-group-edit');
-                $('#edit_deadline').modal('toggle');
-            }
-        });
-        return false;
-    });
-
-    //load data ketika modal dibuka
-    $('#edit-revisi').on('shown.bs.modal', function(e) {
-        load_revisi_edit();
-    })
-
-    //kosongkan modal ketika close
-    $('#edit-revisi').on('hidden.bs.modal', function(e) {
-        $('#accordion-editor').html('');
-    })
-
-    //gantian modal revisi dan deadline revisi
-    // $('#edit-revisi-deadline').on('shown.bs.modal', function (e) {
-    //   $('#edit-revisi').modal('toggle');
-    // })
-    $('#edit-revisi-deadline').on('hidden.bs.modal', function(e) {
-        load_revisi_edit();
-    })
-
-    $('#accordion-editor').on('click', '.trigger-edit-revisi-deadline', function(e) {
-        var revision_id = $(this).attr('data');
-        $('#revision_id').val(revision_id);
-    });
-
-    $('#btn-edit-revisi-deadline').on('click', function(e) {
-        var revision_id = $('#revision_id').val();
-        e.preventDefault();
-        let revision_edit_deadline = $('[name=revision_edit_deadline]').val();
-        let revision_edit_start_date = $('[name=revision_edit_start_date]').val();
-        let revision_edit_end_date = $('[name=revision_edit_end_date]').val();
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('draft/deadlineRevision'); ?>",
-            datatype: "JSON",
-            data: {
-                revision_id: revision_id,
-                revision_deadline: revision_edit_deadline,
-                revision_start_date: revision_edit_start_date,
-                revision_end_date: revision_edit_end_date,
-            },
-            success: function(data) {
-                let datax = JSON.parse(data);
-                console.log(datax);
-                if (datax.status == true) {
-                    show_toast('111');
-                } else {
-                    show_toast('000');
-                }
-                $('#edit-revisi-deadline').modal('toggle');
-            }
-        })
-    })
-
-    function load_revisi_edit() {
-        let draft_id = $('[name=draft_id]').val();
-        $('#accordion-editor').html('<i class="fa fa-spinner fa-spin"></i> Loading data...');
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('draft/getRevision'); ?>",
-            datatype: "JSON",
-            data: {
-                draft_id: draft_id,
-                role: 'editor'
-            },
-            success: function(data) {
-                let datax = JSON.parse(data);
-                console.log(datax.flag);
-                if (datax.flag != true) {
-                    $('#mulai-revisi-editor').removeAttr('disabled');
-                }
-                var i;
-                if (datax.revisi.length > 0) {
-                    for (i = 0; i < datax.revisi.length; i++) {
-                        $('#accordion-editor').html(datax.revisi);
-                        $('.summernote-basic').summernote({
-                            placeholder: 'Write here...',
-                            height: 100,
-                            disableDragAndDrop: true,
-                            toolbar: [
-                                ['style', ['bold', 'italic', 'underline', 'clear']],
-                                ['font', ['strikethrough']],
-                                ['fontsize', ['fontsize', 'height']],
-                                ['color', ['color']],
-                                ['para', ['ul', 'ol', 'paragraph']],
-                                ['height', ['height']],
-                                ['view', ['codeview']],
-                            ]
-                        });
-                    }
-                } else {
-                    $('#accordion-editor').html(datax.revisi);
-                }
-
-            }
-        });
-    }
+    //     $('#accordion-editor').on('click', '.hapus-revisi', function() {
+    //         var id = $(this).attr('data');
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "<?php echo base_url('draft/deleteRevision/'); ?>" + id,
+    //             datatype: "JSON",
+    //             success: function(data) {
+    //                 let datax = JSON.parse(data);
+    //                 console.log(datax);
+    //                 if (datax.status == true) {
+    //                     show_toast('111');
+    //                 } else {
+    //                     show_toast('000');
+    //                 }
+    //                 load_revisi_edit();
+    //             }
+    //         })
+    //     });
 
 
-
-    $('#accordion-editor').on('click', '.selesai-revisi', function() {
-        $(this).attr("disabled", "disabled");
-        var revision_id = $(this).attr('data');
-        let draft_id = $('[name=draft_id]').val();
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('draft/endRevision'); ?>",
-            datatype: "JSON",
-            data: {
-                revision_id: revision_id,
-                draft_id: draft_id
-            },
-            success: function(data) {
-                let datax = JSON.parse(data);
-                console.log(datax);
-                if (datax.status == true) {
-                    show_toast('111');
-                } else {
-                    show_toast('000');
-                }
-                load_revisi_edit();
-            }
-        })
-    });
-
-    $('#accordion-editor').on('click', '.submit-revisi', function() {
-        var revision_id = $(this).attr('data');
-        var revision_notes = $('#revisi' + revision_id).val();
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('draft/submitRevision'); ?>",
-            datatype: "JSON",
-            data: {
-                revision_id: revision_id,
-                revision_notes: revision_notes
-            },
-            success: function(data) {
-                let datax = JSON.parse(data);
-                console.log(datax);
-                if (datax.status == true) {
-                    show_toast('111');
-                } else {
-                    show_toast('000');
-                }
-            }
-        })
-    });
-
-    $('#accordion-editor').on('click', '.hapus-revisi', function() {
-        var id = $(this).attr('data');
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('draft/deleteRevision/'); ?>" + id,
-            datatype: "JSON",
-            success: function(data) {
-                let datax = JSON.parse(data);
-                console.log(datax);
-                if (datax.status == true) {
-                    show_toast('111');
-                } else {
-                    show_toast('000');
-                }
-                load_revisi_edit();
-            }
-        })
-    });
-
-
-    $('#mulai-revisi-editor').on('click', function() {
-        $(this).attr("disabled", "disabled");
-        $(this).tooltip('dispose');
-        let draft_id = $('[name=draft_id]').val();
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('draft/insertRevision'); ?>",
-            datatype: "JSON",
-            data: {
-                draft_id: draft_id,
-                role: 'editor'
-            },
-            success: function(data) {
-                let datax = JSON.parse(data);
-                console.log(datax);
-                if (datax.status == true) {
-                    show_toast('111');
-                } else {
-                    show_toast('000');
-                }
-                load_revisi_edit();
-            }
-        })
-    });
+    //     $('#mulai-revisi-editor').on('click', function() {
+    //         $(this).attr("disabled", "disabled");
+    //         $(this).tooltip('dispose');
+    //         let draft_id = $('[name=draft_id]').val();
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "<?php echo base_url('draft/insertRevision'); ?>",
+    //             datatype: "JSON",
+    //             data: {
+    //                 draft_id: draft_id,
+    //                 role: 'editor'
+    //             },
+    //             success: function(data) {
+    //                 let datax = JSON.parse(data);
+    //                 console.log(datax);
+    //                 if (datax.status == true) {
+    //                     show_toast('111');
+    //                 } else {
+    //                     show_toast('000');
+    //                 }
+    //                 load_revisi_edit();
+    //             }
+    //         })
+    //     });
 
 
 
 
 
-    $('#btn-close-editor').on('click', function() {
-        location.reload();
-    });
+    //     $('#btn-close-editor').on('click', function() {
+    //         location.reload();
+    //     });
 
 })
 </script>

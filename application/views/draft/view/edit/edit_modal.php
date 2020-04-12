@@ -1,131 +1,333 @@
+<?php $level = check_level() ?>
 <div
     class="modal fade"
-    id="edit"
+    id="modal-edit"
     tabindex="-1"
     role="dialog"
-    aria-labelledby="exampleModalLabel"
+    aria-labelledby="modal-edit"
     aria-hidden="true"
 >
-    <div
-        class="modal-dialog modal-lg modal-dialog-overflow"
-        role="document"
-    >
+    <div class="modal-dialog modal-lg modal-dialog-overflow">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"> Progress Edit</h5>
-            </div>
-            <div class="modal-body">
-                <p class="font-weight-bold">NASKAH</p>
-                <?php if ($level == 'editor' or ($level == 'author' and $author_order == 1) or $level == 'superadmin' or $level == 'admin_penerbitan') : ?>
-                    <div class="alert alert-info">Upload file naskah atau sertakan link naskah.</div>
-                    <?= form_open_multipart('draft/upload_progress/' . $input->draft_id . '/edit_file', 'id="editform"'); ?>
-                    <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : ''; ?>
-                    <div class="form-group">
-                        <label for="edit_file">File Naskah</label>
-                        <div class="custom-file">
-                            <?= form_upload('edit_file', '', 'class="custom-file-input naskah" id="edit_file"'); ?>
-                            <label
-                                class="custom-file-label"
-                                for="edit_file"
-                            >Pilih file</label>
-                        </div>
-                        <small class="form-text text-muted">Tipe file upload bertype : docx, doc, pdf, zip, dan rar.</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="editor_file_link">Link Naskah</label>
-                        <div>
-                            <?= form_input('editor_file_link', $input->editor_file_link, 'class="form-control naskah" id="editor_file_link"'); ?>
-                        </div>
-                        <?= form_error('editor_file_link'); ?>
-                    </div>
-                    <div class="form-group">
-                        <button
-                            class="btn btn-primary "
-                            type="submit"
-                            value="Submit"
-                            id="btn-upload-edit"
-                        ><i class="fa fa-upload"></i> Upload</button>
-                    </div>
-                    <?= form_close(); ?>
-                <?php endif; ?>
-                <div id="modal-edit">
-                    <p>Last Upload :
-                        <?= format_datetime($input->edit_upload_date); ?>,
-                        <br> by :
-                        <?= konversi_username_level($input->edit_last_upload); ?>
-                        <?php if ($level != 'author' and $level != 'reviewer') : ?>
-                            <em>(
-                    <?= $input->edit_last_upload; ?>)</em>
-                        <?php endif; ?>
-                    </p>
-                    <?= (!empty($input->edit_file)) ? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="' . $input->edit_file . '" href="' . base_url('draftfile/' . $input->edit_file) . '" class="btn btn-success"><i class="fa fa-download"></i> Download</a>' : ''; ?>
-                    <?= (!empty($input->editor_file_link)) ? '<a data-toggle="tooltip" data-placement="right" title="" data-original-title="' . $input->editor_file_link . '" href="' . $input->editor_file_link . '" class="btn btn-success"><i class="fa fa-external-link-alt"></i> External file</a>' : ''; ?>
-                    <?= (!empty($input->editor_file_link) or !empty($input->edit_file)) ? '<button data-toggle="tooltip" data-placement="right" title="" data-original-title="hapus file" class="btn btn-danger" id="btn-delete-edit"><i class="fa fa-trash"></i></button>' : ''; ?>
-                </div>
-                <hr class="my-3">
-                <?= form_open('', 'id="formedit"'); ?>
-                <fieldset>
-                    <div class="form-group">
-                        <label
-                            for="ce"
-                            class="font-weight-bold"
-                        >Catatan Editor</label>
-                        <small class="text-muted" id="edit_last_notes">
-                  <?= format_datetime($input->edit_notes_date); ?></small>
-                        <?php
-                        $optionsce = array(
-                            'name'  => 'edit_notes',
-                            'class' => 'form-control summernote-basic',
-                            'id'    => 'ce',
-                            'rows'  => '6',
-                            'value' => $input->edit_notes,
-                        );
-                        if ($level != 'editor') {
-                            echo '<div class="font-italic">' . nl2br($input->edit_notes) . '</div>';
-                        } else {
-                            echo form_textarea($optionsce);
-                        }
-                        ?>
-                    </div>
-                    <hr>
-                    <div class="form-group">
-                        <label
-                            for="cep"
-                            class="font-weight-bold"
-                        >Catatan Penulis</label>
-                        <?php
-                        $optionscep = array(
-                            'name'  => 'edit_notes_author',
-                            'class' => 'form-control summernote-basic',
-                            'id'    => 'cep',
-                            'rows'  => '6',
-                            'value' => $input->edit_notes_author,
-                        );
-                        if ($level != 'author' or $author_order != 1) {
-                            echo '<div class="font-italic">' . nl2br($input->edit_notes_author) . '</div>';
-                        } else {
-                            echo form_textarea($optionscep);
-                        }
-                        ?>
-                    </div>
-                </fieldset>
-            </div>
-            <div class="modal-footer">
-                <?php if ($author_order == 1 and $level == 'author' or $level == 'editor') : ?>
-                    <button
-                        class="btn btn-primary ml-auto"
-                        type="submit"
-                        value="Submit"
-                        id="btn-submit-edit"
-                    >Submit</button>
-                <?php endif; ?>
-                <?= form_close(); ?>
                 <button
                     type="button"
-                    class="btn btn-light"
+                    class="close"
                     data-dismiss="modal"
-                >Close</button>
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <ul
+                class="nav nav-tabs"
+                id="edit-tab-wrapper"
+                role="tablist"
+            >
+                <li class="nav-item">
+                    <a
+                        class="nav-link active"
+                        id="edit-file-tab"
+                        data-toggle="tab"
+                        href="#edit-file-tab-content"
+                        role="tab"
+                        aria-controls="edit-file-tab-content"
+                        aria-selected="true"
+                    >File</a>
+                </li>
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        id="edit-comment-tab"
+                        data-toggle="tab"
+                        href="#edit-comment-tab-content"
+                        role="tab"
+                        aria-controls="edit-comment-tab-content"
+                        aria-selected="false"
+                    >Tanggapan</a>
+                </li>
+            </ul>
+
+            <div class="modal-body py-3">
+                <div
+                    class="tab-content"
+                    id="edit-tab-content-wrapper"
+                >
+                    <div
+                        class="tab-pane fade show active"
+                        id="edit-file-tab-content"
+                        role="tabpanel"
+                        aria-labelledby="edit-file-tab"
+                    >
+                        <div id="edit-file-info">
+                            <div class="alert alert-info">
+                                <p class="alert-heading font-weight-bold">File Tersimpan</p>
+                                <?php if ($input->edit_file) : ?>
+                                    <a
+                                        href="<?= base_url("draft/download_file/draftfile/{$input->edit_file}") ?>"
+                                        class="btn btn-success"
+                                    ><i class="fa fa-download"></i> Download</a>
+                                    <button
+                                        type="button"
+                                        class="btn btn-danger edit-delete-file"
+                                    ><i class="fa fa-trash"></i> Delete</button>
+                                <?php endif ?>
+                                <?php if ($input->edit_file_link) : ?>
+                                    <a
+                                        href="<?= $input->edit_file_link ?>"
+                                        class="btn btn-primary"
+                                        target="_blank"
+                                    ><i class="fa fa-external-link-alt"></i> External file</a>
+                                <?php endif ?>
+                                <p>
+                                    <div>Terakhir diubah: <span><?= $input->edit_upload_date ?></span></div>
+                                    <div>Oleh: <span><?= $input->edit_upload_by ?></span></div>
+                                </p>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <?php if ($level == 'editor' || ($level == 'author' && $author_order == 1) || is_admin()) : ?>
+                                <form
+                                    id="edit-upload-form"
+                                    method="post"
+                                    enctype="multipart/form-data"
+                                >
+                                    <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : ''; ?>
+                                    <div class="form-group">
+                                        <label for="edit-file">Upload File Naskah</label>
+                                        <div class="custom-file">
+                                            <?= form_upload("edit_file", '', "class='custom-file-input document' id='edit-file'"); ?>
+                                            <label
+                                                class="custom-file-label"
+                                                for="edit-file"
+                                            >Pilih file</label>
+                                        </div>
+                                        <small class="form-text text-muted">Tipe file upload bertype : <?= get_allowed_file_types('draft_file')['to_text']; ?></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="edit-file-link">Link Naskah</label>
+                                        <div>
+                                            <?= form_input("edit_file_link", $input->{"edit_file_link"}, "class='form-control document' id='edit-file-link'"); ?>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <button
+                                            type="button"
+                                            class="btn btn-light ml-auto"
+                                            data-dismiss="modal"
+                                        >Close</button>
+                                        <button
+                                            id="btn-upload-edit"
+                                            class="btn btn-primary"
+                                            type="submit"
+                                        > Update</button>
+                                    </div>
+                                </form>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div
+                        class="tab-pane fade"
+                        id="edit-comment-tab-content"
+                        role="tabpanel"
+                        aria-labelledby="edit-comment-tab"
+                    >
+                        <div id="edit-comment-info">
+                            <fieldset>
+                                <!-- CATATAN EDITOR UNTUK STAFF/ADMIN/AUTHOR -->
+                                <?php if ($level != 'author') : ?>
+                                    <div class="form-group">
+                                        <label
+                                            for="editor-edit-notes"
+                                            class="font-weight-bold"
+                                        >Catatan Editor untuk Admin</label>
+                                        <?php
+                                        if (!is_admin() && $level != 'editor') {
+                                            echo "<div class='font-italic' id='editor-edit-notes'>" . $input->edit_notes . "</div>";
+                                        } else {
+                                            echo form_textarea([
+                                                'name'  => "editor-edit-notes",
+                                                'class' => 'form-control summernote-basic',
+                                                'id'    => "editor-edit-notes",
+                                                'rows'  => '6',
+                                                'value' => $input->edit_notes
+                                            ]);
+                                        }
+                                        ?>
+                                    </div>
+                                <?php endif; ?>
+
+                                <hr class="my-3">
+
+                                <!-- CATATAN AUTHOR UNTUK STAFF/ADMIN -->
+                                <div class="form-group">
+                                    <label
+                                        for="author-edit-notes"
+                                        class="font-weight-bold"
+                                    >Catatan Penulis</label>
+                                    <?php
+                                    if (!is_admin() && ($level != 'author' || $author_order != 1)) {
+                                        echo "<div class='font-italic' id='author-edit-notes'>" . $input->edit_notes_author . "</div>";
+                                    } else {
+                                        echo form_textarea([
+                                            'name'  => "author-edit-notes",
+                                            'class' => 'form-control summernote-basic',
+                                            'id'    => "author-edit-notes",
+                                            'rows'  => '6',
+                                            'value' => $input->edit_notes_author
+
+                                        ]);
+                                    }
+                                    ?>
+                                </div>
+                            </fieldset>
+
+                            <div class="d-flex justify-content-end">
+                                <button
+                                    type="button"
+                                    class="btn btn-light ml-auto"
+                                    data-dismiss="modal"
+                                >Close</button>
+                                <button
+                                    id="btn-submit-edit"
+                                    class="btn btn-primary"
+                                    type="button"
+                                >Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+$(document).ready(function() {
+    const draftId = $('[name=draft_id]').val();
+
+    // reload segmen ketika modal diclose
+    $('#edit-progress-wrapper').on('shown.bs.modal', `#modal-edit`, function() {
+        // reload ketika modal diclose
+        $(`#modal-edit`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
+            $('#edit-progress-wrapper').load(' #edit-progress', function() {
+                // reinitiate flatpickr modal after load
+                init_flatpickr_modal()
+            });
+        })
+    })
+
+    // submit progress edit
+    $('#edit-progress-wrapper').on('click', `#btn-submit-edit`, function() {
+        const $this = $(this);
+
+        const editData = {
+            [`edit_notes`]: $(`#editor-edit-notes`).val(),
+            [`edit_notes_author`]: $(`#author-edit-notes`).val(),
+        }
+
+        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
+        $.ajax({
+            type: "POST",
+            url: "<?php echo base_url('draft/api_update_draft/'); ?>" + draftId,
+            datatype: "JSON",
+            data: editData,
+            success: function(res) {
+                console.log(res);
+                show_toast(true, res.data);
+                $(`#edit-comment-tab-content`).load(` #edit-comment-info`)
+            },
+            error: function(err) {
+                console.log(err);
+                show_toast(false, err.responseJSON.message);
+            },
+        });
+    });
+
+    // upload progress
+    $('#edit-progress-wrapper').on('submit', `#edit-upload-form`, function(e) {
+        e.preventDefault()
+
+        // validasi form
+        $(this).validate({
+            debug: true,
+            rules: {
+                [`edit_file`]: {
+                    require_from_group: [1, ".document"],
+                    extension: "<?= get_allowed_file_types('draft_file')['types']; ?>",
+                },
+                [`edit_file_link`]: {
+                    curl: true,
+                    require_from_group: [1, ".document"]
+                }
+            },
+            errorElement: "span",
+            errorClass: "none",
+            validClass: "none",
+            errorPlacement: validateErrorPlacement,
+            submitHandler: function(form) {
+                const $this = $(`#btn-upload-edit`);
+                $this.attr("disabled", "disabled").html('<i class="fa fa-spinner fa-spin "></i>');
+
+                // prepare form data
+                const formData = new FormData(form);
+                formData.append('progress', 'edit')
+
+                // send data
+                $.ajax({
+                    url: "<?= base_url('draft/upload_progress/'); ?>" + draftId,
+                    type: "post",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function(res) {
+                        console.log(res);
+                        show_toast(true, res.data);
+                        $(`#edit-file-tab-content`).load(` #edit-file-info`)
+                    },
+                    error: function(err) {
+                        console.log(err);
+                        show_toast(false, err.responseJSON.message);
+                        $resetform = $(`#edit-file`);
+                        $resetform.val('');
+                        $resetform.next('label.custom-file-label').html('');
+                        $this.removeAttr("disabled").html("Update");
+                    },
+                });
+            }
+        });
+
+        // trigger submit handler
+        $(this).submit()
+    })
+
+    // delete file
+    $('#edit-progress-wrapper').on('click', `.edit-delete-file`, function(e) {
+        const $this = $(this)
+        $this.attr("disabled", "disabled").html('<i class="fa fa-spinner fa-spin "></i>');
+
+        // send data
+        $.ajax({
+            url: "<?= base_url('draft/delete_progress/'); ?>" + draftId,
+            type: "post",
+            data: {
+                type: 'edit'
+            },
+            success: function(res) {
+                console.log(res);
+                show_toast(true, res.data);
+                $(`#edit-file-tab-content`).load(` #edit-file-info`)
+            },
+            error: function(err) {
+                console.log(err);
+                show_toast(false, err.responseJSON.message);
+                $this.removeAttr("disabled").html("Update");
+            },
+        });
+    })
+})
+</script>
