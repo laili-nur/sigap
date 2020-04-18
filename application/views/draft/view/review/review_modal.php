@@ -183,7 +183,7 @@ $all_criteria = [
                                                     value="<?= $j ?>"
                                                     type="radio"
                                                     class="custom-control-input"
-                                                    <?= $input->{"{$progress}_score"}[$criteria_key] == $j ? 'checked' : '' ?>
+                                                    <?= $input->{"{$progress}_score"} && $input->{"{$progress}_score"}[$criteria_key] == $j ? 'checked' : '' ?>
                                                 />
                                                 <label
                                                     class="custom-control-label"
