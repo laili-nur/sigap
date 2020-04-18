@@ -373,6 +373,9 @@ class Draft extends Operator_Controller
         } elseif ($input->progress == 'proofread') {
             $this->draft->edit_draft_date($draft_id, 'proofread_start_date');
             $this->draft->update_draft_status($draft_id, ['draft_status' => 12]);
+        } elseif ($input->progress == 'print') {
+            $this->draft->edit_draft_date($draft_id, 'print_start_date');
+            $this->draft->update_draft_status($draft_id, ['draft_status' => 15]);
         }
 
         if ($this->db->trans_status() === false) {
@@ -557,15 +560,23 @@ class Draft extends Operator_Controller
 
         $input = (object) $this->input->post(null, false);
 
+        // update draft status ketika selesai progress
         if ($input->progress == 'review') {
             $input->draft_status = filter_boolean($input->accept) ? 5 : 99;
-            // $input->{"{$input->progress}_end_date"} = now(); //dicatat saat finish progress
+            // $input->{"{$input->progress}_end_date"} = now(); // dicatat saat finish progress
         } elseif ($input->progress == 'edit') {
             $input->draft_status = filter_boolean($input->accept) ? 7 : 99;
+        } elseif ($input->progress == 'layout') {
+            $input->draft_status = filter_boolean($input->accept) ? 9 : 99;
+        } elseif ($input->progress == 'proofread') {
+            $input->draft_status = filter_boolean($input->accept) ? 13 : 99;
+        } elseif ($input->progress == 'print') {
+            $input->draft_status = filter_boolean($input->accept) ? 16 : 99;
+            // print end date berganti saat action admin
+            $this->draft->edit_draft_date($draft_id, 'print_end_date');
         }
 
         $input->{"is_$input->progress"} = filter_boolean($input->accept) ? 'y' : 'n';
-
 
         // hilangkan property pembantu yang tidak ada di db
         unset($input->progress);
@@ -582,7 +593,6 @@ class Draft extends Operator_Controller
     public function api_update_draft($draft_id = null, $rev = null)
     {
         // $input = $this->input->post(null, false);
-        // // $input['accept'] = filter_boolean($input['accept']);
         // return $this->send_json_output(true, $input);
 
         if ($draft_id == null) {

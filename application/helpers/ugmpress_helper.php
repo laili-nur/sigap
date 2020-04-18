@@ -511,7 +511,7 @@ function draft_status_to_text($code)
             $status = 'Final';
             break;
         case 15:
-            $status = 'Cetak';
+            $status = 'Proses Cetak';
             break;
         case 16:
             $status = 'Cetak Selesai';

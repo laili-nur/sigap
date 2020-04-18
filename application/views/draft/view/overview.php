@@ -54,8 +54,8 @@
         <?php if ($input->is_layout == 'y') : ?>
             <?php $this->load->view('draft/view/proofread/index'); ?>
         <?php endif; ?>
-        <?php if ($input->is_proofread == 'y' and $level != 'author' and $level != 'reviewer') : ?>
-            <?php $this->load->view('draft/view/print'); ?>
+        <?php if ($input->is_proofread == 'y' && is_staff()) : ?>
+            <?php $this->load->view('draft/view/print/index'); ?>
         <?php elseif ($input->is_proofread == 'y' and $input->is_print == 'n' and $level == 'author' or $level == 'reviewer') : ?>
             <div class="alert alert-info">
                 <h5 class="alert-heading">Proses Cetak</h5>
