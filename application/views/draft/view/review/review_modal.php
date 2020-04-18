@@ -72,6 +72,19 @@ $all_criteria = [
                         aria-selected="false"
                     >Tanggapan</a>
                 </li>
+                <?php if ($level != 'author') : ?>
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            id="<?= $progress ?>-score-tab"
+                            data-toggle="tab"
+                            href="#<?= $progress ?>-score-tab-content"
+                            role="tab"
+                            aria-controls="<?= $progress ?>-score-tab-content"
+                            aria-selected="false"
+                        >Penilaian</a>
+                    </li>
+                <?php endif ?>
             </ul>
 
             <div class="modal-body py-3">
@@ -94,60 +107,10 @@ $all_criteria = [
                         role="tabpanel"
                         aria-labelledby="<?= $progress ?>-comment-tab"
                     >
-                        <div id="<?= $progress ?>-criteria">
-                            <?php if ($level != 'author') : ?>
-                                <p class="font-weight-bold">KONTEN REVIEW</p>
-                                <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : ''; ?>
-                                <?php foreach ($all_criteria as $criteria_key => $criteria) : ?>
-                                    <div class="alert alert-info">
-                                        <label class="font-weight-bold"><?= $criteria['title'] ?></label>
-                                        <textarea
-                                            type="textarea"
-                                            name="<?= "criteria{$criteria['number']}-{$progress}" ?>"
-                                            id="<?= "criteria{$criteria['number']}-{$progress}" ?>"
-                                            class="form-control summernote-basic"
-                                            rows="6"
-                                        ><?= $input->{"{$progress}_criteria{$criteria['number']}"} ?></textarea>
-
-                                        <hr class="my-3">
-
-                                        <p class="m-0 p-0">Nilai</p>
-                                        <?php for ($j = 1; $j <= 5; $j++) :  ?>
-                                            <div class="custom-control custom-control-inline custom-radio">
-                                                <input
-                                                    id="<?= "score{$j}-criteria{$criteria['number']}-{$progress}" ?>"
-                                                    name="<?= "score-criteria{$criteria['number']}-{$progress}" ?>"
-                                                    value="<?= $j ?>"
-                                                    type="radio"
-                                                    class="custom-control-input"
-                                                    <?= $input->{"{$progress}_score"} && $input->{"{$progress}_score"}[$criteria_key] == $j ? 'checked' : '' ?>
-                                                />
-                                                <label
-                                                    class="custom-control-label"
-                                                    for="<?= "score{$j}-criteria{$criteria['number']}-{$progress}" ?>"
-                                                ><?= $j ?></label>
-                                            </div>
-                                        <?php endfor ?>
-                                    </div>
-                                <?php endforeach ?>
-
-                                <div id="nilai-wrapper">
-                                    <div class="alert <?= $input->{"{$progress}_total_score"} >= 400 ? 'alert-success' : 'alert-danger' ?>">
-                                        <p class="badge <?= $input->{"{$progress}_total_score"} >= 400 ? 'badge-success' : 'badge-danger' ?>">Naskah Lolos Review</p>
-                                        <p class="mb-0">
-                                            <span>Nilai total :</span>
-                                            <strong><?= $input->{"{$progress}_total_score"} ?></strong>
-                                        </p>
-                                        <p class="mb-0">Passing Grade = 400</p>
-                                    </div>
-                                </div>
-                            <?php endif; ?>
-
-
+                        <div id="<?= $progress ?>-comment-section">
                             <fieldset>
                                 <!-- CATATAN REVIEWER UNTUK STAFF/ADMIN -->
                                 <?php if ($level != 'author') : ?>
-                                    <hr class="my-3">
                                     <div class="form-group">
                                         <label
                                             for="reviewer-<?= $progress ?>-notes"
@@ -217,42 +180,6 @@ $all_criteria = [
                                     ?>
                                 </div>
                             </fieldset>
-
-                            <?php if (is_admin() || $level == 'reviewer') : ?>
-                                <div class="card-footer-content text-muted p-0 m-0">
-                                    <div class="mb-1 font-weight-bold">Rekomendasi</div>
-                                    <div class="custom-control custom-control-inline custom-radio">
-                                        <input
-                                            type="radio"
-                                            name="<?= $progress ?>-flag"
-                                            id="<?= $progress ?>-flag-accept"
-                                            class="custom-control-input"
-                                            value="y"
-                                            <?= $input->{"{$progress}_flag"} == 'y' ? 'checked' : ''  ?>
-                                        />
-                                        <label
-                                            class="custom-control-label"
-                                            for="<?= $progress ?>-flag-accept"
-                                        >Setuju</label>
-                                    </div>
-
-                                    <div class="custom-control custom-control-inline custom-radio">
-                                        <input
-                                            type="radio"
-                                            name="<?= $progress ?>-flag"
-                                            id="<?= $progress ?>-flag-decline"
-                                            class="custom-control-input"
-                                            value="n"
-                                            <?= $input->{"{$progress}_flag"} == 'n' ? 'checked' : ''  ?>
-                                        />
-                                        <label
-                                            class="custom-control-label"
-                                            for="<?= $progress ?>-flag-decline"
-                                        >Tolak</label>
-                                    </div>
-                                </div>
-                            <?php endif; ?>
-
                             <div class="d-flex justify-content-end">
                                 <button
                                     type="button"
@@ -260,13 +187,117 @@ $all_criteria = [
                                     data-dismiss="modal"
                                 >Close</button>
                                 <button
-                                    id="btn-submit-<?= $progress ?>"
+                                    id="btn-submit-comment-<?= $progress ?>"
                                     class="btn btn-primary"
                                     type="button"
                                 >Submit</button>
                             </div>
                         </div>
                     </div>
+                    <?php if ($level != 'author') : ?>
+                        <div
+                            class="tab-pane fade"
+                            id="<?= $progress ?>-score-tab-content"
+                            role="tabpanel"
+                            aria-labelledby="<?= $progress ?>-score-tab"
+                        >
+                            <div id="<?= $progress ?>-score-section">
+                                <p class="font-weight-bold">KONTEN REVIEW</p>
+                                <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : ''; ?>
+                                <?php foreach ($all_criteria as $criteria_key => $criteria) : ?>
+                                    <div class="alert alert-info">
+                                        <label class="font-weight-bold"><?= $criteria['title'] ?></label>
+                                        <textarea
+                                            type="textarea"
+                                            name="<?= "criteria{$criteria['number']}-{$progress}" ?>"
+                                            id="<?= "criteria{$criteria['number']}-{$progress}" ?>"
+                                            class="form-control summernote-basic"
+                                            rows="6"
+                                        ><?= $input->{"{$progress}_criteria{$criteria['number']}"} ?></textarea>
+
+                                        <hr class="my-3">
+
+                                        <p class="m-0 p-0">Nilai</p>
+                                        <?php for ($j = 1; $j <= 5; $j++) :  ?>
+                                            <div class="custom-control custom-control-inline custom-radio">
+                                                <input
+                                                    id="<?= "score{$j}-criteria{$criteria['number']}-{$progress}" ?>"
+                                                    name="<?= "score-criteria{$criteria['number']}-{$progress}" ?>"
+                                                    value="<?= $j ?>"
+                                                    type="radio"
+                                                    class="custom-control-input"
+                                                    <?= $input->{"{$progress}_score"} && $input->{"{$progress}_score"}[$criteria_key] == $j ? 'checked' : '' ?>
+                                                />
+                                                <label
+                                                    class="custom-control-label"
+                                                    for="<?= "score{$j}-criteria{$criteria['number']}-{$progress}" ?>"
+                                                ><?= $j ?></label>
+                                            </div>
+                                        <?php endfor ?>
+                                    </div>
+                                <?php endforeach ?>
+
+                                <div id="nilai-wrapper">
+                                    <div class="alert <?= $input->{"{$progress}_total_score"} >= 400 ? 'alert-success' : 'alert-danger' ?>">
+                                        <p class="badge <?= $input->{"{$progress}_total_score"} >= 400 ? 'badge-success' : 'badge-danger' ?>">Naskah Lolos Review</p>
+                                        <p class="mb-0">
+                                            <span>Nilai total :</span>
+                                            <strong><?= $input->{"{$progress}_total_score"} ?></strong>
+                                        </p>
+                                        <p class="mb-0">Passing Grade = 400</p>
+                                    </div>
+                                </div>
+
+                                <?php if (is_admin() || $level == 'reviewer') : ?>
+                                    <div class="card-footer-content text-muted p-0 m-0">
+                                        <div class="mb-1 font-weight-bold">Rekomendasi</div>
+                                        <div class="custom-control custom-control-inline custom-radio">
+                                            <input
+                                                type="radio"
+                                                name="<?= $progress ?>-flag"
+                                                id="<?= $progress ?>-flag-accept"
+                                                class="custom-control-input"
+                                                value="y"
+                                                <?= $input->{"{$progress}_flag"} == 'y' ? 'checked' : ''  ?>
+                                            />
+                                            <label
+                                                class="custom-control-label"
+                                                for="<?= $progress ?>-flag-accept"
+                                            >Setuju</label>
+                                        </div>
+
+                                        <div class="custom-control custom-control-inline custom-radio">
+                                            <input
+                                                type="radio"
+                                                name="<?= $progress ?>-flag"
+                                                id="<?= $progress ?>-flag-decline"
+                                                class="custom-control-input"
+                                                value="n"
+                                                <?= $input->{"{$progress}_flag"} == 'n' ? 'checked' : ''  ?>
+                                            />
+                                            <label
+                                                class="custom-control-label"
+                                                for="<?= $progress ?>-flag-decline"
+                                            >Tolak</label>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+
+                                <div class="d-flex justify-content-end">
+                                    <button
+                                        type="button"
+                                        class="btn btn-light ml-auto"
+                                        data-dismiss="modal"
+                                    >Close</button>
+                                    <button
+                                        id="btn-submit-score-<?= $progress ?>"
+                                        class="btn btn-primary"
+                                        type="button"
+                                    >Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -294,8 +325,8 @@ $(document).ready(function() {
         })
     })
 
-    // submit progress review
-    $('#review-progress-wrapper').on('click', `#btn-submit-${identifier}`, function() {
+    // submit score review
+    $('#review-progress-wrapper').on('click', `#btn-submit-score-${identifier}`, function() {
         const $this = $(this);
 
         // nilai kriteria
@@ -306,9 +337,6 @@ $(document).ready(function() {
         nilai = nilai.join()
 
         const reviewData = {
-            [`${identifier}_notes`]: $(`#reviewer-${identifier}-notes`).val(),
-            [`${identifier}_notes_author`]: $(`#author-${identifier}-notes`).val(),
-            [`${identifier}_notes_admin`]: $(`#admin-${identifier}-notes`).val(),
             [`${identifier}_flag`]: $(`[name=${identifier}-flag]:checked`).val(),
             [`${identifier}_criteria1`]: $(`#criteria1-${identifier}`).val(),
             [`${identifier}_criteria2`]: $(`#criteria2-${identifier}`).val(),
@@ -317,8 +345,26 @@ $(document).ready(function() {
             [`${identifier}_score`]: nilai
         }
 
-        $this.attr("disabled", "disabled").html(
-            "<i class='fa fa-spinner fa-spin '></i>");
+        sendData(reviewData, 'score', $this)
+    });
+
+
+    // submit comment review
+    $('#review-progress-wrapper').on('click', `#btn-submit-comment-${identifier}`, function() {
+        const $this = $(this);
+
+        const reviewData = {
+            [`${identifier}_notes`]: $(`#reviewer-${identifier}-notes`).val(),
+            [`${identifier}_notes_author`]: $(`#author-${identifier}-notes`).val(),
+            [`${identifier}_notes_admin`]: $(`#admin-${identifier}-notes`).val(),
+        }
+
+        sendData(reviewData, 'comment', $this)
+    });
+
+    function sendData(reviewData, type, self) {
+        // type: score || comment
+        self.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
         $.ajax({
             type: "POST",
             url: "<?php echo base_url('draft/api_update_draft/'); ?>" + draftId,
@@ -327,14 +373,14 @@ $(document).ready(function() {
             success: function(res) {
                 console.log(res);
                 show_toast(true, res.data);
-                $(`#${identifier}-comment-tab-content`).load(` #${identifier}-criteria`)
-
+                $(`#${identifier}-${type}-tab-content`).load(` #${identifier}-${type}-section`)
             },
             error: function(err) {
                 console.log(err);
                 show_toast(false, err.responseJSON.message);
+                self.removeAttr("disabled").html("Submit");
             },
         });
-    });
+    }
 })
 </script>

@@ -55,7 +55,7 @@
                 <div class="modal-footer">
                     <button
                         type="button"
-                        class="btn btn-light  ml-auto"
+                        class="btn btn-light ml-auto"
                         data-dismiss="modal"
                     >Close</button>
                     <button

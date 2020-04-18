@@ -274,8 +274,6 @@ $(document).ready(function() {
                 show_toast(false, err.responseJSON.message);
             },
             complete: function() {
-                // reload segmen daftar reviewer
-                // $('#reviewer-list-wrapper').load(' #reviewer-list');
                 // reload segmen review
                 reload_review_segment()
                 // reload progress
