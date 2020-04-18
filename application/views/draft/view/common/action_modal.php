@@ -83,7 +83,6 @@
 $(document).ready(function() {
     // contoh progress = 'review','edit','layout','proofread','print'
     const progress = '<?= $progress ?>'
-    console.log(progress);
 
     function send_action_data(accept) {
         this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");

@@ -52,7 +52,7 @@
             <?php $this->load->view('draft/view/layout/index'); ?>
         <?php endif; ?>
         <?php if ($input->is_layout == 'y') : ?>
-            <?php $this->load->view('draft/view/proofread'); ?>
+            <?php $this->load->view('draft/view/proofread/index'); ?>
         <?php endif; ?>
         <?php if ($input->is_proofread == 'y' and $level != 'author' and $level != 'reviewer') : ?>
             <?php $this->load->view('draft/view/print'); ?>

@@ -457,6 +457,7 @@ class Draft extends Operator_Controller
         $this->draft->edit_draft_date($draft_id, $progress . '_upload_date');
         $upload_by_field         = $progress . '_upload_by';
         $input->$upload_by_field = $this->username;
+
         $column = "{$progress}_file";
 
         if (!empty($_FILES) && $file_name = $_FILES[$column]['name']) {
@@ -509,35 +510,22 @@ class Draft extends Operator_Controller
             return $this->send_json_output(false, $message, 404);
         }
 
-        $input          = (object) $this->input->post(null, true);
+        $input = (object) $this->input->post(null, true);
+        $progress = $input->progress;
+        $file_type = $input->file_type;
+        if ($file_type == 'file') {
+            if (!$this->draft->delete_file($draft->{$input->progress . "_file"})) {
+                return $this->send_json_output(false, $this->lang->line('toast_delete_fail'));
+            }
 
-        if (!$this->draft->delete_file($draft->{$input->type . "_file"})) {
-            return $this->send_json_output(false, $this->lang->line('toast_delete_fail'));
+            // ketika hapus file, update upload date, update upload by, delete progress file
+            $draft->{$progress . '_file'} = '';
+        } else  if ($file_type == 'link') {
+            $draft->{$progress . '_file_link'} = '';
         }
-
-        // if ($input->type == 'edit') {
-        //     if (file_exists("./draftfile/$draft->edit_file")) {
-        //         unlink("./draftfile/$draft->edit_file");
-        //         $flag = true;
-        //     } else {
-        //         $data['status'] = false;
-        //     }
-        // } elseif ($input->type == 'layout') {
-        //     if (file_exists("./draftfile/$draft->layout_file")) {
-        //         unlink("./draftfile/$draft->layout_file");
-        //         $flag = true;
-        //     } else {
-        //         $data['status'] = false;
-        //     }
-        // }
-        $draft->{$input->type . '_upload_date'} = null;
-        $draft->{$input->type . '_upload_by'} = '';
-        $draft->{$input->type . '_file'}        = '';
-        // if ($input->type == 'edit') {
-        //     $draft->edit_file_link = '';
-        // } elseif ($input->type == 'layout') {
-        //     $draft->layout_file_link = '';
-        // }
+        $draft->{$progress . '_upload_date'} = date('Y-m-d H:i:s');
+        $upload_by_field         = $progress . '_upload_by';
+        $draft->$upload_by_field = $this->username;
 
         if ($this->draft->where('draft_id', $draft_id)->update($draft)) {
             return $this->send_json_output(true, $this->lang->line('toast_delete_success'));

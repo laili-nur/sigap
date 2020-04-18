@@ -34,7 +34,7 @@ $all_criteria = [
     >
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> Progress <?= $progress ?> </h5>
+                <h5 class="modal-title"> Progress <?= $progress == 'review1' ? 'Review #1' : 'Review #2' ?> </h5>
                 <button
                     type="button"
                     class="close"
@@ -85,71 +85,8 @@ $all_criteria = [
                         role="tabpanel"
                         aria-labelledby="<?= $progress ?>-file-tab"
                     >
-                        <div id="<?= $progress ?>-file-info">
-                            <div class="alert alert-info">
-                                <p class="alert-heading font-weight-bold">File Tersimpan</p>
-                                <?php if ($input->{"{$progress}_file"}) : ?>
-                                    <a
-                                        href="<?= base_url("draft/download_file/draftfile/{$input->{"{$progress}_file"}}") ?>"
-                                        class="btn btn-success"
-                                    ><i class="fa fa-download"></i> Download</a>
-                                    <button
-                                        type="button"
-                                        class="btn btn-danger <?= $progress ?>-delete-file"
-                                    ><i class="fa fa-trash"></i> Delete</button>
-                                <?php endif ?>
-                                <a
-                                    href="<?= $input->{"{$progress}_file_link"} ?>"
-                                    class="btn btn-primary"
-                                    target="_blank"
-                                ><i class="fa fa-external-link-alt"></i> External file</a>
-                                <p>
-                                    <div>Terakhir diubah: <span><?= $input->{"{$progress}_upload_date"} ?></span></div>
-                                    <div>Oleh: <span><?= $input->{"{$progress}_upload_by"} ?></span></div>
-                                </p>
-                            </div>
-
-                            <hr class="my-4">
-
-                            <?php if ($level == 'reviewer' || ($level == 'author' && $author_order == 1) || is_admin()) : ?>
-                                <form
-                                    id="<?= $progress ?>-upload-form"
-                                    method="post"
-                                    enctype="multipart/form-data"
-                                >
-                                    <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : ''; ?>
-                                    <div class="form-group">
-                                        <label for="<?= $progress ?>-file">Upload File Naskah</label>
-                                        <div class="custom-file">
-                                            <?= form_upload("{$progress}_file", '', "class='custom-file-input document' id='{$progress}-file'"); ?>
-                                            <label
-                                                class="custom-file-label"
-                                                for="<?= $progress ?>-file"
-                                            >Pilih file</label>
-                                        </div>
-                                        <small class="form-text text-muted">Tipe file upload bertype : <?= get_allowed_file_types('draft_file')['to_text']; ?></small>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="<?= $progress ?>-file-link">Link Naskah</label>
-                                        <div>
-                                            <?= form_input("{$progress}_file_link", $input->{"{$progress}_file_link"}, "class='form-control document' id='{$progress}-file-link'"); ?>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-end">
-                                        <button
-                                            type="button"
-                                            class="btn btn-light ml-auto"
-                                            data-dismiss="modal"
-                                        >Close</button>
-                                        <button
-                                            id="btn-upload-<?= $progress ?>"
-                                            class="btn btn-primary"
-                                            type="submit"
-                                        > Update</button>
-                                    </div>
-                                </form>
-                            <?php endif; ?>
-                        </div>
+                        <!-- $progress review ada dua: review1 dan review2, menggunakan modal review ini  -->
+                        <?php $this->load->view('draft/view/common/file_section', ['progress' => $progress]) ?>
                     </div>
                     <div
                         class="tab-pane fade"
@@ -399,87 +336,5 @@ $(document).ready(function() {
             },
         });
     });
-
-    // upload progress
-    $('#review-progress-wrapper').on('submit', `#${identifier}-upload-form`, function(e) {
-        e.preventDefault()
-
-        // validasi form
-        $(this).validate({
-            debug: true,
-            rules: {
-                [`${identifier}_file`]: {
-                    require_from_group: [1, ".document"],
-                    extension: "<?= get_allowed_file_types('draft_file')['types']; ?>",
-                },
-                [`${identifier}_file_link`]: {
-                    curl: true,
-                    require_from_group: [1, ".document"]
-                }
-            },
-            errorElement: "span",
-            errorClass: "none",
-            validClass: "none",
-            errorPlacement: validateErrorPlacement,
-            submitHandler: function(form) {
-                const $this = $(`#btn-upload-${identifier}`);
-                $this.attr("disabled", "disabled").html('<i class="fa fa-spinner fa-spin "></i>');
-
-                // prepare form data
-                const formData = new FormData(form);
-                formData.append('progress', identifier)
-
-                // send data
-                $.ajax({
-                    url: "<?= base_url('draft/upload_progress/'); ?>" + draftId,
-                    type: "post",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    success: function(res) {
-                        console.log(res);
-                        show_toast(true, res.data);
-                        $(`#${identifier}-file-tab-content`).load(` #${identifier}-file-info`)
-                    },
-                    error: function(err) {
-                        console.log(err);
-                        show_toast(false, err.responseJSON.message);
-                        $resetform = $(`#${identifier}-file`);
-                        $resetform.val('');
-                        $resetform.next('label.custom-file-label').html('');
-                        $this.removeAttr("disabled").html("Update");
-                    },
-                });
-            }
-        });
-
-        // trigger submit handler
-        $(this).submit()
-    })
-
-    $('#review-progress-wrapper').on('click', `.${identifier}-delete-file`, function(e) {
-        const $this = $(this)
-        $this.attr("disabled", "disabled").html('<i class="fa fa-spinner fa-spin "></i>');
-
-        // send data
-        $.ajax({
-            url: "<?= base_url('draft/delete_progress/'); ?>" + draftId,
-            type: "post",
-            data: {
-                type: identifier
-            },
-            success: function(res) {
-                console.log(res);
-                show_toast(true, res.data);
-                $(`#${identifier}-file-tab-content`).load(` #${identifier}-file-info`)
-            },
-            error: function(err) {
-                console.log(err);
-                show_toast(false, err.responseJSON.message);
-                $this.removeAttr("disabled").html("Delete");
-            },
-        });
-    })
 })
 </script>
