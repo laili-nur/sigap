@@ -11,12 +11,9 @@ class Revision extends MY_Controller
 
     public function get_revision($draft_id, $progress)
     {
-        $input    = (object) $this->input->post(null);
-        $revisions   = $this->revision->where('revision_role', $progress)->where('draft_id', $draft_id)->get_all();
+        $revisions = $this->revision->where('revision_role', $progress)->where('draft_id', $draft_id)->get_all();
 
         return $this->send_json_output(true, $revisions);
-
-
 
         // $urutan   = 1;
         // //flag menandai revisi yang belum selesai
@@ -130,11 +127,11 @@ class Revision extends MY_Controller
 
         $deadline = date('Y-m-d H:i:s', (strtotime(now()) + (7 * 24 * 60 * 60)));
         $insert   = $this->revision->insert([
-            'draft_id' => $input->draft_id,
+            'draft_id'            => $input->draft_id,
             'revision_start_date' => now(),
-            'revision_role' => $input->role,
-            'revision_deadline' => $deadline,
-            'user_id' => $this->user_id
+            'revision_role'       => $input->role,
+            'revision_deadline'   => $deadline,
+            'user_id'             => $this->user_id,
         ]);
 
         if ($insert) {
@@ -146,7 +143,7 @@ class Revision extends MY_Controller
 
     public function finish_revision()
     {
-        $input  = (object) $this->input->post(null);
+        $input = (object) $this->input->post(null);
 
         // memastikan konsistensi data
         $this->db->trans_begin();
@@ -168,8 +165,8 @@ class Revision extends MY_Controller
 
     public function save_revision()
     {
-        $input          = (object) $this->input->post(null);
-        $update         = $this->revision->where('revision_id', $input->revision_id)->update(['revision_notes' => $input->revision_notes]);
+        $input  = (object) $this->input->post(null);
+        $update = $this->revision->where('revision_id', $input->revision_id)->update(['revision_notes' => $input->revision_notes]);
 
         if ($update) {
             return $this->send_json_output(true, $this->lang->line('toast_edit_success'));
@@ -193,18 +190,17 @@ class Revision extends MY_Controller
         }
     }
 
-    // public function deadlineRevision()
-    // {
-    //     $input  = (object) $this->input->post(null);
-    //     $data   = ['revision_deadline' => $input->revision_deadline, 'revision_start_date' => $input->revision_start_date, 'revision_end_date' => $input->revision_end_date];
-    //     $insert = $this->draft->where('revision_id', $input->revision_id)->update($data, 'revision');
-    //     if ($insert) {
-    //         $data['status'] = true;
-    //     } else {
-    //         $data['status'] = false;
-    //     }
-    //     echo json_encode($data);
-    // }
+    public function save_deadline()
+    {
+        $input  = (object) $this->input->post(null);
+        $update = $this->revision->where('revision_id', $input->revision_id)->update(['revision_deadline' => $input->revision_deadline]);
+
+        if ($update) {
+            return $this->send_json_output(true, $this->lang->line('toast_edit_success'));
+        } else {
+            return $this->send_json_output(false, $this->lang->line('toast_edit_fail'));
+        }
+    }
 }
 
 /* End of file Revision.php */

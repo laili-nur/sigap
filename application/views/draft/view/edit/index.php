@@ -2,9 +2,9 @@
 
 use Carbon\Carbon;
 
-$level = check_level();
+$level               = check_level();
 $edit_remaining_time = Carbon::parse(Carbon::today())->diffInDays($input->edit_deadline, false);
-$is_edit_started      = format_datetime($input->edit_start_date);
+$is_edit_started     = format_datetime($input->edit_start_date);
 ?>
 <section
     id="edit-progress-wrapper"
@@ -20,7 +20,8 @@ $is_edit_started      = format_datetime($input->edit_start_date);
                             type="button"
                             class="d-inline btn <?= empty($editors) ? 'btn-warning' : 'btn-secondary'; ?>"
                             title="Pilih editor"
-                        ><i class="fas fa-user-plus fa-fw"></i><span class="d-none d-lg-inline"> Pilih Editor</span></button>
+                        ><i class="fas fa-user-plus fa-fw"></i><span class="d-none d-lg-inline"> Pilih
+                            Editor</span></button>
                     <?php endif; ?>
                     <?php if ($level == 'editor' || is_admin()) : ?>
                         <button
@@ -42,7 +43,8 @@ $is_edit_started      = format_datetime($input->edit_start_date);
             </div>
         </header>
         <?php if ($editors == null && is_admin()) : ?>
-            <div class="alert alert-warning"><strong>PERHATIAN!</strong> Pilih editor terlebih dahulu sebelum mulai proses editorial</div>
+            <div class="alert alert-warning"><strong>PERHATIAN!</strong> Pilih editor terlebih dahulu sebelum mulai proses
+                editorial</div>
         <?php endif; ?>
         <div
             class="list-group list-group-flush list-group-bordered"
@@ -52,13 +54,13 @@ $is_edit_started      = format_datetime($input->edit_start_date);
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Tanggal mulai</span>
                 <strong>
-            <?= format_datetime($input->edit_start_date); ?></strong>
+                    <?= format_datetime($input->edit_start_date); ?></strong>
             </div>
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Tanggal selesai</span>
                 <strong>
-            <?= format_datetime($input->edit_end_date); ?></strong>
+                    <?= format_datetime($input->edit_end_date); ?></strong>
             </div>
 
             <div class="list-group-item justify-content-between">
@@ -154,7 +156,8 @@ $is_edit_started      = format_datetime($input->edit_start_date);
                         data-toggle="modal"
                         data-target="#modal-edit-revision"
                         class="btn btn-outline-info"
-                    ><i class="fa fa-tasks"></i> Revisi <span class="badge badge-info"><?= $revision_total['editor']; ?></span></button>
+                    ><i class="fa fa-tasks"></i> Revisi <span
+                        class="badge badge-info"><?= $revision_total['editor']; ?></span></button>
                 <?php endif; ?>
             </div>
         </div>
@@ -167,7 +170,7 @@ $is_edit_started      = format_datetime($input->edit_start_date);
 
         // modal aksi edit
         $this->load->view('draft/view/common/action_modal', [
-            'progress' => 'edit'
+            'progress' => 'edit',
         ]);
 
         // modal progress edit

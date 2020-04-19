@@ -1,3 +1,4 @@
+<!-- MODAL LIST REVISI -->
 <div
     class="modal fade"
     id="modal-edit-revision"
@@ -35,6 +36,64 @@
         </div>
     </div>
 </div>
+
+<!-- MODAL DEADLINE REVISI -->
+<div
+    class="modal fade"
+    id="modal-deadline-revision"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="modal-deadline-revision"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Deadline revisi</h4>
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <fieldset>
+                    <input
+                        type="hidden"
+                        name="revision-id"
+                        id="revision-id"
+                    >
+                    <div class="form-group">
+                        <div>
+                            <input
+                                style="width:100%"
+                                type="text"
+                                name="revision-deadline"
+                                id="revision-deadline"
+                                class="form-control flatpickr_modal d-none"
+                            />
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button
+                    href="#"
+                    data-dismiss="modal"
+                    class="btn"
+                >Close</button>
+                <button
+                    href="#"
+                    id="btn-submit-revision-deadline"
+                    class="btn btn-primary"
+                >Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
 $(document).ready(function() {
     const draftId = $('[name=draft_id]').val();
@@ -49,50 +108,46 @@ $(document).ready(function() {
         $('#accordion-editor').html('');
     })
 
-    // //gantian modal revisi dan deadline revisi
-    // // $('#edit-revisi-deadline').on('shown.bs.modal', function (e) {
-    // //   $('#edit-revisi').modal('toggle');
-    // // })
-    // $('#edit-revisi-deadline').on('hidden.bs.modal', function(e) {
-    //     get_revision();
-    // })
+    // populate tanggal deadline dan revision id
+    $('#modal-edit-revision').on('click', '#btn-modal-deadline-revision', function(e) {
+        // menggunakan native selector atau jquery selector element [0] populate untuk flatpickr
+        $('#revision-deadline')[0]._flatpickr.setDate($(this).data().revisionDeadline);
+        $('#revision-id').val($(this).data().revisionId)
+    })
 
-    // $('#accordion-editor').on('click', '.trigger-edit-revisi-deadline', function(e) {
-    //     var revision_id = $(this).attr('data');
-    //     $('#revision_id').val(revision_id);
-    // });
+    $('#modal-deadline-revision').on('click', '#btn-submit-revision-deadline', function(e) {
+        e.preventDefault()
+        const $this = $(this);
+        const revisionDeadline = $('#revision-deadline').val()
+        const revisionId = $('#revision-id').val()
 
-    // $('#btn-edit-revisi-deadline').on('click', function(e) {
-    //     var revision_id = $('#revision_id').val();
-    //     e.preventDefault();
-    //     let revision_edit_deadline = $('[name=revision_edit_deadline]').val();
-    //     let revision_edit_start_date = $('[name=revision_edit_start_date]').val();
-    //     let revision_edit_end_date = $('[name=revision_edit_end_date]').val();
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "<?php echo base_url('draft/deadlineRevision'); ?>",
-    //         datatype: "JSON",
-    //         data: {
-    //             revision_id: revision_id,
-    //             revision_deadline: revision_edit_deadline,
-    //             revision_start_date: revision_edit_start_date,
-    //             revision_end_date: revision_edit_end_date,
-    //         },
-    //         success: function(data) {
-    //             let datax = JSON.parse(data);
-    //             console.log(datax);
-    //             if (datax.status == true) {
-    //                 show_toast('111');
-    //             } else {
-    //                 show_toast('000');
-    //             }
-    //             $('#edit-revisi-deadline').modal('toggle');
-    //         }
-    //     })
-    // })
+        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
+        $.ajax({
+            type: "POST",
+            url: "<?= base_url('revision/save_deadline'); ?>",
+            data: {
+                revision_deadline: revisionDeadline,
+                revision_id: revisionId
+            },
+            success: function(res) {
+                show_toast(true, res.data);
+                getRevision()
+                setTimeout(() => {
+                    $('#modal-deadline-revision').modal('hide')
+                }, 0);
+            },
+            error: function(err) {
+                show_toast(false, err.responseJSON.message);
+            },
+            complete: function() {
+                $this.removeAttr("disabled").html('Submit');
+            }
+        })
+    })
 
+    // get revision dari controller
     function getRevision() {
-        const getUrl = '<?= base_url('revision/get_revision'); ?>'
+        const getUrl = '<?= base_url("revision/get_revision"); ?>'
         $('#accordion-editor').html('<i class="fa fa-spinner fa-spin"></i> Loading data...');
         $.ajax({
             type: "GET",
@@ -132,6 +187,7 @@ $(document).ready(function() {
         });
     }
 
+    // render data menjadi list group
     function renderData(revisions) {
         let list = '';
         let flag = 0;
@@ -152,7 +208,8 @@ $(document).ready(function() {
                     finishBtnAttr = 'd-inline';
                     saveBtnAttr = 'd-inline';
                     badge = '<span class="badge badge-info">Dalam Proses</span>';
-                    formRevision = `<textarea rows="6" name="revision-notes-${r.revision_id}" class="form-control summernote-basic" id="revision-notes-${r.revision_id}">${r.revision_notes}</textarea>`;
+                    formRevision =
+                        `<textarea rows="6" name="revision-notes-${r.revision_id}" class="form-control summernote-basic" id="revision-notes-${r.revision_id}">${r.revision_notes}</textarea>`;
                 }
 
                 list += `
@@ -177,7 +234,15 @@ $(document).ready(function() {
                           <strong>${r.revision_end_date}</strong>
                         </div>
                         <div class="list-group-item justify-content-between">
-                          <span class="text-muted">Deadline</span>
+                        <a
+                            href="#"
+                            id="btn-modal-deadline-revision"
+                            title="Ubah deadline"
+                            data-toggle="modal"
+                            data-target="#modal-deadline-revision"
+                            data-revision-deadline="${r.revision_deadline}"
+                            data-revision-id="${r.revision_id}"
+                        >Deadline revisi <i class="fas fa-edit fa-fw"></i></a>
                           <strong>${r.revision_deadline}</strong>
                         </div>
                         <div class="list-group-item mb-0 pb-0">
@@ -215,7 +280,7 @@ $(document).ready(function() {
         const $this = $(this);
         const revisionId = $this.data().id
 
-        $this.attr("disabled", "disabled");
+        $this.attr("disabled", "disabled")
         $.ajax({
             type: "POST",
             url: "<?= base_url('revision/finish_revision'); ?>",
