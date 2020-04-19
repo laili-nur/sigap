@@ -1,6 +1,9 @@
 <?php $level = check_level(); ?>
 
-<div id="draft-data-wrapper" class="tab-pane fade active show">
+<div
+    id="draft-data-wrapper"
+    class="tab-pane fade active show"
+>
     <div id="draft-data">
         <div class="table-responsive">
             <table class="table table-striped table-bordered mb-0 nowrap">
@@ -92,7 +95,12 @@
                                         <?php ($input->draft_status != 14) ? $atribut = 'disabled' : $atribut = ''; ?>
                                         <p class="m-0 p-0">Draft dengan status proses final dapat di cetak ulang.</p>
                                         <?php if ($level === 'superadmin' or $level === 'admin_penerbitan') : ?>
-                                            <button <?= ($atribut == 'disabled') ? 'style="cursor:not-allowed" disabled' : ''; ?> type="button" class="btn btn-info btn-xs <?= $atribut; ?>" onClick="location.href='<?= base_url("draft/cetakUlang/$input->draft_id"); ?>'">Cetak Ulang</button>
+                                            <button
+                                                <?= ($atribut == 'disabled') ? 'style="cursor:not-allowed" disabled' : ''; ?>
+                                                type="button"
+                                                class="btn btn-info btn-xs <?= $atribut; ?>"
+                                                onClick="location.href='<?= base_url("draft/cetakUlang/$input->draft_id"); ?>'"
+                                            >Cetak Ulang</button>
                                         <?php endif; ?>
                                     </div>
                                 <?php endif; ?>
@@ -115,8 +123,18 @@
     </div>
 </div>
 
-<div id="modal-entry-date" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-entry-date" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div
+    id="modal-entry-date"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="modal-entry-date"
+    aria-hidden="true"
+>
+    <div
+        class="modal-dialog"
+        role="document"
+    >
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Edit Tanggal Masuk</h5>
@@ -132,15 +150,33 @@
                 </fieldset>
             </div>
             <div class="modal-footer">
-                <button id="btn-change-entry-date" class="btn btn-primary" type="button">Pilih</button>
-                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                <button
+                    id="btn-change-entry-date"
+                    class="btn btn-primary"
+                    type="button"
+                >Pilih</button>
+                <button
+                    type="button"
+                    class="btn btn-light"
+                    data-dismiss="modal"
+                >Close</button>
             </div>
         </div>
     </div>
 </div>
 
-<div id="modal-draft-notes" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-draft-notes" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div
+    id="modal-draft-notes"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="modal-draft-notes"
+    aria-hidden="true"
+>
+    <div
+        class="modal-dialog"
+        role="document"
+    >
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Edit Catatan Draft</h5>
@@ -157,8 +193,16 @@
                 </fieldset>
             </div>
             <div class="modal-footer">
-                <button id="btn-change-draft-notes" class="btn btn-primary" type="submit">Pilih</button>
-                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                <button
+                    id="btn-change-draft-notes"
+                    class="btn btn-primary"
+                    type="submit"
+                >Pilih</button>
+                <button
+                    type="button"
+                    class="btn btn-light"
+                    data-dismiss="modal"
+                >Close</button>
             </div>
             <?= form_close(); ?>
         </div>
@@ -166,63 +210,63 @@
 </div>
 
 <script>
-    $(document).ready(function() {
-        // ubah entry date
-        $('#btn-change-entry-date').on('click', function() {
-            const $this = $(this);
-            $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
-            const id = $('[name=draft_id]').val();
-            const entry_date = $('[name=entry_date]').val();
-            const category_id = $('[name=category_id]').val();
+$(document).ready(function() {
+    // ubah entry date
+    $('#btn-change-entry-date').on('click', function() {
+        const $this = $(this);
+        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
+        const id = $('[name=draft_id]').val();
+        const entry_date = $('[name=entry_date]').val();
+        const category_id = $('[name=category_id]').val();
 
-            $.ajax({
-                type: "POST",
-                url: "<?= base_url('draft/api_update_draft/'); ?>" + id,
-                datatype: "JSON",
-                data: {
-                    entry_date,
-                    category_id
-                },
-                success: function(res) {
-                    show_toast(true, res.data);
-                },
-                error: function(err) {
-                    show_toast(false, err.responseJSON.message);
-                },
-                complete: function() {
-                    $this.removeAttr("disabled").html("Submit");
-                    $('#draft-data').load(' #draft-data');
-                    $('#modal-entry-date').modal('toggle');
-                }
-            });
+        $.ajax({
+            type: "POST",
+            url: "<?= base_url('draft/api_update_draft/'); ?>" + id,
+            datatype: "JSON",
+            data: {
+                entry_date,
+                category_id
+            },
+            success: function(res) {
+                show_toast(true, res.data);
+            },
+            error: function(err) {
+                show_toast(false, err.responseJSON.message);
+            },
+            complete: function() {
+                $this.removeAttr("disabled").html("Submit");
+                $('#draft-data').load(' #draft-data');
+                $('#modal-entry-date').modal('toggle');
+            }
         });
+    });
 
-        // ubah catatan draft
-        $('#btn-change-draft-notes').on('click', function() {
-            const $this = $(this);
-            $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-            const id = $('[name=draft_id]').val();
-            const draft_notes = $('[name=draft_notes]').val();
+    // ubah catatan draft
+    $('#btn-change-draft-notes').on('click', function() {
+        const $this = $(this);
+        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+        const id = $('[name=draft_id]').val();
+        const draft_notes = $('[name=draft_notes]').val();
 
-            $.ajax({
-                type: "POST",
-                url: "<?= base_url('draft/api_update_draft/'); ?>" + id,
-                datatype: "JSON",
-                data: {
-                    draft_notes,
-                },
-                success: function(res) {
-                    show_toast(true, res.data);
-                },
-                error: function(err) {
-                    show_toast(false, err.responseJSON.message);
-                },
-                complete: function() {
-                    $this.removeAttr("disabled").html("Submit");
-                    $('#draft-data').load(' #draft-data');
-                    $('#modal-draft-notes').modal('toggle');
-                }
-            });
+        $.ajax({
+            type: "POST",
+            url: "<?= base_url('draft/api_update_draft/'); ?>" + id,
+            datatype: "JSON",
+            data: {
+                draft_notes,
+            },
+            success: function(res) {
+                show_toast(true, res.data);
+            },
+            error: function(err) {
+                show_toast(false, err.responseJSON.message);
+            },
+            complete: function() {
+                $this.removeAttr("disabled").html("Submit");
+                $('#draft-data').load(' #draft-data');
+                $('#modal-draft-notes').modal('toggle');
+            }
         });
-    })
+    });
+})
 </script>

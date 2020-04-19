@@ -22,64 +22,62 @@
 </header>
 <div class="page-section">
     <!-- segment detail draft, penulis, reviewer, buku -->
-    <?php $this->load->view('draft/view/detail/index'); ?>
+    <?php
+    $this->load->view('draft/view/detail/index');
 
-    <!-- desk screening tidak bisa dilihat reviewer -->
-    <?php if ($level != 'reviewer') : ?>
-        <?php $this->load->view('draft/view/desk_screening_progress'); ?>
-    <?php endif; ?>
+    // desk screening tidak bisa dilihat reviewer
+    if ($level != 'reviewer') {
+        $this->load->view('draft/view/desk_screening_progress');
+    }
 
+    // sembunyikan semua progress jika tidak lolos desk screening
+    if ($desk->worksheet_status == 1) {
+        //    progress tidak bisa dilihat reviewer
+        if ($level != 'reviewer') {
+            $this->load->view('draft/view/progress');
+        }
 
-    <!-- sembunyikan semua progress jika tidak lolos desk screening -->
-    <?php if ($desk->worksheet_status != 1) {
-        die();
-    } ?>
+        // alert otorisasi penulis
+        if ($level == 'author') {
+            echo '<div class="alert alert-danger"><strong>PERHATIAN! </strong>Penulis pertama dapat memberikan komentar dan
+        catatan, penulis kedua hanya dapat melihat progress.</div>';
+        }
 
-    <!-- progress tidak bisa dilihat reviewer -->
-    <?php if ($level != 'reviewer') : ?>
-        <?php $this->load->view('draft/view/progress'); ?>
-    <?php endif; ?>
+        // PROGRESS REVIEW
+        $this->load->view('draft/view/review/index');
+        if ($level != 'reviewer') {
+            // PROGRESS EDIT
+            if ($input->is_review == 'y') {
+                $this->load->view('draft/view/edit/index');
+            }
 
-    <!-- alert otorisasi penulis -->
-    <?php if ($level == 'author') : ?>
-        <div class="alert alert-danger"><strong>PERHATIAN! </strong>Penulis pertama dapat memberikan komentar dan
-            catatan, penulis kedua hanya dapat melihat progress.</div>
-    <?php endif; ?>
+            // PROGRESS LAYOUT
+            if ($input->is_edit == 'y') {
+                $this->load->view('draft/view/layout/index');
+            }
 
-    <!-- PROGRESS REVIEW -->
-    <?php $this->load->view('draft/view/review/index'); ?>
+            // PROGRESS PROOFREAD
+            if ($input->is_layout == 'y') {
+                $this->load->view('draft/view/proofread/index');
+            }
 
-    <?php if ($level != 'reviewer') : ?>
-        <!-- PROGRESS EDIT -->
-        <?php if ($input->is_review == 'y') : ?>
-            <?php $this->load->view('draft/view/edit/index'); ?>
-        <?php endif; ?>
+            // PROGRESS CETAK
+            if ($input->is_proofread == 'y' && is_staff()) {
+                $this->load->view('draft/view/print/index');
+            } elseif ($input->is_print == 'y' and $input->draft_status != 14 and $level == 'author' or $level == 'reviewer') {
+                echo '<div class="alert alert-info">
+                        <h5 class="alert-heading">Proses</h5>
+                        <span>Draft sedang dalam proses.</span>
+                      </div>';
+            }
 
-        <!-- PROGRESS LAYOUT -->
-        <?php if ($input->is_edit == 'y') : ?>
-            <?php $this->load->view('draft/view/layout/index'); ?>
-        <?php endif; ?>
-
-        <!-- PROGRESS PROOFREAD -->
-        <?php if ($input->is_layout == 'y') : ?>
-            <?php $this->load->view('draft/view/proofread/index'); ?>
-        <?php endif; ?>
-
-        <!-- PROGRESS CETAK -->
-        <?php if ($input->is_proofread == 'y' && is_staff()) : ?>
-            <?php $this->load->view('draft/view/print/index'); ?>
-        <?php elseif ($input->is_print == 'y' and $input->draft_status != 14 and $level == 'author' or $level == 'reviewer') : ?>
-            <div class="alert alert-info">
-                <h5 class="alert-heading">Proses</h5>
-                Draft sedang dalam proses.
-            </div>
-        <?php endif; ?>
-
-        <!-- PROGRESS FINAL -->
-        <?php if (is_admin()) : ?>
-            <?php $this->load->view('draft/view/final/index'); ?>
-        <?php endif; ?>
-    <?php endif; ?>
+            // PROGRESS FINAL
+            if (is_admin()) {
+                $this->load->view('draft/view/final/index');
+            }
+        }
+    }
+    ?>
 </div>
 
 <script>
