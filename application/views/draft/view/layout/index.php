@@ -71,7 +71,7 @@ $is_layout_started      = format_datetime($input->layout_start_date);
                         data-target="#modal-deadline-layout"
                     >Deadline layouter <i class="fas fa-edit fa-fw"></i></a>
                 <?php else : ?>
-                    <span>Deadline layouter</span>
+                    <span class="text-muted">Deadline layouter</span>
                 <?php endif ?>
                 <strong>
                     <?= ($layout_remaining_time <= 0 && $input->layout_notes == '') ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . format_datetime($input->layout_deadline) . '</span>' : format_datetime($input->layout_deadline); ?>
@@ -149,13 +149,6 @@ $is_layout_started      = format_datetime($input->layout_start_date);
                     data-target="#modal-cover"
                     <?= ($level == 'layouter' and $layout_remaining_time <= 0 and $input->cover_notes == '') ? 'disabled' : ''; ?>
                 >Progress Cover</button>
-                <?php if ($level != 'author') : ?>
-                    <button
-                        data-toggle="modal"
-                        data-target="#modal-layout-revision"
-                        class="btn btn-outline-info"
-                    ><i class="fa fa-tasks"></i> Revisi <span class="badge badge-info"><?= $revision_total['layouter']; ?></span></button>
-                <?php endif; ?>
             </div>
         </div>
 

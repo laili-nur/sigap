@@ -77,7 +77,7 @@ $is_review_started      = format_datetime($input->review_start_date);
                             data-target="#modal-deadline-review1"
                         >Deadline review #1 <i class="fas fa-edit fa-fw"></i></a>
                     <?php else : ?>
-                        <span>Deadline reviewer #1</span>
+                        <span class="text-muted">Deadline reviewer #1</span>
                     <?php endif ?>
                     <strong>
                     <?= ($review1_remaining_time <= 0 && $input->review1_flag == '')
@@ -100,7 +100,7 @@ $is_review_started      = format_datetime($input->review_start_date);
                             data-target="#modal-deadline-review2"
                         >Deadline review #2 <i class="fas fa-edit fa-fw"></i></a>
                     <?php else : ?>
-                        <span>Deadline reviewer #2</span>
+                        <span class="text-muted">Deadline reviewer #2</span>
                     <?php endif ?>
                     <strong>
                     <?= ($review2_remaining_time <= 0 and $input->review2_flag == '')

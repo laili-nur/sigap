@@ -36,15 +36,43 @@ $is_proofread_started      = format_datetime($input->proofread_start_date);
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Tanggal mulai</span>
-                <strong>
-            <?= format_datetime($input->proofread_start_date); ?></strong>
+                <strong><?= format_datetime($input->proofread_start_date); ?></strong>
             </div>
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Tanggal selesai</span>
-                <strong>
-            <?= format_datetime($input->proofread_end_date); ?></strong>
+                <strong><?= format_datetime($input->proofread_end_date); ?></strong>
             </div>
+
+            <?php if ($level != 'author') : ?>
+                <div class="list-group-item justify-content-between">
+                    <?php if (is_staff()) : ?>
+                        <a
+                            class="btn-modal-revision"
+                            href="#revision-edit"
+                            title="Revisi Edit"
+                            data-revision-type="edit"
+                        >Revisi Edit <i class="fas fa-edit fa-fw"></i></a>
+                    <?php else : ?>
+                        <span class="text-muted">Revisi Edit</span>
+                    <?php endif ?>
+                    <strong><span class="badge badge-warning"><?= $revision_total['editor']; ?></span></button></strong>
+                </div>
+
+                <div class="list-group-item justify-content-between">
+                    <?php if (is_staff()) : ?>
+                        <a
+                            class="btn-modal-revision"
+                            href="#revision-layout"
+                            title="Revisi Layout"
+                            data-revision-type="layout"
+                        >Revisi Layout <i class="fas fa-edit fa-fw"></i></a>
+                    <?php else : ?>
+                        <span class="text-muted">Revisi Layout</span>
+                    <?php endif ?>
+                    <strong><span class="badge badge-warning"><?= $revision_total['layouter']; ?></span></button></strong>
+                </div>
+            <?php endif ?>
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Status</span>
@@ -104,6 +132,9 @@ $is_proofread_started      = format_datetime($input->proofread_start_date);
 
         // modal progress proofread
         $this->load->view('draft/view/proofread/proofread_modal');
+
+        // modal revision
+        $this->load->view('draft/view/common/revision_modal');
         ?>
     </div>
 </section>

@@ -1,20 +1,20 @@
 <!-- MODAL LIST REVISI -->
 <div
     class="modal fade"
-    id="modal-edit-revision"
+    id="modal-revision"
     tabindex="-1"
     role="dialog"
-    aria-labelledby="modal-edit-revision"
+    aria-labelledby="modal-revision"
     aria-hidden="true"
 >
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> Revisi Edit</h5>
+                <h5 class="modal-title" id="modal-revision-title"> Revisi</h5>
             </div>
             <div class="modal-body">
                 <div
-                    id="accordion-editor"
+                    id="accordion-revision"
                     class="card-expansion"
                 >
                 </div>
@@ -97,93 +97,45 @@
 <script>
 $(document).ready(function() {
     const draftId = $('[name=draft_id]').val();
+    let revisionType; // edit || layout
 
-    // load data ketika modal dibuka
-    $('#modal-edit-revision').on('shown.bs.modal', function(e) {
-        getRevision();
-    })
-
-    // kosongkan modal ketika modal ditutup
-    $('#modal-edit-revision').on('hidden.bs.modal', function(e) {
-        $('#accordion-editor').html('');
-    })
-
-    // populate tanggal deadline dan revision id
-    $('#modal-edit-revision').on('click', '#btn-modal-deadline-revision', function(e) {
-        // menggunakan native selector atau jquery selector element [0] populate untuk flatpickr
-        $('#revision-deadline')[0]._flatpickr.setDate($(this).data().revisionDeadline);
-        $('#revision-id').val($(this).data().revisionId)
-    })
-
-    $('#modal-deadline-revision').on('click', '#btn-submit-revision-deadline', function(e) {
-        e.preventDefault()
-        const $this = $(this);
-        const revisionDeadline = $('#revision-deadline').val()
-        const revisionId = $('#revision-id').val()
-
-        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
-        $.ajax({
-            type: "POST",
-            url: "<?= base_url('revision/save_deadline'); ?>",
-            data: {
-                revision_deadline: revisionDeadline,
-                revision_id: revisionId
-            },
-            success: function(res) {
-                show_toast(true, res.data);
-                getRevision()
-                setTimeout(() => {
-                    $('#modal-deadline-revision').modal('hide')
-                }, 0);
-            },
-            error: function(err) {
-                show_toast(false, err.responseJSON.message);
-            },
-            complete: function() {
-                $this.removeAttr("disabled").html('Submit');
-            }
+    // reload segmen ketika modal diclose
+    $('#proofread-progress-wrapper').on('shown.bs.modal', '#modal-revision', function() {
+        // reload ketika modal diclose
+        $('#modal-revision').off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
+            $('#proofread-progress-wrapper').load(' #proofread-progress', function() {
+                // reinitiate flatpickr modal after load
+                init_flatpickr_modal()
+            });
+            // kosongkan modal ketika modal ditutup
+            $('#accordion-revision').html('');
         })
+    })
+
+    // buka modal revisi
+    $('#proofread-progress-wrapper').on('click', '.btn-modal-revision', function(e) {
+        e.preventDefault();
+        $('#modal-revision').modal(true);
+        // populate type
+        revisionType = $(this).data().revisionType;
+        getRevision();
+        // ganti judul modal
+        $('#modal-revision-title').html(`Revisi ${revisionType}`);
     })
 
     // get revision dari controller
     function getRevision() {
         const getUrl = '<?= base_url("revision/get_revision"); ?>'
-        $('#accordion-editor').html('<i class="fa fa-spinner fa-spin"></i> Loading data...');
+        $('#accordion-revision').html('<i class="fa fa-spinner fa-spin"></i> Loading data...');
         $.ajax({
             type: "GET",
-            url: `${getUrl}/${draftId}/editor`,
+            url: `${getUrl}/${draftId}/${revisionType}`,
             success: function(res) {
-
-                renderData(res.data)
-                // let datax = JSON.parse(data);
-                // console.log(datax.flag);
-                // if (datax.flag != true) {
-                //     $('#mulai-revisi-editor').removeAttr('disabled');
-                // }
-                // var i;
-                // if (datax.revisi.length > 0) {
-                //     for (i = 0; i < datax.revisi.length; i++) {
-                //         $('#accordion-editor').html(datax.revisi);
-                //         $('.summernote-basic').summernote({
-                //             placeholder: 'Write here...',
-                //             height: 100,
-                //             disableDragAndDrop: true,
-                //             toolbar: [
-                //                 ['style', ['bold', 'italic', 'underline', 'clear']],
-                //                 ['font', ['strikethrough']],
-                //                 ['fontsize', ['fontsize', 'height']],
-                //                 ['color', ['color']],
-                //                 ['para', ['ul', 'ol', 'paragraph']],
-                //                 ['height', ['height']],
-                //                 ['view', ['codeview']],
-                //             ]
-                //         });
-                //     }
-                // } else {
-                //     $('#accordion-editor').html(datax.revisi);
-                // }
-
-            }
+                renderData(res.data);
+            },
+            error: (err) => {
+                show_toast(false, err.responseJSON.message);
+            },
         });
     }
 
@@ -202,7 +154,7 @@ $(document).ready(function() {
                     finishBtnAttr = 'd-none';
                     saveBtnAttr = 'd-none';
                     badge = '<span class="badge badge-success">Selesai</span>';
-                    formRevision = r.revision_notes;
+                    formRevision = r.revision_notes || '<em>Tidak ada catatan</em>';
                 } else {
                     flag++;
                     finishBtnAttr = 'd-inline';
@@ -223,7 +175,7 @@ $(document).ready(function() {
                     </button>
                 </header>
 
-                <div id="collapse-${r.revision_id}" class="collapse" aria-labelledby="heading-revision-${r.revision_id}" data-parent="#accordion-${r.revision_role}">
+                <div id="collapse-${r.revision_id}" class="collapse" aria-labelledby="heading-revision-${r.revision_id}" data-parent="#accordion-revision">
                     <div class="list-group list-group-flush list-group-bordered">
                         <div class="list-group-item justify-content-between">
                           <span class="text-muted">Tanggal mulai</span>
@@ -234,15 +186,9 @@ $(document).ready(function() {
                           <strong>${r.revision_end_date}</strong>
                         </div>
                         <div class="list-group-item justify-content-between">
-                        <a
-                            href="#"
-                            id="btn-modal-deadline-revision"
-                            title="Ubah deadline"
-                            data-toggle="modal"
-                            data-target="#modal-deadline-revision"
-                            data-revision-deadline="${r.revision_deadline}"
-                            data-revision-id="${r.revision_id}"
-                        >Deadline revisi <i class="fas fa-edit fa-fw"></i></a>
+                        ${!r.revision_end_date
+                        ? `<a href="#" id="btn-modal-deadline-revision" title="Ubah deadline" data-toggle="modal"data-target="#modal-deadline-revision" data-revision-deadline="${r.revision_deadline}" data-revision-id="${r.revision_id}">Deadline revisi <i class="fas fa-edit fa-fw"></i></a>`
+                        : `<span class="text-muted">Deadline Revisi</span>`}
                           <strong>${r.revision_deadline}</strong>
                         </div>
                         <div class="list-group-item mb-0 pb-0">
@@ -264,23 +210,40 @@ $(document).ready(function() {
             `
             })
         } else {
-            list = '<em>Tidak ada revisi editor</em>'
+            list = `<em>Tidak ada revisi ${revisionType}</em>`
         }
 
 
-        $('#accordion-editor').html(list)
+        $('#accordion-revision').html(list)
         if (flag == 0) {
             $('#btn-insert-revision').removeAttr('disabled')
         }
+
+        // WARNING! TOO SLOW
+        // $('.summernote-basic').summernote({
+        //     placeholder: 'Write here...',
+        //     height: 100,
+        //     disableDragAndDrop: true,
+        //     toolbar: [
+        //         ['style', ['bold', 'italic', 'underline', 'clear']],
+        //         ['font', ['strikethrough']],
+        //         ['fontsize', ['fontsize', 'height']],
+        //         ['color', ['color']],
+        //         ['para', ['ul', 'ol', 'paragraph']],
+        //         ['height', ['height']],
+        //         ['view', ['codeview']],
+        //     ],
+        //     codeviewFilter: false,
+        //     codeviewIframeFilter: true,
+        // });
     }
 
 
     // selesai revisi
-    $('#accordion-editor').on('click', '.btn-finish-revision', function() {
-        const $this = $(this);
-        const revisionId = $this.data().id
+    $('#proofread-progress-wrapper').on('click', '.btn-finish-revision', function() {
+        const revisionId = $(this).data().id
 
-        $this.attr("disabled", "disabled")
+        $(this).attr("disabled", "disabled")
         $.ajax({
             type: "POST",
             url: "<?= base_url('revision/finish_revision'); ?>",
@@ -288,24 +251,23 @@ $(document).ready(function() {
                 revision_id: revisionId,
                 draft_id: draftId
             },
-            success: function(res) {
+            success: (res) => {
                 show_toast(true, res.data);
                 getRevision()
             },
-            error: function(err) {
+            error: (err) => {
                 show_toast(false, err.responseJSON.message);
-                $this.removeAttr("disabled");
+                $(this).removeAttr("disabled");
             },
         })
     });
 
     // simpan catatan revisi
-    $('#accordion-editor').on('click', '.btn-save-revision', function() {
-        const $this = $(this);
-        const revisionId = $this.data().id
+    $('#proofread-progress-wrapper').on('click', '.btn-save-revision', function() {
+        const revisionId = $(this).data().id
         const revisionNotes = $(`#revision-notes-${revisionId}`).val();
 
-        $this.attr("disabled", "disabled");
+        $(this).attr("disabled", "disabled");
         $.ajax({
             type: "POST",
             url: "<?= base_url('revision/save_revision'); ?>",
@@ -313,62 +275,98 @@ $(document).ready(function() {
                 revision_id: revisionId,
                 revision_notes: revisionNotes
             },
-            success: function(res) {
+            success: (res) => {
                 show_toast(true, res.data);
                 getRevision()
             },
-            error: function(err) {
+            error: (err) => {
                 show_toast(false, err.responseJSON.message);
-                $this.removeAttr("disabled");
+                $(this).removeAttr("disabled");
             },
         })
     });
 
     // hapus revisi
-    $('#accordion-editor').on('click', '.btn-delete-revision', function() {
-        const $this = $(this);
-        const revisionId = $this.data().id
+    $('#proofread-progress-wrapper').on('click', '.btn-delete-revision', function() {
+        const revisionId = $(this).data().id
 
         if (confirm(`Apakah anda yakin akan menghapus revisi ini?`)) {
-            $this.attr("disabled", "disabled");
+            $(this).attr("disabled", "disabled");
             $.ajax({
                 type: "GET",
                 url: "<?= base_url('revision/delete_revision/'); ?>" + revisionId,
-                success: function(res) {
+                success: (res) => {
                     show_toast(true, res.data);
                     getRevision()
                 },
-                error: function(err) {
+                error: (err) => {
                     show_toast(false, err.responseJSON.message);
-                    $this.removeAttr("disabled");
+                    $(this).removeAttr("disabled");
                 },
             })
         }
     });
 
     // tambah revisi baru
-    $('#btn-insert-revision').on('click', function() {
-        const $this = $(this);
-
-        $this.attr("disabled", "disabled");
-        $this.tooltip('dispose');
+    $('#proofread-progress-wrapper').on('click', '#btn-insert-revision', function() {
+        $(this).attr("disabled", "disabled")
+        $(this).tooltip('dispose');
 
         $.ajax({
             type: "POST",
             url: "<?= base_url('revision/insert_revision'); ?>",
             data: {
                 draft_id: draftId,
-                role: 'editor'
+                revision_type: revisionType
             },
-            success: function(res) {
+            success: (res) => {
                 show_toast(true, res.data);
                 getRevision()
             },
-            error: function(err) {
+            error: (err) => {
                 show_toast(false, err.responseJSON.message);
-                $this.removeAttr("disabled");
+                $(this).removeAttr("disabled");
             },
         })
     });
+
+    // DEADLINE MODAL
+
+    // populate tanggal deadline dan revision id
+    $('#proofread-progress-wrapper').on('click', '#btn-modal-deadline-revision', function(e) {
+        // menggunakan native selector atau jquery selector element [0] populate untuk flatpickr
+        $('#revision-deadline')[0]._flatpickr.setDate($(this).data().revisionDeadline);
+        $('#revision-id').val($(this).data().revisionId)
+    })
+
+    // submit deadline revisi
+    $('#proofread-progress-wrapper').on('click', '#btn-submit-revision-deadline', function(e) {
+        e.preventDefault()
+        const revisionDeadline = $('#revision-deadline').val()
+        const revisionId = $('#revision-id').val()
+
+        $(this).attr("disabled", "disabled");
+        $.ajax({
+            type: "POST",
+            url: "<?= base_url('revision/save_deadline'); ?>",
+            data: {
+                revision_deadline: revisionDeadline,
+                revision_id: revisionId
+            },
+            success: (res) => {
+                show_toast(true, res.data);
+                getRevision()
+                setTimeout(() => {
+                    $('#modal-deadline-revision').modal('hide')
+                }, 0);
+            },
+            error: (err) => {
+                show_toast(false, err.responseJSON.message);
+            },
+            complete: () => {
+                $(this).removeAttr("disabled");
+            }
+        })
+    })
 })
 </script>

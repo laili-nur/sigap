@@ -73,7 +73,7 @@ $is_edit_started     = format_datetime($input->edit_start_date);
                         data-target="#modal-deadline-edit"
                     >Deadline editor <i class="fas fa-edit fa-fw"></i></a>
                 <?php else : ?>
-                    <span>Deadline editor</span>
+                    <span class="text-muted">Deadline editor</span>
                 <?php endif ?>
                 <strong>
                     <?= ($edit_remaining_time <= 0 && $input->edit_notes == '') ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . format_datetime($input->edit_deadline) . '</span>' : format_datetime($input->edit_deadline); ?>
@@ -151,14 +151,6 @@ $is_edit_started     = format_datetime($input->edit_start_date);
                         class="btn btn-outline-dark"
                     ><i class="far fa-sticky-note"></i> Catatan</button>
                 <?php endif; ?>
-                <?php if ($level != 'author') : ?>
-                    <button
-                        data-toggle="modal"
-                        data-target="#modal-edit-revision"
-                        class="btn btn-outline-info"
-                    ><i class="fa fa-tasks"></i> Revisi <span
-                        class="badge badge-info"><?= $revision_total['editor']; ?></span></button>
-                <?php endif; ?>
             </div>
         </div>
 
@@ -181,9 +173,6 @@ $is_edit_started     = format_datetime($input->edit_start_date);
 
         // modal catatan confidential
         $this->load->view('draft/view/edit/confidential_modal');
-
-        // modal revision edit
-        $this->load->view('draft/view/edit/revision_modal');
         ?>
     </div>
 </section>

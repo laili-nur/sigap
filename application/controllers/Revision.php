@@ -11,7 +11,12 @@ class Revision extends MY_Controller
 
     public function get_revision($draft_id, $progress)
     {
-        $revisions = $this->revision->where('revision_role', $progress)->where('draft_id', $draft_id)->get_all();
+        if ($progress == 'edit') {
+            $role = 'editor';
+        } else if ($progress == 'layout') {
+            $role = 'layouter';
+        }
+        $revisions = $this->revision->where('revision_role', $role)->where('draft_id', $draft_id)->get_all();
 
         return $this->send_json_output(true, $revisions);
 
@@ -118,18 +123,21 @@ class Revision extends MY_Controller
     public function insert_revision()
     {
         $input = (object) $this->input->post(null);
-        if ($input->role == 'editor') {
+        if ($input->revision_type == 'edit') {
             $status = array('draft_status' => 17);
-        } elseif ($input->role == 'layouter') {
+            $role = 'editor';
+        } elseif ($input->revision_type == 'layout') {
             $status = array('draft_status' => 18);
+            $role = 'layouter';
         }
+
         $this->revision->update_draft_status($input->draft_id, $status);
 
         $deadline = date('Y-m-d H:i:s', (strtotime(now()) + (7 * 24 * 60 * 60)));
         $insert   = $this->revision->insert([
             'draft_id'            => $input->draft_id,
             'revision_start_date' => now(),
-            'revision_role'       => $input->role,
+            'revision_role'       => $role,
             'revision_deadline'   => $deadline,
             'user_id'             => $this->user_id,
         ]);
