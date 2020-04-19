@@ -84,13 +84,13 @@ class Book_model extends MY_Model
             'draft_id'            => '',
             'book_code'           => '',
             'book_title'          => '',
-//            'cover'                    => '',
+            //            'cover'                    => '',
             'book_edition'        => '',
             'book_file_link'      => '',
             'book_pages'          => '',
             'isbn'                => '',
             'eisbn'               => '',
-//            'book_file'                    => '',
+            //            'book_file'                    => '',
             'published_date'      => '',
             'harga'               => '',
             'book_notes'          => '',
@@ -99,6 +99,14 @@ class Book_model extends MY_Model
             'status_hak_cipta'    => '',
             'file_hak_cipta_link' => '',
         ];
+    }
+
+    public function get_book_from_draft($draft_id)
+    {
+        return $this->select('book_id')
+            ->where('book.draft_id', $draft_id)
+            ->join_table('draft', 'book', 'draft')
+            ->get();
     }
 
     public function uploadBookfile($bookfieldname, $bookFileName)
@@ -157,10 +165,9 @@ class Book_model extends MY_Model
         if (file_exists("./hakcipta/$HCfile")) {
             unlink("./hakcipta/$HCfile");
         }
-
     }
 
-//     public function uploadCover($coverfieldname, $coverFileName)
+    //     public function uploadCover($coverfieldname, $coverFileName)
     //    {
     //        $config = [
     //            'upload_path'      => './cover/',

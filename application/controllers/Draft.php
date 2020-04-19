@@ -590,7 +590,7 @@ class Draft extends Operator_Controller
     }
 
     // update draft, kirim update via post
-    public function api_update_draft($draft_id = null, $rev = null)
+    public function api_update_draft($draft_id = null)
     {
         // $input = $this->input->post(null, false);
         // return $this->send_json_output(true, $input);
@@ -626,6 +626,8 @@ class Draft extends Operator_Controller
         // if (empty($input->files)) {
         //     unset($input->files);
         // }
+
+
 
         // if ($this->draft->validate($input) == false) {
         //     return $this->send_json_output('validation errrors', false, 422);
@@ -768,26 +770,64 @@ class Draft extends Operator_Controller
         }
         redirect('draft');
     }
-    public function copyToBook($draft_id)
+    public function finish_draft($draft_id)
     {
+        // memastikan konsistensi data
+        $this->db->trans_begin();
+
+        // update status draft
+        $this->draft->where('draft_id', $draft_id)->update([
+            'draft_status' => 14,
+            'finish_date' => now()
+        ]);
+
         $this->load->model('book_model', 'book', true);
-        $book_id = $this->book->get_id_draft_from_draft_id($draft_id, 'book');
-        $datax   = array('draft_id' => $draft_id);
-        $draft   = $this->draft->get_where($datax);
-        if ($book_id == 0) {
-            $data = array('draft_id' => $draft_id, 'book_title' => $draft->draft_title, 'book_file' => $draft->print_file, 'book_file_link' => $draft->print_file_link, 'published_date' => date('Y-m-d H:i:s'));
-            if ($this->book->insert($data)) {
-                $book_id = $this->db->insert_id();
-                if ($book_id != 0) {
-                    $this->session->set_flashdata('warning', 'Lengkapi data lalu Submit');
-                    redirect('book/edit/' . $book_id);
-                }
-            }
+        $book = $this->book->get_book_from_draft($draft_id);
+        $book_id = 0;
+
+        // cek apakah buku sudah pernah dibuat dari draft ini
+        if (!isset($book)) {
+            $draft   = $this->draft->get_where(['draft_id' => $draft_id]);
+            $this->book->insert([
+                'draft_id' => $draft_id,
+                'book_title' => $draft->draft_title,
+                'book_file' => $draft->print_file,
+                'book_file_link' => $draft->print_file_link,
+            ]);
+            $book_id = $this->db->insert_id();
+        }
+
+        if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
+            $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
         } else {
-            $this->session->set_flashdata('error', 'Book has been created');
-            redirect('book');
+            $this->db->trans_commit();
+            if ($book_id != 0) {
+                $this->session->set_flashdata('warning', 'Lengkapi data buku berikut');
+                redirect("book/edit/$book_id");
+            } else {
+                $this->session->set_flashdata('error', 'Buku telah dibuat menggunakan draft ini');
+                redirect("book/view/{$book->book_id}");
+            }
         }
     }
+
+    // public function tes($draft_id = 1129)
+    // {
+    //     $this->load->model('book_model', 'book', true);
+    //     $book = $this->book->get_book_from_draft($draft_id);
+
+    //     if (isset($book)) {
+    //         $book_id = $book->book_id;
+    //     } else {
+    //         $book_id = 'kosong';
+    //     }
+
+    //     echo '<pre>';
+    //     print_r($book_id);
+    //     echo '</pre>';
+    //     die();
+    // }
 
     public function cetakUlang($id = '')
     {

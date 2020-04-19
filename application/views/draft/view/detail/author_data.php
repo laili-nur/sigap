@@ -3,7 +3,7 @@
     class="tab-pane fade"
     id="author-data"
 >
-    <?php if ($level == 'superadmin' || $level == 'admin_penerbitan') : ?>
+    <?php if (is_admin()) : ?>
         <div class="alert alert-warning">
             Pastikan penulis sudah ada pada tabel <strong>Penulis</strong> agar dapat dipilih, Apabila belum
             maka

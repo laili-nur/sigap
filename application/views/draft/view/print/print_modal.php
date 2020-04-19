@@ -238,9 +238,9 @@ $(document).ready(function() {
     const draftId = $('[name=draft_id]').val();
 
     // reload segmen ketika modal diclose
-    $('#print-progress-wrapper').on('shown.bs.modal', `#modal-print`, function() {
+    $('#print-progress-wrapper').on('shown.bs.modal', '#modal-print', function() {
         // reload ketika modal diclose
-        $(`#modal-print`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
+        $('#modal-print').off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
             $('#print-progress-wrapper').load(' #print-progress', function() {
                 // reinitiate flatpickr modal after load
                 init_flatpickr_modal()
@@ -249,12 +249,12 @@ $(document).ready(function() {
     })
 
     // submit progress print
-    $('#print-progress-wrapper').on('click', `#btn-submit-print`, function() {
+    $('#print-progress-wrapper').on('click', '#btn-submit-print', function() {
         const $this = $(this);
 
         const printData = {
-            [`print_notes`]: $(`#printer-print-notes`).val(),
-            [`print_notes_author`]: $(`#author-print-notes`).val(),
+            ['print_notes']: $('#printer-print-notes').val(),
+            ['print_notes_author']: $('#author-print-notes').val(),
         }
 
         $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
@@ -266,7 +266,7 @@ $(document).ready(function() {
             success: function(res) {
                 console.log(res);
                 show_toast(true, res.data);
-                $(`#print-configutarion-tab-content`).load(` #print-configutarion-info`)
+                $('#print-comment-tab-content').load(' #print-comment-info')
             },
             error: function(err) {
                 console.log(err);
@@ -277,7 +277,7 @@ $(document).ready(function() {
 
 
     // submit print configuration
-    $('#print-progress-wrapper').on('click', `#btn-submit-print-configuration`, function() {
+    $('#print-progress-wrapper').on('click', '#btn-submit-print-configuration', function() {
         const $this = $(this);
 
         const printConfigData = {
@@ -300,7 +300,7 @@ $(document).ready(function() {
             success: function(res) {
                 console.log(res);
                 show_toast(true, res.data);
-                $(`#print-configuration-tab-content`).load(` #print-configuration-section`)
+                $('#print-configuration-tab-content').load(' #print-configuration-section')
             },
             error: function(err) {
                 console.log(err);

@@ -426,21 +426,21 @@ class MY_Model extends CI_Model
         return $data ? $data[$role . '_id'] : null;
     }
 
-    public function get_id_draft_from_draft_id($draft_id, $role)
-    {
-        $id = 0;
+    // public function get_id_draft_from_draft_id($draft_id, $role)
+    // {
+    //     $id = 0;
 
-        $data = $this->select($role . '_id')
-            ->join_relation_dest('draft', $role)
-            ->where_relation($role, $draft_id, 'draft')
-            ->get_row_array($role);
+    //     $data = $this->select($role . '_id')
+    //         ->join_relation_dest('draft', $role)
+    //         ->where_relation($role, $draft_id, 'draft')
+    //         ->get_row_array($role);
 
-        if ($data) {
-            $id = $data[$role . '_id'];
-        }
+    //     if ($data) {
+    //         $id = $data[$role . '_id'];
+    //     }
 
-        return $id;
-    }
+    //     return $id;
+    // }
 
     public function update_session(String $username)
     {
