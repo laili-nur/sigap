@@ -7,7 +7,7 @@
     aria-labelledby="modal-edit-revision"
     aria-hidden="true"
 >
-    <div class="modal-dialog modal-lg modal-dialog-overflow modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"> Revisi Edit</h5>

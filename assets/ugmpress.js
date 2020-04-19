@@ -1,13 +1,15 @@
 // allow stackable modal
 (function multiple_modal() {
-    var modal_lv = 0;
-    $('body').on('show.bs.modal', function (e) {
-        if (modal_lv > 0)
-            $(e.target).css('zIndex', 1051 + modal_lv);
-        modal_lv++;
-    }).on('hidden.bs.modal', function () {
-        if (modal_lv > 0)
-            modal_lv--;
+    $(document).on('show.bs.modal', '.modal', function () {
+        var zIndex = 1040 + (10 * $('.modal:visible').length);
+        $(this).css('z-index', zIndex);
+        setTimeout(function () {
+            $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+        }, 0);
+    });
+
+    $(document).on('hidden.bs.modal', '.modal', function () {
+        $('.modal:visible').length && $(document.body).addClass('modal-open');
     });
 })()
 
