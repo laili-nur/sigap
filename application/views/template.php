@@ -93,6 +93,12 @@
 
     <!-- JS -->
     <script src="<?= base_url('assets/vendor/jquery/jquery.min.js'); ?>"></script>
+
+    <script>
+    // global variable
+    // allow passing to separate .js files
+    window.BASE_URL = '<?= base_url('') ?>'
+    </script>
 </head>
 
 <body>

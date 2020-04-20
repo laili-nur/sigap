@@ -24,6 +24,8 @@ application/logs/*
 
 !application/*/.htaccess
 
+cacheassets
+
 #composer.lock
 
 user_guide_src/build/*
