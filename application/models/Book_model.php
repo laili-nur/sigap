@@ -103,7 +103,7 @@ class Book_model extends MY_Model
 
     public function get_book_from_draft($draft_id)
     {
-        return $this->select('book_id')
+        return $this->select('book_id,book_title,nomor_hak_cipta,status_hak_cipta,file_hak_cipta,file_hak_cipta_link')
             ->where('book.draft_id', $draft_id)
             ->join_table('draft', 'book', 'draft')
             ->get();

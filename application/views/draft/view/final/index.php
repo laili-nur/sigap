@@ -6,29 +6,33 @@
         id="final-progress"
         class="card-button"
     >
-        <?php $is_final_file_ready = $input->print_file || $input->print_file_link; ?>
-        <?php
-        $hidden_date = array(
-            'type'  => 'hidden',
-            'id'    => 'finish_date',
-            'value' => date('Y-m-d H:i:s'),
-        );
-        echo form_input($hidden_date); ?>
-        <?= ($input->is_print == 'n') ? '<div class="m-0"><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> Proses cetak belum disetujui</small></div>' : null ?>
-        <?= $is_final_file_ready ? '' : '<div class="m-0"><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> File/Link cetak belum ada</small></div>'; ?>
+        <?php if (!isset($book)) : ?>
+            <?php $is_final_file_ready = $input->print_file || $input->print_file_link; ?>
+            <?php
+            $hidden_date = array(
+                'type'  => 'hidden',
+                'id'    => 'finish_date',
+                'value' => date('Y-m-d H:i:s'),
+            );
+            echo form_input($hidden_date); ?>
+            <?= ($input->is_print == 'n') ? '<div class="m-0"><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> Proses cetak belum disetujui</small></div>' : null ?>
+            <?= !$is_final_file_ready ? '<div class="m-0"><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> File/Link cetak belum ada</small></div>' : null; ?>
 
-        <button
-            class="btn btn-primary"
-            data-toggle="modal"
-            data-target="#modal-save-draft"
-            <?= ($input->is_print == 'y' && $is_final_file_ready) ? null : 'disabled'; ?>
-        >Simpan jadi buku</button>
-        <button
-            class="btn btn-danger"
-            data-toggle="modal"
-            data-target="#modaltolak"
-            <?= ($input->is_print == 'y' && $is_final_file_ready) ? null : 'disabled'; ?>
-        >Tolak</button>
+            <button
+                class="btn btn-primary"
+                data-toggle="modal"
+                data-target="#modal-save-draft"
+                <?= ($input->is_print == 'y' && $is_final_file_ready) ? null : 'disabled'; ?>
+            >Simpan jadi buku</button>
+            <button
+                class="btn btn-danger"
+                data-toggle="modal"
+                data-target="#modal-decline-draft"
+                <?= ($input->is_print == 'y' && $is_final_file_ready) ? null : 'disabled'; ?>
+            >Tolak</button>
+        <?php else : ?>
+            <div>Buku sudah dibuat menggunakan draft ini. <span><a href="<?= base_url("book/view/{$book->book_id}") ?>" target="_blank"> <i class="fa fa-external-link-alt"></i> Link buku</a></span></div>
+        <?php endif ?>
     </div>
 </div>
 
@@ -66,32 +70,24 @@
 
 <div
     class="modal modal-alert fade"
-    id="modaltolak"
+    id="modal-decline-draft"
     tabindex="-1"
     role="dialog"
-    aria-labelledby="modaltolak"
+    aria-labelledby="modal-decline-draft"
     aria-hidden="true"
 >
-    <div
-        class="modal-dialog"
-        role="document"
-    >
+    <div class="modal-dialog  modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">
-                        <i class="fa fa-exclamation-triangle text-red mr-1"></i> Tolak Draft
-                    </h5>
+                <h5 class="modal-title"><i class="fa fa-exclamation-triangle text-red mr-1"></i> Tolak Draft</h5>
             </div>
             <div class="modal-body">
-                <p>Draft <span class="font-weight-bold">
-                            <?= $input->draft_title; ?></span> ditolak?</p>
+                <p>Draft <span class="font-weight-bold"> <?= $input->draft_title; ?></span> ditolak?</p>
             </div>
             <div class="modal-footer">
                 <button
                     class="btn btn-danger"
-                    type="button"
-                    id="draft-tolak"
-                    value="99"
+                    id="btn-decline-draft"
                 >Tolak</button>
                 <button
                     type="button"
@@ -105,77 +101,36 @@
 
 <script>
 $(document).ready(function() {
+    const draftId = $('[name=draft_id]').val();
 
+    // draft disetujui
     $('#btn-accept-draft').on('click', function() {
-        const $this = $(this);
-        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
-
-        const draftId = $('[name=draft_id]').val();
-        // let draft_title = $this.attr('draft-title');
-        // let draft_file = $this.attr('draft-file');
-        // let action = $('#btn-accept-draft').val();
-        // let finish_date = $('#finish_date').val();
-
+        $(this).attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
         window.location = "<?= base_url('draft/finish_draft/'); ?>" + draftId
-
-        // $.ajax({
-        //     type: "GET",
-        //     url: "<?= base_url('draft/finish_draft/'); ?>" + draftId,
-        //     success: function(res) {
-        //         console.log(res);
-        //         showToast(true, res.data);
-        //     },
-        //     error: function(err) {
-        //         console.log(err);
-        //         showToast(false, err.responseJSON.message);
-        //     },
-        //     // success: function(data) {
-        //     //     let datax = JSON.parse(data);
-        //     //     console.log(datax);
-        //     //     $this.removeAttr("disabled").html("Submit");
-        //     //     if (datax.status == true) {
-        //     //         showToast('111');
-        //     //         location.href = '<?php echo base_url("draft/copyToBook/"); ?>' + draftId;
-        //     //     } else {
-        //     //         showToast('000');
-        //     //     }
-        //     // }
-        // });
-
-        // $('#draft_aksi').modal('hide');
-        // location.reload();
-        return false;
     });
 
-    $('#draft-tolak').on('click', function() {
-        var $this = $(this);
-        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-        let id = $('[name=draft_id]').val();
-        let action = $('#draft-tolak').val();
-        console.log(action);
+    // draft ditolak
+    $('#btn-decline-draft').on('click', function() {
+        $(this).attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
+
         $.ajax({
             type: "POST",
-            url: "<?php echo base_url('draft/api_update_draft/'); ?>" + id,
-            datatype: "JSON",
+            url: "<?= base_url('draft/api_update_draft/'); ?>" + draftId,
             data: {
-                draft_status: action,
+                draft_status: 99,
             },
-            success: function(data) {
-                let datax = JSON.parse(data);
-                console.log(datax);
-                $this.removeAttr("disabled").html("Tolak");
-                if (datax.status == true) {
-                    showToast('111');
-                } else {
-                    showToast('000');
-                }
-                location.href = '<?php echo base_url("draft/view/"); ?>' + id;
+            success: (res) => {
+                console.log(res);
+                showToast(true, res.data);
+            },
+            error: (err) => {
+                console.log(err);
+                showToast(false, err.responseJSON.message);
+            },
+            complete: () => {
+                location.reload();
             }
         });
-
-        // $('#draft_aksi').modal('hide');
-        // location.reload();
-        return false;
     });
 })
 </script>

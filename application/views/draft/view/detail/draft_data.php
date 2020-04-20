@@ -61,8 +61,17 @@
                     <?php endif; ?>
                     <?php if ($level != 'reviewer') : ?>
                         <tr>
-                            <td width="200px"> Tanggal Masuk
-                                <?= ($level === 'superadmin' or $level === 'admin_penerbitan') ? '<button type="button" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#modal-entry-date">Edit</button>' : ''; ?>
+                            <td width="200px">
+                                <?php if (is_admin()) : ?>
+                                    <a
+                                        href="#"
+                                        title="Ubah tanggal masuk"
+                                        data-toggle="modal"
+                                        data-target="#modal-entry-date"
+                                    >Tanggal Masuk <i class="fas fa-edit fa-fw"></i></a>
+                                <?php else : ?>
+                                    <span class="text-muted">Tanggal Masuk</span>
+                                <?php endif ?>
                             </td>
                             <td>
                                 <?= format_datetime($input->entry_date); ?>
@@ -83,8 +92,9 @@
                         </tr>
                         <tr>
                             <td width="200px"> Status Proses </td>
-                            <td><span class="font-weight-bold">
-                                    <?= draft_status_to_text($input->draft_status); ?></span> </td>
+                            <td>
+                                <span class="font-weight-bold <?= ($input->draft_status == 99) ? 'text-danger' : '' ?>"> <?= draft_status_to_text($input->draft_status); ?></span>
+                            </td>
                         </tr>
                         <tr>
                             <td width="200px"> Status Naskah </td>
@@ -107,8 +117,17 @@
                             </td>
                         </tr>
                         <tr>
-                            <td width="200px"> Catatan Draft
-                                <?= ($level != 'author' and $level != 'reviewer') ? '<button type="button" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#modal-draft-notes">Edit</button>' : ''; ?>
+                            <td width="200px">
+                                <?php if (is_admin()) : ?>
+                                    <a
+                                        href="#"
+                                        title="Ubah catatan draft"
+                                        data-toggle="modal"
+                                        data-target="#modal-draft-notes"
+                                    >Catatan draft <i class="fas fa-edit fa-fw"></i></a>
+                                <?php else : ?>
+                                    <span class="text-muted">Catatan draft</span>
+                                <?php endif ?>
                             </td>
                             <td>
                                 <div class="font-weight-bold">
@@ -132,7 +151,7 @@
     aria-hidden="true"
 >
     <div
-        class="modal-dialog"
+        class="modal-dialog modal-dialog-centered"
         role="document"
     >
         <div class="modal-content">
@@ -142,10 +161,7 @@
             <div class="modal-body">
                 <fieldset>
                     <div class="form-group">
-                        <div>
-                            <?= form_input('entry_date', $input->entry_date, 'class="form-control d-none" id="entry_date"'); ?>
-                        </div>
-                        <?= form_error('entry_date'); ?>
+                        <?= form_input('entry_date', $input->entry_date, 'class="form-control d-none" id="entry_date"'); ?>
                     </div>
                 </fieldset>
             </div>
@@ -174,7 +190,7 @@
     aria-hidden="true"
 >
     <div
-        class="modal-dialog"
+        class="modal-dialog modal-dialog-centered"
         role="document"
     >
         <div class="modal-content">
@@ -182,13 +198,9 @@
                 <h5 class="modal-title">Edit Catatan Draft</h5>
             </div>
             <div class="modal-body">
-                <?= form_open('draft/api_update_draft/' . $input->draft_id); ?>
                 <fieldset>
                     <div class="form-group">
-                        <div>
-                            <?= form_textarea('draft_notes', $input->draft_notes, 'class="form-control summernote-basic" id="draft_notes"'); ?>
-                        </div>
-                        <?= form_error('draft_notes'); ?>
+                        <?= form_textarea('draft_notes', $input->draft_notes, 'class="form-control summernote-basic" id="draft_notes"'); ?>
                     </div>
                 </fieldset>
             </div>
@@ -196,7 +208,7 @@
                 <button
                     id="btn-change-draft-notes"
                     class="btn btn-primary"
-                    type="submit"
+                    type="button"
                 >Pilih</button>
                 <button
                     type="button"
@@ -204,37 +216,35 @@
                     data-dismiss="modal"
                 >Close</button>
             </div>
-            <?= form_close(); ?>
         </div>
     </div>
 </div>
 
 <script>
 $(document).ready(function() {
+    const draftId = $('[name=draft_id]').val();
+
     // ubah entry date
     $('#btn-change-entry-date').on('click', function() {
-        const $this = $(this);
-        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
-        const id = $('[name=draft_id]').val();
+        $(this).attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
         const entry_date = $('[name=entry_date]').val();
         const category_id = $('[name=category_id]').val();
 
         $.ajax({
             type: "POST",
-            url: "<?= base_url('draft/api_update_draft/'); ?>" + id,
-            datatype: "JSON",
+            url: "<?= base_url('draft/api_update_draft/'); ?>" + draftId,
             data: {
                 entry_date,
                 category_id
             },
-            success: function(res) {
+            success: (res) => {
                 showToast(true, res.data);
             },
-            error: function(err) {
+            error: (err) => {
                 showToast(false, err.responseJSON.message);
             },
-            complete: function() {
-                $this.removeAttr("disabled").html("Submit");
+            complete: () => {
+                $(this).removeAttr("disabled").html("Submit");
                 $('#draft-data').load(' #draft-data');
                 $('#modal-entry-date').modal('toggle');
             }
@@ -243,26 +253,23 @@ $(document).ready(function() {
 
     // ubah catatan draft
     $('#btn-change-draft-notes').on('click', function() {
-        const $this = $(this);
-        $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
-        const id = $('[name=draft_id]').val();
-        const draft_notes = $('[name=draft_notes]').val();
+        $(this).attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
+        const draftNotes = $('[name=draft_notes]').val();
 
         $.ajax({
             type: "POST",
-            url: "<?= base_url('draft/api_update_draft/'); ?>" + id,
-            datatype: "JSON",
+            url: "<?= base_url('draft/api_update_draft/'); ?>" + draftId,
             data: {
-                draft_notes,
+                draft_notes: draftNotes,
             },
-            success: function(res) {
+            success: (res) => {
                 showToast(true, res.data);
             },
-            error: function(err) {
+            error: (err) => {
                 showToast(false, err.responseJSON.message);
             },
-            complete: function() {
-                $this.removeAttr("disabled").html("Submit");
+            complete: () => {
+                $(this).removeAttr("disabled").html("Submit");
                 $('#draft-data').load(' #draft-data');
                 $('#modal-draft-notes').modal('toggle');
             }

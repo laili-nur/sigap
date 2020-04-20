@@ -19,7 +19,7 @@
                     ><i class="fa fa-user-tie"></i> Penulis</a>
                 </li>
             <?php endif; ?>
-            <?php if ($level == 'author') : ?>
+            <?php if ($level == 'author' || is_admin()) : ?>
                 <!-- author bisa melihat data buku -->
                 <li class="nav-item">
                     <a

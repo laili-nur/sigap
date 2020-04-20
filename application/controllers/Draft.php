@@ -275,7 +275,9 @@ class Draft extends Operator_Controller
         // ambil tabel worksheet
         $desk = $this->draft->get_where(['draft_id' => $draft_id], 'worksheet');
         // ambil tabel books
-        $books = $this->draft->get_where(['draft_id' => $draft_id], 'book');
+        // $books = $this->draft->get_where(['draft_id' => $draft_id], 'book');
+        $this->load->model('book_model', 'book', true);
+        $book = $this->book->get_book_from_draft($draft_id);
 
         // pecah data nilai, csv jadi array
         // hitung bobot nilai
@@ -334,7 +336,7 @@ class Draft extends Operator_Controller
         $pages       = $this->pages;
         $main_view   = 'draft/view/overview';
         $form_action = "draft/edit/$draft_id";
-        $this->load->view('template', compact('revision_total', 'books', 'author_order', 'draft', 'reviewer_order', 'desk', 'pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers', 'editors', 'layouters'));
+        $this->load->view('template', compact('revision_total', 'book', 'author_order', 'draft', 'reviewer_order', 'desk', 'pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers', 'editors', 'layouters'));
     }
 
     public function api_start_progress($draft_id)
@@ -770,6 +772,7 @@ class Draft extends Operator_Controller
         }
         redirect('draft');
     }
+
     public function finish_draft($draft_id)
     {
         // memastikan konsistensi data
@@ -788,6 +791,13 @@ class Draft extends Operator_Controller
         // cek apakah buku sudah pernah dibuat dari draft ini
         if (!isset($book)) {
             $draft   = $this->draft->get_where(['draft_id' => $draft_id]);
+
+            // jika file cetak tidak ada
+            if (!$draft->print_file && !$draft->print_file_link) {
+                $this->session->set_flashdata('warning', 'File cetak tidak ada');
+                redirect("draft/view/$draft_id");
+            }
+
             $this->book->insert([
                 'draft_id' => $draft_id,
                 'book_title' => $draft->draft_title,
