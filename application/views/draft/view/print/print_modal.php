@@ -243,7 +243,7 @@ $(document).ready(function() {
         $('#modal-print').off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
             $('#print-progress-wrapper').load(' #print-progress', function() {
                 // reinitiate flatpickr modal after load
-                init_flatpickr_modal()
+                initFlatpickrModal()
             });
         })
     })
@@ -265,12 +265,12 @@ $(document).ready(function() {
             data: printData,
             success: function(res) {
                 console.log(res);
-                show_toast(true, res.data);
+                showToast(true, res.data);
                 $('#print-comment-tab-content').load(' #print-comment-info')
             },
             error: function(err) {
                 console.log(err);
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
         });
     });
@@ -299,12 +299,12 @@ $(document).ready(function() {
             data: printConfigData,
             success: function(res) {
                 console.log(res);
-                show_toast(true, res.data);
+                showToast(true, res.data);
                 $('#print-configuration-tab-content').load(' #print-configuration-section')
             },
             error: function(err) {
                 console.log(err);
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
         });
     });

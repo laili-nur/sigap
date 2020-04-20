@@ -123,21 +123,21 @@ $(document).ready(function() {
         //     url: "<?= base_url('draft/finish_draft/'); ?>" + draftId,
         //     success: function(res) {
         //         console.log(res);
-        //         show_toast(true, res.data);
+        //         showToast(true, res.data);
         //     },
         //     error: function(err) {
         //         console.log(err);
-        //         show_toast(false, err.responseJSON.message);
+        //         showToast(false, err.responseJSON.message);
         //     },
         //     // success: function(data) {
         //     //     let datax = JSON.parse(data);
         //     //     console.log(datax);
         //     //     $this.removeAttr("disabled").html("Submit");
         //     //     if (datax.status == true) {
-        //     //         show_toast('111');
+        //     //         showToast('111');
         //     //         location.href = '<?php echo base_url("draft/copyToBook/"); ?>' + draftId;
         //     //     } else {
-        //     //         show_toast('000');
+        //     //         showToast('000');
         //     //     }
         //     // }
         // });
@@ -165,9 +165,9 @@ $(document).ready(function() {
                 console.log(datax);
                 $this.removeAttr("disabled").html("Tolak");
                 if (datax.status == true) {
-                    show_toast('111');
+                    showToast('111');
                 } else {
-                    show_toast('000');
+                    showToast('000');
                 }
                 location.href = '<?php echo base_url("draft/view/"); ?>' + id;
             }

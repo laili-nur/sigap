@@ -149,7 +149,7 @@ $(document).ready(function() {
         $(`#modal-proofread`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
             $('#proofread-progress-wrapper').load(' #proofread-progress', function() {
                 // reinitiate flatpickr modal after load
-                init_flatpickr_modal()
+                initFlatpickrModal()
             });
         })
     })
@@ -171,12 +171,12 @@ $(document).ready(function() {
             data: proofreadData,
             success: function(res) {
                 console.log(res);
-                show_toast(true, res.data);
+                showToast(true, res.data);
                 $(`#proofread-comment-tab-content`).load(` #proofread-comment-info`)
             },
             error: function(err) {
                 console.log(err);
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
         });
     });

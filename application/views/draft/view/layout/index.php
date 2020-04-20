@@ -188,15 +188,15 @@ $(document).ready(function() {
                 progress: 'layout'
             },
             success: function(res) {
-                show_toast(true, res.data);
+                showToast(true, res.data);
             },
             error: function(err) {
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
             complete: function() {
                 $('#layout-progress-wrapper').load(' #layout-progress', function() {
                     // reinitiate modal after load
-                    init_flatpickr_modal()
+                    initFlatpickrModal()
                 });
                 // reload progress
                 $('#progress-list-wrapper').load(' #progress-list');
@@ -213,15 +213,15 @@ $(document).ready(function() {
                 progress: 'layout'
             },
             success: function(res) {
-                show_toast(true, res.data);
+                showToast(true, res.data);
             },
             error: function(err) {
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
             complete: function() {
                 $('#layout-progress-wrapper').load(' #layout-progress', function() {
                     // reinitiate modal after load
-                    init_flatpickr_modal()
+                    initFlatpickrModal()
                 });
                 // reload progress
                 $('#progress-list-wrapper').load(' #progress-list');

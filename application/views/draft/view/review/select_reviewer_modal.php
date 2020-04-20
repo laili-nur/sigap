@@ -120,7 +120,7 @@ $(document).ready(function() {
             // location.reload()
             $('#review-progress-wrapper').load(' #review-progress', function() {
                 // reinitiate flatpickr modal after load
-                init_flatpickr_modal()
+                initFlatpickrModal()
             });
         })
 
@@ -162,7 +162,7 @@ $(document).ready(function() {
         const reviewer_id = $('#reviewer-id').val();
 
         if (!reviewer_id) {
-            show_toast(false, 'Pilih reviewer dahulu');
+            showToast(false, 'Pilih reviewer dahulu');
             return
         }
 
@@ -176,10 +176,10 @@ $(document).ready(function() {
                 reviewer_id
             },
             success: function(res) {
-                show_toast(true, res.data);
+                showToast(true, res.data);
             },
             error: function(err) {
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
             complete: function() {
                 $('[name=reviewer]').val(null).trigger('change');
@@ -199,10 +199,10 @@ $(document).ready(function() {
         $.ajax({
             url: "<?= base_url('draftreviewer/delete/'); ?>" + id,
             success: function(res) {
-                show_toast(true, res.data);
+                showToast(true, res.data);
             },
             error: function(err) {
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
             complete: function() {
                 // reload segemen daftar reviewer

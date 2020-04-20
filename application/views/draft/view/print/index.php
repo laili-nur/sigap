@@ -114,15 +114,15 @@ $(document).ready(function() {
                 progress: 'print'
             },
             success: function(res) {
-                show_toast(true, res.data);
+                showToast(true, res.data);
             },
             error: function(err) {
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
             complete: function() {
                 $('#print-progress-wrapper').load(' #print-progress', function() {
                     // reinitiate modal after load
-                    init_flatpickr_modal()
+                    initFlatpickrModal()
                 });
                 // reload progress
                 $('#progress-list-wrapper').load(' #progress-list');

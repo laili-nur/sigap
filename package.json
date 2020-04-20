@@ -1,0 +1,24 @@
+{
+  "name": "sigap",
+  "version": "2.0.0",
+  "description": "Sistem Informasi Penerbitan dan Percetakan Buku GAMA PRESS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bagaskarala/sigap.git"
+  },
+  "author": "bagaskara",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bagaskarala/sigap/issues"
+  },
+  "homepage": "https://github.com/bagaskarala/sigap#readme",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2"
+  }
+}

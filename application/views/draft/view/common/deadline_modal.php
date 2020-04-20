@@ -12,10 +12,7 @@
     >
         <div class="modal-content">
             <div class="modal-header">
-                <h5
-                    class="modal-title"
-                    id="modal-title-<?= $progress ?>"
-                >Deadline <?= $progress ?></h5>
+                <h5 class="modal-title" id="modal-title-<?= $progress ?>">Deadline <?= $progress ?></h5>
                 <button
                     type="button"
                     class="close"
@@ -69,7 +66,7 @@ $(document).ready(function() {
         $(`#modal-deadline-${identifier}`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
             $(`#${progress}-progress-wrapper`).load(` #${progress}-progress`, function() {
                 // reinitiate flatpickr modal after load
-                init_flatpickr_modal()
+                initFlatpickrModal()
             });
         })
     })
@@ -78,7 +75,7 @@ $(document).ready(function() {
     $(`#${progress}-progress-wrapper`).on('click', `#btn-submit-deadline-${identifier}`, function() {
         const $this = $(this);
         $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
-        const draft_id = $('[name=draft_id]').val();
+        const draft_id = $('[name=draft_id]').val()
 
         $.ajax({
             type: "POST",
@@ -88,11 +85,11 @@ $(document).ready(function() {
             },
             success: function(res) {
                 console.log(res);
-                show_toast(true, res.data);
+                showToast(true, res.data);
             },
             error: function(err) {
                 console.log(err);
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
             complete: function() {
                 $this.removeAttr("disabled").html("Submit");

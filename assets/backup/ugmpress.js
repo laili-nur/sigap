@@ -8,7 +8,7 @@ function doublescroll() {
 }
 
 
-function preview_image(event) {
+function previewImage(event) {
     var reader = new FileReader();
     reader.onload = function () {
         var output = document.getElementById('output_image');
@@ -53,7 +53,7 @@ functionvalidate_select2() {
 }
 
 
-function show_toast(param) {
+function showToast(param) {
     toastr.options = {
         "closeButton": true,
         "debug": false,

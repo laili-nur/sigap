@@ -107,7 +107,7 @@ $(document).ready(function() {
         $('#modal-select-editor').off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
             $('#edit-progress-wrapper').load(' #edit-progress', function() {
                 // reinitiate flatpickr modal after load
-                init_flatpickr_modal()
+                initFlatpickrModal()
             });
         })
 
@@ -148,7 +148,7 @@ $(document).ready(function() {
         const user_id = $('#editor-id').val();
 
         if (!user_id) {
-            show_toast(false, 'Pilih editor dahulu');
+            showToast(false, 'Pilih editor dahulu');
             return
         }
 
@@ -161,10 +161,10 @@ $(document).ready(function() {
                 user_id
             },
             success: function(res) {
-                show_toast(true, res.data);
+                showToast(true, res.data);
             },
             error: function(err) {
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
             complete: function() {
                 $('[name=editor]').val(null).trigger('change');
@@ -184,10 +184,10 @@ $(document).ready(function() {
         $.ajax({
             url: "<?= base_url('responsibility/delete/'); ?>" + id,
             success: function(res) {
-                show_toast(true, res.data);
+                showToast(true, res.data);
             },
             error: function(err) {
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
             complete: function() {
                 // reload segmen daftar editor

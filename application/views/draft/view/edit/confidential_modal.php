@@ -86,11 +86,11 @@ $(document).ready(function() {
             },
             success: function(res) {
                 console.log(res);
-                show_toast(true, res.data);
+                showToast(true, res.data);
             },
             error: function(err) {
                 console.log(err);
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
             complete: function() {
                 $this.removeAttr("disabled").html("Submit");

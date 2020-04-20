@@ -320,7 +320,7 @@ $(document).ready(function() {
         $(`#modal-${identifier}`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
             $('#review-progress-wrapper').load(' #review-progress', function() {
                 // reinitiate flatpickr modal after load
-                init_flatpickr_modal()
+                initFlatpickrModal()
             });
         })
     })
@@ -372,12 +372,12 @@ $(document).ready(function() {
             data: reviewData,
             success: function(res) {
                 console.log(res);
-                show_toast(true, res.data);
+                showToast(true, res.data);
                 $(`#${identifier}-${type}-tab-content`).load(` #${identifier}-${type}-section`)
             },
             error: function(err) {
                 console.log(err);
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
                 self.removeAttr("disabled").html("Submit");
             },
         });

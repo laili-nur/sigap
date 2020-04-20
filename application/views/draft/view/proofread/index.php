@@ -152,15 +152,15 @@ $(document).ready(function() {
                 progress: 'proofread'
             },
             success: function(res) {
-                show_toast(true, res.data);
+                showToast(true, res.data);
             },
             error: function(err) {
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
             complete: function() {
                 $('#proofread-progress-wrapper').load(' #proofread-progress', function() {
                     // reinitiate modal after load
-                    init_flatpickr_modal()
+                    initFlatpickrModal()
                 });
                 // reload progress
                 $('#progress-list-wrapper').load(' #progress-list');
@@ -177,15 +177,15 @@ $(document).ready(function() {
                 progress: 'proofread'
             },
             success: function(res) {
-                show_toast(true, res.data);
+                showToast(true, res.data);
             },
             error: function(err) {
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
             complete: function() {
                 $('#proofread-progress-wrapper').load(' #proofread-progress', function() {
                     // reinitiate modal after load
-                    init_flatpickr_modal()
+                    initFlatpickrModal()
                 });
                 // reload progress
                 $('#progress-list-wrapper').load(' #progress-list');

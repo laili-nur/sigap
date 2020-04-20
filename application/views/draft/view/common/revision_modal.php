@@ -105,7 +105,7 @@ $(document).ready(function() {
         $('#modal-revision').off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
             $('#proofread-progress-wrapper').load(' #proofread-progress', function() {
                 // reinitiate flatpickr modal after load
-                init_flatpickr_modal()
+                initFlatpickrModal()
             });
             // kosongkan modal ketika modal ditutup
             $('#accordion-revision').html('');
@@ -134,7 +134,7 @@ $(document).ready(function() {
                 renderData(res.data);
             },
             error: (err) => {
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
         });
     }
@@ -252,11 +252,11 @@ $(document).ready(function() {
                 draft_id: draftId
             },
             success: (res) => {
-                show_toast(true, res.data);
+                showToast(true, res.data);
                 getRevision()
             },
             error: (err) => {
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
                 $(this).removeAttr("disabled");
             },
         })
@@ -276,11 +276,11 @@ $(document).ready(function() {
                 revision_notes: revisionNotes
             },
             success: (res) => {
-                show_toast(true, res.data);
+                showToast(true, res.data);
                 getRevision()
             },
             error: (err) => {
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
                 $(this).removeAttr("disabled");
             },
         })
@@ -296,11 +296,11 @@ $(document).ready(function() {
                 type: "GET",
                 url: "<?= base_url('revision/delete_revision/'); ?>" + revisionId,
                 success: (res) => {
-                    show_toast(true, res.data);
+                    showToast(true, res.data);
                     getRevision()
                 },
                 error: (err) => {
-                    show_toast(false, err.responseJSON.message);
+                    showToast(false, err.responseJSON.message);
                     $(this).removeAttr("disabled");
                 },
             })
@@ -320,11 +320,11 @@ $(document).ready(function() {
                 revision_type: revisionType
             },
             success: (res) => {
-                show_toast(true, res.data);
+                showToast(true, res.data);
                 getRevision()
             },
             error: (err) => {
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
                 $(this).removeAttr("disabled");
             },
         })
@@ -354,14 +354,14 @@ $(document).ready(function() {
                 revision_id: revisionId
             },
             success: (res) => {
-                show_toast(true, res.data);
+                showToast(true, res.data);
                 getRevision()
                 setTimeout(() => {
                     $('#modal-deadline-revision').modal('hide')
                 }, 0);
             },
             error: (err) => {
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
             complete: () => {
                 $(this).removeAttr("disabled");

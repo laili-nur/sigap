@@ -150,7 +150,7 @@ $(document).ready(function() {
         $(`#modal-edit`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
             $('#edit-progress-wrapper').load(' #edit-progress', function() {
                 // reinitiate flatpickr modal after load
-                init_flatpickr_modal()
+                initFlatpickrModal()
             });
         })
     })
@@ -172,12 +172,12 @@ $(document).ready(function() {
             data: editData,
             success: function(res) {
                 console.log(res);
-                show_toast(true, res.data);
+                showToast(true, res.data);
                 $(`#edit-comment-tab-content`).load(` #edit-comment-info`)
             },
             error: function(err) {
                 console.log(err);
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
         });
     });

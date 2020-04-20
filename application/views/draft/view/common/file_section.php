@@ -137,12 +137,12 @@ $(document).ready(function() {
                     cache: false,
                     success: function(res) {
                         console.log(res);
-                        show_toast(true, res.data);
+                        showToast(true, res.data);
                         $(`#${identifier}-file-tab-content`).load(` #${identifier}-file-info`)
                     },
                     error: function(err) {
                         console.log(err);
-                        show_toast(false, err.responseJSON.message);
+                        showToast(false, err.responseJSON.message);
                         $resetform = $(`#${identifier}-file`);
                         $resetform.val('');
                         $resetform.next('label.custom-file-label').html('');
@@ -178,12 +178,12 @@ $(document).ready(function() {
                 },
                 success: function(res) {
                     console.log(res);
-                    show_toast(true, res.data);
+                    showToast(true, res.data);
                     $(`#${identifier}-file-tab-content`).load(` #${identifier}-file-info`)
                 },
                 error: function(err) {
                     console.log(err);
-                    show_toast(false, err.responseJSON.message);
+                    showToast(false, err.responseJSON.message);
                     $this.removeAttr("disabled").html("<i class='fa fa-trash'></i> Hapus file");
                 },
                 complete: function() {

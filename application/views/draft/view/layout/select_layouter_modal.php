@@ -106,7 +106,7 @@ $(document).ready(function() {
         $('#modal-select-layouter').off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
             $('#layout-progress-wrapper').load(' #layout-progress', function() {
                 // reinitiate flatpickr modal after load
-                init_flatpickr_modal()
+                initFlatpickrModal()
             });
         })
 
@@ -147,7 +147,7 @@ $(document).ready(function() {
         const user_id = $('#layouter-id').val();
 
         if (!user_id) {
-            show_toast(false, 'Pilih layouter dahulu');
+            showToast(false, 'Pilih layouter dahulu');
             return
         }
 
@@ -161,11 +161,11 @@ $(document).ready(function() {
             },
             success: function(res) {
                 console.log(res);
-                show_toast(true, res.data);
+                showToast(true, res.data);
             },
             error: function(err) {
                 console.log(err);
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
             complete: function() {
                 $('[name=layouter]').val(null).trigger('change');
@@ -185,10 +185,10 @@ $(document).ready(function() {
         $.ajax({
             url: "<?= base_url('responsibility/delete/'); ?>" + id,
             success: function(res) {
-                show_toast(true, res.data);
+                showToast(true, res.data);
             },
             error: function(err) {
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
             complete: function() {
                 // reload segmen daftar layouter

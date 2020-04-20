@@ -870,9 +870,9 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
 //                         console.log(datax);
 //                         $this.removeAttr("disabled").html("Upload");
 //                         if (datax.status == true) {
-//                             show_toast('111');
+//                             showToast('111');
 //                         } else {
-//                             show_toast('000');
+//                             showToast('000');
 //                         }
 //                         $('#modal-edit').load(' #modal-edit');
 //                     }
@@ -901,9 +901,9 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
 //                 let datax = JSON.parse(data);
 //                 console.log(datax);
 //                 if (datax.status == true) {
-//                     show_toast('111');
+//                     showToast('111');
 //                 } else {
-//                     show_toast('000');
+//                     showToast('000');
 //                 }
 //                 $('#modal-edit').load(' #modal-edit');
 //                 $('#edit_file_link').val('');
@@ -932,11 +932,11 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
 //                 console.log(dataeditor);
 //                 if (!dataeditor.validasi) {
 //                     $('#form-editor').append('<div class="text-danger help-block">editor sudah dipilih</div>');
-//                     show_toast('33');
+//                     showToast('33');
 //                 } else if (dataeditor.validasi == 'max') {
-//                     show_toast('98');
+//                     showToast('98');
 //                 } else {
-//                     show_toast('5');
+//                     showToast('5');
 //                 }
 //                 $('[name=editor]').val("");
 //                 $('#reload-editor').load(' #reload-editor');
@@ -967,9 +967,9 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
 //                 console.log(datax)
 //                 $this.removeAttr("disabled").html("Submit");
 //                 if (datax.status == true) {
-//                     show_toast('111');
+//                     showToast('111');
 //                 } else {
-//                     show_toast('000');
+//                     showToast('000');
 //                 }
 //                 $('#list-group-edit').load(' #list-group-edit');
 //                 $this.removeAttr("disabled").html('<i class="fas fa-play"></i><span class="d-none d-md-inline"> Mulai</span>');
@@ -1001,9 +1001,9 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
 //                 console.log(datax)
 //                 $this.removeAttr("disabled").html("Submit");
 //                 if (datax.status == true) {
-//                     show_toast('111');
+//                     showToast('111');
 //                 } else {
-//                     show_toast('000');
+//                     showToast('000');
 //                 }
 //                 $('#list-group-edit').load(' #list-group-edit');
 //                 $this.removeAttr("disabled").html('<i class="fas fa-stop"></i><span class="d-none d-md-inline"> Selesai</span>');
@@ -1026,7 +1026,7 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
 //             success: function(data) {
 //                 console.log(data);
 //                 $('#reload-editor').load(' #reload-editor');
-//                 show_toast('6');
+//                 showToast('6');
 //                 //$('#list-group-edit').load(' #list-group-edit');
 //             }
 //         })
@@ -1053,9 +1053,9 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
 
 //                 $this.removeAttr("disabled").html("Submit");
 //                 if (datax.status == true) {
-//                     show_toast('111');
+//                     showToast('111');
 //                 } else {
-//                     show_toast('000');
+//                     showToast('000');
 //                 }
 //                 $('#list-group-edit').load(' #list-group-edit');
 //                 $('#edit_last_notes').html(datax.edit_notes_date);
@@ -1082,9 +1082,9 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
 //                 console.log(datax);
 //                 $this.removeAttr("disabled").html("Submit");
 //                 if (datax.status == true) {
-//                     show_toast('111');
+//                     showToast('111');
 //                 } else {
-//                     show_toast('000');
+//                     showToast('000');
 //                 }
 //                 $('#edit-confidential').modal('toggle');
 //             }
@@ -1115,9 +1115,9 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
 //                 console.log(datax);
 //                 $this.removeAttr("disabled").html("Setuju");
 //                 if (datax.status == true) {
-//                     show_toast('111');
+//                     showToast('111');
 //                 } else {
-//                     show_toast('000');
+//                     showToast('000');
 //                 }
 //                 $('#list-group-edit').load(' #list-group-edit');
 //                 location.reload();
@@ -1151,9 +1151,9 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
 //                 console.log(datax);
 //                 $this.removeAttr("disabled").html("Tolak");
 //                 if (datax.status == true) {
-//                     show_toast('111');
+//                     showToast('111');
 //                 } else {
-//                     show_toast('000');
+//                     showToast('000');
 //                 }
 //                 $('#list-group-edit').load(' #list-group-edit');
 //                 location.reload();
@@ -1182,9 +1182,9 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
 //                 console.log(datax)
 //                 $this.removeAttr("disabled").html("Submit");
 //                 if (datax.status == true) {
-//                     show_toast('111');
+//                     showToast('111');
 //                 } else {
-//                     show_toast('000');
+//                     showToast('000');
 //                 }
 //                 $('#list-group-edit').load(' #list-group-edit');
 //                 $('#edit_deadline').modal('toggle');
@@ -1236,9 +1236,9 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
 //                 let datax = JSON.parse(data);
 //                 console.log(datax);
 //                 if (datax.status == true) {
-//                     show_toast('111');
+//                     showToast('111');
 //                 } else {
-//                     show_toast('000');
+//                     showToast('000');
 //                 }
 //                 $('#edit-revisi-deadline').modal('toggle');
 //             }
@@ -1307,9 +1307,9 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
 //                 let datax = JSON.parse(data);
 //                 console.log(datax);
 //                 if (datax.status == true) {
-//                     show_toast('111');
+//                     showToast('111');
 //                 } else {
-//                     show_toast('000');
+//                     showToast('000');
 //                 }
 //                 load_revisi_edit();
 //             }
@@ -1331,9 +1331,9 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
 //                 let datax = JSON.parse(data);
 //                 console.log(datax);
 //                 if (datax.status == true) {
-//                     show_toast('111');
+//                     showToast('111');
 //                 } else {
-//                     show_toast('000');
+//                     showToast('000');
 //                 }
 //             }
 //         })
@@ -1349,9 +1349,9 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
 //                 let datax = JSON.parse(data);
 //                 console.log(datax);
 //                 if (datax.status == true) {
-//                     show_toast('111');
+//                     showToast('111');
 //                 } else {
-//                     show_toast('000');
+//                     showToast('000');
 //                 }
 //                 load_revisi_edit();
 //             }
@@ -1375,9 +1375,9 @@ $sisa_waktu_edit = ceil((strtotime($input->edit_deadline) - strtotime(date('Y-m-
 //                 let datax = JSON.parse(data);
 //                 console.log(datax);
 //                 if (datax.status == true) {
-//                     show_toast('111');
+//                     showToast('111');
 //                 } else {
-//                     show_toast('000');
+//                     showToast('000');
 //                 }
 //                 load_revisi_edit();
 //             }

@@ -190,10 +190,10 @@ $(document).ready(function() {
                 author_id
             },
             success: function(res) {
-                show_toast(true, res.data);
+                showToast(true, res.data);
             },
             error: function(err) {
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
             complete: function() {
                 $this.removeAttr("disabled").html("Submit");
@@ -212,10 +212,10 @@ $(document).ready(function() {
         $.ajax({
             url: "<?= base_url('draftauthor/delete/'); ?>" + id,
             success: function(res) {
-                show_toast(true, res.data);
+                showToast(true, res.data);
             },
             error: function(err) {
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
             complete: function() {
                 $('#author-list').load(' #author-list');

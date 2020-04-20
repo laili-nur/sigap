@@ -77,11 +77,11 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
                 <span class="text-muted">Layouter</span>
                 <strong>
           <?php if ($layouters) {
-            foreach ($layouters as $layouter) {
-              echo '<span class="badge badge-info p-1">' . $layouter->username . '</span> ';
+                foreach ($layouters as $layouter) {
+                    echo '<span class="badge badge-info p-1">' . $layouter->username . '</span> ';
+                }
             }
-          }
-          ?>
+            ?>
         </strong>
             </div>
         <?php endif; ?>
@@ -258,16 +258,16 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
                                 <small class="text-muted" id="layout_last_notes"><?= format_datetime($input->layout_notes_date); ?></small>
                                 <?php
                                 $optionscl = array(
-                                  'name'  => 'layout_notes',
-                                  'class' => 'form-control summernote-basic',
-                                  'id'    => 'cl',
-                                  'rows'  => '6',
-                                  'value' => $input->layout_notes,
+                                    'name'  => 'layout_notes',
+                                    'class' => 'form-control summernote-basic',
+                                    'id'    => 'cl',
+                                    'rows'  => '6',
+                                    'value' => $input->layout_notes,
                                 );
                                 if ($ceklevel != 'layouter') {
-                                  echo '<div class="font-italic">' . nl2br($input->layout_notes) . '</div>';
+                                    echo '<div class="font-italic">' . nl2br($input->layout_notes) . '</div>';
                                 } else {
-                                  echo form_textarea($optionscl);
+                                    echo form_textarea($optionscl);
                                 }
                                 ?>
                             </div>
@@ -281,16 +281,16 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
                                 >Catatan Editor</label>
                                 <?php
                                 $optionsclp = array(
-                                  'name'  => 'layout_notes_author',
-                                  'class' => 'form-control summernote-basic',
-                                  'id'    => 'clp',
-                                  'rows'  => '6',
-                                  'value' => $input->layout_notes_author,
+                                    'name'  => 'layout_notes_author',
+                                    'class' => 'form-control summernote-basic',
+                                    'id'    => 'clp',
+                                    'rows'  => '6',
+                                    'value' => $input->layout_notes_author,
                                 );
                                 if ($ceklevel != 'editor') {
-                                  echo '<div class="font-italic">' . nl2br($input->layout_notes_author) . '</div>';
+                                    echo '<div class="font-italic">' . nl2br($input->layout_notes_author) . '</div>';
                                 } else {
-                                  echo form_textarea($optionsclp);
+                                    echo form_textarea($optionsclp);
                                 }
                                 ?>
                             </div>
@@ -455,16 +455,16 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
                                 >Catatan Cover</label>
                                 <?php
                                 $optionscc = array(
-                                  'name'  => 'cover_notes',
-                                  'class' => 'form-control summernote-basic',
-                                  'id'    => 'cc',
-                                  'rows'  => '6',
-                                  'value' => $input->cover_notes,
+                                    'name'  => 'cover_notes',
+                                    'class' => 'form-control summernote-basic',
+                                    'id'    => 'cc',
+                                    'rows'  => '6',
+                                    'value' => $input->cover_notes,
                                 );
                                 if ($ceklevel != 'layouter') {
-                                  echo '<div class="font-italic">' . nl2br($input->cover_notes) . '</div>';
+                                    echo '<div class="font-italic">' . nl2br($input->cover_notes) . '</div>';
                                 } else {
-                                  echo form_textarea($optionscc);
+                                    echo form_textarea($optionscc);
                                 }
                                 ?>
                             </div>
@@ -478,16 +478,16 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
                                 >Catatan Editor</label>
                                 <?php
                                 $optionsccp = array(
-                                  'name'  => 'cover_notes_author',
-                                  'class' => 'form-control summernote-basic',
-                                  'id'    => 'ccp',
-                                  'rows'  => '6',
-                                  'value' => $input->cover_notes_author,
+                                    'name'  => 'cover_notes_author',
+                                    'class' => 'form-control summernote-basic',
+                                    'id'    => 'ccp',
+                                    'rows'  => '6',
+                                    'value' => $input->cover_notes_author,
                                 );
                                 if ($ceklevel != 'editor') {
-                                  echo '<div class="font-italic">' . nl2br($input->cover_notes_author) . '</div>';
+                                    echo '<div class="font-italic">' . nl2br($input->cover_notes_author) . '</div>';
                                 } else {
-                                  echo form_textarea($optionsccp);
+                                    echo form_textarea($optionsccp);
                                 }
                                 ?>
                             </div>
@@ -871,22 +871,22 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
                                 </div>
                                 <?php
                                 $hidden_date = array(
-                                  'type'  => 'hidden',
-                                  'id'    => 'layout_finish_date',
-                                  'value' => date('Y-m-d H:i:s'),
+                                    'type'  => 'hidden',
+                                    'id'    => 'layout_finish_date',
+                                    'value' => date('Y-m-d H:i:s'),
                                 );
                                 echo form_input($hidden_date);
                                 $layout_status = array(
-                                  'name'  => 'layout_status',
-                                  'class' => 'form-control summernote-basic',
-                                  'id'    => 'crp2',
-                                  'rows'  => '6',
-                                  'value' => $input->layout_status,
+                                    'name'  => 'layout_status',
+                                    'class' => 'form-control summernote-basic',
+                                    'id'    => 'crp2',
+                                    'rows'  => '6',
+                                    'value' => $input->layout_status,
                                 );
                                 if ($ceklevel != 'superadmin' and $ceklevel != 'admin_penerbitan') {
-                                  echo '<div class="font-italic">' . nl2br($input->layout_status) . '</div>';
+                                    echo '<div class="font-italic">' . nl2br($input->layout_status) . '</div>';
                                 } else {
-                                  echo form_textarea($layout_status);
+                                    echo form_textarea($layout_status);
                                 }
                                 ?>
                                 <div class="alert alert-info">
@@ -987,9 +987,9 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
 //             console.log(datax);
 //             $this.removeAttr("disabled").html("Upload");
 //             if (datax.status == true) {
-//               show_toast('111');
+//               showToast('111');
 //             } else {
-//               show_toast('000');
+//               showToast('000');
 //             }
 //             $('#modal-layout').load(' #modal-layout');
 //           }
@@ -1052,9 +1052,9 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
 //             console.log(datax);
 //             $this.removeAttr("disabled").html("Upload");
 //             if (datax.status == true) {
-//               show_toast('111');
+//               showToast('111');
 //             } else {
-//               show_toast('000');
+//               showToast('000');
 //             }
 //             $('#modal-cover').load(' #modal-cover');
 //           }
@@ -1082,9 +1082,9 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
 //         let datax = JSON.parse(data);
 //         console.log(datax);
 //         if (datax.status == true) {
-//           show_toast('111');
+//           showToast('111');
 //         } else {
-//           show_toast('000');
+//           showToast('000');
 //         }
 //         $('#modal-layout').load(' #modal-layout');
 //         $('#layouter_file_link').val('');
@@ -1112,11 +1112,11 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
 //         console.log(datalayouter);
 //         if (!datalayouter.validasi) {
 //           $('#form-layouter').append('<div class="text-danger help-block">layouter sudah dipilih</div>');
-//           show_toast('44');
+//           showToast('44');
 //         } else if (datalayouter.validasi == 'max') {
-//           show_toast('97');
+//           showToast('97');
 //         } else {
-//           show_toast('7');
+//           showToast('7');
 //         }
 //         $('[name=layouter]').val("");
 //         $('#reload-layouter').load(' #reload-layouter');
@@ -1147,9 +1147,9 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
 //         console.log(datax)
 //         $this.removeAttr("disabled").html("Submit");
 //         if (datax.status == true) {
-//           show_toast('111');
+//           showToast('111');
 //         } else {
-//           show_toast('000');
+//           showToast('000');
 //         }
 //         $('#list-group-layout').load(' #list-group-layout');
 //         $this.removeAttr("disabled").html('<i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span>');
@@ -1181,9 +1181,9 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
 //         console.log(datax)
 //         $this.removeAttr("disabled").html("Submit");
 //         if (datax.status == true) {
-//           show_toast('111');
+//           showToast('111');
 //         } else {
-//           show_toast('000');
+//           showToast('000');
 //         }
 //         $('#list-group-layout').load(' #list-group-layout');
 //         $this.removeAttr("disabled").html('<i class="fas fa-stop"></i><span class="d-none d-md-inline"> Selesai</span>');
@@ -1206,7 +1206,7 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
 //       success: function(data) {
 //         console.log(data);
 //         //$('#reload-layouter').load(' #reload-layouter');
-//         show_toast('8');
+//         showToast('8');
 //         //$('#list-group-layout').load(' #list-group-layout');
 //       }
 
@@ -1233,9 +1233,9 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
 //         console.log(datax)
 //         $this.removeAttr("disabled").html("Submit");
 //         if (datax.status == true) {
-//           show_toast('111');
+//           showToast('111');
 //         } else {
-//           show_toast('000');
+//           showToast('000');
 //         }
 //         $('#list-group-layout').load(' #list-group-layout');
 //         $('#layout_last_notes').html(datax.layout_notes_date);
@@ -1265,9 +1265,9 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
 //         console.log(datax)
 //         $this.removeAttr("disabled").html("Submit");
 //         if (datax.status == true) {
-//           show_toast('111');
+//           showToast('111');
 //         } else {
-//           show_toast('000');
+//           showToast('000');
 //         }
 //         $('#list-group-layout').load(' #list-group-layout');
 //         $('#cover').modal('toggle');
@@ -1299,9 +1299,9 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
 //         console.log(datax);
 //         $this.removeAttr("disabled").html("Setuju");
 //         if (datax.status == true) {
-//           show_toast('111');
+//           showToast('111');
 //         } else {
-//           show_toast('000');
+//           showToast('000');
 //         }
 //         $('#list-group-layout').load(' #list-group-layout');
 //         location.reload();
@@ -1335,9 +1335,9 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
 //         console.log(datax);
 //         $this.removeAttr("disabled").html("Tolak");
 //         if (datax.status == true) {
-//           show_toast('111');
+//           showToast('111');
 //         } else {
-//           show_toast('000');
+//           showToast('000');
 //         }
 //         $('#list-group-layout').load(' #list-group-layout');
 //         location.reload();
@@ -1366,9 +1366,9 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
 //         console.log(datax)
 //         $this.removeAttr("disabled").html("Submit");
 //         if (datax.status == true) {
-//           show_toast('111');
+//           showToast('111');
 //         } else {
-//           show_toast('000');
+//           showToast('000');
 //         }
 //         $('#list-group-layout').load(' #list-group-layout');
 //         $('#layout_deadline').modal('toggle');
@@ -1421,9 +1421,9 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
 //         let datax = JSON.parse(data);
 //         console.log(datax);
 //         if (datax.status == true) {
-//           show_toast('111');
+//           showToast('111');
 //         } else {
-//           show_toast('000');
+//           showToast('000');
 //         }
 //         $('#layout-revisi-deadline').modal('toggle');
 //       }
@@ -1493,9 +1493,9 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
 //         let datax = JSON.parse(data);
 //         console.log(datax);
 //         if (datax.status == true) {
-//           show_toast('111');
+//           showToast('111');
 //         } else {
-//           show_toast('000');
+//           showToast('000');
 //         }
 //         load_revisi_layout();
 //       }
@@ -1517,9 +1517,9 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
 //         let datax = JSON.parse(data);
 //         console.log(datax);
 //         if (datax.status == true) {
-//           show_toast('111');
+//           showToast('111');
 //         } else {
-//           show_toast('000');
+//           showToast('000');
 //         }
 //       }
 //     })
@@ -1535,9 +1535,9 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
 //         let datax = JSON.parse(data);
 //         console.log(datax);
 //         if (datax.status == true) {
-//           show_toast('111');
+//           showToast('111');
 //         } else {
-//           show_toast('000');
+//           showToast('000');
 //         }
 //         load_revisi_layout();
 //       }
@@ -1561,9 +1561,9 @@ $sisa_waktu_layout = ceil((strtotime($input->layout_deadline) - strtotime(date('
 //         let datax = JSON.parse(data);
 //         console.log(datax);
 //         if (datax.status == true) {
-//           show_toast('111');
+//           showToast('111');
 //         } else {
-//           show_toast('000');
+//           showToast('000');
 //         }
 //         load_revisi_layout();
 //       }

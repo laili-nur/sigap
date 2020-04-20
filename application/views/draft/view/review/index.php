@@ -254,7 +254,7 @@ $(document).ready(function() {
     function reload_review_segment() {
         $('#review-progress-wrapper').load(' #review-progress', function() {
             // reinitiate modal after load
-            init_flatpickr_modal()
+            initFlatpickrModal()
         });
     }
 
@@ -268,10 +268,10 @@ $(document).ready(function() {
                 progress: 'review'
             },
             success: function(res) {
-                show_toast(true, res.data);
+                showToast(true, res.data);
             },
             error: function(err) {
-                show_toast(false, err.responseJSON.message);
+                showToast(false, err.responseJSON.message);
             },
             complete: function() {
                 // reload segmen review
