@@ -444,15 +444,25 @@ function check_file_extension($file_name)
 }
 
 // memaksa variabel kosong agar disimpan sebagai 'null'
-function empty_to_null($v)
+function empty_to_null($v = '')
 {
     return empty($v) ? null : $v;
 }
 
-function get_allowed_file_types($field_name)
+function get_allowed_file_types($field_name = null)
 {
+    // default
+    $types = 'docx|doc|pdf|zip|rar';
+
     if ($field_name == 'draft_file') {
         $types = 'docx|doc|pdf|zip|rar';
+    }
+    if ($field_name == 'book_file') {
+        $types = 'docx|doc|pdf|zip|rar';
+    }
+
+    if ($field_name == 'hakcipta_file') {
+        $types = 'docx|doc|pdf|zip|rar|jpg|jpeg|png';
     }
 
     return [
@@ -558,4 +568,24 @@ function filter_boolean($data)
 function now()
 {
     return date('Y-m-d H:i:s');
+}
+
+function get_published_date()
+{
+    $CI    = &get_instance();
+    $query = $CI->db->select(['published_date'])->from('book')->order_by("published_date", "asc")->group_by('published_date')->get()->result_array();
+
+    $published_years = [
+        '' => 'Semua'
+    ];
+
+    foreach ($query as $k => $value) {
+        if (!$value['published_date']) {
+            continue;
+        }
+        $date = DateTime::createFromFormat("Y-m-d", $value['published_date']);
+        $published_years[$date->format('Y')] = $date->format('Y');
+    }
+
+    return $published_years;
 }

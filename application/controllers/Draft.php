@@ -798,14 +798,21 @@ class Draft extends Operator_Controller
                 redirect("draft/view/$draft_id");
             }
 
+            // copy file print, ke book
+            $book_file_name = $this->_generate_draft_file_name($draft->print_file, $draft->draft_title, 'book');
+            $this->copy_file('draftfile', 'bookfile', $draft->print_file, $book_file_name);
+
             $this->book->insert([
                 'draft_id' => $draft_id,
                 'book_title' => $draft->draft_title,
-                'book_file' => $draft->print_file,
+                'book_file' =>  $book_file_name,
                 'book_file_link' => $draft->print_file_link,
+                'published_date' => empty_to_null()
             ]);
             $book_id = $this->db->insert_id();
         }
+
+        //
 
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();

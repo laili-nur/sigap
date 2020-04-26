@@ -10,6 +10,18 @@ draftfile/*
 !draftfile/.htaccess
 !draftfile/index.html
 
+# draft file
+bookfile/*
+!bookfile/.gitkeep
+!bookfile/.htaccess
+!bookfile/index.html
+
+# hakcipta file
+hakcipta/*
+!hakcipta/.gitkeep
+!hakcipta/.htaccess
+!hakcipta/index.html
+
 .env
 .env.development
 .env.production

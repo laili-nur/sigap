@@ -2,7 +2,7 @@
 
 class Book_model extends MY_Model
 {
-    protected $per_page = 10;
+    public $per_page = 10;
 
     public function get_validation_rules()
     {
@@ -10,7 +10,7 @@ class Book_model extends MY_Model
             [
                 'field' => 'draft_id',
                 'label' => 'Draft ID',
-                'rules' => 'trim|required',
+                'rules' => 'trim|required|callback_unique_data[draft_id]',
             ],
             [
                 'field' => 'book_code',
@@ -20,7 +20,7 @@ class Book_model extends MY_Model
             [
                 'field' => 'book_title',
                 'label' => 'Book Title',
-                'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_book_title',
+                'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_data[book_title]',
             ],
             [
                 'field' => 'book_edition',
@@ -84,13 +84,12 @@ class Book_model extends MY_Model
             'draft_id'            => '',
             'book_code'           => '',
             'book_title'          => '',
-            //            'cover'                    => '',
             'book_edition'        => '',
             'book_file_link'      => '',
             'book_pages'          => '',
             'isbn'                => '',
             'eisbn'               => '',
-            //            'book_file'                    => '',
+            'book_file'           => '',
             'published_date'      => '',
             'harga'               => '',
             'book_notes'          => '',
@@ -101,6 +100,99 @@ class Book_model extends MY_Model
         ];
     }
 
+    public function filter_book($filters, $page)
+    {
+        $books = $this->select(['book_id', 'book.draft_id', 'book_title', 'category_name', 'published_date', 'work_unit_name', 'book_code', 'isbn', 'status_hak_cipta', 'is_reprint', 'author_name'])
+            ->when('keyword', $filters['keyword'])
+            ->join('draft')
+            ->join_table('category', 'draft', 'category')
+            ->join_table('draft_author', 'draft', 'draft')
+            ->join_table('author', 'draft_author', 'author')
+            ->join_table('work_unit', 'author', 'work_unit')
+            ->when('category', $filters['category'])
+            ->when('status', $filters['status'])
+            ->when('reprint', $filters['reprint'])
+            ->when('published_year', $filters['published_year'])
+            ->order_by('status_hak_cipta')
+            ->order_by('published_date')
+            ->order_by('book_title')
+            ->group_by('draft.draft_id')
+            ->paginate($page)
+            ->get_all();
+
+        $total = $this->select('draft.draft_id')
+            ->when('keyword', $filters['keyword'])
+            ->join('draft')
+            ->join_table('category', 'draft', 'category')
+            ->join_table('draft_author', 'draft', 'draft')
+            ->join_table('author', 'draft_author', 'author')
+            ->join_table('work_unit', 'author', 'work_unit')
+            ->when('category', $filters['category'])
+            ->when('status', $filters['status'])
+            ->when('reprint', $filters['reprint'])
+            ->when('published_year', $filters['published_year'])
+            ->order_by('status_hak_cipta')
+            ->order_by('published_date')
+            ->order_by('book_title')
+            ->group_by('draft.draft_id')
+            ->count();
+
+        // get authors
+        foreach ($books as $b) {
+            if ($b->draft_id) {
+                $b->authors = $this->get_id_and_name('author', 'draft_author', $b->draft_id, 'draft');
+            } else {
+                $b->authors = [];
+            }
+        }
+
+        return [
+            'books' => $books,
+            'total'  => $total,
+        ];
+    }
+
+    public function when($params, $data)
+    {
+        // jika data null, maka skip
+        if ($data) {
+            if ($params == 'reprint') {
+                $this->where('is_reprint', $data);
+            }
+
+            if ($params == 'category') {
+                $this->where('draft.category_id', $data);
+            }
+
+            if ($params == 'status') {
+                $this->where('book.status_hak_cipta', $data == 'done' ? 2 : 1);
+            }
+
+            if ($params == 'published_year') {
+                $this->where('year(published_date)', $data);
+            }
+
+            if ($params == 'keyword') {
+                $this->group_start();
+                // $this->like('draft_title', $data);
+                $this->or_like('book_title', $data);
+                // if ($this->session->userdata('level') != 'reviewer') {
+                $this->or_like('author_name', $data);
+                // }
+                $this->group_end();
+            }
+
+            // if ($params == 'status') {
+            //     if ($data == 'y') {
+            //         $this->where_not('edit_notes', '');
+            //     } elseif ($data == 'n') {
+            //         $this->where('edit_notes', '');
+            //     }
+            // }
+        }
+        return $this;
+    }
+
     public function get_book_from_draft($draft_id)
     {
         return $this->select('book_id,book_title,nomor_hak_cipta,status_hak_cipta,file_hak_cipta,file_hak_cipta_link')
@@ -109,40 +201,42 @@ class Book_model extends MY_Model
             ->get();
     }
 
-    public function uploadBookfile($bookfieldname, $bookFileName)
+    public function upload_book_file($field_name, $book_file_name)
     {
         $config = [
             'upload_path'      => './bookfile/',
-            'file_name'        => $bookFileName,
-            'allowed_types'    => 'docx|doc|pdf', // docx only
-            'max_size'         => 15360, // 15MB
+            'file_name'        => $book_file_name,
+            'allowed_types'    => get_allowed_file_types('book_file')['types'],
+            'max_size'         => 51200, // 15MB
             'overwrite'        => true,
             'file_ext_tolower' => true,
         ];
 
         $this->load->library('upload', $config);
-        if ($this->upload->do_upload($bookfieldname)) {
+        if ($this->upload->do_upload($field_name)) {
             // Upload OK, return uploaded file info.
             return $this->upload->data();
         } else {
             // Add error to $_error_array
-            $this->form_validation->add_to_error_array($bookfieldname, $this->upload->display_errors('', ''));
+            $this->form_validation->add_to_error_array($field_name, $this->upload->display_errors('', ''));
             return false;
         }
     }
 
-    public function deleteBookfile($bookFile)
+    public function delete_book_file($book_file)
     {
-        if (file_exists("./bookfile/$bookFile")) {
-            unlink("./bookfile/$bookFile");
+        if ($book_file != "") {
+            if (file_exists("./bookfile/$book_file")) {
+                unlink("./bookfile/$book_file");
+            }
         }
     }
 
-    public function uploadHCfile($HCfieldname, $HCFileName)
+    public function uploadHCfile($field_name, $hakcipta_file_name)
     {
         $config = [
             'upload_path'      => './hakcipta/',
-            'file_name'        => $HCFileName,
+            'file_name'        => $hakcipta_file_name,
             'allowed_types'    => 'jpg|png|jpeg|pdf', // file types allowed
             'max_size'         => 15360, // 15MB
             'overwrite'        => true,
@@ -150,20 +244,22 @@ class Book_model extends MY_Model
         ];
 
         $this->load->library('upload', $config);
-        if ($this->upload->do_upload($HCfieldname)) {
+        if ($this->upload->do_upload($field_name)) {
             // Upload OK, return uploaded file info.
             return $this->upload->data();
         } else {
             // Add error to $_error_array
-            $this->form_validation->add_to_error_array($HCfieldname, $this->upload->display_errors('', ''));
+            $this->form_validation->add_to_error_array($field_name, $this->upload->display_errors('', ''));
             return false;
         }
     }
 
-    public function deleteHCfile($HCfile)
+    public function delete_hak_cipta_file($hak_cipta_file)
     {
-        if (file_exists("./hakcipta/$HCfile")) {
-            unlink("./hakcipta/$HCfile");
+        if ($hak_cipta_file != "") {
+            if (file_exists("./hakcipta/$hak_cipta_file")) {
+                unlink("./hakcipta/$hak_cipta_file");
+            }
         }
     }
 
@@ -219,4 +315,12 @@ class Book_model extends MY_Model
     //        }
     //    }
 
+    // private function _get_draft_authors_and_status(array $books)
+    // {
+    //     foreach ($books as $b) {
+    //         $b->authors = $this->get_id_and_name('author', 'draft_author', $b->draft_id, 'draft');
+    //     }
+
+    //     return $books;
+    // }
 }

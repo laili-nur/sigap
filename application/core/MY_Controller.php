@@ -63,6 +63,16 @@ class MY_Controller extends MX_Controller
         }
     }
 
+    public function copy_file($source, $target, $file_name_source, $file_name_target)
+    {
+        $file = realpath($source) . "\\" . $file_name_source;
+        if (file_exists($file)) {
+            copy($file, "$target\\$file_name_target");
+        } else {
+            echo $this->lang->line('toast_error_file_not_found');
+        }
+    }
+
     // generate json output API
     public function send_json_output(bool $status, $result, $status_header = null)
     {
