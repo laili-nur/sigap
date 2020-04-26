@@ -110,12 +110,12 @@ $all_criteria = [
                         <div id="<?= $progress ?>-comment-section">
                             <fieldset>
                                 <!-- CATATAN REVIEWER UNTUK STAFF/ADMIN -->
-                                <?php if ($level != 'author') : ?>
+                                <?php if (is_staff() || $level == 'reviewer') : ?>
                                     <div class="form-group">
                                         <label
                                             for="reviewer-<?= $progress ?>-notes"
                                             class="font-weight-bold"
-                                        >Catatan Reviewer untuk Admin</label>
+                                        >Catatan Reviewer</label>
                                         <?php
                                         if (!is_admin() && $level != 'reviewer') {
                                             echo "<div class='font-italic' id='reviewer-{$progress}-notes'>" . $input->{"{$progress}_notes"} . "</div>";
@@ -130,17 +130,17 @@ $all_criteria = [
                                         }
                                         ?>
                                     </div>
+                                    <hr class="my-3">
                                 <?php endif; ?>
 
 
                                 <!-- CATATAN ADMIN UNTUK AUTHOR -->
-                                <?php if (is_admin() || $level == 'author') : ?>
-                                    <hr class="my-3">
+                                <?php if (is_staff() || $level == 'author') : ?>
                                     <div class="form-group">
                                         <label
                                             for="admin-<?= $progress ?>-notes"
                                             class="font-weight-bold"
-                                        >Catatan Admin untuk Penulis</label>
+                                        >Catatan Admin</label>
                                         <?php
                                         if (!is_admin() && $level != 'reviewer') {
                                             echo "<div class='font-italic' id='admin-{$progress}-notes'>" . $input->{"{$progress}_notes_admin"} . "</div>";
@@ -155,30 +155,31 @@ $all_criteria = [
                                         }
                                         ?>
                                     </div>
+                                    <hr class="my-3">
                                 <?php endif; ?>
 
+                                <?php if (is_staff() || $level == 'author') : ?>
+                                    <div class="form-group">
+                                        <label
+                                            for="author-<?= $progress ?>-notes"
+                                            class="font-weight-bold"
+                                        >Catatan Penulis</label>
+                                        <?php
+                                        if (!is_admin() && ($level != 'author' || $author_order != 1)) {
+                                            echo "<div class='font-italic' id='author-{$progress}-notes'>" . $input->{"{$progress}_notes_author"} . "</div>";
+                                        } else {
+                                            echo form_textarea([
+                                                'name'  => "author-{$progress}-notes",
+                                                'class' => 'form-control summernote-basic',
+                                                'id'    => "author-{$progress}-notes",
+                                                'rows'  => '6',
+                                                'value' => $input->{"{$progress}_notes_author"}
+                                            ]);
+                                        }
+                                        ?>
+                                    </div>
+                                <?php endif ?>
 
-                                <hr class="my-3">
-                                <div class="form-group">
-                                    <label
-                                        for="author-<?= $progress ?>-notes"
-                                        class="font-weight-bold"
-                                    >Catatan Penulis</label>
-                                    <?php
-                                    if (!is_admin() && ($level != 'author' || $author_order != 1)) {
-                                        echo "<div class='font-italic' id='author-{$progress}-notes'>" . $input->{"{$progress}_notes_author"} . "</div>";
-                                    } else {
-                                        echo form_textarea([
-                                            'name'  => "author-{$progress}-notes",
-                                            'class' => 'form-control summernote-basic',
-                                            'id'    => "author-{$progress}-notes",
-                                            'rows'  => '6',
-                                            'value' => $input->{"{$progress}_notes_author"}
-
-                                        ]);
-                                    }
-                                    ?>
-                                </div>
                             </fieldset>
                             <div class="d-flex justify-content-end">
                                 <button
@@ -237,16 +238,25 @@ $all_criteria = [
                                     </div>
                                 <?php endforeach ?>
 
-                                <div id="nilai-wrapper">
-                                    <div class="alert <?= $input->{"{$progress}_total_score"} >= 400 ? 'alert-success' : 'alert-danger' ?>">
-                                        <p class="badge <?= $input->{"{$progress}_total_score"} >= 400 ? 'badge-success' : 'badge-danger' ?>">Naskah Lolos Review</p>
-                                        <p class="mb-0">
-                                            <span>Nilai total :</span>
-                                            <strong><?= $input->{"{$progress}_total_score"} ?></strong>
-                                        </p>
-                                        <p class="mb-0">Passing Grade = 400</p>
+                                <?php if ($input->{"{$progress}_flag"}) : ?>
+                                    <div id="nilai-wrapper">
+                                        <div class="alert <?= $input->{"{$progress}_total_score"} >= 400 ? 'alert-success' : 'alert-danger' ?>">
+                                            <?php
+                                            if ($input->{"{$progress}_total_score"} >= 400) {
+                                                echo '<p class="badge badge-success">Naskah Lolos Review</p>';
+                                            } else {
+                                                echo '<p class="badge badge-danger">Naskah Tidak Lolos Review</p>';
+                                            }
+                                            ?>
+
+                                            <p class="mb-0">
+                                                <span>Nilai total :</span>
+                                                <strong><?= $input->{"{$progress}_total_score"} ?></strong>
+                                            </p>
+                                            <p class="mb-0">Passing Grade = 400</p>
+                                        </div>
                                     </div>
-                                </div>
+                                <?php endif ?>
 
                                 <?php if (is_admin() || $level == 'reviewer') : ?>
                                     <div class="card-footer-content text-muted p-0 m-0">

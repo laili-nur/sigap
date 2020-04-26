@@ -1,5 +1,5 @@
 <div id="<?= $progress ?>-file-info">
-    <div class="alert alert-info">
+    <div class="alert alert-info m-0">
         <?php if ($input->{"{$progress}_file_link"} || $input->{"{$progress}_file"}) : ?>
             <?php if ($input->{"{$progress}_file"}) : ?>
                 <div>
@@ -25,11 +25,13 @@
                         target="_blank"
                         class="d-block mb-3"
                     ><i class="fa fa-external-link-alt"></i> <?= $input->{"{$progress}_file_link"} ?></a>
-                    <button
-                        type="button"
-                        data-type="link"
-                        class="btn btn-outline-danger btn-sm <?= $progress ?>-delete-file"
-                    ><i class="fa fa-trash"></i> Hapus link</button>
+                    <?php if ((is_staff())) : ?>
+                        <button
+                            type="button"
+                            data-type="link"
+                            class="btn btn-outline-danger btn-sm <?= $progress ?>-delete-file"
+                        ><i class="fa fa-trash"></i> Hapus link</button>
+                    <?php endif ?>
                     <hr>
                 </div>
             <?php endif ?>
@@ -40,9 +42,10 @@
         <?php endif ?>
     </div>
 
-    <hr class="my-4">
 
     <?php if (is_staff()) : ?>
+        <hr class="my-4">
+        <div class="alert alert-warning">Upload dan hapus file hanya dapat dilakukan oleh staff. Selain staff hanya bisa melihat file saja.</div>
         <form
             id="<?= $progress ?>-upload-form"
             method="post"

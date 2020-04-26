@@ -70,7 +70,7 @@
                                         data-target="#modal-entry-date"
                                     >Tanggal Masuk <i class="fas fa-edit fa-fw"></i></a>
                                 <?php else : ?>
-                                    <span class="text-muted">Tanggal Masuk</span>
+                                    <span>Tanggal Masuk</span>
                                 <?php endif ?>
                             </td>
                             <td>
@@ -126,7 +126,7 @@
                                         data-target="#modal-draft-notes"
                                     >Catatan draft <i class="fas fa-edit fa-fw"></i></a>
                                 <?php else : ?>
-                                    <span class="text-muted">Catatan draft</span>
+                                    <span>Catatan draft</span>
                                 <?php endif ?>
                             </td>
                             <td>

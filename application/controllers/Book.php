@@ -119,7 +119,11 @@ class Book extends Admin_Controller
 
         // }
         // tabel author
-        $authors = $this->author->get_draft_authors($book->draft_id);
+        if ($book->draft_id) {
+            $authors = $this->author->get_draft_authors($book->draft_id);
+        } else {
+            $authors = [];
+        }
 
         // get draft
         // $draft = $this->book->where('draft_id', $input->draft_id)->get('draft');

@@ -38,51 +38,51 @@ $i = isset($page) ? $page * $per_page - $per_page : 0;
 //     ];
 // } else {
 $progress_options = [
-   ''               => '- Filter Progress -',
-   'desk_screening' => 'Tahap Desk Screening',
-   'review'         => 'Tahap Review',
-   'edit'           => 'Tahap Editorial',
-   'layout'         => 'Tahap Layout',
-   'proofread'      => 'Tahap Proofread',
-   'cetak'          => 'Tahap Cetak',
-   'final'          => 'Final',
-   'reject'         => 'Ditolak',
-   'error'          => 'Draft Error',
+    ''               => '- Filter Progress -',
+    'desk_screening' => 'Tahap Desk Screening',
+    'review'         => 'Tahap Review',
+    'edit'           => 'Tahap Editorial',
+    'layout'         => 'Tahap Layout',
+    'proofread'      => 'Tahap Proofread',
+    'print'          => 'Tahap Cetak',
+    'final'          => 'Final',
+    'reject'         => 'Ditolak',
+    'error'          => 'Draft Error',
 ];
 // }
 
 $reprint_options = [
-   ''  => '- Filter Tipe Naskah -',
-   'n' => ' Naskah Baru',
-   'y' => ' Naskah Cetak Ulang',
+    ''  => '- Filter Tipe Naskah -',
+    'n' => ' Naskah Baru',
+    'y' => ' Naskah Cetak Ulang',
 ];
 
-   // $status_options = [
-   //     ''  => '- Filter Edit -',
-   //     'n' => ' Belum Diedit',
-   //     'y' => ' Sudah Diedit',
-   //     //  'approve' => ' Edit Diterima',
-   //     //  'reject'  => ' Edit Dtolak',
-   // ];
+    // $status_options = [
+    //     ''  => '- Filter Edit -',
+    //     'n' => ' Belum Diedit',
+    //     'y' => ' Sudah Diedit',
+    //     //  'approve' => ' Edit Diterima',
+    //     //  'reject'  => ' Edit Dtolak',
+    // ];
 
-   // $authors = '';
-   // foreach ($draft->authors as $key => $value) {
-   //     $authors .= $value->author_name;
-   //     $authors .= '<br>';
-   // }
+    // $authors = '';
+    // foreach ($draft->authors as $key => $value) {
+    //     $authors .= $value->author_name;
+    //     $authors .= '<br>';
+    // }
 ; //  $authors = substr($authors, 0, -2);
 
 function expand($authors)
 {
-   $authors_list = '<ul class="p-0 m-0" style="padding: 0;list-style-type: none;">';
-   foreach ($authors as $a) {
-      $authors_list .= '<li>';
-      $authors_list .= '<i class="fa fa-user fa-fw"></i> ';
-      $authors_list .= $a->author_name;
-      $authors_list .= '</li>';
-   }
-   $authors_list .= '</ul>';
-   return $authors_list;
+    $authors_list = '<ul class="p-0 m-0" style="padding: 0;list-style-type: none;">';
+    foreach ($authors as $a) {
+        $authors_list .= '<li>';
+        $authors_list .= '<i class="fa fa-user fa-fw"></i> ';
+        $authors_list .= $a->author_name;
+        $authors_list .= '</li>';
+    }
+    $authors_list .= '</ul>';
+    return $authors_list;
 }
 ?>
 <header class="page-title-bar">

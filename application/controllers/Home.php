@@ -25,45 +25,43 @@ class Home extends Operator_Controller
             }
         }
 
-        $cekusername   = $this->session->userdata('username');
-        $ceklevel      = $this->session->userdata('level');
         $drafts        = array();
         $count         = array();
         $categories    = '';
         $drafts_newest = '';
 
-        //menampilkan info sesuai level
-        if ($ceklevel == 'superadmin' or $ceklevel == 'admin_penerbitan') {
-            $count['tot_category'] = $this->home->count('category');
-            $count['tot_draft']    = $this->home->count('draft');
-            $count['tot_book']     = $this->home->count('book');
-            $count['tot_author']   = $this->home->count('author');
-            $count['tot_reviewer'] = $this->home->count('reviewer');
-            //sedang desk screening dan lolos desk screening
-            $count['draft_desk'] = $this->home->where('draft_status', 1)->or_where('draft_status', 0)->count('draft');
-            //sedang review
-            $count['draft_review'] = $this->home->where('is_review', 'n')->where('is_edit', 'n')->where('is_layout', 'n')->where('is_proofread', 'n')->where('is_print', 'n')->where('draft_status', '4')->count('draft');
-            //lolos review
-            $count['draft_review_lolos'] = $this->home->where('is_review', 'y')->where('draft_status', '5')->count('draft');
-            //sedang edit
-            $count['draft_edit'] = $this->home->where('is_review', 'y')->where('is_edit', 'n')->where('is_layout', 'n')->where('is_proofread', 'n')->where('is_print', 'n')->where_not('draft_status', '99')->count('draft');
-            //sedang layout
-            $count['draft_layout'] = $this->home->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'n')->where('is_proofread', 'n')->where('is_print', 'n')->where_not('draft_status', '99')->count('draft');
-            //sedang proofread
-            $count['draft_proofread'] = $this->home->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'y')->where('is_proofread', 'n')->where('is_print', 'n')->where_not('draft_status', '99')->count('draft');
-            //sedang cetak
-            $count['draft_cetak'] = $this->home->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'y')->where('is_proofread', 'y')->group_start()->where('is_print', 'n')->or_where('is_print', 'y')->group_end()->where_not('draft_status', '99')->where_not('draft_status', '14')->count('draft');
+        // menampilkan info sesuai level
+        if (is_admin()) {
+            // total data
+            $count['total_category'] = $this->home->count('category');
+            $count['total_draft']    = $this->home->count('draft');
+            $count['total_book']     = $this->home->count('book');
+            $count['total_author']   = $this->home->count('author');
+            $count['total_reviewer'] = $this->home->count('reviewer');
+
+            //  desk screening dan lolos desk screening
+            $count['draft_desk'] = $this->home->count_progress('desk_screening');
+            // review
+            $count['draft_review'] = $this->home->count_progress('review');
+            // edit
+            $count['draft_edit'] = $this->home->count_progress('edit');
+            // layout
+            $count['draft_layout'] = $this->home->count_progress('layout');
+            // proofread
+            $count['draft_proofread'] = $this->home->count_progress('proofread');
+            // cetak
+            $count['draft_print'] = $this->home->count_progress('print');
             //final
-            $count['draft_final'] = $this->home->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'y')->where('is_proofread', 'y')->where('is_print', 'y')->where('is_reprint', 'n')->where('draft_status', '14')->count('draft');
-            //cetak ulang
-            $count['draft_cetak_ulang'] = $this->home->where('is_reprint', 'y')->count('draft');
+            $count['draft_final'] = $this->home->count_progress('final');
+            // cetak ulang
+            $count['draft_reprint'] = $this->home->where('is_reprint', 'y')->count('draft');
 
             //$count['draft_approved'] = $count['draft_desk_lolos']+$count['draft_review_lolos'];
-            $count['draft_in_progress']    = $count['draft_edit'] + $count['draft_layout'] + $count['draft_proofread'] + $count['draft_cetak'];
-            $count['draft_rejected_total'] = $this->home->where('draft_status', '2')->or_where('draft_status', '99')->count('draft');
-        } elseif ($ceklevel == 'reviewer') {
-            $drafts        = $this->home->join_table('draft_reviewer', 'draft', 'draft')->join_table('reviewer', 'draft_reviewer', 'reviewer')->join_table('user', 'reviewer', 'user')->where('user.username', $cekusername)->get_all('draft');
-            $drafts_newest = $this->home->join_table('draft_reviewer', 'draft', 'draft')->join_table('reviewer', 'draft_reviewer', 'reviewer')->join_table('user', 'reviewer', 'user')->where('user.username', $cekusername)->limit(5)->order_by('entry_date', 'desc')->get_all('draft');
+            $count['draft_in_progress']    = $count['draft_edit'] + $count['draft_layout'] + $count['draft_proofread'] + $count['draft_print'];
+            $count['draft_rejected_total'] = $this->home->count_progress('reject');
+        } elseif ($this->level == 'reviewer') {
+            $drafts        = $this->home->join_table('draft_reviewer', 'draft', 'draft')->join_table('reviewer', 'draft_reviewer', 'reviewer')->join_table('user', 'reviewer', 'user')->where('user.username', $this->username)->get_all('draft');
+            $drafts_newest = $this->home->join_table('draft_reviewer', 'draft', 'draft')->join_table('reviewer', 'draft_reviewer', 'reviewer')->join_table('user', 'reviewer', 'user')->where('user.username', $this->username)->limit(5)->order_by('entry_date', 'desc')->get_all('draft');
 
             foreach ($drafts_newest as $key => $value) {
                 $rev        = $this->home->get_id_and_name('reviewer', 'draft_reviewer', $value->draft_id, 'draft');
@@ -125,31 +123,31 @@ class Home extends Operator_Controller
             $count['count_sedang'] = $count_sedang;
             $count['count_belum']  = $count_belum;
             $count['count_total']  = $count_total;
-        } elseif ($ceklevel == 'author') {
+        } elseif ($this->level == 'author') {
             $categories               = $this->home->order_by('category_name')->get_all_where("category_status = 'y'", 'category');
-            $count['draft_total']     = $this->home->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('user.username', $cekusername)->count('draft');
-            $count['draft_desk']      = $this->home->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('user.username', $cekusername)->where('draft_status', '0')->count('draft');
-            $count['draft_review']    = $this->home->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('user.username', $cekusername)->where('draft_status', '4')->where('is_review', 'n')->count('draft');
-            $count['draft_edit']      = $this->home->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('user.username', $cekusername)->where('is_review', 'y')->where('is_edit', 'n')->where_not('draft_status', '99')->count('draft');
-            $count['draft_layout']    = $this->home->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('user.username', $cekusername)->where('is_edit', 'y')->where('is_layout', 'n')->where_not('draft_status', '99')->count('draft');
-            $count['draft_proofread'] = $this->home->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('user.username', $cekusername)->where('is_layout', 'y')->where('is_proofread', 'n')->where_not('draft_status', '99')->count('draft');
-            $count['draft_approved']  = $this->home->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where_not('draft_status', '99')->where_not('draft_status', '2')->where('user.username', $cekusername)->count('draft');
-            $count['draft_rejected']  = $this->home->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('draft_status', '99')->where('user.username', $cekusername)->count('draft');
-            $count['draft_book']      = $this->home->join_table('draft', 'book', 'draft')->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('user.username', $cekusername)->count('book');
-        } elseif ($ceklevel == 'editor') {
-            $count['draft_total']    = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('user.username', $cekusername)->count('draft');
+            $count['draft_total']     = $this->home->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('user.username', $this->username)->count('draft');
+            $count['draft_desk']      = $this->home->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('user.username', $this->username)->where('draft_status', '0')->count('draft');
+            $count['draft_review']    = $this->home->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('user.username', $this->username)->where('draft_status', '4')->where('is_review', 'n')->count('draft');
+            $count['draft_edit']      = $this->home->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('user.username', $this->username)->where('is_review', 'y')->where('is_edit', 'n')->where_not('draft_status', '99')->count('draft');
+            $count['draft_layout']    = $this->home->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('user.username', $this->username)->where('is_edit', 'y')->where('is_layout', 'n')->where_not('draft_status', '99')->count('draft');
+            $count['draft_proofread'] = $this->home->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('user.username', $this->username)->where('is_layout', 'y')->where('is_proofread', 'n')->where_not('draft_status', '99')->count('draft');
+            $count['draft_approved']  = $this->home->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where_not('draft_status', '99')->where_not('draft_status', '2')->where('user.username', $this->username)->count('draft');
+            $count['draft_rejected']  = $this->home->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('draft_status', '99')->where('user.username', $this->username)->count('draft');
+            $count['draft_book']      = $this->home->join_table('draft', 'book', 'draft')->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('user', 'author', 'user')->where('user.username', $this->username)->count('book');
+        } elseif ($this->level == 'editor') {
+            $count['draft_total']    = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('user.username', $this->username)->count('draft');
             $count['draft_desk']     = $this->home->where('draft_status', 0)->count('draft');
-            $count['draft_sudah']    = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where_not('edit_notes', '')->where('user.username', $cekusername)->count('draft');
-            $count['draft_belum']    = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('edit_notes', '')->where_not('draft_status', 99)->where('user.username', $cekusername)->count('draft');
-            $count['draft_approved'] = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('is_edit', 'y')->where('user.username', $cekusername)->count('draft');
-            $count['draft_rejected'] = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('is_edit', 'n')->where('draft_status', 99)->where('user.username', $cekusername)->count('draft');
-        } elseif ($ceklevel == 'layouter') {
-            $count['draft_total']    = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('user.username', $cekusername)->count('draft');
+            $count['draft_sudah']    = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where_not('edit_notes', '')->where('user.username', $this->username)->count('draft');
+            $count['draft_belum']    = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('edit_notes', '')->where_not('draft_status', 99)->where('user.username', $this->username)->count('draft');
+            $count['draft_approved'] = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('is_edit', 'y')->where('user.username', $this->username)->count('draft');
+            $count['draft_rejected'] = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('is_edit', 'n')->where('draft_status', 99)->where('user.username', $this->username)->count('draft');
+        } elseif ($this->level == 'layouter') {
+            $count['draft_total']    = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('user.username', $this->username)->count('draft');
             $count['draft_desk']     = $this->home->where('draft_status', 0)->count('draft');
-            $count['draft_sudah']    = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where_not('layout_notes', '')->where('user.username', $cekusername)->count('draft');
-            $count['draft_belum']    = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('layout_notes', '')->where_not('draft_status', 99)->where('user.username', $cekusername)->count('draft');
-            $count['draft_approved'] = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('is_layout', 'y')->where('user.username', $cekusername)->count('draft');
-            $count['draft_rejected'] = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('is_layout', 'n')->where('draft_status', 99)->where('user.username', $cekusername)->count('draft');
+            $count['draft_sudah']    = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where_not('layout_notes', '')->where('user.username', $this->username)->count('draft');
+            $count['draft_belum']    = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('layout_notes', '')->where_not('draft_status', 99)->where('user.username', $this->username)->count('draft');
+            $count['draft_approved'] = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('is_layout', 'y')->where('user.username', $this->username)->count('draft');
+            $count['draft_rejected'] = $this->home->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')->where('is_layout', 'n')->where('draft_status', 99)->where('user.username', $this->username)->count('draft');
         }
 
         $pages     = $this->pages;

@@ -43,6 +43,11 @@
         catatan, penulis kedua hanya dapat melihat progress.</div>';
         }
 
+        // PROGRESS REVIEW khusus reviewer
+        if ($level == 'reviewer') {
+            $this->load->view('draft/view/review/index');
+        }
+
         // PROGRESS REVIEW
         if ($level != 'reviewer') {
             $this->load->view('draft/view/progress');

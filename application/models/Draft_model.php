@@ -554,7 +554,7 @@ class Draft_model extends MY_Model
                     ->where_not('draft_status', '99');
                 break;
 
-            case 'cetak':
+            case 'print':
                 $this->where('is_review', 'y')
                     ->where('is_edit', 'y')
                     ->where('is_layout', 'y')

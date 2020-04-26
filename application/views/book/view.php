@@ -246,10 +246,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php print_r($authors) ?>
                                         <?php foreach ($authors as $author) : ?>
                                             <tr>
                                                 <td class="align-middle"><?= $i++; ?></td>
-                                                <td class="align-middle"><a href="<?= base_url('author/profile/' . $author->author_id); ?>"><?= $author->author_name; ?></a>
+                                                <td class="align-middle"><a href="<?= base_url('author/view/profile/' . $author->author_id); ?>"><?= $author->author_name; ?></a>
                                                 </td>
                                                 <td class="align-middle"><?= $author->author_nip; ?></td>
                                                 <td class="align-middle"><?= $author->work_unit_name; ?></td>

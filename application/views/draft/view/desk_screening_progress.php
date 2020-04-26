@@ -2,10 +2,12 @@
 <hr class="my-5">
 <section class="card card-fluid">
     <header class="card-header">Desk Screening
-        <a
-            href="<?= base_url('worksheet/edit/' . $desk->worksheet_id); ?>"
-            target="_blank"
-        ><i class="fa fa-external-link-alt"></i></a>
+        <?php if (is_staff()) : ?>
+            <a
+                href="<?= base_url('worksheet/edit/' . $desk->worksheet_id); ?>"
+                target="_blank"
+            ><i class="fa fa-external-link-alt"></i></a>
+        <?php endif ?>
     </header>
     <div class="card-body">
         <?php if ($desk->worksheet_status == 1) : ?>
