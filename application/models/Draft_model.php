@@ -452,14 +452,16 @@ class Draft_model extends MY_Model
 
     public function filter_draft_for_staff($filters, $username, $page)
     {
-        $drafts = $this->select(['draft.draft_id', 'draft_title', 'category_name', 'category_year', 'entry_date', 'draft_status', 'is_reprint', 'author_name', 'edit_start_date', 'edit_end_date', 'edit_deadline'])
+        $drafts = $this->select(['draft.draft_id', 'draft_title', 'category_name', 'category_year', 'entry_date', 'draft_status', 'is_reprint', 'author_name', 'edit_start_date', 'edit_end_date', 'edit_deadline', 'layout_start_date', 'layout_end_date', 'layout_deadline'])
             ->when('keyword', $filters['keyword'])
             ->join('category')
             ->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')
             ->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')
             ->where('username', $username)
             ->when('progress', $filters['progress'])
-            // ->when('status', $filters['status'])
+            ->when('status', $filters['status'])
+            ->when('reprint', $filters['reprint'])
+            ->when('category', $filters['category'])
             ->order_by('draft_status')
             ->order_by('draft_title')
             ->group_by('draft_id')
@@ -472,7 +474,7 @@ class Draft_model extends MY_Model
             ->join_table('responsibility', 'draft', 'draft')->join_table('user', 'responsibility', 'user')
             ->where('username', $username)
             ->when('progress', $filters['progress'])
-            // ->when('status', $filters['status'])
+            ->when('status', $filters['status'])
             ->group_by('draft_id')
             ->count();
 
@@ -507,13 +509,41 @@ class Draft_model extends MY_Model
                 $this->group_end();
             }
 
-            // if ($params == 'status') {
-            //     if ($data == 'y') {
-            //         $this->where_not('edit_notes', '');
-            //     } elseif ($data == 'n') {
-            //         $this->where('edit_notes', '');
-            //     }
-            // }
+            if ($params == 'status') {
+                if ($this->session->userdata('level') == 'editor') {
+                    if ($data == 'y') {
+                        $this->where_not('edit_end_date', null);
+                    } elseif ($data == 'n') {
+                        $this->where('edit_end_date', null);
+                    } elseif ($data == 'approve') {
+                        $this->group_start()
+                            ->where('is_edit', 'y')
+                            ->where_not('draft_status', '99')
+                            ->group_end();
+                    } elseif ($data == 'reject') {
+                        $this->group_start()
+                            ->where('is_edit', 'n')
+                            ->where('draft_status', '99')
+                            ->group_end();
+                    }
+                } else if ($this->session->userdata('level') == 'layouter') {
+                    if ($data == 'y') {
+                        $this->where_not('layout_end_date', null);
+                    } elseif ($data == 'n') {
+                        $this->where('layout_end_date', null);
+                    } elseif ($data == 'approve') {
+                        $this->group_start()
+                            ->where('is_layout', 'y')
+                            ->where_not('draft_status', '99')
+                            ->group_end();
+                    } elseif ($data == 'reject') {
+                        $this->group_start()
+                            ->where('is_layout', 'n')
+                            ->where('draft_status', '99')
+                            ->group_end();
+                    }
+                }
+            }
         }
         return $this;
     }
@@ -573,6 +603,43 @@ class Draft_model extends MY_Model
                 $this->group_start()
                     ->where('draft_status', '99')
                     ->or_where('draft_status', '2')
+                    ->group_end();
+                break;
+
+            case 'approve':
+                $this->group_start()
+                    ->where_not('draft_status', '99')
+                    ->where_not('draft_status', '2')
+                    ->group_end();
+                break;
+
+                //     // edit progress
+                // case 'edit_approve':
+                //     $this->group_start()
+                //         ->where('is_edit', 'y')
+                //         ->where_not('draft_status', '99')
+                //         ->group_end();
+                //     break;
+
+                // case 'edit_reject':
+                //     $this->group_start()
+                //         ->where('is_edit', 'n')
+                //         ->where('draft_status', '99')
+                //         ->group_end();
+                //     break;
+
+                // layout progress
+            case 'layout_approve':
+                $this->group_start()
+                    ->where('is_layout', 'y')
+                    ->where_not('draft_status', '99')
+                    ->group_end();
+                break;
+
+            case 'layout_reject':
+                $this->group_start()
+                    ->where('is_layout', 'n')
+                    ->where('draft_status', '99')
                     ->group_end();
                 break;
 

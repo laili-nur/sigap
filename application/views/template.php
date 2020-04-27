@@ -107,7 +107,7 @@
         <?php $this->load->view('sidebar'); ?>
         <main
             class="app-main"
-            id="bodyx"
+            id="app-main"
         >
             <div class="wrapper">
                 <div class="page">

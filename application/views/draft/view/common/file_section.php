@@ -8,11 +8,13 @@
                         href="<?= base_url("draft/download_file/draftfile/{$input->{"{$progress}_file"}}") ?>"
                         class="d-block mb-3"
                     ><i class="fa fa-download"></i> <?= $input->{"{$progress}_file"} ?></a>
-                    <button
-                        type="button"
-                        data-type="file"
-                        class="btn btn-outline-danger btn-sm <?= $progress ?>-delete-file"
-                    ><i class="fa fa-trash"></i> Hapus file</button>
+                    <?php if ((is_staff())) : ?>
+                        <button
+                            type="button"
+                            data-type="file"
+                            class="btn btn-outline-danger btn-sm <?= $progress ?>-delete-file"
+                        ><i class="fa fa-trash"></i> Hapus file</button>
+                    <?php endif ?>
                     <hr>
                 </div>
             <?php endif ?>

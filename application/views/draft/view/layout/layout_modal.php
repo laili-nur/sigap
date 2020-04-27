@@ -92,9 +92,9 @@
                                         }
                                         ?>
                                     </div>
+                                    <hr class="my-3">
                                 <?php endif; ?>
 
-                                <hr class="my-3">
 
                                 <!-- CATATAN AUTHOR UNTUK STAFF/ADMIN -->
                                 <div class="form-group">

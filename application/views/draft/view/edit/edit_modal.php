@@ -78,7 +78,7 @@
                                         <label
                                             for="editor-edit-notes"
                                             class="font-weight-bold"
-                                        >Catatan Editor untuk Admin</label>
+                                        >Catatan Editor</label>
                                         <?php
                                         if (!is_admin() && $level != 'editor') {
                                             echo "<div class='font-italic' id='editor-edit-notes'>" . $input->edit_notes . "</div>";
@@ -93,9 +93,9 @@
                                         }
                                         ?>
                                     </div>
+                                    <hr class="my-3">
                                 <?php endif; ?>
 
-                                <hr class="my-3">
 
                                 <!-- CATATAN AUTHOR UNTUK STAFF/ADMIN -->
                                 <div class="form-group">

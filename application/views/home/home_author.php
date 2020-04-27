@@ -1,67 +1,55 @@
+<?php
+$role  = $this->session->userdata('role_id');
+?>
 <div class="section-block">
     <div class="metric-row">
         <div class="col-12">
             <div class="metric-row metric-flush">
                 <div class="col">
-                    <a
-                        href="
-                <?= base_url('category'); ?>"
-                        class="metric metric-bordered align-items-center"
-                    >
-                        <h2 class="metric-label">
-                        <i class="fa fa-paperclip"></i> Total Draft
-                     </h2>
+                    <div class="metric metric-bordered align-items-center">
+                        <h2 class="metric-label"><i class="fa fa-paperclip"></i> Total Draft</h2>
                         <p class="metric-value h3">
                             <span class="value">
-                           <?= $count['draft_total']; ?>
-                        </span>
+                                <?= $count['draft_total']; ?>
+                            </span>
                         </p>
-                    </a>
+                    </div>
                 </div>
                 <div class="col">
-                    <a
-                        href="#"
-                        class="metric metric-bordered align-items-center"
-                    >
+                    <div class="metric metric-bordered align-items-center">
                         <h2 class="metric-label">
-                        <i class="fa fa-check"></i> Draft disetujui
-                     </h2>
+                            <i class="fa fa-check"></i> Draft disetujui
+                        </h2>
                         <p class="metric-value h3">
                             <span class="value">
-                           <?= $count['draft_approved']; ?>
-                        </span>
+                                <?= $count['draft_approve']; ?>
+                            </span>
                         </p>
-                    </a>
+                    </div>
                 </div>
                 <div class="col">
-                    <a
-                        href="#"
-                        class="metric metric-bordered align-items-center"
-                    >
+                    <div class="metric metric-bordered align-items-center">
                         <h2 class="metric-label">
-                        <i class="fa fa-times"></i> Draft ditolak
-                     </h2>
+                            <i class="fa fa-times"></i> Draft ditolak
+                        </h2>
                         <p class="metric-value h3">
                             <span class="value">
-                           <?= $count['draft_rejected']; ?>
-                        </span>
+                                <?= $count['draft_reject']; ?>
+                            </span>
                         </p>
-                    </a>
+                    </div>
                 </div>
                 <div class="col">
-                    <a
-                        href="#"
-                        class="metric metric-bordered align-items-center"
-                    >
+                    <div class="metric metric-bordered align-items-center">
                         <h2 class="metric-label">
-                        <i class="fa fa-book"></i> Total Buku
-                     </h2>
+                            <i class="fa fa-book"></i> Total Buku
+                        </h2>
                         <p class="metric-value h3">
                             <span class="value">
-                           <?= $count['draft_book']; ?>
-                        </span>
+                                <?= $count['draft_book']; ?>
+                            </span>
                         </p>
-                    </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -77,106 +65,101 @@
                 <div class="metric-row metric-flush">
                     <div class="col">
                         <a
-                            href="
-                    <?= base_url('draft/filter?filter=desk-screening'); ?>"
+                            href="<?= base_url('draft?progress=desk_screening'); ?>"
                             class="metric metric-bordered align-items-center"
                         >
                             <div class="metric-badge">
                                 <span class="badge badge-lg badge-secondary">
-                              <span class="oi oi-media-record pulse mr-1"></span> DESK SCREENING
+                                    <span class="oi oi-media-record pulse mr-1"></span> DESK SCREENING
                                 </span>
                             </div>
                             <p class="metric-value h3">
                                 <sub>
-                              <i class="fa fa-tasks"></i>
-                           </sub>
+                                    <i class="fa fa-tasks"></i>
+                                </sub>
                                 <span class="value">
-                              <?= $count['draft_desk']; ?>
-                           </span>
+                                    <?= $count['draft_desk']; ?>
+                                </span>
                             </p>
                         </a>
                     </div>
                     <div class="col">
                         <a
-                            href="
-                    <?= base_url('draft/filter?filter=review'); ?>"
+                            href="<?= base_url('draft?progress=review'); ?>"
                             class="metric metric-bordered align-items-center"
                         >
                             <div class="metric-badge">
                                 <span class="badge badge-lg badge-success">
-                              <span class="oi oi-media-record pulse mr-1"></span> REVIEW
+                                    <span class="oi oi-media-record pulse mr-1"></span> REVIEW
                                 </span>
                             </div>
                             <p class="metric-value h3">
                                 <sub>
-                              <i class="fa fa-tasks"></i>
-                           </sub>
+                                    <i class="fa fa-tasks"></i>
+                                </sub>
                                 <span class="value">
-                              <?= $count['draft_review']; ?>
-                           </span>
+                                    <?= $count['draft_review']; ?>
+                                </span>
                             </p>
                         </a>
                     </div>
                     <div class="col">
                         <a
-                            href="
-                    <?= base_url('draft/filter?filter=edit'); ?>"
+                            href="<?= base_url('draft?progress=edit'); ?>"
                             class="metric metric-bordered align-items-center"
                         >
                             <div class="metric-badge">
                                 <span class="badge badge-lg badge-danger">
-                              <span class="oi oi-media-record pulse mr-1"></span> EDITORIAL
+                                    <span class="oi oi-media-record pulse mr-1"></span> EDITORIAL
                                 </span>
                             </div>
                             <p class="metric-value h3">
                                 <sub>
-                              <i class="fa fa-tasks"></i>
-                           </sub>
+                                    <i class="fa fa-tasks"></i>
+                                </sub>
                                 <span class="value">
-                              <?= $count['draft_edit']; ?>
-                           </span>
+                                    <?= $count['draft_edit']; ?>
+                                </span>
                             </p>
                         </a>
                     </div>
                     <div class="col">
                         <a
-                            href="
-                    <?= base_url('draft/filter?filter=layout'); ?>"
+                            href="<?= base_url('draft?progress=layout'); ?>"
                             class="metric metric-bordered align-items-center"
                         >
                             <div class="metric-badge">
                                 <span class="badge badge-lg badge-warning">
-                              <span class="oi oi-media-record pulse mr-1"></span> LAYOUT
+                                    <span class="oi oi-media-record pulse mr-1"></span> LAYOUT
                                 </span>
                             </div>
                             <p class="metric-value h3">
                                 <sub>
-                              <i class="fa fa-tasks"></i>
-                           </sub>
+                                    <i class="fa fa-tasks"></i>
+                                </sub>
                                 <span class="value">
-                              <?= $count['draft_layout']; ?>
-                           </span>
+                                    <?= $count['draft_layout']; ?>
+                                </span>
                             </p>
                         </a>
                     </div>
                     <div class="col">
                         <a
-                            href="
-                    <?= base_url('draft/filter?filter=proofread'); ?>"
+                            href="<?= base_url('draft?progress=proofread'); ?>"
                             class="metric metric-bordered align-items-center"
                         >
                             <div class="metric-badge">
                                 <span class="badge badge-lg badge-info">
-                              <span class="oi oi-media-record pulse mr-1"></span> PROOFREAD
+                                    <span class="oi oi-media-record pulse mr-1"></span> PROOFREAD
                                 </span>
                             </div>
                             <p class="metric-value h3">
                                 <sub>
-                              <i class="fa fa-tasks"></i>
-                           </sub>
+                                    <i class="fa fa-tasks"></i>
+                                </sub>
                                 <span class="value">
-                              <?= $count['draft_proofread']; ?>
-                           </span>
+                                    <?= $count['draft_proofread']; ?>
+                                </span>
                             </p>
                         </a>
                     </div>
@@ -184,7 +167,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-12">
             <section class="card card-fluid">
                 <header class="card-header">
@@ -300,5 +283,5 @@
                 <?php endif; ?>
             </section>
         </div>
-    </div>
+    </div> -->
 </div>

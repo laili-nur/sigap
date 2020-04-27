@@ -71,13 +71,13 @@
                     >
                         <div id="proofread-comment-info">
                             <fieldset>
-                                <!-- CATATAN LAYOUTER UNTUK STAFF/ADMIN/AUTHOR -->
+                                <!-- CATATAN STAFF -->
                                 <?php if ($level != 'author') : ?>
                                     <div class="form-group">
                                         <label
                                             for="proofreader-proofread-notes"
                                             class="font-weight-bold"
-                                        >Catatan Layouter untuk Admin</label>
+                                        >Catatan Staff</label>
                                         <?php
                                         if (!is_admin() && $level != 'proofreader') {
                                             echo "<div class='font-italic' id='proofreader-proofread-notes'>" . $input->proofread_notes . "</div>";
@@ -92,9 +92,9 @@
                                         }
                                         ?>
                                     </div>
+                                    <hr class="my-3">
                                 <?php endif; ?>
 
-                                <hr class="my-3">
 
                                 <!-- CATATAN AUTHOR UNTUK STAFF/ADMIN -->
                                 <div class="form-group">

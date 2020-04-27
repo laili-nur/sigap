@@ -25,6 +25,7 @@ class Draft extends Operator_Controller
             'reprint'  => $this->input->get('reprint', true),
             'progress' => $this->input->get('progress', true),
             'keyword'  => $this->input->get('keyword', true),
+            'status'  => $this->input->get('status', true),
         ];
 
         // custom per page

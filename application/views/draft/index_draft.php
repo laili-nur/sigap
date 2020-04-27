@@ -11,32 +11,6 @@ $page     = $this->uri->segment(2);
 // data table series number
 $i = isset($page) ? $page * $per_page - $per_page : 0;
 
-// Pilihan dropdown per level
-// if ($level == 'reviewer') {
-//     $progress_options = [
-//         ''      => '- Filter Review -',
-//         'belum' => ' Belum Direview',
-//         'sudah' => ' Sudah direview',
-//     ];
-// }
-// elseif ($level == 'editor') {
-//     $progress_options = [
-//         ''        => '- Filter Edit -',
-//         'belum'   => ' Belum Diedit',
-//         'sudah'   => ' Sudah Diedit',
-//         'approve' => ' Edit Diterima',
-//         'reject'  => ' Edit Dtolak',
-//     ];
-// }
-// elseif ($level == 'layouter') {
-//     $progress_options = [
-//         ''        => '- Filter Layout -',
-//         'belum'   => ' Belum Dilayout',
-//         'sudah'   => ' Sudah Dilayout',
-//         'approve' => ' Layout Diterima',
-//         'reject'  => ' Layout Dtolak',
-//     ];
-// } else {
 $progress_options = [
     ''               => '- Filter Progress -',
     'desk_screening' => 'Tahap Desk Screening',
@@ -57,13 +31,13 @@ $reprint_options = [
     'y' => ' Naskah Cetak Ulang',
 ];
 
-    // $status_options = [
-    //     ''  => '- Filter Edit -',
-    //     'n' => ' Belum Diedit',
-    //     'y' => ' Sudah Diedit',
-    //     //  'approve' => ' Edit Diterima',
-    //     //  'reject'  => ' Edit Dtolak',
-    // ];
+$status_options = [
+    ''  => '- Filter Status -',
+    'n' => ' Belum Dikerjakan',
+    'y' => ' Sudah Dikerjakan',
+    'approve' => ' Disetujui Admin',
+    'reject' => ' Ditolak Admin',
+];
 
     // $authors = '';
     // foreach ($draft->authors as $key => $value) {
@@ -138,23 +112,35 @@ function expand($authors)
                         <?= form_open($pages, ['method' => 'GET']); ?>
                         <div class="row">
                             <div class="col-12 col-md-2 mb-3">
+                                <label for="per_page">Data per halaman</label>
                                 <?= form_dropdown('per_page', get_per_page_options(), $per_page, 'id="per_page" class="form-control custom-select d-block" title="List per page"'); ?>
                             </div>
-                            <div class="col-12 mb-3 <?= is_admin() ? 'col-md-4' : 'col-md-10'; ?>">
+                            <div class="col-12 mb-3 <?= is_staff() ? 'col-md-4' : 'col-md-7'; ?>">
+                                <label for="progress">Progress</label>
                                 <?= form_dropdown('progress', $progress_options, $progress, 'id="progress" class="form-control custom-select d-block" title="Filter Progress"'); ?>
                             </div>
-                            <?php if ($level == 'superadmin') : ?>
+                            <?php if (is_staff()) : ?>
                                 <div class="col-12 col-md-3 mb-3">
+                                    <label for="reprint">Tipe naskah</label>
                                     <?= form_dropdown('reprint', $reprint_options, $reprint, 'id="reprint" class="form-control custom-select d-block" title="Filter Naskah"'); ?>
                                 </div>
                                 <div class="col-12 col-md-3 mb-3">
+                                    <label for="category">Kategori</label>
                                     <?= form_dropdown('category', get_dropdown_list_category(), $category, 'id="category" class="form-control custom-select d-block" title="Filter Kategori"'); ?>
                                 </div>
                             <?php endif; ?>
-                            <div class="col-12 col-lg-9 mb-3">
+                            <?php if ($level == 'editor' || $level == 'layouter') : ?>
+                                <div class="col-12 col-md-3 mb-3">
+                                    <label for="status">Status Pengerjaan</label>
+                                    <?= form_dropdown('status', $status_options, $status, 'id="status" class="form-control custom-select d-block" title="Filter Status Progress"'); ?>
+                                </div>
+                            <?php endif ?>
+                            <div class="col-12 <?= is_admin() ? 'col-md-9' : 'col-md-6'; ?> mb-3">
+                                <label for="status">Pencarian</label>
                                 <?= form_input('keyword', $keyword, 'placeholder="Cari berdasarkan Judul, Kategori, Tema, atau Penulis" class="form-control"'); ?>
                             </div>
                             <div class="col-12 col-lg-3">
+                                <label>&nbsp;</label>
                                 <div
                                     class="btn-group btn-block"
                                     role="group"
@@ -210,9 +196,9 @@ function expand($authors)
                                             scope="col"
                                             style="min-width:130px;"
                                         >Status</th>
-                                        <?php if ($level == 'reviewer' or $level == 'editor' or $level == 'layouter') : ?>
+                                        <!-- <?php if ($level == 'reviewer' or $level == 'editor' or $level == 'layouter') : ?>
                                             <th scope="col">Sisa Waktu</th>
-                                        <?php endif; ?>
+                                        <?php endif; ?> -->
                                         <?php if (is_admin()) : ?>
                                             <th style="min-width:170px;"> &nbsp; </th>
                                         <?php endif; ?>
@@ -278,7 +264,7 @@ function expand($authors)
                                                 </td>
                                             <?php elseif ($level == 'editor') : ?>
                                                 <td class="align-middle">
-                                                    <?php if (!format_datetime($draft->edit_start_date)) : ?>
+                                                    <!-- <?php if (!format_datetime($draft->edit_start_date)) : ?>
                                                         <span>Belum mulai</span>
                                                     <?php elseif (format_datetime($draft->edit_end_date)) : ?>
                                                         <span>Selesai</span>
@@ -290,11 +276,11 @@ function expand($authors)
                                                         <?php else : ?>
                                                             <?= $draft->sisa_waktu . ' hari'; ?>
                                                         <?php endif; ?>
-                                                    <?php endif; ?>
+                                                    <?php endif; ?> -->
                                                 </td>
                                             <?php elseif ($level == 'layouter') : ?>
                                                 <td class="align-middle">
-                                                    <?php if (!format_datetime($draft->layout_start_date)) : ?>
+                                                    <!-- <?php if (!format_datetime($draft->layout_start_date)) : ?>
                                                         <span>Belum mulai</span>
                                                     <?php elseif (format_datetime($draft->layout_end_date)) : ?>
                                                         <span>Selesai</span>
@@ -306,7 +292,7 @@ function expand($authors)
                                                         <?php else : ?>
                                                             <?= $draft->sisa_waktu . ' hari'; ?>
                                                         <?php endif; ?>
-                                                    <?php endif; ?>
+                                                    <?php endif; ?> -->
                                                 </td>
                                             <?php endif; ?>
 
@@ -346,12 +332,12 @@ function expand($authors)
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
                                                                         <h5 class="modal-title">
-                                                <i class="fa fa-exclamation-triangle text-red mr-1"></i> Konfirmasi
-                                                Hapus</h5>
+                                                                            <i class="fa fa-exclamation-triangle text-red mr-1"></i> Konfirmasi
+                                                                            Hapus</h5>
                                                                     </div>
                                                                     <div class="modal-body">
                                                                         <p>Apakah anda yakin akan menghapus draft <span class="font-weight-bold">
-                                                   <?= $draft->draft_title; ?></span>?</p>
+                                                                                <?= $draft->draft_title; ?></span>?</p>
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <button
@@ -391,17 +377,25 @@ function expand($authors)
 <script>
 $(document).ready(function() {
     doublescroll();
-    $("#category").select2({
-        placeholder: '- Filter Kategori -',
-        allowClear: true
+    $("#category,#progress,#reprint,#status").select2({
+        placeholder: '- Semua -',
+        allowClear: true,
+        dropdownParent: $('#app-main')
     });
     // $("#progress").select2({
-    //    placeholder: '-- Filter Progress --',
-    //    allowClear: true
+    //     placeholder: '-- Filter Progress --',
+    //     allowClear: true,
+    //     dropdownParent: $('#app-main')
     // });
     // $("#reprint").select2({
-    //    placeholder: '-- Filter Naskah --',
-    //    allowClear: true
+    //     placeholder: '-- Filter Naskah --',
+    //     allowClear: true,
+    //     dropdownParent: $('#app-main')
+    // });
+    // $("#status").select2({
+    //     placeholder: '-- Filter Naskah --',
+    //     allowClear: true,
+    //     dropdownParent: $('#app-main')
     // });
 });
 </script>

@@ -78,7 +78,7 @@
                                         <label
                                             for="layouter-cover-notes"
                                             class="font-weight-bold"
-                                        >Catatan Layouter untuk Admin</label>
+                                        >Catatan Layouter</label>
                                         <?php
                                         if (!is_admin() && $level != 'layouter') {
                                             echo "<div class='font-italic' id='layouter-cover-notes'>" . $input->layout_notes . "</div>";
@@ -93,9 +93,9 @@
                                         }
                                         ?>
                                     </div>
+                                    <hr class="my-3">
                                 <?php endif; ?>
 
-                                <hr class="my-3">
 
                                 <!-- CATATAN AUTHOR UNTUK STAFF/ADMIN -->
                                 <div class="form-group">

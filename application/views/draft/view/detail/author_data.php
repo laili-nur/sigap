@@ -34,7 +34,7 @@
                             <th scope="col">NIP</th>
                             <th scope="col">Unit Kerja</th>
                             <th scope="col">Institusi</th>
-                            <th scope="col">Status</th>
+                            <th scope="col">Hak akses</th>
                             <?php if ($level == 'superadmin' || $level == 'admin_penerbitan') : ?>
                                 <th style="width:100px; min-width:100px;"> &nbsp; </th>
                             <?php endif; ?>
@@ -64,7 +64,7 @@
                                     <?= $author->institute_name; ?>
                                 </td>
                                 <td class="align-middle">
-                                    <?= $author->draft_author_status; ?>
+                                    <?= $author->draft_author_status == 1 ? 'Melakukan update progress' : 'Melihat progress'; ?>
                                 </td>
                                 <?php if ($level == 'superadmin' || $level == 'admin_penerbitan') : ?>
                                     <td class="align-middle text-right">

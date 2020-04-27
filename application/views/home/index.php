@@ -2,7 +2,6 @@
 $username = $this->session->userdata('username');
 $is_login = $this->session->userdata('is_login');
 $level = $this->session->userdata('level');
-$role  = $this->session->userdata('role_id');
 $semua = $this->session->userdata();
 ?>
 
@@ -11,24 +10,24 @@ $semua = $this->session->userdata();
     <p class="lead">
         <span class="font-weight-bold">Halo, <?= $username; ?></span>
         <span class="d-block text-muted">
-         <?= (!empty($tulisan_dashboard->dashboard_head)) ? $tulisan_dashboard->dashboard_head : ''; ?>
-      </span>
+            <?= (!empty($dashboard_text->dashboard_head)) ? $dashboard_text->dashboard_head : ''; ?>
+        </span>
         <?php
          if ($level == 'author') {
-            if (!empty($tulisan_dashboard->dashboard_content_author) or $tulisan_dashboard->dashboard_content_author == '<p><br></p>') {
-               echo '<div class="alert alert-info">' . $tulisan_dashboard->dashboard_content_author . '</div>';
+            if (!empty($dashboard_text->dashboard_content_author) or $dashboard_text->dashboard_content_author == '<p><br></p>') {
+               echo '<div class="alert alert-info">' . $dashboard_text->dashboard_content_author . '</div>';
             }
          } elseif ($level == 'reviewer') {
-            if (!empty($tulisan_dashboard->dashboard_content_reviewer) or $tulisan_dashboard->dashboard_content_reviewer == '<p><br></p>') {
-               echo '<div class="alert alert-info">' . $tulisan_dashboard->dashboard_content_reviewer . '</div>';
+            if (!empty($dashboard_text->dashboard_content_reviewer) or $dashboard_text->dashboard_content_reviewer == '<p><br></p>') {
+               echo '<div class="alert alert-info">' . $dashboard_text->dashboard_content_reviewer . '</div>';
             }
          } elseif ($level == 'layouter') {
-            if (!empty($tulisan_dashboard->dashboard_content_layouter) or $tulisan_dashboard->dashboard_content_layouter == '<p><br></p>') {
-               echo '<div class="alert alert-info">' . $tulisan_dashboard->dashboard_content_layouter . '</div>';
+            if (!empty($dashboard_text->dashboard_content_layouter) or $dashboard_text->dashboard_content_layouter == '<p><br></p>') {
+               echo '<div class="alert alert-info">' . $dashboard_text->dashboard_content_layouter . '</div>';
             }
          } elseif ($level == 'editor') {
-            if (!empty($tulisan_dashboard->dashboard_content_editor) or $tulisan_dashboard->dashboard_content_editor == '<p><br></p>') {
-               echo '<div class="alert alert-info">' . $tulisan_dashboard->dashboard_content_editor . '</div>';
+            if (!empty($dashboard_text->dashboard_content_editor) or $dashboard_text->dashboard_content_editor == '<p><br></p>') {
+               echo '<div class="alert alert-info">' . $dashboard_text->dashboard_content_editor . '</div>';
             }
          }
          ?>
@@ -49,11 +48,8 @@ $semua = $this->session->userdata();
          $this->load->view('home/home_author');
       }
 
-      if ($level == 'editor') {
-         $this->load->view('home/home_editor');
+      if ($level == 'editor' || $level == 'layouter') {
+         $this->load->view('home/home_staff');
       }
-
-      if ($level == 'layouter') {
-         $this->load->view('home/home_layouter');
-      } ?>
+      ?>
 </div>
