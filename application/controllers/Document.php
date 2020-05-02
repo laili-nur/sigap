@@ -1,7 +1,6 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 class Document extends Admin_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -10,28 +9,18 @@ class Document extends Admin_Controller
 
     public function index($page = null)
     {
-        $documents  = $this->document->paginate($page)->order_by('document_year', 'desc')->order_by('document_name')->get_all();
-        $total      = $this->document->count();
+        $filters = [
+            'year'    => $this->input->get('year', true),
+            'keyword' => $this->input->get('keyword', true),
+        ];
+
+        $get_data = $this->document->filter_document($filters, $page);
+
+        $documents  = $get_data['documents'];
+        $total      = $get_data['total'];
         $pages      = $this->pages;
         $main_view  = 'document/index_document';
         $pagination = $this->document->make_pagination(site_url('document'), 2, $total);
-        $this->load->view('template', compact('pagination', 'pages', 'main_view', 'documents', 'total'));
-    }
-
-    public function filter($page = null)
-    {
-        $filter = $this->input->get('filter', true);
-        if ($filter != '') {
-            $documents = $this->document->where('document_year', $filter)->paginate($page)->order_by('document_year', 'desc')->order_by('document_name')->get_all();
-            $total     = $this->document->where('document_year', $filter)->count();
-        } else {
-            $documents = $this->document->paginate($page)->order_by('document_year', 'desc')->order_by('document_name')->get_all();
-            $total     = $this->document->count();
-        }
-
-        $pages      = $this->pages;
-        $main_view  = 'document/index_document';
-        $pagination = $this->document->make_pagination(site_url('document/filter'), 3, $total);
         $this->load->view('template', compact('pagination', 'pages', 'main_view', 'documents', 'total'));
     }
 
@@ -46,11 +35,10 @@ class Document extends Admin_Controller
         if ($this->document->validate()) {
             if (!empty($_FILES) && $_FILES['document_file']['size'] > 0) {
                 $getextension     = explode(".", $_FILES['document_file']['name']);
-                $documentFileName = str_replace(" ", "_", $input->document_name . '_' . date('YmdHis') . "." . $getextension[1]); // document file name
-                $upload           = $this->document->uploadDocumentfile('document_file', $documentFileName);
+                $document_file_name = str_replace(" ", "_", $input->document_name . '_' . date('YmdHis') . "." . $getextension[1]);  // document file name
+                $upload           = $this->document->upload_document_file('document_file', $document_file_name);
                 if ($upload) {
-                    $input->document_file = "$documentFileName"; // Data for column "document".
-
+                    $input->document_file = $document_file_name;  // Data for column "document".
                 }
             }
         }
@@ -63,19 +51,19 @@ class Document extends Admin_Controller
         }
 
         if ($this->document->insert($input)) {
-            $this->session->set_flashdata('success', 'Data saved');
+            $this->session->set_flashdata('success', $this->lang->line('toast_add_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to save');
+            $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
         }
-        redirect('document');
+        redirect($this->pages);
     }
 
-    public function edit($id = null)
+    public function edit($doc_id = null)
     {
-        $document = $this->document->where('document_id', $id)->get();
+        $document = $this->document->where('document_id', $doc_id)->get();
         if (!$document) {
-            $this->session->set_flashdata('warning', 'document data were not available');
-            redirect('document');
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
+            redirect($this->pages);
         }
         if (!$_POST) {
             $input = (object) $document;
@@ -86,13 +74,13 @@ class Document extends Admin_Controller
         if ($this->document->validate()) {
             if (!empty($_FILES) && $_FILES['document_file']['size'] > 0) {
                 $getextension     = explode(".", $_FILES['document_file']['name']);
-                $documentFileName = str_replace(" ", "_", $input->document_name . '_' . date('YmdHis') . "." . $getextension[1]); // document file name
-                $upload           = $this->document->uploadDocumentfile('document_file', $documentFileName);
+                $document_file_name = str_replace(" ", "_", $input->document_name . '_' . date('YmdHis') . "." . $getextension[1]);  // document file name
+                $upload           = $this->document->upload_document_file('document_file', $document_file_name);
                 if ($upload) {
-                    $input->document_file = "$documentFileName"; // Data for column "document".
+                    $input->document_file = $document_file_name;  // Data for column "document".
                     // Delete old draft file
                     if ($document->document_file) {
-                        $this->document->deleteDocumentfile($document->document_file);
+                        $this->document->delete_document_file($document->document_file);
                     }
                 }
             }
@@ -101,7 +89,7 @@ class Document extends Admin_Controller
         if (!$this->document->validate()) {
             $pages       = $this->pages;
             $main_view   = 'document/form_document';
-            $form_action = "document/edit/$id";
+            $form_action = "document/edit/$doc_id";
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
@@ -110,49 +98,29 @@ class Document extends Admin_Controller
             $input->document_year = date('Y');
         }
 
-        if ($this->document->where('document_id', $id)->update($input)) {
-            $this->session->set_flashdata('success', 'Data saved');
+        if ($this->document->where('document_id', $doc_id)->update($input)) {
+            $this->session->set_flashdata('success', $this->lang->line('toast_edit_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to save');
+            $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
         }
-        redirect('document');
+
+        redirect($this->pages);
     }
 
-    public function delete($id = null)
+    public function delete($doc_id = null)
     {
-        $document = $this->document->where('document_id', $id)->get();
+        $document = $this->document->where('document_id', $doc_id)->get();
         if (!$document) {
-            $this->session->set_flashdata('warning', 'document data were not available');
-            redirect('document');
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
+            redirect($this->pages);
         }
-        if ($this->document->where('document_id', $id)->delete()) {
-            $this->document->deleteDocumentfile($document->document_file);
-            $this->session->set_flashdata('success', 'Data deleted');
+        if ($this->document->where('document_id', $doc_id)->delete()) {
+            $this->document->delete_document_file($document->document_file);
+            $this->session->set_flashdata('success', $this->lang->line('toast_delete_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to delete');
+            $this->session->set_flashdata('error', $this->lang->line('toast_delete_fail'));
         }
-        redirect('document');
-    }
 
-    public function search($page = null)
-    {
-        $keywords   = $this->input->get('keywords', true);
-        $documents  = $this->document->like('document_name', $keywords)->or_like('document_year', $keywords)->paginate($page)->get_all();
-        $tot        = $this->document->like('document_name', $keywords)->or_like('document_year', $keywords)->get_all();
-        $total      = count($tot);
-        $pagination = $this->document->make_pagination(site_url('document/search/'), 3, $total);
-        if (!$documents) {
-            $this->session->set_flashdata('warning', 'Data were not found');
-        }
-        $pages     = $this->pages;
-        $main_view = 'document/index_document';
-        $this->load->view('template', compact('pages', 'main_view', 'documents', 'pagination', 'total'));
+        redirect($this->pages);
     }
-
-    public function download($path, $file_name)
-    {
-        $this->load->helper('download');
-        force_download('./' . $path . '/' . $file_name, null);
-    }
-
 }

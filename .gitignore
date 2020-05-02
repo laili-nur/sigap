@@ -22,6 +22,12 @@ hakcipta/*
 !hakcipta/.htaccess
 !hakcipta/index.html
 
+# document file
+documentfile/*
+!documentfile/.gitkeep
+!documentfile/.htaccess
+!documentfile/index.html
+
 .env
 .env.development
 .env.production

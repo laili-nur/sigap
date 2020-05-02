@@ -3,6 +3,7 @@
 class Document_model extends MY_Model
 {
     protected $per_page = 10;
+
     public function get_validation_rules()
     {
         $validation_rules = [
@@ -43,12 +44,37 @@ class Document_model extends MY_Model
         ];
     }
 
-    public function uploadDocumentfile($fieldname, $documentFileName)
+    public function filter_document($filters, $page)
+    {
+        $documents = $this->select('*')
+            ->like('document_name', $filters['keyword'])
+            ->or_like('document_notes', $filters['keyword'])
+            ->where('document_year', $filters['year'])
+            ->order_by('document_year', 'desc')
+            ->order_by('document_name')
+            ->paginate($page)
+            ->get_all();
+
+        $total = $this->select('*')
+            ->like('document_name', $filters['keyword'])
+            ->or_like('document_notes', $filters['keyword'])
+            ->where('document_year', $filters['year'])
+            ->order_by('document_year', 'desc')
+            ->order_by('document_name')
+            ->count();
+
+        return [
+            'documents' => $documents,
+            'total'  => $total,
+        ];
+    }
+
+    public function upload_document_file($fieldname, $documentFileName)
     {
         $config = [
             'upload_path'      => './documentfile/',
             'file_name'        => $documentFileName,
-            'allowed_types'    => 'txt|docx|doc|pdf|jpeg|jpg|png|xls|xlsx|zip|rar',
+            'allowed_types'    => get_allowed_file_types('document_file')['types'],
             'max_size'         => 51200, // 50MB
             'overwrite'        => true,
             'file_ext_tolower' => true,
@@ -64,11 +90,11 @@ class Document_model extends MY_Model
         }
     }
 
-    public function deleteDocumentfile($documentFile)
+    public function delete_document_file($document_file)
     {
-        if ($documentFile != "") {
-            if (file_exists("./documentfile/$documentFile")) {
-                unlink("./documentfile/$documentFile");
+        if ($document_file != "") {
+            if (file_exists("./documentfile/$document_file")) {
+                unlink("./documentfile/$document_file");
             }
         }
     }

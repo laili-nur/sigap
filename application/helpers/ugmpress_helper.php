@@ -465,6 +465,10 @@ function get_allowed_file_types($field_name = null)
         $types = 'docx|doc|pdf|zip|rar|jpg|jpeg|png';
     }
 
+    if ($field_name == 'document_file') {
+        $types = 'txt|docx|doc|pdf|jpeg|jpg|png|xls|xlsx|zip|rar';
+    }
+
     return [
         'types'   => $types,
         'to_text' => str_replace("|", ", ", $types),
