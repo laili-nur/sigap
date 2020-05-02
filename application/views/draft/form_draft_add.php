@@ -30,7 +30,7 @@
                             <?php $atribut = (!empty($this->uri->segment(3)) and $this->uri->segment(2) != 'cetakUlang') ? 'disabled' : ''; ?>
                             <?= form_dropdown('category_id', get_dropdown_list_category(false), $input->category_id, 'id="category" class="form-control custom-select d-block ' . $atribut . '" ' . $atribut . ''); ?>
                             <small class="form-text text-muted">Kategori yang tampil adalah kategori yang statusnya
-                        aktif</small>
+                                aktif</small>
                             <?= form_error('category_id'); ?>
                         </div>
                         <?= (!empty($this->uri->segment(3)) && isset($input->category_id)) ? form_hidden('category_id', $input->category_id) : ''; ?>
@@ -51,27 +51,27 @@
                             <?= form_input('draft_title', $input->draft_title, 'class="form-control customer" id="draft_title"'); ?>
                             <?= form_error('draft_title'); ?>
                         </div>
-                        <?php if (check_level() == 'author') : ?>
+                        <!-- <?php if (check_level() == 'author') : ?>
                             <div class="form-group d-none">
                                 <label for="draft_title">
                                     <?= $this->lang->line('form_author_name'); ?>
-                                    <abbr title="Required">*</abbr>
                                 </label>
                                 <?= form_dropdown('author_id[]', get_dropdown_list('author', ['author_id', 'author_name']), check_role(), 'id="author" class="form-control custom-select" multiple="multiple"'); ?>
                                 <?= form_error('author_id[]'); ?>
                             </div>
-                        <?php else : ?>
-                            <div class="form-group">
-                                <label for="author_id">Pilih Penulis
-                                    <abbr title="Required">*</abbr>
-                                </label>
-                                <?= form_dropdown('author_id[]', get_dropdown_list('author', ['author_id', 'author_name']), $input->author_id, 'id="author" class="form-control custom-select d-block" multiple="multiple"'); ?>
-                                <?= form_error('author_id[]'); ?>
-                                <div class="p-0 m-0">
-                                    <small class="form-text text-muted">Jika Penulis belum ada di list, tambahkan penulis di menu <a target="_blank" href="<?= base_url('author/add'); ?>">PENULIS</a>
-                           </small>
-                                </div>
-                                <!-- <div class="p-0 m-0">
+                        <?php else : ?> -->
+                        <div class="form-group">
+                            <label for="author_id"><?= $this->lang->line('form_author_name'); ?></label>
+                            <?= form_dropdown('author_id[]', get_dropdown_list('author', ['author_id', 'author_name']), $input->author_id, 'id="author" class="form-control custom-select d-block" multiple="multiple"'); ?>
+                            <?= form_error('author_id[]'); ?>
+                            <!-- <div class="p-0 m-0">
+                                <small class="form-text text-muted">Jika Penulis belum ada di list, tambahkan penulis di menu <a
+                                        target="_blank"
+                                        href="<?= base_url('author/add'); ?>"
+                                    >PENULIS</a>
+                                </small>
+                            </div> -->
+                            <!-- <div class="p-0 m-0">
                         <button
                            id="callback"
                            type="button"
@@ -81,8 +81,8 @@
                               id="ajax-reload-author"
                            ></i> Reload Penulis</button>
                      </div> -->
-                            </div>
-                        <?php endif; ?>
+                        </div>
+                        <!-- <?php endif; ?> -->
                         <!-- <div class="form-group">
                      <label for="draft_pages">Jumlah Halaman</label>
                      <?= form_input('draft_pages', $input->draft_pages, 'class="form-control" id="draft_pages"'); ?>
@@ -98,7 +98,7 @@
                                 >Pilih file</label>
                             </div>
                             <small class="form-text text-muted">Menerima tipe file :
-                        <?= get_allowed_file_types('draft_file')['to_text']; ?>. Maksimal 50MB</small>
+                                <?= get_allowed_file_types('draft_file')['to_text']; ?>. Maksimal 50MB</small>
                             <small class="text-danger"><?= $this->session->flashdata('draft_file_no_data'); ?></small>
                             <?= file_form_error('draft_file', '<p class="small text-danger">', '</p>'); ?>
                         </div>
@@ -135,12 +135,11 @@ $(document).ready(function() {
                     crequired: true,
                     cminlength: 5,
                 },
-                "author_id[]": {
-                    crequired: true,
-                },
+                // "author_id[]": {
+                //     crequired: true,
+                // },
                 draft_file: {
                     extension: "<?= get_allowed_file_types('draft_file')['types']; ?>",
-                    filesize50: 52428200
                 },
                 draft_file_link: "curl"
             },

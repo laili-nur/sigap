@@ -671,52 +671,34 @@ class Draft extends Operator_Controller
 
     public function edit($id = null)
     {
-        //khusus admin
-        $ceklevel = $this->session->userdata('level');
-        if ($ceklevel != 'superadmin' and $ceklevel != 'admin_penerbitan') {
-            redirect('draft');
+        if (!is_admin()) {
+            redirect($this->pages);
         }
+
         $draft = $this->draft->where('draft_id', $id)->get();
         if (!$draft) {
-            $this->session->set_flashdata('warning', 'Draft data were not available');
-            redirect('draft');
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
+            redirect($this->pages);
         }
+
         if (!$_POST) {
             $input = (object) $draft;
         } else {
             $input = (object) $this->input->post(null, false);
-            //$input->draft_file = $draft->draft_file; // Set draft file for preview.
         }
+
         if ($this->draft->validate()) {
-            if (!empty($_FILES) && $_FILES['draft_file']['size'] > 0) {
-                $getextension  = explode(".", $_FILES['draft_file']['name']);
-                $draftFileName = str_replace(" ", "_", $input->draft_title . '_' . date('YmdHis') . "." . $getextension[1]); // draft file name
-                $upload        = $this->draft->upload_draft_file('draft_file', $draftFileName);
+            if (!empty($_FILES) && $df = $_FILES['draft_file']['name']) {
+                $draft_file_name = $this->_generate_draft_file_name($df, $input->draft_title);
+                $upload          = $this->draft->upload_draft_file('draft_file', $draft_file_name);
                 if ($upload) {
-                    $input->draft_file = "$draftFileName";
-                    // Delete old draft file
+                    $input->draft_file = $draft_file_name;
                     if ($draft->draft_file) {
                         $this->draft->delete_draft_file($draft->draft_file);
                     }
                 }
             }
         }
-
-        // if ($this->draft->validate()) {
-        //     if (!empty($_FILES) && $_FILES['cover_file']['size'] > 0) {
-        //         // Upload new draft (if any)
-        //         $getextension  = explode(".", $_FILES['cover_file']['name']);
-        //         $coverFileName = str_replace(" ", "_", $input->draft_title . '_' . date('YmdHis') . "." . $getextension[1]); // cover file name
-        //         $upload        = $this->draft->uploadCoverfile('cover_file', $coverFileName);
-        //         if ($upload) {
-        //             $input->cover_file = "$coverFileName";
-        //             // Delete old cover file
-        //             if ($draft->cover_file) {
-        //                 $this->draft->deleteCoverfile($draft->cover_file);
-        //             }
-        //         }
-        //     }
-        // }
 
         // If something wrong
         if (!$this->draft->validate() || $this->form_validation->error_array()) {
@@ -727,51 +709,53 @@ class Draft extends Operator_Controller
             return;
         }
         if ($this->draft->where('draft_id', $id)->update($input)) {
-            $this->session->set_flashdata('success', 'Data updated');
+            $this->session->set_flashdata('success', $this->lang->line('toast_edit_success'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to update');
+            $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
         }
-        redirect('draft');
+
+        redirect($this->pages);
     }
 
     public function delete($id = null)
     {
-        //khusus admin
-        $ceklevel = $this->session->userdata('level');
-        if ($ceklevel != 'superadmin' and $ceklevel != 'admin_penerbitan') {
-            redirect('draft');
+        if (!is_admin()) {
+            redirect($this->pages);
         }
+
         $draft = $this->draft->where('draft_id', $id)->get();
         if (!$draft) {
-            $this->session->set_flashdata('warning', 'Draft data were not available');
-            redirect('draft');
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
+            redirect($this->pages);
         }
-        $is_success = true;
-        $this->draft->where('draft_id', $id)->delete('draft_author');
+
+        // memastikan konsistensi data
+        $this->db->trans_begin();
+
+        $this->load->model('Draft_author_model', 'draft_author');
+        $this->draft_author->where('draft_id', $id)->delete();
         $affected_rows = $this->db->affected_rows();
         if ($affected_rows > 0) {
             if ($this->draft->where('draft_id', $id)->delete()) {
-                // Delete cover.
                 $this->draft->delete_draft_file($draft->draft_file);
                 $this->draft->delete_draft_file($draft->review1_file);
                 $this->draft->delete_draft_file($draft->review2_file);
                 $this->draft->delete_draft_file($draft->edit_file);
                 $this->draft->delete_draft_file($draft->layout_file);
                 $this->draft->delete_draft_file($draft->cover_file);
-                // $this->draft->deleteCoverfile($draft->cover_file);
                 $this->draft->delete_draft_file($draft->proofread_file);
-            } else {
-                $is_success = false;
             }
-        } else {
-            $is_success = false;
         }
-        if ($is_success) {
-            $this->session->set_flashdata('success', 'Data deleted');
+
+        if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
+            $this->session->set_flashdata('error', $this->lang->line('toast_delete_fail'));
         } else {
-            $this->session->set_flashdata('error', 'Data failed to delete');
+            $this->db->trans_commit();
+            $this->session->set_flashdata('success', $this->lang->line('toast_delete_success'));
         }
-        redirect('draft');
+
+        redirect($this->pages);
     }
 
     public function finish_draft($draft_id)

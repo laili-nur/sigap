@@ -26,7 +26,7 @@ class Draft_model extends MY_Model
             [
                 'field' => 'author_id[]',
                 'label' => $this->lang->line('form_author_name'),
-                'rules' => 'trim|required',
+                'rules' => 'trim',
             ],
             [
                 'field' => 'draft_file_link',

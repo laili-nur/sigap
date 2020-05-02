@@ -86,6 +86,7 @@ $(document).ready(function() {
             rules: {
                 document_name: "crequired",
                 document_file: {
+                    extension: "<?= get_allowed_file_types('document_file')['types']; ?>",
                     require_from_group: [1, ".document"],
                 },
                 document_file_link: {
