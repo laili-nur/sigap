@@ -5,6 +5,9 @@ class Author extends Admin_Controller
     {
         parent::__construct();
         $this->pages = 'author';
+
+        // load model
+        $this->load->model('author_model', 'author');
     }
 
     public function index($page = null)

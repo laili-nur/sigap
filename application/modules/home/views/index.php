@@ -6,7 +6,6 @@ $semua = $this->session->userdata();
 ?>
 
 <header class="page-title-bar">
-    <h1 class="page-title"> Dashboard </h1>
     <p class="lead">
         <span class="font-weight-bold">Halo, <?= $username; ?></span>
         <span class="d-block text-muted">

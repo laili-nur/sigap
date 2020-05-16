@@ -5,6 +5,9 @@ class Reviewer extends Admin_Controller
     {
         parent::__construct();
         $this->pages = 'reviewer';
+
+        // load model
+        $this->load->model('reviewer_model', 'reviewer');
     }
 
     public function index($page = null)

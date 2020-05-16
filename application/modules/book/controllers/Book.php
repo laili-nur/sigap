@@ -7,12 +7,15 @@ class Book extends Admin_Controller
         parent::__construct();
         $this->pages = 'book';
 
-        $this->load->model('author_model', 'author');
+        $this->load->model('author/author_model', 'author');
 
 
         // if ($ceklevel == 'author' || $ceklevel == 'reviewer' || $ceklevel == 'editor' || $ceklevel == 'layouter') {
         //     redirect('home');
         // }
+
+        // load model
+        $this->load->model('book_model', 'book');
     }
 
     public function index($page = null)

@@ -10,12 +10,13 @@ class Performance extends Admin_Controller
         $this->pages = 'performance';
 
         // $performance_editor = $this->performance->select(['draft.draft_id','draft_title','username','category_name','edit_start_date','edit_deadline','edit_end_date','is_edit','performance_status'])->join_table('category','draft','category')->join_table('responsibility','draft','draft')->join_table('user','responsibility','user')->where('level', 'editor')->where('responsibility.user_id !=', null)->order_by('performance_status')->get_all('draft');
-
     }
 
     /* Fungsi untuk menampilkan halaman performa editor */
     public function index()
     {
+        echo 'under construction';
+        return;
         $xperformance_editor = $this->performance->join_table('draft', 'responsibility', 'draft')->join_table('user', 'responsibility', 'user')->order_by('responsibility.draft_id')->get_all('responsibility');
 
         foreach ($xperformance_editor as $key => $row) {

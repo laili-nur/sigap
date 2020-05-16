@@ -7,7 +7,7 @@ class Home_model extends MY_Model
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Draft_model', 'draft');
+        $this->load->model('draft/draft_model', 'draft');
     }
 
 

@@ -9,12 +9,16 @@ class Draft extends Operator_Controller
         parent::__construct();
         $this->pages = 'draft';
 
-        $this->load->model('worksheet_model', 'worksheet');
+        // load other models
+        $this->load->model('worksheet/worksheet_model', 'worksheet');
+        $this->load->model('author/author_model', 'author');
+        $this->load->model('reviewer/reviewer_model', 'reviewer');
         $this->load->model('draft_author_model', 'draft_author');
-        $this->load->model('author_model', 'author');
-        $this->load->model('reviewer_model', 'reviewer');
         $this->load->model('user_model', 'user');
         $this->load->model('revision_model', 'revision');
+
+        // load model
+        $this->load->model('draft_model', 'draft');
     }
 
     public function index($page = null)

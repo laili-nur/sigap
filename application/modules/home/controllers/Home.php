@@ -6,6 +6,9 @@ class Home extends Operator_Controller
     {
         parent::__construct();
         $this->pages = 'home';
+
+        // load model
+        $this->load->model('home_model', 'home');
     }
 
     public function index($page = null)

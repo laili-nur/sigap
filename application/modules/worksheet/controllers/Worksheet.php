@@ -10,7 +10,11 @@ class Worksheet extends Operator_Controller
         if ($this->level == 'author' || $this->level == 'reviewer') {
             redirect();
         }
+
+        // load model
+        $this->load->model('worksheet_model', 'worksheet');
     }
+
     public function index($page = null)
     {
         $filters = [

@@ -104,6 +104,7 @@
 <body>
     <div class="app">
         <?php $this->load->view('navbar'); ?>
+        <!-- sidebar consume data 'pages' dari controller -->
         <?php $this->load->view('sidebar'); ?>
         <main
             class="app-main"

@@ -15,6 +15,8 @@ class Reporting extends Admin_Controller
     /* Fungsi untuk menampilkan halaman summary */
     public function index()
     {
+        echo 'under construction';
+        return;
         $summaries = $this->reporting->fetch_data();
 
         $pages     = $this->pages;
@@ -411,7 +413,6 @@ class Reporting extends Admin_Controller
         }
         echo json_encode($tahun);
     }
-
 }
 
 /* End of file Reporting.php */
