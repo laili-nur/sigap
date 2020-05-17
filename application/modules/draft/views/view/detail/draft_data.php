@@ -130,9 +130,7 @@
                                 <?php endif ?>
                             </td>
                             <td>
-                                <div class="font-weight-bold">
-                                    <?= $input->draft_notes; ?>
-                                </div>
+                                <?= $input->draft_notes; ?>
                             </td>
                         </tr>
                     <?php endif; ?>
@@ -200,7 +198,7 @@
             <div class="modal-body">
                 <fieldset>
                     <div class="form-group">
-                        <?= form_textarea('draft_notes', $input->draft_notes, 'class="form-control summernote-basic" id="draft_notes"'); ?>
+                        <?= form_textarea('draft_notes', $input->draft_notes, 'class="form-control" id="draft_notes" data-toggle="summernote" data-height="200"'); ?>
                     </div>
                 </fieldset>
             </div>

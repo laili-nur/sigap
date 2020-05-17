@@ -57,7 +57,7 @@
     >
     <link
         rel="stylesheet"
-        href="<?= base_url('assets/vendor/summernote/summernote-bs4.css'); ?>"
+        href="<?= base_url('assets/vendor/summernote/summernote-bs4.min.css'); ?>"
     >
     <!-- END PLUGINS STYLES -->
 
@@ -142,7 +142,7 @@
     <script src="<?= base_url('assets/vendor/chart.js/Chart.min.js'); ?>"></script>
     <script src="<?= base_url('assets/vendor/DoubleScroll/jquery.doubleScroll.js'); ?>"></script>
     <script src="<?= base_url('assets/vendor/select2/js/select2.min.js'); ?>"></script>
-    <script src="<?= base_url('assets/vendor/summernote/summernote-bs4.js'); ?>"></script>
+    <script src="<?= base_url('assets/vendor/summernote/summernote-bs4.min.js'); ?>"></script>
     <script src="<?= base_url('assets/vendor/toastr/toastr.min.js'); ?>"></script>
     <!--
    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -156,8 +156,7 @@
     <script src="<?= base_url('assets/javascript/pages/select2-demo.js'); ?>"></script>
     <script src="<?= base_url('assets/javascript/pages/flatpickr-demo.js'); ?>"></script>
     <script src="<?= base_url('assets/javascript/pages/summernote-demo.js'); ?>"></script>
-    <!-- <script src="<?= base_url('assets/javascript/pages/easypiechart-demo.js'); ?>"></script> -->
-    <!-- <script src="<?= base_url('assets/javascript/pages/dashboard-demo.js'); ?>"></script>  -->
+
     <!-- END PAGE LEVEL JS -->
 </body>
 
