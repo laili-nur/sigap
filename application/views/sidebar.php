@@ -8,7 +8,7 @@ $user_id      = $session['user_id'];
 $menu_list = [
     [
         'name' => 'Beranda',
-        'url'  => '',
+        'url'  => 'home',
         'icon' => 'fa fa-home'
     ],
     [
@@ -26,15 +26,18 @@ $menu_list = [
         'level' => 'superadmin|admin_penerbitan'
     ],
     [
-        'title' => 'Produksi'
+        'title' => 'Produksi',
+        'level' => 'superadmin|admin_penerbitan'
     ],
     [
         'name' => 'Order Cetak',
         'url'  => 'printing',
-        'icon' => 'fa fa-print'
+        'icon' => 'fa fa-print',
+        'level' => 'superadmin|admin_penerbitan'
     ],
     [
-        'title' => 'Data'
+        'title' => 'Data',
+        'level' => 'superadmin|admin_penerbitan|editor|layouter'
     ],
     [
         'name'  => 'Lembar Kerja',
@@ -99,7 +102,8 @@ $menu_list = [
         'level' => 'superadmin|admin_penerbitan'
     ],
     [
-        'title' => 'Laporan'
+        'title' => 'Laporan',
+        'level' => 'superadmin|admin_penerbitan'
     ],
     [
         'name'  => 'Grafik',
@@ -114,10 +118,11 @@ $menu_list = [
         'level' => 'superadmin|admin_penerbitan'
     ],
     [
-        'title' => 'Pengaturan'
+        'title' => 'Sistem',
+        'level' => 'superadmin'
     ],
     [
-        'name'  => 'Sistem',
+        'name'  => 'Pengaturan',
         'url'   => 'setting',
         'icon'  => 'fa fa-cog',
         'level' => 'superadmin'
@@ -189,48 +194,54 @@ $menu_list = [
             >
                 <ul class="menu">
                     <?php foreach ($menu_list as $menu) : ?>
-                        <!-- title -->
-                        <?php if (isset($menu['title'])) {
-                            echo '<li class="menu-header">' . $menu['title'] . '</li>';
-                        } ?>
+                        <?php
+                        $level_allowed = isset($menu['level']) ? explode('|', $menu['level']) : [];
+                        $is_shown = !isset($menu['level']) || isset($menu['level']) && in_array($level, $level_allowed);
+                        ?>
+                        <?php if ($is_shown) : ?>
+                            <!-- title -->
+                            <?php if (isset($menu['title'])) {
+                                echo '<li class="menu-header">' . $menu['title'] . '</li>';
+                            } ?>
 
-                        <!-- single -->
-                        <?php if (isset($menu['name']) && !isset($menu['child'])) : ?>
-                            <li class="menu-item <?= ($pages == $menu['url']) ? 'has-active' : ''; ?>">
-                                <a
-                                    href="<?= base_url($menu['url']); ?>"
-                                    class="menu-link"
-                                >
-                                    <span class="menu-icon <?= $menu['icon'] ?>"></span>
-                                    <span class="menu-text"><?= $menu['name'] ?></span>
-                                </a>
-                            </li>
-                        <?php endif ?>
+                            <!-- single -->
+                            <?php if (isset($menu['name']) && !isset($menu['child'])) : ?>
+                                <li class="menu-item <?= ($pages == $menu['url']) ? 'has-active' : ''; ?>">
+                                    <a
+                                        href="<?= base_url($menu['url']); ?>"
+                                        class="menu-link"
+                                    >
+                                        <span class="menu-icon <?= $menu['icon'] ?>"></span>
+                                        <span class="menu-text"><?= $menu['name'] ?></span>
+                                    </a>
+                                </li>
+                            <?php endif ?>
 
-                        <!-- nested -->
-                        <?php if (isset($menu['name']) && isset($menu['child'])) : ?>
-                            <?php $child_pages = array_map(function ($ch) {
-                                return $ch['url'];
-                            }, $menu['child']) ?>
-                            <li class="menu-item has-child <?= in_array($pages, $child_pages) ? 'has-active' : ''; ?>">
-                                <a
-                                    href="#"
-                                    class="menu-link"
-                                >
-                                    <span class="menu-icon <?= $menu['icon'] ?>"></span>
-                                    <span class="menu-text"><?= $menu['name'] ?></span>
-                                </a>
-                                <ul class="menu">
-                                    <?php foreach ($menu['child'] as $child) : ?>
-                                        <li class="menu-item <?= ($pages == $child['url']) ? 'has-active' : ''; ?>">
-                                            <a
-                                                href="<?= base_url($child['url']); ?>"
-                                                class="menu-link"
-                                            ><?= $child['name'] ?></a>
-                                        </li>
-                                    <?php endforeach ?>
-                                </ul>
-                            </li>
+                            <!-- nested -->
+                            <?php if (isset($menu['name']) && isset($menu['child'])) : ?>
+                                <?php $child_pages = array_map(function ($child) {
+                                    return $child['url'];
+                                }, $menu['child']) ?>
+                                <li class="menu-item has-child <?= in_array($pages, $child_pages) ? 'has-active' : ''; ?>">
+                                    <a
+                                        href="#"
+                                        class="menu-link"
+                                    >
+                                        <span class="menu-icon <?= $menu['icon'] ?>"></span>
+                                        <span class="menu-text"><?= $menu['name'] ?></span>
+                                    </a>
+                                    <ul class="menu">
+                                        <?php foreach ($menu['child'] as $child) : ?>
+                                            <li class="menu-item <?= ($pages == $child['url']) ? 'has-active' : ''; ?>">
+                                                <a
+                                                    href="<?= base_url($child['url']); ?>"
+                                                    class="menu-link"
+                                                ><?= $child['name'] ?></a>
+                                            </li>
+                                        <?php endforeach ?>
+                                    </ul>
+                                </li>
+                            <?php endif ?>
                         <?php endif ?>
                     <?php endforeach ?>
                 </ul>

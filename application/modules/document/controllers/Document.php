@@ -5,6 +5,8 @@ class Document extends Admin_Controller
     {
         parent::__construct();
         $this->pages = 'document';
+
+        $this->load->model('document_model', 'document');
     }
 
     public function index($page = null)

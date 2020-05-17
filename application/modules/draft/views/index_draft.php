@@ -115,7 +115,7 @@ function expand($authors)
                                 <label for="per_page">Data per halaman</label>
                                 <?= form_dropdown('per_page', get_per_page_options(), $per_page, 'id="per_page" class="form-control custom-select d-block" title="List per page"'); ?>
                             </div>
-                            <div class="col-12 mb-3 <?= is_staff() ? 'col-md-4' : 'col-md-7'; ?>">
+                            <div class="col-12 mb-3 <?= is_staff() ? 'col-md-4' : 'col-md-10'; ?>">
                                 <label for="progress">Progress</label>
                                 <?= form_dropdown('progress', $progress_options, $progress, 'id="progress" class="form-control custom-select d-block" title="Filter Progress"'); ?>
                             </div>
@@ -135,7 +135,7 @@ function expand($authors)
                                     <?= form_dropdown('status', $status_options, $status, 'id="status" class="form-control custom-select d-block" title="Filter Status Progress"'); ?>
                                 </div>
                             <?php endif ?>
-                            <div class="col-12 <?= is_admin() ? 'col-md-9' : 'col-md-6'; ?> mb-3">
+                            <div class="col-12 <?= is_admin() ? 'col-md-9' : (is_staff() ? 'col-md-6' : 'col-md-9'); ?> mb-3">
                                 <label for="status">Pencarian</label>
                                 <?= form_input('keyword', $keyword, 'placeholder="Cari berdasarkan Judul, Kategori, Tema, atau Penulis" class="form-control"'); ?>
                             </div>

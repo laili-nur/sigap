@@ -6,6 +6,8 @@ class Setting extends Admin_Controller
     {
         parent::__construct();
         $this->pages = 'setting';
+
+        $this->load->model('setting_model', 'setting');
     }
 
     public function index()

@@ -5,6 +5,8 @@ class User extends Admin_Controller
     {
         parent::__construct();
         $this->pages = 'user';
+
+        $this->load->model('user_model', 'user');
     }
 
     public function index($page = null)

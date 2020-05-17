@@ -14,7 +14,7 @@ class Draft extends Operator_Controller
         $this->load->model('author/author_model', 'author');
         $this->load->model('reviewer/reviewer_model', 'reviewer');
         $this->load->model('draft_author_model', 'draft_author');
-        $this->load->model('user_model', 'user');
+        $this->load->model('user/user_model', 'user');
         $this->load->model('revision_model', 'revision');
 
         // load model
