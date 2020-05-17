@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CodeIgniter Migrate
  *
@@ -66,9 +67,9 @@ class Migrate extends MY_Controller
         ];*/
 
         $data['assets'] = [
-            'bootstrap_css' => base_url('assets/css/bootstrap.min.css'),
-            'bootstrap_js'  => base_url('assets/js/bootstrap.min.js'),
-            'jquery'        => base_url('assets/js/jquery-2.2.4.min.js'),
+            'bootstrap_css' => base_url('assets/migrate-module/css/bootstrap.min.css'),
+            'bootstrap_js'  => base_url('assets/migrate-module/js/bootstrap.min.js'),
+            'jquery'        => base_url('assets/migrate-module/js/jquery-2.2.4.min.js'),
         ];
 
         $dbconfig = $this->get_dbconfig();
@@ -149,8 +150,10 @@ class Migrate extends MY_Controller
     protected function get_dbconfig()
     {
         // Is the config file in the environment folder?
-        if (!file_exists($file_path = APPPATH . 'config/' . ENVIRONMENT . '/database.php')
-            && !file_exists($file_path = APPPATH . 'config/database.php')) {
+        if (
+            !file_exists($file_path = APPPATH . 'config/' . ENVIRONMENT . '/database.php')
+            && !file_exists($file_path = APPPATH . 'config/database.php')
+        ) {
             show_error('The configuration file database.php does not exist.');
         }
 

@@ -6,9 +6,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var Theme =
-/*#__PURE__*/
-function () {
+var Theme = /*#__PURE__*/function () {
   function Theme() {
     var _this = this;
 
@@ -40,15 +38,19 @@ function () {
         800: '#222230',
         900: '#191927'
       },
-      white: '#ffffff' // list of supported skin
+      white: '#ffffff'
+    }; // list of supported skin
 
-    };
     this.skins = ['default', 'dark']; // current skin
 
-    this.skin = localStorage.getItem('skin') || 'default'; // initialized
+    this.skin = localStorage.getItem('skin') || 'default'; // current aside menu mode
+
+    this.hasCompactMenu = JSON.parse(localStorage.getItem('hasCompactMenu')) || false; // get auto initialize variable
+
+    this.autoInit = localStorage.getItem('autoInit') || true; // initialized
 
     $(document).ready(function () {
-      _this.init();
+      if (_this.autoInit) _this.init();
     });
   }
 
@@ -63,14 +65,16 @@ function () {
 
       this.tooltips();
       this.popovers();
+      this.nestedDropdown();
       this.inputClearable();
       this.inputGroup();
+      this.inputNumber();
       this.fileInputBehavior();
       this.togglePasswordVisibility();
       this.indeterminateCheckboxes();
       this.formValidation();
       this.cardExpansion();
-      this.modalOverflow();
+      this.modalScrollable();
       this.autofocusInputBehaviour(); // handle theme skins (default, dark)
       // =============================================================
 
@@ -83,8 +87,9 @@ function () {
 
 
       this.asideBackdrop();
-      this.aside();
+      this.toggleAside();
       this.asideMenu();
+      this.handleAsideMenu();
       this.sidebar();
       this.pageExpander(); // handle theme components
       // =============================================================
@@ -107,6 +112,7 @@ function () {
       this.sortable();
       this.nestable();
       this.plyr();
+      this.bootstrapSelect();
       this.select2();
       this.atwho();
       this.tribute();
@@ -117,11 +123,15 @@ function () {
       this.summernote();
       this.quill();
       this.simplemde();
-      this.maskInput(); // handle events – how our components should react on events?
+      this.maskInput();
+      this.headroom();
+      this.zxcvbn();
+      this.aos(); // handle events – how our components should react on events?
       // =============================================================
 
       this.eventProps();
-      this.watchMQ(); // utilities
+      this.watchMQ();
+      this.watchIE(); // utilities
       // =============================================================
 
       this.browserFlagging();
@@ -154,7 +164,7 @@ function () {
     value: function placeholderShown() {
       $(document).on('focus blur keyup change', '.form-label-group > input', function () {
         this.classList[this.value ? 'remove' : 'add']('placeholder-shown');
-      }); // fire .placeholder-shown for IE
+      }); // toggle .placeholder-shown onload
 
       $('.form-label-group > input').trigger('change');
     }
@@ -217,6 +227,27 @@ function () {
       $('[data-toggle="popover"]').popover();
     }
     /**
+     * Init nested dropdown
+     */
+
+  }, {
+    key: "nestedDropdown",
+    value: function nestedDropdown() {
+      $('.dropdown-menu [data-toggle="dropdown"]').on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $trigger = $(this);
+        var $dropdown = $trigger.parent();
+        var $dropdownMenu = $trigger.next(); // close all dropdown menu
+
+        $dropdown.siblings().find('.dropdown-menu').removeClass('show');
+        $dropdownMenu.toggleClass('show');
+        $trigger.parents('.nav-item').on('hidden.bs.dropdown', function () {
+          return $dropdownMenu.removeClass('show');
+        });
+      });
+    }
+    /**
      * Hide/show clearable button due to input value
      */
 
@@ -261,6 +292,37 @@ function () {
         if (hasInputGroup) {
           $parent.toggleClass('focus', hasFocus);
         }
+      });
+    }
+    /**
+     * Toggle focus class in input-group when input is focused
+     */
+
+  }, {
+    key: "inputNumber",
+    value: function inputNumber() {
+      $('.custom-number').each(function () {
+        var spinner = $(this);
+        var input = spinner.children('.form-control[type="number"]');
+        var min = parseFloat(input.attr('min'));
+        var max = parseFloat(input.attr('max'));
+        var step = parseFloat(input.attr('step')) || 1;
+        var newVal = 0;
+        var controls = $('<div class="custom-number-controls"></div>');
+        var btnUp = $('<div class="custom-number-btn custom-number-up">+</div>');
+        var btnDown = $('<div class="custom-number-btn custom-number-down">-</div>');
+        controls.prepend(btnUp).append(btnDown);
+        spinner.append(controls);
+        btnUp.on('click', function () {
+          var oldValue = parseFloat(input.val()) || 0;
+          newVal = oldValue >= max ? oldValue : oldValue + step;
+          input.val(newVal).trigger('change');
+        });
+        btnDown.on('click', function () {
+          var oldValue = parseFloat(input.val()) || 0;
+          newVal = oldValue <= min ? oldValue : oldValue - step;
+          input.val(newVal).trigger('change');
+        });
       });
     }
     /**
@@ -369,16 +431,16 @@ function () {
       });
     }
     /**
-     * Toggle class overflow when the modal body scroll reach the top/bottom
+     * Toggle class scrollable when the modal body scroll reach the top/bottom
      */
 
   }, {
-    key: "modalOverflow",
-    value: function modalOverflow() {
+    key: "modalScrollable",
+    value: function modalScrollable() {
       $('.modal').on('shown.bs.modal', function () {
         $(this).addClass('has-shown').find('.modal-body').trigger('scroll');
       });
-      $('.modal-dialog-overflow .modal-body, .modal-drawer .modal-body').on('scroll', function () {
+      $('.modal-dialog-scrollable .modal-body, .modal-drawer .modal-body').on('scroll', function () {
         var $elem = $(this);
         var elem = $elem[0];
         var isTop = $elem.scrollTop() === 0;
@@ -546,8 +608,8 @@ function () {
      */
 
   }, {
-    key: "aside",
-    value: function aside() {
+    key: "toggleAside",
+    value: function toggleAside() {
       var _this4 = this;
 
       var $trigger = $('[data-toggle="aside"]');
@@ -556,6 +618,18 @@ function () {
         $trigger.toggleClass('active', !isShown);
         if (isShown) _this4.hideAside();else _this4.showAside();
       });
+    }
+    /**
+     * Get the appropriate StackedMenu options
+     */
+
+  }, {
+    key: "getMenuOptions",
+    value: function getMenuOptions() {
+      return {
+        compact: this.hasCompactMenu,
+        hoverable: this.hasCompactMenu
+      };
     }
     /**
      * Handle aside menu
@@ -567,9 +641,13 @@ function () {
       var ps;
 
       if (window.StackedMenu && this.isExists('#stacked-menu')) {
-        this.asideMenu = new StackedMenu(); // update perfect scrollbar
+        // init stackedMenu
+        this.stackedMenu = new StackedMenu(this.getMenuOptions());
+        $('.app').toggleClass('has-compact-menu', this.hasCompactMenu); // watch aside
 
-        $(this.asideMenu.selector).on('menu:open menu:close', function () {
+        this.watchAside(); // update perfect scrollbar
+
+        $(this.stackedMenu.selector).on('menu:open menu:close', function () {
           // wait until translation done
           setTimeout(function () {
             if (window.PerfectScrollbar) {
@@ -584,6 +662,103 @@ function () {
           });
         }
       }
+    }
+    /**
+     * Collapse aside menu to compact mode
+     */
+
+  }, {
+    key: "collapseAsideMenu",
+    value: function collapseAsideMenu() {
+      if (typeof this.stackedMenu !== 'undefined') {
+        this.stackedMenu.compact(true).hoverable(true); // update aside mode
+
+        this.hasCompactMenu = true; // as well as localStorage data
+
+        localStorage.setItem('hasCompactMenu', true); // update flag class
+
+        $('.app').addClass('has-compact-menu');
+      } // watch aside
+
+
+      this.watchAside();
+    }
+    /**
+     * Expand aside menu to normal mode
+     */
+
+  }, {
+    key: "expandAsideMenu",
+    value: function expandAsideMenu() {
+      if (typeof this.stackedMenu !== 'undefined') {
+        this.stackedMenu.compact(false).hoverable(false); // update aside mode
+
+        this.hasCompactMenu = false; // as well as localStorage data
+
+        localStorage.setItem('hasCompactMenu', false); // update flag class
+
+        $('.app').removeClass('has-compact-menu');
+      } // watch aside
+
+
+      this.watchAside();
+    }
+    /**
+     * Toggle aside menu mode
+     */
+
+  }, {
+    key: "toggleAsideMenu",
+    value: function toggleAsideMenu() {
+      if (this.hasCompactMenu == true) {
+        this.expandAsideMenu();
+      } else {
+        this.collapseAsideMenu();
+      }
+    }
+    /**
+     *  Watch aside on toggle screen
+     */
+
+  }, {
+    key: "watchAside",
+    value: function watchAside() {
+      var $appWrapper = $('.app');
+
+      if (typeof this.stackedMenu !== 'undefined') {
+        if (!this.isToggleScreenUp() || $appWrapper.hasClass('has-fullwidth')) {
+          this.stackedMenu.compact(false).hoverable(false);
+          $appWrapper.removeClass('has-compact-menu');
+        } else {
+          this.stackedMenu.compact(this.hasCompactMenu).hoverable(this.hasCompactMenu);
+          $appWrapper.toggleClass('has-compact-menu', this.hasCompactMenu);
+        }
+      }
+    }
+    /**
+     * handle aside compact
+     */
+
+  }, {
+    key: "handleAsideMenu",
+    value: function handleAsideMenu() {
+      var _this5 = this;
+
+      $('body').on('click', '[data-toggle="aside-collapse"]', function (e) {
+        e.preventDefault();
+
+        _this5.collapseAsideMenu();
+      }).on('click', '[data-toggle="aside-expand"]', function (e) {
+        e.preventDefault();
+
+        _this5.expandAsideMenu();
+      }).on('click', '[data-toggle="aside-menu"]', function (e) {
+        e.preventDefault();
+
+        _this5.toggleAsideMenu();
+      }); // remove any preparation classes here
+
+      $('html').removeClass('preparing-compact-menu');
     }
     /**
      * Showing sidebar
@@ -898,9 +1073,9 @@ function () {
               color: isDarkSkin ? this.hexToRgba(colors.white, .08) : this.hexToRgba(colors.black, .1),
               zeroLineColor: isDarkSkin ? this.hexToRgba(colors.white, .08) : this.hexToRgba(colors.black, .1)
             }
-          } // Merge settings to Chart JS default options
+          }
+        }; // Merge settings to Chart JS default options
 
-        };
         $.extend(true, Chart.defaults, settings);
       }
     }
@@ -1129,6 +1304,30 @@ function () {
       };
     }
     /**
+     * Handle bootstrap select initialization
+     * See https://developer.snapappointments.com/bootstrap-select
+     */
+
+  }, {
+    key: "bootstrapSelect",
+    value: function bootstrapSelect() {
+      if ($.fn.selectpicker) {
+        // use fontawesome as default icon
+        $.fn.selectpicker.Constructor.DEFAULTS.style = '';
+        $.fn.selectpicker.Constructor.DEFAULTS.styleBase = 'custom-select';
+        $.fn.selectpicker.Constructor.DEFAULTS.iconBase = 'mr-1 fa';
+        $.fn.selectpicker.Constructor.DEFAULTS.tickIcon = 'fa-check font-size-sm mt-2';
+        $('[data-toggle="selectpicker"]').each(function () {
+          var selector = this; // initialize
+
+          $(selector).selectpicker() // add dropdown menu arrow
+          .on('loaded.bs.select', function (e) {
+            $(e.target).nextAll('.dropdown-menu').prepend('<div class="dropdown-arrow" />');
+          });
+        });
+      }
+    }
+    /**
      * Handle select2 initialization
      * See https://select2.org/configuration/data-attributes
      * to use select2 with data-* attributes
@@ -1231,6 +1430,7 @@ function () {
           var options = $(selector).data();
           options.plugins = [];
           options.disable = options.disables || [];
+          options.defaultDate = options.defaultDates || null; // flatpickr plugins
 
           if (options.confirmdate) {
             options.plugins.push(new confirmDatePlugin({
@@ -1243,7 +1443,14 @@ function () {
           }
 
           if (options.monthselect) {
-            options.plugins.push(new monthSelect({}));
+            options.plugins.push(new monthSelectPlugin({
+              shorthand: true,
+              //defaults to false
+              dateFormat: 'm/y',
+              //defaults to 'F Y'
+              altFormat: 'F Y' //defaults to 'F Y'
+
+            }));
           }
 
           if (options.rangeplugin) {
@@ -1286,9 +1493,9 @@ function () {
             buttondown_class: 'btn btn-secondary',
             buttonup_class: 'btn btn-secondary',
             verticalupclass: '+',
-            verticaldownclass: '-' // Merge options
+            verticaldownclass: '-'
+          }; // Merge options
 
-          };
           $.extend(true, options, settings);
           $(selector).TouchSpin(options);
         });
@@ -1450,6 +1657,75 @@ function () {
           vanillaTextMask.maskInput(options);
         });
       }
+    }
+    /*
+     * Handle headroom.js
+     */
+
+  }, {
+    key: "headroom",
+    value: function headroom() {
+      if (window.Headroom) {
+        $('[data-toggle="headroom"]').each(function () {
+          var options = $(this).data();
+          var headroom = new Headroom(this, options); // initialise
+
+          headroom.init();
+        });
+      }
+    }
+    /*
+     * Handle zxcvbn (password strength meter)
+     */
+
+  }, {
+    key: "zxcvbn",
+    value: function (_zxcvbn) {
+      function zxcvbn() {
+        return _zxcvbn.apply(this, arguments);
+      }
+
+      zxcvbn.toString = function () {
+        return _zxcvbn.toString();
+      };
+
+      return zxcvbn;
+    }(function () {
+      if (window.zxcvbn) {
+        $('.form-strength-meter').each(function () {
+          var input = this;
+          var indicator = $(this).data('indicator');
+          var feedback = $(this).data('indicatorFeedback');
+          var strength = ['bg-red', 'bg-orange', 'bg-yellow', 'bg-teal', 'bg-indigo'];
+          $(input).on('keyup', function () {
+            var val = input.value;
+            var result = zxcvbn(val);
+            var indicatorWidth = "".concat((result.score + 1) / strength.length * 100, "%"); // Update the password strength meter
+
+            if (val !== '') {
+              $(indicator).removeClass("d-none ".concat(strength.join(' '))).addClass("".concat(strength[result.score])).css('width', indicatorWidth);
+              $(feedback).html("<strong>".concat(result.feedback.warning, "</strong> ").concat(result.feedback.suggestions));
+            } else {
+              $(indicator).addClass('d-none');
+              $(feedback).html('');
+            }
+          });
+        });
+      }
+    })
+    /*
+     * Handle AOS
+     */
+
+  }, {
+    key: "aos",
+    value: function aos() {
+      if (window.AOS) {
+        AOS.init({
+          duration: 1000,
+          once: true
+        });
+      }
     } // Events
     // =============================================================
 
@@ -1473,13 +1749,16 @@ function () {
   }, {
     key: "watchMQ",
     value: function watchMQ() {
-      var _this5 = this;
+      var _this6 = this;
 
       $(window).on('resize', function () {
         // force close aside on toggle screen up
-        if (_this5.isToggleScreenUp() && $('.app-aside').hasClass('has-open') && !$('.app').hasClass('has-fullwidth')) {
-          _this5.closeAside();
-        } // disable transition temporarily
+        if (_this6.isToggleScreenUp() && $('.app-aside').hasClass('has-open') && !$('.app').hasClass('has-fullwidth')) {
+          _this6.hideAside();
+        } // handle appropriate aside by screen sizes
+
+
+        _this6.watchAside(); // disable transition temporarily
 
 
         $('.app-aside, .page-sidebar').addClass('notransition');
@@ -1487,6 +1766,20 @@ function () {
           $('.app-aside, .page-sidebar').removeClass('notransition');
         }, 1);
       });
+    }
+    /**
+     * Handle IE 11 lack render
+     */
+
+  }, {
+    key: "watchIE",
+    value: function watchIE() {
+      if (this.isIE()) {
+        $('.metric').each(function () {
+          var height = $(this).height();
+          $(this).height("".concat(height, "px"));
+        });
+      }
     } // Utilities
     // =============================================================
 

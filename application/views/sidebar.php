@@ -182,7 +182,7 @@ $menu_list = [
                         class="dropdown-item"
                         href="<?= base_url('auth/logout'); ?>"
                     >
-                        <span class="dropdown-icon oi oi-account-logout"></span> Logout</a>
+                        <span class="dropdown-icon fa fa-sign-out-alt"></span> Logout</a>
                 </div>
             </div>
         </header>

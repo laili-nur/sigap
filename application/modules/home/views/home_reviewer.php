@@ -10,16 +10,16 @@
                         >
                             <div class="metric-badge">
                                 <span class="badge badge-lg badge-info">
-                              <span class="oi oi-media-record pulse mr-1"></span> TOTAL REVIEW
+                                    <span class="fa fa-compact-disc pulse mr-1"></span> TOTAL REVIEW
                                 </span>
                             </div>
                             <p class="metric-value h3">
                                 <sub>
-                              <i class="fa fa-tasks"></i>
-                           </sub>
+                                    <i class="fa fa-tasks"></i>
+                                </sub>
                                 <span class="value">
-                              <?= $count['count_total']; ?>
-                           </span>
+                                    <?= $count['count_total']; ?>
+                                </span>
                             </p>
                         </a>
                     </div>
@@ -30,16 +30,16 @@
                         >
                             <div class="metric-badge">
                                 <span class="badge badge-lg badge-success">
-                              <span class="oi oi-media-record pulse mr-1"></span> SUDAH DIREVIEW
+                                    <span class="fa fa-compact-disc pulse mr-1"></span> SUDAH DIREVIEW
                                 </span>
                             </div>
                             <p class="metric-value h3">
                                 <sub>
-                              <i class="fa fa-tasks"></i>
-                           </sub>
+                                    <i class="fa fa-tasks"></i>
+                                </sub>
                                 <span class="value">
-                              <?= $count['count_sudah']; ?>
-                           </span>
+                                    <?= $count['count_sudah']; ?>
+                                </span>
                             </p>
                         </a>
                     </div>
@@ -51,16 +51,16 @@
                         >
                             <div class="metric-badge">
                                 <span class="badge badge-lg badge-danger">
-                              <span class="oi oi-media-record pulse mr-1"></span> BELUM DIREVIEW
+                                    <span class="fa fa-compact-disc pulse mr-1"></span> BELUM DIREVIEW
                                 </span>
                             </div>
                             <p class="metric-value h3">
                                 <sub>
-                              <i class="fa fa-tasks"></i>
-                           </sub>
+                                    <i class="fa fa-tasks"></i>
+                                </sub>
                                 <span class="value">
-                              <?= $count['count_belum']; ?>
-                           </span>
+                                    <?= $count['count_belum']; ?>
+                                </span>
                             </p>
                         </a>
                     </div>

@@ -27,18 +27,18 @@ $level_native  = $this->session->userdata('level_native');
             </div>
             <div class="top-bar-item top-bar-item-right px-0">
                 <ul class="header-nav nav">
-                    <li class="nav-item dropdown header-nav-dropdown">
+                    <li class="nav-item dropdown header-nav-dropdown has-notified">
                         <a
                             class="nav-link has-badge"
                             href="#"
                             data-toggle="dropdown"
                             aria-haspopup="true"
                             aria-expanded="false"
-                        ><span class="badge badge-pill badge-warning">1</span> <span class="oi oi-pulse"></span></a>
-                        <div class="dropdown-arrow"></div>
+                        ><span class="badge badge-pill badge-warning">1</span> <span class="fa fa-bell"></span></a>
                         <div class="dropdown-menu dropdown-menu-rich dropdown-menu-right">
+                            <div class="dropdown-arrow"></div>
                             <h6 class="dropdown-header stop-propagation">
-                                <span>Notification <span class="badge">(2)</span></span>
+                                <span>Notifikasi <span class="badge">(1)</span></span>
                             </h6>
                             <div class="dropdown-scroll perfect-scrollbar">
                                 <a
@@ -49,14 +49,14 @@ $level_native  = $this->session->userdata('level_native');
                                         <img src="<?= base_url('assets/images/avatars/profile.jpg'); ?>">
                                     </div>
                                     <div class="dropdown-item-body">
-                                        <p class="text"> Jeffrey Wells created a schedule </p><span class="date">Just now</span>
+                                        <p class="text"> placeholder notifikasi </p><span class="date">Just now</span>
                                     </div>
                                 </a>
                             </div>
                             <a
                                 href="user-activities.html"
                                 class="dropdown-footer"
-                            >All notifications <i class="fas fa-fw fa-long-arrow-alt-right"></i></a>
+                            >Semua notifikasi <i class="fas fa-fw fa-long-arrow-alt-right"></i></a>
                         </div>
                     </li>
                     <li class="nav-item dropdown header-nav-dropdown">
@@ -66,15 +66,15 @@ $level_native  = $this->session->userdata('level_native');
                             data-toggle="dropdown"
                             aria-haspopup="true"
                             aria-expanded="false"
-                        ><span class="oi oi-grid-three-up"></span></a>
-                        <div class="dropdown-arrow"></div>
+                        ><span class="fa fa-grip-horizontal"></span></a>
                         <div class="dropdown-menu dropdown-menu-rich dropdown-menu-right">
+                            <div class="dropdown-arrow"></div>
                             <div class="dropdown-sheets">
                                 <div class="dropdown-sheet-item">
                                     <a
                                         href="#"
                                         class="tile-wrapper"
-                                    ><span class="tile tile-lg bg-indigo"><i class="oi oi-people"></i></span> <span class="tile-peek">Teams</span></a>
+                                    ><span class="tile tile-lg bg-indigo"><i class="fa fa-users"></i></span> <span class="tile-peek">Teams</span></a>
                                 </div>
                             </div>
                         </div>
@@ -100,8 +100,12 @@ $level_native  = $this->session->userdata('level_native');
                             <span class="account-description"><?= $level_to_text; ?></span>
                         </span>
                     </button>
-                    <div class="dropdown-arrow dropdown-arrow-left"></div><!-- .dropdown-menu -->
                     <div class="dropdown-menu">
+                        <div
+                            class="dropdown-arrow d-lg-none"
+                            x-arrow=""
+                        ></div>
+                        <div class="dropdown-arrow ml-3 d-none d-lg-block"></div>
                         <h6 class="dropdown-header d-none d-sm-block d-md-none"> <?= $username; ?> </h6>
 
                         <?php if ($level_native == 'author_reviewer') : ?>
@@ -130,7 +134,7 @@ $level_native  = $this->session->userdata('level_native');
                             class="dropdown-item"
                             href="<?= base_url('auth/logout'); ?>"
                         >
-                            <span class="dropdown-icon oi oi-account-logout"></span> Logout</a>
+                            <span class="dropdown-icon fa fa-sign-out-alt"></span> Logout</a>
                     </div>
                 </div>
             </div>

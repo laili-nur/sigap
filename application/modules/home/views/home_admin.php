@@ -25,8 +25,8 @@
                                 <i class="fa fa-paperclip"></i>
                             </sub>
                             <span class="value">
-                           <?= $count['total_draft']; ?>
-                        </span>
+                                <?= $count['total_draft']; ?>
+                            </span>
                         </p>
                     </a>
                 </div>
@@ -41,8 +41,8 @@
                                 <i class="fa fa-book"></i>
                             </sub>
                             <span class="value">
-                           <?= $count['total_book']; ?>
-                        </span>
+                                <?= $count['total_book']; ?>
+                            </span>
                         </p>
                     </a>
                 </div>
@@ -57,8 +57,8 @@
                                 <i class="fa fa-users"></i>
                             </sub>
                             <span class="value">
-                           <?= $count['total_author']; ?>
-                        </span>
+                                <?= $count['total_author']; ?>
+                            </span>
                         </p>
                     </a>
                 </div>
@@ -73,8 +73,8 @@
                                 <i class="fa fa-university"></i>
                             </sub>
                             <span class="value">
-                           <?= $count['total_reviewer']; ?>
-                        </span>
+                                <?= $count['total_reviewer']; ?>
+                            </span>
                         </p>
                     </a>
                 </div>
@@ -96,8 +96,8 @@
                         class="metric metric-bordered align-items-center"
                     >
                         <div class="metric-badge">
-                            <span class="badge badge-lg badge-secondary">
-                           <span class="oi oi-media-record pulse mr-1"></span> DESK SCREENING
+                            <span class="badge badge-lg badge-info">
+                                DESK SCREENING
                             </span>
                         </div>
                         <p class="metric-value h3">
@@ -105,8 +105,8 @@
                                 <i class="fa fa-tasks"></i>
                             </sub>
                             <span class="value">
-                           <?= $count['draft_desk']; ?>
-                        </span>
+                                <?= $count['draft_desk']; ?>
+                            </span>
                         </p>
                     </a>
                 </div>
@@ -116,8 +116,8 @@
                         class="metric metric-bordered align-items-center"
                     >
                         <div class="metric-badge">
-                            <span class="badge badge-lg badge-success">
-                           <span class="oi oi-media-record pulse mr-1"></span> REVIEW
+                            <span class="badge badge-lg badge-info">
+                                REVIEW
                             </span>
                         </div>
                         <p class="metric-value h3">
@@ -125,8 +125,8 @@
                                 <i class="fa fa-tasks"></i>
                             </sub>
                             <span class="value">
-                           <?= $count['draft_review']; ?>
-                        </span>
+                                <?= $count['draft_review']; ?>
+                            </span>
                         </p>
                     </a>
                 </div>
@@ -137,8 +137,8 @@
                         class="metric metric-bordered align-items-center"
                     >
                         <div class="metric-badge">
-                            <span class="badge badge-lg badge-danger">
-                           <span class="oi oi-media-record pulse mr-1"></span> EDITORIAL
+                            <span class="badge badge-lg badge-info">
+                                EDITORIAL
                             </span>
                         </div>
                         <p class="metric-value h3">
@@ -146,8 +146,8 @@
                                 <i class="fa fa-tasks"></i>
                             </sub>
                             <span class="value">
-                           <?= $count['draft_edit']; ?>
-                        </span>
+                                <?= $count['draft_edit']; ?>
+                            </span>
                         </p>
                     </a>
                 </div>
@@ -158,8 +158,8 @@
                         class="metric metric-bordered align-items-center"
                     >
                         <div class="metric-badge">
-                            <span class="badge badge-lg badge-warning">
-                           <span class="oi oi-media-record pulse mr-1"></span> LAYOUT
+                            <span class="badge badge-lg badge-info">
+                                LAYOUT
                             </span>
                         </div>
                         <p class="metric-value h3">
@@ -167,8 +167,8 @@
                                 <i class="fa fa-tasks"></i>
                             </sub>
                             <span class="value">
-                           <?= $count['draft_layout']; ?>
-                        </span>
+                                <?= $count['draft_layout']; ?>
+                            </span>
                         </p>
                     </a>
                 </div>
@@ -180,7 +180,7 @@
                     >
                         <div class="metric-badge">
                             <span class="badge badge-lg badge-info">
-                           <span class="oi oi-media-record pulse mr-1"></span> PROOFREAD
+                                PROOFREAD
                             </span>
                         </div>
                         <p class="metric-value h3">
@@ -188,20 +188,20 @@
                                 <i class="fa fa-tasks"></i>
                             </sub>
                             <span class="value">
-                           <?= $count['draft_proofread']; ?>
-                        </span>
+                                <?= $count['draft_proofread']; ?>
+                            </span>
                         </p>
                     </a>
                 </div>
                 <div class="col">
                     <a
                         href="
-                <?= base_url('draft?progress=cetak'); ?>"
+                <?= base_url('draft?progress=print'); ?>"
                         class="metric metric-bordered align-items-center"
                     >
                         <div class="metric-badge">
-                            <span class="badge badge-lg badge-dark">
-                           <span class="oi oi-media-record pulse mr-1"></span> CETAK
+                            <span class="badge badge-lg badge-info">
+                                CETAK
                             </span>
                         </div>
                         <p class="metric-value h3">
@@ -209,8 +209,8 @@
                                 <i class="fa fa-tasks"></i>
                             </sub>
                             <span class="value">
-                           <?= $count['draft_print']; ?>
-                        </span>
+                                <?= $count['draft_print']; ?>
+                            </span>
                         </p>
                     </a>
                 </div>
@@ -230,8 +230,8 @@
                         </a>
                         <p class="metric-value h3">
                             <span class="value">
-                           <?= $count['draft_final']; ?>
-                        </span>
+                                <?= $count['draft_final']; ?>
+                            </span>
                             <a
                                 href="#"
                                 onclick="event.preventDefault()"
@@ -254,8 +254,8 @@
                         </a>
                         <p class="metric-value h3">
                             <span class="value">
-                           <?= $count['draft_reprint']; ?>
-                        </span>
+                                <?= $count['draft_reprint']; ?>
+                            </span>
                             <a
                                 href="#"
                                 onclick="event.preventDefault()"
@@ -278,8 +278,8 @@
                         </a>
                         <p class="metric-value">
                             <span class="value h3">
-                           <?= $count['draft_rejected_total']; ?>
-                        </span>
+                                <?= $count['draft_rejected_total']; ?>
+                            </span>
                             <a
                                 href="#"
                                 onclick="event.preventDefault()"

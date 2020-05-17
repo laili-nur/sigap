@@ -196,7 +196,7 @@ class Author extends Admin_Controller
 
     public function copy_to_reviewer($user_id, $nip, $name)
     {
-        $this->load->model('reviewer_model', 'reviewer', true);
+        $this->load->model('reviewer/reviewer_model', 'reviewer', true);
 
         // cek apakah sudah ada reviewer menggunakan user_id yang terpasang di author
         $reviewer_id = $this->reviewer->get_role_id_from_user_id($user_id, 'reviewer');

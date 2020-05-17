@@ -11,6 +11,7 @@ class Worksheet extends Operator_Controller
             redirect();
         }
 
+        $this->load->model('draft/draft_model', 'draft');
         // load model
         $this->load->model('worksheet_model', 'worksheet');
     }
@@ -41,7 +42,6 @@ class Worksheet extends Operator_Controller
     {
         $worksheet = $this->worksheet->where('worksheet_id', $id)->get();
 
-        $this->load->model('draft_model', 'draft');
         $draft = $this->draft->get_where(['draft_id' => $worksheet->draft_id]);
 
         if (!$worksheet) {

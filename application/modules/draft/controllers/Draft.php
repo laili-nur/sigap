@@ -13,8 +13,9 @@ class Draft extends Operator_Controller
         $this->load->model('worksheet/worksheet_model', 'worksheet');
         $this->load->model('author/author_model', 'author');
         $this->load->model('reviewer/reviewer_model', 'reviewer');
-        $this->load->model('draft_author_model', 'draft_author');
         $this->load->model('user/user_model', 'user');
+        $this->load->model('book/book_model', 'book');
+        $this->load->model('draft_author_model', 'draft_author');
         $this->load->model('revision_model', 'revision');
 
         // load model
@@ -281,7 +282,6 @@ class Draft extends Operator_Controller
         $desk = $this->draft->get_where(['draft_id' => $draft_id], 'worksheet');
         // ambil tabel books
         // $books = $this->draft->get_where(['draft_id' => $draft_id], 'book');
-        $this->load->model('book_model', 'book', true);
         $book = $this->book->get_book_from_draft($draft_id);
 
         // pecah data nilai, csv jadi array
@@ -773,7 +773,6 @@ class Draft extends Operator_Controller
             'finish_date' => now()
         ]);
 
-        $this->load->model('book_model', 'book', true);
         $book = $this->book->get_book_from_draft($draft_id);
         $book_id = 0;
 
@@ -817,23 +816,6 @@ class Draft extends Operator_Controller
             }
         }
     }
-
-    // public function tes($draft_id = 1129)
-    // {
-    //     $this->load->model('book_model', 'book', true);
-    //     $book = $this->book->get_book_from_draft($draft_id);
-
-    //     if (isset($book)) {
-    //         $book_id = $book->book_id;
-    //     } else {
-    //         $book_id = 'kosong';
-    //     }
-
-    //     echo '<pre>';
-    //     print_r($book_id);
-    //     echo '</pre>';
-    //     die();
-    // }
 
     public function cetakUlang($id = '')
     {

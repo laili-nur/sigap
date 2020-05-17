@@ -10,7 +10,7 @@
     >
     <!-- End Required meta tags -->
 
-    <title>SIGAP</title>
+    <title>SIGAP - Sistem Informasi Gama Press</title>
 
     <!-- FAVICONS -->
     <link
@@ -35,13 +35,13 @@
     ><!-- End GOOGLE FONT -->
 
     <!-- BEGIN PLUGINS STYLES -->
-    <link
-        rel="stylesheet"
-        href="<?= base_url('assets/vendor/open-iconic/css/open-iconic-bootstrap.min.css'); ?>"
-    >
-    <link
+    <!-- <link
         rel="stylesheet"
         href="<?= base_url('assets/vendor/fontawesome/css/all.css'); ?>"
+    > -->
+    <link
+        rel="stylesheet"
+        href="<?= base_url('assets/vendor/@fortawesome/fontawesome-free/css/all.min.css'); ?>"
     >
     <link
         rel="stylesheet"
@@ -64,12 +64,12 @@
     <!-- BEGIN THEME STYLES -->
     <link
         rel="stylesheet"
-        href="<?= base_url('assets/stylesheets/theme.min.css'); ?>"
+        href="<?= base_url('assets/stylesheets/theme.css'); ?>"
         data-skin="default"
     >
     <link
         rel="stylesheet"
-        href="<?= base_url('assets/stylesheets/theme-dark.min.css'); ?>"
+        href="<?= base_url('assets/stylesheets/theme-dark.css'); ?>"
         data-skin="dark"
     >
     <link
@@ -92,6 +92,7 @@
     <!-- END PLUGINS STYLES -->
 
     <!-- JS -->
+    <!-- jquery must load initially, because there is document ready in php scripts -->
     <script src="<?= base_url('assets/vendor/jquery/jquery.min.js'); ?>"></script>
 
     <script>
@@ -120,10 +121,11 @@
                     </div>
                 </div>
             </div>
+            <?php $this->load->view('footer'); ?>
         </main>
     </div>
     <!-- BEGIN BASE JS -->
-    <script src="<?= base_url('assets/vendor/bootstrap/js/popper.min.js'); ?>"></script>
+    <script src="<?= base_url('assets/vendor/popper.js/umd/popper.min.js'); ?>"></script>
     <script src="<?= base_url('assets/vendor/bootstrap/js/bootstrap.min.js'); ?>"></script>
     <script src="<?= base_url('assets/ugmpress.js'); ?>"></script>
     <!-- END BASE JS -->
@@ -132,22 +134,17 @@
     <script src="<?= base_url('assets/vendor/jquery-validation/jquery.validate.min.js'); ?>"></script>
     <script src="<?= base_url('assets/vendor/jquery-validation/additional-methods.min.js'); ?>"></script>
     <script src="<?= base_url('assets/vendor/pace/pace.min.js'); ?>"></script>
-    <script src="<?= base_url('assets/vendor/stacked-menu/stacked-menu.min.js'); ?>"></script>
+    <script src="<?= base_url('assets/vendor/stacked-menu/js/stacked-menu.min.js'); ?>"></script>
     <script src="<?= base_url('assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js'); ?>"></script>
     <script src="<?= base_url('assets/vendor/flatpickr/flatpickr.min.js'); ?>"></script>
     <script src="<?= base_url('assets/vendor/handlebars/handlebars.min.js'); ?>"></script>
     <script src="<?= base_url('assets/vendor/easy-pie-chart/jquery.easypiechart.min.js'); ?>"></script>
     <script src="<?= base_url('assets/vendor/chart.js/Chart.min.js'); ?>"></script>
     <script src="<?= base_url('assets/vendor/DoubleScroll/jquery.doubleScroll.js'); ?>"></script>
-
-
     <script src="<?= base_url('assets/vendor/select2/js/select2.min.js'); ?>"></script>
     <script src="<?= base_url('assets/vendor/summernote/summernote-bs4.js'); ?>"></script>
     <script src="<?= base_url('assets/vendor/toastr/toastr.min.js'); ?>"></script>
     <!--
-   <script src="<?= base_url('assets/vendor/tribute/tribute.min.js'); ?>"></script>
-   <script src="<?= base_url('assets/vendor/Caret/jquery.caret.min.js'); ?>"></script>
-   <script src="<?= base_url('assets/vendor/At.js/js/jquery.atwho.min.js'); ?>"></script>
    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script> -->
     <!-- END PLUGINS JS -->
@@ -156,17 +153,11 @@
     <script src="<?= base_url('assets/javascript/theme.min.js'); ?>"></script> <!-- END THEME JS -->
 
     <!-- BEGIN PAGE LEVEL JS -->
-    <!-- <script src="<?= base_url('assets/javascript/pages/dashboard-demo.js'); ?>"></script>  -->
-    <!-- END PAGE LEVEL JS -->
-
-    <!-- BEGIN THEME JS -->
-    <!-- <script src="<?= base_url('assets/javascript/main.min.js'); ?>"></script> -->
-    <!-- END THEME JS -->
-    <!-- BEGIN PAGE LEVEL JS -->
     <script src="<?= base_url('assets/javascript/pages/select2-demo.js'); ?>"></script>
     <script src="<?= base_url('assets/javascript/pages/flatpickr-demo.js'); ?>"></script>
     <script src="<?= base_url('assets/javascript/pages/summernote-demo.js'); ?>"></script>
     <!-- <script src="<?= base_url('assets/javascript/pages/easypiechart-demo.js'); ?>"></script> -->
+    <!-- <script src="<?= base_url('assets/javascript/pages/dashboard-demo.js'); ?>"></script>  -->
     <!-- END PAGE LEVEL JS -->
 </body>
 

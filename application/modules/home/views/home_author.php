@@ -70,7 +70,7 @@ $role  = $this->session->userdata('role_id');
                         >
                             <div class="metric-badge">
                                 <span class="badge badge-lg badge-secondary">
-                                    <span class="oi oi-media-record pulse mr-1"></span> DESK SCREENING
+                                    <span class="fa fa-compact-disc pulse mr-1"></span> DESK SCREENING
                                 </span>
                             </div>
                             <p class="metric-value h3">
@@ -90,7 +90,7 @@ $role  = $this->session->userdata('role_id');
                         >
                             <div class="metric-badge">
                                 <span class="badge badge-lg badge-success">
-                                    <span class="oi oi-media-record pulse mr-1"></span> REVIEW
+                                    <span class="fa fa-compact-disc pulse mr-1"></span> REVIEW
                                 </span>
                             </div>
                             <p class="metric-value h3">
@@ -110,7 +110,7 @@ $role  = $this->session->userdata('role_id');
                         >
                             <div class="metric-badge">
                                 <span class="badge badge-lg badge-danger">
-                                    <span class="oi oi-media-record pulse mr-1"></span> EDITORIAL
+                                    <span class="fa fa-compact-disc pulse mr-1"></span> EDITORIAL
                                 </span>
                             </div>
                             <p class="metric-value h3">
@@ -130,7 +130,7 @@ $role  = $this->session->userdata('role_id');
                         >
                             <div class="metric-badge">
                                 <span class="badge badge-lg badge-warning">
-                                    <span class="oi oi-media-record pulse mr-1"></span> LAYOUT
+                                    <span class="fa fa-compact-disc pulse mr-1"></span> LAYOUT
                                 </span>
                             </div>
                             <p class="metric-value h3">
@@ -150,7 +150,7 @@ $role  = $this->session->userdata('role_id');
                         >
                             <div class="metric-badge">
                                 <span class="badge badge-lg badge-info">
-                                    <span class="oi oi-media-record pulse mr-1"></span> PROOFREAD
+                                    <span class="fa fa-compact-disc pulse mr-1"></span> PROOFREAD
                                 </span>
                             </div>
                             <p class="metric-value h3">

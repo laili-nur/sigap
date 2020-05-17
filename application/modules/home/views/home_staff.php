@@ -27,7 +27,7 @@
                         >
                             <div class="metric-badge">
                                 <span class="badge badge-lg badge-info">
-                                    <span class="oi oi-media-record pulse mr-1"></span> TOTAL DRAFT
+                                    <span class="fa fa-compact-disc pulse mr-1"></span> TOTAL DRAFT
                                 </span>
                             </div>
                             <p class="metric-value h3">
@@ -47,7 +47,7 @@
                         >
                             <div class="metric-badge">
                                 <span class="badge badge-lg badge-success">
-                                    <span class="oi oi-media-record pulse mr-1"></span> SUDAH DIKERJAKAN
+                                    <span class="fa fa-compact-disc pulse mr-1"></span> SUDAH DIKERJAKAN
                                 </span>
                             </div>
                             <p class="metric-value h3">
@@ -67,7 +67,7 @@
                         >
                             <div class="metric-badge">
                                 <span class="badge badge-lg badge-danger">
-                                    <span class="oi oi-media-record pulse mr-1"></span> BELUM DIKERJAKAN
+                                    <span class="fa fa-compact-disc pulse mr-1"></span> BELUM DIKERJAKAN
                                 </span>
                             </div>
                             <p class="metric-value h3">

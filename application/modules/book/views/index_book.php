@@ -67,7 +67,7 @@ function expand($authors)
                         <?= form_open($pages, ['method' => 'GET']); ?>
                         <div class="row">
                             <div class="col-12 col-md-2 mb-3">
-                                <label for="per_page">Jumlah data per halaman</label>
+                                <label for="per_page">Data per halaman</label>
                                 <?= form_dropdown('per_page', get_per_page_options(), $per_page, 'id="per_page" class="form-control custom-select d-block" title="List per page"'); ?>
                             </div>
                             <div class="col-12 col-md-2 mb-3">

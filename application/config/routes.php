@@ -51,7 +51,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  */
 $route['default_controller']   = 'home';
 $route['']                     = 'home';
-$route['404_override']         = 'error404';
+$route['404_override']         = 'error_404';
 $route['translate_uri_dashes'] = false;
 
 $route['institute/(:num)']      = 'institute/index/$1';
