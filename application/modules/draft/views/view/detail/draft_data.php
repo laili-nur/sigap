@@ -9,36 +9,36 @@
             <table class="table table-striped table-bordered mb-0 nowrap">
                 <tbody>
                     <tr>
-                        <td width="200px"> Judul Draft </td>
+                        <td width="140px">Judul Draft</td>
                         <td><strong>
                                 <?= $input->draft_title; ?></strong> </td>
                     </tr>
                     <tr>
-                        <td width="200px"> Kategori </td>
+                        <td width="140px">Kategori</td>
                         <td>
                             <?= isset($input->category_id) ? konversiID('category', 'category_id', $input->category_id)->category_name : ''; ?>
                         </td>
                     </tr>
                     <tr>
-                        <td width="200px"> Tema </td>
+                        <td width="140px">Tema</td>
                         <td>
                             <?= isset($input->theme_id) ? konversiID('theme', 'theme_id', $input->theme_id)->theme_name : ''; ?>
                         </td>
                     </tr>
                     <tr>
-                        <td width="200px"> File Draft </td>
+                        <td width="140px">File Draft</td>
                         <td>
                             <?= ($input->draft_file) ? '<a data-toggle="tooltip" data-placement="right" title="' . $input->draft_file . '" class="btn btn-success btn-xs m-0" href="' . base_url('draft/download_file/draftfile/' . $input->draft_file) . '" target="_blank"><i class="fa fa-download"></i> Download</a>' : ''; ?>
                             <?= ($input->draft_file_link) ? '<a data-toggle="tooltip" data-placement="right" title="' . $input->draft_file_link . '" class="btn btn-success btn-xs m-0" href="' . $input->draft_file_link . '" target="_blank"><i class="fa fa-external-link-alt"></i> External file</a>' : ''; ?>
                         </td>
                     </tr>
                     <tr>
-                        <td width="200px"> Jumlah halaman</td>
+                        <td width="140px">Jumlah halaman</td>
                         <td><?= $input->draft_pages; ?></td>
                     </tr>
                     <?php if ($level == 'reviewer' and $reviewer_order == 0) : ?>
                         <tr>
-                            <td width="200px"> Aksi Rekomendasi </td>
+                            <td width="140px">Aksi Rekomendasi</td>
                             <td>
                                 <?php if ($input->review1_flag == 'n') : ?>
                                     <span class="badge badge-danger">Tolak</span>
@@ -49,7 +49,7 @@
                         </tr>
                     <?php elseif ($level == 'reviewer' and $reviewer_order == 1) : ?>
                         <tr>
-                            <td width="200px"> Aksi Rekomendasi </td>
+                            <td width="140px">Aksi Rekomendasi</td>
                             <td>
                                 <?php if ($input->review2_flag == 'n') : ?>
                                     <span class="badge badge-danger">Tolak</span>
@@ -61,43 +61,46 @@
                     <?php endif; ?>
                     <?php if ($level != 'reviewer') : ?>
                         <tr>
-                            <td width="200px">
-                                <?php if (is_admin()) : ?>
-                                    <a
-                                        href="#"
-                                        title="Ubah tanggal masuk"
-                                        data-toggle="modal"
-                                        data-target="#modal-entry-date"
-                                    >Tanggal Masuk <i class="fas fa-edit fa-fw"></i></a>
-                                <?php else : ?>
-                                    <span>Tanggal Masuk</span>
-                                <?php endif ?>
-                            </td>
-                            <td>
-                                <?= format_datetime($input->entry_date); ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td width="200px"> Diinput oleh </td>
+                            <td width="140px">Diinput oleh</td>
                             <td>
                                 <em>
                                     <?= $input->input_by; ?></em>
                             </td>
                         </tr>
                         <tr>
-                            <td width="200px"> Tanggal Selesai </td>
+                            <td width="140px">
+                                <!-- <?php //if (is_admin()) :
+                                        ?>
+                                    <a
+                                        href="#"
+                                        title="Ubah tanggal masuk"
+                                        data-toggle="modal"
+                                        data-target="#modal-entry-date"
+                                    >Tanggal Masuk <i class="fas fa-edit fa-fw"></i></a>
+                                <?php //else :
+                                ?> -->
+                                <span>Tanggal Masuk</span>
+                                <!-- <?php //endif
+                                        ?> -->
+                            </td>
+                            <td>
+                                <?= format_datetime($input->entry_date); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="140px">Tanggal Selesai</td>
                             <td>
                                 <?= format_datetime($input->finish_date); ?>
                             </td>
                         </tr>
                         <tr>
-                            <td width="200px"> Status Proses </td>
+                            <td width="140px">Status Proses</td>
                             <td>
                                 <span class="font-weight-bold <?= ($input->draft_status == 99) ? 'text-danger' : '' ?>"> <?= draft_status_to_text($input->draft_status); ?></span>
                             </td>
                         </tr>
                         <tr>
-                            <td width="200px"> Status Naskah </td>
+                            <td width="140px">Tipe Naskah</td>
                             <td class="align-middle">
                                 <?= $input->is_reprint == 'y' ? '<span class="badge badge-warning mb-2">Cetak Ulang</span>' : '<span class="badge badge-success mb-2">Baru</span>'; ?>
                                 <?php if ($input->is_reprint == 'n') : ?>
@@ -117,14 +120,14 @@
                             </td>
                         </tr>
                         <tr>
-                            <td width="200px">
+                            <td width="140px">
                                 <?php if (is_admin()) : ?>
                                     <a
                                         href="#"
                                         title="Ubah catatan draft"
                                         data-toggle="modal"
                                         data-target="#modal-draft-notes"
-                                    >Catatan draft <i class="fas fa-edit fa-fw"></i></a>
+                                    >Catatan <i class="fas fa-edit fa-fw"></i></a>
                                 <?php else : ?>
                                     <span>Catatan draft</span>
                                 <?php endif ?>
@@ -140,7 +143,7 @@
     </div>
 </div>
 
-<div
+<!-- <div
     id="modal-entry-date"
     class="modal fade"
     tabindex="-1"
@@ -177,7 +180,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <div
     id="modal-draft-notes"

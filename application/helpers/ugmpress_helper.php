@@ -495,7 +495,7 @@ function draft_status_to_text($code)
             $status = 'Proses Review';
             break;
         case 5:
-            $status = 'Antri Edit';
+            $status = 'Review Selesai';
             break;
         case 6:
             $status = 'Proses Edit';

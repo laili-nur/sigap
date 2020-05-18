@@ -75,64 +75,6 @@ class Draft extends Operator_Controller
             $get_data = $this->draft->filter_draft_for_author($filters, $this->username, $page);
         } else {
             $get_data = $this->draft->filter_draft_for_admin($filters, $page);
-
-            // if ($progress == 'error') {
-            //     //inisialisasi array penampung kondisi not in
-            //     $desk_screening = [''];
-            //     $review         = [''];
-            //     $edit           = [''];
-            //     $layout         = [''];
-            //     $proofread      = [''];
-            //     $final          = [''];
-            //     $cetak_ulang    = [''];
-            //     $ditolak        = [''];
-
-            //     //menghitung filter lain, untuk mencari draft yang error
-            //     $desk_screenings = $this->draft->select(['draft_id'])->where('draft_status', 1)->or_where('draft_status', 0)->get_all();
-            //     foreach ($desk_screenings as $value) {
-            //         $desk_screening[] = $value->draft_id;
-            //     }
-            //     $reviews = $this->draft->select(['draft_id'])->where('is_review', 'n')->where('is_edit', 'n')->where('is_layout', 'n')->where('is_proofread', 'n')->where('is_print', 'n')->where('draft_status', '4')->get_all();
-            //     foreach ($reviews as $value) {
-            //         $review[] = $value->draft_id;
-            //     }
-            //     $edits = $this->draft->select(['draft_id'])->where('is_review', 'y')->where('is_edit', 'n')->where('is_layout', 'n')->where('is_proofread', 'n')->where('is_print', 'n')->where_not('draft_status', '99')->get_all();
-            //     foreach ($edits as $value) {
-            //         $edit[] = $value->draft_id;
-            //     }
-            //     $layouts = $this->draft->select(['draft_id'])->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'n')->where('is_proofread', 'n')->where('is_print', 'n')->where_not('draft_status', '99')->get_all();
-            //     foreach ($layouts as $value) {
-            //         $layout[] = $value->draft_id;
-            //     }
-            //     $proofreads = $this->draft->select(['draft_id'])->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'y')->where('is_proofread', 'n')->where('is_print', 'n')->where_not('draft_status', '99')->get_all();
-            //     foreach ($proofreads as $value) {
-            //         $proofread[] = $value->draft_id;
-            //     }
-            //     $prints = $this->draft->select(['draft_id'])->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'y')->where('is_proofread', 'y')->group_start()->where('is_print', 'n')->or_where('is_print', 'y')->group_end()->where_not('draft_status', '99')->where_not('draft_status', '14')->get_all();
-            //     foreach ($prints as $value) {
-            //         $print[] = $value->draft_id;
-            //     }
-            //     $finals = $this->draft->select(['draft_id'])->where('is_review', 'y')->where('is_edit', 'y')->where('is_layout', 'y')->where('is_proofread', 'y')->where('is_print', 'y')->where('is_reprint', 'n')->where('draft_status', 14)->get_all();
-            //     foreach ($finals as $value) {
-            //         $final[] = $value->draft_id;
-            //     }
-            //     $cetak_ulangs = $this->draft->select(['draft_id'])->where('is_reprint', 'y')->get_all();
-            //     foreach ($cetak_ulangs as $value) {
-            //         $cetak_ulang[] = $value->draft_id;
-            //     }
-            //     $rejecteds = $this->draft->select(['draft_id'])->where('draft_status', 2)->or_where('draft_status', 99)->get_all();
-            //     foreach ($rejecteds as $value) {
-            //         $rejected[] = $value->draft_id;
-            //     }
-
-            //     $drafts = $this->draft->join('category')->join('theme')->where_not_in('draft_id', $desk_screening)->where_not_in('draft_id', $review)->where_not_in('draft_id', $edit)->where_not_in('draft_id', $layout)->where_not_in('draft_id', $proofread)->where_not_in('draft_id', $print)->where_not_in('draft_id', $final)->where_not_in('draft_id', $cetak_ulang)->where_not_in('draft_id', $rejected)->where($kat['cond_temp'], $kat['category'])->order_by('draft_status')->order_by('draft_title')->paginate($page)->get_all();
-
-            //     $total = $this->draft->where_not_in('draft_id', $desk_screening)->where_not_in('draft_id', $review)->where_not_in('draft_id', $edit)->where_not_in('draft_id', $layout)->where_not_in('draft_id', $proofread)->where_not_in('draft_id', $print)->where_not_in('draft_id', $final)->where_not_in('draft_id', $cetak_ulang)->where_not_in('draft_id', $rejected)->where($kat['cond_temp'], $kat['category'])->count();
-            // } else {
-            //     //get semua draft jik filter gagal semua
-            //     $drafts = $this->draft->join('category')->join('theme')->join_relation_middle('draft', 'draft_author')->join_relation_dest('author', 'draft_author')->where($kat['cond_temp'], $kat['category'])->order_by('draft_status')->order_by('draft_title')->paginate($page)->get_all();
-            //     $total  = $this->draft->where($kat['cond_temp'], $kat['category'])->count();
-            // }
         }
 
         $drafts     = $get_data['drafts'];
@@ -453,7 +395,7 @@ class Draft extends Operator_Controller
 
         // hanya untuk author pertama
         if ($this->level == 'author') {
-            $draft_author_status = $this->getDraftAuthorStatus($this->role_id, $draft_id);
+            $draft_author_status = $this->_get_author_permission($this->role_id, $draft_id);
             if ($draft_author_status == 0) {
                 $message = $this->lang->line('toast_error_not_authorized');
                 return $this->send_json_output(false, $message);
@@ -622,7 +564,7 @@ class Draft extends Operator_Controller
 
         // hanya untuk author pertama
         if ($this->level == 'author') {
-            $draft_author_status = $this->getDraftAuthorStatus($this->role_id, $draft_id);
+            $draft_author_status = $this->_get_author_permission($this->role_id, $draft_id);
             if ($draft_author_status == 0) {
                 $message = $this->lang->line('toast_error_not_authorized');
                 return $this->send_json_output(false, $message);
@@ -712,13 +654,27 @@ class Draft extends Operator_Controller
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
+
+        if ($input->is_review == 'y') {
+            $input->draft_status = 5;
+        }
+        if ($input->is_review == 'y' && $input->is_edit == 'y') {
+            $input->draft_status = 7;
+        }
+        if ($input->is_review == 'y' && $input->is_edit == 'y' && $input->is_layout == 'y') {
+            $input->draft_status = 9;
+        }
+        if ($input->is_review == 'y' && $input->is_edit == 'y' && $input->is_layout == 'y' && $input->is_proofread == 'y') {
+            $input->draft_status = 13;
+        }
+
         if ($this->draft->where('draft_id', $id)->update($input)) {
             $this->session->set_flashdata('success', $this->lang->line('toast_edit_success'));
         } else {
             $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
         }
 
-        redirect($this->pages);
+        redirect("$this->pages/view/$id");
     }
 
     public function delete($id = null)
@@ -799,8 +755,6 @@ class Draft extends Operator_Controller
             ]);
             $book_id = $this->db->insert_id();
         }
-
-        //
 
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();
@@ -924,16 +878,11 @@ class Draft extends Operator_Controller
         }
     }
 
-    private function getDraftAuthorStatus($author_id, $draft_id)
+    private function _get_author_permission($author_id, $draft_id)
     {
-        $data   = array('author_id' => $author_id, 'draft_id' => $draft_id);
-        $result = $this->draft->get_where($data, 'draft_author');
-        if ($result) {
-            $draft_author_status = $result->draft_author_status;
-        } else {
-            $draft_author_status = -1;
-        }
-        return $draft_author_status;
+        // author pertama return 1, true,, otherwise 0
+        $result = $this->draft->get_where(['author_id' => $author_id, 'draft_id' => $draft_id], 'draft_author');
+        return $result->draft_author_status ?? 0;
     }
 
     public function unique_data($str, $data_key)

@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* global flatpickr, toastr */
 
+
 // IIFE: allow stackable modal
 (() => {
     $(document).on('show.bs.modal', '.modal', function () {

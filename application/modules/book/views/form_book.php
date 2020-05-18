@@ -30,7 +30,7 @@
                                 <!-- jika draft id kosong -->
                                 <?= form_dropdown('draft_id', get_dropdown_listBook('draft', ['draft_id', 'draft_title']), $input->draft_id, 'id="draft_id" class="form-control custom-select d-block"'); ?>
                                 <small class="form-text text-muted">Hanya draft berstatus FINAL yang dapat
-                               dipilih</small>
+                                    dipilih</small>
                                 <?= form_error('draft_id'); ?>
                             <?php else : ?>
                                 <!-- jika draft id tidak kosong -->
@@ -114,7 +114,7 @@
                                     for="book_file"
                                 >Pilih file</label>
                             </div>
-                            <small class="form-text text-muted">Hanya menerima file bertype :  <?= get_allowed_file_types('book_file')['to_text']; ?></small>
+                            <small class="form-text text-muted">Hanya menerima file bertype : <?= get_allowed_file_types('book_file')['to_text']; ?></small>
                             <?= file_form_error('book_file', '<p class="text-danger">', '</p>'); ?>
                         </div>
                         <div class="form-group">
@@ -135,7 +135,7 @@
                             class="btn btn-primary ml-auto"
                             type="submit"
                             value="Submit"
-                        >Submit data</button>
+                        >Submit</button>
                     </div>
                     </form>
                 </div>

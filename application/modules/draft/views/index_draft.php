@@ -21,9 +21,7 @@ $progress_options = [
     'print'          => 'Tahap Cetak',
     'final'          => 'Final',
     'reject'         => 'Ditolak',
-    'error'          => 'Draft Error',
 ];
-// }
 
 $reprint_options = [
     ''  => '- Filter Tipe Naskah -',
@@ -382,20 +380,5 @@ $(document).ready(function() {
         allowClear: true,
         dropdownParent: $('#app-main')
     });
-    // $("#progress").select2({
-    //     placeholder: '-- Filter Progress --',
-    //     allowClear: true,
-    //     dropdownParent: $('#app-main')
-    // });
-    // $("#reprint").select2({
-    //     placeholder: '-- Filter Naskah --',
-    //     allowClear: true,
-    //     dropdownParent: $('#app-main')
-    // });
-    // $("#status").select2({
-    //     placeholder: '-- Filter Naskah --',
-    //     allowClear: true,
-    //     dropdownParent: $('#app-main')
-    // });
 });
 </script>

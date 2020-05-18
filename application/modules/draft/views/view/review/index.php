@@ -80,9 +80,9 @@ $is_review_started      = format_datetime($input->review_start_date);
                         <span class="text-muted">Deadline reviewer #1</span>
                     <?php endif ?>
                     <strong>
-                    <?= ($review1_remaining_time <= 0 && $input->review1_flag == '')
-                        ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . format_datetime($input->review1_deadline) . '</span>'
-                        : format_datetime($input->review1_deadline); ?>
+                        <?= ($review1_remaining_time <= 0 && $input->review1_flag == '')
+                            ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . format_datetime($input->review1_deadline) . '</span>'
+                            : format_datetime($input->review1_deadline); ?>
                     </strong>
                 </div>
             <?php endif; ?>
@@ -103,10 +103,10 @@ $is_review_started      = format_datetime($input->review_start_date);
                         <span class="text-muted">Deadline reviewer #2</span>
                     <?php endif ?>
                     <strong>
-                    <?= ($review2_remaining_time <= 0 and $input->review2_flag == '')
-                        ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . format_datetime($input->review2_deadline) . '</span>'
-                        : format_datetime($input->review2_deadline); ?>
-                </strong>
+                        <?= ($review2_remaining_time <= 0 and $input->review2_flag == '')
+                            ? '<span data-toggle="tooltip" data-placement="right" title="Melebihi Deadline" class="text-danger">' . format_datetime($input->review2_deadline) . '</span>'
+                            : format_datetime($input->review2_deadline); ?>
+                    </strong>
                 </div>
             <?php endif; ?>
 

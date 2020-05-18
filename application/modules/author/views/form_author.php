@@ -1,19 +1,19 @@
 <?php
 $author_nip = [
-   'type'  => 'number',
-   'name'  => 'author_nip',
-   'id'    => 'author_nip',
-   'value' => $input->author_nip,
-   'class' => 'form-control',
+    'type'  => 'number',
+    'name'  => 'author_nip',
+    'id'    => 'author_nip',
+    'value' => $input->author_nip,
+    'class' => 'form-control',
 ];
 
 $latest_education_options = [
-   ''      => '-- Pilih --',
-   's1'    => 'S1',
-   's2'    => 'S2',
-   's3'    => 'S3',
-   's4'    => 'Professor',
-   'other' => 'Other',
+    ''      => '-- Pilih --',
+    's1'    => 'S1',
+    's2'    => 'S2',
+    's3'    => 'S3',
+    's4'    => 'Professor',
+    'other' => 'Other',
 ];
 ?>
 <header class="page-title-bar">
@@ -44,7 +44,7 @@ $latest_education_options = [
                             <label for="user_id">Pilih akun untuk login</label>
                             <?= form_dropdown('user_id', get_dropdown_list_user('user', ['user_id', 'username']), $input->user_id, 'id="user_id" class="form-control custom-select d-block"'); ?>
                             <small class="form-text text-muted">Author dapat login ke sistem apabila mempunyai akun pengguna.
-                        Kosongkan pilihan jika tidak menetapkan akun.</small>
+                                Kosongkan pilihan jika tidak menetapkan akun.</small>
                             <?= form_error('user_id'); ?>
                         </div>
                         <hr class="my-2">
@@ -156,7 +156,7 @@ $latest_education_options = [
                                 >Pilih file</label>
                             </div>
                             <small class="form-text text-muted">Hanya menerima file bertype : jpg, jpeg, png, pdf. Maksimal 15
-                        MB</small>
+                                MB</small>
                             <small class="text-danger"><?= $this->session->flashdata('ktp_no_data'); ?></small>
                             <?= file_form_error('author_ktp', '<p class="text-danger">', '</p>'); ?>
                             <?php if ($input->author_ktp) : ?>
@@ -187,7 +187,7 @@ $latest_education_options = [
                         <button
                             class="btn btn-primary ml-auto"
                             type="submit"
-                        >Submit data</button>
+                        >Submit</button>
                     </div>
                     </form>
                 </div>

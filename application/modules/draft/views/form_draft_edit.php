@@ -5,9 +5,6 @@
                 <a href="<?= base_url(); ?>"><span class="fa fa-home"></span></a>
             </li>
             <li class="breadcrumb-item">
-                <a href="<?= base_url(); ?>">Penerbitan</a>
-            </li>
-            <li class="breadcrumb-item">
                 <a href="<?= base_url('draft'); ?>">Draft</a>
             </li>
             <li class="breadcrumb-item">
@@ -24,7 +21,7 @@
                 <div class="card-body">
                     <?= form_open_multipart($form_action, 'novalidate="" id="formdraftedit"'); ?>
                     <fieldset>
-                        <legend>Data Draft</legend>
+                        <legend>Edit Draft</legend>
                         <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : ''; ?>
                         <div class="alert alert-danger">
                             <strong>Perhatian</strong>
@@ -32,20 +29,6 @@
                                 melakukan proses step-by-step dari halaman <a href="<?= base_url("draft/view/$input->draft_id"); ?>">view draft</a>.</p>
                             <p class="mb-0">2. Halaman ini juga digunakan untuk mereset progress draft, dengan cara
                                 menyesuaikan status draft, dan hapus tanggal masing-masing.</p>
-                        </div>
-                        <div class="form-group">
-                            <label for="category_id">Kategori
-                                <abbr title="Required">*</abbr>
-                            </label>
-                            <?= form_dropdown('category_id', get_dropdown_list('category', ['category_id', 'category_name']), $input->category_id, 'id="category" class="form-control custom-select d-block"'); ?>
-                            <?= form_error('category_id'); ?>
-                        </div>
-                        <div class="form-group">
-                            <label for="theme_id">Tema
-                                <abbr title="Required">*</abbr>
-                            </label>
-                            <?= form_dropdown('theme_id', get_dropdown_list('theme', ['theme_id', 'theme_name']), $input->theme_id, 'id="theme" class="form-control custom-select d-block"'); ?>
-                            <?= form_error('theme_id'); ?>
                         </div>
                         <div class="form-group">
                             <label for="draft_title">Judul
@@ -66,7 +49,29 @@
                             <?= form_error('draft_title'); ?>
                         </div>
                         <div class="form-group">
+                            <label for="category_id">Kategori
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <?= form_dropdown('category_id', get_dropdown_list('category', ['category_id', 'category_name']), $input->category_id, 'id="category" class="form-control custom-select d-block"'); ?>
+                            <?= form_error('category_id'); ?>
+                        </div>
+                        <div class="form-group">
+                            <label for="theme_id">Tema
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <?= form_dropdown('theme_id', get_dropdown_list('theme', ['theme_id', 'theme_name']), $input->theme_id, 'id="theme" class="form-control custom-select d-block"'); ?>
+                            <?= form_error('theme_id'); ?>
+                        </div>
+                        <div class="form-group">
                             <label for="draft_file">File Draft</label>
+                            <?php if ($input->draft_file) : ?>
+                                <div class="alert alert-info d-flex justify-content-between align-items-center">File draft yang tersimpan
+                                    <a
+                                        href="<?= base_url("book/download_file/draftfile/$input->draft_file"); ?>"
+                                        class="btn btn-success btn-sm my-2 uploaded-file"
+                                    ><i class="fa fa-download"></i> Download</a>
+                                </div>
+                            <?php endif; ?>
                             <div class="custom-file">
                                 <?= form_upload('draft_file', '', 'class="custom-file-input"'); ?>
                                 <label
@@ -92,19 +97,8 @@
                             <label for="entry_date">Tanggal Masuk
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <div class="has-clearable">
-                                <button
-                                    type="button"
-                                    class="close"
-                                    aria-label="Close"
-                                >
-                                    <span aria-hidden="true">
-                                        <i class="fa fa-times-circle"></i>
-                                    </span>
-                                </button>
-                                <?= form_input('entry_date', $input->entry_date, 'class="form-control dates" '); ?>
-                                <?= form_error('entry_date'); ?>
-                            </div>
+                            <?= form_input('entry_date', $input->entry_date, 'class="form-control dates" '); ?>
+                            <?= form_error('entry_date'); ?>
                         </div>
                         <div class="form-group">
                             <label for="finish_date">Tanggal Selesai</label>
@@ -122,6 +116,32 @@
                                 <?= form_error('finish_date'); ?>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label>
+                                Tipe Naskah
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <div class="form-group">
+                                <div class="custom-control custom-radio">
+                                    <?= form_radio('is_reprint', 'y', isset($input->is_reprint) && ($input->is_reprint == 'y') ? true : false, ' class="custom-control-input" id="is_reprint_true"'); ?>
+                                    <label
+                                        class="custom-control-label"
+                                        for="is_reprint_true"
+                                    >Cetak ulang</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <?= form_radio('is_reprint', 'n', isset($input->is_reprint) && ($input->is_reprint == 'n') ? true : false, 'class="custom-control-input" id="is_reprint_false"'); ?>
+                                    <label
+                                        class="custom-control-label"
+                                        for="is_reprint_false"
+                                    >Naskah baru</label>
+                                </div>
+                                <?= form_error('is_reprint'); ?>
+                            </div>
+                            <div class="form-group">
+                                <?= form_textarea('draft_notes', $input->draft_notes, 'class="form-control" id="draft_notes" data-toggle="summernote" data-height="150"'); ?>
+                            </div>
+                        </div>
                         <hr>
                         <h5 class="card-title">Review</h5>
                         <div class="form-group">
@@ -129,18 +149,18 @@
                             <div class="mb-1">
                                 <label>
                                     <?= form_radio(
-                                       'is_review',
-                                       'y',
-                                       isset($input->is_review) && ($input->is_review == 'y') ? true : false
+                                        'is_review',
+                                        'y',
+                                        isset($input->is_review) && ($input->is_review == 'y') ? true : false
                                     ); ?> <i class="fa fa-check text-success"></i> Sudah Review
                                 </label>
                             </div>
                             <div class="mb-1">
                                 <label>
                                     <?= form_radio(
-                                       'is_review',
-                                       'n',
-                                       isset($input->is_review) && ($input->is_review == 'n') ? true : false
+                                        'is_review',
+                                        'n',
+                                        isset($input->is_review) && ($input->is_review == 'n') ? true : false
                                     ); ?> <i class="fa fa-times text-danger"></i> Belum Review
                                 </label>
                             </div>
@@ -187,18 +207,18 @@
                             <div class="mb-1">
                                 <label>
                                     <?= form_radio(
-                                       'is_edit',
-                                       'y',
-                                       isset($input->is_edit) && ($input->is_edit == 'y') ? true : false
+                                        'is_edit',
+                                        'y',
+                                        isset($input->is_edit) && ($input->is_edit == 'y') ? true : false
                                     ); ?><i class="fa fa-check text-success"></i> Sudah Edit
                                 </label>
                             </div>
                             <div class="mb-1">
                                 <label>
                                     <?= form_radio(
-                                       'is_edit',
-                                       'n',
-                                       isset($input->is_edit) && ($input->is_edit == 'n') ? true : false
+                                        'is_edit',
+                                        'n',
+                                        isset($input->is_edit) && ($input->is_edit == 'n') ? true : false
                                     ); ?><i class="fa fa-times text-danger"></i> Belum Edit
                                 </label>
                             </div>
@@ -245,18 +265,18 @@
                             <div class="mb-1">
                                 <label>
                                     <?= form_radio(
-                                       'is_layout',
-                                       'y',
-                                       isset($input->is_layout) && ($input->is_layout == 'y') ? true : false
+                                        'is_layout',
+                                        'y',
+                                        isset($input->is_layout) && ($input->is_layout == 'y') ? true : false
                                     ); ?><i class="fa fa-check text-success"></i> Sudah Layout
                                 </label>
                             </div>
                             <div class="mb-1">
                                 <label>
                                     <?= form_radio(
-                                       'is_layout',
-                                       'n',
-                                       isset($input->is_layout) && ($input->is_layout == 'n') ? true : false
+                                        'is_layout',
+                                        'n',
+                                        isset($input->is_layout) && ($input->is_layout == 'n') ? true : false
                                     ); ?><i class="fa fa-times text-danger"></i> Belum Layout
                                 </label>
                             </div>
@@ -303,18 +323,18 @@
                             <div class="mb-1">
                                 <label>
                                     <?= form_radio(
-                                       'is_proofread',
-                                       'y',
-                                       isset($input->is_proofread) && ($input->is_proofread == 'y') ? true : false
+                                        'is_proofread',
+                                        'y',
+                                        isset($input->is_proofread) && ($input->is_proofread == 'y') ? true : false
                                     ); ?><i class="fa fa-check text-success"></i> Sudah Proofread
                                 </label>
                             </div>
                             <div class="mb-1">
                                 <label>
                                     <?= form_radio(
-                                       'is_proofread',
-                                       'n',
-                                       isset($input->is_proofread) && ($input->is_proofread == 'n') ? true : false
+                                        'is_proofread',
+                                        'n',
+                                        isset($input->is_proofread) && ($input->is_proofread == 'n') ? true : false
                                     ); ?><i class="fa fa-times text-danger"></i> Belum Proofread
                                 </label>
                             </div>
@@ -361,18 +381,18 @@
                             <div class="mb-1">
                                 <label>
                                     <?= form_radio(
-                                       'is_print',
-                                       'y',
-                                       isset($input->is_print) && ($input->is_print == 'y') ? true : false
+                                        'is_print',
+                                        'y',
+                                        isset($input->is_print) && ($input->is_print == 'y') ? true : false
                                     ); ?><i class="fa fa-check text-success"></i> Sudah Cetak
                                 </label>
                             </div>
                             <div class="mb-1">
                                 <label>
                                     <?= form_radio(
-                                       'is_print',
-                                       'n',
-                                       isset($input->is_print) && ($input->is_print == 'n') ? true : false
+                                        'is_print',
+                                        'n',
+                                        isset($input->is_print) && ($input->is_print == 'n') ? true : false
                                     ); ?><i class="fa fa-times text-danger"></i> Belum Cetak
                                 </label>
                             </div>
@@ -415,10 +435,14 @@
                     </fieldset>
                     <hr>
                     <div class="form-actions">
+                        <a
+                            href="<?= base_url("draft/view/$input->draft_id") ?>"
+                            class="btn btn-light ml-auto mr-2"
+                        >Kembali</a>
                         <button
-                            class="btn btn-primary ml-auto"
+                            class="btn btn-primary"
                             type="submit"
-                        >Submit data</button>
+                        >Submit</button>
                     </div>
                     <?php form_close(); ?>
                 </div>
@@ -447,12 +471,6 @@ $(document).ready(function() {
             errorClass: "none",
             validClass: "none",
             errorPlacement: validateErrorPlacement,
-            // highlight: function(element, errorClass, validClass) {
-            //     $(element).addClass(errorClass).removeClass(validClass);
-            // },
-            // unhighlight: function(element, errorClass, validClass) {
-            //     $(element).addClass(validClass).removeClass(errorClass);
-            // }
         },
         validateSelect2()
     );
@@ -460,19 +478,13 @@ $(document).ready(function() {
     $('.dates').flatpickr({
         disableMobile: true,
         altInput: true,
-        altFormat: 'j F Y H:i',
-        dateFormat: 'Y-m-d H:i',
+        altFormat: 'j F Y',
+        dateFormat: 'Y-m-d',
         minDate: "2000-01-01",
-        enableTime: true,
-        time_24hr: true
     });
-    $("#category").select2({
-        placeholder: '-- Pilih --',
-        allowClear: true
-    });
-    $("#theme").select2({
-        placeholder: '-- Pilih --',
-        allowClear: true
+    $("#category,#theme").select2({
+        placeholder: '- Pilih -',
+        dropdownParent: $('#app-main')
     });
 });
 </script>

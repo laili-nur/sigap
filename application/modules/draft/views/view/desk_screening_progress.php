@@ -22,7 +22,7 @@
             <div class="alert alert-warning">
                 <strong>Draft Menunggu Desk Screening.</strong>
                 <?php if ($level != 'author' and $level != 'reviewer') : ?>
-                    <p class="m-0 p-0">Untuk melakukan desk screening, silakan menuju link berikut :
+                    <p class="m-0 p-0">Persetujuan desk screening dilakukan di halaman lembar kerja. Silakan menuju link berikut :
                         <a
                             href="<?= base_url('worksheet/edit/' . $desk->worksheet_id); ?>"
                             target="_blank"

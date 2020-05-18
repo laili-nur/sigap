@@ -1,8 +1,8 @@
 <?php
 $category_type = [
-   '1' => 'Hibah Buku Karya',
-   '2' => 'Hibah Reguler',
-   '3' => 'Cetak Ulang',
+    '1' => 'Hibah Buku Karya',
+    '2' => 'Hibah Reguler',
+    '3' => 'Cetak Ulang',
 ];
 ?>
 
@@ -113,7 +113,7 @@ $category_type = [
                         <button
                             class="btn btn-primary ml-auto"
                             type="submit"
-                        >Submit data</button>
+                        >Submit</button>
                     </div>
                     </form>
                 </div>

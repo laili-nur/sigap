@@ -70,28 +70,28 @@
                                 >
                                     <label class="btn btn-secondary <?= ($input->status_hak_cipta == '') ? 'active' : ''; ?>">
                                         <?= form_radio(
-                                             'status_hak_cipta',
-                                             '',
-                                             isset($input->is_reprint) && ($input->status_hak_cipta == '') ? true : false,
-                                             'required class="custom-control-input" id="status_hak_cipta0"'
-                                          ); ?>
+                                            'status_hak_cipta',
+                                            '',
+                                            isset($input->is_reprint) && ($input->status_hak_cipta == '') ? true : false,
+                                            'required class="custom-control-input" id="status_hak_cipta0"'
+                                        ); ?>
                                         -</label>
                                     <label class="btn btn-secondary <?= ($input->status_hak_cipta == '1') ? 'active' : ''; ?>">
                                         <?= form_radio(
-                                             'status_hak_cipta',
-                                             '1',
-                                             isset($input->is_reprint) && ($input->status_hak_cipta == '1') ? true : false,
-                                             'required class="custom-control-input" id="status_hak_cipta1"'
-                                          ); ?>
+                                            'status_hak_cipta',
+                                            '1',
+                                            isset($input->is_reprint) && ($input->status_hak_cipta == '1') ? true : false,
+                                            'required class="custom-control-input" id="status_hak_cipta1"'
+                                        ); ?>
                                         Dalam Proses</label>
 
                                     <label class="btn btn-secondary <?= ($input->status_hak_cipta == '2') ? 'active' : ''; ?>">
                                         <?= form_radio(
-                                             'status_hak_cipta',
-                                             '2',
-                                             isset($input->is_reprint) && ($input->status_hak_cipta == '2') ? true : false,
-                                             ' class="custom-control-input" id="status_hak_cipta2"'
-                                          ); ?>
+                                            'status_hak_cipta',
+                                            '2',
+                                            isset($input->is_reprint) && ($input->status_hak_cipta == '2') ? true : false,
+                                            ' class="custom-control-input" id="status_hak_cipta2"'
+                                        ); ?>
                                         Sudah Jadi</label>
                                 </div>
                             </div>
@@ -105,7 +105,7 @@
                             type="submit"
                             value="Submit"
                             id="btn-submit"
-                        >Submit data</button>
+                        >Submit</button>
                     </div>
                     </form>
                 </div>

@@ -60,18 +60,19 @@
                                 <?= form_error('author_id[]'); ?>
                             </div>
                         <?php else : ?> -->
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="author_id"><?= $this->lang->line('form_author_name'); ?></label>
                             <?= form_dropdown('author_id[]', get_dropdown_list('author', ['author_id', 'author_name']), $input->author_id, 'id="author" class="form-control custom-select d-block" multiple="multiple"'); ?>
                             <?= form_error('author_id[]'); ?>
-                            <!-- <div class="p-0 m-0">
+                        </div> -->
+                        <!-- <div class="p-0 m-0">
                                 <small class="form-text text-muted">Jika Penulis belum ada di list, tambahkan penulis di menu <a
                                         target="_blank"
                                         href="<?= base_url('author/add'); ?>"
                                     >PENULIS</a>
                                 </small>
                             </div> -->
-                            <!-- <div class="p-0 m-0">
+                        <!-- <div class="p-0 m-0">
                         <button
                            id="callback"
                            type="button"
@@ -81,13 +82,14 @@
                               id="ajax-reload-author"
                            ></i> Reload Penulis</button>
                      </div> -->
-                        </div>
+
                         <!-- <?php endif; ?> -->
                         <!-- <div class="form-group">
                      <label for="draft_pages">Jumlah Halaman</label>
                      <?= form_input('draft_pages', $input->draft_pages, 'class="form-control" id="draft_pages"'); ?>
                      <?= form_error('draft_pages'); ?>
                   </div> -->
+
                         <div class="form-group">
                             <label for="draft_file">File Draft</label>
                             <div class="custom-file">
@@ -98,7 +100,7 @@
                                 >Pilih file</label>
                             </div>
                             <small class="form-text text-muted">Menerima tipe file :
-                                <?= get_allowed_file_types('draft_file')['to_text']; ?>. Maksimal 50MB</small>
+                                <?= get_allowed_file_types('draft_file')['to_text']; ?></small>
                             <small class="text-danger"><?= $this->session->flashdata('draft_file_no_data'); ?></small>
                             <?= file_form_error('draft_file', '<p class="small text-danger">', '</p>'); ?>
                         </div>
@@ -116,7 +118,7 @@
                                 type="submit"
                                 value="Submit"
                                 id="btn-submit"
-                            >Submit data</button>
+                            >Submit</button>
                         </div>
                         <?= form_close(); ?>
                 </div>
@@ -135,9 +137,9 @@ $(document).ready(function() {
                     crequired: true,
                     cminlength: 5,
                 },
-                // "author_id[]": {
-                //     crequired: true,
-                // },
+                "author_id[]": {
+                    crequired: true,
+                },
                 draft_file: {
                     extension: "<?= get_allowed_file_types('draft_file')['types']; ?>",
                 },
@@ -181,11 +183,13 @@ $(document).ready(function() {
     //       });
     // });
 
-    $("#category").select2(defaultSelect2Options);
-    $("#theme").select2(defaultSelect2Options);
+    $.fn.select2.defaults.set('dropdownParent', '#app-main');
+    $.fn.select2.defaults.set('placeholder', '-- Pilih --');
+
+    $("#category").select2();
+    $("#theme").select2();
     $('#author option[value=""]').detach();
     $("#author").select2({
-        placeholder: '-- Pilih --',
         multiple: true
     });
 
@@ -202,6 +206,5 @@ $(document).ready(function() {
     // $("#form_draft").submit(function(){
     //   $('#btn-submit').attr("disabled","disabled").html("<i class='fa fa-spinner fa-spin '></i> Processing ");
     // });
-
 });
 </script>

@@ -62,7 +62,7 @@ function generate_worksheet_action($worksheet_id)
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="<?=base_url();?>"><span class="fa fa-home"></span></a>
+                <a href="<?= base_url(); ?>"><span class="fa fa-home"></span></a>
             </li>
             <li class="breadcrumb-item active">
                 <a class="text-muted">Lembar Kerja</a>
@@ -72,7 +72,7 @@ function generate_worksheet_action($worksheet_id)
     <div class="d-flex justify-content-between align-items-center">
         <div>
             <h1 class="page-title"> Lembar Kerja </h1>
-            <span class="badge badge-info">Total : <?=$total;?></span>
+            <span class="badge badge-info">Total : <?= $total; ?></span>
         </div>
     </div>
 </header>
@@ -87,9 +87,7 @@ function generate_worksheet_action($worksheet_id)
                             role="alert"
                         >
                             <h5>Info</h5>
-                            <p class="m-0">Klik tombol <button class="btn btn-sm btn-secondary"><i
-                                        class="fa fa-thumbs-up"
-                                    ></i>
+                            <p class="m-0">Klik tombol <button class="btn btn-sm btn-secondary"><i class="fa fa-thumbs-up"></i>
                                     Aksi</button> untuk menyetujui atau menolak draft sesuai dengan keputusan desk
                                 screening</p>
                             <p class="m-0">Klik link di kolom <em>Judul draft</em> untuk menuju draft yang terkait</p>
@@ -105,22 +103,22 @@ function generate_worksheet_action($worksheet_id)
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <?=form_open($pages, ['method' => 'GET']);?>
+                        <?= form_open($pages, ['method' => 'GET']); ?>
                         <div class="row">
                             <div class="col-12 col-md-2 mb-3">
-                                <?=form_dropdown('per_page', get_per_page_options(), $per_page, 'id="per_page" class="form-control custom-select d-block" title="List per page"');?>
+                                <?= form_dropdown('per_page', get_per_page_options(), $per_page, 'id="per_page" class="form-control custom-select d-block" title="List per page"'); ?>
                             </div>
                             <div class="col-12 col-md-4 mb-3">
-                                <?=form_dropdown('status', $status_options, $status, 'id="status" class="form-control custom-select d-block" title="Status"');?>
+                                <?= form_dropdown('status', $status_options, $status, 'id="status" class="form-control custom-select d-block" title="Status"'); ?>
                             </div>
                             <div class="col-12 col-md-3 mb-3">
-                                <?=form_dropdown('reprint', $reprint_options, $reprint, 'id="reprint" class="form-control custom-select d-block" title="Filter Cetak Ulang"');?>
+                                <?= form_dropdown('reprint', $reprint_options, $reprint, 'id="reprint" class="form-control custom-select d-block" title="Filter Cetak Ulang"'); ?>
                             </div>
                             <div class="col-12 col-md-3 mb-3">
-                                <?=form_dropdown('revise', $revise_options, $revise, 'id="revise" class="form-control custom-select d-block" title="Filter Revisi"');?>
+                                <?= form_dropdown('revise', $revise_options, $revise, 'id="revise" class="form-control custom-select d-block" title="Filter Revisi"'); ?>
                             </div>
                             <div class="col-12 col-md-9 mb-3">
-                                <?=form_input('keyword', $keyword, ['placeholder' => 'Cari berdasarkan Nomer Lembar Kerja atau Judul Draft', 'class' => 'form-control']);?>
+                                <?= form_input('keyword', $keyword, ['placeholder' => 'Cari berdasarkan Nomer Lembar Kerja atau Judul Draft', 'class' => 'form-control']); ?>
                             </div>
                             <div class="col-12 col-md-3">
                                 <div
@@ -131,7 +129,7 @@ function generate_worksheet_action($worksheet_id)
                                     <button
                                         class="btn btn-secondary"
                                         type="button"
-                                        onclick="location.href = '<?=base_url($pages);?>'"
+                                        onclick="location.href = '<?= base_url($pages); ?>'"
                                     > Reset</button>
                                     <button
                                         class="btn btn-primary"
@@ -141,89 +139,89 @@ function generate_worksheet_action($worksheet_id)
                                 </div>
                             </div>
                         </div>
-                        <?=form_close();?>
+                        <?= form_close(); ?>
                     </div>
-                    <?php if ($worksheets): ?>
-                    <div class="double-scroll">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th
-                                        scope="col"
-                                        class="pl-4"
-                                    >No</th>
-                                    <th
-                                        scope="col"
-                                        style="min-width:120px;"
-                                    >Nomor Lembar Kerja</th>
-                                    <th
-                                        scope="col"
-                                        style="min-width:350px;"
-                                    >Judul Draft</th>
-                                    <th scope="col">Tahun Masuk</th>
-                                    <th scope="col">Revisi</th>
-                                    <th scope="col">PIC</th>
-                                    <th scope="col">Status</th>
-                                    <!-- <th scope="col">Deadline</th> -->
-                                    <!-- <th scope="col">Tanggal Selesai</th> -->
-                                    <th style="min-width:150px;"> &nbsp; </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($worksheets as $worksheet): ?>
-                                <tr>
-                                    <td class="align-middle pl-4"><?=++$i;?></td>
-                                    <td class="align-middle"><a
-                                            title="Lihat Desk Screening"
-                                            href="<?=base_url('worksheet/edit/' . $worksheet->worksheet_id);?>"
-                                        ><?=highlight_keyword($worksheet->worksheet_num, $keyword);?></a></td>
-                                    <td class="align-middle">
-                                        <a
-                                            title="Lihat detail draft"
-                                            href="<?=base_url('draft/view/' . $worksheet->draft_id);?>"
-                                        >
-                                            <?=($worksheet->is_reprint == 'y') ? '<span class="badge badge-warning"><i class="fa fa-redo" data-toggle="tooltip" title="Cetak Ulang"></i></span>' : '';?>
-                                            <?=highlight_keyword($worksheet->draft_title, $keyword);?>
-                                        </a>
-                                    </td>
-                                    <td class="align-middle"><?=date('Y', strtotime($worksheet->entry_date));?></td>
-                                    <td class="align-middle">
-                                        <?=$worksheet->is_revise == 'y' ? '<i class="fa fa-check text-success"></i>' : '<i class="fa fa-times text-danger"></i>';?>
-                                    </td>
-                                    <td class="align-middle"><?=$worksheet->worksheet_pic;?></td>
-                                    <td class="align-middle"><?=$worksheet_status_badge[$worksheet->worksheet_status];?>
-                                    </td>
-                                    <!-- <td class="align-middle"> <?=format_datetime($worksheet->worksheet_deadline);?></td> -->
-                                    <!-- <td class="align-middle"> <?=format_datetime($worksheet->worksheet_end_date);?></td> -->
-                                    <td class="align-middle text-right">
-                                        <button
-                                            type="button"
-                                            class="btn btn-sm btn-secondary"
-                                            data-container="body"
-                                            data-toggle="popover"
-                                            data-placement="left"
-                                            data-html="true"
-                                            data-content="<?=generate_worksheet_action($worksheet->worksheet_id);?>"
-                                            data-trigger="focus"
-                                        >
-                                            <i class="fa fa-thumbs-up"></i> Aksi
-                                        </button>
-                                        <a
-                                            title="Edit"
-                                            href="<?=base_url('worksheet/edit/' . $worksheet->worksheet_id . '');?>"
-                                            class="btn btn-sm btn-secondary"
-                                        >
-                                            <i class="fa fa-pencil-alt"></i>
-                                            <span class="sr-only">Edit</span>
-                                        </a>
-                                        <?php endforeach;?>
-                            </tbody>
-                        </table>
-                    </div>
-                    <?php else: ?>
-                    <p class="text-center">Data tidak tersedia</p>
-                    <?php endif;?>
-                    <?=$pagination ?? null;?>
+                    <?php if ($worksheets) : ?>
+                        <div class="double-scroll">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th
+                                            scope="col"
+                                            class="pl-4"
+                                        >No</th>
+                                        <th
+                                            scope="col"
+                                            style="min-width:120px;"
+                                        >Nomor Lembar Kerja</th>
+                                        <th
+                                            scope="col"
+                                            style="min-width:350px;"
+                                        >Judul Draft</th>
+                                        <th scope="col">Tahun Masuk</th>
+                                        <th scope="col">Revisi</th>
+                                        <th scope="col">PIC</th>
+                                        <th scope="col">Status</th>
+                                        <!-- <th scope="col">Deadline</th> -->
+                                        <!-- <th scope="col">Tanggal Selesai</th> -->
+                                        <th style="min-width:150px;"> &nbsp; </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($worksheets as $worksheet) : ?>
+                                        <tr>
+                                            <td class="align-middle pl-4"><?= ++$i; ?></td>
+                                            <td class="align-middle"><a
+                                                    title="Lihat Desk Screening"
+                                                    href="<?= base_url('worksheet/edit/' . $worksheet->worksheet_id); ?>"
+                                                ><?= highlight_keyword($worksheet->worksheet_num, $keyword); ?></a></td>
+                                            <td class="align-middle">
+                                                <a
+                                                    title="Lihat detail draft"
+                                                    href="<?= base_url('draft/view/' . $worksheet->draft_id); ?>"
+                                                >
+                                                    <?= ($worksheet->is_reprint == 'y') ? '<span class="badge badge-warning"><i class="fa fa-redo" data-toggle="tooltip" title="Cetak Ulang"></i></span>' : ''; ?>
+                                                    <?= highlight_keyword($worksheet->draft_title, $keyword); ?>
+                                                </a>
+                                            </td>
+                                            <td class="align-middle"><?= date('Y', strtotime($worksheet->entry_date)); ?></td>
+                                            <td class="align-middle">
+                                                <?= $worksheet->is_revise == 'y' ? '<i class="fa fa-check text-success"></i>' : '-'; ?>
+                                            </td>
+                                            <td class="align-middle"><?= $worksheet->worksheet_pic; ?></td>
+                                            <td class="align-middle"><?= $worksheet_status_badge[$worksheet->worksheet_status]; ?>
+                                            </td>
+                                            <!-- <td class="align-middle"> <?= format_datetime($worksheet->worksheet_deadline); ?></td> -->
+                                            <!-- <td class="align-middle"> <?= format_datetime($worksheet->worksheet_end_date); ?></td> -->
+                                            <td class="align-middle text-right">
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-sm btn-secondary"
+                                                    data-container="body"
+                                                    data-toggle="popover"
+                                                    data-placement="left"
+                                                    data-html="true"
+                                                    data-content="<?= generate_worksheet_action($worksheet->worksheet_id); ?>"
+                                                    data-trigger="focus"
+                                                >
+                                                    <i class="fa fa-thumbs-up"></i> Aksi
+                                                </button>
+                                                <a
+                                                    title="Edit"
+                                                    href="<?= base_url('worksheet/edit/' . $worksheet->worksheet_id . ''); ?>"
+                                                    class="btn btn-sm btn-secondary"
+                                                >
+                                                    <i class="fa fa-pencil-alt"></i>
+                                                    <span class="sr-only">Edit</span>
+                                                </a>
+                                            <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php else : ?>
+                        <p class="text-center">Data tidak tersedia</p>
+                    <?php endif; ?>
+                    <?= $pagination ?? null; ?>
                 </div>
             </section>
         </div>

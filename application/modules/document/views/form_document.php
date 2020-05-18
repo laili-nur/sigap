@@ -71,7 +71,7 @@
                         <button
                             class="btn btn-primary ml-auto"
                             type="submit"
-                        >Submit data</button>
+                        >Submit</button>
                     </div>
                     </form>
                 </div>
