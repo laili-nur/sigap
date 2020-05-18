@@ -1,8 +1,8 @@
 <?php
 $worksheet_status_options = [
-   0 => 'Menunggu Desk Screening',
-   1 => 'Diterima',
-   2 => 'Ditolak',
+    0 => 'Menunggu Desk Screening',
+    1 => 'Diterima',
+    2 => 'Ditolak',
 ]; ?>
 <header class="page-title-bar">
     <nav aria-label="breadcrumb">
@@ -116,36 +116,14 @@ $worksheet_status_options = [
                             <label for="worksheet_deadline">
                                 <?= $this->lang->line('form_worksheet_deadline'); ?>
                             </label>
-                            <div class="has-clearable">
-                                <button
-                                    type="button"
-                                    class="close"
-                                    aria-label="Close"
-                                >
-                                    <span aria-hidden="true">
-                                        <i class="fa fa-times-circle"></i>
-                                    </span>
-                                </button>
-                                <?= form_input('worksheet_deadline', $input->worksheet_deadline, 'class="form-control mydate" id="worksheet_deadline"'); ?>
-                            </div>
+                            <?= form_input('worksheet_deadline', $input->worksheet_deadline, 'class="form-control dates" id="worksheet_deadline"'); ?>
                             <?= form_error('worksheet_deadline'); ?>
                         </div>
                         <div class="form-group">
                             <label for="worksheet_end_date">
                                 <?= $this->lang->line('form_worksheet_end_date'); ?>
                             </label>
-                            <div class="has-clearable">
-                                <button
-                                    type="button"
-                                    class="close"
-                                    aria-label="Close"
-                                >
-                                    <span aria-hidden="true">
-                                        <i class="fa fa-times-circle"></i>
-                                    </span>
-                                </button>
-                                <?= form_input('worksheet_end_date', $input->worksheet_end_date, 'class="form-control mydate" id="worksheet_end_date"'); ?>
-                            </div>
+                            <?= form_input('worksheet_end_date', $input->worksheet_end_date, 'class="form-control dates" id="worksheet_end_date"'); ?>
                             <?= form_error('worksheet_end_date'); ?>
                         </div>
                     </fieldset>
@@ -180,5 +158,13 @@ $(document).ready(function() {
         },
         validateSelect2()
     );
+
+    $('.dates').flatpickr({
+        disableMobile: true,
+        altInput: true,
+        altFormat: 'j F Y',
+        dateFormat: 'Y-m-d',
+        minDate: "2000-01-01",
+    });
 });
 </script>

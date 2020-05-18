@@ -67,27 +67,33 @@ class Worksheet extends Operator_Controller
 
         // pic merupakan user yang login
         $input->worksheet_pic = $this->username;
-        if ($this->worksheet->where('worksheet_id', $id)->update($input)) {
-            // setelah update worksheet
-            // update draft status juga
-            if ($input->worksheet_status == 1) {
-                $status = array('draft_status' => 1);
-            } elseif ($input->worksheet_status == 2) {
-                $status = array('draft_status' => 2);
-            } else {
-                $status = array('draft_status' => 0);
-            }
-            $this->worksheet->update_draft_status($worksheet->draft_id, $status);
-            $this->session->set_flashdata('success', $this->lang->line('toast_edit_success'));
-        } else {
+        // jika diterima atau ditolak, simpan tanggal selesai
+        if ($input->worksheet_status == 1 || $input->worksheet_status == 2) {
+            $input->worksheet_end_date = now();
+        }
+
+        $this->db->trans_begin();
+
+        // update lembar kerja
+        $this->worksheet->where('worksheet_id', $id)->update($input);
+
+        // update draft status
+        // worksheet_status berisi 0 | 1 | 2 sesuai dengan draft status
+        $this->worksheet->update_draft_status($worksheet->draft_id, ['draft_status' => $input->worksheet_status]);
+
+        if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
             $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
+        } else {
+            $this->db->trans_commit();
+            $this->session->set_flashdata('success', $this->lang->line('toast_edit_success'));
         }
 
         redirect($this->pages);
     }
 
     // untuk menyetujui atau menolak draft
-    public function action($id, $action)
+    public function action($id, $worksheet_status)
     {
         $worksheet = $this->worksheet->where('worksheet_id', $id)->get();
         if (!$worksheet) {
@@ -97,11 +103,16 @@ class Worksheet extends Operator_Controller
 
         $this->db->trans_begin();
 
+        // update lembar kerja
         $this->worksheet->where('worksheet_id', $id)->update([
-            'worksheet_status' => $action,
+            'worksheet_status' => $worksheet_status,
             'worksheet_pic'    => $this->username,
+            'worksheet_end_date' => now()
         ]);
-        $this->worksheet->update_draft_status($worksheet->draft_id, ['draft_status' => $action]);
+
+        // update draft status
+        // worksheet_status berisi 0 | 1 | 2 sesuai dengan draft status
+        $this->worksheet->update_draft_status($worksheet->draft_id, ['draft_status' => $worksheet_status]);
 
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();

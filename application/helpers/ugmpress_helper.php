@@ -477,6 +477,7 @@ function get_allowed_file_types($field_name = null)
 
 function draft_status_to_text($code)
 {
+    // status 0,1,2 sama dengan status desk screening worksheet
     $status = "";
     switch ($code) {
         case 0:
