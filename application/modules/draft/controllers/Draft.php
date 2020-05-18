@@ -655,19 +655,6 @@ class Draft extends Operator_Controller
             return;
         }
 
-        if ($input->is_review == 'y') {
-            $input->draft_status = 5;
-        }
-        if ($input->is_review == 'y' && $input->is_edit == 'y') {
-            $input->draft_status = 7;
-        }
-        if ($input->is_review == 'y' && $input->is_edit == 'y' && $input->is_layout == 'y') {
-            $input->draft_status = 9;
-        }
-        if ($input->is_review == 'y' && $input->is_edit == 'y' && $input->is_layout == 'y' && $input->is_proofread == 'y') {
-            $input->draft_status = 13;
-        }
-
         if ($this->draft->where('draft_id', $id)->update($input)) {
             $this->session->set_flashdata('success', $this->lang->line('toast_edit_success'));
         } else {
@@ -692,19 +679,15 @@ class Draft extends Operator_Controller
         // memastikan konsistensi data
         $this->db->trans_begin();
 
-        $this->load->model('Draft_author_model', 'draft_author');
         $this->draft_author->where('draft_id', $id)->delete();
-        $affected_rows = $this->db->affected_rows();
-        if ($affected_rows > 0) {
-            if ($this->draft->where('draft_id', $id)->delete()) {
-                $this->draft->delete_draft_file($draft->draft_file);
-                $this->draft->delete_draft_file($draft->review1_file);
-                $this->draft->delete_draft_file($draft->review2_file);
-                $this->draft->delete_draft_file($draft->edit_file);
-                $this->draft->delete_draft_file($draft->layout_file);
-                $this->draft->delete_draft_file($draft->cover_file);
-                $this->draft->delete_draft_file($draft->proofread_file);
-            }
+        if ($this->draft->where('draft_id', $id)->delete()) {
+            $this->draft->delete_draft_file($draft->draft_file);
+            $this->draft->delete_draft_file($draft->review1_file);
+            $this->draft->delete_draft_file($draft->review2_file);
+            $this->draft->delete_draft_file($draft->edit_file);
+            $this->draft->delete_draft_file($draft->layout_file);
+            $this->draft->delete_draft_file($draft->cover_file);
+            $this->draft->delete_draft_file($draft->proofread_file);
         }
 
         if ($this->db->trans_status() === false) {
@@ -771,68 +754,76 @@ class Draft extends Operator_Controller
         }
     }
 
-    public function cetakUlang($id = '')
+    public function reprint($draft_id = null, $is_revise = false)
     {
-        $draft = $this->draft->where('draft_id', $id)->get();
+        $draft = $this->draft->where('draft_id', $draft_id)->get();
         if (!$draft) {
-            $this->session->set_flashdata('warning', 'Draft data were not available');
-            redirect('draft');
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
+            redirect($this->pages);
         }
-        $draft->draft_title = $draft->draft_title . " (cetak ulang)";
-        // if (!$_POST) {
-        // } else {
-        //     $input = (object)$this->input->post(null, false);
-        // }
-        $input             = (object) $draft;
+
+        if ($draft->draft_status != 14) {
+            $this->session->set_flashdata('warning', 'Draft belum final, tidak bisa dicetak ulang');
+            redirect('draft/view/' . $draft_id);
+        }
+
+        // set default data untuk draft cetak ulang
+        $input             = new stdClass();
+        $input->draft_title = $draft->draft_title . " (cetak ulang)";
         $input->is_reprint = 'y';
-        unset($input->draft_id);
+        $input->input_by = $this->username;
+        $input->entry_date = now();
+        $input->is_review = 'y';
+        $input->is_edit = 'y';
+        $input->is_layout = 'y';
+        $input->is_proofread = 'y';
+        $input->is_print = 'y';
 
-        //get array penulis
-        $input->authors   = $this->draft->select('draft_author.author_id')->join_table('draft_author', 'draft', 'draft')->join_table('author', 'draft_author', 'author')->join_table('work_unit', 'author', 'work_unit')->join_table('institute', 'author', 'institute')->where('draft_author.draft_id', $id)->get_all();
-        $input->author_id = array();
-        foreach ($input->authors as $au) {
-            array_push($input->author_id, $au->author_id);
+        // copy data dari draft yang direprint
+        $copied_values = ['category_id', 'theme_id', 'draft_file', 'draft_file_link'];
+        foreach ($copied_values as $value) {
+            $input->{$value} = $draft->{$value};
         }
 
-        // if (!$this->draft->validate() || $this->form_validation->error_array()) {
-        //     $pages = $this->pages;
-        //     $main_view = 'draft/form_draft_add';
-        //     $form_action = 'draft/add';
-        //     $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
-        //     return;
-        // }
+        // get array penulis
+        $authors = array_map(function ($author) {
+            return $author->author_id;
+        }, $this->author->get_draft_authors($draft_id));
 
-        $draft_id   = $this->draft->insert($input);
-        $is_success = true;
-        if ($draft_id > 0) {
-            foreach ($input->author_id as $key => $value) {
-                $data_author = array('author_id' => $value, 'draft_id' => $draft_id);
-                if ($key == 0) {
-                    $data_author['draft_author_status'] = 1;
-                }
-                $draft_author_id = $this->draft->insert($data_author, 'draft_author');
-                if ($draft_author_id < 1) {
-                    $is_success = false;
-                    break;
-                }
-            }
+        // memastikan konsistensi data
+        $this->db->trans_begin();
+
+        // insert draft
+        $insert_id   = $this->draft->insert($input);
+
+        // insert draft author
+        foreach ($authors as $key => $value) {
+            // hanya author pertama yang boleh edit draft
+            // author lain hanya bisa view only
+            $this->draft_author->insert([
+                'author_id'           => $value,
+                'draft_id'            => $draft_id,
+                'draft_author_status' => $key == 0 ? 1 : 0, // author pertama, flag 1, artinya boleh edit draft
+            ]);
+        }
+
+        // insert ke worksheet
+        $this->worksheet->insert([
+            'draft_id'         => $insert_id,
+            'worksheet_num'    => $this->_generate_worksheet_number(),
+            'worksheet_status' => 1,
+            'is_reprint'       => 'y'
+        ]);
+
+        if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
+            $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
         } else {
-            $is_success = false;
+            $this->db->trans_commit();
+            $this->session->set_flashdata('success', $this->lang->line('toast_add_success'));
         }
-        if ($is_success) {
-            $worksheet_num  = $this->_generate_worksheet_number();
-            $data_worksheet = array('draft_id' => $draft_id, 'worksheet_num' => $worksheet_num, 'worksheet_status' => 1, 'is_reprint' => 'y');
-            $worksheet_id   = $this->draft->insert($data_worksheet, 'worksheet');
-            if ($worksheet_id < 1) {
-                $is_success = false;
-            }
-        }
-        if ($is_success) {
-            $this->session->set_flashdata('success', 'Data saved');
-        } else {
-            $this->session->set_flashdata('error', 'Data failed to save');
-        }
-        redirect('draft/view/' . $draft_id);
+
+        redirect('draft/view/' . $insert_id);
     }
 
     // public function endProgress($id, $status)

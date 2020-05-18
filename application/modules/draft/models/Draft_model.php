@@ -23,11 +23,11 @@ class Draft_model extends MY_Model
                 'label' => $this->lang->line('form_draft_title'),
                 'rules' => 'trim|required|min_length[1]|max_length[256]|callback_unique_data[draft_title]',
             ],
-            [
-                'field' => 'author_id[]',
-                'label' => $this->lang->line('form_author_name'),
-                'rules' => 'trim',
-            ],
+            // [
+            //     'field' => 'author_id[]',
+            //     'label' => $this->lang->line('form_author_name'),
+            //     'rules' => 'trim',
+            // ],
             [
                 'field' => 'draft_file_link',
                 'label' => $this->lang->line('form_draft_file_link'),

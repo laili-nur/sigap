@@ -103,20 +103,6 @@
                             <td width="140px">Tipe Naskah</td>
                             <td class="align-middle">
                                 <?= $input->is_reprint == 'y' ? '<span class="badge badge-warning mb-2">Cetak Ulang</span>' : '<span class="badge badge-success mb-2">Baru</span>'; ?>
-                                <?php if ($input->is_reprint == 'n') : ?>
-                                    <div class="alert alert-info m-0 p-2">
-                                        <?php ($input->draft_status != 14) ? $atribut = 'disabled' : $atribut = ''; ?>
-                                        <p class="m-0 p-0">Draft dengan status proses final dapat di cetak ulang.</p>
-                                        <?php if ($level === 'superadmin' or $level === 'admin_penerbitan') : ?>
-                                            <button
-                                                <?= ($atribut == 'disabled') ? 'style="cursor:not-allowed" disabled' : ''; ?>
-                                                type="button"
-                                                class="btn btn-info btn-xs <?= $atribut; ?>"
-                                                onClick="location.href='<?= base_url("draft/cetakUlang/$input->draft_id"); ?>'"
-                                            >Cetak Ulang</button>
-                                        <?php endif; ?>
-                                    </div>
-                                <?php endif; ?>
                             </td>
                         </tr>
                         <tr>

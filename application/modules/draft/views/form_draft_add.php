@@ -27,7 +27,7 @@
                                 <?= $this->lang->line('form_category_name'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <?php $atribut = (!empty($this->uri->segment(3)) and $this->uri->segment(2) != 'cetakUlang') ? 'disabled' : ''; ?>
+                            <?php $atribut = (!empty($this->uri->segment(3)) and $this->uri->segment(2) != 'reprint') ? 'disabled' : ''; ?>
                             <?= form_dropdown('category_id', get_dropdown_list_category(false), $input->category_id, 'id="category" class="form-control custom-select d-block ' . $atribut . '" ' . $atribut . ''); ?>
                             <small class="form-text text-muted">Kategori yang tampil adalah kategori yang statusnya
                                 aktif</small>

@@ -228,7 +228,7 @@ function expand($authors)
                                                     <?= isset($draft->author_name) ? highlight_keyword($draft->author_name, $keyword) : '-'; ?>
                                                     <button
                                                         type="button"
-                                                        class="btn btn-link btn-sm m-0 p-0 <?= count($draft->authors) == 1 ? 'd-none' : ''; ?>"
+                                                        class="btn btn-link btn-sm m-0 p-0 <?= count($draft->authors) <= 1 ? 'd-none' : ''; ?>"
                                                         data-container="body"
                                                         data-toggle="popover"
                                                         data-placement="right"

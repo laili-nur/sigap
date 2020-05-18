@@ -1,3 +1,11 @@
+<?php
+$draft_status_code = range(0, 19);
+$draft_status_code[] = 99;
+
+$draft_status_options = array_map(function ($draft_status) {
+    return  draft_status_to_text($draft_status);
+}, $draft_status_code)
+?>
 <header class="page-title-bar">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -139,10 +147,16 @@
                                 <?= form_error('is_reprint'); ?>
                             </div>
                             <div class="form-group">
+                                <label for="draft_status">Progress</label>
+                                <?= form_dropdown('draft_status', $draft_status_options, $input->draft_status, 'id="draft_status" class="form-control custom-select d-block"'); ?>
+                            </div>
+                            <div class="form-group">
+                                <label for="draft_notes">Catatan draft</label>
                                 <?= form_textarea('draft_notes', $input->draft_notes, 'class="form-control" id="draft_notes" data-toggle="summernote" data-height="150"'); ?>
                             </div>
                         </div>
                         <hr>
+
                         <h5 class="card-title">Review</h5>
                         <div class="form-group">
                             <label>Status Review</label>
@@ -482,7 +496,7 @@ $(document).ready(function() {
         dateFormat: 'Y-m-d',
         minDate: "2000-01-01",
     });
-    $("#category,#theme").select2({
+    $("#category,#theme,#draft_status").select2({
         placeholder: '- Pilih -',
         dropdownParent: $('#app-main')
     });

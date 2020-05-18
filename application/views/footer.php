@@ -1,4 +1,4 @@
-<footer class="app-footer">
+<footer class="app-footer my-2">
     <hr>
     <ul class="list-inline">
         <li class="list-inline-item">

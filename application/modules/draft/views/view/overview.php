@@ -16,12 +16,21 @@
     </nav>
     <div class="d-flex justify-content-between align-items-center my-3">
         <div class="page-title mb-0 pb-0 h1"> Draft </div>
-        <?php if (is_admin()) : ?>
-            <a
-                href="<?= base_url('draft/edit/' . $input->draft_id) ?>"
-                class="btn btn-secondary btn-sm"
-            ><i class="fa fa-edit fa-fw"></i> Edit Draft</a>
-        <?php endif ?>
+        <div>
+            <?php if (is_admin()) : ?>
+                <?php if ($input->is_reprint == 'n') : ?>
+                    <button
+                        type="button"
+                        class="btn btn-info btn-xs"
+                        onClick="location.href='<?= base_url("draft/reprint/$input->draft_id"); ?>'"
+                    ><i class="fa fa-redo"></i>&nbsp; Cetak Ulang</button>
+                <?php endif; ?>
+                <a
+                    href="<?= base_url('draft/edit/' . $input->draft_id) ?>"
+                    class="btn btn-secondary btn-sm"
+                ><i class="fa fa-edit fa-fw"></i> Edit Draft</a>
+            <?php endif ?>
+        </div>
     </div>
 </header>
 <div class="page-section">
