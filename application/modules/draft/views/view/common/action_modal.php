@@ -47,14 +47,20 @@
                             ]);
                         }
                         ?>
+                        <hr class="my-3">
                         <div class="alert alert-info">
-                            Pilih salah satu tombol dibawah ini: <br>
+                            Pilih aksi dibawah ini: <br>
                             Jika <strong class="text-success">Setuju</strong>, maka tahap <?= $progress ?> akan
                             diakhiri
                             dan tanggal selesai <?= $progress ?> akan dicatat <br>
                             Jika <strong class="text-danger">Tolak</strong> maka proses draft akan diakhiri
-                            sampai tahap ini.
+                            sampai tahap ini.<br>
+                            Pilih <strong class="text-primary">Reset</strong> jika ingin mengembalikan status progress.
                         </div>
+                        <button
+                            class="btn btn-link"
+                            id="btn-<?= $progress ?>-revert"
+                        ><i class="fa fa-history"></i> Reset Aksi</button>
                     </div>
                 </fieldset>
             </div>
@@ -81,20 +87,25 @@
 
 <script>
 $(document).ready(function() {
-    // contoh progress = 'review','edit','layout','proofread','print'
+    // contoh progress = 'review','edit','layout','proofread'
     const progress = '<?= $progress ?>'
+    const url = "<?= base_url('draft/api_action_progress'); ?>"
 
-    function send_action_data(accept) {
+    const draftId = $('[name=draft_id]').val();
+
+    function send_action_data({
+        isAccept,
+        isRevert
+    }) {
         this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
-        const draft_id = $('[name=draft_id]').val();
-
 
         $.ajax({
             type: "POST",
-            url: "<?= base_url('draft/api_action_progress/'); ?>" + draft_id,
+            url: `${url}/${draftId}`,
             data: {
                 progress,
-                accept: accept,
+                accept: isAccept,
+                revert: isRevert,
                 [`${progress}_status`]: $(`#${progress}_status`).val()
             },
             success: function(res) {
@@ -113,12 +124,26 @@ $(document).ready(function() {
 
     // aksi setuju
     $(`#${progress}-progress-wrapper`).on('click', `#btn-${progress}-accept`, function() {
-        send_action_data.call($(this), true)
+        send_action_data.call($(this), {
+            isAccept: 1,
+            isRevert: 0
+        })
     });
 
     // aksi tolak
     $(`#${progress}-progress-wrapper`).on('click', `#btn-${progress}-decline`, function() {
-        send_action_data.call($(this), false)
+        send_action_data.call($(this), {
+            isAccept: 0,
+            isRevert: 0
+        })
     });
+
+    // aksi revert
+    $(`#${progress}-progress-wrapper`).on('click', `#btn-${progress}-revert`, function() {
+        send_action_data.call($(this), {
+            isAccept: null,
+            isRevert: 1
+        })
+    })
 })
 </script>

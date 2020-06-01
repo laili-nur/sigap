@@ -59,7 +59,7 @@ $all_criteria = [
                         role="tab"
                         aria-controls="<?= $progress ?>-file-tab-content"
                         aria-selected="true"
-                    >File</a>
+                    ><i class="far fa-file-alt"></i> File</a>
                 </li>
                 <li class="nav-item">
                     <a
@@ -70,7 +70,7 @@ $all_criteria = [
                         role="tab"
                         aria-controls="<?= $progress ?>-comment-tab-content"
                         aria-selected="false"
-                    >Tanggapan</a>
+                    ><i class="far fa-comments"></i> Tanggapan</a>
                 </li>
                 <?php if ($level != 'author') : ?>
                     <li class="nav-item">
@@ -82,7 +82,7 @@ $all_criteria = [
                             role="tab"
                             aria-controls="<?= $progress ?>-score-tab-content"
                             aria-selected="false"
-                        >Penilaian</a>
+                        > <i class="fa fa-file-signature"></i> Penilaian</a>
                     </li>
                 <?php endif ?>
             </ul>
@@ -316,7 +316,6 @@ $all_criteria = [
 
 <script>
 $(document).ready(function() {
-    // contoh progress = 'review1','review2,'edit','layout','proofread','print'
     const progress = "<?= $progress == 'review1' || $progress == 'review2' ? 'review' : $progress ?>"
     // identifier khusus untuk progress review
     // selain progress review, identifier == progress

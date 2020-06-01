@@ -5,6 +5,8 @@ use Carbon\Carbon;
 $level               = check_level();
 $edit_remaining_time = Carbon::parse(Carbon::today())->diffInDays($input->edit_deadline, false);
 $is_edit_started     = format_datetime($input->edit_start_date);
+$is_notes_populated = $input->edit_notes || $input->edit_notes_author ? true : false;
+$is_files_populated = $input->edit_file || $input->edit_file_link ? true : false;
 ?>
 <section
     id="edit-progress-wrapper"
@@ -21,9 +23,9 @@ $is_edit_started     = format_datetime($input->edit_start_date);
                             class="d-inline btn <?= empty($editors) ? 'btn-warning' : 'btn-secondary'; ?>"
                             title="Pilih editor"
                         ><i class="fas fa-user-plus fa-fw"></i><span class="d-none d-lg-inline"> Pilih
-                            Editor</span></button>
+                                Editor</span></button>
                     <?php endif; ?>
-                    <?php if ($level == 'editor' || is_admin()) : ?>
+                    <?php if (($level == 'editor' || is_admin()) && !$is_final) : ?>
                         <button
                             id="btn-start-edit"
                             title="Mulai proses editorial"
@@ -127,29 +129,35 @@ $is_edit_started     = format_datetime($input->edit_start_date);
         <div class="card-body">
             <div class="card-button">
                 <!-- button aksi -->
-                <?php if (is_admin()) : ?>
+                <?php if (is_admin() && !$is_final) : ?>
                     <button
                         title="Aksi admin"
                         class="btn btn-secondary <?= !$is_edit_started ? 'btn-disabled' : ''; ?>"
                         data-toggle="modal"
                         data-target="#modal-action-edit"
+                        <?= !$is_edit_started ? 'disabled' : ''; ?>
                     ><i class="fa fa-thumbs-up"></i> Aksi</button>
                 <?php endif; ?>
 
                 <!-- button tanggapan edit -->
                 <button
                     type="button"
-                    class="btn <?= ($input->edit_notes) ? 'btn-success' : 'btn-outline-success'; ?>"
+                    class="btn btn-outline-success <?= !$is_edit_started ? 'btn-disabled' : ''; ?>"
                     data-toggle="modal"
                     data-target="#modal-edit"
+                    <?= !$is_edit_started ? 'disabled' : ''; ?>
                     <?= ($level == 'editor' and $edit_remaining_time <= 0 and $input->edit_notes == '') ? 'disabled' : ''; ?>
-                >Progress Edit</button>
+                >Progress Edit
+                    <?= $is_notes_populated ? '<i class="far fa-comments"></i>' : '' ?>
+                    <?= $is_files_populated ? '<i class="far fa-file-alt"></i>' : '' ?>
+                </button>
                 <?php if ($level != 'author' and $level != 'layouter') : ?>
                     <button
                         data-toggle="modal"
                         data-target="#modal-edit-confidential"
-                        class="btn btn-outline-dark"
-                    ><i class="far fa-sticky-note"></i> Catatan</button>
+                        class="btn btn-outline-dark <?= !$is_edit_started ? 'btn-disabled' : ''; ?>"
+                        <?= !$is_edit_started ? 'disabled' : ''; ?>
+                    > Catatan</button>
                 <?php endif; ?>
             </div>
         </div>

@@ -1,5 +1,5 @@
 <?php $level = check_level(); ?>
-<hr class="my-5">
+<hr class="my-4">
 <section class="card card-fluid">
     <header class="card-header">Desk Screening
         <?php if (is_staff()) : ?>

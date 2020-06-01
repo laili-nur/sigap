@@ -35,7 +35,7 @@
                         role="tab"
                         aria-controls="edit-file-tab-content"
                         aria-selected="true"
-                    >File</a>
+                    ><i class="far fa-file-alt"></i> File</a>
                 </li>
                 <li class="nav-item">
                     <a
@@ -46,7 +46,7 @@
                         role="tab"
                         aria-controls="edit-comment-tab-content"
                         aria-selected="false"
-                    >Tanggapan</a>
+                    ><i class="far fa-comments"></i> Tanggapan</a>
                 </li>
             </ul>
 

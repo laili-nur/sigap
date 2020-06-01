@@ -153,12 +153,6 @@ $(document).ready(function() {
                         $resetform.next('label.custom-file-label').html('');
                         $this.removeAttr("disabled").html("Update");
                     },
-                    complete: function() {
-                        // reload tombol finalisasi jika terdapat update file print
-                        if (progress == 'print') {
-                            $('#final-progress-wrapper').load(' #final-progress')
-                        }
-                    }
                 });
             }
         });
@@ -191,12 +185,6 @@ $(document).ready(function() {
                     showToast(false, err.responseJSON.message);
                     $this.removeAttr("disabled").html("<i class='fa fa-trash'></i> Hapus file");
                 },
-                complete: function() {
-                    // reload tombol finalisasi jika terdapat update file print
-                    if (progress == 'print') {
-                        $('#final-progress-wrapper').load(' #final-progress')
-                    }
-                }
             });
         }
     })

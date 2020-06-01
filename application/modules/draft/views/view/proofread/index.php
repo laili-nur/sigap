@@ -1,6 +1,8 @@
 <?php
 $level = check_level();
 $is_proofread_started      = format_datetime($input->proofread_start_date);
+$is_notes_populated = $input->proofread_notes || $input->proofread_notes_author ? true : false;
+$is_files_populated = $input->proofread_file || $input->proofread_file_link ? true : false;
 ?>
 <section
     id="proofread-progress-wrapper"
@@ -10,7 +12,7 @@ $is_proofread_started      = format_datetime($input->proofread_start_date);
         <header class="card-header">
             <div class="d-flex align-items-center"><span class="mr-auto">Proofread</span>
                 <div class="card-header-control">
-                    <?php if (is_staff()) : ?>
+                    <?php if (is_staff() && !$is_final) : ?>
                         <button
                             id="btn-start-proofread"
                             title="Mulai proses proofreading"
@@ -47,12 +49,12 @@ $is_proofread_started      = format_datetime($input->proofread_start_date);
             <?php if ($level != 'author') : ?>
                 <div class="list-group-item justify-content-between">
                     <?php if (is_staff()) : ?>
-                        <a
-                            class="btn-modal-revision"
-                            href="#revision-edit"
+                        <button
+                            class="btn-modal-revision btn btn-secondary btn-sm <?= !$is_proofread_started ? 'btn-disabled' : ''; ?>"
                             title="Revisi Edit"
                             data-revision-type="edit"
-                        >Revisi Edit <i class="fas fa-edit fa-fw"></i></a>
+                            <?= !$is_proofread_started ? 'disabled' : ''; ?>
+                        >Revisi Edit <i class="fas fa-edit fa-fw"></i></button>
                     <?php else : ?>
                         <span class="text-muted">Revisi Edit</span>
                     <?php endif ?>
@@ -61,12 +63,12 @@ $is_proofread_started      = format_datetime($input->proofread_start_date);
 
                 <div class="list-group-item justify-content-between">
                     <?php if (is_staff()) : ?>
-                        <a
-                            class="btn-modal-revision"
-                            href="#revision-layout"
+                        <button
+                            class="btn-modal-revision btn btn-secondary btn-sm <?= !$is_proofread_started ? 'btn-disabled' : ''; ?>"
                             title="Revisi Layout"
                             data-revision-type="layout"
-                        >Revisi Layout <i class="fas fa-edit fa-fw"></i></a>
+                            <?= !$is_proofread_started ? 'disabled' : ''; ?>
+                        >Revisi Layout <i class="fas fa-edit fa-fw"></i></button>
                     <?php else : ?>
                         <span class="text-muted">Revisi Layout</span>
                     <?php endif ?>
@@ -105,22 +107,27 @@ $is_proofread_started      = format_datetime($input->proofread_start_date);
         <div class="card-body">
             <div class="card-button">
                 <!-- button aksi -->
-                <?php if (is_admin()) : ?>
+                <?php if (is_admin() && !$is_final) : ?>
                     <button
                         title="Aksi admin"
                         class="btn btn-secondary <?= !$is_proofread_started ? 'btn-disabled' : ''; ?>"
                         data-toggle="modal"
                         data-target="#modal-action-proofread"
+                        <?= !$is_proofread_started ? 'disabled' : ''; ?>
                     ><i class="fa fa-thumbs-up"></i> Aksi</button>
                 <?php endif; ?>
 
                 <!-- button tanggapan proofread -->
                 <button
                     type="button"
-                    class="btn <?= ($input->proofread_notes) ? 'btn-success' : 'btn-outline-success'; ?>"
+                    class="btn btn-outline-success <?= !$is_proofread_started ? 'btn-disabled' : ''; ?>"
                     data-toggle="modal"
                     data-target="#modal-proofread"
-                >Progress Proofread</button>
+                    <?= !$is_proofread_started ? 'disabled' : ''; ?>
+                >Progress Proofread
+                    <?= $is_notes_populated ? '<i class="far fa-comments"></i>' : '' ?>
+                    <?= $is_files_populated ? '<i class="far fa-file-alt"></i>' : '' ?>
+                </button>
             </div>
         </div>
 

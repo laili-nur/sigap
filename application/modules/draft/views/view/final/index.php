@@ -7,7 +7,7 @@
         class="card-button"
     >
         <?php if (!isset($book)) : ?>
-            <?php $is_final_file_ready = $input->print_file || $input->print_file_link; ?>
+            <?php $is_final_file_ready = $input->proofread_file || $input->proofread_file_link; ?>
             <?php
             $hidden_date = array(
                 'type'  => 'hidden',
@@ -15,23 +15,26 @@
                 'value' => date('Y-m-d H:i:s'),
             );
             echo form_input($hidden_date); ?>
-            <?= ($input->is_print == 'n') ? '<div class="m-0"><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> Proses cetak belum disetujui</small></div>' : null ?>
-            <?= !$is_final_file_ready ? '<div class="m-0"><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> File/Link cetak belum ada</small></div>' : null; ?>
+            <?= ($input->is_proofread == 'n') ? '<div class="m-0"><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> Proses proofread belum disetujui</small></div>' : null ?>
+            <?= !$is_final_file_ready ? '<div class="m-0"><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> File/Link proofread belum ada</small></div>' : null; ?>
 
             <button
-                class="btn btn-primary"
+                class="btn btn-primary <?= ($input->is_proofread == 'y' && $is_final_file_ready) ? null : 'btn-disabled'; ?>"
                 data-toggle="modal"
                 data-target="#modal-save-draft"
-                <?= ($input->is_print == 'y' && $is_final_file_ready) ? null : 'disabled'; ?>
-            >Simpan jadi buku</button>
+                <?= ($input->is_proofread == 'y' && $is_final_file_ready) ? null : 'disabled'; ?>
+            >Finalisasi Draft</button>
             <button
-                class="btn btn-danger"
+                class="btn btn-danger <?= ($input->is_proofread == 'y' && $is_final_file_ready) ? null : 'btn-disabled'; ?>"
                 data-toggle="modal"
                 data-target="#modal-decline-draft"
-                <?= ($input->is_print == 'y' && $is_final_file_ready) ? null : 'disabled'; ?>
-            >Tolak</button>
+                <?= ($input->is_proofread == 'y' && $is_final_file_ready) ? null : 'disabled'; ?>
+            >Tolak Draft</button>
         <?php else : ?>
-            <div>Buku sudah dibuat menggunakan draft ini. <span><a href="<?= base_url("book/view/{$book->book_id}") ?>" target="_blank"> <i class="fa fa-external-link-alt"></i> Link buku</a></span></div>
+            <div>Buku sudah dibuat menggunakan draft ini.&nbsp;<span><a
+                        href="<?= base_url("book/view/{$book->book_id}") ?>"
+                        target="_blank"
+                    > <i class="fa fa-external-link-alt"></i> Link buku</a></span></div>
         <?php endif ?>
     </div>
 </div>

@@ -6,6 +6,10 @@ $level                  = check_level();
 $review1_remaining_time = Carbon::parse(Carbon::today())->diffInDays($input->review1_deadline, false);
 $review2_remaining_time = Carbon::parse(Carbon::today())->diffInDays($input->review2_deadline, false);
 $is_review_started      = format_datetime($input->review_start_date);
+$is_review1_notes_populated = $input->review1_notes || $input->review1_notes_author || $input->review1_notes_admin ? true : false;
+$is_review1_files_populated = $input->review1_file || $input->review1_file_link ? true : false;
+$is_review2_notes_populated = $input->review2_notes || $input->review2_notes_author || $input->review2_notes_admin ? true : false;
+$is_review2_files_populated = $input->review2_file || $input->review2_file_link ? true : false;
 ?>
 
 <section
@@ -24,7 +28,7 @@ $is_review_started      = format_datetime($input->review_start_date);
                             title="Pilih Reviewer"
                         ><i class="fas fa-user-plus fa-fw"></i><span class="d-none d-lg-inline"> Pilih Reviewer</span></button>
                     <?php endif; ?>
-                    <?php if ($level == 'reviewer' || is_admin()) : ?>
+                    <?php if (($level == 'reviewer' || is_admin()) && !$is_final) : ?>
                         <button
                             id="btn-start-review"
                             title="Mulai proses review"
@@ -174,7 +178,7 @@ $is_review_started      = format_datetime($input->review_start_date);
         <div class="card-body">
             <div class="card-button">
                 <!-- button aksi -->
-                <?php if (is_admin()) : ?>
+                <?php if (is_admin() && !$is_final) : ?>
                     <button
                         title="Aksi admin"
                         class="btn btn-secondary <?= !$is_review_started ? 'btn-disabled' : ''; ?>"
@@ -188,13 +192,16 @@ $is_review_started      = format_datetime($input->review_start_date);
                 <?php if (is_null($reviewer_order) || $reviewer_order == 0) : ?>
                     <button
                         type="button"
-                        class="btn-modal-review1 btn <?= $input->review1_flag ? 'btn-success' : 'btn-outline-success'; ?> <?= !$is_review_started ? 'btn-disabled' : ''; ?>"
+                        class="btn btn-outline-success <?= !$is_review_started ? 'btn-disabled' : ''; ?>"
                         data-toggle="modal"
                         data-target="#modal-review1"
                         <?= !$is_review_started ? 'disabled' : ''; ?>
                         <?= ($level == 'reviewer' && $review1_remaining_time <= 0 && $input->review1_flag == '') ? 'disabled' : ''; ?>
                     >
-                        <span>Progress Review #1</span>
+                        <span>Progress Review #1
+                            <?= $is_review1_notes_populated ? '<i class="far fa-comments"></i>' : '' ?>
+                            <?= $is_review1_files_populated ? '<i class="far fa-file-alt"></i>' : '' ?>
+                        </span>
                     </button>
                 <?php endif; ?>
 
@@ -202,13 +209,16 @@ $is_review_started      = format_datetime($input->review_start_date);
                 <?php if (is_null($reviewer_order) || $reviewer_order == 1) : ?>
                     <button
                         type="button"
-                        class="btn-modal-review2 btn <?= $input->review2_flag ? 'btn-success' : 'btn-outline-success'; ?> <?= !$is_review_started ? 'btn-disabled' : ''; ?>"
+                        class="btn btn-outline-success <?= !$is_review_started ? 'btn-disabled' : ''; ?>"
                         data-toggle="modal"
                         data-target="#modal-review2"
                         <?= !$is_review_started ? 'disabled' : ''; ?>
                         <?= ($level == 'reviewer' and $review2_remaining_time <= 0 and $input->review2_flag == '') ? 'disabled' : ''; ?>
                     >
-                        <span>Progress Review #2</span>
+                        <span>Progress Review #2
+                            <?= $is_review2_notes_populated ? '<i class="far fa-comments"></i>' : '' ?>
+                            <?= $is_review2_files_populated ? '<i class="far fa-file-alt"></i>' : '' ?>
+                        </span>
                     </button>
                 <?php endif; ?>
             </div>

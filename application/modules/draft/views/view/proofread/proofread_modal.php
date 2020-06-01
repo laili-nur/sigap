@@ -35,7 +35,7 @@
                         role="tab"
                         aria-controls="proofread-file-tab-content"
                         aria-selected="true"
-                    >File</a>
+                    ><i class="far fa-file-alt"></i> File</a>
                 </li>
                 <li class="nav-item">
                     <a
@@ -46,7 +46,7 @@
                         role="tab"
                         aria-controls="proofread-comment-tab-content"
                         aria-selected="false"
-                    >Tanggapan</a>
+                    ><i class="far fa-comments"></i> Tanggapan</a>
                 </li>
             </ul>
 
@@ -147,10 +147,8 @@ $(document).ready(function() {
     $('#proofread-progress-wrapper').on('shown.bs.modal', `#modal-proofread`, function() {
         // reload ketika modal diclose
         $(`#modal-proofread`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
-            $('#proofread-progress-wrapper').load(' #proofread-progress', function() {
-                // reinitiate flatpickr modal after load
-                initFlatpickrModal()
-            });
+            $('#proofread-progress-wrapper').load(' #proofread-progress');
+            $('#final-progress-wrapper').load(' #final-progress');
         })
     })
 

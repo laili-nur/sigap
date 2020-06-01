@@ -8,6 +8,7 @@ class Book extends Admin_Controller
         $this->pages = 'book';
 
         $this->load->model('author/author_model', 'author');
+        $this->load->model('draft/draft_model', 'draft');
 
 
         // if ($ceklevel == 'author' || $ceklevel == 'reviewer' || $ceklevel == 'editor' || $ceklevel == 'layouter') {
@@ -265,6 +266,9 @@ class Book extends Admin_Controller
             $this->book->delete_book_file($book->book_file);
             // Delete hak cipta file
             $this->book->delete_hak_cipta_file($book->file_hak_cipta);
+            // kembalikan status draft menjadi sebelum final
+            $this->draft->where('draft_id', $book->draft_id)->update(['draft_status' => 13]);
+
             $this->session->set_flashdata('success', $this->lang->line('toast_delete_success'));
         } else {
             $this->session->set_flashdata('success', $this->lang->line('toast_delete_fail'));

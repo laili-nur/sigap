@@ -35,7 +35,7 @@
                         role="tab"
                         aria-controls="cover-file-tab-content"
                         aria-selected="true"
-                    >File</a>
+                    ><i class="far fa-file-alt"></i> File</a>
                 </li>
                 <li class="nav-item">
                     <a
@@ -46,7 +46,7 @@
                         role="tab"
                         aria-controls="cover-comment-tab-content"
                         aria-selected="false"
-                    >Tanggapan</a>
+                    ><i class="far fa-comments"></i> Tanggapan</a>
                 </li>
             </ul>
 
@@ -148,7 +148,7 @@ $(document).ready(function() {
     $('#layout-progress-wrapper').on('shown.bs.modal', `#modal-cover`, function() {
         // reload ketika modal diclose
         $(`#modal-cover`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
-            $('#cover-progress-wrapper').load(' #cover-progress', function() {
+            $('#layout-progress-wrapper').load(' #layout-progress', function() {
                 // reinitiate flatpickr modal after load
                 initFlatpickrModal()
             });

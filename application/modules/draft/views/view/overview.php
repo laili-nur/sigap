@@ -74,13 +74,9 @@
                     // PROGRESS PROOFREAD
                     if ($input->is_layout == 'y') {
                         $this->load->view('draft/view/proofread/index');
-                        // PROGRESS CETAK
+                        // PROGRESS FINAL
                         if ($input->is_proofread == 'y' && is_staff()) {
-                            $this->load->view('draft/view/print/index');
-                            // PROGRESS FINAL
-                            if ($input->is_print == 'y' && is_admin()) {
-                                $this->load->view('draft/view/final/index');
-                            }
+                            $this->load->view('draft/view/final/index');
                         } elseif ($input->is_print == 'y' and $input->draft_status != 14 and $level == 'author' or $level == 'reviewer') {
                             echo '<div class="alert alert-info"><span>Draft sedang dalam proses.</span></div>';
                         }

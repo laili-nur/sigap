@@ -8,13 +8,14 @@
                 <tbody>
                     <tr>
                         <td width="200px"> Judul Buku </td>
-                        <td><strong>
-                            <?= $book->book_title; ?></strong> </td>
+                        <td>
+                            <a href="<?= base_url("book/view/$book->book_id") ?>"><?= $book->book_title; ?></a>
+                        </td>
                     </tr>
                     <tr>
                         <td width="200px"> Nomor Hak Cipta </td>
                         <td><strong>
-                            <?= $book->nomor_hak_cipta; ?></strong> </td>
+                                <?= $book->nomor_hak_cipta; ?></strong> </td>
                     </tr>
                     <tr>
                         <td width="200px"> File hak cipta </td>

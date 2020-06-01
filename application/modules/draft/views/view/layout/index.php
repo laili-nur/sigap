@@ -5,6 +5,10 @@ use Carbon\Carbon;
 $level = check_level();
 $layout_remaining_time = Carbon::parse(Carbon::today())->diffInDays($input->layout_deadline, false);
 $is_layout_started      = format_datetime($input->layout_start_date);
+$is_layout_notes_populated = $input->layout_notes || $input->layout_notes_author ? true : false;
+$is_layout_files_populated = $input->layout_file || $input->layout_file_link ? true : false;
+$is_cover_notes_populated = $input->cover_notes || $input->cover_notes_author ? true : false;
+$is_cover_files_populated = $input->cover_file || $input->cover_file_link ? true : false;
 ?>
 <section
     id="layout-progress-wrapper"
@@ -22,7 +26,7 @@ $is_layout_started      = format_datetime($input->layout_start_date);
                             title="Pilih layouter"
                         ><i class="fas fa-user-plus fa-fw"></i><span class="d-none d-lg-inline"> Pilih Layouter</span></button>
                     <?php endif; ?>
-                    <?php if ($level == 'layouter' || is_admin()) : ?>
+                    <?php if (($level == 'layouter' || is_admin()) && !$is_final) : ?>
                         <button
                             id="btn-start-layout"
                             title="Mulai proses layouting"
@@ -52,13 +56,13 @@ $is_layout_started      = format_datetime($input->layout_start_date);
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Tanggal mulai</span>
                 <strong>
-            <?= format_datetime($input->layout_start_date); ?></strong>
+                    <?= format_datetime($input->layout_start_date); ?></strong>
             </div>
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Tanggal selesai</span>
                 <strong>
-            <?= format_datetime($input->layout_end_date); ?></strong>
+                    <?= format_datetime($input->layout_end_date); ?></strong>
             </div>
 
             <div class="list-group-item justify-content-between">
@@ -125,30 +129,39 @@ $is_layout_started      = format_datetime($input->layout_start_date);
         <div class="card-body">
             <div class="card-button">
                 <!-- button aksi -->
-                <?php if (is_admin()) : ?>
+                <?php if (is_admin() && !$is_final) : ?>
                     <button
                         title="Aksi admin"
                         class="btn btn-secondary <?= !$is_layout_started ? 'btn-disabled' : ''; ?>"
                         data-toggle="modal"
                         data-target="#modal-action-layout"
+                        <?= !$is_layout_started ? 'disabled' : ''; ?>
                     ><i class="fa fa-thumbs-up"></i> Aksi</button>
                 <?php endif; ?>
 
                 <!-- button tanggapan layout -->
                 <button
                     type="button"
-                    class="btn <?= ($input->layout_notes) ? 'btn-success' : 'btn-outline-success'; ?>"
+                    class="btn btn-outline-success <?= !$is_layout_started ? 'btn-disabled' : ''; ?>"
                     data-toggle="modal"
                     data-target="#modal-layout"
+                    <?= !$is_layout_started ? 'disabled' : ''; ?>
                     <?= ($level == 'layouter' and $layout_remaining_time <= 0 and $input->layout_notes == '') ? 'disabled' : ''; ?>
-                >Progress Layout</button>
+                >Progress Layout
+                    <?= $is_layout_notes_populated ? '<i class="far fa-comments"></i>' : '' ?>
+                    <?= $is_layout_files_populated ? '<i class="far fa-file-alt"></i>' : '' ?>
+                </button>
                 <button
                     type="button"
-                    class="btn <?= ($input->cover_notes) ? 'btn-success' : 'btn-outline-success'; ?>"
+                    class="btn btn-outline-success <?= !$is_layout_started ? 'btn-disabled' : ''; ?>"
                     data-toggle="modal"
                     data-target="#modal-cover"
+                    <?= !$is_layout_started ? 'disabled' : ''; ?>
                     <?= ($level == 'layouter' and $layout_remaining_time <= 0 and $input->cover_notes == '') ? 'disabled' : ''; ?>
-                >Progress Cover</button>
+                >Progress Cover
+                    <?= $is_cover_notes_populated ? '<i class="far fa-comments"></i>' : '' ?>
+                    <?= $is_cover_files_populated ? '<i class="far fa-file-alt"></i>' : '' ?>
+                </button>
             </div>
         </div>
 

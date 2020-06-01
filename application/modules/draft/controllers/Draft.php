@@ -280,10 +280,12 @@ class Draft extends Operator_Controller
         $revision_total['editor']   = $this->revision->count_revision($draft_id, 'editor');
         $revision_total['layouter'] = $this->revision->count_revision($draft_id, 'layouter');
 
+        $is_final = $input->draft_status == 14 ? true : false;
+
         $pages       = $this->pages;
         $main_view   = 'draft/view/overview';
         $form_action = "draft/edit/$draft_id";
-        $this->load->view('template', compact('revision_total', 'book', 'author_order', 'draft', 'reviewer_order', 'desk', 'pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers', 'editors', 'layouters'));
+        $this->load->view('template', compact('revision_total', 'book', 'author_order', 'draft', 'reviewer_order', 'desk', 'pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers', 'editors', 'layouters', 'is_final'));
     }
 
     public function api_start_progress($draft_id)
@@ -322,10 +324,11 @@ class Draft extends Operator_Controller
         } elseif ($input->progress == 'proofread') {
             $this->draft->edit_draft_date($draft_id, 'proofread_start_date');
             $this->draft->update_draft_status($draft_id, ['draft_status' => 12]);
-        } elseif ($input->progress == 'print') {
-            $this->draft->edit_draft_date($draft_id, 'print_start_date');
-            $this->draft->update_draft_status($draft_id, ['draft_status' => 15]);
         }
+        // elseif ($input->progress == 'print') {
+        //     $this->draft->edit_draft_date($draft_id, 'print_start_date');
+        //     $this->draft->update_draft_status($draft_id, ['draft_status' => 15]);
+        // }
 
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();
@@ -509,27 +512,39 @@ class Draft extends Operator_Controller
 
         $input = (object) $this->input->post(null, false);
 
-        // update draft status ketika selesai progress
-        if ($input->progress == 'review') {
-            $input->draft_status = filter_boolean($input->accept) ? 5 : 99;
-            // $input->{"{$input->progress}_end_date"} = now(); // dicatat saat finish progress
-        } elseif ($input->progress == 'edit') {
-            $input->draft_status = filter_boolean($input->accept) ? 7 : 99;
-        } elseif ($input->progress == 'layout') {
-            $input->draft_status = filter_boolean($input->accept) ? 9 : 99;
-        } elseif ($input->progress == 'proofread') {
-            $input->draft_status = filter_boolean($input->accept) ? 13 : 99;
-        } elseif ($input->progress == 'print') {
-            $input->draft_status = filter_boolean($input->accept) ? 16 : 99;
-            // print end date berganti saat action admin
-            $this->draft->edit_draft_date($draft_id, 'print_end_date');
-        }
+        // cek status apakah akan direvert
+        if ($input->revert) {
+            $input->{"is_$input->progress"} = 'n';
 
-        $input->{"is_$input->progress"} = filter_boolean($input->accept) ? 'y' : 'n';
+            // kembali ke status 'sedang diproses'
+            if ($input->progress == 'review') {
+                $input->draft_status = 4;
+            } elseif ($input->progress == 'edit') {
+                $input->draft_status = 6;
+            } elseif ($input->progress == 'layout') {
+                $input->draft_status = 8;
+            } elseif ($input->progress == 'proofread') {
+                $input->draft_status = 12;
+            }
+        } else {
+            $input->{"is_$input->progress"} = filter_boolean($input->accept) ? 'y' : 'n';
+
+            // update draft status ketika selesai progress
+            if ($input->progress == 'review') {
+                $input->draft_status = filter_boolean($input->accept) ? 5 : 99;
+            } elseif ($input->progress == 'edit') {
+                $input->draft_status = filter_boolean($input->accept) ? 7 : 99;
+            } elseif ($input->progress == 'layout') {
+                $input->draft_status = filter_boolean($input->accept) ? 9 : 99;
+            } elseif ($input->progress == 'proofread') {
+                $input->draft_status = filter_boolean($input->accept) ? 13 : 99;
+            }
+        }
 
         // hilangkan property pembantu yang tidak ada di db
         unset($input->progress);
         unset($input->accept);
+        unset($input->revert);
 
         if ($this->draft->where('draft_id', $draft_id)->update($input)) {
             return $this->send_json_output(true, $this->lang->line('toast_edit_success'));
@@ -720,20 +735,23 @@ class Draft extends Operator_Controller
             $draft   = $this->draft->get_where(['draft_id' => $draft_id]);
 
             // jika file cetak tidak ada
-            if (!$draft->print_file && !$draft->print_file_link) {
+            if (!$draft->proofread_file && !$draft->proofread_file_link) {
                 $this->session->set_flashdata('warning', 'File cetak tidak ada');
                 redirect("draft/view/$draft_id");
             }
 
-            // copy file print, ke book
-            $book_file_name = $this->_generate_draft_file_name($draft->print_file, $draft->draft_title, 'book');
-            $this->copy_file('draftfile', 'bookfile', $draft->print_file, $book_file_name);
+            // copy file proofread, ke book
+            $book_file_name = null;
+            if ($draft->proofread_file) {
+                $book_file_name = $this->_generate_draft_file_name($draft->proofread_file, $draft->draft_title, 'book');
+                $this->copy_file('draftfile', 'bookfile', $draft->proofread_file, $book_file_name);
+            }
 
             $this->book->insert([
                 'draft_id' => $draft_id,
                 'book_title' => $draft->draft_title,
                 'book_file' =>  $book_file_name,
-                'book_file_link' => $draft->print_file_link,
+                'book_file_link' => $draft->proofread_file_link,
                 'published_date' => empty_to_null()
             ]);
             $book_id = $this->db->insert_id();
