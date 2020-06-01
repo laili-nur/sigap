@@ -580,18 +580,9 @@ class Draft_model extends MY_Model
                 $this->where('is_review', 'y')
                     ->where('is_edit', 'y')
                     ->where('is_layout', 'y')
-                    ->where('is_proofread', 'n')
-                    ->where_not('draft_status', '99');
-                break;
-
-            case 'print':
-                $this->where('is_review', 'y')
-                    ->where('is_edit', 'y')
-                    ->where('is_layout', 'y')
-                    ->where('is_proofread', 'y')
                     ->group_start()
-                    ->where('is_print', 'n')
-                    ->or_where('is_print', 'y')
+                    ->where('is_proofread', 'n')
+                    ->or_where('is_proofread', 'y')
                     ->group_end()
                     ->group_start()
                     ->where_not('draft_status', '99')
@@ -648,7 +639,6 @@ class Draft_model extends MY_Model
                     ->where('is_edit', 'y')
                     ->where('is_layout', 'y')
                     ->where('is_proofread', 'y')
-                    ->where('is_print', 'y')
                     ->where('is_reprint', 'n')
                     ->where('draft_status', '14');
                 break;

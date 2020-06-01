@@ -97,6 +97,9 @@
                             <td width="140px">Status Proses</td>
                             <td>
                                 <span class="font-weight-bold <?= ($input->draft_status == 99) ? 'text-danger' : '' ?>"> <?= draft_status_to_text($input->draft_status); ?></span>
+                                <?php if (draft_status_to_text($input->draft_status) === 'Error' && is_admin()) {
+                                    echo '<span class="small text-muted">(Apabila status Error, lakukan aksi pada salah satu progress)</span>';
+                                } ?>
                             </td>
                         </tr>
                         <tr>

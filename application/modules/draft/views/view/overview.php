@@ -77,8 +77,6 @@
                         // PROGRESS FINAL
                         if ($input->is_proofread == 'y' && is_staff()) {
                             $this->load->view('draft/view/final/index');
-                        } elseif ($input->is_print == 'y' and $input->draft_status != 14 and $level == 'author' or $level == 'reviewer') {
-                            echo '<div class="alert alert-info"><span>Draft sedang dalam proses.</span></div>';
                         }
                     }
                 }

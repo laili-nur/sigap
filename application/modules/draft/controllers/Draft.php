@@ -325,10 +325,6 @@ class Draft extends Operator_Controller
             $this->draft->edit_draft_date($draft_id, 'proofread_start_date');
             $this->draft->update_draft_status($draft_id, ['draft_status' => 12]);
         }
-        // elseif ($input->progress == 'print') {
-        //     $this->draft->edit_draft_date($draft_id, 'print_start_date');
-        //     $this->draft->update_draft_status($draft_id, ['draft_status' => 15]);
-        // }
 
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();
@@ -795,7 +791,6 @@ class Draft extends Operator_Controller
         $input->is_edit = 'y';
         $input->is_layout = 'y';
         $input->is_proofread = 'y';
-        $input->is_print = 'y';
 
         // copy data dari draft yang direprint
         $copied_values = ['category_id', 'theme_id', 'draft_file', 'draft_file_link'];

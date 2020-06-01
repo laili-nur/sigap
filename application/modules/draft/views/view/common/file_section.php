@@ -89,9 +89,9 @@
 
 <script>
 $(document).ready(function() {
-    // identifier adalah 'review1','review2,'edit','layout','cover','proofread','print'
+    // identifier adalah 'review1','review2,'edit','layout','cover','proofread'
     const identifier = '<?= $progress ?>'
-    // progress adalah 'review','edit','layout','proofread','print'
+    // progress adalah 'review','edit','layout','proofread'
     let progress;
     if (identifier == 'review1' || identifier == 'review2') {
         progress = 'review'

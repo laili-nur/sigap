@@ -1,6 +1,5 @@
 <?php
-$draft_status_code = range(0, 19);
-$draft_status_code[] = 99;
+$draft_status_code = array_merge(range(0, 14), range(17, 19), [99]);
 
 $draft_status_options = array_map(function ($draft_status) {
     return  draft_status_to_text($draft_status);
@@ -386,64 +385,6 @@ $draft_status_options = array_map(function ($draft_status) {
                                 </button>
                                 <?= form_input('proofread_end_date', $input->proofread_end_date, 'class="form-control dates"  '); ?>
                                 <?= form_error('proofread_end_date'); ?>
-                            </div>
-                        </div>
-                        <hr>
-                        <h5 class="card-title">Cetak</h5>
-                        <div class="form-group">
-                            <label>Status Cetak</label>
-                            <div class="mb-1">
-                                <label>
-                                    <?= form_radio(
-                                        'is_print',
-                                        'y',
-                                        isset($input->is_print) && ($input->is_print == 'y') ? true : false
-                                    ); ?><i class="fa fa-check text-success"></i> Sudah Cetak
-                                </label>
-                            </div>
-                            <div class="mb-1">
-                                <label>
-                                    <?= form_radio(
-                                        'is_print',
-                                        'n',
-                                        isset($input->is_print) && ($input->is_print == 'n') ? true : false
-                                    ); ?><i class="fa fa-times text-danger"></i> Belum Cetak
-                                </label>
-                            </div>
-                            <?= form_error('is_print'); ?>
-                        </div>
-                        <div class="form-group">
-                            <label for="print_start_date">Tanggal Mulai Cetak
-                            </label>
-                            <div class="has-clearable">
-                                <button
-                                    type="button"
-                                    class="close"
-                                    aria-label="Close"
-                                >
-                                    <span aria-hidden="true">
-                                        <i class="fa fa-times-circle"></i>
-                                    </span>
-                                </button>
-                                <?= form_input('print_start_date', $input->print_start_date, 'class="form-control dates" '); ?>
-                                <?= form_error('print_start_date'); ?>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="print_end_date">Tanggal Selesai Cetak
-                            </label>
-                            <div class="has-clearable">
-                                <button
-                                    type="button"
-                                    class="close"
-                                    aria-label="Close"
-                                >
-                                    <span aria-hidden="true">
-                                        <i class="fa fa-times-circle"></i>
-                                    </span>
-                                </button>
-                                <?= form_input('print_end_date', $input->print_end_date, 'class="form-control dates"'); ?>
-                                <?= form_error('print_end_date'); ?>
                             </div>
                         </div>
                     </fieldset>

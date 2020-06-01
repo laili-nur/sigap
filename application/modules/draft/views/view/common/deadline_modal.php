@@ -12,7 +12,10 @@
     >
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-title-<?= $progress ?>">Deadline <?= $progress ?></h5>
+                <h5
+                    class="modal-title"
+                    id="modal-title-<?= $progress ?>"
+                >Deadline <?= $progress ?></h5>
                 <button
                     type="button"
                     class="close"
@@ -54,7 +57,7 @@
 </div>
 <script>
 $(document).ready(function() {
-    // contoh progress = 'review1','review2,'edit','layout','proofread','print'
+    // contoh progress = 'review1','review2,'edit','layout','proofread'
     const progress = "<?= $progress == 'review1' || $progress == 'review2' ? 'review' : $progress ?>"
     // identifier khusus untuk progress review
     // selain progress review, identifier == progress

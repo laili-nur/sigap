@@ -63,21 +63,6 @@ if ($input->is_layout == 'y' && $input->is_proofread == 'n' && $input->draft_sta
     $proofread_title = 'Belum mulai';
 }
 
-// $print_class = '';
-// $print_title = '';
-// if ($input->is_proofread == 'y' && $input->is_print == 'n' && $input->draft_status == 99) {
-//     $print_class .= 'error ';
-//     $print_title = 'Ditolak';
-// } else if ($input->is_print == 'y') {
-//     $print_class .= 'success ';
-//     $print_title = 'Selesai';
-// } else if (format_datetime($input->print_start_date)) {
-//     $print_class .= 'active ';
-//     $print_title = 'Dalam Proses';
-// } else {
-//     $print_title = 'Belum mulai';
-// }
-
 $final_class = '';
 $final_title = '';
 if ($input->is_review == 'y' && $input->is_edit == 'y' && $input->is_layout == 'y' && $input->is_proofread == 'y' && $input->draft_status == 99) {

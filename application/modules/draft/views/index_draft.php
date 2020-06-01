@@ -18,7 +18,6 @@ $progress_options = [
     'edit'           => 'Tahap Editorial',
     'layout'         => 'Tahap Layout',
     'proofread'      => 'Tahap Proofread',
-    'print'          => 'Tahap Cetak',
     'final'          => 'Final',
     'reject'         => 'Ditolak',
 ];

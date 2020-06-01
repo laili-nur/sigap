@@ -525,12 +525,12 @@ function draft_status_to_text($code)
         case 14:
             $status = 'Final';
             break;
-        case 15:
-            $status = 'Proses Cetak';
-            break;
-        case 16:
-            $status = 'Cetak Selesai';
-            break;
+            // case 15:
+            //     $status = 'Proses Cetak';
+            //     break;
+            // case 16:
+            //     $status = 'Cetak Selesai';
+            //     break;
         case 17:
             $status = 'Revisi Edit';
             break;
@@ -544,7 +544,7 @@ function draft_status_to_text($code)
             $status = 'Draft Ditolak';
             break;
         default:
-            # code...
+            $status = 'Error';
             break;
     }
     return $status;
