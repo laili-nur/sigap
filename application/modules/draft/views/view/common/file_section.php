@@ -134,7 +134,7 @@ $(document).ready(function() {
 
                 // send data
                 $.ajax({
-                    url: "<?= base_url('draft/upload_progress/'); ?>" + draftId,
+                    url: "<?= base_url('draft/api_upload_progress/'); ?>" + draftId,
                     type: "post",
                     data: formData,
                     processData: false,
@@ -169,7 +169,7 @@ $(document).ready(function() {
             $this.attr("disabled", "disabled").html('<i class="fa fa-spinner fa-spin "></i>');
             // send data
             $.ajax({
-                url: "<?= base_url('draft/delete_progress/'); ?>" + draftId,
+                url: "<?= base_url('draft/api_delete_progress/'); ?>" + draftId,
                 type: "post",
                 data: {
                     progress: identifier,

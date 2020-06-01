@@ -290,11 +290,6 @@ class Draft extends Operator_Controller
 
     public function api_start_progress($draft_id)
     {
-        if ($draft_id == null) {
-            $message = 'ID draft kosong';
-            return $this->send_json_output(false, $message);
-        }
-
         // apakah draft tersedia
         $draft = $this->draft->where('draft_id', $draft_id)->get();
         if (!$draft) {
@@ -337,11 +332,6 @@ class Draft extends Operator_Controller
 
     public function api_finish_progress($draft_id)
     {
-        if ($draft_id == null) {
-            $message = 'ID draft kosong';
-            return $this->send_json_output(false, $message);
-        }
-
         // apakah draft tersedia
         $draft = $this->draft->where('draft_id', $draft_id)->get();
         if (!$draft) {
@@ -378,13 +368,8 @@ class Draft extends Operator_Controller
         }
     }
 
-    public function upload_progress($draft_id)
+    public function api_upload_progress($draft_id)
     {
-        if ($draft_id == null) {
-            $message = 'ID draft kosong';
-            return $this->send_json_output(false, $message);
-        }
-
         // apakah draft tersedia
         $draft = $this->draft->where('draft_id', $draft_id)->get();
         if (!$draft) {
@@ -413,20 +398,12 @@ class Draft extends Operator_Controller
 
         if (!empty($_FILES) && $file_name = $_FILES[$column]['name']) {
             $draft_file_name = $this->_generate_draft_file_name($file_name, $draft->draft_title, $column);
-            // if ($column == 'cover_file') {
-            //     $upload = $this->draft->uploadProgressCover($column, $draft_file_name);
-            // } else {
             $upload = $this->draft->upload_file($column, $draft_file_name);
-            // }
             if ($upload) {
                 $input->$column = $draft_file_name;
                 // Delete old draft file
                 if ($draft->$column) {
-                    // if ($column == 'cover_file') {
-                    //     $this->draft->deleteProgressCover($draft->$column);
-                    // } else {
                     $this->draft->delete_file($draft->$column);
-                    // }
                 }
             }
 
@@ -447,13 +424,8 @@ class Draft extends Operator_Controller
     }
 
     // hapus progress draft
-    public function delete_progress($draft_id)
+    public function api_delete_progress($draft_id)
     {
-        if ($draft_id == null) {
-            $message = 'ID draft kosong';
-            return $this->send_json_output(false, $message);
-        }
-
         // apakah draft tersedia
         $draft = $this->draft->where('draft_id', $draft_id)->get();
         if (!$draft) {
@@ -488,11 +460,6 @@ class Draft extends Operator_Controller
     // update draft, kirim update via post
     public function api_action_progress($draft_id)
     {
-        if ($draft_id == null) {
-            $message = 'ID draft kosong';
-            return $this->send_json_output(false, $message);
-        }
-
         // apakah draft tersedia
         $draft = $this->draft->where('draft_id', $draft_id)->get();
         if (!$draft) {
@@ -552,14 +519,6 @@ class Draft extends Operator_Controller
     // update draft, kirim update via post
     public function api_update_draft($draft_id = null)
     {
-        // $input = $this->input->post(null, false);
-        // return $this->send_json_output(true, $input);
-
-        if ($draft_id == null) {
-            $message = 'ID draft kosong';
-            return $this->send_json_output(false, $message);
-        }
-
         // apakah draft tersedia
         $draft = $this->draft->where('draft_id', $draft_id)->get();
         if (!$draft) {
@@ -838,22 +797,6 @@ class Draft extends Operator_Controller
 
         redirect('draft/view/' . $insert_id);
     }
-
-    // public function endProgress($id, $status)
-    // {
-    //     $this->draft->update_draft_status($id, array('draft_status' => $status + 1));
-    //     switch ($status) {
-    //         case '4':
-    //             $column = 'review_end_date';
-    //             break;
-    //         default:
-    //             # code...
-
-    //             break;
-    //     }
-    //     $this->draft->edit_draft_date($id, $column);
-    //     $this->detail($id);
-    // }
 
     private function _generate_worksheet_number()
     {

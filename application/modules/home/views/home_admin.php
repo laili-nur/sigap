@@ -96,14 +96,11 @@
                         class="metric metric-bordered align-items-center"
                     >
                         <div class="metric-badge">
-                            <span class="badge badge-lg badge-info">
+                            <span class="badge badge-lg badge-secondary">
                                 DESK SCREENING
                             </span>
                         </div>
                         <p class="metric-value h3">
-                            <sub>
-                                <i class="fa fa-tasks"></i>
-                            </sub>
                             <span class="value">
                                 <?= $count['draft_desk']; ?>
                             </span>
@@ -116,14 +113,11 @@
                         class="metric metric-bordered align-items-center"
                     >
                         <div class="metric-badge">
-                            <span class="badge badge-lg badge-info">
+                            <span class="badge badge-lg badge-secondary">
                                 REVIEW
                             </span>
                         </div>
                         <p class="metric-value h3">
-                            <sub>
-                                <i class="fa fa-tasks"></i>
-                            </sub>
                             <span class="value">
                                 <?= $count['draft_review']; ?>
                             </span>
@@ -132,19 +126,15 @@
                 </div>
                 <div class="col">
                     <a
-                        href="
-                <?= base_url('draft?progress=edit'); ?>"
+                        href="<?= base_url('draft?progress=edit'); ?>"
                         class="metric metric-bordered align-items-center"
                     >
                         <div class="metric-badge">
-                            <span class="badge badge-lg badge-info">
+                            <span class="badge badge-lg badge-secondary">
                                 EDITORIAL
                             </span>
                         </div>
                         <p class="metric-value h3">
-                            <sub>
-                                <i class="fa fa-tasks"></i>
-                            </sub>
                             <span class="value">
                                 <?= $count['draft_edit']; ?>
                             </span>
@@ -153,19 +143,15 @@
                 </div>
                 <div class="col">
                     <a
-                        href="
-                <?= base_url('draft?progress=layout'); ?>"
+                        href="<?= base_url('draft?progress=layout'); ?>"
                         class="metric metric-bordered align-items-center"
                     >
                         <div class="metric-badge">
-                            <span class="badge badge-lg badge-info">
+                            <span class="badge badge-lg badge-secondary">
                                 LAYOUT
                             </span>
                         </div>
                         <p class="metric-value h3">
-                            <sub>
-                                <i class="fa fa-tasks"></i>
-                            </sub>
                             <span class="value">
                                 <?= $count['draft_layout']; ?>
                             </span>
@@ -174,42 +160,17 @@
                 </div>
                 <div class="col">
                     <a
-                        href="
-                <?= base_url('draft?progress=proofread'); ?>"
+                        href="<?= base_url('draft?progress=proofread'); ?>"
                         class="metric metric-bordered align-items-center"
                     >
                         <div class="metric-badge">
-                            <span class="badge badge-lg badge-info">
+                            <span class="badge badge-lg badge-secondary">
                                 PROOFREAD
                             </span>
                         </div>
                         <p class="metric-value h3">
-                            <sub>
-                                <i class="fa fa-tasks"></i>
-                            </sub>
                             <span class="value">
                                 <?= $count['draft_proofread']; ?>
-                            </span>
-                        </p>
-                    </a>
-                </div>
-                <div class="col">
-                    <a
-                        href="
-                <?= base_url('draft?progress=print'); ?>"
-                        class="metric metric-bordered align-items-center"
-                    >
-                        <div class="metric-badge">
-                            <span class="badge badge-lg badge-info">
-                                CETAK
-                            </span>
-                        </div>
-                        <p class="metric-value h3">
-                            <sub>
-                                <i class="fa fa-tasks"></i>
-                            </sub>
-                            <span class="value">
-                                <?= $count['draft_print']; ?>
                             </span>
                         </p>
                     </a>
@@ -221,75 +182,69 @@
         <div class="col-12">
             <div class="metric-row metric-flush">
                 <div class="col">
-                    <div class="metric metric-bordered align-items-center">
-                        <a
-                            href="<?= base_url('draft?progress=final'); ?>"
-                            class="metric-label"
-                        >
+                    <a
+                        href="<?= base_url('draft?progress=final'); ?>"
+                        class="metric metric-bordered align-items-center"
+                    >
+                        <span class="metric-label text-success">
                             <i class="fa fa-check"></i> Draft final
-                        </a>
+                        </span>
                         <p class="metric-value h3">
                             <span class="value">
                                 <?= $count['draft_final']; ?>
                             </span>
-                            <a
-                                href="#"
-                                onclick="event.preventDefault()"
+                            <span
                                 class="font-weight-bold info-home"
                                 data-toggle="tooltip"
                                 data-html="true"
                                 data-placement="left"
                                 title="Draft yang sudah selesai proses"
-                            ><i class="fa fa-info-circle"></i></a>
+                            ><i class="fa fa-info-circle"></i></span>
                         </p>
-                    </div>
+                    </a>
                 </div>
                 <div class="col">
-                    <div class="metric metric-bordered align-items-center">
-                        <a
-                            href="<?= base_url('draft?reprint=y'); ?>"
-                            class="metric-label"
-                        >
+                    <a
+                        href="<?= base_url('draft?reprint=y'); ?>"
+                        class="metric metric-bordered align-items-center"
+                    >
+                        <span class="metric-label text-warning">
                             <i class="fa fa-redo"></i> Draft Cetak Ulang
-                        </a>
+                        </span>
                         <p class="metric-value h3">
                             <span class="value">
                                 <?= $count['draft_reprint']; ?>
                             </span>
-                            <a
-                                href="#"
-                                onclick="event.preventDefault()"
+                            <span
                                 class="font-weight-bold info-home"
                                 data-toggle="tooltip"
                                 data-html="true"
                                 data-placement="left"
                                 title="Draft final yang di cetak ulang"
-                            ><i class="fa fa-info-circle"></i></a>
+                            ><i class="fa fa-info-circle"></i></span>
                         </p>
-                    </div>
+                    </a>
                 </div>
                 <div class="col">
-                    <div class="metric metric-bordered align-items-center">
-                        <a
-                            href="<?= base_url('draft?progress=reject'); ?>"
-                            class="metric-label"
-                        >
+                    <a
+                        href="<?= base_url('draft?progress=reject'); ?>"
+                        class="metric metric-bordered align-items-center"
+                    >
+                        <span class="metric-label text-danger">
                             <i class="fa fa-times"></i> Draft ditolak
-                        </a>
+                        </span>
                         <p class="metric-value">
                             <span class="value h3">
                                 <?= $count['draft_rejected_total']; ?>
                             </span>
-                            <a
-                                href="#"
-                                onclick="event.preventDefault()"
+                            <span
                                 class="font-weight-bold info-home"
                                 data-toggle="tooltip"
                                 data-placement="left"
                                 title="Draft yang ditolak pada tahap desk screening dan tahap selanjutnya"
-                            ><i class="fa fa-info-circle"></i></a>
+                            ><i class="fa fa-info-circle"></i></span>
                         </p>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>

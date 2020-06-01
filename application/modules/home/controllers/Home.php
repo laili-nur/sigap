@@ -48,12 +48,11 @@ class Home extends Operator_Controller
             $count['draft_edit'] = $this->home->count_progress('edit');
             $count['draft_layout'] = $this->home->count_progress('layout');
             $count['draft_proofread'] = $this->home->count_progress('proofread');
-            $count['draft_print'] = $this->home->count_progress('print');
             $count['draft_final'] = $this->home->count_progress('final');
             $count['draft_reprint'] = $this->home->where('is_reprint', 'y')->count('draft');
 
             //$count['draft_approved'] = $count['draft_desk_lolos']+$count['draft_review_lolos'];
-            $count['draft_in_progress']    = $count['draft_edit'] + $count['draft_layout'] + $count['draft_proofread'] + $count['draft_print'];
+            $count['draft_in_progress']    = $count['draft_edit'] + $count['draft_layout'] + $count['draft_proofread'];
             $count['draft_rejected_total'] = $this->home->count_progress('reject');
         } elseif ($this->level == 'reviewer') {
             $drafts        = $this->home->join_table('draft_reviewer', 'draft', 'draft')->join_table('reviewer', 'draft_reviewer', 'reviewer')->join_table('user', 'reviewer', 'user')->where('user.username', $this->username)->get_all('draft');
