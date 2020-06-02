@@ -45,7 +45,7 @@ $is_files_populated = $input->edit_file || $input->edit_file_link ? true : false
             </div>
         </header>
         <?php if ($editors == null && is_admin()) : ?>
-            <div class="alert alert-warning"><strong>PERHATIAN!</strong> Pilih editor terlebih dahulu sebelum mulai proses
+            <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Pilih editor terlebih dahulu sebelum mulai proses
                 editorial</div>
         <?php endif; ?>
         <div

@@ -163,51 +163,6 @@
                         <table class="table table-striped table-bordered mb-0">
                             <tbody>
                                 <tr>
-                                    <td width="200px"> Tipe printing</td>
-                                    <td><?= ($input->printing_type == 'o') ? 'Offset' : ''; ?>
-                                        <?= ($input->printing_type == 'p') ? 'Print On Demand' : ''; ?> </td>
-                                </tr>
-                                <tr>
-                                    <td width="200px"> Serial Number</td>
-                                    <td><?= $input->serial_num; ?> </td>
-                                </tr>
-                                <tr>
-                                    <td width="200px"> Serial Number per tahun </td>
-                                    <td><?= $input->serial_num_per_year; ?> </td>
-                                </tr>
-                                <tr>
-                                    <td width="200px"> Jumlah copy </td>
-                                    <td><?= $input->copies_num; ?> </td>
-                                </tr>
-                                <tr>
-                                    <td width="200px"> Cetakan ke </td>
-                                    <td><?= $input->cetakan_ke; ?> </td>
-                                </tr>
-                                <tr>
-                                    <td width="200px"> Kertas isi </td>
-                                    <td><?= $input->kertas_isi; ?> </td>
-                                </tr>
-                                <tr>
-                                    <td width="200px"> Kertas cover </td>
-                                    <td><?= $input->kertas_cover; ?> </td>
-                                </tr>
-                                <tr>
-                                    <td width="200px"> Ukuran </td>
-                                    <td><?= $input->ukuran; ?> </td>
-                                </tr>
-                                <tr>
-                                    <td width="200px"> Tipe Naskah </td>
-                                    <td><?= ($input->is_reprint == 'y') ? 'Cetak Ulang' : ''; ?>
-                                        <?= ($input->is_reprint == 'n') ? 'Naskah baru' : ''; ?> </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <hr class="my-4">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered mb-0">
-                            <tbody>
-                                <tr>
                                     <td width="200px"> Tanggal Masuk Draft</td>
                                     <td><?= format_datetime($input->entry_date); ?> </td>
                                 </tr>
@@ -246,7 +201,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php print_r($authors) ?>
                                         <?php foreach ($authors as $author) : ?>
                                             <tr>
                                                 <td class="align-middle"><?= $i++; ?></td>

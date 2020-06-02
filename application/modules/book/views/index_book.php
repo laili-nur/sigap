@@ -1,11 +1,11 @@
 <?php
-$per_page = $this->input->get('per_page') ?? 10;
-$keyword  = $this->input->get('keyword');
-$category = $this->input->get('category');
-$status   = $this->input->get('status');
-$reprint   = $this->input->get('reprint');
-$published_year   = $this->input->get('published_year');
-$page     = $this->uri->segment(2);
+$per_page       = $this->input->get('per_page') ?? 10;
+$keyword        = $this->input->get('keyword');
+$category       = $this->input->get('category');
+$status         = $this->input->get('status');
+$reprint        = $this->input->get('reprint');
+$published_year = $this->input->get('published_year');
+$page           = $this->uri->segment(2);
 // data table series number
 $i = isset($page) ? $page * $per_page - $per_page : 0;
 

@@ -124,7 +124,7 @@
                         </div>
                         <div class="form-group">
                             <label for="book_notes">Keterangan Buku</label>
-                            <?= form_textarea('book_notes', $input->book_notes, 'class="form-control summernote-basic"'); ?>
+                            <?= form_textarea('book_notes', $input->book_notes, 'class="form-control" data-toggle="summernote" data-height="200"'); ?>
                             <?= form_error('book_notes'); ?>
                         </div>
                     </fieldset>
@@ -151,6 +151,13 @@ $(document).ready(function() {
         $('#book_title').val(data);
     })
 
+    // fix summernote validate error
+    jQuery.validator.setDefaults({
+        // This will ignore all hidden elements alongside `contenteditable` elements
+        // that have no `name` attribute
+        ignore: ":hidden, [contenteditable='true']:not([name])"
+    });
+
     loadValidateSetting();
 
     $("#form_book").validate({
@@ -166,18 +173,11 @@ $(document).ready(function() {
                 },
             },
             errorElement: "span",
-            errorClass: "none",
-            validClass: "none",
             errorPlacement: validateErrorPlacement,
-            // highlight: function(element, errorClass, validClass) {
-            //     $(element).addClass(errorClass).removeClass(validClass);
-            // },
-            // unhighlight: function(element, errorClass, validClass) {
-            //     $(element).addClass(validClass).removeClass(errorClass);
-            // }
         },
         validateSelect2()
     );
+
     $("#draft_id").select2({
         placeholder: '-- Pilih --',
         allowClear: true

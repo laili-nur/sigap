@@ -135,7 +135,7 @@ class Book extends Admin_Controller
         // If something wrong
         // if (!$this->book->validate() || $this->form_validation->error_array()) {
         $pages       = $this->pages;
-        $main_view   = 'book/view';
+        $main_view   = 'book/view_book';
         // $form_action = "book/edit/$book_id";
         $this->load->view('template', compact('authors', 'pages', 'main_view', 'input'));
         return;

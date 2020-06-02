@@ -46,7 +46,7 @@ $is_cover_files_populated = $input->cover_file || $input->cover_file_link ? true
             </div>
         </header>
         <?php if ($layouters == null && is_admin()) : ?>
-            <div class="alert alert-warning"><strong>PERHATIAN!</strong> Pilih layouter terlebih dahulu sebelum mulai proses layouting</div>
+            <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Pilih layouter terlebih dahulu sebelum mulai proses layouting</div>
         <?php endif; ?>
         <div
             class="list-group list-group-flush list-group-bordered"

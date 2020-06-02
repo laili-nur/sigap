@@ -27,7 +27,7 @@ $level_native  = $this->session->userdata('level_native');
             </div>
             <div class="top-bar-item top-bar-item-right px-0">
                 <ul class="header-nav nav">
-                    <li class="nav-item dropdown header-nav-dropdown has-notified">
+                    <!-- <li class="nav-item dropdown header-nav-dropdown has-notified">
                         <a
                             class="nav-link has-badge"
                             href="#"
@@ -54,12 +54,12 @@ $level_native  = $this->session->userdata('level_native');
                                 </a>
                             </div>
                             <a
-                                href="user-activities.html"
+                                href="#"
                                 class="dropdown-footer"
                             >Semua notifikasi <i class="fas fa-fw fa-long-arrow-alt-right"></i></a>
                         </div>
-                    </li>
-                    <li class="nav-item dropdown header-nav-dropdown">
+                    </li> -->
+                    <!-- <li class="nav-item dropdown header-nav-dropdown">
                         <a
                             class="nav-link"
                             href="#"
@@ -78,7 +78,7 @@ $level_native  = $this->session->userdata('level_native');
                                 </div>
                             </div>
                         </div>
-                    </li>
+                    </li> -->
                 </ul>
 
                 <div class="dropdown d-none d-sm-flex">

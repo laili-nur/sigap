@@ -72,25 +72,25 @@
                                         <?= form_radio(
                                             'status_hak_cipta',
                                             '',
-                                            isset($input->is_reprint) && ($input->status_hak_cipta == '') ? true : false,
-                                            'required class="custom-control-input" id="status_hak_cipta0"'
+                                            isset($input->status_hak_cipta) && ($input->status_hak_cipta == '') ? true : false,
+                                            'class="custom-control-input"'
                                         ); ?>
-                                        -</label>
-                                    <label class="btn btn-secondary <?= ($input->status_hak_cipta == '1') ? 'active' : ''; ?>">
+                                        Belum Diproses</label>
+                                    <label class="btn btn-secondary <?= ($input->status_hak_cipta == 1) ? 'active' : ''; ?>">
                                         <?= form_radio(
                                             'status_hak_cipta',
-                                            '1',
-                                            isset($input->is_reprint) && ($input->status_hak_cipta == '1') ? true : false,
-                                            'required class="custom-control-input" id="status_hak_cipta1"'
+                                            1,
+                                            isset($input->status_hak_cipta) && ($input->status_hak_cipta == 1) ? true : false,
+                                            'class="custom-control-input"'
                                         ); ?>
                                         Dalam Proses</label>
 
-                                    <label class="btn btn-secondary <?= ($input->status_hak_cipta == '2') ? 'active' : ''; ?>">
+                                    <label class="btn btn-secondary <?= ($input->status_hak_cipta == 2) ? 'active' : ''; ?>">
                                         <?= form_radio(
                                             'status_hak_cipta',
-                                            '2',
-                                            isset($input->is_reprint) && ($input->status_hak_cipta == '2') ? true : false,
-                                            ' class="custom-control-input" id="status_hak_cipta2"'
+                                            2,
+                                            isset($input->status_hak_cipta) && ($input->status_hak_cipta == 2) ? true : false,
+                                            'class="custom-control-input"'
                                         ); ?>
                                         Sudah Jadi</label>
                                 </div>
@@ -121,11 +121,9 @@ $(document).ready(function() {
                 file_hak_cipta_link: "curl",
                 file_hak_cipta: {
                     extension: "<?= get_allowed_file_types('hakcipta_file')['types']; ?>",
-                }
+                },
             },
             errorElement: "span",
-            errorClass: "none",
-            validClass: "none",
             errorPlacement: validateErrorPlacement,
         },
         validateSelect2()
