@@ -82,7 +82,7 @@ $all_criteria = [
                             role="tab"
                             aria-controls="<?= $progress ?>-score-tab-content"
                             aria-selected="false"
-                        > <i class="fa fa-file-signature"></i> Penilaian</a>
+                        > <i class="fas fa-file-signature"></i> Penilaian</a>
                     </li>
                 <?php endif ?>
             </ul>
@@ -114,18 +114,18 @@ $all_criteria = [
                                     <div class="form-group">
                                         <label
                                             for="reviewer-<?= $progress ?>-notes"
-                                            class="font-weight-bold"
+                                            class="badge badge-primary"
                                         >Catatan Reviewer</label>
                                         <?php
-                                        if (!is_admin() && $level != 'reviewer') {
-                                            echo "<div class='font-italic' id='reviewer-{$progress}-notes'>" . $input->{"{$progress}_notes"} . "</div>";
+                                        if (!is_admin() && $level != 'reviewer' || $is_final) {
+                                            echo "<div>" . $input->{"{$progress}_notes"} . "</div>";
                                         } else {
                                             echo form_textarea([
                                                 'name'  => "reviewer-{$progress}-notes",
-                                                'class' => 'form-control summernote-basic',
+                                                'class' => 'form-control',
                                                 'id'    => "reviewer-{$progress}-notes",
                                                 'rows'  => '6',
-                                                'value' => $input->{"{$progress}_notes"}
+                                                'value' => $input->{"{$progress}_notes"},
                                             ]);
                                         }
                                         ?>
@@ -133,24 +133,23 @@ $all_criteria = [
                                     <hr class="my-3">
                                 <?php endif; ?>
 
-
                                 <!-- CATATAN ADMIN UNTUK AUTHOR -->
                                 <?php if (is_staff() || $level == 'author') : ?>
                                     <div class="form-group">
                                         <label
                                             for="admin-<?= $progress ?>-notes"
-                                            class="font-weight-bold"
+                                            class="badge badge-primary"
                                         >Catatan Admin</label>
                                         <?php
-                                        if (!is_admin() && $level != 'reviewer') {
-                                            echo "<div class='font-italic' id='admin-{$progress}-notes'>" . $input->{"{$progress}_notes_admin"} . "</div>";
+                                        if (!is_admin() && $level != 'reviewer' || $is_final) {
+                                            echo "<div>" . $input->{"{$progress}_notes_admin"} . "</div>";
                                         } else {
                                             echo form_textarea([
                                                 'name'  => "admin-{$progress}-notes",
-                                                'class' => 'form-control summernote-basic',
+                                                'class' => 'form-control',
                                                 'id'    => "admin-{$progress}-notes",
                                                 'rows'  => '6',
-                                                'value' => $input->{"{$progress}_notes_admin"}
+                                                'value' => $input->{"{$progress}_notes_admin"},
                                             ]);
                                         }
                                         ?>
@@ -162,11 +161,11 @@ $all_criteria = [
                                     <div class="form-group">
                                         <label
                                             for="author-<?= $progress ?>-notes"
-                                            class="font-weight-bold"
+                                            class="badge badge-primary"
                                         >Catatan Penulis</label>
                                         <?php
-                                        if (!is_admin() && ($level != 'author' || $author_order != 1)) {
-                                            echo "<div class='font-italic' id='author-{$progress}-notes'>" . $input->{"{$progress}_notes_author"} . "</div>";
+                                        if (!is_admin() && ($level != 'author' || $author_order != 1) || $is_final) {
+                                            echo "<div>" . $input->{"{$progress}_notes_author"} . "</div>";
                                         } else {
                                             echo form_textarea([
                                                 'name'  => "author-{$progress}-notes",
@@ -179,19 +178,21 @@ $all_criteria = [
                                         ?>
                                     </div>
                                 <?php endif ?>
-
                             </fieldset>
+
                             <div class="d-flex justify-content-end">
                                 <button
                                     type="button"
                                     class="btn btn-light ml-auto"
                                     data-dismiss="modal"
                                 >Close</button>
-                                <button
-                                    id="btn-submit-comment-<?= $progress ?>"
-                                    class="btn btn-primary"
-                                    type="button"
-                                >Submit</button>
+                                <?php if (!$is_final) : ?>
+                                    <button
+                                        id="btn-submit-comment-<?= $progress ?>"
+                                        class="btn btn-primary"
+                                        type="button"
+                                    >Submit</button>
+                                <?php endif ?>
                             </div>
                         </div>
                     </div>
@@ -207,34 +208,44 @@ $all_criteria = [
                                 <?= isset($input->draft_id) ? form_hidden('draft_id', $input->draft_id) : ''; ?>
                                 <?php foreach ($all_criteria as $criteria_key => $criteria) : ?>
                                     <div class="alert alert-info">
+                                        <!-- bagian text area -->
                                         <label class="font-weight-bold"><?= $criteria['title'] ?></label>
-                                        <textarea
-                                            type="textarea"
-                                            name="<?= "criteria{$criteria['number']}-{$progress}" ?>"
-                                            id="<?= "criteria{$criteria['number']}-{$progress}" ?>"
-                                            class="form-control summernote-basic"
-                                            rows="6"
-                                        ><?= $input->{"{$progress}_criteria{$criteria['number']}"} ?></textarea>
+                                        <?php if (!$is_final) : ?>
+                                            <textarea
+                                                type="textarea"
+                                                name="<?= "criteria{$criteria['number']}-{$progress}" ?>"
+                                                id="<?= "criteria{$criteria['number']}-{$progress}" ?>"
+                                                class="form-control summernote-basic"
+                                                rows="6"
+                                            ><?= $input->{"{$progress}_criteria{$criteria['number']}"} ?></textarea>
+                                        <?php else : ?>
+                                            <?= $input->{"{$progress}_criteria{$criteria['number']}"} ?>
+                                        <?php endif ?>
 
                                         <hr class="my-3">
 
+                                        <!-- bagian nilai -->
                                         <p class="m-0 p-0">Nilai</p>
-                                        <?php for ($j = 1; $j <= 5; $j++) :  ?>
-                                            <div class="custom-control custom-control-inline custom-radio">
-                                                <input
-                                                    id="<?= "score{$j}-criteria{$criteria['number']}-{$progress}" ?>"
-                                                    name="<?= "score-criteria{$criteria['number']}-{$progress}" ?>"
-                                                    value="<?= $j ?>"
-                                                    type="radio"
-                                                    class="custom-control-input"
-                                                    <?= $input->{"{$progress}_score"} && $input->{"{$progress}_score"}[$criteria_key] == $j ? 'checked' : '' ?>
-                                                />
-                                                <label
-                                                    class="custom-control-label"
-                                                    for="<?= "score{$j}-criteria{$criteria['number']}-{$progress}" ?>"
-                                                ><?= $j ?></label>
-                                            </div>
-                                        <?php endfor ?>
+                                        <?php if (!$is_final) : ?>
+                                            <?php for ($j = 1; $j <= 5; $j++) :  ?>
+                                                <div class="custom-control custom-control-inline custom-radio">
+                                                    <input
+                                                        id="<?= "score{$j}-criteria{$criteria['number']}-{$progress}" ?>"
+                                                        name="<?= "score-criteria{$criteria['number']}-{$progress}" ?>"
+                                                        value="<?= $j ?>"
+                                                        type="radio"
+                                                        class="custom-control-input"
+                                                        <?= $input->{"{$progress}_score"} && $input->{"{$progress}_score"}[$criteria_key] == $j ? 'checked' : '' ?>
+                                                    />
+                                                    <label
+                                                        class="custom-control-label"
+                                                        for="<?= "score{$j}-criteria{$criteria['number']}-{$progress}" ?>"
+                                                    ><?= $j ?></label>
+                                                </div>
+                                            <?php endfor ?>
+                                        <?php else : ?>
+                                            <span class="font-weight-bold"><?= $input->{"{$progress}_score"}[$criteria_key] ?></span>
+                                        <?php endif ?>
                                     </div>
                                 <?php endforeach ?>
 
@@ -258,8 +269,8 @@ $all_criteria = [
                                     </div>
                                 <?php endif ?>
 
-                                <?php if (is_admin() || $level == 'reviewer') : ?>
-                                    <div class="card-footer-content text-muted p-0 m-0">
+                                <?php if ((is_admin() || $level == 'reviewer') && !$is_final) : ?>
+                                    <div class="card-footer-content p-0 m-0">
                                         <div class="mb-1 font-weight-bold">Rekomendasi</div>
                                         <div class="custom-control custom-control-inline custom-radio">
                                             <input
@@ -299,11 +310,13 @@ $all_criteria = [
                                         class="btn btn-light ml-auto"
                                         data-dismiss="modal"
                                     >Close</button>
-                                    <button
-                                        id="btn-submit-score-<?= $progress ?>"
-                                        class="btn btn-primary"
-                                        type="button"
-                                    >Submit</button>
+                                    <?php if (!$is_final) : ?>
+                                        <button
+                                            id="btn-submit-score-<?= $progress ?>"
+                                            class="btn btn-primary"
+                                            type="button"
+                                        >Submit</button>
+                                    <?php endif ?>
                                 </div>
                             </div>
                         </div>
@@ -316,17 +329,16 @@ $all_criteria = [
 
 <script>
 $(document).ready(function() {
-    const progress = "<?= $progress == 'review1' || $progress == 'review2' ? 'review' : $progress ?>"
-    // identifier khusus untuk progress review
-    // selain progress review, identifier == progress
+    // identifier = review1 | review2
     const identifier = '<?= $progress ?>'
-
     const draftId = $('[name=draft_id]').val();
 
     // reload segmen ketika modal diclose
     $('#review-progress-wrapper').on('shown.bs.modal', `#modal-${identifier}`, function() {
+        initSummernote(identifier)
+
         // reload ketika modal diclose
-        $(`#modal-${identifier}`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
+        $(`#modal-${identifier}`).off('hidden.bs.modal').on('hidden.bs.modal', function() {
             $('#review-progress-wrapper').load(' #review-progress', function() {
                 // reinitiate flatpickr modal after load
                 initFlatpickrModal()
@@ -336,8 +348,6 @@ $(document).ready(function() {
 
     // submit score review
     $('#review-progress-wrapper').on('click', `#btn-submit-score-${identifier}`, function() {
-        const $this = $(this);
-
         // nilai kriteria
         let nilai = [];
         for (let k = 1; k <= 4; k++) {
@@ -354,23 +364,22 @@ $(document).ready(function() {
             [`${identifier}_score`]: nilai
         }
 
-        sendData(reviewData, 'score', $this)
+        sendData(reviewData, 'score', $(this))
     });
 
 
     // submit comment review
     $('#review-progress-wrapper').on('click', `#btn-submit-comment-${identifier}`, function() {
-        const $this = $(this);
-
         const reviewData = {
             [`${identifier}_notes`]: $(`#reviewer-${identifier}-notes`).val(),
             [`${identifier}_notes_author`]: $(`#author-${identifier}-notes`).val(),
             [`${identifier}_notes_admin`]: $(`#admin-${identifier}-notes`).val(),
         }
 
-        sendData(reviewData, 'comment', $this)
+        sendData(reviewData, 'comment', $(this))
     });
 
+    // send data ke server
     function sendData(reviewData, type, self) {
         // type: score || comment
         self.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
@@ -380,9 +389,10 @@ $(document).ready(function() {
             datatype: "JSON",
             data: reviewData,
             success: function(res) {
-                console.log(res);
-                showToast(true, res.data);
-                $(`#${identifier}-${type}-tab-content`).load(` #${identifier}-${type}-section`)
+                $(`#${identifier}-${type}-tab-content`).load(` #${identifier}-${type}-section`, function() {
+                    showToast(true, res.data);
+                    initSummernote(identifier)
+                })
             },
             error: function(err) {
                 console.log(err);
@@ -392,4 +402,11 @@ $(document).ready(function() {
         });
     }
 })
+
+function initSummernote(identifier) {
+    // inisiasi summernote
+    $(`#reviewer-${identifier}-notes`).summernote(summernoteConfig)
+    $(`#admin-${identifier}-notes`).summernote(summernoteConfig)
+    $(`#author-${identifier}-notes`).summernote(summernoteConfig)
+}
 </script>

@@ -69,7 +69,9 @@ class Worksheet extends Operator_Controller
         $input->worksheet_pic = $this->username;
         // jika diterima atau ditolak, simpan tanggal selesai
         if ($input->worksheet_status == 1 || $input->worksheet_status == 2) {
-            $input->worksheet_end_date = now();
+            if (!$input->worksheet_end_date) {
+                $input->worksheet_end_date = now();
+            }
         }
 
         $this->db->trans_begin();

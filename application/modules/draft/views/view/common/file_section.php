@@ -1,6 +1,6 @@
 <div id="<?= $progress ?>-file-info">
-    <div class="alert alert-info m-0">
-        <?php if ($input->{"{$progress}_file_link"} || $input->{"{$progress}_file"}) : ?>
+    <?php if ($input->{"{$progress}_file_link"} || $input->{"{$progress}_file"}) : ?>
+        <div class="alert alert-info m-0">
             <?php if ($input->{"{$progress}_file"}) : ?>
                 <div>
                     <p class="alert-heading font-weight-bold">File Tersimpan</p>
@@ -8,7 +8,7 @@
                         href="<?= base_url("draft/download_file/draftfile/{$input->{"{$progress}_file"}}") ?>"
                         class="d-block mb-3"
                     ><i class="fa fa-download"></i> <?= $input->{"{$progress}_file"} ?></a>
-                    <?php if ((is_staff())) : ?>
+                    <?php if (is_staff() && !$is_final) : ?>
                         <button
                             type="button"
                             data-type="file"
@@ -27,7 +27,7 @@
                         target="_blank"
                         class="d-block mb-3"
                     ><i class="fa fa-external-link-alt"></i> <?= $input->{"{$progress}_file_link"} ?></a>
-                    <?php if ((is_staff())) : ?>
+                    <?php if (is_staff() && !$is_final) : ?>
                         <button
                             type="button"
                             data-type="link"
@@ -39,13 +39,15 @@
             <?php endif ?>
             <div class="text-muted">Terakhir diubah: <span><?= $input->{"{$progress}_upload_date"} ?></span></div>
             <div class="text-muted">Oleh: <span><?= $input->{"{$progress}_upload_by"} ?></span></div>
-        <?php else : ?>
+        </div>
+    <?php else : ?>
+        <div class="alert alert-secondary m-0">
             File/Link progress belum tersimpan di server
-        <?php endif ?>
-    </div>
+        </div>
+    <?php endif ?>
 
 
-    <?php if (is_staff()) : ?>
+    <?php if (is_staff() && !$is_final) : ?>
         <hr class="my-4">
         <div class="alert alert-warning">Upload dan hapus file hanya dapat dilakukan oleh staff. Selain staff hanya bisa melihat file saja.</div>
         <form
@@ -71,7 +73,7 @@
                     <?= form_input("{$progress}_file_link", $input->{"{$progress}_file_link"}, "class='form-control document' id='{$progress}-file-link'"); ?>
                 </div>
             </div>
-            <div class="d-flex justify-content-end">
+            <div class="d-flex justify-content-end mt-3">
                 <button
                     type="button"
                     class="btn btn-light ml-auto"
@@ -84,7 +86,15 @@
                 > Update</button>
             </div>
         </form>
-    <?php endif; ?>
+    <?php else : ?>
+        <div class="d-flex justify-content-end mt-3">
+            <button
+                type="button"
+                class="btn btn-light ml-auto"
+                data-dismiss="modal"
+            >Close</button>
+        </div>
+    <?php endif ?>
 </div>
 
 <script>

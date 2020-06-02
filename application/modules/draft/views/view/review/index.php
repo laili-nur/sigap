@@ -72,7 +72,7 @@ $is_review2_files_populated = $input->review2_file || $input->review2_file_link 
             <!-- staff/admin bisa melihat semua -->
             <?php if (is_null($reviewer_order) || $reviewer_order == 0) : ?>
                 <div class="list-group-item justify-content-between">
-                    <?php if (is_admin()) : ?>
+                    <?php if (is_admin() && !$is_final) : ?>
                         <a
                             href="#"
                             id="btn-modal-deadline-review1"
@@ -95,7 +95,7 @@ $is_review2_files_populated = $input->review2_file || $input->review2_file_link 
             <!-- staff/admin bisa melihat semua -->
             <?php if (is_null($reviewer_order) || $reviewer_order == 1) : ?>
                 <div class="list-group-item justify-content-between">
-                    <?php if (is_admin()) : ?>
+                    <?php if (is_admin() && !$is_final) : ?>
                         <a
                             href="#"
                             id="btn-modal-deadline-review2"
@@ -148,28 +148,33 @@ $is_review2_files_populated = $input->review2_file || $input->review2_file_link 
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Status</span>
-                <a
-                    href="#"
-                    onclick="event.preventDefault()"
+                <span
                     class="font-weight-bold"
                     data-toggle="popover"
                     data-placement="left"
                     data-container="body"
-                    auto=""
-                    right=""
                     data-html="true"
                     data-trigger="hover"
                     data-content="<?= $input->review_status; ?>"
                     data-original-title="Catatan Admin"
                 >
                     <?php if ($input->is_review == 'n' && $input->draft_status == 99) : ?>
-                        <i class="fa fa-info-circle"></i>
-                        <span>Review Ditolak</span>
+                        <span class="text-danger">
+                            <i class="fa fa-times"></i>
+                            <span>Review Ditolak</span>
+                        </span>
                     <?php elseif ($input->is_review == 'y') : ?>
-                        <i class="fa fa-info-circle"></i>
-                        <span>Review Selesai</span>
+                        <span class="text-success">
+                            <i class="fa fa-check"></i>
+                            <span>Review Selesai</span>
+                        </span>
                     <?php endif ?>
-                </a>
+                </span>
+            </div>
+
+            <div class="m-3">
+                <div class="text-muted pb-1">Catatan Admin</div>
+                <?= $input->review_status; ?>
             </div>
             <hr class="m-0">
         </div>
@@ -181,7 +186,7 @@ $is_review2_files_populated = $input->review2_file || $input->review2_file_link 
                 <?php if (is_admin() && !$is_final) : ?>
                     <button
                         title="Aksi admin"
-                        class="btn btn-secondary <?= !$is_review_started ? 'btn-disabled' : ''; ?>"
+                        class="btn btn-outline-dark <?= !$is_review_started ? 'btn-disabled' : ''; ?>"
                         data-toggle="modal"
                         data-target="#modal-action-review"
                         <?= !$is_review_started ? 'disabled' : ''; ?>

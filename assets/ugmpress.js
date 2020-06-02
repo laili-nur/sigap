@@ -75,6 +75,20 @@ const defaultSelect2Options = {
     allowClear: true,
 };
 
+const summernoteConfig = {
+    toolbar: [
+        ['font', ['bold', 'underline', 'clear', 'italic', 'strikethrough', 'fontsize']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['table', ['table']],
+        ['insert', ['link']],
+        ['view', ['fullscreen']],
+    ],
+    dialogsInBody: true,
+    height: 150,
+    disableDragAndDrop: true,
+};
+
 function loadValidateSetting() {
     $.validator.addMethod(
         'alphanum',

@@ -4808,17 +4808,17 @@ a.badge-dark:focus, a.badge-dark.focus {
 }
 
 .alert-danger {
-  color: #9d5d8e;
-  background-color: #fcf9fb;
-  border-color: #b76ba3;
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #EA6759;
 }
 
 .alert-danger hr {
-  border-top-color: #af5a98;
+  border-top-color: #f1b0b7;
 }
 
 .alert-danger .alert-link {
-  color: #7d4a71;
+  color: #491217;
 }
 
 .alert-light {
@@ -10774,7 +10774,7 @@ td.hljs-ln-code {
 
 .alert-danger .alert-icon {
   color: #ffffff;
-  background-color: #9d5d8e;
+  background-color: #721c24;
 }
 
 .alert-light .alert-icon {

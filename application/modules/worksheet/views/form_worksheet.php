@@ -29,6 +29,9 @@ $worksheet_status_options = [
                         <legend>Form Lembar Kerja</legend>
                         <?= isset($input->worksheet_id) ? form_hidden('worksheet_id', $input->worksheet_id) : ''; ?>
                         <div class="form-group">
+                            <label for="draft_title">
+                                <?= $this->lang->line('form_draft_title'); ?>
+                            </label>
                             <p class="font-weight-bold">
                                 <a href="<?= base_url('draft/view/' . $input->draft_id); ?>"><?= $draft->draft_title; ?></a>
                             </p>
