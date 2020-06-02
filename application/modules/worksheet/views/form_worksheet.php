@@ -73,7 +73,7 @@ $worksheet_status_options = [
                                         <i class="fa fa-times-circle"></i>
                                     </span>
                                 </button>
-                                <?= form_textarea('worksheet_notes', $input->worksheet_notes, 'class="form-control summernote-basic" id="worksheet_notes"'); ?>
+                                <?= form_textarea('worksheet_notes', $input->worksheet_notes, 'class="form-control" id="worksheet_notes"'); ?>
                             </div>
                             <?= form_error('worksheet_notes'); ?>
                         </div>
@@ -169,5 +169,7 @@ $(document).ready(function() {
         dateFormat: 'Y-m-d',
         minDate: "2000-01-01",
     });
+
+    $(`#worksheet_notes`).summernote(summernoteConfig)
 });
 </script>

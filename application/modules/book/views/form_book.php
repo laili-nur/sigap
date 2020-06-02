@@ -124,7 +124,7 @@
                         </div>
                         <div class="form-group">
                             <label for="book_notes">Keterangan Buku</label>
-                            <?= form_textarea('book_notes', $input->book_notes, 'class="form-control" data-toggle="summernote" data-height="200"'); ?>
+                            <?= form_textarea('book_notes', $input->book_notes, 'class="form-control" id="book_notes"'); ?>
                             <?= form_error('book_notes'); ?>
                         </div>
                     </fieldset>
@@ -182,5 +182,7 @@ $(document).ready(function() {
         placeholder: '-- Pilih --',
         allowClear: true
     });
+
+    $('#book_notes').summernote(summernoteConfig)
 });
 </script>

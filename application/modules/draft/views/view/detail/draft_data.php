@@ -190,7 +190,7 @@
             <div class="modal-body">
                 <fieldset>
                     <div class="form-group">
-                        <?= form_textarea('draft_notes', $input->draft_notes, 'class="form-control" id="draft_notes" data-toggle="summernote" data-height="200"'); ?>
+                        <?= form_textarea('draft_notes', $input->draft_notes, 'class="form-control" id="draft_notes"'); ?>
                     </div>
                 </fieldset>
             </div>
@@ -213,6 +213,8 @@
 <script>
 $(document).ready(function() {
     const draftId = $('[name=draft_id]').val();
+
+    $(`#draft_notes`).summernote(summernoteConfig)
 
     // ubah entry date
     $('#btn-change-entry-date').on('click', function() {

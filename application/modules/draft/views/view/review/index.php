@@ -59,6 +59,27 @@ $is_review2_files_populated = $input->review2_file || $input->review2_file_link 
         >
 
             <div class="list-group-item justify-content-between">
+                <span class="text-muted">Status</span>
+                <span>
+                    <?php if ($input->is_review == 'n' && $input->draft_status == 99) : ?>
+                        <span class="text-danger">
+                            <i class="fa fa-times"></i>
+                            <span>Review Ditolak</span>
+                        </span>
+                    <?php elseif ($input->is_review == 'y') : ?>
+                        <span class="text-success">
+                            <i class="fa fa-check"></i>
+                            <span>Review Selesai</span>
+                        </span>
+                    <?php else : ?>
+                        <span class="text-primary">
+                            <span>Sedang Diproses</span>
+                        </span>
+                    <?php endif ?>
+                </span>
+            </div>
+
+            <div class="list-group-item justify-content-between">
                 <span class="text-muted">Tanggal mulai</span>
                 <strong><?= format_datetime($input->review_start_date); ?></strong>
             </div>
@@ -145,23 +166,6 @@ $is_review2_files_populated = $input->review2_file || $input->review2_file_link 
                     </div>
                 </div>
             <?php endif; ?>
-
-            <div class="list-group-item justify-content-between">
-                <span class="text-muted">Status</span>
-                <span>
-                    <?php if ($input->is_review == 'n' && $input->draft_status == 99) : ?>
-                        <span class="text-danger">
-                            <i class="fa fa-times"></i>
-                            <span>Review Ditolak</span>
-                        </span>
-                    <?php elseif ($input->is_review == 'y') : ?>
-                        <span class="text-success">
-                            <i class="fa fa-check"></i>
-                            <span>Review Selesai</span>
-                        </span>
-                    <?php endif ?>
-                </span>
-            </div>
 
             <div class="m-3">
                 <div class="text-muted pb-1">Catatan Admin</div>

@@ -114,7 +114,6 @@ $is_files_populated = $input->edit_file || $input->edit_file_link ? true : false
                         </span>
                     <?php else : ?>
                         <span class="text-primary">
-                            <i class="fa fa-loading"></i>
                             <span>Sedang Diproses</span>
                         </span>
                     <?php endif ?>

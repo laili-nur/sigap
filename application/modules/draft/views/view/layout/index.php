@@ -66,7 +66,7 @@ $is_cover_files_populated = $input->cover_file || $input->cover_file_link ? true
             </div>
 
             <div class="list-group-item justify-content-between">
-                <?php if (is_admin()) : ?>
+                <?php if (is_admin() && !$is_final) : ?>
                     <a
                         href="#"
                         id="btn-modal-deadline-layout"
@@ -100,28 +100,28 @@ $is_cover_files_populated = $input->cover_file || $input->cover_file_link ? true
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Status</span>
-                <a
-                    href="#"
-                    onclick="event.preventDefault()"
-                    class="font-weight-bold"
-                    data-toggle="popover"
-                    data-placement="left"
-                    data-container="body"
-                    auto=""
-                    right=""
-                    data-html="true"
-                    data-trigger="hover"
-                    data-content="<?= $input->layout_status; ?>"
-                    data-original-title="Catatan Admin"
-                >
-                    <?php if ($input->is_layout == 'n' and $input->draft_status == 99) : ?>
-                        <i class="fa fa-info-circle"></i>
-                        <span>Layout Ditolak</span>
+                <span>
+                    <?php if ($input->is_layout == 'n' && $input->draft_status == 99) : ?>
+                        <span class="text-danger">
+                            <i class="fa fa-times"></i>
+                            <span>Layout Ditolak</span>
+                        </span>
                     <?php elseif ($input->is_layout == 'y') : ?>
-                        <i class="fa fa-info-circle"></i>
-                        <span>Layout Selesai</span>
+                        <span class="text-success">
+                            <i class="fa fa-check"></i>
+                            <span>Layout Selesai</span>
+                        </span>
+                    <?php else : ?>
+                        <span class="text-primary">
+                            <span>Sedang Diproses</span>
+                        </span>
                     <?php endif ?>
-                </a>
+                </span>
+            </div>
+
+            <div class="m-3">
+                <div class="text-muted pb-1">Catatan Admin</div>
+                <?= $input->layout_status; ?>
             </div>
             <hr class="m-0">
         </div>
@@ -132,11 +132,11 @@ $is_cover_files_populated = $input->cover_file || $input->cover_file_link ? true
                 <?php if (is_admin() && !$is_final) : ?>
                     <button
                         title="Aksi admin"
-                        class="btn btn-secondary <?= !$is_layout_started ? 'btn-disabled' : ''; ?>"
+                        class="btn btn-outline-dark <?= !$is_layout_started ? 'btn-disabled' : ''; ?>"
                         data-toggle="modal"
                         data-target="#modal-action-layout"
                         <?= !$is_layout_started ? 'disabled' : ''; ?>
-                    ><i class="fa fa-thumbs-up"></i> Aksi</button>
+                    >Aksi</button>
                 <?php endif; ?>
 
                 <!-- button tanggapan layout -->

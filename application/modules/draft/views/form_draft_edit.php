@@ -151,7 +151,7 @@ $draft_status_options = array_map(function ($draft_status) {
                             </div>
                             <div class="form-group">
                                 <label for="draft_notes">Catatan draft</label>
-                                <?= form_textarea('draft_notes', $input->draft_notes, 'class="form-control" id="draft_notes" data-toggle="summernote" data-height="150"'); ?>
+                                <?= form_textarea('draft_notes', $input->draft_notes, 'class="form-control" id="draft_notes"'); ?>
                             </div>
                         </div>
                         <hr>
@@ -437,9 +437,12 @@ $(document).ready(function() {
         dateFormat: 'Y-m-d',
         minDate: "2000-01-01",
     });
+
     $("#category,#theme,#draft_status").select2({
         placeholder: '- Pilih -',
         dropdownParent: $('#app-main')
     });
+
+    $(`#draft_notes`).summernote(summernoteConfig)
 });
 </script>

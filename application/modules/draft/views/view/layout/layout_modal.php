@@ -76,11 +76,11 @@
                                     <div class="form-group">
                                         <label
                                             for="layouter-layout-notes"
-                                            class="font-weight-bold"
-                                        >Catatan Layouter untuk Admin</label>
+                                            class="badge badge-primary"
+                                        >Catatan Layouter</label>
                                         <?php
-                                        if (!is_admin() && $level != 'layouter') {
-                                            echo "<div class='font-italic' id='layouter-layout-notes'>" . $input->layout_notes . "</div>";
+                                        if (!is_admin() && $level != 'layouter' || $is_final) {
+                                            echo "<div>" . $input->layout_notes . "</div>";
                                         } else {
                                             echo form_textarea([
                                                 'name'  => "layouter-layout-notes",
@@ -95,16 +95,15 @@
                                     <hr class="my-3">
                                 <?php endif; ?>
 
-
                                 <!-- CATATAN AUTHOR UNTUK STAFF/ADMIN -->
                                 <div class="form-group">
                                     <label
                                         for="author-layout-notes"
-                                        class="font-weight-bold"
+                                        class="badge badge-primary"
                                     >Catatan Penulis</label>
                                     <?php
-                                    if (!is_admin() && ($level != 'author' || $author_order != 1)) {
-                                        echo "<div class='font-italic' id='author-layout-notes'>" . $input->layout_notes_author . "</div>";
+                                    if (!is_admin() && ($level != 'author' || $author_order != 1) || $is_final) {
+                                        echo "<div>" . $input->layout_notes_author . "</div>";
                                     } else {
                                         echo form_textarea([
                                             'name'  => "author-layout-notes",
@@ -112,7 +111,6 @@
                                             'id'    => "author-layout-notes",
                                             'rows'  => '6',
                                             'value' => $input->layout_notes_author
-
                                         ]);
                                     }
                                     ?>
@@ -125,11 +123,13 @@
                                     class="btn btn-light ml-auto"
                                     data-dismiss="modal"
                                 >Close</button>
-                                <button
-                                    id="btn-submit-layout"
-                                    class="btn btn-primary"
-                                    type="button"
-                                >Submit</button>
+                                <?php if (!$is_final) : ?>
+                                    <button
+                                        id="btn-submit-layout"
+                                        class="btn btn-primary"
+                                        type="button"
+                                    >Submit</button>
+                                <?php endif ?>
                             </div>
                         </div>
                     </div>
@@ -145,6 +145,8 @@ $(document).ready(function() {
 
     // reload segmen ketika modal diclose
     $('#layout-progress-wrapper').on('shown.bs.modal', `#modal-layout`, function() {
+        initSummernote()
+
         // reload ketika modal diclose
         $(`#modal-layout`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
             $('#layout-progress-wrapper').load(' #layout-progress', function() {
@@ -170,9 +172,10 @@ $(document).ready(function() {
             datatype: "JSON",
             data: layoutData,
             success: function(res) {
-                console.log(res);
-                showToast(true, res.data);
-                $(`#layout-comment-tab-content`).load(` #layout-comment-info`)
+                $(`#layout-comment-tab-content`).load(` #layout-comment-info`, function() {
+                    showToast(true, res.data);
+                    initSummernote()
+                })
             },
             error: function(err) {
                 console.log(err);
@@ -180,5 +183,11 @@ $(document).ready(function() {
             },
         });
     });
+
+    function initSummernote() {
+        // inisiasi summernote
+        $(`#layouter-layout-notes`).summernote(summernoteConfig)
+        $(`#author-layout-notes`).summernote(summernoteConfig)
+    }
 })
 </script>

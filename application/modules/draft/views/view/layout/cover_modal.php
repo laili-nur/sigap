@@ -62,7 +62,6 @@
                         aria-labelledby="cover-file-tab"
                     >
                         <?php $this->load->view('draft/view/common/file_section', ['progress' => 'cover']) ?>
-
                     </div>
                     <div
                         class="tab-pane fade"
@@ -77,11 +76,11 @@
                                     <div class="form-group">
                                         <label
                                             for="layouter-cover-notes"
-                                            class="font-weight-bold"
+                                            class="badge badge-primary"
                                         >Catatan Layouter</label>
                                         <?php
-                                        if (!is_admin() && $level != 'layouter') {
-                                            echo "<div class='font-italic' id='layouter-cover-notes'>" . $input->layout_notes . "</div>";
+                                        if (!is_admin() && $level != 'layouter' || $is_final) {
+                                            echo "<div>" . $input->layout_notes . "</div>";
                                         } else {
                                             echo form_textarea([
                                                 'name'  => "layouter-cover-notes",
@@ -96,16 +95,15 @@
                                     <hr class="my-3">
                                 <?php endif; ?>
 
-
                                 <!-- CATATAN AUTHOR UNTUK STAFF/ADMIN -->
                                 <div class="form-group">
                                     <label
                                         for="author-cover-notes"
-                                        class="font-weight-bold"
+                                        class="badge badge-primary"
                                     >Catatan Penulis</label>
                                     <?php
-                                    if (!is_admin() && ($level != 'author' || $author_order != 1)) {
-                                        echo "<div class='font-italic' id='author-cover-notes'>" . $input->cover_notes_author . "</div>";
+                                    if (!is_admin() && ($level != 'author' || $author_order != 1) || $is_final) {
+                                        echo "<div>" . $input->cover_notes_author . "</div>";
                                     } else {
                                         echo form_textarea([
                                             'name'  => "author-cover-notes",
@@ -113,7 +111,6 @@
                                             'id'    => "author-cover-notes",
                                             'rows'  => '6',
                                             'value' => $input->cover_notes_author
-
                                         ]);
                                     }
                                     ?>
@@ -126,11 +123,13 @@
                                     class="btn btn-light ml-auto"
                                     data-dismiss="modal"
                                 >Close</button>
-                                <button
-                                    id="btn-submit-cover"
-                                    class="btn btn-primary"
-                                    type="button"
-                                >Submit</button>
+                                <?php if (!$is_final) : ?>
+                                    <button
+                                        id="btn-submit-cover"
+                                        class="btn btn-primary"
+                                        type="button"
+                                    >Submit</button>
+                                <?php endif ?>
                             </div>
                         </div>
                     </div>
@@ -146,6 +145,8 @@ $(document).ready(function() {
 
     // reload segmen ketika modal diclose
     $('#layout-progress-wrapper').on('shown.bs.modal', `#modal-cover`, function() {
+        initSummernote()
+
         // reload ketika modal diclose
         $(`#modal-cover`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
             $('#layout-progress-wrapper').load(' #layout-progress', function() {
@@ -171,9 +172,10 @@ $(document).ready(function() {
             datatype: "JSON",
             data: layoutData,
             success: function(res) {
-                console.log(res);
-                showToast(true, res.data);
-                $(`#cover-comment-tab-content`).load(` #cover-comment-info`)
+                $(`#cover-comment-tab-content`).load(` #cover-comment-info`, function() {
+                    showToast(true, res.data);
+                    initSummernote()
+                })
             },
             error: function(err) {
                 console.log(err);
@@ -181,5 +183,11 @@ $(document).ready(function() {
             },
         });
     });
+
+    function initSummernote() {
+        // inisiasi summernote
+        $(`#layouter-cover-notes`).summernote(summernoteConfig)
+        $(`#author-cover-notes`).summernote(summernoteConfig)
+    }
 })
 </script>
