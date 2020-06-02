@@ -6,6 +6,7 @@ $level               = check_level();
 $edit_remaining_time = Carbon::parse(Carbon::today())->diffInDays($input->edit_deadline, false);
 $is_edit_started     = format_datetime($input->edit_start_date);
 $is_notes_populated = $input->edit_notes || $input->edit_notes_author ? true : false;
+$is_confidential_populated = $input->edit_notes_confidential ? true : false;
 $is_files_populated = $input->edit_file || $input->edit_file_link ? true : false;
 ?>
 <section
@@ -66,7 +67,7 @@ $is_files_populated = $input->edit_file || $input->edit_file_link ? true : false
             </div>
 
             <div class="list-group-item justify-content-between">
-                <?php if (is_admin()) : ?>
+                <?php if (is_admin() && !$is_final) : ?>
                     <a
                         href="#"
                         id="btn-modal-deadline-edit"
@@ -100,28 +101,29 @@ $is_files_populated = $input->edit_file || $input->edit_file_link ? true : false
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Status</span>
-                <a
-                    href="#"
-                    onclick="event.preventDefault()"
-                    class="font-weight-bold"
-                    data-toggle="popover"
-                    data-placement="left"
-                    data-container="body"
-                    auto=""
-                    right=""
-                    data-html="true"
-                    data-trigger="hover"
-                    data-content="<?= $input->edit_status; ?>"
-                    data-original-title="Catatan Admin"
-                >
-                    <?php if ($input->is_edit == 'n' and $input->draft_status == 99) : ?>
-                        <i class="fa fa-info-circle"></i>
-                        <span>Edit Ditolak</span>
+                <span>
+                    <?php if ($input->is_edit == 'n' && $input->draft_status == 99) : ?>
+                        <span class="text-danger">
+                            <i class="fa fa-times"></i>
+                            <span>Edit Ditolak</span>
+                        </span>
                     <?php elseif ($input->is_edit == 'y') : ?>
-                        <i class="fa fa-info-circle"></i>
-                        <span>Edit Selesai</span>
+                        <span class="text-success">
+                            <i class="fa fa-check"></i>
+                            <span>Edit Selesai</span>
+                        </span>
+                    <?php else : ?>
+                        <span class="text-primary">
+                            <i class="fa fa-loading"></i>
+                            <span>Sedang Diproses</span>
+                        </span>
                     <?php endif ?>
-                </a>
+                </span>
+            </div>
+
+            <div class="m-3">
+                <div class="text-muted pb-1">Catatan Admin</div>
+                <?= $input->edit_status; ?>
             </div>
             <hr class="m-0">
         </div>
@@ -132,11 +134,11 @@ $is_files_populated = $input->edit_file || $input->edit_file_link ? true : false
                 <?php if (is_admin() && !$is_final) : ?>
                     <button
                         title="Aksi admin"
-                        class="btn btn-secondary <?= !$is_edit_started ? 'btn-disabled' : ''; ?>"
+                        class="btn btn-outline-dark <?= !$is_edit_started ? 'btn-disabled' : ''; ?>"
                         data-toggle="modal"
                         data-target="#modal-action-edit"
                         <?= !$is_edit_started ? 'disabled' : ''; ?>
-                    ><i class="fa fa-thumbs-up"></i> Aksi</button>
+                    >Aksi</button>
                 <?php endif; ?>
 
                 <!-- button tanggapan edit -->
@@ -155,9 +157,10 @@ $is_files_populated = $input->edit_file || $input->edit_file_link ? true : false
                     <button
                         data-toggle="modal"
                         data-target="#modal-edit-confidential"
-                        class="btn btn-outline-dark <?= !$is_edit_started ? 'btn-disabled' : ''; ?>"
+                        class="btn btn-outline-primary <?= !$is_edit_started ? 'btn-disabled' : ''; ?>"
                         <?= !$is_edit_started ? 'disabled' : ''; ?>
-                    > Catatan</button>
+                    >Catatan
+                        <?= $is_confidential_populated ? '<i class="far fa-comment"></i>' : '' ?></button>
                 <?php endif; ?>
             </div>
         </div>

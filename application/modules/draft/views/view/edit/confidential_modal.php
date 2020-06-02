@@ -35,8 +35,8 @@
                             class="font-weight-bold"
                         >Catatan Editor</label>
                         <?php
-                        if (!is_admin() && $level != 'editor') {
-                            echo "<div class='font-italic' id='confidential-edit-notes'>" . $input->edit_notes_confidential . "</div>";
+                        if (!is_admin() && $level != 'editor' || $is_final) {
+                            echo "<div>" . $input->edit_notes_confidential . "</div>";
                         } else {
                             echo form_textarea([
                                 'name'  => "confidential-edit-notes",
@@ -44,7 +44,6 @@
                                 'id'    => "confidential-edit-notes",
                                 'rows'  => '6',
                                 'value' => $input->edit_notes_confidential
-
                             ]);
                         }
                         ?>
@@ -58,19 +57,27 @@
                         class="btn btn-light ml-auto"
                         data-dismiss="modal"
                     >Close</button>
-                    <button
-                        class="btn btn-primary"
-                        type="button"
-                        id="btn-submit-edit-confidential"
-                    >Submit</button>
+                    <?php if (!$is_final) : ?>
+                        <button
+                            class="btn btn-primary"
+                            type="button"
+                            id="btn-submit-edit-confidential"
+                        >Submit</button>
+                    <?php endif ?>
                 </div>
             <?php endif; ?>
         </div>
     </div>
 </div>
+
 <script>
 $(document).ready(function() {
     const draftId = $('[name=draft_id]').val();
+
+    // reload segmen ketika modal diclose
+    $('#edit-progress-wrapper').on('shown.bs.modal', `#modal-edit-confidential`, function() {
+        initSummernote()
+    })
 
     // submit progress edit
     $('#edit-progress-wrapper').on('click', `#btn-submit-edit-confidential`, function() {
@@ -85,7 +92,6 @@ $(document).ready(function() {
                 [`edit_notes_confidential`]: $(`#confidential-edit-notes`).val(),
             },
             success: function(res) {
-                console.log(res);
                 showToast(true, res.data);
             },
             error: function(err) {
@@ -98,5 +104,9 @@ $(document).ready(function() {
         });
     });
 
+    function initSummernote() {
+        // inisiasi summernote
+        $(`#confidential-edit-notes`).summernote(summernoteConfig)
+    }
 })
 </script>

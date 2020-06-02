@@ -401,12 +401,12 @@ $(document).ready(function() {
             },
         });
     }
-})
 
-function initSummernote(identifier) {
-    // inisiasi summernote
-    $(`#reviewer-${identifier}-notes`).summernote(summernoteConfig)
-    $(`#admin-${identifier}-notes`).summernote(summernoteConfig)
-    $(`#author-${identifier}-notes`).summernote(summernoteConfig)
-}
+    function initSummernote(identifier) {
+        // inisiasi summernote
+        $(`#reviewer-${identifier}-notes`).summernote(summernoteConfig)
+        $(`#admin-${identifier}-notes`).summernote(summernoteConfig)
+        $(`#author-${identifier}-notes`).summernote(summernoteConfig)
+    }
+})
 </script>

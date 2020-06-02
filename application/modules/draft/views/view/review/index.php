@@ -148,16 +148,7 @@ $is_review2_files_populated = $input->review2_file || $input->review2_file_link 
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Status</span>
-                <span
-                    class="font-weight-bold"
-                    data-toggle="popover"
-                    data-placement="left"
-                    data-container="body"
-                    data-html="true"
-                    data-trigger="hover"
-                    data-content="<?= $input->review_status; ?>"
-                    data-original-title="Catatan Admin"
-                >
+                <span>
                     <?php if ($input->is_review == 'n' && $input->draft_status == 99) : ?>
                         <span class="text-danger">
                             <i class="fa fa-times"></i>
@@ -176,6 +167,7 @@ $is_review2_files_populated = $input->review2_file || $input->review2_file_link 
                 <div class="text-muted pb-1">Catatan Admin</div>
                 <?= $input->review_status; ?>
             </div>
+
             <hr class="m-0">
         </div>
 
@@ -190,7 +182,7 @@ $is_review2_files_populated = $input->review2_file || $input->review2_file_link 
                         data-toggle="modal"
                         data-target="#modal-action-review"
                         <?= !$is_review_started ? 'disabled' : ''; ?>
-                    ><i class="fa fa-thumbs-up"></i> Aksi</button>
+                    >Aksi</button>
                 <?php endif; ?>
 
                 <!-- button tanggapan review 1 -->

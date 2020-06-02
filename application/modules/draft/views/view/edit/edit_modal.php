@@ -77,11 +77,11 @@
                                     <div class="form-group">
                                         <label
                                             for="editor-edit-notes"
-                                            class="font-weight-bold"
+                                            class="badge badge-primary"
                                         >Catatan Editor</label>
                                         <?php
-                                        if (!is_admin() && $level != 'editor') {
-                                            echo "<div class='font-italic' id='editor-edit-notes'>" . $input->edit_notes . "</div>";
+                                        if (!is_admin() && $level != 'editor' || $is_final) {
+                                            echo "<div>" . $input->edit_notes . "</div>";
                                         } else {
                                             echo form_textarea([
                                                 'name'  => "editor-edit-notes",
@@ -96,16 +96,15 @@
                                     <hr class="my-3">
                                 <?php endif; ?>
 
-
                                 <!-- CATATAN AUTHOR UNTUK STAFF/ADMIN -->
                                 <div class="form-group">
                                     <label
                                         for="author-edit-notes"
-                                        class="font-weight-bold"
+                                        class="badge badge-primary"
                                     >Catatan Penulis</label>
                                     <?php
-                                    if (!is_admin() && ($level != 'author' || $author_order != 1)) {
-                                        echo "<div class='font-italic' id='author-edit-notes'>" . $input->edit_notes_author . "</div>";
+                                    if (!is_admin() && ($level != 'author' || $author_order != 1) || $is_final) {
+                                        echo "<div>" . $input->edit_notes_author . "</div>";
                                     } else {
                                         echo form_textarea([
                                             'name'  => "author-edit-notes",
@@ -113,7 +112,6 @@
                                             'id'    => "author-edit-notes",
                                             'rows'  => '6',
                                             'value' => $input->edit_notes_author
-
                                         ]);
                                     }
                                     ?>
@@ -126,11 +124,13 @@
                                     class="btn btn-light ml-auto"
                                     data-dismiss="modal"
                                 >Close</button>
-                                <button
-                                    id="btn-submit-edit"
-                                    class="btn btn-primary"
-                                    type="button"
-                                >Submit</button>
+                                <?php if (!$is_final) : ?>
+                                    <button
+                                        id="btn-submit-edit"
+                                        class="btn btn-primary"
+                                        type="button"
+                                    >Submit</button>
+                                <?php endif ?>
                             </div>
                         </div>
                     </div>
@@ -146,6 +146,8 @@ $(document).ready(function() {
 
     // reload segmen ketika modal diclose
     $('#edit-progress-wrapper').on('shown.bs.modal', `#modal-edit`, function() {
+        initSummernote()
+
         // reload ketika modal diclose
         $(`#modal-edit`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
             $('#edit-progress-wrapper').load(' #edit-progress', function() {
@@ -171,9 +173,10 @@ $(document).ready(function() {
             datatype: "JSON",
             data: editData,
             success: function(res) {
-                console.log(res);
-                showToast(true, res.data);
-                $(`#edit-comment-tab-content`).load(` #edit-comment-info`)
+                $(`#edit-comment-tab-content`).load(` #edit-comment-info`, function() {
+                    showToast(true, res.data);
+                    initSummernote()
+                })
             },
             error: function(err) {
                 console.log(err);
@@ -181,5 +184,11 @@ $(document).ready(function() {
             },
         });
     });
+
+    function initSummernote() {
+        // inisiasi summernote
+        $(`#editor-edit-notes`).summernote(summernoteConfig)
+        $(`#author-edit-notes`).summernote(summernoteConfig)
+    }
 })
 </script>
