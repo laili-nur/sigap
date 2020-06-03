@@ -31,7 +31,7 @@ $menu_list = [
     ],
     [
         'name' => 'Order Cetak',
-        'url'  => 'printing',
+        'url'  => 'print_order',
         'icon' => 'fa fa-print',
         'level' => 'superadmin|admin_penerbitan'
     ],

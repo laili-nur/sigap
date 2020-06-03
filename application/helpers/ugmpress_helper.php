@@ -594,3 +594,16 @@ function get_published_date()
 
     return $published_years;
 }
+
+function expand($authors)
+{
+    $authors_list = '<ul class="p-0 m-0" style="list-style-type: none;">';
+    foreach ($authors as $a) {
+        $authors_list .= '<li>';
+        $authors_list .= '<i class="fa fa-user fa-fw"></i> ';
+        $authors_list .= $a->author_name;
+        $authors_list .= '</li>';
+    }
+    $authors_list .= '</ul>';
+    return $authors_list;
+}

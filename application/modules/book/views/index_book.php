@@ -20,19 +20,6 @@ $reprint_options = [
     'n' => ' Buku Baru',
     'y' => ' Buku Cetak Ulang',
 ];
-
-function expand($authors)
-{
-    $authors_list = '<ul class="p-0 m-0" style="padding: 0;list-style-type: none;">';
-    foreach ($authors as $a) {
-        $authors_list .= '<li>';
-        $authors_list .= '<i class="fa fa-user fa-fw"></i> ';
-        $authors_list .= $a->author_name;
-        $authors_list .= '</li>';
-    }
-    $authors_list .= '</ul>';
-    return $authors_list;
-}
 ?>
 
 <header class="page-title-bar">
