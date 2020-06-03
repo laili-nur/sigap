@@ -32,7 +32,8 @@
     <link
         href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600"
         rel="stylesheet"
-    ><!-- End GOOGLE FONT -->
+    >
+    <!-- End GOOGLE FONT -->
 
     <!-- BEGIN PLUGINS STYLES -->
     <!-- <link

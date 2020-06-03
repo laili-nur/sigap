@@ -61,7 +61,7 @@
                         </div>
                         <div class="form-group">
                             <label for="document_notes">Catatan Dokumen</label>
-                            <?= form_textarea('document_notes', $input->document_notes, 'class="form-control summernote-basic" id="document_notes"'); ?>
+                            <?= form_textarea('document_notes', $input->document_notes, 'class="form-control" data-toggle="summernote" data-height="150" id="document_notes"'); ?>
                             <?= form_error('document_notes'); ?>
                         </div>
 

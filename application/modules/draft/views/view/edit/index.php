@@ -17,7 +17,7 @@ $is_files_populated = $input->edit_file || $input->edit_file_link ? true : false
         <header class="card-header">
             <div class="d-flex align-items-center"><span class="mr-auto">Editorial</span>
                 <div class="card-header-control">
-                    <?php if (is_admin()) : ?>
+                    <?php if (is_admin() && !$is_final) : ?>
                         <button
                             id="btn-modal-select-editor"
                             type="button"
@@ -53,6 +53,27 @@ $is_files_populated = $input->edit_file || $input->edit_file_link ? true : false
             class="list-group list-group-flush list-group-bordered"
             id="list-group-edit"
         >
+
+            <div class="list-group-item justify-content-between">
+                <span class="text-muted">Status</span>
+                <span class="font-weight-bold">
+                    <?php if ($input->is_edit == 'n' && $input->draft_status == 99) : ?>
+                        <span class="text-danger">
+                            <i class="fa fa-times"></i>
+                            <span>Edit Ditolak</span>
+                        </span>
+                    <?php elseif ($input->is_edit == 'y') : ?>
+                        <span class="text-success">
+                            <i class="fa fa-check"></i>
+                            <span>Edit Selesai</span>
+                        </span>
+                    <?php else : ?>
+                        <span class="text-primary">
+                            <span>Sedang Diproses</span>
+                        </span>
+                    <?php endif ?>
+                </span>
+            </div>
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Tanggal mulai</span>
@@ -98,27 +119,6 @@ $is_files_populated = $input->edit_file || $input->edit_file_link ? true : false
                     </div>
                 </div>
             <?php endif; ?>
-
-            <div class="list-group-item justify-content-between">
-                <span class="text-muted">Status</span>
-                <span>
-                    <?php if ($input->is_edit == 'n' && $input->draft_status == 99) : ?>
-                        <span class="text-danger">
-                            <i class="fa fa-times"></i>
-                            <span>Edit Ditolak</span>
-                        </span>
-                    <?php elseif ($input->is_edit == 'y') : ?>
-                        <span class="text-success">
-                            <i class="fa fa-check"></i>
-                            <span>Edit Selesai</span>
-                        </span>
-                    <?php else : ?>
-                        <span class="text-primary">
-                            <span>Sedang Diproses</span>
-                        </span>
-                    <?php endif ?>
-                </span>
-            </div>
 
             <div class="m-3">
                 <div class="text-muted pb-1">Catatan Admin</div>

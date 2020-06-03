@@ -40,7 +40,7 @@
                         } else {
                             echo form_textarea([
                                 'name'  => "{$progress}_status",
-                                'class' => 'form-control summernote-basic',
+                                'class' => 'form-control',
                                 'id'    => "{$progress}_status",
                                 'rows'  => '6',
                                 'value' => $input->{"{$progress}_status"},

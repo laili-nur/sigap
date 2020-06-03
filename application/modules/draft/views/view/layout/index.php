@@ -18,7 +18,7 @@ $is_cover_files_populated = $input->cover_file || $input->cover_file_link ? true
         <header class="card-header">
             <div class="d-flex align-items-center"><span class="mr-auto">Layouting</span>
                 <div class="card-header-control">
-                    <?php if (is_admin()) : ?>
+                    <?php if (is_admin() && !$is_final) : ?>
                         <button
                             id="btn-modal-select-layouter"
                             type="button"
@@ -52,6 +52,27 @@ $is_cover_files_populated = $input->cover_file || $input->cover_file_link ? true
             class="list-group list-group-flush list-group-bordered"
             id="list-group-layout"
         >
+
+            <div class="list-group-item justify-content-between">
+                <span class="text-muted">Status</span>
+                <span class="font-weight-bold">
+                    <?php if ($input->is_layout == 'n' && $input->draft_status == 99) : ?>
+                        <span class="text-danger">
+                            <i class="fa fa-times"></i>
+                            <span>Layout Ditolak</span>
+                        </span>
+                    <?php elseif ($input->is_layout == 'y') : ?>
+                        <span class="text-success">
+                            <i class="fa fa-check"></i>
+                            <span>Layout Selesai</span>
+                        </span>
+                    <?php else : ?>
+                        <span class="text-primary">
+                            <span>Sedang Diproses</span>
+                        </span>
+                    <?php endif ?>
+                </span>
+            </div>
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Tanggal mulai</span>
@@ -97,27 +118,6 @@ $is_cover_files_populated = $input->cover_file || $input->cover_file_link ? true
                     </div>
                 </div>
             <?php endif; ?>
-
-            <div class="list-group-item justify-content-between">
-                <span class="text-muted">Status</span>
-                <span>
-                    <?php if ($input->is_layout == 'n' && $input->draft_status == 99) : ?>
-                        <span class="text-danger">
-                            <i class="fa fa-times"></i>
-                            <span>Layout Ditolak</span>
-                        </span>
-                    <?php elseif ($input->is_layout == 'y') : ?>
-                        <span class="text-success">
-                            <i class="fa fa-check"></i>
-                            <span>Layout Selesai</span>
-                        </span>
-                    <?php else : ?>
-                        <span class="text-primary">
-                            <span>Sedang Diproses</span>
-                        </span>
-                    <?php endif ?>
-                </span>
-            </div>
 
             <div class="m-3">
                 <div class="text-muted pb-1">Catatan Admin</div>

@@ -20,7 +20,7 @@ $is_review2_files_populated = $input->review2_file || $input->review2_file_link 
         <header class="card-header">
             <div class="d-flex align-items-center"><span class="mr-auto">Review</span>
                 <div class="card-header-control">
-                    <?php if (is_admin()) : ?>
+                    <?php if (is_admin() && !$is_final) : ?>
                         <button
                             id="btn-modal-select-reviewer"
                             type="button"
@@ -60,7 +60,7 @@ $is_review2_files_populated = $input->review2_file || $input->review2_file_link 
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Status</span>
-                <span>
+                <span class="font-weight-bold">
                     <?php if ($input->is_review == 'n' && $input->draft_status == 99) : ?>
                         <span class="text-danger">
                             <i class="fa fa-times"></i>

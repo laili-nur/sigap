@@ -76,15 +76,15 @@
                                     <div class="form-group">
                                         <label
                                             for="proofreader-proofread-notes"
-                                            class="font-weight-bold"
+                                            class="badge badge-primary"
                                         >Catatan Staff</label>
                                         <?php
-                                        if (!is_admin() && $level != 'proofreader') {
-                                            echo "<div class='font-italic' id='proofreader-proofread-notes'>" . $input->proofread_notes . "</div>";
+                                        if (!is_admin() && $level != 'proofreader' || $is_final) {
+                                            echo "<div>" . $input->proofread_notes . "</div>";
                                         } else {
                                             echo form_textarea([
                                                 'name'  => "proofreader-proofread-notes",
-                                                'class' => 'form-control summernote-basic',
+                                                'class' => 'form-control',
                                                 'id'    => "proofreader-proofread-notes",
                                                 'rows'  => '6',
                                                 'value' => $input->proofread_notes
@@ -100,15 +100,15 @@
                                 <div class="form-group">
                                     <label
                                         for="author-proofread-notes"
-                                        class="font-weight-bold"
+                                        class="badge badge-primary"
                                     >Catatan Penulis</label>
                                     <?php
-                                    if (!is_admin() && ($level != 'author' || $author_order != 1)) {
-                                        echo "<div class='font-italic' id='author-proofread-notes'>" . $input->proofread_notes_author . "</div>";
+                                    if (!is_admin() && ($level != 'author' || $author_order != 1) || $is_final) {
+                                        echo "<div>" . $input->proofread_notes_author . "</div>";
                                     } else {
                                         echo form_textarea([
                                             'name'  => "author-proofread-notes",
-                                            'class' => 'form-control summernote-basic',
+                                            'class' => 'form-control',
                                             'id'    => "author-proofread-notes",
                                             'rows'  => '6',
                                             'value' => $input->proofread_notes_author
@@ -125,11 +125,13 @@
                                     class="btn btn-light ml-auto"
                                     data-dismiss="modal"
                                 >Close</button>
-                                <button
-                                    id="btn-submit-proofread"
-                                    class="btn btn-primary"
-                                    type="button"
-                                >Submit</button>
+                                <?php if (!$is_final) : ?>
+                                    <button
+                                        id="btn-submit-proofread"
+                                        class="btn btn-primary"
+                                        type="button"
+                                    >Submit</button>
+                                <?php endif ?>
                             </div>
                         </div>
                     </div>
@@ -145,6 +147,8 @@ $(document).ready(function() {
 
     // reload segmen ketika modal diclose
     $('#proofread-progress-wrapper').on('shown.bs.modal', `#modal-proofread`, function() {
+        initSummernote()
+
         // reload ketika modal diclose
         $(`#modal-proofread`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
             $('#proofread-progress-wrapper').load(' #proofread-progress');
@@ -168,9 +172,10 @@ $(document).ready(function() {
             datatype: "JSON",
             data: proofreadData,
             success: function(res) {
-                console.log(res);
-                showToast(true, res.data);
-                $(`#proofread-comment-tab-content`).load(` #proofread-comment-info`)
+                $(`#proofread-comment-tab-content`).load(` #proofread-comment-info`, function() {
+                    initSummernote()
+                    showToast(true, res.data);
+                })
             },
             error: function(err) {
                 console.log(err);
@@ -178,5 +183,11 @@ $(document).ready(function() {
             },
         });
     });
+
+    function initSummernote() {
+        // inisiasi summernote
+        $('#proofreader-proofread-notes').summernote(summernoteConfig)
+        $('#author-proofread-notes').summernote(summernoteConfig)
+    }
 })
 </script>

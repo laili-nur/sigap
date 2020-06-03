@@ -94,7 +94,7 @@
                                         } else {
                                             echo form_textarea([
                                                 'name'  => "printer-print-notes",
-                                                'class' => 'form-control summernote-basic',
+                                                'class' => 'form-control',
                                                 'id'    => "printer-print-notes",
                                                 'rows'  => '6',
                                                 'value' => $input->print_notes

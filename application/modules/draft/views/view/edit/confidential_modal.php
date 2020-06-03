@@ -40,7 +40,7 @@
                         } else {
                             echo form_textarea([
                                 'name'  => "confidential-edit-notes",
-                                'class' => 'form-control summernote-basic',
+                                'class' => 'form-control',
                                 'id'    => "confidential-edit-notes",
                                 'rows'  => '6',
                                 'value' => $input->edit_notes_confidential

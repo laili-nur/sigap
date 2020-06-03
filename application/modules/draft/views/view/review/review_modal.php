@@ -169,7 +169,7 @@ $all_criteria = [
                                         } else {
                                             echo form_textarea([
                                                 'name'  => "author-{$progress}-notes",
-                                                'class' => 'form-control summernote-basic',
+                                                'class' => 'form-control',
                                                 'id'    => "author-{$progress}-notes",
                                                 'rows'  => '6',
                                                 'value' => $input->{"{$progress}_notes_author"}
@@ -215,7 +215,7 @@ $all_criteria = [
                                                 type="textarea"
                                                 name="<?= "criteria{$criteria['number']}-{$progress}" ?>"
                                                 id="<?= "criteria{$criteria['number']}-{$progress}" ?>"
-                                                class="form-control summernote-basic"
+                                                class="form-control"
                                                 rows="6"
                                             ><?= $input->{"{$progress}_criteria{$criteria['number']}"} ?></textarea>
                                         <?php else : ?>
@@ -244,7 +244,7 @@ $all_criteria = [
                                                 </div>
                                             <?php endfor ?>
                                         <?php else : ?>
-                                            <span class="font-weight-bold"><?= $input->{"{$progress}_score"}[$criteria_key] ?></span>
+                                            <span class="font-weight-bold"><?= $input->{"{$progress}_score"} ? $input->{"{$progress}_score"}[$criteria_key] : null ?></span>
                                         <?php endif ?>
                                     </div>
                                 <?php endforeach ?>

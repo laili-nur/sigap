@@ -84,7 +84,7 @@
                                         } else {
                                             echo form_textarea([
                                                 'name'  => "layouter-layout-notes",
-                                                'class' => 'form-control summernote-basic',
+                                                'class' => 'form-control',
                                                 'id'    => "layouter-layout-notes",
                                                 'rows'  => '6',
                                                 'value' => $input->layout_notes
@@ -107,7 +107,7 @@
                                     } else {
                                         echo form_textarea([
                                             'name'  => "author-layout-notes",
-                                            'class' => 'form-control summernote-basic',
+                                            'class' => 'form-control',
                                             'id'    => "author-layout-notes",
                                             'rows'  => '6',
                                             'value' => $input->layout_notes_author

@@ -10,7 +10,10 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-revision-title"> Revisi</h5>
+                <h5
+                    class="modal-title"
+                    id="modal-revision-title"
+                > Revisi</h5>
             </div>
             <div class="modal-body">
                 <div
@@ -20,13 +23,18 @@
                 </div>
             </div>
             <div class="modal-footer justify-content-between">
-                <button
-                    disabled="disabled"
-                    class="btn btn-success"
-                    id="btn-insert-revision"
-                    title="Tanggal mulai revisi akan tersimpan. Status draft akan diperbarui."
-                    data-toggle="tooltip"
-                ><i class="fa fa-plus"></i> Mulai Revisi Baru</button>
+                <?php if (!$is_final) : ?>
+                    <button
+                        disabled="disabled"
+                        class="btn btn-success"
+                        id="btn-insert-revision"
+                        title="Tanggal mulai revisi akan tersimpan. Status draft akan diperbarui."
+                        data-toggle="tooltip"
+                    ><i class="fa fa-plus"></i> Mulai Revisi Baru</button>
+                <?php else : ?>
+                    <!-- trick justify content -->
+                    <span></span>
+                <?php endif ?>
                 <button
                     type="button"
                     class="btn btn-light"
@@ -94,13 +102,16 @@
         </div>
     </div>
 </div>
+
 <script>
 $(document).ready(function() {
     const draftId = $('[name=draft_id]').val();
+    const isFinal = Number('<?= $is_final ?>')
     let revisionType; // edit || layout
 
     // reload segmen ketika modal diclose
     $('#proofread-progress-wrapper').on('shown.bs.modal', '#modal-revision', function() {
+
         // reload ketika modal diclose
         $('#modal-revision').off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
             $('#proofread-progress-wrapper').load(' #proofread-progress', function() {
@@ -132,6 +143,7 @@ $(document).ready(function() {
             url: `${getUrl}/${draftId}/${revisionType}`,
             success: function(res) {
                 renderData(res.data);
+                initSummernote()
             },
             error: (err) => {
                 showToast(false, err.responseJSON.message);
@@ -160,8 +172,9 @@ $(document).ready(function() {
                     finishBtnAttr = 'd-inline';
                     saveBtnAttr = 'd-inline';
                     badge = '<span class="badge badge-info">Dalam Proses</span>';
-                    formRevision =
-                        `<textarea rows="6" name="revision-notes-${r.revision_id}" class="form-control summernote-basic" id="revision-notes-${r.revision_id}">${r.revision_notes}</textarea>`;
+                    formRevision = !isFinal ?
+                        `<textarea rows="6" name="revision-notes-${r.revision_id}" class="form-control summernote" id="revision-notes-${r.revision_id}">${r.revision_notes}</textarea>` :
+                        `<div>${r.revision_notes}</div>`;
                 }
 
                 list += `
@@ -197,7 +210,7 @@ $(document).ready(function() {
                     </div>
                     <div class="card-body">
                         <div class="form-group">${formRevision}</div>
-                        <div class="card-button">
+                        <div class="card-button" style="display:none">
                             <button title="Submit catatan" type="button" class="${saveBtnAttr} btn btn-primary btn-save-revision" data-id="${r.revision_id}"><i class="fas fa-save"></i><span class="d-none d-lg-inline"> Simpan</span></button>
 
                             <button title="Selesai revisi" type="button" class="btn btn-secondary btn-finish-revision ${finishBtnAttr}" data-id="${r.revision_id}"><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
@@ -218,26 +231,7 @@ $(document).ready(function() {
         if (flag == 0) {
             $('#btn-insert-revision').removeAttr('disabled')
         }
-
-        // WARNING! TOO SLOW
-        // $('.summernote-basic').summernote({
-        //     placeholder: 'Write here...',
-        //     height: 100,
-        //     disableDragAndDrop: true,
-        //     toolbar: [
-        //         ['style', ['bold', 'italic', 'underline', 'clear']],
-        //         ['font', ['strikethrough']],
-        //         ['fontsize', ['fontsize', 'height']],
-        //         ['color', ['color']],
-        //         ['para', ['ul', 'ol', 'paragraph']],
-        //         ['height', ['height']],
-        //         ['view', ['codeview']],
-        //     ],
-        //     codeviewFilter: false,
-        //     codeviewIframeFilter: true,
-        // });
     }
-
 
     // selesai revisi
     $('#proofread-progress-wrapper').on('click', '.btn-finish-revision', function() {
@@ -368,5 +362,10 @@ $(document).ready(function() {
             }
         })
     })
+
+    function initSummernote() {
+        // inisiasi summernote
+        $('.summernote').summernote(summernoteConfig)
+    }
 })
 </script>

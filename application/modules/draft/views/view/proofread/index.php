@@ -37,6 +37,27 @@ $is_files_populated = $input->proofread_file || $input->proofread_file_link ? tr
         >
 
             <div class="list-group-item justify-content-between">
+                <span class="text-muted">Status</span>
+                <span class="font-weight-bold">
+                    <?php if ($input->is_proofread == 'n' && $input->draft_status == 99) : ?>
+                        <span class="text-danger">
+                            <i class="fa fa-times"></i>
+                            <span>Proofread Ditolak</span>
+                        </span>
+                    <?php elseif ($input->is_proofread == 'y') : ?>
+                        <span class="text-success">
+                            <i class="fa fa-check"></i>
+                            <span>Proofread Selesai</span>
+                        </span>
+                    <?php else : ?>
+                        <span class="text-primary">
+                            <span>Sedang Diproses</span>
+                        </span>
+                    <?php endif ?>
+                </span>
+            </div>
+
+            <div class="list-group-item justify-content-between">
                 <span class="text-muted">Tanggal mulai</span>
                 <strong><?= format_datetime($input->proofread_start_date); ?></strong>
             </div>
@@ -50,7 +71,9 @@ $is_files_populated = $input->proofread_file || $input->proofread_file_link ? tr
                 <div class="list-group-item justify-content-between">
                     <?php if (is_staff()) : ?>
                         <button
-                            class="btn-modal-revision btn btn-secondary btn-sm <?= !$is_proofread_started ? 'btn-disabled' : ''; ?>"
+                            class="btn-modal-revision btn btn-sm
+                            <?= $is_revision_in_progress['editor'] ? 'btn-warning' : 'btn-secondary' ?>
+                            <?= !$is_proofread_started ? 'btn-disabled' : ''; ?>"
                             title="Revisi Edit"
                             data-revision-type="edit"
                             <?= !$is_proofread_started ? 'disabled' : ''; ?>
@@ -58,13 +81,15 @@ $is_files_populated = $input->proofread_file || $input->proofread_file_link ? tr
                     <?php else : ?>
                         <span class="text-muted">Revisi Edit</span>
                     <?php endif ?>
-                    <strong><span class="badge badge-warning"><?= $revision_total['editor']; ?></span></button></strong>
+                    <strong><span class="badge badge-primary"><?= $revision_total['editor']; ?></span></button></strong>
                 </div>
 
                 <div class="list-group-item justify-content-between">
                     <?php if (is_staff()) : ?>
                         <button
-                            class="btn-modal-revision btn btn-secondary btn-sm <?= !$is_proofread_started ? 'btn-disabled' : ''; ?>"
+                            class="btn-modal-revision btn btn-sm
+                            <?= $is_revision_in_progress['layouter'] ? 'btn-warning' : 'btn-secondary' ?>
+                            <?= !$is_proofread_started ? 'btn-disabled' : ''; ?>"
                             title="Revisi Layout"
                             data-revision-type="layout"
                             <?= !$is_proofread_started ? 'disabled' : ''; ?>
@@ -72,34 +97,13 @@ $is_files_populated = $input->proofread_file || $input->proofread_file_link ? tr
                     <?php else : ?>
                         <span class="text-muted">Revisi Layout</span>
                     <?php endif ?>
-                    <strong><span class="badge badge-warning"><?= $revision_total['layouter']; ?></span></button></strong>
+                    <strong><span class="badge badge-primary"><?= $revision_total['layouter']; ?></span></button></strong>
                 </div>
             <?php endif ?>
 
-            <div class="list-group-item justify-content-between">
-                <span class="text-muted">Status</span>
-                <a
-                    href="#"
-                    onclick="event.preventDefault()"
-                    class="font-weight-bold"
-                    data-toggle="popover"
-                    data-placement="left"
-                    data-container="body"
-                    auto=""
-                    right=""
-                    data-html="true"
-                    data-trigger="hover"
-                    data-content="<?= $input->proofread_status; ?>"
-                    data-original-title="Catatan Admin"
-                >
-                    <?php if ($input->is_proofread == 'n' and $input->draft_status == 99) : ?>
-                        <i class="fa fa-info-circle"></i>
-                        <span>Proofread Ditolak</span>
-                    <?php elseif ($input->is_proofread == 'y') : ?>
-                        <i class="fa fa-info-circle"></i>
-                        <span>Proofread Selesai</span>
-                    <?php endif ?>
-                </a>
+            <div class="m-3">
+                <div class="text-muted pb-1">Catatan Admin</div>
+                <?= $input->proofread_status; ?>
             </div>
             <hr class="m-0">
         </div>
@@ -108,12 +112,14 @@ $is_files_populated = $input->proofread_file || $input->proofread_file_link ? tr
             <div class="card-button">
                 <!-- button aksi -->
                 <?php if (is_admin() && !$is_final) : ?>
+                    <!-- cek kondisi untuk disable aksi admin -->
+                    <?php $disable_action_button = !$is_proofread_started ||  $is_revision_in_progress['layouter'] ||  $is_revision_in_progress['editor'] ?>
                     <button
-                        title="Aksi admin"
-                        class="btn btn-secondary <?= !$is_proofread_started ? 'btn-disabled' : ''; ?>"
+                        title="<?= $disable_action_button ? 'Revisi belum diselesaikan atau proofread belum dimulai' : 'Aksi admin'  ?>"
+                        class="btn btn-outline-dark <?= $disable_action_button  ? 'btn-disabled' : ''; ?>"
                         data-toggle="modal"
                         data-target="#modal-action-proofread"
-                        <?= !$is_proofread_started ? 'disabled' : ''; ?>
+                        <?= $disable_action_button ? 'disabled' : ''; ?>
                     ><i class="fa fa-thumbs-up"></i> Aksi</button>
                 <?php endif; ?>
 

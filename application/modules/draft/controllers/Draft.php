@@ -278,14 +278,16 @@ class Draft extends Operator_Controller
 
         // hitung jumlah revisi
         $revision_total['editor']   = $this->revision->count_revision($draft_id, 'editor');
+        $is_revision_in_progress['editor']   = $this->revision->is_revision_in_progress($draft_id, 'editor');
         $revision_total['layouter'] = $this->revision->count_revision($draft_id, 'layouter');
+        $is_revision_in_progress['layouter']   = $this->revision->is_revision_in_progress($draft_id, 'layouter');
 
         $is_final = $input->draft_status == 14 ? true : false;
 
         $pages       = $this->pages;
         $main_view   = 'draft/view/overview';
         $form_action = "draft/edit/$draft_id";
-        $this->load->view('template', compact('revision_total', 'book', 'author_order', 'draft', 'reviewer_order', 'desk', 'pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers', 'editors', 'layouters', 'is_final'));
+        $this->load->view('template', compact('revision_total', 'is_revision_in_progress', 'book', 'author_order', 'draft', 'reviewer_order', 'desk', 'pages', 'main_view', 'form_action', 'input', 'authors', 'reviewers', 'editors', 'layouters', 'is_final'));
     }
 
     public function api_start_progress($draft_id)
