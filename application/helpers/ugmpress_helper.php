@@ -142,7 +142,7 @@ function konversiID($table, $vars, $id)
 function get_dropdown_listBook($table, $columns)
 {
     $CI    = &get_instance();
-    $query = $CI->db->select($columns)->from($table)->where('draft_status', '14')->get();
+    $query = $CI->db->select($columns)->from($table)->get();
 
     if ($query->num_rows() >= 1) {
         $options1 = ['' => '-- Pilih --'];

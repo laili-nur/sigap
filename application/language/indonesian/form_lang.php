@@ -119,3 +119,6 @@ $lang['form_worksheet_is_revise']  = 'Status Revisi';
 $lang['form_worksheet_status']     = 'Status Lembar Kerja';
 $lang['form_worksheet_deadline']   = 'Deadline Desk Screening';
 $lang['form_worksheet_end_date']   = 'Tanggal Selesai Desk Screening';
+
+// Book
+$lang['form_book_title']       = 'Judul Buku';

@@ -82,7 +82,7 @@ $i        = isset($page) ? $page * $per_page - $per_page : 0;
                                         <td class="align-middle pl-4"><?= ++$i; ?></td>
                                         <td class="align-middle">
                                             <a
-                                                href="<?= base_url('book/view/' . $print_order->book_id . ''); ?>"
+                                                href="<?= base_url('print_order/view/' . $print_order->print_order_id . ''); ?>"
                                                 class="font-weight-bold"
                                             >
                                                 <?= highlight_keyword($print_order->book_title, $keyword); ?>

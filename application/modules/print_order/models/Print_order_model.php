@@ -3,9 +3,46 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Print_order_model extends MY_Model
 {
-
     public $per_page = 10;
 
+    public function get_validation_rules()
+    {
+        $validation_rules = [
+            [
+                'field' => 'book_id',
+                'label' => $this->lang->line('form_book_title'),
+                'rules' => 'trim|required',
+            ],
+        ];
+
+        return $validation_rules;
+    }
+
+    public function get_default_values()
+    {
+        return [
+            'book_id'       => '',
+            'order_number'  => '',
+            'copies'        => '',
+            'print_number'  => '',
+            'content_paper' => '',
+            'cover_paper'   => '',
+            'size'          => '',
+            'type'          => 'pod',
+            'priority'      => '',
+            'entry_date'    => '',
+            'finish_date'   => '',
+        ];
+    }
+
+    public function get_print_order($print_order_id)
+    {
+        return $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'order_number', 'copies', 'type', 'priority', 'print_order.entry_date', 'print_order.finish_date', 'print_order.input_by', 'book_file', 'book_file_link', 'cover_file', 'cover_file_link', 'book_notes', 'is_preprint', 'preprint_start_date', 'preprint_end_date', 'preprint_deadline', 'preprint_notes', 'print_order.is_print', 'print_order.print_start_date', 'print_order.print_end_date', 'print_order.print_deadline', 'print_order.print_notes', 'is_postprint', 'postprint_start_date', 'postprint_end_date', 'postprint_deadline', 'postprint_notes'])
+            ->join('book')
+            ->join_table('draft', 'book', 'draft')
+            ->where('print_order_id', $print_order_id)
+            ->get();
+    }
 
     public function filter_print_order($filters, $page)
     {
@@ -49,7 +86,7 @@ class Print_order_model extends MY_Model
 
         return [
             'print_orders' => $print_orders,
-            'total'  => $total,
+            'total'        => $total,
         ];
     }
 
