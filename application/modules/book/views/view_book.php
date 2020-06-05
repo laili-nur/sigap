@@ -171,10 +171,6 @@
                                     <td><?= format_datetime($input->finish_date); ?> </td>
                                 </tr>
                                 <tr>
-                                    <td width="200px"> Tanggal Cetak </td>
-                                    <td><?= format_datetime($input->print_end_date); ?> </td>
-                                </tr>
-                                <tr>
                                     <td width="200px"> Tanggal Terbit </td>
                                     <td><?= format_datetime($input->published_date); ?> </td>
                                 </tr>

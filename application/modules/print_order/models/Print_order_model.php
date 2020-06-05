@@ -30,14 +30,12 @@ class Print_order_model extends MY_Model
             'size'          => '',
             'type'          => 'pod',
             'priority'      => '',
-            'entry_date'    => '',
-            'finish_date'   => '',
         ];
     }
 
     public function get_print_order($print_order_id)
     {
-        return $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'order_number', 'copies', 'type', 'priority', 'print_order.entry_date', 'print_order.finish_date', 'print_order.input_by', 'book_file', 'book_file_link', 'cover_file', 'cover_file_link', 'book_notes', 'is_preprint', 'preprint_start_date', 'preprint_end_date', 'preprint_deadline', 'preprint_notes', 'print_order.is_print', 'print_order.print_start_date', 'print_order.print_end_date', 'print_order.print_deadline', 'print_order.print_notes', 'is_postprint', 'postprint_start_date', 'postprint_end_date', 'postprint_deadline', 'postprint_notes'])
+        return $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'order_number', 'copies', 'type', 'priority', 'print_order.entry_date', 'print_order.finish_date', 'print_order.input_by', 'book_file', 'book_file_link', 'cover_file', 'cover_file_link', 'book_notes', 'is_preprint', 'preprint_start_date', 'preprint_end_date', 'preprint_deadline', 'preprint_notes', 'print_order.is_print', 'print_order.print_start_date', 'print_order.print_end_date', 'print_order.print_deadline', 'print_order.print_notes', 'is_postprint', 'postprint_start_date', 'postprint_end_date', 'postprint_deadline', 'postprint_notes', 'status'])
             ->join('book')
             ->join_table('draft', 'book', 'draft')
             ->where('print_order_id', $print_order_id)
@@ -46,14 +44,13 @@ class Print_order_model extends MY_Model
 
     public function filter_print_order($filters, $page)
     {
-        $print_orders = $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'category_name', 'author_name', 'order_number', 'copies', 'type', 'priority', 'print_order.entry_date'])
+        $print_orders = $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'category_name', 'author_name', 'order_number', 'copies', 'type', 'priority', 'print_order.entry_date', 'print_order.status'])
             ->when('keyword', $filters['keyword'])
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
             ->join_table('category', 'draft', 'category')
             ->join_table('draft_author', 'draft', 'draft')
             ->join_table('author', 'draft_author', 'author')
-            ->join_table('work_unit', 'author', 'work_unit')
             ->order_by('status_hak_cipta')
             ->order_by('published_date')
             ->order_by('book_title')
@@ -68,7 +65,6 @@ class Print_order_model extends MY_Model
             ->join_table('category', 'draft', 'category')
             ->join_table('draft_author', 'draft', 'draft')
             ->join_table('author', 'draft_author', 'author')
-            ->join_table('work_unit', 'author', 'work_unit')
             ->order_by('status_hak_cipta')
             ->order_by('published_date')
             ->order_by('book_title')

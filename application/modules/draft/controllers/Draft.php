@@ -800,6 +800,15 @@ class Draft extends Operator_Controller
         redirect('draft/view/' . $insert_id);
     }
 
+    public function print_data($draft_id)
+    {
+        $print = $this->draft->select(['is_print', 'print_start_date', 'print_end_date', 'print_file', 'print_file_link', 'print_notes', 'print_status'])
+            ->where('draft_id', $draft_id)
+            ->get();
+
+        $this->send_json_output(true, $print);
+    }
+
     private function _generate_worksheet_number()
     {
         // format nomor worksheet

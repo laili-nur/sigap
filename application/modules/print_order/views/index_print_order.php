@@ -47,7 +47,7 @@ $i        = isset($page) ? $page * $per_page - $per_page : 0;
                                     >Judul</th>
                                     <th
                                         scope="col"
-                                        style="min-width:100px;"
+                                        style="min-width:150px;"
                                     >Kategori</th>
                                     <th
                                         scope="col"
@@ -73,6 +73,10 @@ $i        = isset($page) ? $page * $per_page - $per_page : 0;
                                         scope="col"
                                         style="min-width:100px;"
                                     >Tanggal Masuk</th>
+                                    <th
+                                        scope="col"
+                                        style="min-width:70px;"
+                                    >Status</th>
                                     <th style="min-width:150px;"> &nbsp; </th>
                                 </tr>
                             </thead>
@@ -109,6 +113,7 @@ $i        = isset($page) ? $page * $per_page - $per_page : 0;
                                         <td class="align-middle"><?= $print_order->type; ?></td>
                                         <td class="align-middle"><?= $print_order->priority; ?></td>
                                         <td class="align-middle"><?= $print_order->entry_date; ?></td>
+                                        <td class="align-middle"><?= $print_order->status; ?></td>
                                         <td class="align-middle text-right">
                                             <a
                                                 href="<?= base_url('print_order/edit/' . $print_order->print_order_id . ''); ?>"
