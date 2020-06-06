@@ -35,8 +35,7 @@
   <div class="col-8 col-md-12 mb-2">
     <div align="right">
       <div class="col-4 col-md-2 mb-4">
-        <a href="<?=base_url('author/') ?>" class="btn btn-primary" target="_blank" >View  <i class="fa fa-eye"></i>
-        </a>
+        <button id="button" type="button" class="btn btn-primary">View  <i class="fa fa-eye"></i></a>
       </div>
     </div>
   </div>
@@ -46,7 +45,61 @@
   <h4>UGM Press</h4>
   <h5>Laporan Grafik Instansi Penulis</h5>
 </div>
+<div class="bg-modal">
+  <div class="modal-content">
 
+<div class="close">+</div>
+<div style="overflow: hidden; margin: 15px auto;">
+<iframe id="embed" src="<?=base_url('book/') ?>" style="border: 0px none; margin-left: -250px; height: 812px; margin-top: -200px; width: 1200px;">
+</iframe>
+</div>
+
+  </div>
+</div>
+<script type="text/javascript">
+  function embed(url){
+    $('#embed').attr("src", url);
+  }
+</script>
+<style>
+  .bg-modal{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none;
+  }
+
+  .modal-content{
+    width: 90%;
+    height: 90%;
+    background-color: white;
+    border-radius: 4px;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .badge-primary{
+    width:15%;
+    height: 20%;
+    font-size: 12px;
+    display: inline-grid;
+    margin: 40px auto ;
+  }
+
+  .close{
+    position: absolute;
+    top:0;
+    right: 10px;
+    font-size: 32px;
+    transform: rotate(45deg);
+    cursor: pointer;
+  }
+</style>
 <canvas id="myPieChart" width="380" height="100"></canvas>
 <script>
 
@@ -151,5 +204,13 @@ function(data){
       }
     }
   });
+});
+document.getElementById('button').addEventListener('click',
+function (){
+  document.querySelector('.bg-modal').style.display = 'flex';
+});
+document.querySelector('.close').addEventListener('click',
+function(){
+  document.querySelector('.bg-modal').style.display = 'none';
 });
 </script>

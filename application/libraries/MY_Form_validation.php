@@ -1,10 +1,9 @@
-<?php
-/** application/libraries/MY_Form_validation **/
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+
 class MY_Form_validation extends CI_Form_validation
 {
-    public $CI;
 
-    public function __construct($config = array())
+    function __construct($config = array())
     {
         parent::__construct($config);
     }
@@ -16,9 +15,10 @@ class MY_Form_validation extends CI_Form_validation
      *
      * @return  array
      */
-    public function add_to_error_array($field = '', $message = '')
+    function add_to_error_array($field = '', $message = '')
     {
-        if (!isset($this->_error_array[$field])) {
+        if ( ! isset($this->_error_array[$field]))
+        {
             $this->_error_array[$field] = $message;
         }
 
@@ -32,13 +32,17 @@ class MY_Form_validation extends CI_Form_validation
      *
      * @return  array
      */
-    public function error_array()
+    function error_array()
     {
-        if (count($this->_error_array) === 0) {
-            return false;
-        } else {
+        if (count($this->_error_array) === 0){
+            return FALSE;
+        }
+        else{
             return $this->_error_array;
         }
-
-    }
+            
+        }
 }
+
+/* End of file MY_Form_validation.php */
+/* Location: ./application/libraries/MY_Form_validation.php */

@@ -31,24 +31,35 @@
 
 <br/>
 
-<div class="form-group row">
-  <div class="col-8 col-md-10 mb-1">
-    <div align="right">
-      <label for="" class="col-sm-4 col-form-label"><h6><i class="fa fa-filter"></i>  Filter :</h6></label>
-    </div>
-  </div>
-  <div class="col-4 col-md-2  mb-4">
-    <?= form_open('', ['method' => 'GET']) ?>
-    <?= form_dropdown('droptahun', getYears(), $this->input->get('droptahun'), 'onchange="this.form.submit()" id="droptahun" class="form-control custom-select d-block" title="Filter tahun"') ?>
-    <?= form_close() ?>
-  </div>
-</div>
+<?= form_open('', ['method' => 'GET']) ?>
+          <div class="form-group row">
+            <div class="col-8 col-md-10 mb-1">
+              <div align="right">
+                <label for="" class="col-sm-4 col-form-label"><h6><i class="fa fa-filter"></i> Filter :</h6></label>
+              </div>
+            </div>
+            <div class="col-4 col-md-2  mb-4">
+              <?= form_dropdown('droptahun', getYearsSummary(), $this->input->get('droptahun'), 'onchange="this.form.submit()" id="droptahun" class="form-control custom-select d-block" title="Filter tahun"') ?>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-8 col-md-10 mb-1">
+              <div align="right">
+                <label for="" class="col-sm-4 col-form-label"><h6><i class="fa fa-filter"></i> Kategori :</h6></label>
+              </div>
+            </div>
+            <div class="col-4 col-md-2  mb-4">
+              <?= form_dropdown('category', getDropdownListCategory('category', ['category_id', 'category_name'],true), $this->input->get('category'), 'onchange="this.form.submit()" id="category" class="form-control custom-select d-block" title="Filter Kategori"') ?>
+            </div>
+          </div>
+          <?= form_close() ?>
 
 <div class="form-group row">
   <div class="col-8 col-md-12 mb-2">
     <div align="right">
-        <a href="<?=base_url('worksheet/') ?>" class="btn btn-primary" target="_blank" >View  <i class="fa fa-eye"></i>
-        </a>
+      <div class="col-4 col-md-2 mb-4">
+        <button id="button" type="button" class="btn btn-primary">View  <i class="fa fa-eye"></i></a>
+      </div>
     </div>
   </div>
 </div>
@@ -57,13 +68,69 @@
   <h4>UGM Press</h4>
   <h5>Laporan Grafik Jumlah Draft Perbulan</h5>
 </div>
+<div class="bg-modal">
+  <div class="modal-content">
+
+<div class="close">+</div>
+<div style="overflow: hidden; margin: 15px auto;">
+<iframe id="embed" src="<?=base_url('worksheet/') ?>" style="border: 0px none; margin-left: -250px; height: 812px; margin-top: -200px; width: 1200px;">
+</iframe>
+</div>
+
+  </div>
+</div>
+<script type="text/javascript">
+  function embed(url){
+    $('#embed').attr("src", url);
+  }
+</script>
+<style>
+  .bg-modal{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none;
+  }
+
+  .modal-content{
+    width: 90%;
+    height: 90%;
+    background-color: white;
+    border-radius: 4px;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .badge-primary{
+    width:15%;
+    height: 20%;
+    font-size: 12px;
+    display: inline-grid;
+    margin: 40px auto ;
+  }
+
+  .close{
+    position: absolute;
+    top:0;
+    right: 10px;
+    font-size: 32px;
+    transform: rotate(45deg);
+    cursor: pointer;
+  }
+</style>
 
 <!-- graph for draft -->
 
 <canvas id="myChart" width="500" height="170"></canvas>
 <script>
 var tahun = $('#droptahun').val();
-$.post("<?php echo base_url();?>Reporting/getDraft?droptahun="+tahun,
+var category = $('#category').val();
+$.post("<?php echo base_url();?>Reporting/getDraft?droptahun="+tahun+"&category="+category,
 function(data){
   var obj = JSON.parse(data);
   console.log(obj);
@@ -165,4 +232,12 @@ function(data){
   });
 });
 
+document.getElementById('button').addEventListener('click',
+function (){
+  document.querySelector('.bg-modal').style.display = 'flex';
+});
+document.querySelector('.close').addEventListener('click',
+function(){
+  document.querySelector('.bg-modal').style.display = 'none';
+});
 </script>

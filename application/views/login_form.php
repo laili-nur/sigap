@@ -1,235 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- End Required meta tags -->
+    <!-- Begin SEO tag -->
     <title> SIGAP LOGIN</title>
-    <meta
-        property="og:title"
-        content="Log In SIGAP"
-    >
-    <meta
-        name="author"
-        content="Bagaskara LA"
-    >
-    <meta
-        property="og:locale"
-        content="id_ID"
-    >
-    <meta
-        name="description"
-        content="SIGAP - Sistem Informasi GAMA PRESS"
-    >
-    <meta
-        property="og:description"
-        content="Sistem Informasi GAMA PRESS"
-    >
-    <link
-        rel="canonical"
-        href=""
-    >
-    <meta
-        property="og:url"
-        content="https://digitalpress.ugm.ac.id/sigap"
-    >
-    <meta
-        property="og:site_name"
-        content="SIGAP UGMPRESS"
-    >
-
+    <meta property="og:title" content="Log In">
+    <meta name="author" content="bagaskara luthfi">
+    <meta property="og:locale" content="en_US">
+    <meta name="description" content="SIGAP - Sistem Informasi Penerbitan UGM PRESS">
+    <meta property="og:description" content="Sistem Informasi Penerbitan UGM PRESS">
+    <link rel="canonical" href="">
+    <meta property="og:url" content="//digitalpress.ac.id/sigap">
+    <meta property="og:site_name" content="SIIP UGMPRESS">
     <!-- Favicons -->
-    <link
-        rel="apple-touch-icon-precomposed"
-        sizes="144x144"
-        href="<?= base_url('assets/apple-touch-icon.png'); ?>"
-    >
-    <link
-        rel="shortcut icon"
-        href="<?= base_url('assets/favicon.ico'); ?>"
-    >
-    <meta
-        name="theme-color"
-        content="#3063A0"
-    >
-
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/apple-touch-icon.png">
+    <link rel="shortcut icon" href="assets/favicon.ico">
+    <meta name="theme-color" content="#3063A0">
+    <!-- BEGIN BASE STYLES -->
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="assets/vendor/font-awesome/css/fontawesome-all.min.css">
+    <!-- END BASE STYLES -->
     <!-- BEGIN THEME STYLES -->
-    <link
-        rel="stylesheet"
-        href="<?= base_url('assets/stylesheets/theme.min.css'); ?>"
-        data-skin="default"
-    >
-    <link
-        rel="stylesheet"
-        href="<?= base_url('assets/stylesheets/theme-dark.min.css'); ?>"
-        data-skin="dark"
-    >
-    <link
-        rel="stylesheet"
-        href="<?= base_url('assets/stylesheets/custom.css'); ?>"
-    >
-    <!-- Disable unused skin immediately -->
-
-    <script>
-    var skin = localStorage.getItem('skin') || 'default';
-    var unusedLink = document.querySelector('link[data-skin]:not([data-skin="' + skin + '"])');
-
-    unusedLink.setAttribute('rel', '');
-    unusedLink.setAttribute('disabled', true);
-    </script>
+    <link rel="stylesheet" href="assets/stylesheets/main.css">
+    <link rel="stylesheet" href="assets/stylesheets/custom.css">
     <!-- END THEME STYLES -->
-</head>
-
-<body>
+  </head>
+  <body>
+    <!-- .auth -->
     <main class="auth">
-        <header
-            id="auth-header"
-            class="auth-header"
-        >
-            <h1 class="text-warning">
-                SIGAP
-                <span class="sr-only">Log In</span>
-            </h1>
-            <h5 class="mb-5">Sistem Informasi GAMA PRESS</h5>
-            <!-- <p> Tidak punya akun?
-            <a href="#">Hubungi Admin</a>
-         </p> -->
-        </header>
-        <?= form_open('auth', 'class="auth-form"'); ?>
+      <header id="auth-header" class="auth-header">
+        <h1>
+          SIGAP
+          <span class="sr-only">Sign In</span>
+        </h1>
+        <p> Tidak punya akun?
+          <a href="#">Hubungi Admin</a>
+        </p>
+      </header>
+      <!-- form -->
+      <?= form_open('login', 'class="auth-form"'); ?>
         <?php if (!empty($this->session->flashdata('error'))) : ?>
-            <p class="alert alert-danger alert-dismissable"><?= $this->session->flashdata('error'); ?></p>
-        <?php endif; ?>
+        <p class="alert alert-danger alert-dismissable"><?= $this->session->flashdata('error') ?></p>
+    	<?php endif ?>
+        <!-- .form-group -->
         <div class="form-group">
-            <div class="form-label-group">
-                <?= form_input('username', $input->username, 'id="inputUser" class="form-control" placeholder="UsBername" required="" autofocus=""'); ?>
-                <label for="inputUser">Username</label>
-                <?= form_error('username', '<p class="text-danger">', '</p>'); ?>
-            </div>
+          <div class="form-label-group">
+            <?= form_input('username', $input->username, 'id="inputUser" class="form-control" placeholder="UsBername" required="" autofocus=""') ?>
+            <label for="inputUser">Username</label>
+            <?= form_error('username', '<p class="text-danger">', '</p>');?>
+          </div>
         </div>
+        <!-- /.form-group -->
+        <!-- .form-group -->
         <div class="form-group">
-            <div class="form-label-group">
-                <?= form_password('password', $input->password, 'id="inputPassword" class="form-control" placeholder="Password" required=""'); ?>
-                <label for="inputPassword">Password</label>
-                <?= form_error('password', '<p class="text-danger">', '</p>'); ?>
-            </div>
+          <div class="form-label-group">
+            <?= form_password('password', $input->password, 'id="inputPassword" class="form-control" placeholder="Password" required=""') ?>
+            <label for="inputPassword">Password</label>
+            <?= form_error('password', '<p class="text-danger">', '</p>');?>
+          </div>
         </div>
+        <!-- /.form-group -->
+        <!-- .form-group -->
         <div class="form-group">
-            <button
-                class="btn btn-lg btn-primary btn-block"
-                type="submit"
-            >Log In</button>
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
         </div>
-        <?= form_close(); ?>
-        <footer class="auth-footer">
-            <p class="text-center">
-                <a
-                    href="#"
-                    data-toggle="modal"
-                    data-target="#modal-about"
-                >About</a>
-            </p>
-            <div
-                id="modal-about"
-                class="modal fade"
-                tabindex="-1"
-                role="dialog"
-                aria-labelledby="modal-about"
-                aria-hidden="true"
-            >
-                <div
-                    class="modal-dialog modal-lg"
-                    role="document"
-                >
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title text-center"> About us </h5>
+        <!-- /.form-group -->
+      <?= form_close() ?>
+      <!-- /.auth-form -->
+      <!-- copyright -->
+      <footer class="auth-footer">
+        <p class="text-center"><a href="#" data-toggle="modal" data-target="#exampleModalSm">About</a></p>
+        <!-- .modal -->
+	      <div id="exampleModalSm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	        <!-- .modal-dialog -->
+	        <div class="modal-dialog modal-lg" role="document">
+	          <!-- .modal-content -->
+	          <div class="modal-content">
+	            <!-- .modal-header -->
+	            <div class="modal-header">
+	              <h5 class="modal-title text-center"> About us </h5>
+	            </div>
+	            <!-- /.modal-header -->
+	            <!-- .modal-body -->
+	            <div class="modal-body">
+                  <!-- metric row -->
+                  <div class="metric-row">
+                    <!-- metric column -->
+                    <div class="col-12 col-sm-6 col-lg-3">
+                      <!-- .metric -->
+                      <div class="card-metric">
+                        <div class="metric">
+                          <div class="text-center mb-4">
+					          <!-- .user-avatar -->
+					          <div class="user-avatar user-avatar-xl mb-2">
+					            <img src="assets/images/avatars/profile.jpg" alt="User Avatar"> </div>
+					          <!-- /.user-avatar -->
+					          <h2 class="card-title"> I Wayan Mustika </h2>
+					          <h6 class="card-subtitle text-muted"> Supervisor<br>Administrator </h6>
+					        </div>
                         </div>
-                        <div class="modal-body">
-                            <div class="metric-row">
-                                <div class="col-12 col-sm-6 col-lg-3">
-                                    <div class="card-metric">
-                                        <div class="metric">
-                                            <div class="text-center mb-4">
-                                                <div class="user-avatar user-avatar-xl mb-2">
-                                                    <img
-                                                        src="assets/images/avatars/profile.jpg"
-                                                        alt="User Avatar"
-                                                    > </div>
-                                                <h2 class="card-title"> I Wayan Mustika </h2>
-                                                <h6 class="card-subtitle text-muted"> Supervisor<br>Administrator </h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-lg-3">
-                                    <div class="card-metric">
-                                        <div class="metric">
-                                            <div class="text-center mb-4">
-                                                <div class="user-avatar user-avatar-xl mb-2">
-                                                    <img
-                                                        src="assets/images/avatars/profile.jpg"
-                                                        alt="User Avatar"
-                                                    > </div>
-                                                <h2 class="card-title"> Bagaskara LA </h2>
-                                                <h6 class="card-subtitle text-muted"> Fullstack Developer and UX Researcher </h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-lg-3">
-                                    <div class="card-metric">
-                                        <div class="metric">
-                                            <div class="text-center mb-4">
-                                                <div class="user-avatar user-avatar-xl mb-2">
-                                                    <img
-                                                        src="assets/images/avatars/profile.jpg"
-                                                        alt="User Avatar"
-                                                    > </div>
-                                                <h2 class="card-title"> Edward </h2>
-                                                <h6 class="card-subtitle text-muted"> Back End and Database Developer </h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-lg-3">
-                                    <div class="card-metric">
-                                        <div class="metric">
-                                            <div class="text-center mb-4">
-                                                <div class="user-avatar user-avatar-xl mb-2">
-                                                    <img
-                                                        src="assets/images/avatars/profile.jpg"
-                                                        alt="User Avatar"
-                                                    > </div>
-                                                <h2 class="card-title"> Syuhada Sipayung </h2>
-                                                <h6 class="card-subtitle text-muted"> Business Reporting and API Developer </h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button
-                                type="button"
-                                class="btn btn-light"
-                                data-dismiss="modal"
-                            >Close</button>
-                        </div>
+                      </div>
+                      <!-- /.metric -->
                     </div>
-                </div>
-            </div>
-        </footer>
-    </main>
+                    <!-- /metric column -->
+                    <!-- metric column -->
+                    <div class="col-12 col-sm-6 col-lg-3">
+                      <!-- .metric -->
+                      <div class="card-metric">
+                        <div class="metric">
+                          <div class="text-center mb-4">
+					          <!-- .user-avatar -->
+					          <div class="user-avatar user-avatar-xl mb-2">
+					            <img src="assets/images/avatars/profile.jpg" alt="User Avatar"> </div>
+					          <!-- /.user-avatar -->
+					          <h2 class="card-title"> Bagaskara LA </h2>
+					          <h6 class="card-subtitle text-muted"> Fullstack Developer and UX Researcher </h6>
+					        </div>
+                        </div>
+                      </div>
+                      <!-- /.metric -->
+                    </div>
+                    <!-- /metric column -->
+                    <!-- metric column -->
+                    <div class="col-12 col-sm-6 col-lg-3">
+                      <!-- .metric -->
+                      <div class="card-metric">
+                        <div class="metric">
+                          <div class="text-center mb-4">
+					          <!-- .user-avatar -->
+					          <div class="user-avatar user-avatar-xl mb-2">
+					            <img src="assets/images/avatars/profile.jpg" alt="User Avatar"> </div>
+					          <!-- /.user-avatar -->
+					          <h2 class="card-title"> Edward </h2>
+					          <h6 class="card-subtitle text-muted"> Back End and Database Developer </h6>
+					        </div>
+                        </div>
+                      </div>
+                      <!-- /.metric -->
+                    </div>
+                    <!-- /metric column -->
+                    <!-- metric column -->
+                    <div class="col-12 col-sm-6 col-lg-3">
+                      <!-- .metric -->
+                      <div class="card-metric">
+                        <div class="metric">
+                          <div class="text-center mb-4">
+					          <!-- .user-avatar -->
+					          <div class="user-avatar user-avatar-xl mb-2">
+					            <img src="assets/images/avatars/profile.jpg" alt="User Avatar"> </div>
+					          <!-- /.user-avatar -->
+					          <h2 class="card-title"> Syuhada Sipayung </h2>
+					          <h6 class="card-subtitle text-muted"> Business Reporting and API Developer </h6>
+					        </div>
+                        </div>
+                      </div>
+                      <!-- /.metric -->
+                    </div>
+                    <!-- /metric column -->
+                  </div>
+                  <!-- /metric row -->
 
+		        
+	            </div>
+	            <!-- /.modal-body -->
+	            <!-- .modal-footer -->
+	            <div class="modal-footer">
+	              <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+	            </div>
+	            <!-- /.modal-footer -->
+	          </div>
+	          <!-- /.modal-content -->
+	        </div>
+	        <!-- /.modal-dialog -->
+	      </div>
+	      <!-- /.modal -->
+      </footer>
+    </main>
+    <!-- /.auth -->
     <!-- BEGIN BASE JS -->
     <script src="<?= base_url('assets/vendor/jquery/jquery.min.js'); ?>"></script>
-    <script src="<?= base_url('assets/vendor/popper.js/umd/popper.min.js'); ?>"></script>
+    <script src="<?= base_url('assets/vendor/bootstrap/js/popper.min.js'); ?>"></script>
     <script src="<?= base_url('assets/vendor/bootstrap/js/bootstrap.min.js'); ?>"></script>
     <!-- END BASE JS -->
-</body>
-
+  </body>
 </html>

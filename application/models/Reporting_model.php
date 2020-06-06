@@ -68,33 +68,53 @@ class Reporting_model extends MY_Model{
   }
 
   /*model for graph*/
-  public function getSummary($year)
+  public function getSummary($year, $category='')
   {
-    $query = $this->db->query("SELECT * FROM draft WHERE YEAR(entry_date) = $year");
+    $filter_categori = '';
+    if($category != ''){
+      $filter_categori = " AND category_id='$category'";
+    }
+    $query = $this->db->query("SELECT * FROM draft WHERE YEAR(entry_date) = $year $filter_categori");
     return $query->result();
   }
 
-  public function getSummaryUlang($year)
+  public function getSummaryUlang($year, $category='')
   {
-    $query = $this->db->query("SELECT * FROM draft WHERE YEAR(entry_date) = $year and is_reprint = 'y'");
+    $filter_categori = '';
+    if($category != ''){
+      $filter_categori = " AND category_id='$category'";
+    }
+    $query = $this->db->query("SELECT * FROM draft WHERE YEAR(entry_date) = $year and is_reprint = 'y' $filter_categori");
     return $query->result();
   }
 
-  public function getSummaryBaru($year)
+  public function getSummaryBaru($year, $category='')
   {
-    $query = $this->db->query("SELECT * FROM draft WHERE YEAR(entry_date) = $year and is_reprint = 'n'");
+    $filter_categori = '';
+    if($category != ''){
+      $filter_categori = " AND category_id='$category'";
+    }
+    $query = $this->db->query("SELECT * FROM draft WHERE YEAR(entry_date) = $year and is_reprint = 'n' $filter_categori");
     return $query->result();
   }
 
-  public function getDraft($month, $year)
+  public function getDraft($month, $year, $category='')
   {
-    $query = $this->db->query("SELECT draft_id, draft_title, entry_date FROM draft WHERE MONTH(entry_date) = $month and YEAR(entry_date) = $year");
+    $filter_categori = '';
+    if($category != ''){
+      $filter_categori = " AND category_id='$category'";
+    }
+    $query = $this->db->query("SELECT draft_id, draft_title, entry_date FROM draft WHERE MONTH(entry_date) = $month and YEAR(entry_date) = $year $filter_categori");
     return $query->result();
   }
 
-  public function getBook($month, $year)
+  public function getBook($month, $year, $category='')
   {
-    $query = $this->db->query("SELECT book_id, book_title, published_date FROM book WHERE Month(published_date) = $month and YEAR(published_date) = $year");
+    $filter_categori = '';
+    if($category != ''){
+      $filter_categori = " AND category_id='$category'";
+    }
+    $query = $this->db->query("SELECT book_id, book_title, published_date FROM book b join draft d on b.draft_id=d.draft_id WHERE Month(published_date) = $month and YEAR(published_date) = $year $filter_categori");
     return $query->result();
   }
 

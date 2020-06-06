@@ -29,7 +29,7 @@
 
 <!-- /.page-title-bar -->
 <br />
-
+<?= form_open('', ['method' => 'GET']) ?>
 <div class="form-group row">
   <div class="col-8 col-md-10 mb-1">
     <div align="right">
@@ -37,18 +37,32 @@
     </div>
   </div>
   <div class="col-4 col-md-2  mb-4">
-    <?= form_open('', ['method' => 'GET']) ?>
     <?= form_dropdown('droptahunsummary', getYearsSummary(), $this->input->get('droptahunsummary'), 'onchange="this.form.submit()" id="droptahunsummary" class="form-control custom-select d-block" title="Filter tahun"') ?>
-    <?= form_close() ?>
   </div>
 </div>
+<div class="form-group row">
+  <div class="col-8 col-md-10 mb-1">
+    <div align="right">
+      <label for="" class="col-sm-4 col-form-label"><h6><i class="fa fa-filter"></i> Kategori :</h6></label>
+    </div>
+  </div>
+  <div class="col-4 col-md-2  mb-4">
+    <?= form_dropdown('category', getDropdownListCategory('category', ['category_id', 'category_name'],true), $this->input->get('category'), 'onchange="this.form.submit()" id="category" class="form-control custom-select d-block" title="Filter Kategori"') ?>
+  </div>
+</div>
+<?= form_close() ?>
 
 <div class="form-group row">
-  <div class="col-8 col-md-12 mb-2">
+  <div class="col-8 col-md-10 mb-1">
     <div align="right">
-      <div class="col-4 col-md-2 mb-4">
-        <button id="button" type="button" class="btn btn-primary">View  <i class="fa fa-eye"></i></a>
-      </div>
+        <button id="button" type="button" class="btn btn-primary">View  <i class="fa fa-eye"></i></button>
+    </div>
+  </div>
+  <div class="col-4 col-md-2  mb-2">
+    <div align="right">
+        <a href="<?php echo site_url('reporting/export_summary/'.$this->input->get('droptahunsummary')); ?>" target="_blank">
+          <button id="button" type="button" class="btn btn-success">Download  <i class="fa fa-file-excel"></i></button>
+        </a>
     </div>
   </div>
 </div>
@@ -63,16 +77,25 @@
 
 <div class="close">+</div>
 <form action="">
-  <a href="<?=base_url('draft/filter?filter=review') ?>" target="_blank" class="badge badge-primary">Review</a>
-  <a href="<?=base_url('draft/filter?filter=edit') ?>" target="_blank" class="badge badge-primary">Editorial</a>
-  <a href="<?=base_url('draft/filter?filter=layout') ?>" target="_blank" class="badge badge-primary">Layout</a>
-  <a href="<?=base_url('draft/filter?filter=proofread') ?>" target="_blank" class="badge badge-primary">Proofread</a>
-  <a href="<?=base_url('draft/filter?filter=cetak') ?>" target="_blank" class="badge badge-primary">Cetak</a>
-  <a href="<?=base_url('draft/filter?filter=final') ?>" target="_blank" class="badge badge-primary">Final</a>
+  <a href="javascript:embed('<?=base_url('draft/filter?filter=review') ?>');" class="badge badge-primary">Review</a>
+  <a href="javascript:embed('<?=base_url('draft/filter?filter=edit') ?>')" class="badge badge-primary">Editorial</a>
+  <a href="javascript:embed('<?=base_url('draft/filter?filter=layout') ?>')" class="badge badge-primary">Layout</a>
+  <a href="javascript:embed('<?=base_url('draft/filter?filter=proofread') ?>')" class="badge badge-primary">Proofread</a>
+  <a href="javascript:embed('<?=base_url('draft/filter?filter=cetak') ?>')" class="badge badge-primary">Cetak</a>
+  <a href="javascript:embed('<?=base_url('draft/filter?filter=final') ?>')" class="badge badge-primary">Final</a>
 </form>
+<div style="overflow: hidden; margin: 15px auto;">
+<iframe id="embed" src="<?=base_url('draft/filter?filter=review') ?>" style="border: 0px none; margin-left: -250px; height: 812px; margin-top: -200px; width: 1200px;">
+</iframe>
+</div>
 
   </div>
 </div>
+<script type="text/javascript">
+  function embed(url){
+    $('#embed').attr("src", url);
+  }
+</script>
 
 <style>
   .bg-modal{
@@ -88,8 +111,8 @@
   }
 
   .modal-content{
-    width: 600px;
-    height: 125px;
+    width: 90%;
+    height: 90%;
     background-color: white;
     border-radius: 4px;
     text-align: center;
@@ -118,7 +141,8 @@
 <canvas id="myChart" width="500" height="170"></canvas>
 <script>
 var tahun = $('#droptahunsummary').val();
-$.post("<?php echo base_url();?>Reporting/getSummary?droptahunsummary="+tahun,
+var category = $('#category').val();
+$.post("<?php echo base_url();?>Reporting/getSummary?droptahunsummary="+tahun+"&category="+category,
 function(data){
   var obj = JSON.parse(data);
   var review = obj.count_review;
