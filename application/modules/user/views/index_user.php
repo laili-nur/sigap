@@ -11,6 +11,7 @@ $level_options = [
     ''                 => '- Semua Level -',
     'superadmin'       => 'Superadmin',
     'admin_penerbitan' => 'Admin Penerbitan',
+    'admin_percetakan' => 'Admin Percetakan',
     'author'           => 'Author',
     'reviewer'         => 'Reviewer',
     'editor'           => 'Editor',

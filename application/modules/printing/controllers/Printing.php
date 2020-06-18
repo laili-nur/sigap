@@ -12,35 +12,44 @@ class Printing extends Operator_Controller
     }
 
     public function index(){
+        if($this->check_level() == TRUE):
         $pages       = $this->pages;
         $main_view   = 'printing/index_printing';
         $data_all    = $this->Printing_model->fetch_all_data();
         $data_jilid  = $this->Printing_model->fetch_jilid_data();
         $i           = 1;
         $this->load->view('template', compact('pages', 'main_view', 'data_all', 'data_jilid', 'i'));
+        endif;
     }
 
     public function view_printing_add(){
+        if($this->check_level() == TRUE):
         $pages       = $this->pages;
         $main_view   = 'printing/printing_add';
         $this->load->view('template', compact('pages', 'main_view'));
+        endif;
     }
 
     public function view_printing_edit($print_id){
+        if($this->check_level() == TRUE):
         $pages       = $this->pages;
         $main_view   = 'printing/printing_edit';
         $pData       = $this->Printing_model->fetch_print_id($print_id)->row();
         $this->load->view('template', compact('pages', 'main_view', 'pData'));
+        endif;
     }
 
     public function view_printing_view($print_id){
+        if($this->check_level() == TRUE):
         $pages       = $this->pages;
         $main_view   = 'printing/printing_view';
         $pData       = $this->Printing_model->fetch_print_id($print_id)->row();
         $this->load->view('template', compact('pages', 'main_view', 'pData'));
+        endif;
     }
 
     public function add_printing(){
+        if($this->check_level() == TRUE):
         $this->load->library('form_validation');
         $this->form_validation->set_rules('book_id', 'Judul buku', 'required|max_length[10]');
         $this->form_validation->set_rules('print_type', 'Tipe cetak', 'required|max_length[1]');
@@ -66,9 +75,11 @@ class Printing extends Operator_Controller
                 redirect('printing/add_printing');
             }
         }
+        endif;
     }
 
     public function edit_printing($print_id){
+        if($this->check_level() == TRUE):
         $this->load->library('form_validation');
         $this->form_validation->set_rules('book_id', 'Judul buku', 'max_length[10]');
         $this->form_validation->set_rules('print_type', 'Tipe cetak', 'max_length[1]');
@@ -105,9 +116,11 @@ class Printing extends Operator_Controller
                 redirect('printing/view_printing_view/'.$print_id);
             }
         }
+        endif;
     }
 
     public function delete_printing($print_id){
+        if($this->check_level() == TRUE):
         $isDeleted  = $this->Printing_model->delete_printing($print_id);
         if($isDeleted   ==  TRUE){
             $this->session->set_flashdata('success','Order printing berhasil di hapus.');
@@ -116,6 +129,7 @@ class Printing extends Operator_Controller
             $this->session->set_flashdata('error',print_r($this->db->error()));
             redirect('Printing');
         }
+        endif;
     }
 
     public function ac_book_id(){
@@ -133,6 +147,7 @@ class Printing extends Operator_Controller
     }
 
     public function start_progress($print_id,$progress_name){
+        if($this->check_level() == TRUE):
         $check  = $this->Printing_model->start_progress($print_id,$progress_name);
         if($check   ==  TRUE){
             $this->session->set_flashdata('success','Berhasil memulai progress '.$progress_name.'.');
@@ -141,9 +156,11 @@ class Printing extends Operator_Controller
             $this->session->set_flashdata('error','Gagal memulai progress '.$progress_name.'.');
             redirect($_SERVER['HTTP_REFERER'].'#section_'.$progress_name, 'refresh'); 
         }
+        endif;
     }
 
     public function stop_progress($print_id,$progress_name){
+        if($this->check_level() == TRUE):
         $check  = $this->Printing_model->stop_progress($print_id,$progress_name);
         if($check   ==  TRUE){
             $this->session->set_flashdata('success','Berhasil memberhentikan progress '.$progress_name.'.');
@@ -152,9 +169,11 @@ class Printing extends Operator_Controller
             $this->session->set_flashdata('error','Gagal memberhentikan progress '.$progress_name.'.');
             redirect($_SERVER['HTTP_REFERER'].'#section_'.$progress_name, 'refresh'); 
         }
+        endif;
     }
 
     public function set_deadline($print_id,$progress_name){
+        if($this->check_level() == TRUE):
         $check  = $this->Printing_model->set_deadline($print_id,$progress_name);
         if($check   ==  TRUE){
             $this->session->set_flashdata('success','Berhasil menentukan deadline progress '.$progress_name.'.');
@@ -163,9 +182,11 @@ class Printing extends Operator_Controller
             $this->session->set_flashdata('error','Gagal menentukan deadline progress '.$progress_name.'.');
             redirect($_SERVER['HTTP_REFERER'].'#section_'.$progress_name, 'refresh'); 
         }
+        endif;
     }
 
     public function add_notes($print_id,$progress_name){
+        if($this->check_level() == TRUE):
         $check  = $this->Printing_model->add_notes($print_id,$progress_name);
         if($check   ==  TRUE){
             $this->session->set_flashdata('success','Berhasil menambahkan catatan pada progress '.$progress_name.'.');
@@ -174,9 +195,11 @@ class Printing extends Operator_Controller
             $this->session->set_flashdata('error','Gagal menambahkan catatan pada progress '.$progress_name.'.');
             redirect($_SERVER['HTTP_REFERER'].'#section_'.$progress_name, 'refresh'); 
         }
+        endif;
     }
 
     public function choose_action($print_id,$progress_name){
+        if($this->check_level() == TRUE):
         $check  = $this->Printing_model->choose_action($print_id,$progress_name);
         if($check   ==  TRUE){
             $this->session->set_flashdata('success','Berhasil melakukan aksi pada progress '.$progress_name.'.');
@@ -185,9 +208,11 @@ class Printing extends Operator_Controller
             $this->session->set_flashdata('error','Gagal melakukan aksi pada progress '.$progress_name.'.');
             redirect($_SERVER['HTTP_REFERER'].'#section_'.$progress_name, 'refresh'); 
         }
+        endif;
     }
 
     public function choose_admin_jilid($print_id,$progress_name){
+        if($this->check_level() == TRUE):
         $check  = $this->Printing_model->choose_admin_jilid($print_id);
         if($check   ==  TRUE){
             $this->session->set_flashdata('success','Berhasil memilih admin jilid pada progress '.$progress_name.'.');
@@ -196,9 +221,11 @@ class Printing extends Operator_Controller
             $this->session->set_flashdata('error','Gagal memilih admin jilid pada progress '.$progress_name.'.');
             redirect($_SERVER['HTTP_REFERER'].'#section_'.$progress_name, 'refresh'); 
         }
+        endif;
     }
 
     public function set_book($print_id,$progress_name){
+        if($this->check_level() == TRUE):
         $check =   $this->Printing_model->set_book($print_id);
         if($check   ==  TRUE){
             $this->session->set_flashdata('success','Berhasil memilih buku pada progress '.$progress_name.'.');
@@ -207,9 +234,11 @@ class Printing extends Operator_Controller
             $this->session->set_flashdata('error','Gagal memilih buku pada progress '.$progress_name.'.');
             redirect($_SERVER['HTTP_REFERER'].'#section_'.$progress_name, 'refresh'); 
         }
+        endif;
     }
 
     public function to_new_book($print_id,$progress_name){
+        if($this->check_level() == TRUE):
         $this->load->library('form_validation');
         $this->form_validation->set_rules('draft_id', 'Judul draft', 'required|max_length[9]');
         $this->form_validation->set_rules('book_code', 'Kode buku', 'max_length[5]');
@@ -250,9 +279,11 @@ class Printing extends Operator_Controller
                 redirect($_SERVER['HTTP_REFERER'].'#section_'.$progress_name, 'refresh'); 
             }
         }
+        endif;
     }
 
     public function finalisasi_printing($print_id){
+        if($this->check_level() == TRUE):
         $this->load->library('form_validation');
         $this->form_validation->set_rules('stock_in_warehouse', 'Stok dalam gudang', 'required|max_length[10]');
         $this->form_validation->set_rules('stock_out_warehouse', 'Stok luar gudang', 'required|max_length[10]');
@@ -271,6 +302,16 @@ class Printing extends Operator_Controller
                 $this->session->set_flashdata('error',print_r($this->db->error()));
                 redirect($_SERVER['HTTP_REFERER'].'#section_final', 'refresh');
             }
+        }
+        endif;
+    }
+
+    public function check_level(){
+        if($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_percetakan'){
+            return TRUE;
+        }else{
+            $this->session->set_flashdata('error','Hanya admin percetakan dan superadmin yang dapat mengakses.');
+            redirect(base_url());
         }
     }
 }

@@ -27,13 +27,13 @@ $menu_list = [
     ],
     [
         'title' => 'Produksi',
-        'level' => 'superadmin|admin_penerbitan'
+        'level' => 'superadmin|admin_percetakan'
     ],
     [
         'name' => 'Order Cetak',
-        'url'  => 'print_order',
+        'url'  => 'printing',
         'icon' => 'fa fa-print',
-        'level' => 'superadmin|admin_penerbitan'
+        'level' => 'superadmin|admin_percetakan'
     ],
     [
         'title' => 'Data',
