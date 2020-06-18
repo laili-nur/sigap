@@ -11,14 +11,26 @@ class Printing extends Operator_Controller
         $this->load->model('printing/Printing_model');
     }
 
-    public function index(){
+    public function index($page = null){
         if($this->check_level() == TRUE):
-        $pages       = $this->pages;
-        $main_view   = 'printing/index_printing';
-        $data_all    = $this->Printing_model->fetch_all_data();
-        $data_jilid  = $this->Printing_model->fetch_jilid_data();
-        $i           = 1;
-        $this->load->view('template', compact('pages', 'main_view', 'data_all', 'data_jilid', 'i'));
+
+        $filters = [
+            'status'    => $this->input->get('status', true),//0-6 > belum,preprint,print,binding,final,tolak,selesai
+            'category'  => $this->input->get('category', true),//0-1 > cetak baru, cetak ulang
+            'type'      => $this->input->get('type', true),//0-1 > POD, Offset
+            'priority'  => $this->input->get('priority', true),//0-2 > rendah, sedang, tinggi
+            'keyword'   => $this->input->get('keyword', true),//cari berdasarkan semua kolom
+        ];
+
+        $get_data   = $this->Printing_model->filter_printing($filters, $page);
+        
+        $pages      = $this->pages;
+        $main_view  = 'printing/index_printing';
+        $data       = $get_data['printing'];
+        $pagination = $this->draft->make_pagination(site_url('printing'), 2, $total);
+        $total      = $get_data['printing'];
+        $this->load->view('template', compact('pages', 'main_view', 'data', 'pagination', 'total'));
+
         endif;
     }
 

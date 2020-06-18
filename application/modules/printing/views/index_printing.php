@@ -1,3 +1,42 @@
+<?php
+$level = check_level();
+
+$per_page = $this->input->get('per_page') ?? 10;
+$keyword  = $this->input->get('keyword');
+$reprint  = $this->input->get('reprint');
+$progress = $this->input->get('progress');
+$category = $this->input->get('category');
+$status   = $this->input->get('status');
+$page     = $this->uri->segment(2);
+// data table series number
+$i = isset($page) ? $page * $per_page - $per_page : 0;
+
+$progress_options = [
+    ''               => '- Filter Progress -',
+    'desk_screening' => 'Tahap Desk Screening',
+    'review'         => 'Tahap Review',
+    'edit'           => 'Tahap Editorial',
+    'layout'         => 'Tahap Layout',
+    'proofread'      => 'Tahap Proofread',
+    'final'          => 'Final',
+    'reject'         => 'Ditolak',
+];
+
+$reprint_options = [
+    ''  => '- Filter Tipe Naskah -',
+    'n' => ' Naskah Baru',
+    'y' => ' Naskah Cetak Ulang',
+];
+
+$status_options = [
+    ''  => '- Filter Status -',
+    'n' => ' Belum Dikerjakan',
+    'y' => ' Sudah Dikerjakan',
+    'approve' => ' Disetujui Admin',
+    'reject' => ' Ditolak Admin',
+];
+?>
+
 <header class="page-title-bar">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -5,23 +44,17 @@
                 <a href="<?= base_url(); ?>"><span class="fa fa-home"></span></a>
             </li>
             <li class="breadcrumb-item active">
-                <a class="text-muted">Printing</a>
+                <a class="text-muted">Draft</a>
             </li>
         </ol>
     </nav>
     <div class="d-flex justify-content-between align-items-center">
         <div>
-            <h1 class="page-title"> Order Cetak </h1>
-            <span class="badge badge-info">Total : 
-            <?php 
-                if($_SESSION['level'] == 'admin jilid'){echo $data_jilid->num_rows();}
-                elseif($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin cetak'){echo $data_all->num_rows();}
-                else{echo 0;}
-            ?>
-            </span>
+            <h1 class="page-title"> Draft Usulan </h1>
+            <span class="badge badge-info">Total : <?= $total; ?></span>
         </div>
         <a
-            href="<?= base_url("$pages/view_printing_add"); ?>"
+            href="<?= base_url("$pages/add"); ?>"
             class="btn btn-primary btn-sm <?= !is_admin() ? 'd-none' : ''; ?>"
         ><i class="fa fa-plus fa-fw"></i> Tambah</a>
     </div>
@@ -33,12 +66,12 @@
             <section class="card card-fluid">
                 <div class="card-body p-0">
                     <div class="p-3">
-                        <?php //if ($progress == 'error') : ?>
-                            <!-- <div
+                        <?php if ($progress == 'error') : ?>
+                            <div
                                 class="alert alert-danger alert-dismissible fade show"
                                 role="alert"
                             >
-                                <p class="m-0">Lakukan penyesuaian order cetak berikut agar tidak terjadi error progress, dengan cara
+                                <p class="m-0">Lakukan penyesuaian draft berikut agar tidak terjadi error progress, dengan cara
                                     masuk ke menu edit manual lalu sesuaikan progress dan tanggalnya. Selain itu dapat juga direset
                                     dengan mengosongi isian pada <em>halaman edit</em>, lalu memulai progress dengan benar di
                                     <em>halaman view</em>.</p>
@@ -50,12 +83,63 @@
                                 >
                                     <span aria-hidden="true">&times;</span>
                                 </button>
-                            </div> -->
-                        <?php //endif; // filter error
+                            </div>
+                        <?php endif; // filter error
                         ?>
 
+                        <?= form_open($pages, ['method' => 'GET']); ?>
+                        <div class="row">
+                            <div class="col-12 col-md-2 mb-3">
+                                <label for="per_page">Data per halaman</label>
+                                <?= form_dropdown('per_page', get_per_page_options(), $per_page, 'id="per_page" class="form-control custom-select d-block" title="List per page"'); ?>
+                            </div>
+                            <div class="col-12 mb-3 <?= is_staff() ? 'col-md-4' : 'col-md-10'; ?>">
+                                <label for="progress">Progress</label>
+                                <?= form_dropdown('progress', $progress_options, $progress, 'id="progress" class="form-control custom-select d-block" title="Filter Progress"'); ?>
+                            </div>
+                            <?php if (is_staff()) : ?>
+                                <div class="col-12 col-md-3 mb-3">
+                                    <label for="reprint">Tipe naskah</label>
+                                    <?= form_dropdown('reprint', $reprint_options, $reprint, 'id="reprint" class="form-control custom-select d-block" title="Filter Naskah"'); ?>
+                                </div>
+                                <div class="col-12 col-md-3 mb-3">
+                                    <label for="category">Kategori</label>
+                                    <?= form_dropdown('category', get_dropdown_list_category(), $category, 'id="category" class="form-control custom-select d-block" title="Filter Kategori"'); ?>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($level == 'editor' || $level == 'layouter') : ?>
+                                <div class="col-12 col-md-3 mb-3">
+                                    <label for="status">Status Pengerjaan</label>
+                                    <?= form_dropdown('status', $status_options, $status, 'id="status" class="form-control custom-select d-block" title="Filter Status Progress"'); ?>
+                                </div>
+                            <?php endif ?>
+                            <div class="col-12 <?= is_admin() ? 'col-md-9' : (is_staff() ? 'col-md-6' : 'col-md-9'); ?> mb-3">
+                                <label for="status">Pencarian</label>
+                                <?= form_input('keyword', $keyword, 'placeholder="Cari berdasarkan Judul, Kategori, Tema, atau Penulis" class="form-control"'); ?>
+                            </div>
+                            <div class="col-12 col-lg-3">
+                                <label>&nbsp;</label>
+                                <div
+                                    class="btn-group btn-block"
+                                    role="group"
+                                    aria-label="Filter button"
+                                >
+                                    <button
+                                        class="btn btn-secondary"
+                                        type="button"
+                                        onclick="location.href = '<?= base_url($pages); ?>'"
+                                    > Reset</button>
+                                    <button
+                                        class="btn btn-primary"
+                                        type="submit"
+                                        value="Submit"
+                                    ><i class="fa fa-filter"></i> Filter</button>
+                                </div>
+                            </div>
+                        </div>
+                        <?= form_close(); ?>
                     </div>
-                    <?php if ($data_all || $data_jilid) : ?>
+                    <?php if ($drafts) : ?>
                         <div class="double-scroll">
                             <table class="table table-striped mb-0">
                                 <thead>
@@ -70,111 +154,131 @@
                                         >Judul</th>
                                         <th
                                             scope="col"
+                                            style="min-width:220px;"
+                                        >Kategori</th>
+                                        <th
+                                            scope="col"
                                             style="min-width:50px;"
-                                        >Edisi</th>
-                                        <th
-                                            scope="col"
-                                            style="min-width:100px;"
-                                        >Tipe cetak</th>
-                                        <th
-                                            scope="col"
-                                            style="min-width:100px;"
-                                        >Jumlah cetak</th>
-                                        <th
-                                            scope="col"
-                                            style="min-width:100px;"
-                                        >Prioritas</th>
-                                        <th
-                                            scope="col"
-                                            style="min-width:100px;"
-                                        >Tanggal masuk</th>
-                                        <th
-                                            scope="col"
-                                            style="max-width:100px;"
-                                        >Status</th>
-                                        <?php if (is_admin()) : ?>
-                                            <th style="min-width:170px;"> &nbsp; </th>
-                                        <?php endif; ?>
-                                        <!-- <?php //if ($level != 'reviewer') : ?>
+                                        >Tahun</th>
+                                        <?php if ($level != 'reviewer') : ?>
                                             <th
                                                 scope="col"
                                                 style="min-width:150px;"
                                             >Penulis</th>
-                                        <?php //endif; ?> -->
-                                        <!-- <th
+                                        <?php endif; ?>
+                                        <th
                                             scope="col"
                                             style="max-width:100px;"
                                         >Tanggal Masuk</th>
                                         <th
                                             scope="col"
                                             style="min-width:130px;"
-                                        >Status</th> -->
-                                        <!-- <?php //if ($level == 'reviewer' or $level == 'editor' or $level == 'layouter') : ?>
+                                        >Status</th>
+                                        <!-- <?php if ($level == 'reviewer' or $level == 'editor' or $level == 'layouter') : ?>
                                             <th scope="col">Sisa Waktu</th>
-                                        <?php //endif; ?> -->
-                                        <!-- <?php //if (is_admin()) : ?>
+                                        <?php endif; ?> -->
+                                        <?php if (is_admin()) : ?>
                                             <th style="min-width:170px;"> &nbsp; </th>
-                                        <?php //endif; ?> -->
+                                        <?php endif; ?>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php if($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin cetak') : ?>
-                                    <?php foreach ($data_all->result() as $data) : ?>
+                                    <?php foreach ($drafts as $draft) : ?>
                                         <tr>
-                                            <td class="align-middle pl-3"><!-- No  -->
+                                            <td class="align-middle pl-3">
                                                 <?= ++$i; ?>
                                             </td>
-                                            <td class="align-middle"><!-- Judul  -->
+                                            <td class="align-middle">
                                                 <a
-                                                    href="<?= base_url('printing/view_printing_view/' . $data->print_id . ''); ?>"
+                                                    href="<?= base_url('draft/view/' . $draft->draft_id . ''); ?>"
                                                     class="font-weight-bold"
                                                 >
-                                                    <?= ($data->print_category == 1) ? '<span class="badge badge-warning"><i class="fa fa-redo" data-toggle="tooltip" title="Cetak Ulang"></i></span>' : ''; ?>
-                                                    <?= $data->book_title //highlight_keyword($draft->draft_title, $keyword); ?>
+                                                    <?= ($draft->is_reprint == 'y') ? '<span class="badge badge-warning"><i class="fa fa-redo" data-toggle="tooltip" title="Cetak Ulang"></i></span>' : ''; ?>
+                                                    <?= highlight_keyword($draft->draft_title, $keyword); ?>
                                                 </a>
                                             </td>
-                                            <td class="align-middle"><!-- Cetakan ke-  -->
-                                                <?= $data->print_edition; ?>
+                                            <td class="align-middle">
+                                                <?= $draft->category_name; ?>
                                             </td>
-                                            <td class="align-middle"><!-- Tipe cetak  -->
-                                                <?php
-                                                if($data->print_type == 0){echo 'POD';}
-                                                elseif($data->print_type == 1){echo 'Offset';}
-                                                else{echo '';}
-                                                ?>
+                                            <td class="align-middle">
+                                                <?= $draft->category_year; ?>
                                             </td>
-                                            <td class="align-middle"><!-- Jumlah cetak  -->
-                                                <?= $data->print_total; ?>
+                                            <?php if ($level != 'reviewer') : ?>
+                                                <td class="align-middle">
+                                                    <?= isset($draft->author_name) ? highlight_keyword($draft->author_name, $keyword) : '-'; ?>
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-link btn-sm m-0 p-0 <?= count($draft->authors) <= 1 ? 'd-none' : ''; ?>"
+                                                        data-container="body"
+                                                        data-toggle="popover"
+                                                        data-placement="right"
+                                                        data-html="true"
+                                                        data-trigger="hover"
+                                                        data-content='<?= expand($draft->authors); ?>'
+                                                    >
+                                                        <i class="fa fa-users"></i>
+                                                    </button>
+                                                </td>
+                                            <?php endif; ?>
+                                            <td class="align-middle">
+                                                <?= format_datetime($draft->entry_date); ?>
                                             </td>
-                                            <td class="align-middle"><!-- Prioritas  -->
-                                                <?php
-                                                if($data->print_priority == 0){echo 'Rendah';}
-                                                elseif($data->print_priority == 1){echo 'Sedang';}
-                                                elseif($data->print_priority == 2){echo 'Tinggi';}
-                                                else{echo '';}
-                                                ?>
+                                            <td class="align-middle">
+                                                <?php if ($level == 'reviewer') : ?>
+                                                    <?= $draft->review_flag ? '<span class="badge badge-success">Sudah direview</span>' : '<span class="badge badge-danger">Belum direview</span>'; ?>
+                                                <?php else : ?>
+                                                    <?= draft_status_to_text($draft->draft_status); ?>
+                                                <?php endif; ?>
                                             </td>
-                                            <td class="align-middle"><!-- Tanggal masuk  -->
-                                                <?= format_datetime($data->entry_date); ?>
-                                            </td>
-                                            <td class="align-middle"><!-- Status  -->
-                                                <?php
-                                                if($data->is_pracetak == 1){echo 'Proses Pracetak';}
-                                                elseif($data->is_cetak == 1){echo 'Proses Cetak';}
-                                                elseif($data->is_jilid == 1){echo 'Proses Jilid';}
-                                                elseif($data->is_final == 1){echo 'Proses Final';}
-                                                elseif($data->print_flag == 2){echo 'Selesai';}
-                                                elseif($data->print_flag == 1){echo 'Ditolak';}
-                                                elseif($data->print_flag == 0){echo 'Belum di Proses';}
-                                                else{echo '';}
-                                                ?>                                     
-                                            </td>
+                                            <?php if ($level == 'reviewer') : ?>
+                                                <td class="align-middle">
+                                                    <?php if ($draft->sisa_waktu <= 0 and $draft->review_flag == '') : ?>
+                                                        <?= '<span class="font-weight-bold text-danger"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>'; ?>
+                                                    <?php elseif ($draft->sisa_waktu <= 0 and $draft->review_flag != '') : ?>
+                                                        <?= null; ?>
+                                                    <?php else : ?>
+                                                        <?= $draft->sisa_waktu . ' hari'; ?>
+                                                    <?php endif; ?>
+                                                </td>
+                                            <?php elseif ($level == 'editor') : ?>
+                                                <td class="align-middle">
+                                                    <!-- <?php if (!format_datetime($draft->edit_start_date)) : ?>
+                                                        <span>Belum mulai</span>
+                                                    <?php elseif (format_datetime($draft->edit_end_date)) : ?>
+                                                        <span>Selesai</span>
+                                                    <?php else : ?>
+                                                        <?php if ($draft->sisa_waktu <= 0 and $draft->edit_notes == '') : ?>
+                                                            <?= '<span class="font-weight-bold text-danger"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>'; ?>
+                                                        <?php elseif ($draft->sisa_waktu <= 0 and $draft->edit_notes != '') : ?>
+                                                            <?= null; ?>
+                                                        <?php else : ?>
+                                                            <?= $draft->sisa_waktu . ' hari'; ?>
+                                                        <?php endif; ?>
+                                                    <?php endif; ?> -->
+                                                </td>
+                                            <?php elseif ($level == 'layouter') : ?>
+                                                <td class="align-middle">
+                                                    <!-- <?php if (!format_datetime($draft->layout_start_date)) : ?>
+                                                        <span>Belum mulai</span>
+                                                    <?php elseif (format_datetime($draft->layout_end_date)) : ?>
+                                                        <span>Selesai</span>
+                                                    <?php else : ?>
+                                                        <?php if ($draft->sisa_waktu <= 0 and $draft->layout_notes == '') : ?>
+                                                            <?= '<span class="font-weight-bold text-danger"><i class="fa fa-info-circle"></i> Melebihi Deadline!</span>'; ?>
+                                                        <?php elseif ($draft->sisa_waktu <= 0 and $draft->layout_notes != '') : ?>
+                                                            <?= null; ?>
+                                                        <?php else : ?>
+                                                            <?= $draft->sisa_waktu . ' hari'; ?>
+                                                        <?php endif; ?>
+                                                    <?php endif; ?> -->
+                                                </td>
+                                            <?php endif; ?>
 
                                             <?php if (is_admin()) : ?>
-                                                <td class="align-middle text-right"><!-- Edit  -->
+                                                <td class="align-middle text-right">
                                                     <a
                                                         title="Edit"
-                                                        href="<?= base_url('printing/view_printing_edit/' . $data->print_id . ''); ?>"
+                                                        href="<?= base_url('draft/edit/' . $draft->draft_id . ''); ?>"
                                                         class="btn btn-sm btn-secondary"
                                                     >
                                                         <i class="fa fa-pencil-alt"></i>
@@ -185,7 +289,7 @@
                                                         type="button"
                                                         class="btn btn-sm btn-danger"
                                                         data-toggle="modal"
-                                                        data-target="#modal-hapus-<?= $data->print_id; ?>"
+                                                        data-target="#modal-hapus-<?= $draft->draft_id; ?>"
                                                     >
                                                         <i class="fa fa-trash-alt"></i>
                                                         <span class="sr-only">Delete</span>
@@ -193,7 +297,7 @@
                                                     <div class="text-left">
                                                         <div
                                                             class="modal modal-alert fade"
-                                                            id="modal-hapus-<?= $data->print_id; ?>"
+                                                            id="modal-hapus-<?= $draft->draft_id; ?>"
                                                             tabindex="-1"
                                                             role="dialog"
                                                             aria-labelledby="modal-hapus"
@@ -211,13 +315,13 @@
                                                                     </div>
                                                                     <div class="modal-body">
                                                                         <p>Apakah anda yakin akan menghapus draft <span class="font-weight-bold">
-                                                                                <?= $data->book_title; ?></span>?</p>
+                                                                                <?= $draft->draft_title; ?></span>?</p>
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <button
                                                                             type="button"
                                                                             class="btn btn-danger"
-                                                                            onclick="location.href='<?= base_url('printing/delete_printing/' . $data->print_id . ''); ?>'"
+                                                                            onclick="location.href='<?= base_url('draft/delete/' . $draft->draft_id . ''); ?>'"
                                                                             data-dismiss="modal"
                                                                         >Hapus</button>
                                                                         <button
@@ -234,7 +338,6 @@
                                             <?php endif; ?>
                                         </tr>
                                     <?php endforeach; ?>
-                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
