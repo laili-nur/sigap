@@ -17,6 +17,7 @@ class Book extends Admin_Controller
 
         // load model
         $this->load->model('book_model', 'book');
+        $this->load->model('Book_model');
     }
 
     public function index($page = null)
@@ -132,12 +133,17 @@ class Book extends Admin_Controller
         // get draft
         // $draft = $this->book->where('draft_id', $input->draft_id)->get('draft');
 
+        $get_stock      = $this->Book_model->fetch_stock_by_id($book_id);
+
+        $stock_history  = $get_stock['stock_history'];
+        $stock_last     = $get_stock['stock_last'];
+
         // If something wrong
         // if (!$this->book->validate() || $this->form_validation->error_array()) {
         $pages       = $this->pages;
         $main_view   = 'book/view_book';
         // $form_action = "book/edit/$book_id";
-        $this->load->view('template', compact('authors', 'pages', 'main_view', 'input'));
+        $this->load->view('template', compact('authors', 'pages', 'main_view', 'input', 'stock_history', 'stock_last'));
         return;
         // }
 
@@ -313,5 +319,38 @@ class Book extends Admin_Controller
             return false;
         }
         return true;
+    }
+
+    public function add_book_stock(){
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('stock_in_warehouse', 'Stok dalam gudang', 'required|max_length[10]');
+        $this->form_validation->set_rules('stock_out_warehouse', 'Stok luar gudang', 'required|max_length[10]');
+        $this->form_validation->set_rules('stock_marketing', 'Stok pemasaran', 'required|max_length[10]');
+        $this->form_validation->set_rules('stock_input_notes', 'Catatan', 'required|max_length[256]');
+
+        if($this->form_validation->run() == FALSE){
+            $this->session->set_flashdata('error',validation_errors());
+            redirect($_SERVER['HTTP_REFERER'], 'refresh');
+        }else{
+            $check  =   $this->Book_model->add_book_stock();
+            if($check   ==  TRUE){
+                $this->session->set_flashdata('success','Berhasil mengubah stok.');
+                redirect($_SERVER['HTTP_REFERER'], 'refresh');
+            }else{
+                $this->session->set_flashdata('error',$this->db->error());
+                redirect($_SERVER['HTTP_REFERER'], 'refresh');
+            }
+        }
+    }
+
+    public function delete_book_stock($book_stock_id){
+        $isDeleted  = $this->Book_model->delete_book_stock($book_stock_id);
+        if($isDeleted   ==  TRUE){
+            $this->session->set_flashdata('success','Berhasil menghapus data stok buku.');
+            redirect($_SERVER['HTTP_REFERER'], 'refresh');
+        }else{
+            $this->session->set_flashdata('error',print_r($this->db->error()));
+            redirect($_SERVER['HTTP_REFERER'], 'refresh');
+        }
     }
 }

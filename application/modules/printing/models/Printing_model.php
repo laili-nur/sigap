@@ -248,10 +248,10 @@ class Printing_model extends MY_Model
     public function finalisasi_printing($print_id){
         $add    =   [
             'book_id'               => $this->input->post('book_id'),
-            'stock_in_warehouse'    => $this->input->post('stok_dalam_gudang'),
-            'stock_out_warehouse'   => $this->input->post('stok_luar_gudang'),
-            'stock_marketing'       => $this->input->post('stok_pemasaran'),
-            'stock_input_notes'     => $this->input->post('stok_input_notes'),
+            'stock_in_warehouse'    => $this->input->post('stock_in_warehouse'),
+            'stock_out_warehouse'   => $this->input->post('stock_out_warehouse'),
+            'stock_marketing'       => $this->input->post('stock_marketing'),
+            'stock_input_notes'     => $this->input->post('stock_input_notes'),
             'stock_input_type'      => 1,
             'stock_input_user'      => $_SESSION['username'],
             'stock_input_date'      => date('Y-m-d H:i:s')

@@ -116,11 +116,11 @@
                     </tr>
                     <tr>
                         <td width="140px">Tanggal masuk</td>
-                        <td><?php if(empty($pData->entry_date) == FALSE){echo date('d-F-Y H:i:s', strtotime($pData->entry_date));} ?></td>
+                        <td><?php if(empty($pData->entry_date) == FALSE){echo date('d F Y H:i:s', strtotime($pData->entry_date));} ?></td>
                     </tr>
                     <tr>
                         <td width="140px">Tanggal selesai</td>
-                        <td><?php if(empty($pData->finish_date) == FALSE){echo date('d-F-Y H:i:s', strtotime($pData->finish_date));} ?></td>
+                        <td><?php if(empty($pData->finish_date) == FALSE){echo date('d F Y H:i:s', strtotime($pData->finish_date));} ?></td>
                     </tr>
                     <tr>
                         <td width="140px">User entry</td>

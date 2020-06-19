@@ -35,12 +35,12 @@
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Tanggal mulai</span>
-                <strong><?php if(empty($pData->binding_start_date) == FALSE){echo date('d-F-Y H:i:s', strtotime($pData->binding_start_date));} ?></strong>
+                <strong><?php if(empty($pData->binding_start_date) == FALSE){echo date('d F Y H:i:s', strtotime($pData->binding_start_date));} ?></strong>
             </div>
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Tanggal selesai</span>
-                <strong><?php if(empty($pData->binding_end_date) == FALSE){echo date('d-F-Y H:i:s', strtotime($pData->binding_end_date));} ?></strong>
+                <strong><?php if(empty($pData->binding_end_date) == FALSE){echo date('d F Y H:i:s', strtotime($pData->binding_end_date));} ?></strong>
             </div>
 
             <div class="list-group-item justify-content-between">
@@ -51,7 +51,7 @@
                     data-toggle="modal"
                     data-target="#modal_binding_deadline"
                 >Deadline <i class="fas fa-edit fa-fw"></i></a>
-                <strong><?php if(empty($pData->binding_deadline) == FALSE){echo date('d-F-Y H:i:s', strtotime($pData->binding_deadline));} ?></strong>
+                <strong><?php if(empty($pData->binding_deadline) == FALSE){echo date('d F Y H:i:s', strtotime($pData->binding_deadline));} ?></strong>
             </div>
 
             <div class="list-group-item justify-content-between">

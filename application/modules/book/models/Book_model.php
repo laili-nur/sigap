@@ -323,4 +323,35 @@ class Book_model extends MY_Model
 
     //     return $books;
     // }
+
+    public function fetch_stock_by_id($book_id){
+        
+        $stock_history    = $this->db->select('*')->from('book_stock')->where('book_id',$book_id)->order_by("UNIX_TIMESTAMP(stock_input_date)","ASC")->get()->result();
+        $stock_last       = $this->db->select('*')->from('book_stock')->where('book_id',$book_id)->order_by("UNIX_TIMESTAMP(stock_input_date)","DESC")->limit(1)->get()->row();
+        return [
+            'stock_history' => $stock_history,
+            'stock_last'    => $stock_last
+        ];
+    }
+
+    public function add_book_stock(){
+        $add    =   [
+            'book_id'               => $this->input->post('book_id'),
+            'stock_in_warehouse'    => $this->input->post('stock_in_warehouse'),
+            'stock_out_warehouse'   => $this->input->post('stock_out_warehouse'),
+            'stock_marketing'       => $this->input->post('stock_marketing'),
+            'stock_input_notes'     => $this->input->post('stock_input_notes'),
+            'stock_input_type'      => 0,
+            'stock_input_user'      => $_SESSION['username'],
+            'stock_input_date'      => date('Y-m-d H:i:s')
+        ];
+        
+        $this->db->insert('book_stock', $add);
+        return TRUE;
+    }
+
+    public function delete_book_stock($book_stock_id){
+        $this->db->where('book_stock_id',$book_stock_id)->delete('book_stock');
+        return TRUE;
+    }
 }
