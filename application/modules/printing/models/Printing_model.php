@@ -59,16 +59,52 @@ class Printing_model extends MY_Model
             'order_number'          => $this->input->post('order_number'),
             'entry_date'            => $this->input->post('entry_date'),
             'finish_date'           => $this->input->post('finish_date'),
-            'is_preprint'           => $this->input->post('is_preprint'),
+            'preprint_status'       => $this->input->post('preprint_status'),
             'preprint_start_date'   => $this->input->post('preprint_start_date'),
             'preprint_end_date'     => $this->input->post('preprint_end_date'),
-            'is_print'              => $this->input->post('is_print'),
+            'print_status'          => $this->input->post('print_status'),
             'print_start_date'      => $this->input->post('print_start_date'),
             'print_end_date'        => $this->input->post('print_end_date'),
-            'is_binding'            => $this->input->post('is_binding'),
+            'binding_status'        => $this->input->post('binding_status'),
             'binding_start_date'    => $this->input->post('binding_start_date'),
             'binding_end_date'      => $this->input->post('binding_end_date'),
         ];
+
+        if($this->input->post('preprint_status') == 0){//preprint belum
+            $edit['preprint_flag']      = 0;
+            $edit['print_flag']         = 0;
+            $edit['print_status']       = 0;
+            $edit['binding_flag']       = 0;
+            $edit['binding_status']     = 0;
+            $edit['final_status']       = 0;
+            $edit['progress_status']    = 0;
+        }elseif($this->input->post('preprint_status') == 2){//preprint sudah
+            $edit['preprint_flag']      = 2;
+            $edit['print_flag']         = 0;
+            $edit['print_status']       = 1;
+            $edit['binding_flag']       = 0;
+            $edit['binding_status']     = 0;
+            $edit['final_status']       = 0;
+            $edit['progress_status']    = 2;
+        }elseif($this->input->post('print_status') == 0){//print belum
+            $edit['print_flag']         = 0;
+            $edit['binding_flag']       = 0;
+            $edit['binding_status']     = 0;
+            $edit['final_status']       = 0;
+        }elseif($this->input->post('print_status') == 2){//print sudah
+            $edit['print_flag']         = 2;
+            $edit['binding_flag']       = 0;
+            $edit['binding_status']     = 1;
+            $edit['final_status']       = 0;
+            $edit['progress_status']    = 3;
+        }elseif($this->input->post('binding_status') == 0){//binding belum
+            $edit['binding_flag']       = 0;
+            $edit['final_status']       = 0;
+        }elseif($this->input->post('binding_status') == 2){//binding sudah
+            $edit['binding_flag']       = 2;
+            $edit['final_status']       = 1;
+            $edit['progress_status']    = 4;
+        }
         
         $this->db->set($edit)->where('print_id',$print_id)->update('printing');
         return TRUE;
@@ -124,7 +160,7 @@ class Printing_model extends MY_Model
 
     public function fetch_all_data(){
         return $this->db
-        ->select('print_id, a.book_id as a_book_id, book_title, print_edition, print_type, print_total, print_priority, entry_date, print_category, is_preprint, is_print, is_binding, is_final, printing_flag')
+        ->select('print_id, a.book_id as a_book_id, book_title, print_edition, print_type, print_total, print_priority, entry_date, print_category, preprint_status, print_status, binding_status, final_status, printing_flag')
         ->from('printing a')
         ->join('book b', 'b.book_id = a.book_id', 'left')
         ->order_by('book_title', 'ASC')
@@ -133,7 +169,7 @@ class Printing_model extends MY_Model
 
     public function fetch_jilid_data(){
         return $this->db
-        ->select('print_id, a.book_id as a_book_id, book_title, print_edition, print_type, print_total, print_priority, entry_date, print_category, is_preprint, is_print, is_binding, is_final, printing_flag')
+        ->select('print_id, a.book_id as a_book_id, book_title, print_edition, print_type, print_total, print_priority, entry_date, print_category, preprint_status, print_status, binding_status, final_status, printing_flag')
         ->from('printing a')
         ->join('book b', 'b.book_id = a.book_id', 'left')
         ->order_by('book_title', 'ASC')
@@ -143,7 +179,6 @@ class Printing_model extends MY_Model
 
     public function start_progress($print_id,$progress_name){
         $set    =   [
-            'is_'.$progress_name            =>  1,
             $progress_name.'_status'        =>  1,
             $progress_name.'_start_date'    =>  date('Y-m-d H:i:s')
         ];
@@ -204,28 +239,12 @@ class Printing_model extends MY_Model
                     ];
 
         if($progress_name == 'preprint' && $this->input->post($progress_name.'_flag') == 2){
-            $set['is_preprint']     =   0;
-            $set['is_print']        =   1;
-            $set['is_binding']      =   0;
-            $set['is_final']        =   0;
             $set['progress_status'] =   2; //print
         }elseif($progress_name == 'print' && $this->input->post($progress_name.'_flag') == 2){
-            $set['is_preprint']     =   0;
-            $set['is_print']        =   0;
-            $set['is_binding']      =   1;
-            $set['is_final']        =   0;
             $set['progress_status'] =   3; //binding
         }elseif($progress_name == 'binding' && $this->input->post($progress_name.'_flag') == 2){
-            $set['is_preprint']     =   0;
-            $set['is_print']        =   0;
-            $set['is_binding']      =   0;
-            $set['is_final']        =   1;
             $set['progress_status'] =   4; //final
         }elseif($this->input->post($progress_name.'_flag') == 1 ){
-            $set['is_preprint']     =   0;
-            $set['is_print']        =   0;
-            $set['is_binding']      =   0;
-            $set['is_final']        =   0;
             $set['printing_flag']   =   1;
             $set['progress_status'] =   5; //tolak
         }

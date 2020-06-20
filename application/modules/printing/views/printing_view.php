@@ -130,13 +130,13 @@
                         <td width="140px">Status proses</td>
                         <td>
                         <?php
-                        if($pData->is_preprint == 1){echo 'Proses Pracetak';}
-                        elseif($pData->is_print == 1){echo 'Proses Cetak';}
-                        elseif($pData->is_binding == 1){echo 'Proses Jilid';}
-                        elseif($pData->is_final == 1){echo 'Proses Final';}
-                        elseif($pData->print_flag == 2){echo 'Selesai';}
-                        elseif($pData->print_flag == 1){echo 'Ditolak';}
-                        elseif($pData->print_flag == 0){echo 'Belum di Proses';}
+                        if($pData->progress_status == 0){echo 'Belum di proses.';}
+                        elseif($pData->progress_status == 1){echo 'Proses Pracetak';}
+                        elseif($pData->progress_status == 2){echo 'Proses Cetak';}
+                        elseif($pData->progress_status == 3){echo 'Proses Jilid';}
+                        elseif($pData->progress_status == 4){echo 'Proses Final';}
+                        elseif($pData->progress_status == 5){echo 'Ditolak';}
+                        elseif($pData->progress_status == 6){echo 'Selesai';}
                         else{echo '';}
                         ?>
                         </td>

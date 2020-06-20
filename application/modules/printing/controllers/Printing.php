@@ -1,8 +1,6 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
-use Carbon\Carbon;
-
-class Printing extends Operator_Controller
+class Printing extends MY_Controller
 {
     public function __construct()
     {
@@ -105,13 +103,13 @@ class Printing extends Operator_Controller
         $this->form_validation->set_rules('order_number', 'Nomor order', 'max_length[15]');
         $this->form_validation->set_rules('entry_date', 'Tanggal input', '');
         $this->form_validation->set_rules('finish_date', 'Tanggal selesai', '');
-        $this->form_validation->set_rules('is_preprint', 'Status pracetak', 'max_length[1]');
+        $this->form_validation->set_rules('preprint_status', 'Status pracetak', 'max_length[1]');
         $this->form_validation->set_rules('preprint_start_date', 'Tanggal Mulai Pracetak', '');
         $this->form_validation->set_rules('preprint_end_date', 'Tanggal Selesai Pracetak', '');
-        $this->form_validation->set_rules('is_print', 'Status cetak', 'max_length[1]');
+        $this->form_validation->set_rules('print_status', 'Status cetak', 'max_length[1]');
         $this->form_validation->set_rules('print_start_date', 'Tanggal Mulai Cetak', '');
         $this->form_validation->set_rules('print_end_date', 'Tanggal Selesai Cetak', '');
-        $this->form_validation->set_rules('is_binding', 'Status jilid', 'max_length[1]');
+        $this->form_validation->set_rules('binding_status', 'Status jilid', 'max_length[1]');
         $this->form_validation->set_rules('binding_start_date', 'Tanggal Mulai Jilid', '');
         $this->form_validation->set_rules('binding_end_date', 'Tanggal Selesai Jilid', '');
 

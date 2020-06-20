@@ -127,13 +127,13 @@
                                 <label>Status Pracetak</label>
                                 <div class="mb-1">
                                     <label>
-                                        <input type="radio" name="is_preprint" value="1" <?php if($pData->is_preprint == 1){echo 'checked';}else{echo '';} ?>/>
+                                        <input type="radio" name="preprint_status" value="2" <?php if($pData->preprint_status == 2){echo 'checked';}else{echo '';} ?>/>
                                         <i class="fa fa-check text-success"></i> Sudah Pracetak
                                     </label>
                                 </div>
                                 <div class="mb-1">
                                     <label>
-                                        <input type="radio" name="is_preprint" value="0" <?php if($pData->is_preprint == 0){echo 'checked';}else{echo '';} ?>/>
+                                        <input type="radio" name="preprint_status" value="0" <?php if($pData->preprint_status == 0){echo 'checked';}else{echo '';} ?>/>
                                         <i class="fa fa-times text-danger"></i> Belum Pracetak
                                     </label>
                                 </div>
@@ -163,13 +163,13 @@
                                 <label>Status Cetak</label>
                                 <div class="mb-1">
                                     <label>
-                                        <input type="radio" name="is_print" value="1" <?php if($pData->is_print == 1){echo 'checked';}else{echo '';} ?>/>
+                                        <input type="radio" name="print_status" value="2" <?php if($pData->print_status == 2){echo 'checked';}else{echo '';} ?>/>
                                         <i class="fa fa-check text-success"></i> Sudah Cetak
                                     </label>
                                 </div>
                                 <div class="mb-1">
                                     <label>
-                                        <input type="radio" name="is_print" value="0" <?php if($pData->is_print == 0){echo 'checked';}else{echo '';} ?>/>
+                                        <input type="radio" name="print_status" value="0" <?php if($pData->print_status == 0){echo 'checked';}else{echo '';} ?>/>
                                         <i class="fa fa-times text-danger"></i> Belum Cetak
                                     </label>
                                 </div>
@@ -199,13 +199,13 @@
                                 <label>Status Jilid</label>
                                 <div class="mb-1">
                                     <label>
-                                        <input type="radio" name="is_binding" value="1" <?php if($pData->is_binding == 1){echo 'checked';}else{echo '';} ?>/>
+                                        <input type="radio" name="binding_status" value="2" <?php if($pData->binding_status == 2){echo 'checked';}else{echo '';} ?>/>
                                         <i class="fa fa-check text-success"></i> Sudah Jilid
                                     </label>
                                 </div>
                                 <div class="mb-1">
                                     <label>
-                                        <input type="radio" name="is_binding" value="0" <?php if($pData->is_binding == 0){echo 'checked';}else{echo '';} ?>/>
+                                        <input type="radio" name="binding_status" value="0" <?php if($pData->binding_status == 0){echo 'checked';}else{echo '';} ?>/>
                                         <i class="fa fa-times text-danger"></i> Belum Jilid
                                     </label>
                                 </div>
