@@ -562,7 +562,7 @@ function get_per_page_options()
 
 function get_user_levels()
 {
-    return ['superadmin', 'admin_penerbitan', 'author', 'reviewer', 'editor', 'layouter', 'author_reviewer','admin_percetakan'];
+    return ['superadmin', 'admin_penerbitan', 'author', 'reviewer', 'editor', 'layouter', 'author_reviewer','admin_percetakan','admin_gudang','admin_pemasaran'];
 }
 
 function filter_boolean($data)

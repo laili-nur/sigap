@@ -322,6 +322,7 @@ class Book extends Admin_Controller
     }
 
     public function add_book_stock(){
+        if($this->check_level_gudang() == TRUE):
         $this->load->library('form_validation');
         $this->form_validation->set_rules('stock_in_warehouse', 'Stok dalam gudang', 'required|max_length[10]');
         $this->form_validation->set_rules('stock_out_warehouse', 'Stok luar gudang', 'required|max_length[10]');
@@ -341,15 +342,27 @@ class Book extends Admin_Controller
                 redirect($_SERVER['HTTP_REFERER'], 'refresh');
             }
         }
+        endif;
     }
 
     public function delete_book_stock($book_stock_id){
+        if($this->check_level_gudang() == TRUE):
         $isDeleted  = $this->Book_model->delete_book_stock($book_stock_id);
         if($isDeleted   ==  TRUE){
             $this->session->set_flashdata('success','Berhasil menghapus data stok buku.');
             redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }else{
             $this->session->set_flashdata('error',print_r($this->db->error()));
+            redirect($_SERVER['HTTP_REFERER'], 'refresh');
+        }
+        endif;
+    }
+
+    public function check_level_gudang(){
+        if($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_gudang'){
+            return TRUE;
+        }else{
+            $this->session->set_flashdata('error','Hanya admin gudang dan superadmin yang dapat mengakses.');
             redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }
     }

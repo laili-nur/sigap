@@ -82,4 +82,17 @@ class Book_request_model extends MY_Model{
         $this->db->set($set)->where('book_request_id',$book_request_id)->update('book_request');
         return TRUE;
     }
+
+    public function fetch_book_id($postData){
+        $response = array();
+
+        if(isset($postData['search']) ){
+            $records = $this->db->select('book_id, book_title')->order_by('book_title','ASC')->like('book_title', $postData['search'],'both')->limit(5)->get('book')->result();
+            foreach($records as $row ){
+                $response[] = array("value"=>$row->book_id,"label"=>$row->book_title);
+            }
+        }
+
+        return $response;
+    }
 }

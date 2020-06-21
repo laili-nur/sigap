@@ -9,27 +9,27 @@ class Printing extends MY_Controller
         $this->load->model('printing/Printing_model');
     }
 
-    public function index($page = null){
-        if($this->check_level() == TRUE):
+    public function index(){
+        // if($this->check_level() == TRUE):
 
-        $filters = [
-            'status'    => $this->input->get('status', true),//0-6 > belum,preprint,print,binding,final,tolak,selesai
-            'category'  => $this->input->get('category', true),//0-1 > cetak baru, cetak ulang
-            'type'      => $this->input->get('type', true),//0-1 > POD, Offset
-            'priority'  => $this->input->get('priority', true),//0-2 > rendah, sedang, tinggi
-            'keyword'   => $this->input->get('keyword', true),//cari berdasarkan semua kolom
-        ];
+        // $filters = [
+        //     'status'    => $this->input->get('status', true),//0-6 > belum,preprint,print,binding,final,tolak,selesai
+        //     'category'  => $this->input->get('category', true),//0-1 > cetak baru, cetak ulang
+        //     'type'      => $this->input->get('type', true),//0-1 > POD, Offset
+        //     'priority'  => $this->input->get('priority', true),//0-2 > rendah, sedang, tinggi
+        //     'keyword'   => $this->input->get('keyword', true),//cari berdasarkan semua kolom
+        // ];
 
-        $get_data   = $this->Printing_model->filter_printing($filters, $page);
+        // $get_data   = $this->Printing_model->filter_printing($filters, $page);
         
-        $pages      = $this->pages;
-        $main_view  = 'printing/index_printing';
-        $data       = $get_data['printing'];
-        $pagination = $this->draft->make_pagination(site_url('printing'), 2, $total);
-        $total      = $get_data['printing'];
-        $this->load->view('template', compact('pages', 'main_view', 'data', 'pagination', 'total'));
+        // $pages      = $this->pages;
+        // $main_view  = 'printing/index_printing';
+        // $data       = $get_data['printing'];
+        // $pagination = $this->draft->make_pagination(site_url('printing'), 2, $total);
+        // $total      = $get_data['printing'];
+        // $this->load->view('template', compact('pages', 'main_view', 'data', 'pagination', 'total'));
 
-        endif;
+        // endif;
     }
 
     public function view_printing_add(){
@@ -41,7 +41,7 @@ class Printing extends MY_Controller
     }
 
     public function view_printing_edit($print_id){
-        if($this->check_level() == TRUE):
+        if($this->check_level_admin() == TRUE):
         $pages       = $this->pages;
         $main_view   = 'printing/printing_edit';
         $pData       = $this->Printing_model->fetch_print_id($print_id)->row();
@@ -74,7 +74,7 @@ class Printing extends MY_Controller
 
         if($this->form_validation->run() == FALSE){
             $this->session->set_flashdata('error',validation_errors());
-            redirect('printing/add_printing');
+            redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }else{
             $check_add  =   $this->Printing_model->add_printing();
             if($check_add   ==  TRUE){
@@ -82,14 +82,14 @@ class Printing extends MY_Controller
                 redirect('printing');
             }else{
                 $this->session->set_flashdata('error',print_r($this->db->error()));
-                redirect('printing/add_printing');
+                redirect($_SERVER['HTTP_REFERER'], 'refresh');
             }
         }
         endif;
     }
 
     public function edit_printing($print_id){
-        if($this->check_level() == TRUE):
+        if($this->check_level_admin() == TRUE):
         $this->load->library('form_validation');
         $this->form_validation->set_rules('book_id', 'Judul buku', 'max_length[10]');
         $this->form_validation->set_rules('print_type', 'Tipe cetak', 'max_length[1]');
@@ -115,7 +115,7 @@ class Printing extends MY_Controller
 
         if($this->form_validation->run() == FALSE){
             $this->session->set_flashdata('error',validation_errors());
-            redirect('printing/view_edit_view/'.$print_id);
+            redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }else{
             $check_edit  =   $this->Printing_model->edit_printing($print_id);
             if($check_edit   ==  TRUE){
@@ -123,14 +123,14 @@ class Printing extends MY_Controller
                 redirect('printing/view_printing_view/'.$print_id);
             }else{
                 $this->session->set_flashdata('error',print_r($this->db->error()));
-                redirect('printing/view_printing_view/'.$print_id);
+                redirect($_SERVER['HTTP_REFERER'], 'refresh');
             }
         }
         endif;
     }
 
     public function delete_printing($print_id){
-        if($this->check_level() == TRUE):
+        if($this->check_level_admin() == TRUE):
         $isDeleted  = $this->Printing_model->delete_printing($print_id);
         if($isDeleted   ==  TRUE){
             $this->session->set_flashdata('success','Order printing berhasil di hapus.');
@@ -161,7 +161,7 @@ class Printing extends MY_Controller
         $check  = $this->Printing_model->start_progress($print_id,$progress_name);
         if($check   ==  TRUE){
             $this->session->set_flashdata('success','Berhasil memulai progress '.$progress_name.'.');
-            redirect($_SERVER['HTTP_REFERER'].'#section_'.$progress_name, 'refresh'); 
+            redirect($_SERVER['HTTP_REFERER'].'#section_'.$progress_name, 'refresh');
         }else{
             $this->session->set_flashdata('error','Gagal memulai progress '.$progress_name.'.');
             redirect($_SERVER['HTTP_REFERER'].'#section_'.$progress_name, 'refresh'); 
@@ -216,19 +216,6 @@ class Printing extends MY_Controller
             redirect($_SERVER['HTTP_REFERER'].'#section_'.$progress_name, 'refresh'); 
         }else{
             $this->session->set_flashdata('error','Gagal melakukan aksi pada progress '.$progress_name.'.');
-            redirect($_SERVER['HTTP_REFERER'].'#section_'.$progress_name, 'refresh'); 
-        }
-        endif;
-    }
-
-    public function choose_admin_jilid($print_id,$progress_name){
-        if($this->check_level() == TRUE):
-        $check  = $this->Printing_model->choose_admin_jilid($print_id);
-        if($check   ==  TRUE){
-            $this->session->set_flashdata('success','Berhasil memilih admin jilid pada progress '.$progress_name.'.');
-            redirect($_SERVER['HTTP_REFERER'].'#section_'.$progress_name, 'refresh'); 
-        }else{
-            $this->session->set_flashdata('error','Gagal memilih admin jilid pada progress '.$progress_name.'.');
             redirect($_SERVER['HTTP_REFERER'].'#section_'.$progress_name, 'refresh'); 
         }
         endif;
@@ -321,7 +308,16 @@ class Printing extends MY_Controller
             return TRUE;
         }else{
             $this->session->set_flashdata('error','Hanya admin percetakan dan superadmin yang dapat mengakses.');
-            redirect(base_url());
+            redirect($_SERVER['HTTP_REFERER'], 'refresh');
+        }
+    }
+
+    public function check_level_admin(){
+        if($_SESSION['level'] == 'superadmin'){
+            return TRUE;
+        }else{
+            $this->session->set_flashdata('error','Hanya superadmin yang dapat mengakses.');
+            redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }
     }
 }
