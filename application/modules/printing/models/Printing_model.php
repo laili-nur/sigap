@@ -197,7 +197,6 @@ class Printing_model extends MY_Model
 
     public function stop_progress($print_id,$progress_name){
         $set    =   [
-            'is_'.$progress_name        =>  1,
             $progress_name.'_status'    =>  2,
             $progress_name.'_end_date'  =>  date('Y-m-d H:i:s'),
             $progress_name.'_user'      =>  $_SESSION['username']

@@ -45,7 +45,12 @@ class Printing extends MY_Controller
         $pages       = $this->pages;
         $main_view   = 'printing/printing_edit';
         $pData       = $this->Printing_model->fetch_print_id($print_id)->row();
+        if(empty($pData) == FALSE):
         $this->load->view('template', compact('pages', 'main_view', 'pData'));
+        else:
+        $this->session->set_flashdata('error','Halaman tidak ditemukan.');
+        redirect(base_url(), 'refresh');
+        endif;
         endif;
     }
 
@@ -54,7 +59,12 @@ class Printing extends MY_Controller
         $pages       = $this->pages;
         $main_view   = 'printing/printing_view';
         $pData       = $this->Printing_model->fetch_print_id($print_id)->row();
+        if(empty($pData) == FALSE):
         $this->load->view('template', compact('pages', 'main_view', 'pData'));
+        else:
+        $this->session->set_flashdata('error','Halaman tidak ditemukan.');
+        redirect(base_url(), 'refresh');
+        endif;
         endif;
     }
 

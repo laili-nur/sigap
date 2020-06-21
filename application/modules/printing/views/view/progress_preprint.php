@@ -248,7 +248,7 @@
     >
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Catatan</h5>
+                <h5 class="modal-title">Pengaturan Buku</h5>
                 <button
                     type="button"
                     class="close"
