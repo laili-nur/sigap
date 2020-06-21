@@ -193,11 +193,15 @@ class MY_Model extends CI_Model
         return $this;
     }
 
-    public function validate()
+    public function validate($validation_rules = null)
     {
-        // $this->load->library('form_validation');
         $this->form_validation->set_error_delimiters('<small class="text-danger">', '</small>');
-        $validation_rules = $this->get_validation_rules(); // in child model
+
+        if (is_null($validation_rules)) {
+            // get default validations rules in child model
+            $validation_rules = $this->get_validation_rules();
+        }
+
         $this->form_validation->set_rules($validation_rules);
         return $this->form_validation->run();
     }
@@ -463,6 +467,7 @@ class MY_Model extends CI_Model
                 'is_login'     => true,
                 'user_id'      => $user->user_id,
                 'role_id'      => $role_id,
+                'email'        => $user->email,
             ]);
             return true;
         }

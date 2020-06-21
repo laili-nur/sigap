@@ -5,7 +5,7 @@
                 <a href="<?= base_url(); ?>"><span class="fa fa-home"></span></a>
             </li>
             <li class="breadcrumb-item">
-                <a class="text-muted">Form Ganti Password</a>
+                <a class="text-muted">Form Ubah Password</a>
             </li>
         </ol>
     </nav>
@@ -17,7 +17,7 @@
                 <div class="card-body">
                     <?= form_open($form_action, 'id="form_change_password" novalidate=""'); ?>
                     <fieldset>
-                        <legend>Ganti Password</legend>
+                        <legend>Ubah Password</legend>
 
                         <div class="form-group">
                             <label for="password">Password Lama

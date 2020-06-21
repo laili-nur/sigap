@@ -124,12 +124,15 @@ class User extends Admin_Controller
 
     public function required_on($str, $condition)
     {
-        if ($this->uri->segment(2) == $condition) {
-            if (!$str) {
-                $this->form_validation->set_message('required_on', 'Bidang %s dibutuhkan');
-                return false;
-            }
+        if ($this->uri->segment(2) != $condition) {
+            return true;
         }
+
+        if (!$str) {
+            $this->form_validation->set_message('required_on', 'Bidang %s dibutuhkan');
+            return false;
+        }
+
         return true;
     }
 

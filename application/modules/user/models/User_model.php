@@ -79,6 +79,7 @@ class User_model extends MY_Model
             if ($params == 'keyword') {
                 $this->group_start();
                 $this->like('username', $data);
+                $this->or_like('email', $data);
                 $this->group_end();
             }
 

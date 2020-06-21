@@ -33,6 +33,16 @@ $semua = $this->session->userdata();
     </p>
 
 </header>
+
+<?php if (empty($this->session->userdata('email'))) : ?>
+    <div class="alert alert-warning">
+        <i class="fa fa-exclamation-triangle"></i> Segera update akun email anda <a
+            href="<?= base_url('auth/change_email') ?>"
+            target="_blank"
+        >di sini <i class="fa fa-external-link-alt"></i></a>
+    </div>
+<?php endif ?>
+
 <div class="page-section">
     <?php
       if (is_admin()) {

@@ -175,9 +175,14 @@ $menu_list = [
 
                     <a
                         class="dropdown-item"
-                        href="<?= base_url("auth/change_password/$user_id"); ?>"
+                        href="<?= base_url('auth/change_email'); ?>"
                     >
-                        <span class="dropdown-icon fa fa-cog"></span> Ganti Password</a>
+                        <span class="dropdown-icon fa fa-envelope"></span> Ubah Email</a>
+                    <a
+                        class="dropdown-item"
+                        href="<?= base_url('auth/change_password'); ?>"
+                    >
+                        <span class="dropdown-icon fa fa-cog"></span> Ubah Password</a>
                     <a
                         class="dropdown-item"
                         href="<?= base_url('auth/logout'); ?>"
