@@ -16,7 +16,7 @@ class Auth_model extends MY_Model
             [
                 'field' => 'password',
                 'label' => $this->lang->line('form_user_password'),
-                'rules' => '',
+                'rules' => 'trim',
             ],
         ];
 

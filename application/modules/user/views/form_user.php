@@ -126,6 +126,8 @@ $is_add_user = $this->uri->segment(2) == 'add';
 <script>
 $(document).ready(function() {
     loadValidateSetting();
+
+    isAddUser = '<?= $is_add_user ?>'
     $("#form_user").validate({
             rules: {
                 username: {
@@ -133,8 +135,12 @@ $(document).ready(function() {
                     username: true,
                 },
                 password: {
-                    crequired: true,
+                    crequired: isAddUser ? true : false,
                     cminlength: 4
+                },
+                email: {
+                    crequired: true,
+                    cemail: true
                 },
                 level: "crequired"
             },
@@ -143,5 +149,6 @@ $(document).ready(function() {
         },
         validateSelect2()
     );
+    console.log(isAddUser);
 })
 </script>

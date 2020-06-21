@@ -105,7 +105,7 @@
         <?php endif; ?>
         <div class="form-group">
             <div class="form-label-group">
-                <?= form_input('username', $input->username, 'id="inputUser" class="form-control" placeholder="UsBername" required="" autofocus=""'); ?>
+                <?= form_input('username', $input->username, 'id="inputUser" class="form-control" placeholder="Username" required="" autofocus=""'); ?>
                 <label for="inputUser">Username</label>
                 <?= form_error('username', '<p class="text-danger">', '</p>'); ?>
             </div>
