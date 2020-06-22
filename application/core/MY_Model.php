@@ -467,7 +467,7 @@ class MY_Model extends CI_Model
                 'is_login'     => true,
                 'user_id'      => $user->user_id,
                 'role_id'      => $role_id,
-                'email'        => $user->email,
+                'email'        => isset($user->email) ? $user->email : null,
             ]);
             return true;
         }
