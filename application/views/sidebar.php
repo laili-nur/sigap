@@ -37,7 +37,7 @@ $menu_list = [
     ],
     [
         'title' => 'Pasca Produksi',
-        'level' => 'superadmin|admin_gudang|admin_pemasaran'
+        'level' => 'superadmin|admin_gudang|admin_pemasaran|admin_keuangan'
     ],
     [
         'name' => 'Permintaan Buku',
@@ -47,15 +47,15 @@ $menu_list = [
     ],
     [
         'name' => 'Logistik',
-        'url'  => 'logistics',
+        'url'  => 'logistic',
         'icon' => 'fa fa-warehouse',
-        'level' => 'superadmin|admin_gudang|admin_pemasaran'
+        'level' => 'superadmin|admin_gudang|admin_keuangan'
     ],
     [
         'name' => 'Permintaan Logistik',
-        'url'  => 'logistics_request',
+        'url'  => 'logistic_request',
         'icon' => 'fa fa-paperclip',
-        'level' => 'superadmin|admin_gudang|admin_pemasaran'
+        'level' => 'superadmin|admin_gudang|admin_keuangan'
     ],
     [
         'title' => 'Data',

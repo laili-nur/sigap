@@ -344,6 +344,7 @@
                                                     <?php
                                                         if($history->stock_input_type == 0){echo 'Input menggunakan fitur buku.';}
                                                         elseif($history->stock_input_type == 1){echo 'Input menggunakan fitur printing.';}
+                                                        elseif($history->stock_input_type == 2){echo 'Input menggunakan fitur permintaan buku.';}
                                                         else{echo '';}
                                                     ?>
                                                 </td>

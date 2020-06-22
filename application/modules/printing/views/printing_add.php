@@ -114,6 +114,3 @@
         </div>
     </div>
 </div>
-<script>
-
-</script>

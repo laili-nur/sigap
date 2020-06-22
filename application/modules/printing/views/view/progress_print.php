@@ -26,8 +26,6 @@
                 </div>
             </div>
         </header>
-        <!-- <div class="alert alert-warning"><strong>PERHATIAN!</strong> Pilih editor terlebih dahulu sebelum mulai proses
-            editorial</div> -->
         <div
             class="list-group list-group-flush list-group-bordered"
             id="list-group-edit"
@@ -35,12 +33,12 @@
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Tanggal mulai</span>
-                <strong><?php if(empty($pData->print_start_date) == FALSE){echo date('d F Y H:i:s', strtotime($pData->print_start_date));} ?></strong>
+                <strong style="max-width:50%"><?php if(empty($pData->print_start_date) == FALSE){echo date('d F Y H:i:s', strtotime($pData->print_start_date));} ?></strong>
             </div>
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Tanggal selesai</span>
-                <strong><?php if(empty($pData->print_end_date) == FALSE){echo date('d F Y H:i:s', strtotime($pData->print_end_date));} ?></strong>
+                <strong style="max-width:50%"><?php if(empty($pData->print_end_date) == FALSE){echo date('d F Y H:i:s', strtotime($pData->print_end_date));} ?></strong>
             </div>
 
             <div class="list-group-item justify-content-between">
@@ -51,12 +49,12 @@
                     data-toggle="modal"
                     data-target="#modal_print_deadline"
                 >Deadline <i class="fas fa-edit fa-fw"></i></a>
-                <strong><?php if(empty($pData->print_deadline) == FALSE){echo date('d F Y H:i:s', strtotime($pData->print_deadline));} ?></strong>
+                <strong style="max-width:50%"><?php if(empty($pData->print_deadline) == FALSE){echo date('d F Y H:i:s', strtotime($pData->print_deadline));} ?></strong>
             </div>
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Status</span>
-                <strong>
+                <strong style="max-width:50%">
                     <?php
                     if($pData->print_status == 0){echo 'Cetak belum di proses.';}
                     elseif($pData->print_status == 1){echo 'Cetak sedang di proses.';}
@@ -68,7 +66,7 @@
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">User</span>
-                <strong><?= $pData->print_user;?></strong>
+                <strong style="max-width:50%"><?= $pData->print_user;?></strong>
             </div>
             <hr class="m-0">
         </div>

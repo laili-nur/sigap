@@ -14,11 +14,12 @@ $level_options = [
     'admin_percetakan' => 'Admin Percetakan',
     'admin_gudang'     => 'Admin Gudang',
     'admin_pemasaran'  => 'Admin Pemasaran',
+    'admin_keuangan'   => 'Admin Keuangan',
     'author'           => 'Author',
     'reviewer'         => 'Reviewer',
     'editor'           => 'Editor',
     'layouter'         => 'Layouter',
-    'author_reviewer'  => 'Author dan Reviewer',
+    'author_reviewer'  => 'Author dan Reviewer'
 ];
 
 $status_options = [

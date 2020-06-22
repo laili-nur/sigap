@@ -17,7 +17,7 @@ class Book_request_model extends MY_Model{
     }
 
     public function edit_book_request($book_request_id){
-        $edit = [
+        $set = [
             'book_id'           => $this->input->post('book_id'),
             'order_number'      => $this->input->post('order_number'),
             'total'             => $this->input->post('total'),
@@ -34,23 +34,50 @@ class Book_request_model extends MY_Model{
     }
 
     public function fetch_book_request_id($book_request_id){
-        
+        return $this->db
+        ->select('book_request.*, book.book_title, book.book_file, book.book_file_link')
+        ->from('book_request')
+        ->join('book', 'book_request.book_id = book.book_id', 'left')
+        ->where('book_request_id', $book_request_id)
+        ->get()->row();
     }
 
+    public function fetch_book_stock_id($book_id){
+        return $this->db
+        ->select('*')
+        ->from('book_stock')
+        ->where('book_id',$book_id)
+        ->order_by("UNIX_TIMESTAMP(stock_input_date)","DESC")
+        ->limit(1)->get()->row();
+    }
+    
     public function action_request($book_request_id){
+        $date = date('Y-m-d H:i:s');
+        $user = $_SESSION['username'];
+        $note = $this->input->post('request_notes_admin');
+
         $set = [
             'flag'                  => $this->input->post('flag'),
             'request_status'        => 2,
-            'request_notes_admin'   => $this->input->post('request_notes_admin'),
-            'request_user'          => $_SESSION['username'],
-            'request_date'          => date('Y-m-d H:i:s')
+            'request_user'          => $user,
+            'request_notes_admin'   => $note,
+            'request_date'          => $date
         ];
 
         if($this->input->post('flag') == 2){//setuju
-            $set['final_status']    = 1;//request status menjadi sedang dalam proses
-            $set['status']          = 1;//status menjadi Proses Final
+            $set['final_status']        = 1;
+            $set['final_user']          = '';
+            $set['final_date']          = '';
+            $set['final_notes_admin']   = '';
+            $set['finish_date']         = '';
+            $set['status']              = 1;
         }elseif($this->input->post('flag') == 1){//tolak
-            $set['status']          = 2;//status menjadi ditolak
+            $set['final_status']        = 0;
+            $set['final_user']          = $user;
+            $set['final_date']          = $date;
+            $set['final_notes_admin']   = $note;
+            $set['finish_date']         = $date;
+            $set['status']              = 2;
         }
 
         $this->db->set($set)->where('book_request_id',$book_request_id)->update('book_request');

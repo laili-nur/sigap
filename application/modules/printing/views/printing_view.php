@@ -15,10 +15,12 @@
     </nav>
     <div class="d-flex justify-content-between align-items-center my-3">
         <div class="page-title mb-0 pb-0 h1"> Order Cetak </div>
+        <?php if($_SESSION['level'] == 'superadmin'): ?>
         <a
             href="<?= base_url('printing/view_printing_edit/'.$pData->print_id); ?>"
             class="btn btn-secondary btn-sm"
         ><i class="fa fa-edit fa-fw"></i> Edit Order Cetak</a>
+        <?php endif; ?>
     </div>
 </header>
 <!-- BREADCUMB,TITLE -->
@@ -154,7 +156,7 @@
     id="detail_book_wrapper"
 >
     <?php
-    $book = $this->Printing_model->fetch_book_data($pData->a_book_id)->row();
+    $book = $this->Printing_model->fetch_book_data($pData->book_id);
     if (isset($book)) :
     ?>
         <div class="table-responsive">

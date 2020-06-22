@@ -35,12 +35,12 @@
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Tanggal mulai</span>
-                <strong><?php if(empty($pData->preprint_start_date) == FALSE){echo date('d F Y H:i:s', strtotime($pData->preprint_start_date));} ?></strong>
+                <strong style="max-width:50%"><?php if(empty($pData->preprint_start_date) == FALSE){echo date('d F Y H:i:s', strtotime($pData->preprint_start_date));} ?></strong>
             </div>
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Tanggal selesai</span>
-                <strong><?php if(empty($pData->preprint_end_date) == FALSE){echo date('d F Y H:i:s', strtotime($pData->preprint_end_date));} ?></strong>
+                <strong style="max-width:50%"><?php if(empty($pData->preprint_end_date) == FALSE){echo date('d F Y H:i:s', strtotime($pData->preprint_end_date));} ?></strong>
             </div>
 
             <div class="list-group-item justify-content-between">
@@ -51,12 +51,12 @@
                     data-toggle="modal"
                     data-target="#modal_preprint_deadline"
                 >Deadline <i class="fas fa-edit fa-fw"></i></a>
-                <strong><?php if(empty($pData->preprint_deadline) == FALSE){echo date('d F Y H:i:s', strtotime($pData->preprint_deadline));} ?></strong>
+                <strong style="max-width:50%"><?php if(empty($pData->preprint_deadline) == FALSE){echo date('d F Y H:i:s', strtotime($pData->preprint_deadline));} ?></strong>
             </div>
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Status</span>
-                <strong>
+                <strong style="max-width:50%">
                     <?php
                     if($pData->preprint_status == 0){echo 'Pracetak belum di proses.';}
                     elseif($pData->preprint_status == 1){echo 'Pracetak sedang di proses.';}
@@ -68,7 +68,7 @@
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">User</span>
-                <strong><?= $pData->preprint_user;?></strong>
+                <strong style="max-width:50%"><?= $pData->preprint_user;?></strong>
             </div>
             <hr class="m-0">
         </div>
@@ -400,7 +400,7 @@
                     </div>
                     <div class="form-group">
                         <label for="book_notes">Keterangan Buku</label>
-                        <textarea name="book_notes" cols="40" rows="10" class="form-control summernote-basic" ></textarea>
+                        <textarea name="book_notes" id="book_notes" cols="40" rows="10" class="form-control summernote-basic" ></textarea>
                     </div>
                 </fieldset>
                 <div class="col-12 text-right">

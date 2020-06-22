@@ -117,11 +117,12 @@ class Printing_model extends MY_Model
 
     public function fetch_print_id($print_id){
         return $this->db
-        ->select('a.*, a.book_id as a_book_id, book_title')
-        ->from('printing a')
-        ->join('book b', 'b.book_id = a.book_id', 'left')
+        ->select('printing.*, book.book_title')
+        ->from('printing')
+        ->join('book', 'printing.book_id = book.book_id', 'left')
         ->where('print_id', $print_id)
-        ->get();
+        ->get()
+        ->row();
     }
 
     public function fetch_book_data($book_id){
@@ -129,7 +130,8 @@ class Printing_model extends MY_Model
         ->select('*')
         ->from('book')
         ->where('book_id',$book_id)
-        ->get();
+        ->get()
+        ->row();
     }
 
     public function fetch_book_id($postData){

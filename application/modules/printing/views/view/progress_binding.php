@@ -26,8 +26,6 @@
                 </div>
             </div>
         </header>
-        <!-- <div class="alert alert-warning"><strong>PERHATIAN!</strong> Pilih editor terlebih dahulu sebelum mulai proses
-            editorial</div> -->
         <div
             class="list-group list-group-flush list-group-bordered"
             id="list-group-edit"
@@ -35,12 +33,12 @@
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Tanggal mulai</span>
-                <strong><?php if(empty($pData->binding_start_date) == FALSE){echo date('d F Y H:i:s', strtotime($pData->binding_start_date));} ?></strong>
+                <strong style="max-width:50%"><?php if(empty($pData->binding_start_date) == FALSE){echo date('d F Y H:i:s', strtotime($pData->binding_start_date));} ?></strong>
             </div>
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Tanggal selesai</span>
-                <strong><?php if(empty($pData->binding_end_date) == FALSE){echo date('d F Y H:i:s', strtotime($pData->binding_end_date));} ?></strong>
+                <strong style="max-width:50%"><?php if(empty($pData->binding_end_date) == FALSE){echo date('d F Y H:i:s', strtotime($pData->binding_end_date));} ?></strong>
             </div>
 
             <div class="list-group-item justify-content-between">
@@ -51,12 +49,12 @@
                     data-toggle="modal"
                     data-target="#modal_binding_deadline"
                 >Deadline <i class="fas fa-edit fa-fw"></i></a>
-                <strong><?php if(empty($pData->binding_deadline) == FALSE){echo date('d F Y H:i:s', strtotime($pData->binding_deadline));} ?></strong>
+                <strong style="max-width:50%"><?php if(empty($pData->binding_deadline) == FALSE){echo date('d F Y H:i:s', strtotime($pData->binding_deadline));} ?></strong>
             </div>
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">Status</span>
-                <strong>
+                <strong style="max-width:50%">
                     <?php
                     if($pData->binding_status == 0){echo 'Jilid belum di proses.';}
                     elseif($pData->binding_status == 1){echo 'Jilid sedang di proses.';}
@@ -68,7 +66,7 @@
 
             <div class="list-group-item justify-content-between">
                 <span class="text-muted">User</span>
-                <strong><?= $pData->binding_user;?></strong>
+                <strong style="max-width:50%"><?= $pData->binding_user;?></strong>
             </div>
             <hr class="m-0">
         </div>
