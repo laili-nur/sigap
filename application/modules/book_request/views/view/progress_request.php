@@ -6,9 +6,9 @@
         <header class="card-header">
             <span class="mr-auto">Permintaan Buku</span>
         </header>
-        <?php if($_SESSION['level'] == 'admin_pemasaran' && $rData->request_status != 2): ?>
+        <?php if($level == 'admin_pemasaran' && $rData->request_status != 2): ?>
         <div class="alert alert-warning"><strong>PERHATIAN!</strong> Harap tunggu Admin Gudang untuk konfirmasi permintaan ini.</div>
-        <?php elseif($_SESSION['level'] == 'admin_pemasaran' && $rData->request_status == 2 && $rData->flag == 2 && $rData->final_status != 2): ?>
+        <?php elseif($level == 'admin_pemasaran' && $rData->request_status == 2 && $rData->flag == 2 && $rData->final_status != 2): ?>
         <div class="alert alert-success">
             <strong>PERHATIAN!</strong> Permintaan telah di konfirmasi. Harap tunggu Admin Gudang memproses permintaan ini.
         </div>
@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <?php if($rData->request_status != 2 && ($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_gudang')): ?>
+        <?php if($rData->request_status != 2 && ($level == 'superadmin' || $level == 'admin_gudang')): ?>
         <hr class="m-0">
         <div class="card-body">
             <div class="card-button">
@@ -127,7 +127,7 @@
 <!-- Modal Aksi -->
             </div>
         </div>
-        <?php elseif($rData->request_status == 2 && ($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_gudang' || $_SESSION['level'] == 'admin_pemasaran')): ?>
+        <?php elseif($rData->request_status == 2 && ($level == 'superadmin' || $level == 'admin_gudang' || $level == 'admin_pemasaran')): ?>
         <hr class="m-0">
         <div class="card-body">
             <div class="card-button">

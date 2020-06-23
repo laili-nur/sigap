@@ -6,11 +6,29 @@ class Book_request extends MY_Controller
     {
         parent::__construct();
         $this->pages = 'book_request';
-        $this->load->model('book_request/Book_request_model');
+        $this->load->model('book_request_model', 'book_request');
     }
 
-    public function index(){
+    public function index($page = NULL){
+        if($this->check_level_gudang_pemasaran() == TRUE):
+        // all filter
+        $filters = [
+            'keyword'           => $this->input->get('keyword', true),
+            'status'            => $this->input->get('status', true)
+        ];
 
+        // custom per page
+        $this->book_request->per_page = $this->input->get('per_page', true) ?? 10;
+
+        $get_data = $this->book_request->filter_book_request($filters, $page);
+
+        $book_request   = $get_data['book_request'];
+        $total          = $get_data['total'];
+        $pagination     = $this->book_request->make_pagination(site_url('book_request'), 2, $total);
+        $pages          = $this->pages;
+        $main_view      = 'book_request/index_book_request';
+        $this->load->view('template', compact('pages', 'main_view', 'book_request', 'pagination', 'total'));
+        endif;
     }
 
     public function view_book_request_add(){
@@ -25,7 +43,7 @@ class Book_request extends MY_Controller
         if($this->check_level_gudang() == TRUE):
         $pages       = $this->pages;
         $main_view   = 'book_request/book_request_edit';
-        $rData       = $this->Book_request_model->fetch_book_request_id($book_request_id);
+        $rData       = $this->book_request->fetch_book_request_id($book_request_id);
         if(empty($rData) == FALSE):
         $this->load->view('template', compact('pages', 'main_view', 'rData'));
         else:
@@ -39,9 +57,9 @@ class Book_request extends MY_Controller
         if($this->check_level_gudang_pemasaran() == TRUE):
         $pages       = $this->pages;
         $main_view   = 'book_request/book_request_view';
-        $rData       = $this->Book_request_model->fetch_book_request_id($book_request_id);
+        $rData       = $this->book_request->fetch_book_request_id($book_request_id);
         if(empty($rData) == FALSE):
-        $stock       = $this->Book_request_model->fetch_book_stock_id($rData->book_id);
+        $stock       = $this->book_request->fetch_book_stock_id($rData->book_id);
         $this->load->view('template', compact('pages', 'main_view', 'rData', 'stock'));
         else:
         $this->session->set_flashdata('error','Halaman tidak ditemukan.');
@@ -62,7 +80,7 @@ class Book_request extends MY_Controller
             $this->session->set_flashdata('error',validation_errors());
             redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }else{
-            $check  =   $this->Book_request_model->add_book_request();
+            $check  =   $this->book_request->add_book_request();
             if($check   ==  TRUE){
                 $this->session->set_flashdata('success','Berhasil menambahkan draft permintaan buku.');
                 redirect('book_request');
@@ -86,7 +104,7 @@ class Book_request extends MY_Controller
             $this->session->set_flashdata('error',validation_errors());
             redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }else{
-            $check  =   $this->Book_request_model->edit_book_request($book_request_id);
+            $check  =   $this->book_request->edit_book_request($book_request_id);
             if($check   ==  TRUE){
                 $this->session->set_flashdata('success','Berhasil mengubah data draft permintaan buku.');
                 redirect('book_request/view_book_request_view/'.$book_request_id);
@@ -100,7 +118,7 @@ class Book_request extends MY_Controller
 
     public function delete_book_request($book_request_id){
         if($this->check_level_gudang() == TRUE):
-        $check  = $this->Book_request_model->delete_book_request($book_request_id);
+        $check  = $this->book_request->delete_book_request($book_request_id);
         if($check   ==  TRUE){
             $this->session->set_flashdata('success','Berhasil menghapus data draft permintaan buku.');
             redirect('book_request');
@@ -121,7 +139,7 @@ class Book_request extends MY_Controller
             $this->session->set_flashdata('error',validation_errors());
             redirect($_SERVER['HTTP_REFERER'].'#section_request', 'refresh');
         }else{
-            $check  =   $this->Book_request_model->action_request($book_request_id);
+            $check  =   $this->book_request->action_request($book_request_id);
             if($check   ==  TRUE){
                 $this->session->set_flashdata('success','Berhasil melakukan aksi pada progress permintaan.');
                 redirect($_SERVER['HTTP_REFERER'].'#section_request', 'refresh');
@@ -145,7 +163,7 @@ class Book_request extends MY_Controller
             $this->session->set_flashdata('error',validation_errors());
             redirect($_SERVER['HTTP_REFERER'].'#section_final', 'refresh');
         }else{
-            $check  =   $this->Book_request_model->action_final($book_request_id);
+            $check  =   $this->book_request->action_final($book_request_id);
             if($check   ==  TRUE){
                 $this->session->set_flashdata('success','Permintaan buku berhasil di finalisasi.');
                 redirect($_SERVER['HTTP_REFERER'].'#section_final', 'refresh');
@@ -186,7 +204,7 @@ class Book_request extends MY_Controller
 
     public function ac_book_id(){
         $postData   =   $this->input->post();
-        $data       =   $this->Book_request_model->fetch_book_id($postData);
+        $data       =   $this->book_request->fetch_book_id($postData);
 
         echo json_encode($data);
     }

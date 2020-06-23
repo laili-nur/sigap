@@ -6,11 +6,28 @@ class Logistic extends MY_Controller
     {
         parent::__construct();
         $this->pages = 'logistic';
-        $this->load->model('logistic/Logistic_model');
+        $this->load->model('logistic_model', 'logistic');
     }
 
-    public function index(){
+    public function index($page = NULL){
+        if($this->check_level() == TRUE):
+        // all filter
+        $filters = [
+            'keyword'   => $this->input->get('keyword', true)
+        ];
 
+        // custom per page
+        $this->logistic->per_page = $this->input->get('per_page', true) ?? 10;
+
+        $get_data = $this->logistic->filter_logistic($filters, $page);
+
+        $logistic   = $get_data['logistic'];
+        $total      = $get_data['total'];
+        $pagination = $this->logistic->make_pagination(site_url('logistic'), 2, $total);
+        $pages      = $this->pages;
+        $main_view  = 'logistic/index_logistic';
+        $this->load->view('template', compact('pages', 'main_view', 'logistic', 'pagination', 'total'));
+        endif;
     }
 
     public function view_logistic_add(){
@@ -25,7 +42,7 @@ class Logistic extends MY_Controller
         if($this->check_level_gudang() == TRUE):
         $pages       = $this->pages;
         $main_view   = 'logistic/logistic_edit';
-        $lData       = $this->Logistic_model->fetch_logistic_id($logistic_id);
+        $lData       = $this->logistic->fetch_logistic_id($logistic_id);
         if(empty($lData) == FALSE):
         $this->load->view('template', compact('pages', 'main_view', 'lData'));
         else:
@@ -36,11 +53,11 @@ class Logistic extends MY_Controller
     }
 
     public function view_logistic_view($logistic_id){
-        if($this->check_level_gudang_keuangan() == TRUE):
+        if($this->check_level() == TRUE):
         $pages          = $this->pages;
         $main_view      = 'logistic/logistic_view';
-        $lData          = $this->Logistic_model->fetch_logistic_id($logistic_id);
-        $get_stock      = $this->Logistic_model->fetch_stock_by_id($logistic_id);
+        $lData          = $this->logistic->fetch_logistic_id($logistic_id);
+        $get_stock      = $this->logistic->fetch_stock_by_id($logistic_id);
         $stock_history  = $get_stock['stock_history'];
         $stock_last     = $get_stock['stock_last'];
         if(empty($lData) == FALSE):
@@ -64,7 +81,7 @@ class Logistic extends MY_Controller
             $this->session->set_flashdata('error',validation_errors());
             redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }else{
-            $check = $this->Logistic_model->add_logistic();
+            $check = $this->logistic->add_logistic();
             if($check   ==  TRUE){
                 $this->session->set_flashdata('success','Logistik berhasil ditambah.');
                 redirect('logistic');
@@ -88,7 +105,7 @@ class Logistic extends MY_Controller
             $this->session->set_flashdata('error',validation_errors());
             redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }else{
-            $check = $this->Logistic_model->edit_logistic($logistic_id);
+            $check = $this->logistic->edit_logistic($logistic_id);
             if($check   ==  TRUE){
                 $this->session->set_flashdata('success','Order cetak berhasil diubah.');
                 redirect('logistic/view_logistic_view/'.$logistic_id);
@@ -102,7 +119,7 @@ class Logistic extends MY_Controller
 
     public function delete_logistic($logistic_id){
         if($this->check_level_gudang() == TRUE):
-        $check = $this->Logistic_model->delete_logistic($logistic_id);
+        $check = $this->logistic->delete_logistic($logistic_id);
         if($check   ==  TRUE){
             $this->session->set_flashdata('success','Logistik berhasil di hapus.');
             redirect('logistic');
@@ -125,7 +142,7 @@ class Logistic extends MY_Controller
             $this->session->set_flashdata('error',validation_errors());
             redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }else{
-            $check  =   $this->Logistic_model->add_logistic_stock();
+            $check  =   $this->logistic->add_logistic_stock();
             if($check   ==  TRUE){
                 $this->session->set_flashdata('success','Berhasil mengubah stok.');
                 redirect($_SERVER['HTTP_REFERER'], 'refresh');
@@ -139,7 +156,7 @@ class Logistic extends MY_Controller
 
     public function delete_logistic_stock($logistic_stock_id){
         if($this->check_level_gudang() == TRUE):
-        $isDeleted  = $this->Book_model->delete_logistic_stock($logistic_stock_id);
+        $isDeleted  = $this->logistic->delete_logistic_stock($logistic_stock_id);
         if($isDeleted   ==  TRUE){
             $this->session->set_flashdata('success','Berhasil menghapus data stok logistik.');
             redirect($_SERVER['HTTP_REFERER'], 'refresh');
@@ -150,12 +167,12 @@ class Logistic extends MY_Controller
         endif;
     }
     
-    public function check_level_gudang_keuangan(){
-        if($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_gudang' || $_SESSION['level'] == 'admin_keuangan'){
+    public function check_level(){
+        if($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_gudang' || $_SESSION['level'] == 'admin_keuangan' || $_SESSION['level'] == 'admin_penerbitan'){
             return TRUE;
         }else{
-            $this->session->set_flashdata('error','Hanya admin gudang, admin keuangan, dan superadmin yang dapat mengakses.');
-            redirect($_SERVER['HTTP_REFERER'], 'refresh');
+            $this->session->set_flashdata('error','Hanya admin gudang, admin keuangan, admin penerbitan dan superadmin yang dapat mengakses.');
+            redirect(base_url(), 'refresh');
         }
     }
 
@@ -164,16 +181,7 @@ class Logistic extends MY_Controller
             return TRUE;
         }else{
             $this->session->set_flashdata('error','Hanya admin gudang dan superadmin yang dapat mengakses.');
-            redirect($_SERVER['HTTP_REFERER'], 'refresh');
+            redirect(base_url(), 'refresh');
         }
     }
-
-    // public function check_level_keuangan(){
-    //     if($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_keuangan'){
-    //         return TRUE;
-    //     }else{
-    //         $this->session->set_flashdata('error','Hanya admin keuangan dan superadmin yang dapat mengakses.');
-    //         redirect($_SERVER['HTTP_REFERER'], 'refresh');
-    //     }
-    // }
 }

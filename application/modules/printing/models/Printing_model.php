@@ -2,6 +2,8 @@
 
 class Printing_model extends MY_Model
 {
+    public $per_page = 10;
+
     public function add_printing(){
         $add = [
             'book_id'           => $this->input->post('book_id'),
@@ -160,25 +162,6 @@ class Printing_model extends MY_Model
         return $response;
     }
 
-    public function fetch_all_data(){
-        return $this->db
-        ->select('print_id, a.book_id as a_book_id, book_title, print_edition, print_type, print_total, print_priority, entry_date, print_category, preprint_status, print_status, binding_status, final_status, printing_flag')
-        ->from('printing a')
-        ->join('book b', 'b.book_id = a.book_id', 'left')
-        ->order_by('book_title', 'ASC')
-        ->get();
-    }//result() untuk fetch, num_rows() untuk total
-
-    public function fetch_jilid_data(){
-        return $this->db
-        ->select('print_id, a.book_id as a_book_id, book_title, print_edition, print_type, print_total, print_priority, entry_date, print_category, preprint_status, print_status, binding_status, final_status, printing_flag')
-        ->from('printing a')
-        ->join('book b', 'b.book_id = a.book_id', 'left')
-        ->order_by('book_title', 'ASC')
-        ->where('jilid_user_id',$_SESSION['user_id'])
-        ->get();
-    }//result() untuk fetch, num_rows() untuk total
-
     public function start_progress($print_id,$progress_name){
         $set    =   [
             $progress_name.'_status'        =>  1,
@@ -291,216 +274,66 @@ class Printing_model extends MY_Model
         return TRUE;
     }
 
-    // page > data per halman
-    // progress(is_preprint,is_print,is_binding,is_final,printing_flag(belum,tolak,selesai))
-    // print_category > cetak baru, cetak ulang
-    // print_type > POD, Offset
-    // print_priority > rendah, sedang, tinggi
-    // keyword
-    // pake like or_like
-
     public function filter_printing($filters, $page){
-        $printing   = $this->select(['printing.*','book.book_title'])
-                    ->join('book')
-                    ->when('printing.progress_status', $filters['status'])
-                    ->when('printing.print_category', $filters['category'])
-                    ->when('printing.print_type', $filters['type'])
-                    ->when('printing.print_priority', $filters['priority'])
-                    ->when('book.book_title', $filters['keyword'])
-                    ->when('printing.print_edition', $filters['keyword'])
-                    ->when('printing.print_total', $filters['keyword'])
-                    ->when('printing.paper_content', $filters['keyword'])
-                    ->when('printing.paper_cover', $filters['keyword'])
-                    ->when('printing.paper_size', $filters['keyword'])
-                    ->when('printing.order_number', $filters['keyword'])
-                    ->order_by('book.book_title','ASC')
-                    ->order_by('printing.print_priority','DESC')
-                    ->paginate($page)
-                    ->get_all();
-        
-        $total      = $this->select(['printing.*','book.book_title'])
-                    ->join('book')
-                    ->when('printing.progress_status', $filters['status'])
-                    ->when('printing.print_category', $filters['category'])
-                    ->when('printing.print_type', $filters['type'])
-                    ->when('printing.print_priority', $filters['priority'])
-                    ->when('book.book_title', $filters['keyword'])
-                    ->when('printing.print_edition', $filters['keyword'])
-                    ->when('printing.print_total', $filters['keyword'])
-                    ->when('printing.paper_content', $filters['keyword'])
-                    ->when('printing.paper_cover', $filters['keyword'])
-                    ->when('printing.paper_size', $filters['keyword'])
-                    ->when('printing.order_number', $filters['keyword'])
-                    ->count();
-                    
+        $printing = $this->select(['printing.print_id','printing.book_id','book.book_title','printing.print_edition','printing.print_category','printing.print_type','printing.print_total','printing.print_priority','printing.entry_date','printing.progress_status','printing.order_number'])
+        ->when('keyword', $filters['keyword'])//book_title dan print edition
+        ->when('print_category',$filters['print_category'])
+        ->when('print_type',$filters['print_type'])
+        ->when('print_priority',$filters['print_priority'])
+        ->when('progress_status',$filters['progress_status'])
+        ->join_table('book','printing','book')
+        ->order_by('print_priority','DESC')
+        ->order_by('UNIX_TIMESTAMP(entry_date)','DESC')
+        ->order_by('book_title')
+        ->paginate($page)
+        ->get_all();
+
+        $total = $this->select(['printing.print_id','printing.book_id','book.book_title','printing.print_edition','printing.print_category','printing.print_type','printing.print_total','printing.print_priority','printing.entry_date','printing.progress_status','printing.order_number'])
+        ->when('keyword', $filters['keyword'])//book_title dan print edition
+        ->when('print_category',$filters['print_category'])
+        ->when('print_type',$filters['print_type'])
+        ->when('print_priority',$filters['print_priority'])
+        ->when('progress_status',$filters['progress_status'])
+        ->join_table('book','printing','book')
+        ->order_by('print_priority','DESC')
+        ->order_by('UNIX_TIMESTAMP(entry_date)','DESC')
+        ->order_by('book_title')
+        ->paginate($page)
+        ->count();
+
         return [
             'printing'  => $printing,
-            'total'     => $printing
+            'total'     => $total,
         ];
     }
 
     public function when($params, $data)
     {
         // jika data null, maka skip
-        if ($data) {
-            if ($params == 'reprint') {
-                $this->where('is_reprint', $data);
-            }
-
-            if ($params == 'category') {
-                $this->where('draft.category_id', $data);
-            }
-
-            if ($params == 'progress') {
-                $this->resolve_progress($data);
-            }
-
-            if ($params == 'keyword') {
+        if ($data != '') {
+            if($params == 'keyword'){
                 $this->group_start();
-                $this->like('draft_title', $data);
-                if ($this->session->userdata('level') != 'reviewer') {
-                    $this->or_like('author_name', $data);
-                }
+                $this->or_like('book_title',$data);
+                $this->or_like('print_edition',$data);
+                $this->or_like('order_number',$data);
                 $this->group_end();
             }
 
-            if ($params == 'status') {
-                if ($this->session->userdata('level') == 'editor') {
-                    if ($data == 'y') {
-                        $this->where_not('edit_end_date', null);
-                    } elseif ($data == 'n') {
-                        $this->where('edit_end_date', null);
-                    } elseif ($data == 'approve') {
-                        $this->group_start()
-                            ->where('is_edit', 'y')
-                            ->where_not('draft_status', '99')
-                            ->group_end();
-                    } elseif ($data == 'reject') {
-                        $this->group_start()
-                            ->where('is_edit', 'n')
-                            ->where('draft_status', '99')
-                            ->group_end();
-                    }
-                } else if ($this->session->userdata('level') == 'layouter') {
-                    if ($data == 'y') {
-                        $this->where_not('layout_end_date', null);
-                    } elseif ($data == 'n') {
-                        $this->where('layout_end_date', null);
-                    } elseif ($data == 'approve') {
-                        $this->group_start()
-                            ->where('is_layout', 'y')
-                            ->where_not('draft_status', '99')
-                            ->group_end();
-                    } elseif ($data == 'reject') {
-                        $this->group_start()
-                            ->where('is_layout', 'n')
-                            ->where('draft_status', '99')
-                            ->group_end();
-                    }
-                }
+            if($params == 'print_category'){
+                $this->where('print_category', $data);
             }
-        }
-        return $this;
-    }
 
-    public function resolve_progress($progress)
-    {
-        switch ($progress) {
-            case 'desk_screening':
-                $this->group_start()
-                    ->where('draft_status', 0)
-                    ->or_where('draft_status', 1)
-                    ->group_end();
-                break;
+            if($params == 'print_type'){
+                $this->where('print_type', $data);
+            }
 
-            case 'review':
-                $this->where('is_review', 'n')
-                    ->where('draft_status', '4');
-                break;
+            if($params == 'print_priority'){
+                $this->where('print_priority', $data);
+            }
 
-            case 'edit':
-                $this->where('is_review', 'y')
-                    ->where('is_edit', 'n')
-                    ->where_not('draft_status', '99');
-                break;
-
-            case 'layout':
-                $this->where('is_review', 'y')
-                    ->where('is_edit', 'y')
-                    ->where('is_layout', 'n')
-                    ->where_not('draft_status', '99');
-                break;
-
-            case 'proofread':
-                $this->where('is_review', 'y')
-                    ->where('is_edit', 'y')
-                    ->where('is_layout', 'y')
-                    ->group_start()
-                    ->where('is_proofread', 'n')
-                    ->or_where('is_proofread', 'y')
-                    ->group_end()
-                    ->group_start()
-                    ->where_not('draft_status', '99')
-                    ->where_not('draft_status', '14')
-                    ->group_end();
-                break;
-
-            case 'reject':
-                $this->group_start()
-                    ->where('draft_status', '99')
-                    ->or_where('draft_status', '2')
-                    ->group_end();
-                break;
-
-            case 'approve':
-                $this->group_start()
-                    ->where_not('draft_status', '99')
-                    ->where_not('draft_status', '2')
-                    ->group_end();
-                break;
-
-                //     // edit progress
-                // case 'edit_approve':
-                //     $this->group_start()
-                //         ->where('is_edit', 'y')
-                //         ->where_not('draft_status', '99')
-                //         ->group_end();
-                //     break;
-
-                // case 'edit_reject':
-                //     $this->group_start()
-                //         ->where('is_edit', 'n')
-                //         ->where('draft_status', '99')
-                //         ->group_end();
-                //     break;
-
-                // layout progress
-            case 'layout_approve':
-                $this->group_start()
-                    ->where('is_layout', 'y')
-                    ->where_not('draft_status', '99')
-                    ->group_end();
-                break;
-
-            case 'layout_reject':
-                $this->group_start()
-                    ->where('is_layout', 'n')
-                    ->where('draft_status', '99')
-                    ->group_end();
-                break;
-
-            case 'final':
-                $this->where('is_review', 'y')
-                    ->where('is_edit', 'y')
-                    ->where('is_layout', 'y')
-                    ->where('is_proofread', 'y')
-                    ->where('is_reprint', 'n')
-                    ->where('draft_status', '14');
-                break;
-
-            default:
-                # code...
-                break;
+            if($params == 'progress_status'){
+                $this->where('progress_status', $data);
+            }
         }
         return $this;
     }

@@ -2,6 +2,8 @@
 
 class Logistic_model extends MY_Model
 {
+    public $per_page = 10;
+
     public function add_logistic(){
         $add = [
             'name'          => $this->input->post('name'),
@@ -73,5 +75,41 @@ class Logistic_model extends MY_Model
     public function delete_logistic_stock($logistic_stock_id){
         $this->db->where('logistic_stock_id',$logistic_stock_id)->delete('logistic_stock');
         return TRUE;
+    }
+
+    public function filter_logistic($filters, $page){
+        $logistic = $this->select(['logistic_id','name','type','category'])
+        ->when('keyword',$filters['keyword'])
+        ->order_by('name')
+        ->order_by('UNIX_TIMESTAMP(date_created)','ASC')
+        ->paginate($page)
+        ->get_all();
+
+        $total = $this->select(['logistic_id','name','type','category'])
+        ->when('keyword',$filters['keyword'])
+        ->order_by('name')
+        ->order_by('UNIX_TIMESTAMP(date_created)','ASC')
+        ->paginate($page)
+        ->count();
+
+        return [
+            'logistic'  => $logistic,
+            'total'     => $total,
+        ];
+    }
+
+    public function when($params, $data)
+    {
+        // jika data null, maka skip
+        if ($data != '') {
+            if($params == 'keyword'){
+                $this->group_start();
+                $this->or_like('name',$data);
+                $this->or_like('type',$data);
+                $this->or_like('category',$data);
+                $this->group_end();
+            }
+        }
+        return $this;
     }
 }

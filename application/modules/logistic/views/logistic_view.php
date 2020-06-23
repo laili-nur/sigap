@@ -76,7 +76,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <?php if($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_gudang'): ?>
+                    <?php if($level == 'superadmin' || $level == 'admin_gudang'): ?>
                     <hr>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered mb-0">
@@ -124,14 +124,14 @@
     id="stock-data"
 >
     <div id="reload-stock">
-        <?php if($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_penerbitan' || $_SESSION['level'] == 'admin_percetakan' || $_SESSION['level'] == 'admin_gudang' || $_SESSION['level'] == 'admin_keuangan'): ?>
+        <?php if($level == 'superadmin' || $level == 'admin_penerbitan' || $level == 'admin_percetakan' || $level == 'admin_gudang' || $level == 'admin_keuangan'): ?>
             <?php $i = 1; ?>
             <div class="row">
                 <div class="col-6 text-left">
                     <strong>Stok Logistik</strong>
                 </div>
                 <div class="col-6 text-right">
-                    <?php if($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_gudang'): ?>
+                    <?php if($level == 'superadmin' || $level == 'admin_gudang'): ?>
                     <button
                         class="btn btn-primary btn-sm "
                         title="Ubah Stok"
@@ -258,7 +258,7 @@
                             <th scope="col">User Input</th>
                             <th scope="col">Tanggal Input</th>
                             <th scope="col">Catatan</th>
-                            <?php if($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_gudang'): ?>
+                            <?php if($level == 'superadmin' || $level == 'admin_gudang'): ?>
                             <th scope="col"></th>
                             <?php endif; ?>
                         </tr>
@@ -280,7 +280,7 @@
                                 <td><?= $history->input_user; ?></td>
                                 <td><?= date('d F Y H:i:s',strtotime($history->input_date)); ?></td>
                                 <td><?= $history->input_notes; ?></td>
-                                <?php if($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_gudang'): ?>
+                                <?php if($level == 'superadmin' || $level == 'admin_gudang'): ?>
                                 <td>
                                     <button
                                         title="Delete"

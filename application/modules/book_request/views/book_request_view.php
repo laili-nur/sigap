@@ -195,7 +195,7 @@ if($rData->final_status == 0 && $rData->flag == 0){
 
 <!-- FINAL -->
 <?php
-    if($rData->request_status == 2 && $rData->flag == 2 && $rData->final_status == 1 && ($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_gudang')){
+    if($rData->request_status == 2 && $rData->flag == 2 && $rData->final_status == 1 && ($level == 'superadmin' || $level == 'admin_gudang')){
         $this->load->view('book_request/view/progress_final');
     }//load progres final ketika request sudah
     elseif($rData->request_status == 2 && $rData->flag == 2 && $rData->final_status == 2){

@@ -1,6 +1,8 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
 class Book_request_model extends MY_Model{
+    public $per_page = 10;
+
     public function add_book_request(){
         $add = [
             'book_id'           => $this->input->post('book_id'),
@@ -121,5 +123,49 @@ class Book_request_model extends MY_Model{
         }
 
         return $response;
+    }
+
+    public function filter_book_request($filters, $page){
+        $book_request = $this->select(['book_request_id','book_request.book_id','book_title','entry_date','order_number','total','status'])
+        ->when('keyword',$filters['keyword'])
+        ->when('status',$filters['status'])
+        ->join_table('book','book_request','book')
+        ->order_by('UNIX_TIMESTAMP(entry_date)','DESC')
+        ->order_by('book_title')
+        ->paginate($page)
+        ->get_all();
+
+        $total = $this->select(['book_request_id','book_request.book_id','book_title','entry_date','order_number','total','status'])
+        ->when('keyword',$filters['keyword'])
+        ->when('status',$filters['status'])
+        ->join_table('book','book_request','book')
+        ->order_by('UNIX_TIMESTAMP(entry_date)','DESC')
+        ->order_by('book_title')
+        ->paginate($page)
+        ->count();
+
+        return [
+            'book_request'  => $book_request,
+            'total'         => $total,
+        ];
+    }
+
+    public function when($params, $data)
+    {
+        // jika data null, maka skip
+        if ($data != '') {
+            if($params == 'keyword'){
+                $this->group_start();
+                $this->or_like('book_title',$data);
+                $this->or_like('order_number',$data);
+                $this->or_like('total',$data);
+                $this->group_end();
+            }
+
+            if($params == 'status'){
+                $this->where('status', $data);
+            }
+        }
+        return $this;
     }
 }
