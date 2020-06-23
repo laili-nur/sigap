@@ -1,3 +1,6 @@
+<?php
+$level              = check_level();
+?>
 <section
     id="section_final"
     class="card"

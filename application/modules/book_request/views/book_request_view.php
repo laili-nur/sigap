@@ -1,4 +1,6 @@
-
+<?php
+$level              = check_level();
+?>
 <!-- BREADCUMB,TITLE -->
 <header class="page-title-bar mb-3">
     <nav aria-label="breadcrumb">
