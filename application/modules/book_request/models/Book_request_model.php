@@ -141,7 +141,6 @@ class Book_request_model extends MY_Model{
         ->join_table('book','book_request','book')
         ->order_by('UNIX_TIMESTAMP(entry_date)','DESC')
         ->order_by('book_title')
-        ->paginate($page)
         ->count();
 
         return [

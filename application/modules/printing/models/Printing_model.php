@@ -298,7 +298,6 @@ class Printing_model extends MY_Model
         ->order_by('print_priority','DESC')
         ->order_by('UNIX_TIMESTAMP(entry_date)','DESC')
         ->order_by('book_title')
-        ->paginate($page)
         ->count();
 
         return [

@@ -89,7 +89,6 @@ class Logistic_model extends MY_Model
         ->when('keyword',$filters['keyword'])
         ->order_by('name')
         ->order_by('UNIX_TIMESTAMP(date_created)','ASC')
-        ->paginate($page)
         ->count();
 
         return [
