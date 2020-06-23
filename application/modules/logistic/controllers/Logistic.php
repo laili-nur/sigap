@@ -37,11 +37,14 @@ class Logistic extends MY_Controller
 
     public function view_logistic_view($logistic_id){
         if($this->check_level_gudang_keuangan() == TRUE):
-        $pages       = $this->pages;
-        $main_view   = 'logistic/logistic_view';
-        $lData       = $this->Logistic_model->fetch_logistic_id($logistic_id);
+        $pages          = $this->pages;
+        $main_view      = 'logistic/logistic_view';
+        $lData          = $this->Logistic_model->fetch_logistic_id($logistic_id);
+        $get_stock      = $this->Logistic_model->fetch_stock_by_id($logistic_id);
+        $stock_history  = $get_stock['stock_history'];
+        $stock_last     = $get_stock['stock_last'];
         if(empty($lData) == FALSE):
-        $this->load->view('template', compact('pages', 'main_view', 'lData'));
+        $this->load->view('template', compact('pages', 'main_view', 'lData','stock_history','stock_last'));
         else:
         $this->session->set_flashdata('error','Halaman tidak ditemukan.');
         redirect(base_url(), 'refresh');
@@ -106,6 +109,43 @@ class Logistic extends MY_Controller
         }else{
             $this->session->set_flashdata('error',print_r($this->db->error()));
             redirect('logistic');
+        }
+        endif;
+    }
+
+    public function add_logistic_stock(){
+        if($this->check_level_gudang() == TRUE):
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('stock_warehouse', 'Stok Gudang', 'required|max_length[10]');
+        $this->form_validation->set_rules('stock_production', 'Stok Produksi', 'required|max_length[10]');
+        $this->form_validation->set_rules('stock_other', 'Stok Lainnya', 'max_length[10]');
+        $this->form_validation->set_rules('input_notes', 'Catatan', 'required|max_length[256]');
+
+        if($this->form_validation->run() == FALSE){
+            $this->session->set_flashdata('error',validation_errors());
+            redirect($_SERVER['HTTP_REFERER'], 'refresh');
+        }else{
+            $check  =   $this->Logistic_model->add_logistic_stock();
+            if($check   ==  TRUE){
+                $this->session->set_flashdata('success','Berhasil mengubah stok.');
+                redirect($_SERVER['HTTP_REFERER'], 'refresh');
+            }else{
+                $this->session->set_flashdata('error',$this->db->error());
+                redirect($_SERVER['HTTP_REFERER'], 'refresh');
+            }
+        }
+        endif;
+    }
+
+    public function delete_logistic_stock($logistic_stock_id){
+        if($this->check_level_gudang() == TRUE):
+        $isDeleted  = $this->Book_model->delete_logistic_stock($logistic_stock_id);
+        if($isDeleted   ==  TRUE){
+            $this->session->set_flashdata('success','Berhasil menghapus data stok logistik.');
+            redirect($_SERVER['HTTP_REFERER'], 'refresh');
+        }else{
+            $this->session->set_flashdata('error',print_r($this->db->error()));
+            redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }
         endif;
     }

@@ -193,7 +193,7 @@
                     class="tab-pane fade"
                     id="stock-data"
                 >
-                    <div id="reload-author">
+                    <div id="reload-stock">
                         <?php if($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_penerbitan' || $_SESSION['level'] == 'admin_percetakan' || $_SESSION['level'] == 'admin_gudang' || $_SESSION['level'] == 'admin_pemasaran'): ?>
                             <?php $i = 1; ?>
                             <div class="row">
@@ -226,7 +226,7 @@
                                         >
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title">Aksi pracetak</h5>
+                                                    <h5 class="modal-title">Tambah Stok</h5>
                                                     <button
                                                         type="button"
                                                         class="close"

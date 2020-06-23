@@ -83,7 +83,7 @@
                             <tbody>
                                 <tr>
                                     <td width="200px"> Tanggal di buat </td>
-                                    <td><strong><?= $lData->date_created; ?></strong> </td>
+                                    <td><?= date('d F Y H:i:s',strtotime($lData->date_created)); ?></td>
                                 </tr>
                                 <tr>
                                     <td width="200px"> User </td>
@@ -98,7 +98,7 @@
                             <tbody>
                                 <tr>
                                     <td width="200px"> Tanggal di edit </td>
-                                    <td><strong><?= $lData->date_edited; ?></strong> </td>
+                                    <td><?= date('d F Y H:i:s',strtotime($lData->date_edited)); ?></td>
                                 </tr>
                                 <tr>
                                     <td width="200px"> User </td>
@@ -123,12 +123,12 @@
     class="tab-pane fade"
     id="stock-data"
 >
-    <div id="reload-author">
-        <?php if($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_penerbitan' || $_SESSION['level'] == 'admin_percetakan' || $_SESSION['level'] == 'admin_gudang' || $_SESSION['level'] == 'admin_pemasaran'): ?>
+    <div id="reload-stock">
+        <?php if($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_penerbitan' || $_SESSION['level'] == 'admin_percetakan' || $_SESSION['level'] == 'admin_gudang' || $_SESSION['level'] == 'admin_keuangan'): ?>
             <?php $i = 1; ?>
             <div class="row">
                 <div class="col-6 text-left">
-                    <strong>Stok Buku</strong>
+                    <strong>Stok Logistik</strong>
                 </div>
                 <div class="col-6 text-right">
                     <?php if($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_gudang'): ?>
@@ -156,7 +156,7 @@
                         >
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Aksi pracetak</h5>
+                                    <h5 class="modal-title">Tambah Stok</h5>
                                     <button
                                         type="button"
                                         class="close"
@@ -167,32 +167,32 @@
                                     </button>
                                 </div>
                                 <div class="modal-body text-left">
-                                    <div class="alert alert-warning"><strong>PERHATIAN!</strong> Fitur ini berfungsi untuk mengubah stok buku.</div>
-                                <form action="<?= base_url('book/add_book_stock');?>" method="post">
+                                    <div class="alert alert-warning"><strong>PERHATIAN!</strong> Fitur ini berfungsi untuk mengubah stok logistik.</div>
+                                <form action="<?= base_url('logistic/add_logistic_stock');?>" method="post">
                                     <div class="form-group">
-                                        <label class="font-weight-bold">Judul Buku</label>
-                                        <input type="text" class="form-control" value="<?= $input->book_title; ?>" disabled/>
-                                        <input type="hidden" class="form-control" id="book_id" name="book_id" value="<?= $input->book_id;?>"/>
+                                        <label class="font-weight-bold">Nama Logistik</label>
+                                        <input type="text" class="form-control" value="<?= $lData->name; ?>" disabled/>
+                                        <input type="hidden" class="form-control" id="logistic_id" name="logistic_id" value="<?= $lData->logistic_id;?>"/>
                                     </div>
                                     <div class="form-group">
-                                        <label class="font-weight-bold" for="stock_in_warehouse">Stok dalam gudang</label>
-                                        <input type="number" class="form-control" name="stock_in_warehouse" id="stock_in_warehouse" value="<td><?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_in_warehouse;}else{echo "-";} ?></td>"/>
+                                        <label class="font-weight-bold" for="stock_warehouse">Stok Gudang</label>
+                                        <input type="number" class="form-control" name="stock_warehouse" id="stock_warehouse" value="<td><?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_warehouse;}else{echo "-";} ?></td>"/>
                                     </div>
                                     <div class="form-group">
-                                        <label class="font-weight-bold" for="stock_out_warehouse">Stok luar gudang</label>
-                                        <input type="number" class="form-control" name="stock_out_warehouse" id="stock_out_warehouse" value="<?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_out_warehouse;}else{echo "-";} ?>"/>
+                                        <label class="font-weight-bold" for="stock_production">Stok Produksi</label>
+                                        <input type="number" class="form-control" name="stock_production" id="stock_production" value="<?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_production;}else{echo "-";} ?>"/>
                                     </div>
                                     <div class="form-group">
-                                        <label class="font-weight-bold" for="stock_pemasaran">Stok pemasaran</label>
-                                        <input type="number" class="form-control" name="stock_marketing" id="stock_marketing" value="<?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_marketing;}else{echo "-";} ?>"/>
+                                        <label class="font-weight-bold" for="stock_other">Stok Lainnya</label>
+                                        <input type="number" class="form-control" name="stock_other" id="stock_other" value="<?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_other;}else{echo "-";} ?>"/>
                                     </div>
                                     <div class="form-group">
-                                        <label class="font-weight-bold" for="stock_input_notes">Catatan</label>
+                                        <label class="font-weight-bold" for="input_notes">Catatan</label>
                                         <textarea
                                             rows="6"
                                             class="form-control summernote-basic"
-                                            id="stock_input_notes"
-                                            name="stock_input_notes"
+                                            id="input_notes"
+                                            name="input_notes"
                                         ></textarea>
                                     </div>
                                 </div>
@@ -220,24 +220,24 @@
                 <table class="table table-striped table-bordered mb-0 nowrap">
                     <tbody>
                         <tr>
-                            <td width="160px">Judul Buku</td>
-                            <td><strong><?= $input->book_title; ?></strong></td>
+                            <td width="160px">Nama Logistik</td>
+                            <td><strong><?= $lData->name; ?></strong></td>
                         </tr>
                         <tr>
-                            <td width="160px">Stok Dalam gudang</td>
-                            <td><?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_in_warehouse;}else{echo "-";} ?></td>
+                            <td width="160px">Stok Gudang</td>
+                            <td><?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_warehouse;}else{echo "-";} ?></td>
                         </tr>
                         <tr>
-                            <td width="160px">Stok Luar Gudang</td>
-                            <td><?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_out_warehouse;}else{echo "-";} ?></td>
+                            <td width="160px">Stok Produksi</td>
+                            <td><?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_production;}else{echo "-";} ?></td>
                         </tr>
                         <tr>
-                            <td width="160px">Stok Pemasaran</td>
-                            <td><?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_marketing;}else{echo "-";} ?></td>
+                            <td width="160px">Stok Lainnya</td>
+                            <td><?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_other;}else{echo "-";} ?></td>
                         </tr>
                         <tr>
                             <td width="160px">Perubahan Terakhir</td>
-                            <td><?php if(empty($stock_last) == FALSE){ echo date('d F Y H:i:s',strtotime($stock_last->stock_input_date));}else{echo "-";} ?></td>
+                            <td><?php if(empty($stock_last) == FALSE){ echo date('d F Y H:i:s',strtotime($stock_last->input_date));}else{echo "-";} ?></td>
                         </tr>
                     </tbody>
                 </table>
@@ -251,9 +251,9 @@
                     <thead>
                         <tr class="text-center">
                             <th scope="col">No</th>
-                            <th scope="col">Stok Dalam Gudang</th>
-                            <th scope="col">Stok Luar Gudang</th>
-                            <th scope="col">Stok Pemasaran</th>
+                            <th scope="col">Stok Gudang</th>
+                            <th scope="col">Stok Produksi</th>
+                            <th scope="col">Stok Lainnya</th>
                             <th scope="col">Tipe Input</th>
                             <th scope="col">User Input</th>
                             <th scope="col">Tanggal Input</th>
@@ -267,20 +267,19 @@
                         <?php foreach ($stock_history as $history) : ?>
                             <tr class="text-center">
                                 <td><?= $i++; ?></td>
-                                <td><?= $history->stock_in_warehouse; ?></td>
-                                <td><?= $history->stock_out_warehouse; ?></td>
-                                <td><?= $history->stock_marketing; ?></td>
+                                <td><?= $history->stock_warehouse; ?></td>
+                                <td><?= $history->stock_production; ?></td>
+                                <td><?= $history->stock_other; ?></td>
                                 <td>
                                     <?php
-                                        if($history->stock_input_type == 0){echo 'Input menggunakan fitur buku.';}
-                                        elseif($history->stock_input_type == 1){echo 'Input menggunakan fitur printing.';}
-                                        elseif($history->stock_input_type == 2){echo 'Input menggunakan fitur permintaan buku.';}
+                                        if($history->input_type == 0){echo 'Input menggunakan fitur logistik.';}
+                                        elseif($history->input_type == 1){echo 'Input menggunakan fitur permintaan logistik.';}
                                         else{echo '';}
                                     ?>
                                 </td>
-                                <td><?= $history->stock_input_user; ?></td>
-                                <td><?= date('d F Y H:i:s',strtotime($history->stock_input_date)); ?></td>
-                                <td><?= $history->stock_input_notes; ?></td>
+                                <td><?= $history->input_user; ?></td>
+                                <td><?= date('d F Y H:i:s',strtotime($history->input_date)); ?></td>
+                                <td><?= $history->input_notes; ?></td>
                                 <?php if($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_gudang'): ?>
                                 <td>
                                     <button
@@ -288,7 +287,7 @@
                                         type="button"
                                         class="btn btn-sm btn-danger"
                                         data-toggle="modal"
-                                        data-target="#modal_delete_stock<?= $history->book_stock_id; ?>"
+                                        data-target="#modal_delete_stock<?= $history->logistic_stock_id; ?>"
                                     >
                                         <i class="fa fa-trash-alt"></i>
                                         <span class="sr-only">Delete</span>
@@ -296,10 +295,10 @@
                                     <!-- Modal Hapus -->
                                     <div
                                         class="modal modal-alert fade"
-                                        id="modal_delete_stock<?= $history->book_stock_id; ?>"
+                                        id="modal_delete_stock<?= $history->logistic_stock_id; ?>"
                                         tabindex="-1"
                                         role="dialog"
-                                        aria-labelledby="modal_delete_stock<?= $history->book_stock_id; ?>"
+                                        aria-labelledby="modal_delete_stock<?= $history->logistic_stock_id; ?>"
                                         aria-hidden="true"
                                     >
                                         <div
@@ -313,7 +312,7 @@
                                                         Hapus</h5>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p>Apakah anda yakin akan menghapus data stok buku dari buku <span class="font-weight-bold"><?= $input->book_title; ?></span> ?</p>
+                                                    <p>Apakah anda yakin akan menghapus data stok logistik dari <span class="font-weight-bold"><?= $lData->name; ?></span> ?</p>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button
@@ -322,7 +321,7 @@
                                                         data-dismiss="modal"
                                                     >Close</button>
                                                     <a
-                                                        href="<?= base_url('book/delete_book_stock/'.$history->book_stock_id); ?>"
+                                                        href="<?= base_url('logistic/delete_logistic_stock/'.$history->logistic_stock_id); ?>"
                                                         type="button"
                                                         class="btn btn-danger"
                                                     >
@@ -343,7 +342,7 @@
             <?php endif; ?>
             <!-- Log perubahan Stok -->
             <?php else : ?>
-            <p>Data hanya dapat dilihat oleh Superadmin, Admin Penerbitan, Admin Percetakan, Admin Gudang, dan Admin Pemasaran</p>
+            <p>Data hanya dapat dilihat oleh Superadmin, Admin Penerbitan, Admin Percetakan, Admin Gudang, dan Admin Keuangan.</p>
             <?php endif; ?>
     </div>
 </div>
