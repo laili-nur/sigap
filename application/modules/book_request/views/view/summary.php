@@ -18,7 +18,7 @@ $level              = check_level();
         <?php else: ?>
         <div class="alert alert-danger">
             Permintaan Buku telah ditolak, ajukan kembali permintaan buku.
-            <br><span><a href="<?= base_url('book_request/view_book_request_add');?>" target="_blank"><i class="fa fa-external-link-alt"></i> Tambah Permintaan Buku Baru</a></span>
+            <br><span><a href="<?= base_url('book_request/add');?>" target="_blank"><i class="fa fa-external-link-alt"></i> Tambah Permintaan Buku Baru</a></span>
         </div>
         <?php endif;?>
         <div

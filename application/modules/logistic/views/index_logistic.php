@@ -23,7 +23,7 @@ $i                  = isset($page) ? $page * $per_page - $per_page : 0;
             <span class="badge badge-info">Total : <?= $total; ?></span>
         </div>
         <a
-            href="<?= base_url("$pages/view_logistic_add"); ?>"
+            href="<?= base_url("$pages/add"); ?>"
             class="btn btn-primary btn-sm"
         ><i class="fa fa-plus fa-fw"></i> Tambah</a>
     </div>
@@ -97,7 +97,7 @@ $i                  = isset($page) ? $page * $per_page - $per_page : 0;
                                         <td class="align-middle pl-4"><?= ++$i; ?></td>
                                         <td class="text-left align-middle">
                                             <a
-                                                href="<?= base_url('logistic/view_logistic_view/' . $lData->logistic_id . ''); ?>"
+                                                href="<?= base_url('logistic/view/' . $lData->logistic_id . ''); ?>"
                                                 class="font-weight-bold"
                                             >
                                                 <?= highlight_keyword($lData->name, $keyword); ?>
@@ -112,7 +112,7 @@ $i                  = isset($page) ? $page * $per_page - $per_page : 0;
                                         <?php if($level == 'superadmin' || $level == 'admin_gudang'): ?>
                                         <td class="align-middle">
                                             <a
-                                                href="<?= base_url('logistic/view_logistic_edit/'.$lData->logistic_id); ?>"
+                                                href="<?= base_url('logistic/edit/'.$lData->logistic_id); ?>"
                                                 class="btn btn-sm btn-secondary"
                                             >
                                                 <i class="fa fa-pencil-alt"></i>

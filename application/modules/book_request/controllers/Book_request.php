@@ -31,7 +31,7 @@ class Book_request extends MY_Controller
         endif;
     }
 
-    public function view_book_request_add(){
+    public function add(){
         if($this->check_level_gudang_pemasaran() == TRUE):
         $pages       = $this->pages;
         $main_view   = 'book_request/book_request_add';
@@ -39,7 +39,7 @@ class Book_request extends MY_Controller
         endif;
     }
 
-    public function view_book_request_edit($book_request_id){
+    public function edit($book_request_id){
         if($this->check_level_gudang() == TRUE):
         $pages       = $this->pages;
         $main_view   = 'book_request/book_request_edit';
@@ -53,7 +53,7 @@ class Book_request extends MY_Controller
         endif;
     }
 
-    public function view_book_request_view($book_request_id){
+    public function view($book_request_id){
         if($this->check_level_gudang_pemasaran() == TRUE):
         $pages       = $this->pages;
         $main_view   = 'book_request/book_request_view';
@@ -107,7 +107,7 @@ class Book_request extends MY_Controller
             $check  =   $this->book_request->edit_book_request($book_request_id);
             if($check   ==  TRUE){
                 $this->session->set_flashdata('success','Berhasil mengubah data draft permintaan buku.');
-                redirect('book_request/view_book_request_view/'.$book_request_id);
+                redirect('book_request/view/'.$book_request_id);
             }else{
                 $this->session->set_flashdata('error',print_r($this->db->error()));
                 redirect($_SERVER['HTTP_REFERER'], 'refresh');

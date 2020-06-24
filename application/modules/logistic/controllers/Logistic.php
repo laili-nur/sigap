@@ -30,7 +30,7 @@ class Logistic extends MY_Controller
         endif;
     }
 
-    public function view_logistic_add(){
+    public function add(){
         if($this->check_level_gudang() == TRUE):
         $pages       = $this->pages;
         $main_view   = 'logistic/logistic_add';
@@ -38,7 +38,7 @@ class Logistic extends MY_Controller
         endif;
     }
 
-    public function view_logistic_edit($logistic_id){
+    public function edit($logistic_id){
         if($this->check_level_gudang() == TRUE):
         $pages       = $this->pages;
         $main_view   = 'logistic/logistic_edit';
@@ -52,7 +52,7 @@ class Logistic extends MY_Controller
         endif;
     }
 
-    public function view_logistic_view($logistic_id){
+    public function view($logistic_id){
         if($this->check_level() == TRUE):
         $pages          = $this->pages;
         $main_view      = 'logistic/logistic_view';
@@ -108,7 +108,7 @@ class Logistic extends MY_Controller
             $check = $this->logistic->edit_logistic($logistic_id);
             if($check   ==  TRUE){
                 $this->session->set_flashdata('success','Order cetak berhasil diubah.');
-                redirect('logistic/view_logistic_view/'.$logistic_id);
+                redirect('logistic/view/'.$logistic_id);
             }else{
                 $this->session->set_flashdata('error',print_r($this->db->error()));
                 redirect($_SERVER['HTTP_REFERER'], 'refresh');

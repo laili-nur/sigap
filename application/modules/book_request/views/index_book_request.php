@@ -32,7 +32,7 @@ $status_options = [
             <span class="badge badge-info">Total : <?= $total; ?></span>
         </div>
         <a
-            href="<?= base_url("$pages/view_book_request_add"); ?>"
+            href="<?= base_url("$pages/add"); ?>"
             class="btn btn-primary btn-sm"
         ><i class="fa fa-plus fa-fw"></i> Tambah</a>
     </div>
@@ -116,7 +116,7 @@ $status_options = [
                                         <td class="align-middle pl-4"><?= ++$i; ?></td>
                                         <td class="text-left align-middle">
                                             <a
-                                                href="<?= base_url('book_request/view_book_request_view/' . $rData->book_request_id . ''); ?>"
+                                                href="<?= base_url('book_request/view/' . $rData->book_request_id . ''); ?>"
                                                 class="font-weight-bold"
                                             >
                                                 <?= highlight_keyword($rData->book_title, $keyword); ?>
@@ -142,7 +142,7 @@ $status_options = [
                                         </td>
                                         <td class="align-middle text-right">
                                             <a
-                                                href="<?= base_url('book_request/view_book_request_edit/'.$rData->book_request_id); ?>"
+                                                href="<?= base_url('book_request/edit/'.$rData->book_request_id); ?>"
                                                 class="btn btn-sm btn-secondary"
                                             >
                                                 <i class="fa fa-pencil-alt"></i>

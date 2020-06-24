@@ -19,7 +19,7 @@ $level              = check_level();
     <div class="d-flex justify-content-between align-items-center my-3">
         <div class="page-title mb-0 pb-0 h1"> Permintaan Buku </div>
         <a
-            href="<?= base_url('book_request/view_book_request_edit/'.$rData->book_request_id); ?>"
+            href="<?= base_url('book_request/edit/'.$rData->book_request_id); ?>"
             class="btn btn-secondary btn-sm"
         ><i class="fa fa-edit fa-fw"></i> Edit Permintaan Buku</a>
     </div>

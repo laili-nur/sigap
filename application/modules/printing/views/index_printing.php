@@ -57,7 +57,7 @@ $print_status_options = [
             <span class="badge badge-info">Total : <?= $total; ?></span>
         </div>
         <a
-            href="<?= base_url("$pages/view_printing_add"); ?>"
+            href="<?= base_url("$pages/add"); ?>"
             class="btn btn-primary btn-sm"
         ><i class="fa fa-plus fa-fw"></i> Tambah</a>
     </div>
@@ -167,7 +167,7 @@ $print_status_options = [
                                         <td class="align-middle pl-4"><?= ++$i; ?></td>
                                         <td class="text-left align-middle">
                                             <a
-                                                href="<?= base_url('printing/view_printing_view/' . $pData->print_id . ''); ?>"
+                                                href="<?= base_url('printing/view/' . $pData->print_id . ''); ?>"
                                                 class="font-weight-bold"
                                             >
                                                 <?= ($pData->print_category == 1) ? '<span class="badge badge-warning"><i class="fa fa-redo" data-toggle="tooltip" title="Cetak Ulang"></i></span>' : ''; ?>
@@ -216,7 +216,7 @@ $print_status_options = [
                                         <?php if($level == 'superadmin'): ?>
                                         <td class="align-middle">
                                             <a
-                                                href="<?= base_url('printing/view_printing_edit/'.$pData->print_id); ?>"
+                                                href="<?= base_url('printing/edit/'.$pData->print_id); ?>"
                                                 class="btn btn-sm btn-secondary"
                                             >
                                                 <i class="fa fa-pencil-alt"></i>

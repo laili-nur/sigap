@@ -25,7 +25,7 @@
                             <div class="alert alert-danger">
                                 <strong>Perhatian</strong>
                                 <p class="mb-0">1. Halaman ini digunakan untuk mengedit tanggal secara manual, namun pastikan sudah
-                                    melakukan proses step-by-step dari halaman <a href="<?= base_url("printing/view_printing_view/".$pData->print_id);?>">view order printing</a>.</p>
+                                    melakukan proses step-by-step dari halaman <a href="<?= base_url("printing/view/".$pData->print_id);?>">view order printing</a>.</p>
                                 <p class="mb-0">2. Halaman ini juga digunakan untuk mereset progress order printing, dengan cara
                                     menyesuaikan status order printing, dan hapus tanggal masing-masing.</p>
                             </div>

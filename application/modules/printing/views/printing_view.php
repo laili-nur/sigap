@@ -1,3 +1,6 @@
+<?php
+$level              = check_level();
+?>
 <!-- BREADCUMB,TITLE -->
 <header class="page-title-bar mb-3">
     <nav aria-label="breadcrumb">
@@ -17,7 +20,7 @@
         <div class="page-title mb-0 pb-0 h1"> Order Cetak </div>
         <?php if($level == 'superadmin'): ?>
         <a
-            href="<?= base_url('printing/view_printing_edit/'.$pData->print_id); ?>"
+            href="<?= base_url('printing/edit/'.$pData->print_id); ?>"
             class="btn btn-secondary btn-sm"
         ><i class="fa fa-edit fa-fw"></i> Edit Order Cetak</a>
         <?php endif; ?>

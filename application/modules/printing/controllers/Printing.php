@@ -34,7 +34,7 @@ class Printing extends MY_Controller
         endif;
     }
 
-    public function view_printing_add(){
+    public function add(){
         if($this->check_level() == TRUE):
         $pages       = $this->pages;
         $main_view   = 'printing/printing_add';
@@ -42,7 +42,7 @@ class Printing extends MY_Controller
         endif;
     }
 
-    public function view_printing_edit($print_id){
+    public function edit($print_id){
         if($this->check_level_admin() == TRUE):
         $pages       = $this->pages;
         $main_view   = 'printing/printing_edit';
@@ -56,7 +56,7 @@ class Printing extends MY_Controller
         endif;
     }
 
-    public function view_printing_view($print_id){
+    public function view($print_id){
         if($this->check_level() == TRUE):
         $pages       = $this->pages;
         $main_view   = 'printing/printing_view';
@@ -132,7 +132,7 @@ class Printing extends MY_Controller
             $check_edit  =   $this->printing->edit_printing($print_id);
             if($check_edit   ==  TRUE){
                 $this->session->set_flashdata('success','Order cetak berhasil diubah.');
-                redirect('printing/view_printing_view/'.$print_id);
+                redirect('printing/view/'.$print_id);
             }else{
                 $this->session->set_flashdata('error',print_r($this->db->error()));
                 redirect($_SERVER['HTTP_REFERER'], 'refresh');
