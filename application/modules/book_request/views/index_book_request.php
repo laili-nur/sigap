@@ -135,8 +135,8 @@ $status_options = [
                                             <?php
                                                 if($rData->status == 0){echo 'Proses Permintaan';}
                                                 elseif($rData->status == 1){echo 'Proses Finalisasi';}
-                                                elseif($rData->status == 5){echo 'Ditolak';}
-                                                elseif($rData->status == 6){echo 'Selesai';}
+                                                elseif($rData->status == 3){echo 'Ditolak';}
+                                                elseif($rData->status == 4){echo 'Selesai';}
                                                 else{'';}
                                             ?>
                                         </td>
