@@ -78,7 +78,7 @@ class Logistic extends MY_Controller
         $this->form_validation->set_rules('notes', 'Catatan', 'max_length[1000]');
 
         if($this->form_validation->run() == FALSE){
-            $this->session->set_flashdata('error',validation_errors());
+            $this->session->set_flashdata('error','Logistik gagal ditambah.');
             redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }else{
             $check = $this->logistic->add_logistic();
@@ -86,7 +86,7 @@ class Logistic extends MY_Controller
                 $this->session->set_flashdata('success','Logistik berhasil ditambah.');
                 redirect('logistic');
             }else{
-                $this->session->set_flashdata('error',print_r($this->db->error()));
+                $this->session->set_flashdata('error','Logistik gagal ditambah.');
                 redirect($_SERVER['HTTP_REFERER'], 'refresh');
             }
         }
@@ -102,15 +102,15 @@ class Logistic extends MY_Controller
         $this->form_validation->set_rules('notes', 'Catatan', 'max_length[1000]');
 
         if($this->form_validation->run() == FALSE){
-            $this->session->set_flashdata('error',validation_errors());
+            $this->session->set_flashdata('error','Logistik gagal diubah.');
             redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }else{
             $check = $this->logistic->edit_logistic($logistic_id);
             if($check   ==  TRUE){
-                $this->session->set_flashdata('success','Order cetak berhasil diubah.');
+                $this->session->set_flashdata('success','Logistik berhasil diubah.');
                 redirect('logistic/view/'.$logistic_id);
             }else{
-                $this->session->set_flashdata('error',print_r($this->db->error()));
+                $this->session->set_flashdata('error','Logistik gagal diubah.');
                 redirect($_SERVER['HTTP_REFERER'], 'refresh');
             }
         }
@@ -124,7 +124,7 @@ class Logistic extends MY_Controller
             $this->session->set_flashdata('success','Logistik berhasil di hapus.');
             redirect('logistic');
         }else{
-            $this->session->set_flashdata('error',print_r($this->db->error()));
+            $this->session->set_flashdata('error','Logistik gagal di hapus.');
             redirect('logistic');
         }
         endif;
@@ -139,7 +139,7 @@ class Logistic extends MY_Controller
         $this->form_validation->set_rules('input_notes', 'Catatan', 'required|max_length[256]');
 
         if($this->form_validation->run() == FALSE){
-            $this->session->set_flashdata('error',validation_errors());
+            $this->session->set_flashdata('error','Gagal mengubah stok.');
             redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }else{
             $check  =   $this->logistic->add_logistic_stock();
@@ -147,7 +147,7 @@ class Logistic extends MY_Controller
                 $this->session->set_flashdata('success','Berhasil mengubah stok.');
                 redirect($_SERVER['HTTP_REFERER'], 'refresh');
             }else{
-                $this->session->set_flashdata('error',$this->db->error());
+                $this->session->set_flashdata('error','Gagal mengubah stok.');
                 redirect($_SERVER['HTTP_REFERER'], 'refresh');
             }
         }
@@ -161,14 +161,14 @@ class Logistic extends MY_Controller
             $this->session->set_flashdata('success','Berhasil menghapus data stok logistik.');
             redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }else{
-            $this->session->set_flashdata('error',print_r($this->db->error()));
+            $this->session->set_flashdata('error','Gagal menghapus data stok logistik.');
             redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }
         endif;
     }
     
     public function check_level(){
-        if($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_gudang' || $_SESSION['level'] == 'admin_keuangan' || $_SESSION['level'] == 'admin_penerbitan'){
+        if($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_gudang' || $_SESSION['level'] == 'admin_keuangan' || $_SESSION['level'] == 'admin_penerbitan' || $_SESSION['level'] == 'admin_percetakan'){
             return TRUE;
         }else{
             $this->session->set_flashdata('error','Hanya admin gudang, admin keuangan, admin penerbitan dan superadmin yang dapat mengakses.');

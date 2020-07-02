@@ -52,7 +52,7 @@ $type_options = [
                     <div class="p-3">
                         <?= form_open($pages, ['method' => 'GET']); ?>
                         <div class="row">
-                            <div class="col-12 <?php if($level == 'superadmin' || $level == 'admin_gudang'){echo 'col-md-4';}elseif($level == 'admin_keuangan'){echo 'col-md-6';} ?>">
+                            <div class="col-12 <?php if($level == 'superadmin' || $level == 'admin_gudang'){echo 'col-md-4';}elseif($level == 'admin_keuangan' || $level == 'admin_percetakan'){echo 'col-md-6';} ?>">
                                 <label for="per_page">Data per halaman</label>
                                 <?= form_dropdown('per_page', get_per_page_options(), $per_page, 'id="per_page" class="form-control custom-select d-block" title="List per page"'); ?>
                             </div>
@@ -62,7 +62,7 @@ $type_options = [
                                 <?= form_dropdown('type', $type_options, $type, 'id="type" class="form-control custom-select d-block" title="Filter Tipe"'); ?>
                             </div>
                             <?php endif; ?>
-                            <div class="col-12 <?php if($level == 'superadmin' || $level == 'admin_gudang'){echo 'col-md-4';}elseif($level == 'admin_keuangan'){echo 'col-md-6';} ?>">
+                            <div class="col-12 <?php if($level == 'superadmin' || $level == 'admin_gudang'){echo 'col-md-4';}elseif($level == 'admin_keuangan' || $level == 'admin_percetakan'){echo 'col-md-6';} ?>">
                                 <label for="status">Status</label>
                                 <?= form_dropdown('status', $status_options, $status, 'id="status" class="form-control custom-select d-block" title="Filter Status"'); ?>
                             </div>

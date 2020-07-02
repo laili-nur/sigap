@@ -1,3 +1,6 @@
+<?php
+    $level  = check_level();
+?>
 <header class="page-title-bar">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -5,7 +8,7 @@
                 <a href="<?= base_url(); ?>"><span class="fa fa-home"></span></a>
             </li>
             <li class="breadcrumb-item">
-                <a href="<?= base_url('book_request'); ?>">Permintaan Buku</a>
+                <a href="<?= base_url('logistic_request'); ?>">Permintaan Logistik</a>
             </li>
             <li class="breadcrumb-item">
                 <a class="text-muted">Form</a>
@@ -18,26 +21,37 @@
         <div class="col-md-8">
             <section class="card">
                 <div class="card-body">
-                    <form action="<?= base_url("book_request/add_book_request"); ?>" method="post">
+                    <form action="<?= base_url("logistic_request/add_logistic_request"); ?>" method="post">
                         <fielsdet>
-                            <legend>Form Permintaan Buku</legend>
+                            <legend>Form Permintaan Logistik</legend>
+                            <?php if($level == 'superadmin') : ?>
+                                <div class="form-group">
+                                    <label for="type" class="font-weight-bold">Tipe Stok Ulang<abbr title="Required">*</abbr></label>
+                                    <select class="form-control" id="type" name="type">
+                                        <option selected>-- Tipe Stok Ulang --</option>
+                                        <option value="0">Stok Ulang Percetakan</option>
+                                        <option value="1">Stok Ulang Gudang</option>
+                                    </select>
+                                </div>
+                                <hr>
+                            <?php endif; ?>
                             <link href="<?php echo base_url(); ?>assets/autocomplete/jquery-ui.min.css" rel="stylesheet"><!-- JQuery UI CSS -->
                             <div class="form-group">
                                 <div id="prefetch">
-                                    <label for="book_title" class="font-weight-bold">Judul buku<abbr title="Required">*</abbr></label>
-                                    <input type="text" name="book_title" id="book_title" class="form-control" placeholder="Cari judul buku"/>
-                                    <input type="hidden" name="book_id" id="book_id" class="form-control" value='0'/>
+                                    <label for="name" class="font-weight-bold">Nama Logistik<abbr title="Required">*</abbr></label>
+                                    <input type="text" name="name" id="name" class="form-control" placeholder="Cari logistik"/>
+                                    <input type="hidden" name="logistic_id" id="logistic_id" class="form-control" value='0'/>
                                 </div>
                             </div>
                             <script language="JavaScript" type="text/javascript" src="<?php echo base_url(); ?>assets/autocomplete/jquery.min.js"></script><!-- JQuery JS -->
                             <script language="JavaScript" type="text/javascript" src="<?php echo base_url(); ?>assets/autocomplete/jquery-ui.min.js"></script><!-- JQuery UI JS -->
                             <script>
                                 $(document).ready(function () {
-                                    $("#book_title").autocomplete({
+                                    $("#name").autocomplete({
                                         source: function (request, response) {
                                             // Fetch data
                                             $.ajax({
-                                                url: "<?php echo base_url("$pages/ac_book_id"); ?>",
+                                                url: "<?php echo base_url("$pages/ac_logistic_id"); ?>",
                                                 type: 'post',
                                                 dataType: "json",
                                                 data: {
@@ -50,8 +64,8 @@
                                         },
                                         select: function (event, ui) {
                                             // Set selection
-                                            $('#book_title').val(ui.item.label); // display the selected text
-                                            $('#book_id').val(ui.item.value); // save selected id to input
+                                            $('#name').val(ui.item.label); // display the selected text
+                                            $('#logistic_id').val(ui.item.value); // save selected id to input
                                             return false;
                                         }
                                     });
@@ -62,7 +76,7 @@
                                 <input type="text" name="order_number" id="order_number" class="form-control"/>
                             </div>
                             <div class="form-group">
-                                <label for="total" class="font-weight-bold">Jumlah Permintaan Buku<abbr title="Required">*</abbr></label>
+                                <label for="total" class="font-weight-bold">Jumlah Permintaan Logistik<abbr title="Required">*</abbr></label>
                                 <input type="text" name="total" id="total" class="form-control"/>
                             </div>
                             <div class="form-group">
@@ -73,7 +87,7 @@
                         <hr>
                         <!-- button -->
                         <input type="submit" class="btn btn-primary" value="Submit" />
-                        <a class="btn btn-secondary" href="<?php echo base_url('book_request') ?>" role="button">Back</a>
+                        <a class="btn btn-secondary" href="<?php echo base_url('logistic_request') ?>" role="button">Back</a>
                     </form>
                 </div>
             </section>

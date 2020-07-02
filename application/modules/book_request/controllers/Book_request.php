@@ -85,7 +85,7 @@ class Book_request extends MY_Controller
                 $this->session->set_flashdata('success','Berhasil menambahkan draft permintaan buku.');
                 redirect('book_request');
             }else{
-                $this->session->set_flashdata('error',print_r($this->db->error()));
+                $this->session->set_flashdata('error','Gagal menambahkan draft permintaan buku.');
                 redirect($_SERVER['HTTP_REFERER'], 'refresh');
             }
         }
@@ -101,7 +101,7 @@ class Book_request extends MY_Controller
         $this->form_validation->set_rules('notes', 'Catatan', 'max_length[250]');
 
         if($this->form_validation->run() == FALSE){
-            $this->session->set_flashdata('error',validation_errors());
+            $this->session->set_flashdata('error','Gagal mengubah data draft permintaan buku.');
             redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }else{
             $check  =   $this->book_request->edit_book_request($book_request_id);
@@ -109,7 +109,7 @@ class Book_request extends MY_Controller
                 $this->session->set_flashdata('success','Berhasil mengubah data draft permintaan buku.');
                 redirect('book_request/view/'.$book_request_id);
             }else{
-                $this->session->set_flashdata('error',print_r($this->db->error()));
+                $this->session->set_flashdata('error','Gagal mengubah data draft permintaan buku.');
                 redirect($_SERVER['HTTP_REFERER'], 'refresh');
             }
         }
@@ -123,7 +123,7 @@ class Book_request extends MY_Controller
             $this->session->set_flashdata('success','Berhasil menghapus data draft permintaan buku.');
             redirect('book_request');
         }else{
-            $this->session->set_flashdata('error',print_r($this->db->error()));
+            $this->session->set_flashdata('error','Gagal menghapus data draft permintaan buku.');
             redirect('book_request');
         }
         endif;
@@ -136,7 +136,7 @@ class Book_request extends MY_Controller
         $this->form_validation->set_rules('request_notes_admin', 'Catatan', 'required|max_length[1000]');
 
         if($this->form_validation->run() == FALSE){
-            $this->session->set_flashdata('error',validation_errors());
+            $this->session->set_flashdata('error','Gagal melakukan aksi pada progress permintaan.');
             redirect($_SERVER['HTTP_REFERER'].'#section_request', 'refresh');
         }else{
             $check  =   $this->book_request->action_request($book_request_id);
@@ -144,7 +144,7 @@ class Book_request extends MY_Controller
                 $this->session->set_flashdata('success','Berhasil melakukan aksi pada progress permintaan.');
                 redirect($_SERVER['HTTP_REFERER'].'#section_request', 'refresh');
             }else{
-                $this->session->set_flashdata('error',print_r($this->db->error()));
+                $this->session->set_flashdata('error','Gagal melakukan aksi pada progress permintaan.');
                 redirect($_SERVER['HTTP_REFERER'].'#section_request', 'refresh');
             }
         }
@@ -160,7 +160,7 @@ class Book_request extends MY_Controller
         $this->form_validation->set_rules('stock_input_notes', 'Catatan', 'required|max_length[256]');
 
         if($this->form_validation->run() == FALSE){
-            $this->session->set_flashdata('error',validation_errors());
+            $this->session->set_flashdata('error','Permintaan buku gagal di finalisasi.');
             redirect($_SERVER['HTTP_REFERER'].'#section_final', 'refresh');
         }else{
             $check  =   $this->book_request->action_final($book_request_id);
@@ -168,7 +168,7 @@ class Book_request extends MY_Controller
                 $this->session->set_flashdata('success','Permintaan buku berhasil di finalisasi.');
                 redirect($_SERVER['HTTP_REFERER'].'#section_final', 'refresh');
             }else{
-                $this->session->set_flashdata('error',print_r($this->db->error()));
+                $this->session->set_flashdata('error','Permintaan buku gagal di finalisasi.');
                 redirect($_SERVER['HTTP_REFERER'].'#section_final', 'refresh');
             }
         }

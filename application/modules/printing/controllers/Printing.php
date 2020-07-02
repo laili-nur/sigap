@@ -85,7 +85,7 @@ class Printing extends MY_Controller
         $this->form_validation->set_rules('order_number', 'Nomor order', 'required|max_length[15]');
 
         if($this->form_validation->run() == FALSE){
-            $this->session->set_flashdata('error',validation_errors());
+            $this->session->set_flashdata('error','Order cetak gagal dibuat.');
             redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }else{
             $check_add  =   $this->printing->add_printing();
@@ -93,7 +93,7 @@ class Printing extends MY_Controller
                 $this->session->set_flashdata('success','Order cetak berhasil dibuat.');
                 redirect('printing');
             }else{
-                $this->session->set_flashdata('error',print_r($this->db->error()));
+                $this->session->set_flashdata('error','Order cetak gagal dibuat.');
                 redirect($_SERVER['HTTP_REFERER'], 'refresh');
             }
         }
@@ -126,7 +126,7 @@ class Printing extends MY_Controller
         $this->form_validation->set_rules('binding_end_date', 'Tanggal Selesai Jilid', '');
 
         if($this->form_validation->run() == FALSE){
-            $this->session->set_flashdata('error',validation_errors());
+            $this->session->set_flashdata('error','Order cetak gagal diubah.');
             redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }else{
             $check_edit  =   $this->printing->edit_printing($print_id);
@@ -134,7 +134,7 @@ class Printing extends MY_Controller
                 $this->session->set_flashdata('success','Order cetak berhasil diubah.');
                 redirect('printing/view/'.$print_id);
             }else{
-                $this->session->set_flashdata('error',print_r($this->db->error()));
+                $this->session->set_flashdata('error','Order cetak gagal diubah.');
                 redirect($_SERVER['HTTP_REFERER'], 'refresh');
             }
         }
@@ -145,10 +145,10 @@ class Printing extends MY_Controller
         if($this->check_level_admin() == TRUE):
         $isDeleted  = $this->printing->delete_printing($print_id);
         if($isDeleted   ==  TRUE){
-            $this->session->set_flashdata('success','Order printing berhasil di hapus.');
+            $this->session->set_flashdata('success','Order cetak berhasil di hapus.');
             redirect('Printing');
         }else{
-            $this->session->set_flashdata('error',print_r($this->db->error()));
+            $this->session->set_flashdata('error','Order cetak gagal di hapus.');
             redirect('Printing');
         }
         endif;
@@ -262,7 +262,7 @@ class Printing extends MY_Controller
         $this->form_validation->set_rules('book_notes', 'Keterangan buku', 'max_length[1024]');
 
         if($this->form_validation->run() == FALSE){
-            $this->session->set_flashdata('error',validation_errors());
+            $this->session->set_flashdata('error','Gagal mengubah buku.');
             redirect($_SERVER['HTTP_REFERER'].'#section_'.$progress_name, 'refresh'); 
         }else{
             $config['upload_path']      = './bookfile/';
@@ -284,7 +284,7 @@ class Printing extends MY_Controller
                 $this->session->set_flashdata('success','Berhasil mengubah buku.');
                 redirect($_SERVER['HTTP_REFERER'].'#section_'.$progress_name, 'refresh');
             }else{
-                $this->session->set_flashdata('error',print_r($this->db->error()));
+                $this->session->set_flashdata('error','Gagal mengubah buku.');
                 redirect($_SERVER['HTTP_REFERER'].'#section_'.$progress_name, 'refresh'); 
             }
         }
@@ -300,15 +300,15 @@ class Printing extends MY_Controller
         $this->form_validation->set_rules('stock_input_notes', 'Catatan', 'required|max_length[256]');
 
         if($this->form_validation->run() == FALSE){
-            $this->session->set_flashdata('error',validation_errors());
+            $this->session->set_flashdata('error','Order cetak gagal difinalisasi.');
             redirect($_SERVER['HTTP_REFERER'].'#section_final', 'refresh');
         }else{
             $check  =   $this->printing->finalisasi_printing($print_id);
             if($check   ==  TRUE){
-                $this->session->set_flashdata('success','Order cetak telah difinalisasi.');
+                $this->session->set_flashdata('success','Order cetak berhasil difinalisasi.');
                 redirect($_SERVER['HTTP_REFERER'].'#section_final', 'refresh');
             }else{
-                $this->session->set_flashdata('error',print_r($this->db->error()));
+                $this->session->set_flashdata('error','Order cetak gagal difinalisasi.');
                 redirect($_SERVER['HTTP_REFERER'].'#section_final', 'refresh');
             }
         }

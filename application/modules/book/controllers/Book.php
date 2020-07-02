@@ -329,15 +329,15 @@ class Book extends Admin_Controller
         $this->form_validation->set_rules('stock_input_notes', 'Catatan', 'required|max_length[256]');
 
         if($this->form_validation->run() == FALSE){
-            $this->session->set_flashdata('error',validation_errors());
+            $this->session->set_flashdata('error','Gagal mengubah data stok buku.');
             redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }else{
             $check  =   $this->book->add_book_stock();
             if($check   ==  TRUE){
-                $this->session->set_flashdata('success','Berhasil mengubah stok.');
+                $this->session->set_flashdata('success','Berhasil mengubah data stok buku.');
                 redirect($_SERVER['HTTP_REFERER'], 'refresh');
             }else{
-                $this->session->set_flashdata('error',$this->db->error());
+                $this->session->set_flashdata('error','Gagal mengubah data stok buku.');
                 redirect($_SERVER['HTTP_REFERER'], 'refresh');
             }
         }
@@ -351,7 +351,7 @@ class Book extends Admin_Controller
             $this->session->set_flashdata('success','Berhasil menghapus data stok buku.');
             redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }else{
-            $this->session->set_flashdata('error',print_r($this->db->error()));
+            $this->session->set_flashdata('error','Gagal menghapus data stok buku.');
             redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }
         endif;
