@@ -23,6 +23,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
  */
+date_default_timezone_set('Asia/Jakarta');
 $config['base_url'] = getenv('BASE_URL');
 
 /*

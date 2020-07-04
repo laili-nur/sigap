@@ -67,6 +67,10 @@ $route['user/(:num)']           = 'user/index/$1';
 $route['theme/(:num)']          = 'theme/index/$1';
 $route['book/(:num)']           = 'book/index/$1';
 $route['document/(:num)']       = 'document/index/$1';
+$route['printing/(:num)']       = 'printing/index/$1';
+$route['book_request/(:num)']   = 'book_request/index/$1';
+$route['logistic/(:num)']       = 'logistic/index/$1';
+$route['logistic_request/(:num)']= 'logistic_request/index/$1';
 
 // $route['draftauthor'] = 'draft_author';
 // $route['draftauthor/addmulti'] = 'draft_author/addmulti';

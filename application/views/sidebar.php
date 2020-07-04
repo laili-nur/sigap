@@ -23,17 +23,39 @@ $menu_list = [
         'name'  => 'Buku',
         'url'   => 'book',
         'icon'  => 'fa fa-book',
-        'level' => 'superadmin|admin_penerbitan'
+        'level' => 'superadmin|admin_penerbitan|admin_percetakan|admin_gudang|admin_pemasaran'
     ],
     [
         'title' => 'Produksi',
-        'level' => 'superadmin|admin_penerbitan'
+        'level' => 'superadmin|admin_percetakan'
     ],
     [
         'name' => 'Order Cetak',
-        'url'  => 'print_order',
+        'url'  => 'printing',
         'icon' => 'fa fa-print',
-        'level' => 'superadmin|admin_penerbitan'
+        'level' => 'superadmin|admin_percetakan'
+    ],
+    [
+        'title' => 'Pasca Produksi',
+        'level' => 'superadmin|admin_gudang|admin_pemasaran|admin_keuangan|admin_percetakan'
+    ],
+    [
+        'name' => 'Permintaan Buku',
+        'url'  => 'book_request',
+        'icon' => 'fa fa-paperclip',
+        'level' => 'superadmin|admin_gudang|admin_pemasaran'
+    ],
+    [
+        'name' => 'Logistik',
+        'url'  => 'logistic',
+        'icon' => 'fa fa-warehouse',
+        'level' => 'superadmin|admin_gudang|admin_keuangan|admin_percetakan'
+    ],
+    [
+        'name' => 'Permintaan Logistik',
+        'url'  => 'logistic_request',
+        'icon' => 'fa fa-paperclip',
+        'level' => 'superadmin|admin_gudang|admin_keuangan|admin_percetakan'
     ],
     [
         'title' => 'Data',

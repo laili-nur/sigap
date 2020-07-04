@@ -132,12 +132,17 @@ class Book extends Admin_Controller
         // get draft
         // $draft = $this->book->where('draft_id', $input->draft_id)->get('draft');
 
+        $get_stock      = $this->book->fetch_stock_by_id($book_id);
+
+        $stock_history  = $get_stock['stock_history'];
+        $stock_last     = $get_stock['stock_last'];
+
         // If something wrong
         // if (!$this->book->validate() || $this->form_validation->error_array()) {
         $pages       = $this->pages;
         $main_view   = 'book/view_book';
         // $form_action = "book/edit/$book_id";
-        $this->load->view('template', compact('authors', 'pages', 'main_view', 'input'));
+        $this->load->view('template', compact('authors', 'pages', 'main_view', 'input', 'stock_history', 'stock_last'));
         return;
         // }
 
@@ -313,5 +318,51 @@ class Book extends Admin_Controller
             return false;
         }
         return true;
+    }
+
+    public function add_book_stock(){
+        if($this->check_level_gudang() == TRUE):
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('stock_in_warehouse', 'Stok dalam gudang', 'required|max_length[10]');
+        $this->form_validation->set_rules('stock_out_warehouse', 'Stok luar gudang', 'required|max_length[10]');
+        $this->form_validation->set_rules('stock_marketing', 'Stok pemasaran', 'required|max_length[10]');
+        $this->form_validation->set_rules('stock_input_notes', 'Catatan', 'required|max_length[256]');
+
+        if($this->form_validation->run() == FALSE){
+            $this->session->set_flashdata('error','Gagal mengubah data stok buku.');
+            redirect($_SERVER['HTTP_REFERER'], 'refresh');
+        }else{
+            $check  =   $this->book->add_book_stock();
+            if($check   ==  TRUE){
+                $this->session->set_flashdata('success','Berhasil mengubah data stok buku.');
+                redirect($_SERVER['HTTP_REFERER'], 'refresh');
+            }else{
+                $this->session->set_flashdata('error','Gagal mengubah data stok buku.');
+                redirect($_SERVER['HTTP_REFERER'], 'refresh');
+            }
+        }
+        endif;
+    }
+
+    public function delete_book_stock($book_stock_id){
+        if($this->check_level_gudang() == TRUE):
+        $isDeleted  = $this->book->delete_book_stock($book_stock_id);
+        if($isDeleted   ==  TRUE){
+            $this->session->set_flashdata('success','Berhasil menghapus data stok buku.');
+            redirect($_SERVER['HTTP_REFERER'], 'refresh');
+        }else{
+            $this->session->set_flashdata('error','Gagal menghapus data stok buku.');
+            redirect($_SERVER['HTTP_REFERER'], 'refresh');
+        }
+        endif;
+    }
+
+    public function check_level_gudang(){
+        if($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_gudang'){
+            return TRUE;
+        }else{
+            $this->session->set_flashdata('error','Hanya admin gudang dan superadmin yang dapat mengakses.');
+            redirect($_SERVER['HTTP_REFERER'], 'refresh');
+        }
     }
 }
