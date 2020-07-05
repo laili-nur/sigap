@@ -34,7 +34,7 @@ class Migration_Print_order extends CI_Migration
                 'type' => 'VARCHAR',
                 'constraint' => 100
             ],
-            'print_cover' => [
+            'paper_cover' => [
                 'type' => 'VARCHAR',
                 'constraint' => 100
             ],
@@ -42,7 +42,7 @@ class Migration_Print_order extends CI_Migration
                 'type' => 'VARCHAR',
                 'constraint' => 100
             ],
-            'print_priority' => [
+            'priority' => [
                 'type' => 'INT',
                 'constraint' => 1
             ],
@@ -50,12 +50,9 @@ class Migration_Print_order extends CI_Migration
                 'type' => 'VARCHAR',
                 'constraint' => 15
             ],
-            'entry_date' => [
-                'type' => 'DATETIME',
-                'null' => TRUE
-            ],
+            "entry_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
             'finish_date' => [
-                'type' => 'DATETIME',
+                'type' => 'TIMESTAMP',
                 'null' => TRUE
             ],
             'input_by' => [
@@ -70,18 +67,19 @@ class Migration_Print_order extends CI_Migration
             // preprint
             'is_preprint' => [
                 'type' => 'INT',
-                'constraint' => 1
+                'constraint' => 1,
+                'default' => 0
             ],
             'preprint_start_date' => [
-                'type' => 'DATETIME',
+                'type' => 'TIMESTAMP',
                 'null' => TRUE
             ],
             'preprint_end_date' => [
-                'type' => 'DATETIME',
+                'type' => 'TIMESTAMP',
                 'null' => TRUE
             ],
             'preprint_deadline' => [
-                'type' => 'DATETIME',
+                'type' => 'TIMESTAMP',
                 'null' => TRUE
             ],
             'preprint_notes' => [
@@ -98,18 +96,19 @@ class Migration_Print_order extends CI_Migration
             // print
             'is_print' => [
                 'type' => 'INT',
-                'constraint' => 1
+                'constraint' => 1,
+                'default' => 0
             ],
             'print_start_date' => [
-                'type' => 'DATETIME',
+                'type' => 'TIMESTAMP',
                 'null' => TRUE
             ],
             'print_end_date' => [
-                'type' => 'DATETIME',
+                'type' => 'TIMESTAMP',
                 'null' => TRUE
             ],
             'print_deadline' => [
-                'type' => 'DATETIME',
+                'type' => 'TIMESTAMP',
                 'null' => TRUE
             ],
             'print_notes' => [
@@ -126,18 +125,19 @@ class Migration_Print_order extends CI_Migration
             // postprint
             'is_postprint' => [
                 'type' => 'INT',
-                'constraint' => 1
+                'constraint' => 1,
+                'default' => 0
             ],
             'postprint_start_date' => [
-                'type' => 'DATETIME',
+                'type' => 'TIMESTAMP',
                 'null' => TRUE
             ],
             'postprint_end_date' => [
-                'type' => 'DATETIME',
+                'type' => 'TIMESTAMP',
                 'null' => TRUE
             ],
             'postprint_deadline' => [
-                'type' => 'DATETIME',
+                'type' => 'TIMESTAMP',
                 'null' => TRUE
             ],
             'postprint_notes' => [

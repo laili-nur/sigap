@@ -122,3 +122,13 @@ $lang['form_worksheet_end_date']   = 'Tanggal Selesai Desk Screening';
 
 // Book
 $lang['form_book_title']       = 'Judul Buku';
+
+
+// Print order
+$lang['form_print_order_number']        = 'Nomor Cetak';
+$lang['form_print_order_type']          = 'Tipe Cetak';
+$lang['form_print_order_priority']      = 'Prioritas Cetak';
+$lang['form_print_order_total']         = 'Jumlah Cetak';
+$lang['form_print_order_paper_content'] = 'Kertas Isi';
+$lang['form_print_order_paper_cover']   = 'Kertas Sampul';
+$lang['form_print_order_paper_size']    = 'Ukuran';

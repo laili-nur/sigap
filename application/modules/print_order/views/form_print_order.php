@@ -33,40 +33,22 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="order_number">Nomor Cetak</label>
+                            <label for="order_number">
+                                <?= $this->lang->line('form_print_order_number'); ?>
+                                <abbr title="Required">*</abbr>
+                            </label>
                             <?= form_input('order_number', $input->order_number, 'class="form-control" id="order_number"'); ?>
                             <?= form_error('order_number'); ?>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="copies">Jumlah Copy</label>
-                            <?= form_input('copies', $input->copies, 'class="form-control" id="copies"'); ?>
-                            <?= form_error('copies'); ?>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="content_paper">Kertas Isi</label>
-                            <?= form_input('content_paper', $input->content_paper, 'class="form-control" id="content_paper"'); ?>
-                            <?= form_error('content_paper'); ?>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="cover_paper">Kertas Cover</label>
-                            <?= form_input('cover_paper', $input->cover_paper, 'class="form-control" id="cover_paper"'); ?>
-                            <?= form_error('cover_paper'); ?>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="size">Ukuran</label>
-                            <?= form_input('size', $input->size, 'class="form-control" id="size"'); ?>
-                            <?= form_error('size'); ?>
                         </div>
 
                         <div class="form-group">
                             <label
                                 for="type"
                                 class="d-block"
-                            >Tipe Cetak</label>
+                            >
+                                <?= $this->lang->line('form_print_order_type'); ?>
+                                <abbr title="Required">*</abbr>
+                            </label>
                             <div
                                 class="btn-group btn-group-toggle"
                                 data-toggle="buttons"
@@ -93,12 +75,57 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="priority">Prioritas</label>
-                            <?= form_input('priority', $input->priority, 'class="form-control" id="priority"'); ?>
+                            <label for="priority">
+                                <?= $this->lang->line('form_print_order_priority'); ?>
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <select
+                                class="custom-select"
+                                name="priority"
+                                id="priority"
+                            >
+                                <?php foreach (get_print_order_priority() as $key => $value) : ?>
+                                    <option value="<?= $key ?>"><?= $value ?></option>
+                                <?php endforeach ?>
+                            </select>
                             <?= form_error('priority'); ?>
                         </div>
 
+                        <div class="form-group">
+                            <label for="total">
+                                <?= $this->lang->line('form_print_order_total'); ?>
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <?= form_input('total', $input->total, 'class="form-control" id="total"'); ?>
+                            <?= form_error('total'); ?>
+                        </div>
 
+                        <div class="form-group">
+                            <label for="paper_content">
+                                <?= $this->lang->line('form_print_order_paper_content'); ?>
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <?= form_input('paper_content', $input->paper_content, 'class="form-control" id="paper_content"'); ?>
+                            <?= form_error('paper_content'); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="paper_cover">
+                                <?= $this->lang->line('form_print_order_paper_cover'); ?>
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <?= form_input('paper_cover', $input->paper_cover, 'class="form-control" id="paper_cover"'); ?>
+                            <?= form_error('paper_cover'); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="paper_size">
+                                <?= $this->lang->line('form_print_order_paper_size'); ?>
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <?= form_input('paper_size', $input->paper_size, 'class="form-control" id="paper_size"'); ?>
+                            <?= form_error('paper_size'); ?>
+                        </div>
                         </fieldset>
                         <hr>
                         <div class="form-actions">
@@ -122,5 +149,26 @@ $(document).ready(function() {
         placeholder: '-- Pilih --',
         dropdownParent: $('#app-main')
     });
+
+    loadValidateSetting();
+    $("#form_print_order").validate({
+            rules: {
+                book_id: "crequired",
+                order_number: "crequired",
+                type: "crequired",
+                priority: "crequired",
+                total: {
+                    crequired: true,
+                    cnumber: true
+                },
+                paper_content: "crequired",
+                paper_cover: "crequired",
+                paper_size: "crequired",
+            },
+            errorElement: "span",
+            errorPlacement: validateErrorPlacement,
+        },
+        validateSelect2()
+    );
 })
 </script>

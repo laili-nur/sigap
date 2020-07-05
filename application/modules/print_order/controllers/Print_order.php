@@ -35,9 +35,8 @@ class Print_order extends Admin_Controller
 
     public function add()
     {
-        // khusus admin
-        if (!is_admin()) {
-            redirect();
+        if (!$this->_is_printing_admin()) {
+            redirect($this->pages);
         }
 
         if (!$_POST) {
@@ -73,14 +72,17 @@ class Print_order extends Admin_Controller
         redirect('print_order/view/' . $print_order_id);
     }
 
-    public function view($print_order_id)
+    public function view($print_order_id = null)
     {
+        if (!$this->_is_printing_admin()) {
+            redirect($this->pages);
+        }
+
         if ($print_order_id == null) {
             redirect($this->pages);
         }
 
         $print_order = $this->print_order->get_print_order($print_order_id);
-
 
         if (!$print_order) {
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
@@ -91,6 +93,26 @@ class Print_order extends Admin_Controller
         $main_view   = 'print_order/view/overview';
         $form_action = "print_order/edit/$print_order_id";
         $this->load->view('template', compact('form_action', 'main_view', 'pages', 'print_order'));
+    }
+
+    private function _is_printing_admin()
+    {
+        if ($this->level == 'superadmin' || $this->level == 'admin_percetakan') {
+            return true;
+        } else {
+            $this->session->set_flashdata('error', 'Hanya admin percetakan dan superadmin yang dapat mengakses.');
+            return false;
+        }
+    }
+
+    private function _is_superadmin()
+    {
+        if ($this->level == 'superadmin') {
+            return TRUE;
+        } else {
+            $this->session->set_flashdata('error', 'Hanya superadmin yang dapat mengakses.');
+            redirect(base_url(), 'refresh');
+        }
     }
 }
 

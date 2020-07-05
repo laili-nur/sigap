@@ -15,28 +15,24 @@
                         <td><?= $print_order->order_number; ?> </td>
                     </tr>
                     <tr>
-                        <td width="200px"> Jumlah Copy </td>
-                        <td><?= $print_order->copies; ?> </td>
-                    </tr>
-                    <tr>
                         <td width="200px"> Tipe Cetak </td>
                         <td><?= $print_order->type; ?> </td>
                     </tr>
                     <tr>
+                        <td width="200px"> Jumlah Cetak </td>
+                        <td><?= $print_order->total; ?> </td>
+                    </tr>
+                    <tr>
+                        <td width="200px"> Kategori Cetak (data draft)</td>
+                        <td><?= $print_order->is_reprint == 'y' ? 'Cetak ulang' : 'Cetak baru'; ?> </td>
+                    </tr>
+                    <tr>
+                        <td width="200px"> Edisi Cetak (data buku)</td>
+                        <td><?= $print_order->book_edition  ?> </td>
+                    </tr>
+                    <tr>
                         <td width="200px"> Prioritas </td>
                         <td><?= $print_order->priority; ?> </td>
-                    </tr>
-                    <tr>
-                        <td width="200px"> Tanggal Masuk </td>
-                        <td><?= $print_order->entry_date; ?> </td>
-                    </tr>
-                    <tr>
-                        <td width="200px"> Tanggal Selesai </td>
-                        <td><?= $print_order->finish_date; ?> </td>
-                    </tr>
-                    <tr>
-                        <td width="200px"> Diinput oleh </td>
-                        <td><?= $print_order->input_by; ?> </td>
                     </tr>
                     <tr>
                         <td width="200px"> File Buku </td>
@@ -66,6 +62,22 @@
                         <td width="200px"> Referensi Buku </td>
                         <td><a href="<?= base_url('book/view/' . $print_order->book_id); ?>"><?= $print_order->book_title; ?></a>
                         </td>
+                    </tr>
+                    <tr>
+                        <td width="200px"> Tanggal Masuk </td>
+                        <td><?= $print_order->entry_date; ?> </td>
+                    </tr>
+                    <tr>
+                        <td width="200px"> Tanggal Selesai </td>
+                        <td><?= $print_order->finish_date; ?> </td>
+                    </tr>
+                    <tr>
+                        <td width="200px"> Diinput oleh </td>
+                        <td><?= $print_order->input_by; ?> </td>
+                    </tr>
+                    <tr>
+                        <td width="200px"> Status </td>
+                        <td><?= $print_order->print_order_status; ?> </td>
                     </tr>
                 </tbody>
             </table>

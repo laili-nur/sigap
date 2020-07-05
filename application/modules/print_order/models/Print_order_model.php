@@ -13,6 +13,41 @@ class Print_order_model extends MY_Model
                 'label' => $this->lang->line('form_book_title'),
                 'rules' => 'trim|required',
             ],
+            [
+                'field' => 'order_number',
+                'label' => $this->lang->line('form_print_order_number'),
+                'rules' => 'trim|required',
+            ],
+            [
+                'field' => 'type',
+                'label' => $this->lang->line('form_print_order_type'),
+                'rules' => 'trim|required',
+            ],
+            [
+                'field' => 'priority',
+                'label' => $this->lang->line('form_print_order_priority'),
+                'rules' => 'trim|required|integer',
+            ],
+            [
+                'field' => 'total',
+                'label' => $this->lang->line('form_print_order_total'),
+                'rules' => 'trim|required|integer',
+            ],
+            [
+                'field' => 'paper_content',
+                'label' => $this->lang->line('form_print_order_paper_content'),
+                'rules' => 'trim|required',
+            ],
+            [
+                'field' => 'paper_cover',
+                'label' => $this->lang->line('form_print_order_paper_cover'),
+                'rules' => 'trim|required',
+            ],
+            [
+                'field' => 'paper_size',
+                'label' => $this->lang->line('form_print_order_paper_size'),
+                'rules' => 'trim|required',
+            ],
         ];
 
         return $validation_rules;
@@ -23,11 +58,11 @@ class Print_order_model extends MY_Model
         return [
             'book_id'       => '',
             'order_number'  => '',
-            'copies'        => '',
+            'total'         => '',
             'print_number'  => '',
-            'content_paper' => '',
-            'cover_paper'   => '',
-            'size'          => '',
+            'paper_content' => '',
+            'paper_cover'  => '',
+            'paper_size'    => '',
             'type'          => 'pod',
             'priority'      => '',
         ];
@@ -35,7 +70,7 @@ class Print_order_model extends MY_Model
 
     public function get_print_order($print_order_id)
     {
-        return $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'order_number', 'copies', 'type', 'priority', 'print_order.entry_date', 'print_order.finish_date', 'print_order.input_by', 'book_file', 'book_file_link', 'cover_file', 'cover_file_link', 'book_notes', 'is_preprint', 'preprint_start_date', 'preprint_end_date', 'preprint_deadline', 'preprint_notes', 'print_order.is_print', 'print_order.print_start_date', 'print_order.print_end_date', 'print_order.print_deadline', 'print_order.print_notes', 'is_postprint', 'postprint_start_date', 'postprint_end_date', 'postprint_deadline', 'postprint_notes', 'status'])
+        return $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'order_number', 'total', 'type', 'priority', 'print_order.entry_date', 'print_order.finish_date', 'print_order.input_by', 'book_file', 'book_file_link', 'cover_file', 'cover_file_link', 'book_notes', 'is_preprint', 'preprint_start_date', 'preprint_end_date', 'preprint_deadline', 'preprint_notes', 'print_order.is_print', 'print_order.print_start_date', 'print_order.print_end_date', 'print_order.print_deadline', 'print_order.print_notes', 'is_postprint', 'postprint_start_date', 'postprint_end_date', 'postprint_deadline', 'postprint_notes', 'print_order_status', 'is_reprint', 'book_edition'])
             ->join('book')
             ->join_table('draft', 'book', 'draft')
             ->where('print_order_id', $print_order_id)
@@ -44,17 +79,15 @@ class Print_order_model extends MY_Model
 
     public function filter_print_order($filters, $page)
     {
-        $print_orders = $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'category_name', 'author_name', 'order_number', 'copies', 'type', 'priority', 'print_order.entry_date', 'print_order.status'])
+        $print_orders = $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'category_name', 'order_number', 'total', 'type', 'priority', 'print_order.entry_date', 'print_order_status'])
             ->when('keyword', $filters['keyword'])
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
             ->join_table('category', 'draft', 'category')
-            ->join_table('draft_author', 'draft', 'draft')
-            ->join_table('author', 'draft_author', 'author')
             ->order_by('status_hak_cipta')
             ->order_by('published_date')
             ->order_by('book_title')
-            ->group_by('draft.draft_id')
+            ->order_by('UNIX_TIMESTAMP(print_order.entry_date)', 'DESC')
             ->paginate($page)
             ->get_all();
 
@@ -63,22 +96,19 @@ class Print_order_model extends MY_Model
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
             ->join_table('category', 'draft', 'category')
-            ->join_table('draft_author', 'draft', 'draft')
-            ->join_table('author', 'draft_author', 'author')
             ->order_by('status_hak_cipta')
             ->order_by('published_date')
             ->order_by('book_title')
-            ->group_by('draft.draft_id')
             ->count();
 
         // get authors
-        foreach ($print_orders as $b) {
-            if ($b->draft_id) {
-                $b->authors = $this->get_id_and_name('author', 'draft_author', $b->draft_id, 'draft');
-            } else {
-                $b->authors = [];
-            }
-        }
+        // foreach ($print_orders as $b) {
+        //     if ($b->draft_id) {
+        //         $b->authors = $this->get_id_and_name('author', 'draft_author', $b->draft_id, 'draft');
+        //     } else {
+        //         $b->authors = [];
+        //     }
+        // }
 
         return [
             'print_orders' => $print_orders,

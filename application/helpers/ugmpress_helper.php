@@ -562,7 +562,7 @@ function get_per_page_options()
 
 function get_user_levels()
 {
-    return ['superadmin', 'admin_penerbitan', 'author', 'reviewer', 'editor', 'layouter', 'author_reviewer','admin_percetakan','admin_gudang','admin_pemasaran','admin_keuangan'];
+    return ['superadmin', 'admin_penerbitan', 'author', 'reviewer', 'editor', 'layouter', 'author_reviewer', 'admin_percetakan', 'admin_gudang', 'admin_pemasaran', 'admin_keuangan'];
 }
 
 function filter_boolean($data)
@@ -606,4 +606,13 @@ function expand($authors)
     }
     $authors_list .= '</ul>';
     return $authors_list;
+}
+
+function get_print_order_priority()
+{
+    return [
+        1 => 'rendah',
+        2 => 'sedang',
+        3 => 'tinggi'
+    ];
 }
