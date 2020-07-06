@@ -70,7 +70,7 @@ class Print_order_model extends MY_Model
 
     public function get_print_order($print_order_id)
     {
-        return $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'order_number', 'total', 'type', 'priority', 'print_order.entry_date', 'print_order.finish_date', 'print_order.input_by', 'book_file', 'book_file_link', 'cover_file', 'cover_file_link', 'book_notes', 'is_preprint', 'preprint_start_date', 'preprint_end_date', 'preprint_deadline', 'preprint_notes', 'print_order.is_print', 'print_order.print_start_date', 'print_order.print_end_date', 'print_order.print_deadline', 'print_order.print_notes', 'is_postprint', 'postprint_start_date', 'postprint_end_date', 'postprint_deadline', 'postprint_notes', 'print_order_status', 'is_reprint', 'book_edition'])
+        return $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'order_number', 'total', 'type', 'priority', 'print_order.entry_date', 'print_order.finish_date', 'print_order.input_by', 'book_file', 'book_file_link', 'cover_file', 'cover_file_link', 'book_notes', 'is_preprint', 'preprint_start_date', 'preprint_end_date', 'preprint_deadline', 'preprint_notes', 'print_order.is_print', 'print_order.print_start_date', 'print_order.print_end_date', 'print_order.print_deadline', 'print_order.print_notes', 'is_postprint', 'postprint_start_date', 'postprint_end_date', 'postprint_deadline', 'postprint_notes', 'print_order_status', 'is_reprint', 'book_edition', 'nomor_hak_cipta', 'status_hak_cipta', 'file_hak_cipta', 'file_hak_cipta_link'])
             ->join('book')
             ->join_table('draft', 'book', 'draft')
             ->where('print_order_id', $print_order_id)
@@ -147,6 +147,42 @@ class Print_order_model extends MY_Model
             }
         }
         return $this;
+    }
+
+    public function start_progress($print_order_id, $progress)
+    {
+        // transaction data agar konsisten
+        $this->db->trans_begin();
+
+        $input = [
+            'print_order_status' => $progress,
+            "{$progress}_start_date" => date('Y-m-d H:i:s')
+        ];
+
+        $this->print_order->where('print_order_id', $print_order_id)->update($input);
+
+        if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
+            return false;
+        } else {
+            $this->db->trans_commit();
+            return true;
+        }
+    }
+
+    public function finish_progress($print_order_id, $progress)
+    {
+        $input = [
+            "{$progress}_end_date" => date('Y-m-d H:i:s')
+        ];
+
+        $update_state = $this->print_order->where('print_order_id', $print_order_id)->update($input);
+
+        if ($update_state) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 

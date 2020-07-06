@@ -20,6 +20,7 @@
 
 <div class="page-section">
     <?php $this->load->view('print_order/view/detail/index'); ?>
+    <?php $this->load->view('print_order/view/progress'); ?>
     <?php $this->load->view('print_order/view/preprint/index'); ?>
     <?php $this->load->view('print_order/view/print/index'); ?>
     <?php $this->load->view('print_order/view/postprint/index'); ?>

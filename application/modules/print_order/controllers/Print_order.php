@@ -95,6 +95,60 @@ class Print_order extends Admin_Controller
         $this->load->view('template', compact('form_action', 'main_view', 'pages', 'print_order'));
     }
 
+    public function api_start_progress($print_order_id)
+    {
+        // apakah order cetak tersedia
+        $print_order = $this->print_order->where('print_order_id', $print_order_id)->get();
+        if (!$print_order) {
+            $message = $this->lang->line('toast_data_not_available');
+            return $this->send_json_output(false, $message, 404);
+        }
+
+        // hanya untuk user yang berkaitan dengan draft ini
+        if (!$this->_is_printing_admin()) {
+            $message = $this->lang->line('toast_error_not_authorized');
+            return $this->send_json_output(false, $message);
+        }
+
+        // berisi 'progress' untuk conditional dibawah
+        $input = (object) $this->input->post(null, false);
+
+        $is_start_progress = $this->print_order->start_progress($print_order_id, $input->progress);
+
+        if ($is_start_progress) {
+            return $this->send_json_output(true, $this->lang->line('toast_edit_success'));
+        } else {
+            return $this->send_json_output(false, $this->lang->line('toast_edit_fail'));
+        }
+    }
+
+    public function api_finish_progress($print_order_id)
+    {
+        // apakah order cetak tersedia
+        $print_order = $this->print_order->where('print_order_id', $print_order_id)->get();
+        if (!$print_order) {
+            $message = $this->lang->line('toast_data_not_available');
+            return $this->send_json_output(false, $message, 404);
+        }
+
+        // hanya untuk user yang berkaitan dengan draft ini
+        if (!$this->_is_printing_admin()) {
+            $message = $this->lang->line('toast_error_not_authorized');
+            return $this->send_json_output(false, $message);
+        }
+
+        // berisi 'progress' untuk conditional dibawah
+        $input = (object) $this->input->post(null, false);
+
+        $is_finish_progress = $this->print_order->finish_progress($print_order_id, $input->progress);
+
+        if ($is_finish_progress) {
+            return $this->send_json_output(true, $this->lang->line('toast_edit_success'));
+        } else {
+            return $this->send_json_output(false, $this->lang->line('toast_edit_fail'));
+        }
+    }
+
     private function _is_printing_admin()
     {
         if ($this->level == 'superadmin' || $this->level == 'admin_percetakan') {
