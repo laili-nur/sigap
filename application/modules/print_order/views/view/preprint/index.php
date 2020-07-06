@@ -71,6 +71,7 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
                 <?php else : ?>
                     <span class="text-muted">Deadline</span>
                 <?php endif ?>
+                <strong><?= format_datetime($print_order->preprint_deadline); ?></strong>
             </div>
 
             <hr class="m-0">
@@ -78,15 +79,43 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
 
         <div class="card-body">
             <div class="card-button">
-                <!-- button tanggapan edit -->
+                <!-- button aksi -->
+                <?php if (is_admin()) : ?>
+                    <button
+                        title="Aksi admin"
+                        class="btn btn-outline-dark <?= !$is_preprint_started ? 'btn-disabled' : ''; ?>"
+                        data-toggle="modal"
+                        data-target="#modal-action-preprint"
+                        <?= !$is_preprint_started ? 'disabled' : ''; ?>
+                    >Aksi</button>
+                <?php endif; ?>
+
+                <!-- button tanggapan preprint -->
                 <button
                     type="button"
                     class="btn btn-outline-success"
                     data-toggle="modal"
-                    data-target="#modal-preprint"
+                    data-target="#modal-preprint-notes"
                 >Catatan</button>
             </div>
         </div>
+
+        <?php
+        // modal deadline
+        $this->load->view('print_order/view/common/deadline_modal', [
+            'progress' => 'preprint',
+        ]);
+
+        // modal action
+        $this->load->view('print_order/view/common/action_modal', [
+            'progress' => 'preprint',
+        ]);
+
+        // modal note
+        $this->load->view('print_order/view/common/notes_modal', [
+            'progress' => 'preprint',
+        ]);
+        ?>
     </div>
 </section>
 
@@ -94,16 +123,16 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
 $(document).ready(function() {
     const print_order_id = '<?= $print_order->print_order_id ?>'
 
-    // // inisialisasi segment
-    // reload_review_segment()
+    // inisialisasi segment
+    reload_preprint_segment()
 
-    // // ketika load segment, re-initialize call function-nya
-    // function reload_review_segment() {
-    //     $('#review-progress-wrapper').load(' #review-progress', function() {
-    //         // reinitiate modal after load
-    //         initFlatpickrModal()
-    //     });
-    // }
+    // ketika load segment, re-initialize call function-nya
+    function reload_preprint_segment() {
+        $('#review-progress-wrapper').load(' #review-progress', function() {
+            // reinitiate modal after load
+            initFlatpickrModal()
+        });
+    }
 
     // mulai pracetak
     $('#preprint-progress-wrapper').on('click', '#btn-start-preprint', function() {
@@ -121,14 +150,12 @@ $(document).ready(function() {
                 showToast(false, err.responseJSON.message);
             },
             complete: function() {
-                // reload segmen review
-                // reload_review_segment()
+                // reload segmen preprint
+                reload_preprint_segment()
                 // reload progress
                 $('#progress-list-wrapper').load(' #progress-list');
                 // reload data draft
                 $('#print-data-wrapper').load(' #print-data');
-                // reload preprint
-                $('#preprint-progress-wrapper').load(' #preprint-progress');
             },
         })
     })
@@ -150,13 +177,11 @@ $(document).ready(function() {
             },
             complete: function() {
                 // reload segmen review
-                // reload_review_segment()
+                reload_preprint_segment()
                 // reload progress
                 $('#progress-list-wrapper').load(' #progress-list');
                 // reload data draft
                 $('#print-data-wrapper').load(' #print-data');
-                // reload preprint
-                $('#preprint-progress-wrapper').load(' #preprint-progress');
             },
         })
     })

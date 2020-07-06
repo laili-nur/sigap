@@ -131,7 +131,7 @@ class Print_order extends Admin_Controller
             return $this->send_json_output(false, $message, 404);
         }
 
-        // hanya untuk user yang berkaitan dengan draft ini
+        // hanya untuk admin
         if (!$this->_is_printing_admin()) {
             $message = $this->lang->line('toast_error_not_authorized');
             return $this->send_json_output(false, $message);
@@ -143,6 +143,86 @@ class Print_order extends Admin_Controller
         $is_finish_progress = $this->print_order->finish_progress($print_order_id, $input->progress);
 
         if ($is_finish_progress) {
+            return $this->send_json_output(true, $this->lang->line('toast_edit_success'));
+        } else {
+            return $this->send_json_output(false, $this->lang->line('toast_edit_fail'));
+        }
+    }
+
+    // update draft, kirim update via post
+    public function api_update($print_order_id = null)
+    {
+        // cek data
+        $print_order = $this->print_order->where('print_order_id', $print_order_id)->get();
+        if (!$print_order) {
+            $message = $this->lang->line('toast_data_not_available');
+            return $this->send_json_output(false, $message, 404);
+        }
+
+        // // hanya untuk admin
+        // if (!$this->_is_printing_admin()) {
+        //     $message = $this->lang->line('toast_error_not_authorized');
+        //     return $this->send_json_output(false, $message);
+        // }
+
+        $input = (object) $this->input->post(null, false);
+
+        if ($this->print_order->where('print_order_id', $print_order_id)->update($input)) {
+            return $this->send_json_output(true, $this->lang->line('toast_edit_success'));
+        } else {
+            return $this->send_json_output(false, $this->lang->line('toast_edit_fail'));
+        }
+    }
+
+    // update draft, kirim update via post
+    public function api_action_progress($print_order_id)
+    {
+        // cek data
+        $print_order = $this->print_order->where('print_order_id', $print_order_id)->get();
+        if (!$print_order) {
+            $message = $this->lang->line('toast_data_not_available');
+            return $this->send_json_output(false, $message, 404);
+        }
+
+        // hanya untuk admin
+        if (!$this->_is_printing_admin()) {
+            $message = $this->lang->line('toast_error_not_authorized');
+            return $this->send_json_output(false, $message);
+        }
+
+        $input = (object) $this->input->post(null, false);
+
+        // cek status apakah akan direvert
+        if ($input->revert) {
+            $input->{"is_$input->progress"} = 0;
+
+            // kembali ke status 'sedang diproses'
+            if ($input->progress == 'preprint') {
+                $input->print_order_status = 'preprint';
+            } elseif ($input->progress == 'print') {
+                $input->print_order_status = 'print';
+            } elseif ($input->progress == 'postprint') {
+                $input->print_order_status = 'posprint';
+            }
+        } else {
+            $input->{"is_$input->progress"} = $input->accept;
+
+            // update draft status ketika selesai progress
+            if ($input->progress == 'preprint') {
+                $input->print_order_status = $input->accept ? 'preprint_finish' : 'reject';
+            } elseif ($input->progress == 'print') {
+                $input->print_order_status = $input->accept ? 'print_finish' : 'reject';
+            } elseif ($input->progress == 'postprint') {
+                $input->print_order_status = $input->accept ? 'postprint_finish' : 'reject';
+            }
+        }
+
+        // hilangkan property pembantu yang tidak ada di db
+        unset($input->progress);
+        unset($input->accept);
+        unset($input->revert);
+
+        if ($this->print_order->where('print_order_id', $print_order_id)->update($input)) {
             return $this->send_json_output(true, $this->lang->line('toast_edit_success'));
         } else {
             return $this->send_json_output(false, $this->lang->line('toast_edit_fail'));
