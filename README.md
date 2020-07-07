@@ -51,3 +51,6 @@ Developed for UGM PRESS internal system
         "editor.formatOnSave": true
     },
 ```
+
+### Migration and Seeding
+- Run `php index.php tools help` to show available CLI commands
