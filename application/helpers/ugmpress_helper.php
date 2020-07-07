@@ -630,6 +630,6 @@ function get_print_order_status()
         'postprint_approval' => 'Jilid menunggu approval',
         'postprint_finish' => 'Jilid selesai',
         'reject' => 'Ditolak',
-        'final' => 'Finalisasi',
+        'finish' => 'Selesai',
     ];
 }

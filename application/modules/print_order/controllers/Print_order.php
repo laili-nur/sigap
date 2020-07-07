@@ -53,7 +53,7 @@ class Print_order extends Admin_Controller
 
         if (!$this->print_order->validate() || $this->form_validation->error_array()) {
             $pages       = $this->pages;
-            $main_view   = 'print_order/form_print_order';
+            $main_view   = 'print_order/form_print_order_add';
             $form_action = 'print_order/add';
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
@@ -64,6 +64,46 @@ class Print_order extends Admin_Controller
 
         // insert print order
         $print_order_id = $this->print_order->insert($input);
+
+        if ($print_order_id) {
+            $this->session->set_flashdata('success', $this->lang->line('toast_add_success'));
+        } else {
+            $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
+        }
+
+        redirect('print_order/view/' . $print_order_id);
+    }
+
+    public function edit($print_order_id)
+    {
+        if (!$this->_is_printing_admin()) {
+            redirect($this->pages);
+        }
+
+        $print_order = $this->print_order->get_print_order($print_order_id);
+        if (!$print_order) {
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
+            redirect($this->pages);
+        }
+
+        if (!$_POST) {
+            $input = (object)  $print_order;
+        } else {
+            $input = (object) $this->input->post(null, true);
+            // catat orang yang menginput order cetak
+            $input->input_by = $this->username;
+        }
+
+        if (!$this->print_order->validate() || $this->form_validation->error_array()) {
+            $pages       = $this->pages;
+            $main_view   = 'print_order/form_print_order_edit';
+            $form_action = "print_order/edit/$print_order_id";
+            $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
+            return;
+        }
+
+        // update print order
+        $print_order_id = $this->print_order->where('print_order_id', $print_order_id)->update($input);
 
         if ($print_order_id) {
             $this->session->set_flashdata('success', $this->lang->line('toast_add_success'));
@@ -95,6 +135,34 @@ class Print_order extends Admin_Controller
         $main_view   = 'print_order/view/overview';
         $form_action = "print_order/edit/$print_order_id";
         $this->load->view('template', compact('form_action', 'main_view', 'pages', 'print_order'));
+    }
+
+    public function finish($print_order_id)
+    {
+        // memastikan konsistensi data
+        $this->db->trans_begin();
+
+        // apakah order cetak tersedia
+        $print_order = $this->print_order->where('print_order_id', $print_order_id)->get();
+        if (!$print_order) {
+            $message = $this->lang->line('toast_data_not_available');
+            return $this->send_json_output(false, $message, 404);
+        }
+
+        // update data order cetak
+        $this->print_order->where('print_order_id', $print_order_id)->update([
+            'print_order_status' => 'finish',
+            'finish_date' => now()
+        ]);
+
+        if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
+            $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
+        } else {
+            $this->db->trans_commit();
+            $this->session->set_flashdata('error', 'Proses cetak selesai, stok buku telah diubah.');
+            redirect("book/view/{$print_order->book_id}");
+        }
     }
 
     public function api_start_progress($print_order_id)

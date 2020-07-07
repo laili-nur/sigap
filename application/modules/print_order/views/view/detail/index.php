@@ -59,11 +59,11 @@
                                 </tr>
                                 <tr>
                                     <td width="200px"> Tanggal Masuk </td>
-                                    <td><?= $print_order->entry_date; ?> </td>
+                                    <td><?= format_datetime($print_order->entry_date); ?> </td>
                                 </tr>
                                 <tr>
                                     <td width="200px"> Tanggal Selesai </td>
-                                    <td><?= $print_order->finish_date; ?> </td>
+                                    <td><?= format_datetime($print_order->finish_date); ?> </td>
                                 </tr>
                                 <tr>
                                     <td width="200px"> Diinput oleh </td>

@@ -15,6 +15,14 @@
     </nav>
     <div class="d-flex justify-content-between align-items-center my-3">
         <div class="page-title mb-0 pb-0 h1"> Order Cetak </div>
+        <div>
+            <?php if (is_admin()) : ?>
+                <a
+                    href="<?= base_url('print_order/edit/' . $print_order->print_order_id) ?>"
+                    class="btn btn-secondary btn-sm"
+                ><i class="fa fa-edit fa-fw"></i> Edit Order Cetak</a>
+            <?php endif ?>
+        </div>
     </div>
 </header>
 
@@ -28,7 +36,7 @@
         if ($print_order->is_print) {
             $this->load->view('print_order/view/postprint/index');
             if ($print_order->is_postprint) {
-                $this->load->view('print_order/view/finish/index');
+                $this->load->view('print_order/view/final/index');
             }
         }
     }
