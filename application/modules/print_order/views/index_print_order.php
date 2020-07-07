@@ -2,41 +2,41 @@
 $level              = check_level();
 $per_page           = 10;
 $keyword            = $this->input->get('keyword');
-$print_category     = $this->input->get('print_category');
-$print_type         = $this->input->get('print_type');
-$print_priority     = $this->input->get('print_priority');
-$progress_status    = $this->input->get('progress_status');
+$reprint            = $this->input->get('reprint');
+$type               = $this->input->get('type');
+$priority           = $this->input->get('priority');
+$print_order_status = $this->input->get('print_order_status');
 $page               = $this->uri->segment(2);
 $i                  = isset($page) ? $page * $per_page - $per_page : 0;
 
-$print_category_options = [
+$reprint_options = [
     ''  => '- Filter Kategori Cetak -',
     '0' => 'Cetak Baru',
     '1' => 'Cetak Ulang'
 ];
 
-$print_type_options = [
+$type_options = [
     ''  => '- Filter Tipe Cetak -',
-    '0' => 'Cetak POD',
-    '1' => 'Cetak Offset'
+    'pod' => 'Cetak POD',
+    'offset' => 'Cetak Offset'
 ];
 
-$print_priority_options = [
+$priority_options = [
     ''  => '- Filter Prioritas Cetak -',
-    '0' => 'Prioritas Rendah',
-    '1' => 'Prioritas Sedang',
-    '2' => 'Prioritas Tinggi'
+    '1' => 'Prioritas Rendah',
+    '2' => 'Prioritas Sedang',
+    '3' => 'Prioritas Tinggi'
 ];
 
-$print_status_options = [
+$print_order_status_options = [
     ''  => '- Filter Status Cetak -',
-    '0' => 'Belum di Proses',
-    '1' => 'Proses Pracetak',
-    '2' => 'Proses Cetak',
-    '3' => 'Proses Jilid',
-    '4' => 'Proses Finalisasi',
-    '5' => 'Ditolak',
-    '6' => 'Selesai'
+    'waiting' => 'Belum diproses',
+    'preprint' => 'Proses Pracetak',
+    'print' => 'Proses Cetak',
+    'postprint' => 'Proses Jilid',
+    'final' => 'Proses Finalisasi',
+    'reject' => 'Ditolak',
+    'finish' => 'Selesai'
 ];
 ?>
 
@@ -75,20 +75,20 @@ $print_status_options = [
                                 <?= form_dropdown('per_page', get_per_page_options(), $per_page, 'id="per_page" class="form-control custom-select d-block" title="List per page"'); ?>
                             </div>
                             <div class="col-12 col-md-3 mb-3">
-                                <label for="print_category">Kategori Cetak</label>
-                                <?= form_dropdown('print_category', $print_category_options, $print_category, 'id="print_category" class="form-control custom-select d-block" title="Filter Kategori Cetak"'); ?>
+                                <label for="reprint">Kategori Cetak</label>
+                                <?= form_dropdown('reprint', $reprint_options, $reprint, 'id="reprint" class="form-control custom-select d-block" title="Filter Status Buku"'); ?>
                             </div>
                             <div class="col-12 col-md-3 mb-3">
-                                <label for="print_type">Tipe Cetak</label>
-                                <?= form_dropdown('print_type', $print_type_options, $print_type, 'id="print_type" class="form-control custom-select d-block" title="Filter Tipe Cetak"'); ?>
+                                <label for="type">Tipe Cetak</label>
+                                <?= form_dropdown('type', $type_options, $type, 'id="type" class="form-control custom-select d-block" title="Filter Tipe Cetak"'); ?>
                             </div>
                             <div class="col-12 col-md-3 mb-3">
-                                <label for="print_priority">Prioritas Cetak</label>
-                                <?= form_dropdown('print_priority', $print_priority_options, $print_priority, 'id="print_priority" class="form-control custom-select d-block" title="Filter Prioritas Cetak"'); ?>
+                                <label for="priority">Prioritas Cetak</label>
+                                <?= form_dropdown('priority', $priority_options, $priority, 'id="priority" class="form-control custom-select d-block" title="Filter Prioritas Cetak"'); ?>
                             </div>
                             <div class="col-12 col-md-3">
-                                <label for="progress_status">Status</label>
-                                <?= form_dropdown('progress_status', $print_status_options, $progress_status, 'id="progress_status" class="form-control custom-select d-block" title="Filter Status Cetak"'); ?>
+                                <label for="print_order_status">Status</label>
+                                <?= form_dropdown('print_order_status', $print_order_status_options, $print_order_status, 'id="print_order_status" class="form-control custom-select d-block" title="Filter Status Cetak"'); ?>
                             </div>
                             <div class="col-12 col-md-6">
                                 <label for="status">Pencarian</label>
@@ -177,22 +177,10 @@ $print_status_options = [
                                         <td class="align-middle"><?= $print_order->order_number; ?></td>
                                         <td class="align-middle"><?= $print_order->total; ?></td>
                                         <td class="align-middle"><?= $print_order->type; ?></td>
-                                        <td class="align-middle">
-                                            <?php
-                                            if ($print_order->priority == 1) {
-                                                echo 'Rendah';
-                                            } elseif ($print_order->priority == 2) {
-                                                echo 'Sedang';
-                                            } elseif ($print_order->priority == 3) {
-                                                echo 'Tinggi';
-                                            } else {
-                                                echo '';
-                                            }
-                                            ?>
-                                        </td>
+                                        <td class="align-middle"><?= get_print_order_priority()[$print_order->priority] ?? '' ?>
                                         </td>
                                         <td class="align-middle"><?= $print_order->entry_date; ?></td>
-                                        <td class="align-middle"><?= $print_order->print_order_status; ?></td>
+                                        <td class="align-middle"><?= get_print_order_status()[$print_order->print_order_status] ?? $print_order->print_order_status; ?></td>
                                         <td class="align-middle text-right">
                                             <a
                                                 href="<?= base_url('print_order/edit/' . $print_order->print_order_id . ''); ?>"

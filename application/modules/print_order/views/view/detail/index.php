@@ -55,7 +55,7 @@
                                 </tr>
                                 <tr>
                                     <td width="200px"> Prioritas </td>
-                                    <td><?= $print_order->priority; ?> </td>
+                                    <td><?= get_print_order_priority()[$print_order->priority] ?? '' ?> </td>
                                 </tr>
                                 <tr>
                                     <td width="200px"> Tanggal Masuk </td>
@@ -71,7 +71,7 @@
                                 </tr>
                                 <tr>
                                     <td width="200px"> Status </td>
-                                    <td><?= $print_order->print_order_status; ?> </td>
+                                    <td><?= get_print_order_status()[$print_order->print_order_status] ?? $print_order->print_order_status; ?></td>
                                 </tr>
                             </tbody>
                         </table>

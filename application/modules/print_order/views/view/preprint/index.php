@@ -37,7 +37,12 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
                     <?php if ($print_order->is_preprint) : ?>
                         <span class="text-success">
                             <i class="fa fa-check"></i>
-                            <span>Pracetak Selesai</span>
+                            <span>Selesai</span>
+                        </span>
+                    <?php elseif (!$print_order->is_preprint && $print_order->print_order_status == 'reject') : ?>
+                        <span class="text-danger">
+                            <i class="fa fa-times"></i>
+                            <span>Ditolak</span>
                         </span>
                     <?php elseif (!$print_order->is_preprint && $print_order->preprint_start_date) : ?>
                         <span class="text-primary">
@@ -72,6 +77,12 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
                     <span class="text-muted">Deadline</span>
                 <?php endif ?>
                 <strong><?= format_datetime($print_order->preprint_deadline); ?></strong>
+            </div>
+
+            <div class="list-group-item justify-content-between">
+                <span class="text-muted">User</span>
+                <strong>
+                    <?= $print_order->preprint_user ?></strong>
             </div>
 
             <hr class="m-0">
@@ -128,7 +139,7 @@ $(document).ready(function() {
 
     // ketika load segment, re-initialize call function-nya
     function reload_preprint_segment() {
-        $('#review-progress-wrapper').load(' #review-progress', function() {
+        $('#preprint-progress-wrapper').load(' #preprint-progress', function() {
             // reinitiate modal after load
             initFlatpickrModal()
         });
@@ -176,7 +187,7 @@ $(document).ready(function() {
                 showToast(false, err.responseJSON.message);
             },
             complete: function() {
-                // reload segmen review
+                // reload segmen preprint
                 reload_preprint_segment()
                 // reload progress
                 $('#progress-list-wrapper').load(' #progress-list');

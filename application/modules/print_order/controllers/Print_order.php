@@ -17,7 +17,11 @@ class Print_order extends Admin_Controller
     {
         // all filter
         $filters = [
-            'keyword' => $this->input->get('keyword', true),
+            'keyword'            => $this->input->get('keyword', true),
+            'reprint'            => $this->input->get('reprint', true),
+            'type'               => $this->input->get('type', true),
+            'priority'           => $this->input->get('priority', true),
+            'print_order_status' => $this->input->get('print_order_status', true)
         ];
 
         // custom per page
@@ -55,18 +59,16 @@ class Print_order extends Admin_Controller
             return;
         }
 
-        // memastikan konsistensi data
-        $this->db->trans_begin();
+        // set status awal
+        $input->print_order_status = 'waiting';
 
         // insert print order
         $print_order_id = $this->print_order->insert($input);
 
-        if ($this->db->trans_status() === false) {
-            $this->db->trans_rollback();
-            $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
-        } else {
-            $this->db->trans_commit();
+        if ($print_order_id) {
             $this->session->set_flashdata('success', $this->lang->line('toast_add_success'));
+        } else {
+            $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
         }
 
         redirect('print_order/view/' . $print_order_id);
@@ -165,7 +167,19 @@ class Print_order extends Admin_Controller
         //     return $this->send_json_output(false, $message);
         // }
 
+
         $input = (object) $this->input->post(null, false);
+
+        // untuk reset deadline
+        if (isset($input->preprint_deadline)) {
+            $input->preprint_deadline = empty_to_null($input->preprint_deadline);
+        }
+        if (isset($input->print_deadline)) {
+            $input->print_deadline = empty_to_null($input->print_deadline);
+        }
+        if (isset($input->postprint_deadline)) {
+            $input->postprint_deadline = empty_to_null($input->postprint_deadline);
+        }
 
         if ($this->print_order->where('print_order_id', $print_order_id)->update($input)) {
             return $this->send_json_output(true, $this->lang->line('toast_edit_success'));

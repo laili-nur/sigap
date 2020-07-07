@@ -616,3 +616,20 @@ function get_print_order_priority()
         3 => 'tinggi'
     ];
 }
+
+function get_print_order_status()
+{
+    return [
+        'preprint' => 'Proses pracetak',
+        'preprint_approval' => 'Pracetak menunggu approval',
+        'preprint_finish' => 'Pracetak selesai',
+        'print' => 'Proses cetak',
+        'print_approval' => 'Cetak menunggu approval',
+        'print_finish' => 'Cetak selesai',
+        'postprint' => 'Proses jilid',
+        'postprint_approval' => 'Jilid menunggu approval',
+        'postprint_finish' => 'Jilid selesai',
+        'reject' => 'Ditolak',
+        'final' => 'Finalisasi',
+    ];
+}

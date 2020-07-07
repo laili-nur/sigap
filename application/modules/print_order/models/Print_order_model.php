@@ -81,6 +81,10 @@ class Print_order_model extends MY_Model
     {
         $print_orders = $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'category_name', 'order_number', 'total', 'type', 'priority', 'print_order.entry_date', 'print_order_status'])
             ->when('keyword', $filters['keyword'])
+            ->when('reprint', $filters['reprint'])
+            ->when('type', $filters['type'])
+            ->when('priority', $filters['priority'])
+            ->when('print_order_status', $filters['print_order_status'])
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
             ->join_table('category', 'draft', 'category')
@@ -93,6 +97,10 @@ class Print_order_model extends MY_Model
 
         $total = $this->select('draft.draft_id')
             ->when('keyword', $filters['keyword'])
+            ->when('reprint', $filters['reprint'])
+            ->when('type', $filters['type'])
+            ->when('priority', $filters['priority'])
+            ->when('print_order_status', $filters['print_order_status'])
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
             ->join_table('category', 'draft', 'category')
@@ -124,26 +132,29 @@ class Print_order_model extends MY_Model
                 $this->where('is_reprint', $data);
             }
 
-            if ($params == 'category') {
-                $this->where('draft.category_id', $data);
+            if ($params == 'type') {
+                $this->where('type', $data);
             }
 
-            if ($params == 'status') {
-                $this->where('book.status_hak_cipta', $data == 'done' ? 2 : 1);
-            }
-
-            if ($params == 'published_year') {
-                $this->where('year(published_date)', $data);
+            if ($params == 'priority') {
+                $this->where('priority', $data);
             }
 
             if ($params == 'keyword') {
                 $this->group_start();
-                // $this->like('draft_title', $data);
                 $this->or_like('book_title', $data);
-                // if ($this->session->userdata('level') != 'reviewer') {
-                $this->or_like('author_name', $data);
-                // }
+                $this->or_like('order_number', $data);
                 $this->group_end();
+            }
+
+            if ($params == 'print_order_status') {
+                if ($data == 'preprint' || $data == 'print' || $data == 'postprint') {
+                    $this->where('print_order_status', $data);
+                    $this->or_where('print_order_status', "{$data}_approval");
+                    $this->or_where('print_order_status', "{$data}_finish");
+                } else {
+                    $this->where('print_order_status', $data);
+                }
             }
         }
         return $this;
@@ -156,7 +167,8 @@ class Print_order_model extends MY_Model
 
         $input = [
             'print_order_status' => $progress,
-            "{$progress}_start_date" => date('Y-m-d H:i:s')
+            "{$progress}_start_date" => date('Y-m-d H:i:s'),
+            "{$progress}_user" => $this->session->userdata('username')
         ];
 
         $this->print_order->where('print_order_id', $print_order_id)->update($input);
@@ -173,7 +185,9 @@ class Print_order_model extends MY_Model
     public function finish_progress($print_order_id, $progress)
     {
         $input = [
-            "{$progress}_end_date" => date('Y-m-d H:i:s')
+            'print_order_status' => "{$progress}_approval",
+            "{$progress}_end_date" => date('Y-m-d H:i:s'),
+            "{$progress}_user" => $this->session->userdata('username')
         ];
 
         $update_state = $this->print_order->where('print_order_id', $print_order_id)->update($input);

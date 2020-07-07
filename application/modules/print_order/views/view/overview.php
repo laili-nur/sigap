@@ -19,10 +19,18 @@
 </header>
 
 <div class="page-section">
-    <?php $this->load->view('print_order/view/detail/index'); ?>
-    <?php $this->load->view('print_order/view/progress'); ?>
-    <?php $this->load->view('print_order/view/preprint/index'); ?>
-    <?php $this->load->view('print_order/view/print/index'); ?>
-    <?php $this->load->view('print_order/view/postprint/index'); ?>
-    <?php $this->load->view('print_order/view/finish/index'); ?>
+    <?php
+    $this->load->view('print_order/view/detail/index');
+    $this->load->view('print_order/view/progress');
+    $this->load->view('print_order/view/preprint/index');
+    if ($print_order->is_preprint) {
+        $this->load->view('print_order/view/print/index');
+        if ($print_order->is_print) {
+            $this->load->view('print_order/view/postprint/index');
+            if ($print_order->is_postprint) {
+                $this->load->view('print_order/view/finish/index');
+            }
+        }
+    }
+    ?>
 </div>
