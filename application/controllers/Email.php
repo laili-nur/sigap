@@ -13,22 +13,22 @@ class Email extends MY_Controller
     public function send()
     {
         // Please specify your Mail Server - Example: mail.yourdomain.com.
-        ini_set("SMTP", "sigap.ugmpress@gmail.com");
+        // ini_set("SMTP", "sigap.ugmpress@gmail.com");
 
-        // Please specify an SMTP Number 25 and 8889 are valid SMTP Ports.
-        ini_set("smtp_port", "25");
+        // // Please specify an SMTP Number 25 and 8889 are valid SMTP Ports.
+        // ini_set("smtp_port", "25");
 
-        // Please specify the return address to use
-        ini_set('sendmail_from', 'sigap.ugmpress@gmail.com');
+        // // Please specify the return address to use
+        // ini_set('sendmail_from', 'sigap.ugmpress@gmail.com');
 
         $email_config = array(
             'protocol'  => 'smtp',
-            'smtp_host' => 'ssl://smtp.googlemail.com',
-            'smtp_port' => '465',
+            'smtp_host' => 'smtp.googlemail.com',
+            'smtp_port' => '587',
             'smtp_user' => getenv('EMAIL_ADDRESS'),
             'smtp_pass' => getenv('EMAIL_PASSWORD'),
             'mailtype'  => 'html',
-            'starttls'  => true,
+            'smtp_crypto' => 'tls',
             'newline'   => "\r\n",
         );
 
