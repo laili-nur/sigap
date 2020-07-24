@@ -72,23 +72,37 @@ $draft_status_options = array_map(function ($draft_status) {
                         <div class="form-group">
                             <label for="draft_file">File Draft</label>
                             <?php if ($input->draft_file) : ?>
-                                <div class="alert alert-info d-flex justify-content-between align-items-center">File draft yang tersimpan
-                                    <a
-                                        href="<?= base_url("book/download_file/draftfile/$input->draft_file"); ?>"
-                                        class="btn btn-success btn-sm my-2 uploaded-file"
-                                    ><i class="fa fa-download"></i> Download</a>
+                                <div class="alert alert-info">
+                                    <div class="d-flex justify-content-between align-items-center">File draft yang tersimpan
+                                        <a
+                                            href="<?= base_url("book/download_file/draftfile/$input->draft_file"); ?>"
+                                            class="btn btn-success btn-sm my-2 uploaded-file"
+                                        ><i class="fa fa-download"></i> Download</a>
+                                    </div>
+                                    <hr>
+                                    <div>
+                                        <?= form_checkbox('delete_draft', true, false, 'id="delete-draft"'); ?>
+                                        <label
+                                            class="form-check-label"
+                                            for="delete-draft"
+                                        >
+                                            <span class="text-danger">Hapus draft</span>
+                                        </label>
+                                    </div>
                                 </div>
                             <?php endif; ?>
-                            <div class="custom-file">
-                                <?= form_upload('draft_file', '', 'class="custom-file-input"'); ?>
-                                <label
-                                    class="custom-file-label"
-                                    for="draft_file"
-                                >Pilih file</label>
-                                <div class="invalid-feedback">Field is required</div>
+                            <div id="upload-file-form">
+                                <div class="custom-file">
+                                    <?= form_upload('draft_file', '', 'class="custom-file-input"'); ?>
+                                    <label
+                                        class="custom-file-label"
+                                        for="draft_file"
+                                    >Pilih file</label>
+                                    <div class="invalid-feedback">Field is required</div>
+                                </div>
+                                <small class="form-text text-muted">Hanya menerima file bertype : <?= get_allowed_file_types('draft_file')['to_text']; ?></small>
+                                <?= file_form_error('draft_file', '<p class="text-danger">', '</p>'); ?>
                             </div>
-                            <small class="form-text text-muted">Hanya menerima file bertype : <?= get_allowed_file_types('draft_file')['to_text']; ?></small>
-                            <?= file_form_error('draft_file', '<p class="text-danger">', '</p>'); ?>
                         </div>
                         <div class="form-group">
                             <label for="draft_file_link">Link File Draft</label>
@@ -444,5 +458,13 @@ $(document).ready(function() {
     });
 
     $(`#draft_notes`).summernote(summernoteConfig)
+
+    $('#delete-draft').change(function() {
+        if (this.checked) {
+            $('#upload-file-form').hide()
+        } else {
+            $('#upload-file-form').show()
+        }
+    })
 });
 </script>

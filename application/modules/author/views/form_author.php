@@ -211,9 +211,6 @@ $(document).ready(function() {
                 },
                 work_unit_id: "crequired",
                 institute_id: "crequired",
-                author_contact: {
-                    cnumber: true
-                },
                 author_email: {
                     cemail: true
                 },

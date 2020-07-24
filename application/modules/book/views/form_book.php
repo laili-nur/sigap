@@ -14,6 +14,7 @@
     </nav>
 </header>
 <div class="page-section">
+    <?= validation_errors() ?>
     <div class="row">
         <div class="col-md-6">
             <section class="card">
@@ -100,22 +101,36 @@
                                 File Buku
                             </label>
                             <?php if ($input->book_file) : ?>
-                                <div class="alert alert-info d-flex justify-content-between align-items-center">File buku yang tersimpan
-                                    <a
-                                        href="<?= base_url("book/download_file/bookfile/$input->book_file"); ?>"
-                                        class="btn btn-success btn-sm my-2 uploaded-file"
-                                    ><i class="fa fa-download"></i> Download</a>
+                                <div class="alert alert-info">
+                                    <div class="d-flex justify-content-between align-items-center">File buku yang tersimpan
+                                        <a
+                                            href="<?= base_url("book/download_file/bookfile/$input->book_file"); ?>"
+                                            class="btn btn-success btn-sm my-2 uploaded-file"
+                                        ><i class="fa fa-download"></i> Download</a>
+                                    </div>
+                                    <hr>
+                                    <div>
+                                        <?= form_checkbox('delete_book', true, false, 'id="delete-book"'); ?>
+                                        <label
+                                            class="form-check-label"
+                                            for="delete-book"
+                                        >
+                                            <span class="text-danger">Hapus buku</span>
+                                        </label>
+                                    </div>
                                 </div>
                             <?php endif; ?>
-                            <div class="custom-file">
-                                <?= form_upload('book_file', '', 'class="custom-file-input" id="book_file"'); ?>
-                                <label
-                                    class="custom-file-label"
-                                    for="book_file"
-                                >Pilih file</label>
+                            <div id="upload-file-form">
+                                <div class="custom-file">
+                                    <?= form_upload('book_file', '', 'class="custom-file-input" id="book_file"'); ?>
+                                    <label
+                                        class="custom-file-label"
+                                        for="book_file"
+                                    >Pilih file</label>
+                                </div>
+                                <small class="form-text text-muted">Hanya menerima file bertype : <?= get_allowed_file_types('book_file')['to_text']; ?></small>
+                                <?= file_form_error('book_file', '<p class="text-danger">', '</p>'); ?>
                             </div>
-                            <small class="form-text text-muted">Hanya menerima file bertype : <?= get_allowed_file_types('book_file')['to_text']; ?></small>
-                            <?= file_form_error('book_file', '<p class="text-danger">', '</p>'); ?>
                         </div>
                         <div class="form-group">
                             <label for="book_file_link">Link File Buku</label>
@@ -184,5 +199,13 @@ $(document).ready(function() {
     });
 
     $('#book_notes').summernote(summernoteConfig)
+
+    $('#delete-book').change(function() {
+        if (this.checked) {
+            $('#upload-file-form').hide()
+        } else {
+            $('#upload-file-form').show()
+        }
+    })
 });
 </script>

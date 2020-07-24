@@ -587,13 +587,13 @@ class Draft extends Operator_Controller
         }
     }
 
-    public function edit($id = null)
+    public function edit($draft_id = null)
     {
         if (!is_admin()) {
             redirect($this->pages);
         }
 
-        $draft = $this->draft->where('draft_id', $id)->get();
+        $draft = $this->draft->where('draft_id', $draft_id)->get();
         if (!$draft) {
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
             redirect($this->pages);
@@ -622,27 +622,42 @@ class Draft extends Operator_Controller
         if (!$this->draft->validate() || $this->form_validation->error_array()) {
             $pages       = $this->pages;
             $main_view   = 'draft/form_draft_edit';
-            $form_action = "draft/edit/$id";
+            $form_action = "draft/edit/$draft_id";
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
         }
 
-        if ($this->draft->where('draft_id', $id)->update($input)) {
-            $this->session->set_flashdata('success', $this->lang->line('toast_edit_success'));
-        } else {
-            $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
+        // memastikan konsistensi data
+        $this->db->trans_begin();
+
+        //  hapus buku jika check delete_draft
+        if (isset($input->delete_draft) && $input->delete_draft == 1) {
+            $this->draft->delete_draft_file($input->draft_file);
+            $input->draft_file = null;
+            unset($input->delete_draft);
         }
 
-        redirect("$this->pages/view/$id");
+        // update draft
+        $this->draft->where('draft_id', $draft_id)->update($input);
+
+        if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
+            $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
+        } else {
+            $this->db->trans_commit();
+            $this->session->set_flashdata('success', $this->lang->line('toast_edit_success'));
+        }
+
+        redirect("$this->pages/view/$draft_id");
     }
 
-    public function delete($id = null)
+    public function delete($draft_id = null)
     {
         if (!is_admin()) {
             redirect($this->pages);
         }
 
-        $draft = $this->draft->where('draft_id', $id)->get();
+        $draft = $this->draft->where('draft_id', $draft_id)->get();
         if (!$draft) {
             $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
             redirect($this->pages);
@@ -651,8 +666,8 @@ class Draft extends Operator_Controller
         // memastikan konsistensi data
         $this->db->trans_begin();
 
-        $this->draft_author->where('draft_id', $id)->delete();
-        if ($this->draft->where('draft_id', $id)->delete()) {
+        $this->draft_author->where('draft_id', $draft_id)->delete();
+        if ($this->draft->where('draft_id', $draft_id)->delete()) {
             $this->draft->delete_draft_file($draft->draft_file);
             $this->draft->delete_draft_file($draft->review1_file);
             $this->draft->delete_draft_file($draft->review2_file);
