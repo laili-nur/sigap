@@ -19,6 +19,16 @@ class Print_order_model extends MY_Model
                 'rules' => 'trim|required',
             ],
             [
+                'field' => 'category',
+                'label' => $this->lang->line('form_print_order_category'),
+                'rules' => 'trim|required',
+            ],
+            [
+                'field' => 'order_code',
+                'label' => $this->lang->line('form_print_order_code'),
+                'rules' => 'trim|required',
+            ],
+            [
                 'field' => 'type',
                 'label' => $this->lang->line('form_print_order_type'),
                 'rules' => 'trim|required',
@@ -57,7 +67,9 @@ class Print_order_model extends MY_Model
     {
         return [
             'book_id'       => '',
+            'category'       => '',
             'order_number'  => '',
+            'order_code'  => '',
             'total'         => '',
             'print_number'  => '',
             'paper_content' => '',
@@ -196,6 +208,34 @@ class Print_order_model extends MY_Model
             return true;
         } else {
             return false;
+        }
+    }
+
+    public function upload_print_order_file($field_name, $file_name)
+    {
+        $config = [
+            'upload_path'      => './printorderfile/',
+            'file_name'        => $file_name,
+            'allowed_types'    => get_allowed_file_types('print_order_file')['types'],
+            'max_size'         => 51200,                                           // 50MB
+            'overwrite'        => true,
+            'file_ext_tolower' => true,
+        ];
+        $this->load->library('upload', $config);
+        if ($this->upload->do_upload($field_name)) {
+            // Upload OK, return uploaded file info.
+            return $this->upload->data();
+        } else {
+            // Add error to $_error_array
+            $this->form_validation->add_to_error_array($field_name, $this->upload->display_errors('', ''));
+            return false;
+        }
+    }
+
+    public function delete_print_order_file($file)
+    {
+        if ($file && file_exists("./printorderfile/$file")) {
+            unlink("./printorderfile/$file");
         }
     }
 }

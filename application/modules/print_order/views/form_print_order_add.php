@@ -33,12 +33,30 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="category">
+                                <?= $this->lang->line('form_print_order_category'); ?>
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <?= form_input('category', $input->category, 'class="form-control" id="category"'); ?>
+                            <?= form_error('category'); ?>
+                        </div>
+
+                        <div class="form-group">
                             <label for="order_number">
                                 <?= $this->lang->line('form_print_order_number'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
                             <?= form_input('order_number', $input->order_number, 'class="form-control" id="order_number"'); ?>
                             <?= form_error('order_number'); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="order_code">
+                                <?= $this->lang->line('form_print_order_code'); ?>
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <?= form_input('order_code', $input->order_code, 'class="form-control" id="order_code"'); ?>
+                            <?= form_error('order_code'); ?>
                         </div>
 
                         <div class="form-group">
@@ -96,7 +114,16 @@
                                 <?= $this->lang->line('form_print_order_total'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <?= form_input('total', $input->total, 'class="form-control" id="total"'); ?>
+                            <?php
+                            $form_total = array(
+                                'type'  => 'number',
+                                'name'  => 'total',
+                                'id'    => 'total',
+                                'value' => $input->total,
+                                'class' => 'form-control'
+                            );
+                            ?>
+                            <?= form_input($form_total); ?>
                             <?= form_error('total'); ?>
                         </div>
 
@@ -126,6 +153,21 @@
                             <?= form_input('paper_size', $input->paper_size, 'class="form-control" id="paper_size"'); ?>
                             <?= form_error('paper_size'); ?>
                         </div>
+
+                        <div class="form-group">
+                            <label for="print_order_file"><?= $this->lang->line('form_print_order_file'); ?></label>
+                            <div class="custom-file">
+                                <?= form_upload('print_order_file', '', 'class="custom-file-input"'); ?>
+                                <label
+                                    class="custom-file-label"
+                                    for="print_order_file"
+                                >Pilih file</label>
+                            </div>
+                            <small class="form-text text-muted">Menerima tipe file :
+                                <?= get_allowed_file_types('print_order_file')['to_text']; ?></small>
+                            <small class="text-danger"><?= $this->session->flashdata('print_order_file_no_data'); ?></small>
+                            <?= file_form_error('print_order_file', '<p class="small text-danger">', '</p>'); ?>
+                        </div>
                         </fieldset>
                         <hr>
                         <div class="form-actions">
@@ -154,7 +196,9 @@ $(document).ready(function() {
     $("#form_print_order").validate({
             rules: {
                 book_id: "crequired",
+                category: "crequired",
                 order_number: "crequired",
+                order_code: "crequired",
                 type: "crequired",
                 priority: "crequired",
                 total: {

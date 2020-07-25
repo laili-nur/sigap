@@ -75,7 +75,7 @@ $draft_status_options = array_map(function ($draft_status) {
                                 <div class="alert alert-info">
                                     <div class="d-flex justify-content-between align-items-center">File draft yang tersimpan
                                         <a
-                                            href="<?= base_url("book/download_file/draftfile/$input->draft_file"); ?>"
+                                            href="<?= base_url("draft/download_file/draftfile/$input->draft_file"); ?>"
                                             class="btn btn-success btn-sm my-2 uploaded-file"
                                         ><i class="fa fa-download"></i> Download</a>
                                     </div>

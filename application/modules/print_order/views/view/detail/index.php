@@ -30,19 +30,27 @@
                         <table class="table table-striped table-bordered mb-0">
                             <tbody>
                                 <tr>
-                                    <td width="200px"> Judul Buku </td>
+                                    <td width="200px"> <?= $this->lang->line('form_book_title') ?> </td>
                                     <td><strong><?= $print_order->book_title; ?></strong> </td>
                                 </tr>
                                 <tr>
-                                    <td width="200px"> Nomor Order </td>
+                                    <td width="200px"> <?= $this->lang->line('form_print_order_category') ?> </td>
+                                    <td><?= $print_order->category; ?> </td>
+                                </tr>
+                                <tr>
+                                    <td width="200px"> <?= $this->lang->line('form_print_order_number') ?> </td>
                                     <td><?= $print_order->order_number; ?> </td>
                                 </tr>
                                 <tr>
-                                    <td width="200px"> Tipe Cetak </td>
+                                    <td width="200px"> <?= $this->lang->line('form_print_order_code') ?> </td>
+                                    <td><?= $print_order->order_code; ?> </td>
+                                </tr>
+                                <tr>
+                                    <td width="200px"> <?= $this->lang->line('form_print_order_type') ?> </td>
                                     <td><?= $print_order->type; ?> </td>
                                 </tr>
                                 <tr>
-                                    <td width="200px"> Jumlah Cetak </td>
+                                    <td width="200px"> <?= $this->lang->line('form_print_order_total') ?> </td>
                                     <td><?= $print_order->total; ?> </td>
                                 </tr>
                                 <tr>
@@ -54,23 +62,29 @@
                                     <td><?= $print_order->book_edition  ?> </td>
                                 </tr>
                                 <tr>
-                                    <td width="200px"> Prioritas </td>
+                                    <td width="200px"> <?= $this->lang->line('form_print_order_priority') ?> </td>
                                     <td><?= get_print_order_priority()[$print_order->priority] ?? '' ?> </td>
                                 </tr>
                                 <tr>
-                                    <td width="200px"> Tanggal Masuk </td>
+                                    <td width="140px"><?= $this->lang->line('form_print_order_file') ?></td>
+                                    <td>
+                                        <?= ($print_order->print_order_file) ? '<a data-toggle="tooltip" data-placement="right" title="' . $print_order->print_order_file . '" class="btn btn-success btn-xs m-0" href="' . base_url('print_order/download_file/printorderfile/' . $print_order->print_order_file) . '" target="_blank"><i class="fa fa-download"></i> Download</a>' : ''; ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="200px"> <?= $this->lang->line('form_print_order_start_date') ?> </td>
                                     <td><?= format_datetime($print_order->entry_date); ?> </td>
                                 </tr>
                                 <tr>
-                                    <td width="200px"> Tanggal Selesai </td>
+                                    <td width="200px"> <?= $this->lang->line('form_print_order_finish_date') ?></td>
                                     <td><?= format_datetime($print_order->finish_date); ?> </td>
                                 </tr>
                                 <tr>
-                                    <td width="200px"> Diinput oleh </td>
+                                    <td width="200px"> <?= $this->lang->line('form_print_order_input_by') ?> </td>
                                     <td><?= $print_order->input_by; ?> </td>
                                 </tr>
                                 <tr>
-                                    <td width="200px"> Status </td>
+                                    <td width="200px"> <?= $this->lang->line('form_print_order_status') ?> </td>
                                     <td><?= get_print_order_status()[$print_order->print_order_status] ?? $print_order->print_order_status; ?></td>
                                 </tr>
                             </tbody>

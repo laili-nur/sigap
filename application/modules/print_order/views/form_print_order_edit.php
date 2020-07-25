@@ -33,12 +33,30 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="category">
+                                <?= $this->lang->line('form_print_order_category'); ?>
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <?= form_input('category', $input->category, 'class="form-control" id="category"'); ?>
+                            <?= form_error('category'); ?>
+                        </div>
+
+                        <div class="form-group">
                             <label for="order_number">
                                 <?= $this->lang->line('form_print_order_number'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
                             <?= form_input('order_number', $input->order_number, 'class="form-control" id="order_number"'); ?>
                             <?= form_error('order_number'); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="order_code">
+                                <?= $this->lang->line('form_print_order_code'); ?>
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <?= form_input('order_code', $input->order_code, 'class="form-control" id="order_code"'); ?>
+                            <?= form_error('order_code'); ?>
                         </div>
 
                         <div class="form-group">
@@ -128,7 +146,44 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="entry_date">Tanggal Masuk
+                            <label for="print_order_file"> <?= $this->lang->line('form_print_order_file'); ?></label>
+                            <?php if ($input->print_order_file) : ?>
+                                <div class="alert alert-info">
+                                    <div class="d-flex justify-content-between align-items-center">File order cetak yang tersimpan
+                                        <a
+                                            href="<?= base_url("print_order/download_file/printorderfile/$input->print_order_file"); ?>"
+                                            class="btn btn-success btn-sm my-2 uploaded-file"
+                                        ><i class="fa fa-download"></i> Download</a>
+                                    </div>
+                                    <hr>
+                                    <div>
+                                        <?= form_checkbox('delete_file', true, false, 'id="delete-file"'); ?>
+                                        <label
+                                            class="form-check-label"
+                                            for="delete-file"
+                                        >
+                                            <span class="text-danger">Hapus file</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <div id="upload-file-form">
+                                <div class="custom-file">
+                                    <?= form_upload('print_order_file', '', 'class="custom-file-input"'); ?>
+                                    <label
+                                        class="custom-file-label"
+                                        for="print_order_file"
+                                    >Pilih file</label>
+                                    <div class="invalid-feedback">Field is required</div>
+                                </div>
+                                <small class="form-text text-muted">Hanya menerima file bertype : <?= get_allowed_file_types('print_order_file')['to_text']; ?></small>
+                                <?= file_form_error('print_order_file', '<p class="text-danger">', '</p>'); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="entry_date">
+                                <?= $this->lang->line('form_print_order_start_date'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
                             <?= form_input('entry_date', $input->entry_date, 'class="form-control dates"'); ?>
@@ -136,7 +191,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="finish_date">Tanggal Selesai</label>
+                            <label for="finish_date"><?= $this->lang->line('form_print_order_finish_date'); ?></label>
                             <div class="has-clearable">
                                 <button
                                     type="button"
@@ -333,6 +388,8 @@ $(document).ready(function() {
     $("#form_print_order").validate({
             rules: {
                 book_id: "crequired",
+                category: "crequired",
+                order_code: "crequired",
                 order_number: "crequired",
                 type: "crequired",
                 priority: "crequired",
@@ -358,5 +415,13 @@ $(document).ready(function() {
         minDate: "2000-01-01",
         enableTime: true
     });
+
+    $('#delete-file').change(function() {
+        if (this.checked) {
+            $('#upload-file-form').hide()
+        } else {
+            $('#upload-file-form').show()
+        }
+    })
 })
 </script>

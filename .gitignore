@@ -28,6 +28,12 @@ documentfile/*
 !documentfile/.htaccess
 !documentfile/index.html
 
+# document file
+printorderfile/*
+!printorderfile/.gitkeep
+!printorderfile/.htaccess
+!printorderfile/index.html
+
 .env
 .env.development
 .env.production
