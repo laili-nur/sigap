@@ -9,7 +9,7 @@
             </li>
             <li class="breadcrumb-item">
                 <a class="text-muted">
-                    <?= $print_order->book_title; ?></a>
+                    <?= $print_order->book_id ? $print_order->book_title : $print_order->name; ?></a>
             </li>
         </ol>
     </nav>

@@ -617,9 +617,21 @@ function get_print_order_priority()
     ];
 }
 
+function get_print_order_category()
+{
+    return [
+        '' => null,
+        'new' => 'Cetak Baru',
+        'revise' => 'Cetak Ulang Revisi',
+        'reprint' => 'Cetak Ulang Non Revisi',
+        'nonbook' => 'Cetak Non Buku'
+    ];
+}
+
 function get_print_order_status()
 {
     return [
+        'waiting' => 'Menunggu diproses',
         'preprint' => 'Proses pracetak',
         'preprint_approval' => 'Pracetak menunggu approval',
         'preprint_finish' => 'Pracetak selesai',

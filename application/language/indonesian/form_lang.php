@@ -139,3 +139,5 @@ $lang['form_print_order_start_date']    = 'Tanggal Mulai Cetak';
 $lang['form_print_order_finish_date']   = 'Tanggal Selesai Cetak';
 $lang['form_print_order_input_by']      = 'Diinput Oleh';
 $lang['form_print_order_status']        = 'Status Order Cetak';
+$lang['form_print_order_notes']        = 'Catatan Order Cetak';
+$lang['form_print_order_name']        = 'Nama Pesanan';

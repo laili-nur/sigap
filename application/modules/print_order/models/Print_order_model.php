@@ -9,20 +9,15 @@ class Print_order_model extends MY_Model
     {
         $validation_rules = [
             [
-                'field' => 'book_id',
-                'label' => $this->lang->line('form_book_title'),
-                'rules' => 'trim|required',
-            ],
-            [
                 'field' => 'order_number',
                 'label' => $this->lang->line('form_print_order_number'),
                 'rules' => 'trim|required',
             ],
-            [
-                'field' => 'category',
-                'label' => $this->lang->line('form_print_order_category'),
-                'rules' => 'trim|required',
-            ],
+            // [
+            //     'field' => 'category',
+            //     'label' => $this->lang->line('form_print_order_category'),
+            //     'rules' => 'trim|required',
+            // ],
             [
                 'field' => 'order_code',
                 'label' => $this->lang->line('form_print_order_code'),
@@ -66,17 +61,20 @@ class Print_order_model extends MY_Model
     public function get_default_values()
     {
         return [
-            'book_id'       => '',
-            'category'       => '',
-            'order_number'  => '',
-            'order_code'  => '',
-            'total'         => '',
-            'print_number'  => '',
-            'paper_content' => '',
-            'paper_cover'  => '',
-            'paper_size'    => '',
-            'type'          => 'pod',
-            'priority'      => '',
+            'book_id'           => '',
+            'category'          => '',
+            'order_number'      => '',
+            'order_code'        => '',
+            'total'             => '',
+            'print_number'      => '',
+            'paper_content'     => '',
+            'paper_cover'       => '',
+            'paper_size'        => '',
+            'type'              => 'pod',
+            'priority'          => '',
+            'print_order_notes' => '',
+            'name'              => '',
+            'print_mode'              => 'book',
         ];
     }
 
@@ -91,9 +89,9 @@ class Print_order_model extends MY_Model
 
     public function filter_print_order($filters, $page)
     {
-        $print_orders = $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'category_name', 'order_number', 'total', 'type', 'priority', 'print_order.entry_date', 'print_order_status'])
+        $print_orders = $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'category_name', 'draft.is_reprint', 'print_order.*'])
             ->when('keyword', $filters['keyword'])
-            ->when('reprint', $filters['reprint'])
+            ->when('category', $filters['category'])
             ->when('type', $filters['type'])
             ->when('priority', $filters['priority'])
             ->when('print_order_status', $filters['print_order_status'])
@@ -109,7 +107,7 @@ class Print_order_model extends MY_Model
 
         $total = $this->select('draft.draft_id')
             ->when('keyword', $filters['keyword'])
-            ->when('reprint', $filters['reprint'])
+            ->when('category', $filters['category'])
             ->when('type', $filters['type'])
             ->when('priority', $filters['priority'])
             ->when('print_order_status', $filters['print_order_status'])
@@ -140,8 +138,8 @@ class Print_order_model extends MY_Model
     {
         // jika data null, maka skip
         if ($data) {
-            if ($params == 'reprint') {
-                $this->where('is_reprint', $data);
+            if ($params == 'category') {
+                $this->where('category', $data);
             }
 
             if ($params == 'type') {
@@ -156,6 +154,8 @@ class Print_order_model extends MY_Model
                 $this->group_start();
                 $this->or_like('book_title', $data);
                 $this->or_like('order_number', $data);
+                $this->or_like('order_code', $data);
+                $this->or_like('name', $data);
                 $this->group_end();
             }
 

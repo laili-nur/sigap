@@ -19,43 +19,67 @@
         <div class="col-md-8">
             <section class="card">
                 <div class="card-body">
-                    <?= form_open_multipart($form_action, 'novalidate="" id="form_print_order"'); ?>
+                    <?= form_open_multipart($form_action, 'novalidate="" id="form-print-order"'); ?>
                     <fielsdet>
                         <legend>Form Edit Order Cetak</legend>
                         <?= isset($input->print_order_id) ? form_hidden('print_order_id', $input->print_order_id) : ''; ?>
-                        <div class="form-group">
-                            <label for="book_id">
-                                <?= $this->lang->line('form_book_title'); ?>
-                                <abbr title="Required">*</abbr>
-                            </label>
-                            <?= form_dropdown('book_id', get_dropdown_listBook('book', ['book_id', 'book_title']), $input->book_id, 'id="book_id" class="form-control custom-select d-block"'); ?>
-                            <?= form_error('book_id'); ?>
-                        </div>
-
                         <div class="form-group">
                             <label for="category">
                                 <?= $this->lang->line('form_print_order_category'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <?= form_input('category', $input->category, 'class="form-control" id="category"'); ?>
+                            <?= form_dropdown('category', get_print_order_category(), $input->category, 'id="category" class="form-control custom-select d-block"'); ?>
                             <?= form_error('category'); ?>
                         </div>
 
+                        <div
+                            class="form-group"
+                            id="book-id-wrapper"
+                        >
+                            <label for="book-id">
+                                <?= $this->lang->line('form_book_title'); ?>
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <?= form_dropdown('book_id', get_dropdown_listBook('book', ['book_id', 'book_title']), $input->book_id, 'id="book-id" class="form-control custom-select d-block"'); ?>
+                            <?= form_error('book_id'); ?>
+                        </div>
+
+                        <div
+                            class="form-group"
+                            id="name-wrapper"
+                        >
+                            <label for="name">
+                                <?= $this->lang->line('form_print_order_name'); ?>
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <?= form_input('name', $input->name, 'class="form-control" id="name"'); ?>
+                            <?= form_error('name'); ?>
+                        </div>
+
                         <div class="form-group">
-                            <label for="order_number">
+                            <label for="print-order-notes">
+                                <?= $this->lang->line('form_print_order_notes'); ?>
+                                <!-- <abbr title="Required">*</abbr> -->
+                            </label>
+                            <?= form_textarea('print_order_notes', $input->print_order_notes, 'class="form-control" id="print-order-notes"'); ?>
+                            <?= form_error('print_order_notes'); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="order-number">
                                 <?= $this->lang->line('form_print_order_number'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <?= form_input('order_number', $input->order_number, 'class="form-control" id="order_number"'); ?>
+                            <?= form_input('order_number', $input->order_number, 'class="form-control" id="order-number"'); ?>
                             <?= form_error('order_number'); ?>
                         </div>
 
                         <div class="form-group">
-                            <label for="order_code">
+                            <label for="order-code">
                                 <?= $this->lang->line('form_print_order_code'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <?= form_input('order_code', $input->order_code, 'class="form-control" id="order_code"'); ?>
+                            <?= form_input('order_code', $input->order_code, 'class="form-control" id="order-code"'); ?>
                             <?= form_error('order_code'); ?>
                         </div>
 
@@ -114,34 +138,43 @@
                                 <?= $this->lang->line('form_print_order_total'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <?= form_input('total', $input->total, 'class="form-control" id="total"'); ?>
+                            <?php
+                            $form_total = array(
+                                'type'  => 'number',
+                                'name'  => 'total',
+                                'id'    => 'total',
+                                'value' => $input->total,
+                                'class' => 'form-control'
+                            );
+                            ?>
+                            <?= form_input($form_total); ?>
                             <?= form_error('total'); ?>
                         </div>
 
                         <div class="form-group">
-                            <label for="paper_content">
+                            <label for="paper-content">
                                 <?= $this->lang->line('form_print_order_paper_content'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <?= form_input('paper_content', $input->paper_content, 'class="form-control" id="paper_content"'); ?>
+                            <?= form_input('paper_content', $input->paper_content, 'class="form-control" id="paper-content"'); ?>
                             <?= form_error('paper_content'); ?>
                         </div>
 
                         <div class="form-group">
-                            <label for="paper_cover">
+                            <label for="paper-cover">
                                 <?= $this->lang->line('form_print_order_paper_cover'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <?= form_input('paper_cover', $input->paper_cover, 'class="form-control" id="paper_cover"'); ?>
+                            <?= form_input('paper_cover', $input->paper_cover, 'class="form-control" id="paper-cover"'); ?>
                             <?= form_error('paper_cover'); ?>
                         </div>
 
                         <div class="form-group">
-                            <label for="paper_size">
+                            <label for="paper-size">
                                 <?= $this->lang->line('form_print_order_paper_size'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <?= form_input('paper_size', $input->paper_size, 'class="form-control" id="paper_size"'); ?>
+                            <?= form_input('paper_size', $input->paper_size, 'class="form-control" id="paper-size"'); ?>
                             <?= form_error('paper_size'); ?>
                         </div>
 
@@ -177,6 +210,7 @@
                                     <div class="invalid-feedback">Field is required</div>
                                 </div>
                                 <small class="form-text text-muted">Hanya menerima file bertype : <?= get_allowed_file_types('print_order_file')['to_text']; ?></small>
+                                <small class="text-danger"><?= $this->session->flashdata('print_order_file_no_data'); ?></small>
                                 <?= file_form_error('print_order_file', '<p class="text-danger">', '</p>'); ?>
                             </div>
                         </div>
@@ -379,33 +413,51 @@
 
 <script>
 $(document).ready(function() {
-    $("#book_id").select2({
+    $("#book-id").select2({
         placeholder: '-- Pilih --',
         dropdownParent: $('#app-main')
     });
 
     loadValidateSetting();
-    $("#form_print_order").validate({
-            rules: {
-                book_id: "crequired",
-                category: "crequired",
-                order_code: "crequired",
-                order_number: "crequired",
-                type: "crequired",
-                priority: "crequired",
-                total: {
-                    crequired: true,
-                    cnumber: true
-                },
-                paper_content: "crequired",
-                paper_cover: "crequired",
-                paper_size: "crequired",
-            },
-            errorElement: "span",
-            errorPlacement: validateErrorPlacement,
-        },
-        validateSelect2()
-    );
+    // $("#form-print-order").validate({
+    //         rules: {
+    //             book_id: "crequired",
+    //             name: "crequired",
+    //             category: "crequired",
+    //             order_number: "crequired",
+    //             order_code: "crequired",
+    //             type: "crequired",
+    //             priority: "crequired",
+    //             total: {
+    //                 crequired: true,
+    //                 cnumber: true
+    //             },
+    //             paper_content: "crequired",
+    //             paper_cover: "crequired",
+    //             paper_size: "crequired",
+    //         },
+    //         errorElement: "span",
+    //         errorPlacement: validateErrorPlacement,
+    //     },
+    //     validateSelect2()
+    // );
+
+    handleCategoryChange($('#category').val())
+
+    $('#category').change(function(e) {
+        const category = e.target.value
+        handleCategoryChange(category)
+    })
+
+    function handleCategoryChange(category) {
+        if (category === 'nonbook') {
+            $('#book-id-wrapper').hide()
+            $('#name-wrapper').show()
+        } else {
+            $('#book-id-wrapper').show()
+            $('#name-wrapper').hide()
+        }
+    }
 
     $('.dates').flatpickr({
         disableMobile: true,

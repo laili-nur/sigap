@@ -18,7 +18,7 @@ class Print_order extends Admin_Controller
         // all filter
         $filters = [
             'keyword'            => $this->input->get('keyword', true),
-            'reprint'            => $this->input->get('reprint', true),
+            'category'            => $this->input->get('category', true),
             'type'               => $this->input->get('type', true),
             'priority'           => $this->input->get('priority', true),
             'print_order_status' => $this->input->get('print_order_status', true)
@@ -28,6 +28,11 @@ class Print_order extends Admin_Controller
         $this->print_order->per_page = $this->input->get('per_page', true) ?? 10;
 
         $get_data = $this->print_order->filter_print_order($filters, $page);
+
+        // echo '<pre>';
+        // print_r($get_data['print_orders']);
+        // echo '</pre>';
+        // die();
 
         $print_orders = $get_data['print_orders'];
         $total        = $get_data['total'];
@@ -49,13 +54,23 @@ class Print_order extends Admin_Controller
             $input = (object) $this->input->post(null, true);
             // catat orang yang menginput order cetak
             $input->input_by = $this->username;
+            $input->category = 'new';
 
             // repopulate print_order_file ketika validasi form gagal
             if (!isset($input->print_order_file)) {
                 $input->print_order_file = null;
+                $this->session->set_flashdata('print_order_file_no_data', $this->lang->line('form_error_file_no_data'));
             }
+        }
 
-            $this->session->set_flashdata('print_order_file_no_data', $this->lang->line('form_error_file_no_data'));
+        // autoset category
+        $input->category = $this->_check_book($input->book_id);
+
+        // conditional rules, untuk book dan nonbook
+        if ($input->print_mode == 'nonbook') {
+            $this->form_validation->set_rules('name', $this->lang->line('form_print_order_name'), 'required');
+        } else {
+            $this->form_validation->set_rules('book_id', $this->lang->line('form_book_title'), 'required');
         }
 
         if ($this->print_order->validate()) {
@@ -69,6 +84,7 @@ class Print_order extends Admin_Controller
         }
 
         if (!$this->print_order->validate() || $this->form_validation->error_array()) {
+
             $pages       = $this->pages;
             $main_view   = 'print_order/form_print_order_add';
             $form_action = 'print_order/add';
@@ -76,8 +92,17 @@ class Print_order extends Admin_Controller
             return;
         }
 
+        // handle book dan nonbook
+        if ($input->category == 'nonbook') {
+            $input->book_id = null;
+        } else {
+            $input->name = null;
+        }
+
         // set status awal
         $input->print_order_status = 'waiting';
+
+        unset($input->print_mode);
 
         // insert print order
         $print_order_id = $this->print_order->insert($input);
@@ -109,6 +134,18 @@ class Print_order extends Admin_Controller
             $input = (object) $this->input->post(null, true);
             // catat orang yang menginput order cetak
             $input->input_by = $this->username;
+
+            // repopulate print_order_file ketika validasi form gagal
+            if (!isset($input->print_order_file)) {
+                $input->print_order_file = $print_order->print_order_file;
+                $this->session->set_flashdata('print_order_file_no_data', $this->lang->line('form_error_file_no_data'));
+            }
+        }
+
+        if ($input->category == 'nonbook') {
+            $this->form_validation->set_rules('name', $this->lang->line('form_print_order_name'), 'required');
+        } else {
+            $this->form_validation->set_rules('book_id', $this->lang->line('form_book_title'), 'required');
         }
 
 
@@ -131,6 +168,13 @@ class Print_order extends Admin_Controller
             $form_action = "print_order/edit/$print_order_id";
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
+        }
+
+        // handle book dan nonbook
+        if ($input->category == 'nonbook') {
+            $input->book_id = null;
+        } elseif ($input->category == 'normal') {
+            $input->name = null;
         }
 
         // memastikan konsistensi data
@@ -383,6 +427,37 @@ class Print_order extends Admin_Controller
         } else {
             return $this->send_json_output(false, $this->lang->line('toast_edit_fail'));
         }
+    }
+
+    private function _check_book($book_id)
+    {
+        $this->load->model('book/book_model', 'book');
+
+        $book = $this->book->join('draft')->get_where(['book_id' => $book_id]);
+        $is_reprint_book = $book->is_reprint ?? null;
+
+        // cek buku apakah pernah order cetak
+        $book_order = $this->print_order->get_where(['book_id' => $book_id]);
+
+        if ($book_order) {
+            return 'reprint';
+        }
+
+        if (!$book_order) {
+            if ($is_reprint_book == 'n') {
+                return 'new';
+            }
+            if ($is_reprint_book == 'y') {
+                return 'revise';
+            }
+        }
+
+        return 'nonbook';
+    }
+
+    public function api_check_book($book_id)
+    {
+        return $this->send_json_output(true, $this->_check_book($book_id));
     }
 
     private function _is_printing_admin()
