@@ -31,8 +31,8 @@ $is_cover_files_populated = $input->cover_file || $input->cover_file_link ? true
                             id="btn-start-layout"
                             title="Mulai proses layouting"
                             type="button"
-                            class="d-inline btn <?= !$is_layout_started ? 'btn-warning' : 'btn-secondary'; ?> <?= empty($layouters) || $is_layout_started ? 'btn-disabled' : ''; ?>"
-                            <?= empty($layouters) || $is_layout_started ? 'disabled' : ''; ?>
+                            class="d-inline btn <?= !$is_layout_started ? 'btn-warning' : 'btn-secondary'; ?> <?= $is_layout_started ? 'btn-disabled' : ''; ?>"
+                            <?= $is_layout_started ? 'disabled' : ''; ?>
                         ><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
                         <button
                             id="btn-finish-layout"
@@ -46,7 +46,7 @@ $is_cover_files_populated = $input->cover_file || $input->cover_file_link ? true
             </div>
         </header>
         <?php if ($layouters == null && is_admin()) : ?>
-            <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Pilih layouter terlebih dahulu sebelum mulai proses layouting</div>
+            <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Belum ada layouter yang dipilih.</div>
         <?php endif; ?>
         <div
             class="list-group list-group-flush list-group-bordered"

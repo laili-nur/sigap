@@ -24,7 +24,7 @@ $is_files_populated = $input->proofread_file || $input->proofread_file_link ? tr
                             id="btn-finish-proofread"
                             title="Selesai proses proofreading"
                             type="button"
-                            class="d-inline btn btn-secondary"
+                            class="d-inline btn btn-secondary  <?= !$is_proofread_started ? 'btn-disabled' : '' ?>"
                             <?= !$is_proofread_started ? 'disabled' : '' ?>
                         ><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
                     <?php endif; ?>

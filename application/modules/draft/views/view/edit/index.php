@@ -31,14 +31,14 @@ $is_files_populated = $input->edit_file || $input->edit_file_link ? true : false
                             id="btn-start-edit"
                             title="Mulai proses editorial"
                             type="button"
-                            class="d-inline btn <?= !$is_edit_started ? 'btn-warning' : 'btn-secondary'; ?> <?= empty($editors) || $is_edit_started ? 'btn-disabled' : ''; ?>"
-                            <?= empty($editors) || $is_edit_started ? 'disabled' : ''; ?>
+                            class="d-inline btn <?= !$is_edit_started ? 'btn-warning' : 'btn-secondary'; ?> <?= $is_edit_started ? 'btn-disabled' : ''; ?>"
+                            <?= $is_edit_started ? 'disabled' : ''; ?>
                         ><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
                         <button
                             id="btn-finish-edit"
                             title="Selesai proses editorial"
                             type="button"
-                            class="d-inline btn btn-secondary"
+                            class="d-inline btn btn-secondary  <?= !$is_edit_started ? 'btn-disabled' : '' ?>"
                             <?= !$is_edit_started ? 'disabled' : '' ?>
                         ><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
                     <?php endif; ?>
@@ -46,8 +46,7 @@ $is_files_populated = $input->edit_file || $input->edit_file_link ? true : false
             </div>
         </header>
         <?php if ($editors == null && is_admin()) : ?>
-            <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Pilih editor terlebih dahulu sebelum mulai proses
-                editorial</div>
+            <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Belum ada editor yang dipilih.</div>
         <?php endif; ?>
         <div
             class="list-group list-group-flush list-group-bordered"

@@ -506,6 +506,11 @@ class Draft extends Operator_Controller
             }
         }
 
+        // fill end date ketika aksi, jika kosong
+        if (!$draft->{"{$input->progress}_end_date"}) {
+            $input->{"{$input->progress}_end_date"} = now();
+        }
+
         // hilangkan property pembantu yang tidak ada di db
         unset($input->progress);
         unset($input->accept);
