@@ -95,35 +95,35 @@ function loadValidateSetting() {
         function (value, element) {
             return this.optional(element) || /^[\w., ]+$/i.test(value);
         },
-        'Hanya diperbolehkan menggunakan huruf, angka, underscore, titik, koma, dan spasi',
+        'Hanya diperbolehkan menggunakan huruf, angka, underscore, titik, koma, dan spasi.',
     );
     $.validator.addMethod(
         'username',
         function (value, element) {
             return this.optional(element) || /^[\w.]+$/i.test(value);
         },
-        'Hanya diperbolehkan menggunakan huruf, angka, underscore dan titik',
+        'Hanya diperbolehkan menggunakan huruf, angka, underscore dan titik.',
     );
     $.validator.addMethod(
         'filesize50',
         function (value, element, param) {
             return this.optional(element) || element.files[0].size <= param;
         },
-        'File harus kurang dari 50MB',
+        'File harus kurang dari 50MB.',
     );
     $.validator.addMethod(
         'filesize15',
         function (value, element, param) {
             return this.optional(element) || element.files[0].size <= param;
         },
-        'File harus kurang dari 15MB',
+        'File harus kurang dari 15MB.',
     );
     $.validator.addMethod(
         'huruf',
         function (value, element) {
             return this.optional(element) || /^[a-z ]+$/i.test(value);
         },
-        'Hanya diperbolehkan menggunakan huruf alfabet',
+        'Hanya diperbolehkan menggunakan huruf alfabet.',
     );
     $.validator.addMethod(
         'notEqualTo',
@@ -132,47 +132,47 @@ function loadValidateSetting() {
                 this.optional(element) || !$.validator.methods.equalTo.call(this, value, element, param)
             );
         },
-        'Please enter a different value, values must not be the same.',
+        'Password baru tidak boleh sama dengan password lama.',
     );
     $.validator.addMethod(
         'require_from_group',
         $.validator.methods.require_from_group,
-        'Wajib isi salah satu kolom ini',
+        'Wajib isi salah satu kolom ini.',
     );
     $.validator.addMethod(
         'crequired',
         $.validator.methods.required,
-        'Kolom tidak boleh kosong',
+        'Kolom tidak boleh kosong.',
     );
     $.validator.addMethod(
         'cminlength',
         $.validator.methods.minlength,
-        $.validator.format('Minimal {0} karakter'),
+        $.validator.format('Minimal {0} karakter.'),
     );
     $.validator.addMethod(
         'cnumber',
         $.validator.methods.number,
-        $.validator.format('Hanya diperbolehkan menggunakan angka'),
+        $.validator.format('Hanya diperbolehkan menggunakan angka.'),
     );
     $.validator.addMethod(
         'cemail',
         $.validator.methods.email,
-        $.validator.format('Masukkan sesuai format email'),
+        $.validator.format('Masukkan sesuai format email.'),
     );
     $.validator.addMethod(
         'crange',
         $.validator.methods.range,
-        $.validator.format('Masukkan tahun antara {0} sampai {1}'),
+        $.validator.format('Masukkan tahun antara {0} sampai {1}.'),
     );
     $.validator.addMethod(
         'curl',
         $.validator.methods.url,
-        $.validator.format('Masukkan URL yang valid. Contoh http://ugm.ac.id'),
+        $.validator.format('Masukkan URL yang valid. Contoh http://ugm.ac.id.'),
     );
     $.validator.addMethod(
         'extension',
         $.validator.methods.extension,
-        'Format/Ekstensi file salah',
+        'Format/Ekstensi file salah.',
     );
 }
 

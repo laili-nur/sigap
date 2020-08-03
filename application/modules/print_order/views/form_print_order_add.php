@@ -234,28 +234,28 @@ $(document).ready(function() {
     });
 
     loadValidateSetting();
-    // $("#form-print-order").validate({
-    //         rules: {
-    //             book_id: "crequired",
-    //             name: "crequired",
-    //             category: "crequired",
-    //             order_number: "crequired",
-    //             order_code: "crequired",
-    //             type: "crequired",
-    //             priority: "crequired",
-    //             total: {
-    //                 crequired: true,
-    //                 cnumber: true
-    //             },
-    //             paper_content: "crequired",
-    //             paper_cover: "crequired",
-    //             paper_size: "crequired",
-    //         },
-    //         errorElement: "span",
-    //         errorPlacement: validateErrorPlacement,
-    //     },
-    //     validateSelect2()
-    // );
+    $("#form-print-order").validate({
+            rules: {
+                book_id: "crequired",
+                name: "crequired",
+                category: "crequired",
+                order_number: "crequired",
+                order_code: "crequired",
+                type: "crequired",
+                priority: "crequired",
+                total: {
+                    crequired: true,
+                    cnumber: true
+                },
+                paper_content: "crequired",
+                paper_cover: "crequired",
+                paper_size: "crequired",
+            },
+            errorElement: "span",
+            errorPlacement: validateErrorPlacement,
+        },
+        validateSelect2()
+    );
 
     handleCategoryChange($('#print-mode').val())
 

@@ -8,22 +8,24 @@ $is_postprint_started      = format_datetime($print_order->postprint_start_date)
     <div id="postprint-progress">
         <header class="card-header">
             <div class="d-flex align-items-center"><span class="mr-auto">Jilid</span>
-                <div class="card-header-control">
-                    <button
-                        id="btn-start-postprint"
-                        title="Mulai proses pra cetak"
-                        type="button"
-                        class="d-inline btn <?= !$is_postprint_started ? 'btn-warning' : 'btn-secondary'; ?> <?= $is_postprint_started ? 'btn-disabled' : ''; ?>"
-                        <?= $is_postprint_started ? 'disabled' : ''; ?>
-                    ><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
-                    <button
-                        id="btn-finish-postprint"
-                        title="Selesai proses pra cetak"
-                        type="button"
-                        class="d-inline btn btn-secondary"
-                        <?= !$is_postprint_started ? 'disabled' : '' ?>
-                    ><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
-                </div>
+                <?php if (!$is_final) : ?>
+                    <div class="card-header-control">
+                        <button
+                            id="btn-start-postprint"
+                            title="Mulai proses pra cetak"
+                            type="button"
+                            class="d-inline btn <?= !$is_postprint_started ? 'btn-warning' : 'btn-secondary'; ?> <?= $is_postprint_started ? 'btn-disabled' : ''; ?>"
+                            <?= $is_postprint_started ? 'disabled' : ''; ?>
+                        ><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
+                        <button
+                            id="btn-finish-postprint"
+                            title="Selesai proses pra cetak"
+                            type="button"
+                            class="d-inline btn btn-secondary <?= !$is_postprint_started ? 'btn-disabled' : '' ?>"
+                            <?= !$is_postprint_started ? 'disabled' : '' ?>
+                        ><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
+                    </div>
+                <?php endif ?>
             </div>
         </header>
 
@@ -65,7 +67,7 @@ $is_postprint_started      = format_datetime($print_order->postprint_start_date)
             </div>
 
             <div class="list-group-item justify-content-between">
-                <?php if (is_admin()) : ?>
+                <?php if (is_admin() && !$is_final) : ?>
                     <a
                         href="#"
                         id="btn-modal-deadline-postprint"
@@ -85,13 +87,18 @@ $is_postprint_started      = format_datetime($print_order->postprint_start_date)
                     <?= $print_order->postprint_user ?></strong>
             </div>
 
+            <div class="m-3">
+                <div class="text-muted pb-1">Catatan Admin</div>
+                <?= $print_order->postprint_notes_admin ?>
+            </div>
+
             <hr class="m-0">
         </div>
 
         <div class="card-body">
             <div class="card-button">
                 <!-- button aksi -->
-                <?php if (is_admin()) : ?>
+                <?php if (is_admin() && !$is_final) : ?>
                     <button
                         title="Aksi admin"
                         class="btn btn-outline-dark <?= !$is_postprint_started ? 'btn-disabled' : ''; ?>"

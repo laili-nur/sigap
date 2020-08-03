@@ -8,22 +8,24 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
     <div id="preprint-progress">
         <header class="card-header">
             <div class="d-flex align-items-center"><span class="mr-auto">Pra Cetak</span>
-                <div class="card-header-control">
-                    <button
-                        id="btn-start-preprint"
-                        title="Mulai proses pra cetak"
-                        type="button"
-                        class="d-inline btn <?= !$is_preprint_started ? 'btn-warning' : 'btn-secondary'; ?> <?= $is_preprint_started ? 'btn-disabled' : ''; ?>"
-                        <?= $is_preprint_started ? 'disabled' : ''; ?>
-                    ><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
-                    <button
-                        id="btn-finish-preprint"
-                        title="Selesai proses pra cetak"
-                        type="button"
-                        class="d-inline btn btn-secondary"
-                        <?= !$is_preprint_started ? 'disabled' : '' ?>
-                    ><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
-                </div>
+                <?php if (!$is_final) : ?>
+                    <div class="card-header-control">
+                        <button
+                            id="btn-start-preprint"
+                            title="Mulai proses pra cetak"
+                            type="button"
+                            class="d-inline btn <?= !$is_preprint_started ? 'btn-warning' : 'btn-secondary'; ?> <?= $is_preprint_started ? 'btn-disabled' : ''; ?>"
+                            <?= $is_preprint_started ? 'disabled' : ''; ?>
+                        ><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
+                        <button
+                            id="btn-finish-preprint"
+                            title="Selesai proses pra cetak"
+                            type="button"
+                            class="d-inline btn btn-secondary  <?= !$is_preprint_started ? 'btn-disabled' : '' ?>"
+                            <?= !$is_preprint_started ? 'disabled' : '' ?>
+                        ><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
+                    </div>
+                <?php endif ?>
             </div>
         </header>
 
@@ -65,7 +67,7 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
             </div>
 
             <div class="list-group-item justify-content-between">
-                <?php if (is_admin()) : ?>
+                <?php if (is_admin() && !$is_final) : ?>
                     <a
                         href="#"
                         id="btn-modal-deadline-preprint"
@@ -85,13 +87,18 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
                     <?= $print_order->preprint_user ?></strong>
             </div>
 
+            <div class="m-3">
+                <div class="text-muted pb-1">Catatan Admin</div>
+                <?= $print_order->preprint_notes_admin ?>
+            </div>
+
             <hr class="m-0">
         </div>
 
         <div class="card-body">
             <div class="card-button">
                 <!-- button aksi -->
-                <?php if (is_admin()) : ?>
+                <?php if (is_admin() && !$is_final) : ?>
                     <button
                         title="Aksi admin"
                         class="btn btn-outline-dark <?= !$is_preprint_started ? 'btn-disabled' : ''; ?>"
@@ -132,7 +139,7 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
 
 <script>
 $(document).ready(function() {
-    const print_order_id = '<?= $print_order->print_order_id ?>'
+    const printorderId = '<?= $print_order->print_order_id ?>'
 
     // inisialisasi segment
     reload_preprint_segment()
@@ -149,7 +156,7 @@ $(document).ready(function() {
     $('#preprint-progress-wrapper').on('click', '#btn-start-preprint', function() {
         $.ajax({
             type: "POST",
-            url: "<?= base_url('print_order/api_start_progress/'); ?>" + print_order_id,
+            url: "<?= base_url('print_order/api_start_progress/'); ?>" + printorderId,
             datatype: "JSON",
             data: {
                 progress: 'preprint'
@@ -175,7 +182,7 @@ $(document).ready(function() {
     $('#preprint-progress-wrapper').on('click', '#btn-finish-preprint', function() {
         $.ajax({
             type: "POST",
-            url: "<?= base_url('print_order/api_finish_progress/'); ?>" + print_order_id,
+            url: "<?= base_url('print_order/api_finish_progress/'); ?>" + printorderId,
             datatype: "JSON",
             data: {
                 progress: 'preprint'

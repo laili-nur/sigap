@@ -1,4 +1,13 @@
-<?php $level = check_level() ?>
+<?php $level = check_level();
+$progress_text = '';
+if ($progress == 'preprint') {
+    $progress_text = 'pracetak';
+} elseif ($progress == 'print') {
+    $progress_text = 'cetak';
+} elseif ($progress == 'postprint') {
+    $progress_text = 'jilid';
+}
+?>
 <div
     class="modal fade"
     id="modal-action-<?= $progress ?>"
@@ -13,7 +22,7 @@
     >
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Aksi <?= $progress ?></h5>
+                <h5 class="modal-title">Aksi <?= $progress_text ?></h5>
                 <button
                     type="button"
                     class="close"
@@ -50,9 +59,9 @@
                         <hr class="my-3">
                         <div class="alert alert-info">
                             Pilih aksi dibawah ini: <br>
-                            Jika <strong class="text-success">Setuju</strong>, maka tahap <?= $progress ?> akan
+                            Jika <strong class="text-success">Setuju</strong>, maka tahap <?= $progress_text ?> akan
                             diakhiri
-                            dan tanggal selesai <?= $progress ?> akan dicatat <br>
+                            dan tanggal selesai <?= $progress_text ?> akan dicatat <br>
                             Jika <strong class="text-danger">Tolak</strong> maka proses draft akan diakhiri
                             sampai tahap ini.<br>
                             Pilih <strong class="text-primary">Reset</strong> jika ingin mengembalikan status progress.
@@ -108,9 +117,11 @@ $(document).ready(function() {
                 [`${progress}_notes_admin`]: $(`#${progress}_notes_admin`).val()
             },
             success: function(res) {
+                console.log(res);
                 showToast(true, res.data);
             },
             error: function(err) {
+                console.log(err);
                 showToast(false, err.responseJSON.message);
             },
             complete: function() {

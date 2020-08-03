@@ -26,18 +26,18 @@
             <div class="modal-body">
                 <fieldset>
                     <div class="form-group">
-                        <label
-                            for="<?= $progress ?>-edit-notes"
-                            class="font-weight-bold"
-                        >Catatan </label>
                         <?php
-                        echo form_textarea([
-                            'name'  => "{$progress}_notes",
-                            'class' => 'form-control',
-                            'id'    => "{$progress}-notes",
-                            'rows'  => '6',
-                            'value' => $print_order->{"{$progress}_notes"}
-                        ]);
+                        if ($is_final) {
+                            echo "<div>" . $print_order->{"{$progress}_notes"} . "</div>";
+                        } else {
+                            echo form_textarea([
+                                'name'  => "{$progress}_notes",
+                                'class' => 'form-control',
+                                'id'    => "{$progress}-notes",
+                                'rows'  => '6',
+                                'value' => $print_order->{"{$progress}_notes"}
+                            ]);
+                        }
                         ?>
                     </div>
                 </fieldset>
@@ -48,11 +48,13 @@
                     class="btn btn-light ml-auto"
                     data-dismiss="modal"
                 >Close</button>
-                <button
-                    class="btn btn-primary"
-                    type="button"
-                    id="btn-submit-<?= $progress ?>-notes"
-                >Submit</button>
+                <?php if (!$is_final) : ?>
+                    <button
+                        class="btn btn-primary"
+                        type="button"
+                        id="btn-submit-<?= $progress ?>-notes"
+                    >Submit</button>
+                <?php endif ?>
             </div>
         </div>
     </div>

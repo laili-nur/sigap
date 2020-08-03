@@ -36,7 +36,6 @@ $print_order_status_options = [
     'preprint' => 'Proses Pracetak',
     'print' => 'Proses Cetak',
     'postprint' => 'Proses Jilid',
-    'final' => 'Proses Finalisasi',
     'reject' => 'Ditolak',
     'finish' => 'Selesai'
 ];
@@ -160,6 +159,10 @@ $print_order_status_options = [
                                     >Tanggal Masuk</th>
                                     <th
                                         scope="col"
+                                        style="min-width:100px;"
+                                    >Tanggal Selesai</th>
+                                    <th
+                                        scope="col"
                                         style="min-width:70px;"
                                     >Status</th>
                                     <?php if ($level == 'superadmin') : ?>
@@ -187,6 +190,7 @@ $print_order_status_options = [
                                         <td class="align-middle"><?= get_print_order_priority()[$print_order->priority] ?? '' ?>
                                         </td>
                                         <td class="align-middle"><?= $print_order->entry_date; ?></td>
+                                        <td class="align-middle"><?= $print_order->finish_date; ?></td>
                                         <td class="align-middle"><?= get_print_order_status()[$print_order->print_order_status] ?? $print_order->print_order_status; ?></td>
                                         <td class="align-middle text-right">
                                             <a
@@ -247,7 +251,7 @@ $print_order_status_options = [
                             </tbody>
                         </table>
                     <?php else : ?>
-                        <p class="text-center">Data tidak tersedia</p>
+                        <p class="text-center my-5">Data tidak tersedia</p>
                     <?php endif; ?>
                     <?= $pagination ?? null; ?>
                 </div>

@@ -24,6 +24,25 @@
             <?php endif ?>
         </div>
     </div>
+
+    <!-- FINAL ALERT -->
+    <?php if ($is_final) : ?>
+        <div
+            class="alert alert-warning alert-dismissible fade show"
+            role="alert"
+        >
+            <i class="fa fa-exclamation-triangle"></i>
+            <strong>Order cetak telah selesai</strong>, data progress tidak dapat diubah.
+            <button
+                type="button"
+                class="close"
+                data-dismiss="alert"
+                aria-label="Close"
+            >
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <?php endif ?>
 </header>
 
 <div class="page-section">

@@ -219,38 +219,45 @@ class Print_order extends Admin_Controller
             redirect($this->pages);
         }
 
+        $is_final = $print_order->print_order_status == 'finish';
+
         $pages       = $this->pages;
         $main_view   = 'print_order/view/overview';
         $form_action = "print_order/edit/$print_order_id";
-        $this->load->view('template', compact('form_action', 'main_view', 'pages', 'print_order'));
+        $this->load->view('template', compact('form_action', 'main_view', 'pages', 'print_order', 'is_final'));
     }
 
-    public function finish($print_order_id)
+    public function final($print_order_id = null, $action = null)
     {
+        if (!$print_order_id || !$action) {
+            $this->session->set_flashdata('error', $this->lang->line('toast_data_not_available'));
+            redirect($this->pages);
+        }
+
         // memastikan konsistensi data
         $this->db->trans_begin();
 
         // apakah order cetak tersedia
         $print_order = $this->print_order->where('print_order_id', $print_order_id)->get();
         if (!$print_order) {
-            $message = $this->lang->line('toast_data_not_available');
-            return $this->send_json_output(false, $message, 404);
+            $this->session->set_flashdata('error', $this->lang->line('toast_data_not_available'));
         }
 
         // update data order cetak
         $this->print_order->where('print_order_id', $print_order_id)->update([
-            'print_order_status' => 'finish',
-            'finish_date' => now()
+            'print_order_status' => $action,
+            'finish_date' => $action == 'finish' ? now() : null
         ]);
 
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();
-            $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
+            $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
         } else {
             $this->db->trans_commit();
-            $this->session->set_flashdata('error', 'Proses cetak selesai, stok buku telah diubah.');
-            redirect("book/view/{$print_order->book_id}");
+            $this->session->set_flashdata('success', $this->lang->line('toast_edit_success'));
         }
+
+        redirect($this->pages . "/view/$print_order_id");
     }
 
     public function delete($print_order_id = null)
@@ -415,6 +422,11 @@ class Print_order extends Admin_Controller
             } elseif ($input->progress == 'postprint') {
                 $input->print_order_status = $input->accept ? 'postprint_finish' : 'reject';
             }
+        }
+
+        // jika end date kosong, maka isikan nilai now
+        if (!$print_order->{"{$input->progress}_end_date"}) {
+            $input->{"{$input->progress}_end_date"} = now();
         }
 
         // hilangkan property pembantu yang tidak ada di db
