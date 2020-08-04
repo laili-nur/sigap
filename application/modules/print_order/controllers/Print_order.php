@@ -63,13 +63,14 @@ class Print_order extends Admin_Controller
             }
         }
 
-        // autoset category
-        $input->category = $this->_check_book($input->book_id);
+
 
         // conditional rules, untuk book dan nonbook
         if ($input->print_mode == 'nonbook') {
+            $input->category = 'nonbook';
             $this->form_validation->set_rules('name', $this->lang->line('form_print_order_name'), 'required');
         } else {
+            $input->category = $this->_check_book($input->book_id);
             $this->form_validation->set_rules('book_id', $this->lang->line('form_book_title'), 'required');
         }
 
@@ -464,7 +465,7 @@ class Print_order extends Admin_Controller
             }
         }
 
-        return 'nonbook';
+        return null;
     }
 
     public function api_check_book($book_id)
