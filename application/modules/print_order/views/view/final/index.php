@@ -1,91 +1,113 @@
-<?php if ($print_order->print_order_status == 'finish') : ?>
-    <div>Order cetak sudah selesai diproses. <a
-            href="<?= base_url("book/view/{$print_order->book_id}#stock-data") ?>"
-            target="_blank"
-        > <i class="fa fa-external-link-alt"></i> Link stok buku</a></div>
-<?php else : ?>
-    <section
+<?php
+$is_ready = $print_order->is_preprint && $print_order->is_print && $print_order->is_postprint;
+
+if (!$is_final) :
+?>
+    <div
         id="final-progress-wrapper"
-        class="card"
+        class="mx-3 mx-md-0"
     >
-        <div id="final-progress">
-            <header class="card-header"><span class="mr-auto">Final</span></header>
-            <div class="alert alert-warning"><strong>PERHATIAN!</strong> Fitur ini berfungsi untuk mengatur stok buku setelah proses produksi/cetak.</div>
-            <div class="card-body">
-                <form
-                    action="<?= base_url('print_order/finish/' . $print_order->print_order_id); ?>"
-                    method="post"
-                >
-                    <input
-                        type="hidden"
-                        name="book_id"
-                        value="<?= $print_order->book_id; ?>"
-                    />
-                    <div class="form-group">
-                        <label class="font-weight-bold">Judul Buku : </label>
-                        <?= $print_order->book_title; ?>
-                    </div>
-                    <div class="form-group">
-                        <label
-                            class="font-weight-bold"
-                            for="stock_in_warehouse"
-                        >Stok dalam gudang</label>
-                        <input
-                            type="number"
-                            class="form-control"
-                            name="stock_in_warehouse"
-                            value="0"
-                        />
-                    </div>
-                    <div class="form-group">
-                        <label
-                            class="font-weight-bold"
-                            for="stock_out_warehouse"
-                        >Stok luar gudang</label>
-                        <input
-                            type="number"
-                            class="form-control"
-                            name="stock_out_warehouse"
-                            value="0"
-                        />
-                    </div>
-                    <div class="form-group">
-                        <label
-                            class="font-weight-bold"
-                            for="stock_pemasaran"
-                        >Stok pemasaran</label>
-                        <input
-                            type="number"
-                            class="form-control"
-                            name="stock_marketing"
-                            value="0"
-                        />
-                    </div>
-                    <div class="form-group">
-                        <label
-                            class="font-weight-bold"
-                            for="stock_input_notes"
-                        >Catatan</label>
-                        <textarea
-                            rows="6"
-                            class="form-control summernote"
-                            id="stock-input-notes"
-                            name="stock_input_notes"
-                        ></textarea>
-                    </div>
-                    <hr>
+        <div
+            id="final-progress"
+            class="card-button"
+        >
+            <?= (!$is_ready) ? '<div class="m-0"><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> Terdapat proses yang belum disetujui</small></div>' : null
+            ?>
+
+            <button
+                class="btn btn-primary <?= ($is_ready) ? null : 'btn-disabled'; ?>"
+                data-toggle="modal"
+                data-target="#modal-accept-print-order"
+                <?= ($is_ready) ? null : 'disabled'; ?>
+            >Finalisasi</button>
+            <button
+                class="btn btn-danger <?= ($is_ready) ? null : 'btn-disabled'; ?>"
+                data-toggle="modal"
+                data-target="#modal-reject-print-order"
+                <?= ($is_ready) ? null : 'disabled'; ?>
+            >Tolak</button>
+        </div>
+    </div>
+
+    <div
+        class="modal modal-warning fade"
+        id="modal-accept-print-order"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="modal-accept-print-order"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fa fa-bullhorn text-yellow mr-1"></i> Konfirmasi finalisasi order cetak</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Apakah anda yakin akan menyelesaikan cetak ini?</p>
+                    <div class="alert alert-info">Tanggal selesai cetak akan tercatat ketika klik Submit</div>
+                </div>
+                <div class="modal-footer">
                     <button
+                        id="btn-accept-print-order"
                         class="btn btn-primary"
-                        type="submit"
                     >Submit</button>
-                </form>
+                    <button
+                        type="button"
+                        class="btn btn-light"
+                        data-dismiss="modal"
+                    >Close</button>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+
+    <div
+        class="modal modal-alert fade"
+        id="modal-reject-print-order"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="modal-reject-print-order"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fa fa-exclamation-triangle text-red mr-1"></i> Tolak Draft</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Apakah anda yain akan menolak cetak ini?</p>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        class="btn btn-danger"
+                        id="btn-reject-print-order"
+                    >Tolak</button>
+                    <button
+                        type="button"
+                        class="btn btn-light"
+                        data-dismiss="modal"
+                    >Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 <?php endif ?>
 
 <script>
 $(document).ready(function() {
-    $('#stock-input-notes').summernote(summernoteConfig)
+    const printOrderId = '<?= $print_order->print_order_id ?>';
+    const url = '<?= base_url('print_order/final/'); ?>' + printOrderId
+
+    // order cetak disetujui
+    $('#btn-accept-print-order').on('click', function() {
+        $(this).attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
+        window.location = url + '/finish'
+    });
+
+    // order cetak ditolak
+    $('#btn-reject-print-order').on('click', function() {
+        $(this).attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
+        window.location = url + '/reject'
+    });
 })
 </script>

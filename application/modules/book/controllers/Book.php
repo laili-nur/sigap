@@ -203,6 +203,7 @@ class Book extends Admin_Controller
 
         //  hapus buku jika check delete_book
         if (isset($input->delete_book) && $input->delete_book == 1) {
+            $this->book->delete_book_file($book->book_file);
             $this->book->delete_book_file($input->book_file);
             $input->book_file = null;
             unset($input->delete_book);

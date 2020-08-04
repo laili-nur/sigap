@@ -19,26 +19,68 @@
         <div class="col-md-8">
             <section class="card">
                 <div class="card-body">
-                    <?= form_open_multipart($form_action, 'novalidate="" id="form_print_order"'); ?>
+                    <?= form_open_multipart($form_action, 'novalidate="" id="form-print-order"'); ?>
                     <fielsdet>
                         <legend>Form Edit Order Cetak</legend>
                         <?= isset($input->print_order_id) ? form_hidden('print_order_id', $input->print_order_id) : ''; ?>
                         <div class="form-group">
-                            <label for="book_id">
+                            <label for="category">
+                                <?= $this->lang->line('form_print_order_category'); ?>
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <?= form_dropdown('category', get_print_order_category(), $input->category, 'id="category" class="form-control custom-select d-block"'); ?>
+                            <?= form_error('category'); ?>
+                        </div>
+
+                        <div
+                            class="form-group"
+                            id="book-id-wrapper"
+                        >
+                            <label for="book-id">
                                 <?= $this->lang->line('form_book_title'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <?= form_dropdown('book_id', get_dropdown_listBook('book', ['book_id', 'book_title']), $input->book_id, 'id="book_id" class="form-control custom-select d-block"'); ?>
+                            <?= form_dropdown('book_id', get_dropdown_listBook('book', ['book_id', 'book_title']), $input->book_id, 'id="book-id" class="form-control custom-select d-block"'); ?>
                             <?= form_error('book_id'); ?>
                         </div>
 
+                        <div
+                            class="form-group"
+                            id="name-wrapper"
+                        >
+                            <label for="name">
+                                <?= $this->lang->line('form_print_order_name'); ?>
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <?= form_input('name', $input->name, 'class="form-control" id="name"'); ?>
+                            <?= form_error('name'); ?>
+                        </div>
+
                         <div class="form-group">
-                            <label for="order_number">
+                            <label for="print-order-notes">
+                                <?= $this->lang->line('form_print_order_notes'); ?>
+                                <!-- <abbr title="Required">*</abbr> -->
+                            </label>
+                            <?= form_textarea('print_order_notes', $input->print_order_notes, 'class="form-control" id="print-order-notes"'); ?>
+                            <?= form_error('print_order_notes'); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="order-number">
                                 <?= $this->lang->line('form_print_order_number'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <?= form_input('order_number', $input->order_number, 'class="form-control" id="order_number"'); ?>
+                            <?= form_input('order_number', $input->order_number, 'class="form-control" id="order-number"'); ?>
                             <?= form_error('order_number'); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="order-code">
+                                <?= $this->lang->line('form_print_order_code'); ?>
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <?= form_input('order_code', $input->order_code, 'class="form-control" id="order-code"'); ?>
+                            <?= form_error('order_code'); ?>
                         </div>
 
                         <div class="form-group">
@@ -96,39 +138,86 @@
                                 <?= $this->lang->line('form_print_order_total'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <?= form_input('total', $input->total, 'class="form-control" id="total"'); ?>
+                            <?php
+                            $form_total = array(
+                                'type'  => 'number',
+                                'name'  => 'total',
+                                'id'    => 'total',
+                                'value' => $input->total,
+                                'class' => 'form-control'
+                            );
+                            ?>
+                            <?= form_input($form_total); ?>
                             <?= form_error('total'); ?>
                         </div>
 
                         <div class="form-group">
-                            <label for="paper_content">
+                            <label for="paper-content">
                                 <?= $this->lang->line('form_print_order_paper_content'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <?= form_input('paper_content', $input->paper_content, 'class="form-control" id="paper_content"'); ?>
+                            <?= form_input('paper_content', $input->paper_content, 'class="form-control" id="paper-content"'); ?>
                             <?= form_error('paper_content'); ?>
                         </div>
 
                         <div class="form-group">
-                            <label for="paper_cover">
+                            <label for="paper-cover">
                                 <?= $this->lang->line('form_print_order_paper_cover'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <?= form_input('paper_cover', $input->paper_cover, 'class="form-control" id="paper_cover"'); ?>
+                            <?= form_input('paper_cover', $input->paper_cover, 'class="form-control" id="paper-cover"'); ?>
                             <?= form_error('paper_cover'); ?>
                         </div>
 
                         <div class="form-group">
-                            <label for="paper_size">
+                            <label for="paper-size">
                                 <?= $this->lang->line('form_print_order_paper_size'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <?= form_input('paper_size', $input->paper_size, 'class="form-control" id="paper_size"'); ?>
+                            <?= form_input('paper_size', $input->paper_size, 'class="form-control" id="paper-size"'); ?>
                             <?= form_error('paper_size'); ?>
                         </div>
 
                         <div class="form-group">
-                            <label for="entry_date">Tanggal Masuk
+                            <label for="print_order_file"> <?= $this->lang->line('form_print_order_file'); ?></label>
+                            <?php if ($input->print_order_file) : ?>
+                                <div class="alert alert-info">
+                                    <div class="d-flex justify-content-between align-items-center">File order cetak yang tersimpan
+                                        <a
+                                            href="<?= base_url("print_order/download_file/printorderfile/$input->print_order_file"); ?>"
+                                            class="btn btn-success btn-sm my-2 uploaded-file"
+                                        ><i class="fa fa-download"></i> Download</a>
+                                    </div>
+                                    <hr>
+                                    <div>
+                                        <?= form_checkbox('delete_file', true, false, 'id="delete-file"'); ?>
+                                        <label
+                                            class="form-check-label"
+                                            for="delete-file"
+                                        >
+                                            <span class="text-danger">Hapus file</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <div id="upload-file-form">
+                                <div class="custom-file">
+                                    <?= form_upload('print_order_file', '', 'class="custom-file-input"'); ?>
+                                    <label
+                                        class="custom-file-label"
+                                        for="print_order_file"
+                                    >Pilih file</label>
+                                    <div class="invalid-feedback">Field is required</div>
+                                </div>
+                                <small class="form-text text-muted">Hanya menerima file bertype : <?= get_allowed_file_types('print_order_file')['to_text']; ?></small>
+                                <small class="text-danger"><?= $this->session->flashdata('print_order_file_no_data'); ?></small>
+                                <?= file_form_error('print_order_file', '<p class="text-danger">', '</p>'); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="entry_date">
+                                <?= $this->lang->line('form_print_order_start_date'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
                             <?= form_input('entry_date', $input->entry_date, 'class="form-control dates"'); ?>
@@ -136,7 +225,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="finish_date">Tanggal Selesai</label>
+                            <label for="finish_date"><?= $this->lang->line('form_print_order_finish_date'); ?></label>
                             <div class="has-clearable">
                                 <button
                                     type="button"
@@ -324,16 +413,19 @@
 
 <script>
 $(document).ready(function() {
-    $("#book_id").select2({
+    $("#book-id").select2({
         placeholder: '-- Pilih --',
         dropdownParent: $('#app-main')
     });
 
     loadValidateSetting();
-    $("#form_print_order").validate({
+    $("#form-print-order").validate({
             rules: {
                 book_id: "crequired",
+                name: "crequired",
+                category: "crequired",
                 order_number: "crequired",
+                order_code: "crequired",
                 type: "crequired",
                 priority: "crequired",
                 total: {
@@ -350,6 +442,23 @@ $(document).ready(function() {
         validateSelect2()
     );
 
+    handleCategoryChange($('#category').val())
+
+    $('#category').change(function(e) {
+        const category = e.target.value
+        handleCategoryChange(category)
+    })
+
+    function handleCategoryChange(category) {
+        if (category === 'nonbook') {
+            $('#book-id-wrapper').hide()
+            $('#name-wrapper').show()
+        } else {
+            $('#book-id-wrapper').show()
+            $('#name-wrapper').hide()
+        }
+    }
+
     $('.dates').flatpickr({
         disableMobile: true,
         altInput: true,
@@ -358,5 +467,13 @@ $(document).ready(function() {
         minDate: "2000-01-01",
         enableTime: true
     });
+
+    $('#delete-file').change(function() {
+        if (this.checked) {
+            $('#upload-file-form').hide()
+        } else {
+            $('#upload-file-form').show()
+        }
+    })
 })
 </script>

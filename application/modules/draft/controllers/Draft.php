@@ -637,6 +637,7 @@ class Draft extends Operator_Controller
 
         //  hapus buku jika check delete_draft
         if (isset($input->delete_draft) && $input->delete_draft == 1) {
+            $this->draft->delete_draft_file($draft->draft_file);
             $this->draft->delete_draft_file($input->draft_file);
             $input->draft_file = null;
             unset($input->delete_draft);

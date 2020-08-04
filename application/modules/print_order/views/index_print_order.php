@@ -2,17 +2,19 @@
 $level              = check_level();
 $per_page           = 10;
 $keyword            = $this->input->get('keyword');
-$reprint            = $this->input->get('reprint');
+$category            = $this->input->get('category');
 $type               = $this->input->get('type');
 $priority           = $this->input->get('priority');
 $print_order_status = $this->input->get('print_order_status');
 $page               = $this->uri->segment(2);
 $i                  = isset($page) ? $page * $per_page - $per_page : 0;
 
-$reprint_options = [
+$category_options = [
     ''  => '- Filter Kategori Cetak -',
-    '0' => 'Cetak Baru',
-    '1' => 'Cetak Ulang'
+    'new' => 'Cetak Baru',
+    'revise' => 'Cetak Ulang Revisi',
+    'reprint' => 'Cetak Ulang Non Revisi',
+    'nonbook' => 'Cetak Non Buku',
 ];
 
 $type_options = [
@@ -34,7 +36,6 @@ $print_order_status_options = [
     'preprint' => 'Proses Pracetak',
     'print' => 'Proses Cetak',
     'postprint' => 'Proses Jilid',
-    'final' => 'Proses Finalisasi',
     'reject' => 'Ditolak',
     'finish' => 'Selesai'
 ];
@@ -75,8 +76,8 @@ $print_order_status_options = [
                                 <?= form_dropdown('per_page', get_per_page_options(), $per_page, 'id="per_page" class="form-control custom-select d-block" title="List per page"'); ?>
                             </div>
                             <div class="col-12 col-md-3 mb-3">
-                                <label for="reprint">Kategori Cetak</label>
-                                <?= form_dropdown('reprint', $reprint_options, $reprint, 'id="reprint" class="form-control custom-select d-block" title="Filter Status Buku"'); ?>
+                                <label for="category">Kategori Cetak</label>
+                                <?= form_dropdown('category', $category_options, $category, 'id="category" class="form-control custom-select d-block" title="Filter Kategori Cetak"'); ?>
                             </div>
                             <div class="col-12 col-md-3 mb-3">
                                 <label for="type">Tipe Cetak</label>
@@ -92,7 +93,7 @@ $print_order_status_options = [
                             </div>
                             <div class="col-12 col-md-6">
                                 <label for="status">Pencarian</label>
-                                <?= form_input('keyword', $keyword, 'placeholder="Cari berdasarkan Judul, Kategori, Tema, atau Penulis" class="form-control"'); ?>
+                                <?= form_input('keyword', $keyword, 'placeholder="Cari berdasarkan Judul, Nomor, Kode, Nama Pesanan" class="form-control"'); ?>
                             </div>
                             <div class="col-12 col-lg-3">
                                 <label>&nbsp;</label>
@@ -126,7 +127,7 @@ $print_order_status_options = [
                                     >No</th>
                                     <th
                                         scope="col"
-                                        style="min-width:200px;"
+                                        style="min-width:400px;"
                                     >Judul</th>
                                     <th
                                         scope="col"
@@ -136,6 +137,10 @@ $print_order_status_options = [
                                         scope="col"
                                         style="min-width:100px;"
                                     >Nomor Order</th>
+                                    <th
+                                        scope="col"
+                                        style="min-width:100px;"
+                                    >Kode Order</th>
                                     <th
                                         scope="col"
                                         style="min-width:100px;"
@@ -154,6 +159,10 @@ $print_order_status_options = [
                                     >Tanggal Masuk</th>
                                     <th
                                         scope="col"
+                                        style="min-width:100px;"
+                                    >Tanggal Selesai</th>
+                                    <th
+                                        scope="col"
                                         style="min-width:70px;"
                                     >Status</th>
                                     <?php if ($level == 'superadmin') : ?>
@@ -170,16 +179,18 @@ $print_order_status_options = [
                                                 href="<?= base_url('print_order/view/' . $print_order->print_order_id . ''); ?>"
                                                 class="font-weight-bold"
                                             >
-                                                <?= highlight_keyword($print_order->book_title, $keyword); ?>
+                                                <?= highlight_keyword($print_order->book_id ? $print_order->book_title : $print_order->name, $keyword); ?>
                                             </a>
                                         </td>
-                                        <td class="align-middle"><?= $print_order->category_name; ?></td>
-                                        <td class="align-middle"><?= $print_order->order_number; ?></td>
+                                        <td class="align-middle"><?= get_print_order_category()[$print_order->category]; ?></td>
+                                        <td class="align-middle"><?= highlight_keyword($print_order->order_number, $keyword); ?></td>
+                                        <td class="align-middle"><?= highlight_keyword($print_order->order_code, $keyword); ?></td>
                                         <td class="align-middle"><?= $print_order->total; ?></td>
                                         <td class="align-middle"><?= $print_order->type; ?></td>
                                         <td class="align-middle"><?= get_print_order_priority()[$print_order->priority] ?? '' ?>
                                         </td>
                                         <td class="align-middle"><?= $print_order->entry_date; ?></td>
+                                        <td class="align-middle"><?= $print_order->finish_date; ?></td>
                                         <td class="align-middle"><?= get_print_order_status()[$print_order->print_order_status] ?? $print_order->print_order_status; ?></td>
                                         <td class="align-middle text-right">
                                             <a
@@ -240,7 +251,7 @@ $print_order_status_options = [
                             </tbody>
                         </table>
                     <?php else : ?>
-                        <p class="text-center">Data tidak tersedia</p>
+                        <p class="text-center my-5">Data tidak tersedia</p>
                     <?php endif; ?>
                     <?= $pagination ?? null; ?>
                 </div>
