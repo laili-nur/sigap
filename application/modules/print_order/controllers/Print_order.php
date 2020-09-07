@@ -21,6 +21,7 @@ class Print_order extends Admin_Controller
             'category'            => $this->input->get('category', true),
             'type'               => $this->input->get('type', true),
             'priority'           => $this->input->get('priority', true),
+            'mode'           => $this->input->get('mode', true),
             'print_order_status' => $this->input->get('print_order_status', true)
         ];
 
@@ -66,7 +67,7 @@ class Print_order extends Admin_Controller
 
 
         // conditional rules, untuk book dan nonbook
-        if ($input->print_mode == 'nonbook') {
+        if ($input->mode == 'nonbook') {
             $input->category = 'nonbook';
             $this->form_validation->set_rules('name', $this->lang->line('form_print_order_name'), 'required');
         } else {
@@ -103,7 +104,7 @@ class Print_order extends Admin_Controller
         // set status awal
         $input->print_order_status = 'waiting';
 
-        unset($input->print_mode);
+        // unset($input->mode);
 
         // insert print order
         $print_order_id = $this->print_order->insert($input);
@@ -471,6 +472,50 @@ class Print_order extends Admin_Controller
     public function api_check_book($book_id)
     {
         return $this->send_json_output(true, $this->_check_book($book_id));
+    }
+
+    public function api_upload_preprint_file(){
+        if (!$this->_is_printing_admin()) {
+            redirect($this->pages);
+        }
+
+        if (!$_POST) {
+            $input = (object) $this->print_order->get_default_values();
+        } else {
+            $input = (object) $this->input->post(null, true);
+
+            // repopulate preprint_file ketika validasi form gagal
+            if (!isset($input->preprint_file)) {
+                $input->preprint_file = null;
+                $this->session->set_flashdata('preprint_file_no_data', $this->lang->line('form_error_file_no_data'));
+            }
+        }
+
+        if ($this->print_order->validate()) {
+            if (!empty($_FILES) && $file_name = $_FILES['preprint_file']['name']) {
+                $generated_name = $this->_generate_file_name($file_name);
+                $upload          = $this->print_order->upload_preprint_file('preprint_file', $generated_name);
+                if ($upload) {
+                    $input->preprint_file = $generated_name;
+                }
+            }
+        }
+
+        // insert print order
+        $print_order_id = $this->print_order->insert($input);
+
+        if ($print_order_id) {
+            $this->session->set_flashdata('success', $this->lang->line('toast_add_success'));
+        } else {
+            $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
+        }
+
+        redirect('print_order/view/' . $print_order_id.'#preprint-progress');
+    }
+
+    public function download_preprint_file($filename){
+        $this->load->helper('download');
+        force_download('./preprintfile/'.$filename, NULL);
     }
 
     private function _is_printing_admin()

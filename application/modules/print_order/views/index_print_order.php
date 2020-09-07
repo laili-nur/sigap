@@ -5,6 +5,7 @@ $keyword            = $this->input->get('keyword');
 $category            = $this->input->get('category');
 $type               = $this->input->get('type');
 $priority           = $this->input->get('priority');
+$mode               = $this->input->get('mode');
 $print_order_status = $this->input->get('print_order_status');
 $page               = $this->uri->segment(2);
 $i                  = isset($page) ? $page * $per_page - $per_page : 0;
@@ -28,6 +29,13 @@ $priority_options = [
     '1' => 'Prioritas Rendah',
     '2' => 'Prioritas Sedang',
     '3' => 'Prioritas Tinggi'
+];
+
+$mode_options = [
+    ''  => '- Filter Mode Cetak -',
+    'book' => 'Cetak Buku',
+    'nonbook' => 'Cetak Non Buku',
+    'outsideprint' => 'Cetak di Luar'
 ];
 
 $print_order_status_options = [
@@ -87,11 +95,15 @@ $print_order_status_options = [
                                 <label for="priority">Prioritas Cetak</label>
                                 <?= form_dropdown('priority', $priority_options, $priority, 'id="priority" class="form-control custom-select d-block" title="Filter Prioritas Cetak"'); ?>
                             </div>
+                            <div class="col-12 col-md-3 mb-3">
+                                <label for="mode">Mode Cetak</label>
+                                <?= form_dropdown('mode', $mode_options, $mode, 'id="mode" class="form-control custom-select d-block" title="Filter Mode Cetak"'); ?>
+                            </div>
                             <div class="col-12 col-md-3">
                                 <label for="print_order_status">Status</label>
                                 <?= form_dropdown('print_order_status', $print_order_status_options, $print_order_status, 'id="print_order_status" class="form-control custom-select d-block" title="Filter Status Cetak"'); ?>
                             </div>
-                            <div class="col-12 col-md-6">
+                            <div class="col-12 col-md-3">
                                 <label for="status">Pencarian</label>
                                 <?= form_input('keyword', $keyword, 'placeholder="Cari berdasarkan Judul, Nomor, Kode, Nama Pesanan" class="form-control"'); ?>
                             </div>
@@ -156,6 +168,10 @@ $print_order_status_options = [
                                     <th
                                         scope="col"
                                         style="min-width:100px;"
+                                    >Mode</th>
+                                    <th
+                                        scope="col"
+                                        style="min-width:100px;"
                                     >Tanggal Masuk</th>
                                     <th
                                         scope="col"
@@ -188,6 +204,8 @@ $print_order_status_options = [
                                         <td class="align-middle"><?= $print_order->total; ?></td>
                                         <td class="align-middle"><?= $print_order->type; ?></td>
                                         <td class="align-middle"><?= get_print_order_priority()[$print_order->priority] ?? '' ?>
+                                        </td>
+                                        <td class="align-middle"><?= get_print_order_mode()[$print_order->mode] ?? '' ?>
                                         </td>
                                         <td class="align-middle"><?= $print_order->entry_date; ?></td>
                                         <td class="align-middle"><?= $print_order->finish_date; ?></td>

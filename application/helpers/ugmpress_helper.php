@@ -469,6 +469,10 @@ function get_allowed_file_types($field_name = null)
         $types = 'txt|docx|doc|pdf|jpeg|jpg|png|xls|xlsx|zip|rar';
     }
 
+    if ($field_name == 'preprint_file') {
+        $types = 'docx|doc|pdf|zip|rar';
+    }
+
     return [
         'types'   => $types,
         'to_text' => str_replace("|", ", ", $types),
@@ -625,6 +629,15 @@ function get_print_order_category()
         'revise' => 'Cetak Ulang Revisi',
         'reprint' => 'Cetak Ulang Non Revisi',
         'nonbook' => 'Cetak Non Buku'
+    ];
+}
+
+function get_print_order_mode()
+{
+    return [
+        'book' => 'Cetak Buku',
+        'nonbook' => 'Cetak Non Buku',
+        'outsideprint' => 'Cetak di Luar'
     ];
 }
 

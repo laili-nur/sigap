@@ -115,6 +115,113 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
                     data-toggle="modal"
                     data-target="#modal-preprint-notes"
                 >Catatan</button>
+
+                <?php if($print_order->mode == "outsideprint") : ?>
+                    <?php if(empty($print_order->preprint_file) == TRUE) : ?>
+                        <!-- button modal preprint upload -->
+                        <button
+                            type="button"
+                            class="btn btn-outline-dark"
+                            data-toggle="modal"
+                            data-target="#modal-preprint-upload"
+                        >Upload File Approval</button>
+                        <!-- modal preprint upload -->
+                        <div
+                            class="modal modal-warning fade"
+                            id="modal-preprint-upload"
+                            tabindex="-1"
+                            role="dialog"
+                            aria-labelledby="modal-preprint-upload"
+                            aria-hidden="true"
+                        >
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title"><i class="fa fa-bullhorn text-yellow mr-1"></i>Upload File Approval</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <?= form_open_multipart($form_action, 'novalidate="" id="form-print-order-preprint-file"'); ?>
+                                            <fielsdet>
+                                                <div class="form-group">
+                                                    <label for="preprint-file"><?= $this->lang->line('form_print_order_preprint_file'); ?></label>
+                                                    <div class="custom-file">
+                                                        <?= form_upload('preprint_file', '', 'class="custom-file-input" id="preprint-file"'); ?>
+                                                        <label
+                                                            class="custom-file-label"
+                                                            for="preprint-file"
+                                                        >Pilih file</label>
+                                                    </div>
+                                                    <small class="form-text text-muted">Menerima tipe file :
+                                                        <?= get_allowed_file_types('preprint_file')['to_text']; ?></small>
+                                                    <small class="text-danger"><?= $this->session->flashdata('preprint_file_no_data'); ?></small>
+                                                    <?= file_form_error('preprint_file', '<p class="small text-danger">', '</p>'); ?>
+                                                </div>
+                                            </fieldset>
+                                    </div>
+                                    <div class="modal-footer">
+                                            <div class="form-actions">
+                                                <button
+                                                    class="btn btn-primary ml-auto"
+                                                    type="submit"
+                                                    value="Submit"
+                                                    id="btn-submit"
+                                                >Submit</button>
+                                            </div>
+                                        <?= form_close(); ?>
+                                        <button
+                                            type="button"
+                                            class="btn btn-light"
+                                            data-dismiss="modal"
+                                        >Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php else : ?>
+                        <!-- button modal preprint file -->
+                        <button
+                            type="button"
+                            class="btn btn-outline-success"
+                            data-toggle="modal"
+                            data-target="#modal-preprint-file"
+                        >Lihat File Approval</button>
+                        <!-- modal view uploaded -->
+                        <div
+                            class="modal modal-warning fade"
+                            id="modal-preprint-file"
+                            tabindex="-1"
+                            role="dialog"
+                            aria-labelledby="modal-preprint-file"
+                            aria-hidden="true"
+                        >
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title"><i class="fa fa-bullhorn text-yellow mr-1"></i>Upload File Approval</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <?php if(empty($print_order->preprint_file) == FALSE) : ?>
+                                            <?php if(strpos($print_order->preprint_file, '.pdf') == TRUE) : ?>
+                                                <a href="<?= base_url('print_order/download_preprint_file/'.$print_order->preprint_file);?>"><span class="badge badge-success"><?= base_url('preprintfile/'.$print_order->preprint_file);?></span></a>
+                                                <iframe src="<?= base_url('preprintfile/'.$print_order->preprint_file);?>" style="width: 100%;height: 500px;border: none;"></iframe>
+                                            <?php else : ?>
+                                                <a href="<?= base_url('print_order/download_preprint_file/'.$print_order->preprint_file);?>"><span class="badge badge-success"><?= base_url('preprintfile/'.$print_order->preprint_file);?></span></a>
+                                                <p>File not supported, download to view this file.</p>
+                                            <?php endif ; ?>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button
+                                            type="button"
+                                            class="btn btn-light"
+                                            data-dismiss="modal"
+                                        >Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                <?php endif; ?>
             </div>
         </div>
 

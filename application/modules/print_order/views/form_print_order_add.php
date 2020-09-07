@@ -25,11 +25,12 @@
                         <?= isset($input->print_order_id) ? form_hidden('print_order_id', $input->print_order_id) : ''; ?>
 
                         <div class="form-group">
-                            <label for="print-mode">
-                                Mode Cetak
+                            <label for="mode">
+                                <?= $this->lang->line('form_print_order_mode'); ?>
+                                <abbr title="Required">*</abbr>
                             </label>
-                            <?= form_dropdown('print_mode', ['book' => 'Buku', 'nonbook' => 'Non Buku'], $input->print_mode, 'id="print-mode" class="form-control custom-select d-block"'); ?>
-                            <?= form_error('print_mode'); ?>
+                            <?= form_dropdown('mode', get_print_order_mode(), $input->mode, 'id="mode" class="form-control custom-select d-block"'); ?>
+                            <?= form_error('mode'); ?>
                         </div>
 
                         <div
@@ -243,6 +244,7 @@ $(document).ready(function() {
                 order_code: "crequired",
                 type: "crequired",
                 priority: "crequired",
+                mode: "crequired",
                 total: {
                     crequired: true,
                     cnumber: true
@@ -257,9 +259,9 @@ $(document).ready(function() {
         validateSelect2()
     );
 
-    handleCategoryChange($('#print-mode').val())
+    handleCategoryChange($('#mode').val())
 
-    $('#print-mode').change(function(e) {
+    $('#mode').change(function(e) {
         handleCategoryChange(e.target.value)
     })
 
