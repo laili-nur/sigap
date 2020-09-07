@@ -1,5 +1,9 @@
 <?php
-$progress_list = ['preprint', 'print', 'postprint'];
+if($print_order->mode != 'outsideprint') :
+    $progress_list = ['preprint', 'print', 'postprint', 'stock'];
+else :
+    $progress_list = ['preprint', 'print', 'stock'];
+endif ;
 
 function get_print_order_progress($progress = null, $print_order, $progress_list)
 {

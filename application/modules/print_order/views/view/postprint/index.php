@@ -1,5 +1,6 @@
 <?php
-$is_postprint_started      = format_datetime($print_order->postprint_start_date);
+    $is_postprint_started      = format_datetime($print_order->postprint_start_date);
+    if($print_order->mode != 'outsideprint') :
 ?>
 <section
     id="postprint-progress-wrapper"
@@ -205,3 +206,6 @@ $(document).ready(function() {
     })
 })
 </script>
+<?php
+    endif;
+?>

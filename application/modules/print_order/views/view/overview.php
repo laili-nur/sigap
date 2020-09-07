@@ -55,7 +55,10 @@
         if ($print_order->is_print) {
             $this->load->view('print_order/view/postprint/index');
             if ($print_order->is_postprint) {
-                $this->load->view('print_order/view/final/index');
+                $this->load->view('print_order/view/stock/index');
+                if ($print_order->is_stock) {
+                    $this->load->view('print_order/view/final/index');
+                }    
             }
         }
     }

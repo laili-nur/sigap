@@ -10,20 +10,37 @@ $is_print_started      = format_datetime($print_order->print_start_date);
             <div class="d-flex align-items-center"><span class="mr-auto">Cetak</span>
                 <?php if (!$is_final) : ?>
                     <div class="card-header-control">
-                        <button
-                            id="btn-start-print"
-                            title="Mulai proses cetak"
-                            type="button"
-                            class="d-inline btn <?= !$is_print_started ? 'btn-warning' : 'btn-secondary'; ?> <?= $is_print_started ? 'btn-disabled' : ''; ?>"
-                            <?= $is_print_started ? 'disabled' : ''; ?>
-                        ><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
-                        <button
-                            id="btn-finish-print"
-                            title="Selesai proses cetak"
-                            type="button"
-                            class="d-inline btn btn-secondary <?= !$is_print_started ? 'btn-disabled' : '' ?>"
-                            <?= !$is_print_started ? 'disabled' : '' ?>
-                        ><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
+                        <?php if($print_order->mode == 'outsideprint'): ?>
+                            <button
+                                id="btn-start-print-postprint"
+                                title="Mulai proses cetak"
+                                type="button"
+                                class="d-inline btn <?= !$is_print_started ? 'btn-warning' : 'btn-secondary'; ?> <?= $is_print_started ? 'btn-disabled' : ''; ?>"
+                                <?= $is_print_started ? 'disabled' : ''; ?>
+                            ><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
+                            <button
+                                id="btn-finish-print-postprint"
+                                title="Selesai proses cetak"
+                                type="button"
+                                class="d-inline btn btn-secondary <?= !$is_print_started ? 'btn-disabled' : '' ?>"
+                                <?= !$is_print_started ? 'disabled' : '' ?>
+                            ><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
+                        <?php else : ?>
+                            <button
+                                id="btn-start-print"
+                                title="Mulai proses cetak"
+                                type="button"
+                                class="d-inline btn <?= !$is_print_started ? 'btn-warning' : 'btn-secondary'; ?> <?= $is_print_started ? 'btn-disabled' : ''; ?>"
+                                <?= $is_print_started ? 'disabled' : ''; ?>
+                            ><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
+                            <button
+                                id="btn-finish-print"
+                                title="Selesai proses cetak"
+                                type="button"
+                                class="d-inline btn btn-secondary <?= !$is_print_started ? 'btn-disabled' : '' ?>"
+                                <?= !$is_print_started ? 'disabled' : '' ?>
+                            ><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
+                        <?php endif; ?>
                     </div>
                 <?php endif ?>
             </div>
@@ -186,6 +203,61 @@ $(document).ready(function() {
             datatype: "JSON",
             data: {
                 progress: 'print'
+            },
+            success: function(res) {
+                showToast(true, res.data);
+            },
+            error: function(err) {
+                showToast(false, err.responseJSON.message);
+            },
+            complete: function() {
+                // reload segmen print
+                reload_print_segment()
+                // reload progress
+                $('#progress-list-wrapper').load(' #progress-list');
+                // reload data draft
+                $('#print-data-wrapper').load(' #print-data');
+            },
+        })
+    })
+
+    // print-preprint
+    // mulai cetak dan jilid
+    $('#print-progress-wrapper').on('click', '#btn-start-print-preprint', function() {
+        $.ajax({
+            type: "POST",
+            url: "<?= base_url('print_order/api_start_progress/'); ?>" + print_order_id,
+            datatype: "JSON",
+            data: {
+                progress: 'print',
+                progress: 'preprint'
+            },
+            success: function(res) {
+                showToast(true, res.data);
+            },
+            error: function(err) {
+                showToast(false, err.responseJSON.message);
+            },
+            complete: function() {
+                // reload segmen print
+                reload_print_segment()
+                // reload progress
+                $('#progress-list-wrapper').load(' #progress-list');
+                // reload data draft
+                $('#print-data-wrapper').load(' #print-data');
+            },
+        })
+    })
+
+    // selesai cetak dan jilid
+    $('#print-progress-wrapper').on('click', '#btn-finish-print-preprint', function() {
+        $.ajax({
+            type: "POST",
+            url: "<?= base_url('print_order/api_finish_progress/'); ?>" + print_order_id,
+            datatype: "JSON",
+            data: {
+                progress: 'print',
+                progress: 'preprint'
             },
             success: function(res) {
                 showToast(true, res.data);
