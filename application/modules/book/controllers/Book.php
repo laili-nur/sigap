@@ -340,9 +340,7 @@ class Book extends Admin_Controller
     {
         if ($this->check_level_gudang() == TRUE) :
             $this->load->library('form_validation');
-            $this->form_validation->set_rules('stock_in_warehouse', 'Stok dalam gudang', 'required|max_length[10]');
-            $this->form_validation->set_rules('stock_out_warehouse', 'Stok luar gudang', 'required|max_length[10]');
-            $this->form_validation->set_rules('stock_marketing', 'Stok pemasaran', 'required|max_length[10]');
+            $this->form_validation->set_rules('modifier_warehouse', 'Stok Gudang', 'required|max_length[10]');
             $this->form_validation->set_rules('stock_input_notes', 'Catatan', 'required|max_length[256]');
 
             if ($this->form_validation->run() == FALSE) {

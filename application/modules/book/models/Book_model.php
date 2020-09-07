@@ -327,7 +327,7 @@ class Book_model extends MY_Model
     public function fetch_stock_by_id($book_id)
     {
 
-        $stock_history    = $this->db->select('*')->from('book_stock')->where('book_id', $book_id)->order_by("UNIX_TIMESTAMP(stock_input_date)", "ASC")->get()->result();
+        $stock_history    = $this->db->select('*')->from('book_stock')->where('book_id', $book_id)->order_by("UNIX_TIMESTAMP(stock_input_date)", "DESC")->get()->result();
         $stock_last       = $this->db->select('*')->from('book_stock')->where('book_id', $book_id)->order_by("UNIX_TIMESTAMP(stock_input_date)", "DESC")->limit(1)->get()->row();
         return [
             'stock_history' => $stock_history,
@@ -337,17 +337,30 @@ class Book_model extends MY_Model
 
     public function add_book_stock()
     {
-        $add    =   [
-            'book_id'               => $this->input->post('book_id'),
-            'stock_in_warehouse'    => $this->input->post('stock_in_warehouse'),
-            'stock_out_warehouse'   => $this->input->post('stock_out_warehouse'),
-            'stock_marketing'       => $this->input->post('stock_marketing'),
-            'stock_input_notes'     => $this->input->post('stock_input_notes'),
-            'stock_input_type'      => 0,
-            'stock_input_user'      => $_SESSION['username'],
-            'stock_input_date'      => date('Y-m-d H:i:s')
+        $book_id                =   $this->input->post('book_id');
+        $initial_warehouse   =   intval($this->input->post('initial_warehouse'));
+        $modifier_warehouse  =   intval($this->input->post('modifier_warehouse'));
+        $final_warehouse     =   $initial_warehouse + $modifier_warehouse;
+
+        if($modifier_warehouse < 0){
+            $modifier_warehouse  =   ' - '.abs($modifier_warehouse);
+        }elseif($modifier_warehouse >= 0){
+            $modifier_warehouse  =   ' + '.abs($modifier_warehouse);
+        }
+
+        $edit   =   [
+            'stock_warehouse'    => intval($final_warehouse),
         ];
 
+        $add    =   [
+            'book_id'               => $book_id,
+            'stock_warehouse'    => $initial_warehouse.$modifier_warehouse,
+            'stock_input_notes'     => $this->input->post('stock_input_notes'),
+            'stock_input_type'      => 'book',
+            'stock_input_user'      => $_SESSION['username']
+        ];
+
+        $this->db->set($edit)->where('book_id',$book_id)->update('book');
         $this->db->insert('book_stock', $add);
         return TRUE;
     }

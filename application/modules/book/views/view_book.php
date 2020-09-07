@@ -248,16 +248,9 @@ $level              = check_level();
                                                         <input type="hidden" class="form-control" id="book_id" name="book_id" value="<?= $input->book_id;?>"/>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class="font-weight-bold" for="stock_in_warehouse">Stok dalam gudang</label>
-                                                        <input type="number" class="form-control" name="stock_in_warehouse" id="stock_in_warehouse" value="<td><?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_in_warehouse;}else{echo "-";} ?></td>"/>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="font-weight-bold" for="stock_out_warehouse">Stok luar gudang</label>
-                                                        <input type="number" class="form-control" name="stock_out_warehouse" id="stock_out_warehouse" value="<?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_out_warehouse;}else{echo "-";} ?>"/>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="font-weight-bold" for="stock_pemasaran">Stok pemasaran</label>
-                                                        <input type="number" class="form-control" name="stock_marketing" id="stock_marketing" value="<?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_marketing;}else{echo "-";} ?>"/>
+                                                        <label class="font-weight-bold" for="modifier_warehouse">Stok Gudang</label>
+                                                        <input type="number" class="form-control" name="modifier_warehouse" id="modifier_warehouse"/>
+                                                        <input type="hidden" name="initial_warehouse" id="initial_warehouse"  value="<?= $input->stock_warehouse; ?>">
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="font-weight-bold" for="stock_input_notes">Catatan</label>
@@ -297,16 +290,8 @@ $level              = check_level();
                                             <td><strong><?= $input->book_title; ?></strong></td>
                                         </tr>
                                         <tr>
-                                            <td width="160px">Stok Dalam gudang</td>
-                                            <td><?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_in_warehouse;}else{echo "-";} ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="160px">Stok Luar Gudang</td>
-                                            <td><?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_out_warehouse;}else{echo "-";} ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="160px">Stok Pemasaran</td>
-                                            <td><?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_marketing;}else{echo "-";} ?></td>
+                                            <td width="160px">Stok Gudang</td>
+                                            <td><?= $input->stock_warehouse; ?></td>
                                         </tr>
                                         <tr>
                                             <td width="160px">Perubahan Terakhir</td>
@@ -324,9 +309,7 @@ $level              = check_level();
                                     <thead>
                                         <tr class="text-center">
                                             <th scope="col">No</th>
-                                            <th scope="col">Stok Dalam Gudang</th>
-                                            <th scope="col">Stok Luar Gudang</th>
-                                            <th scope="col">Stok Pemasaran</th>
+                                            <th scope="col">Stok Gudang</th>
                                             <th scope="col">Tipe Input</th>
                                             <th scope="col">User Input</th>
                                             <th scope="col">Tanggal Input</th>
@@ -340,14 +323,12 @@ $level              = check_level();
                                         <?php foreach ($stock_history as $history) : ?>
                                             <tr class="text-center">
                                                 <td><?= $i++; ?></td>
-                                                <td><?= $history->stock_in_warehouse; ?></td>
-                                                <td><?= $history->stock_out_warehouse; ?></td>
-                                                <td><?= $history->stock_marketing; ?></td>
+                                                <td><?= $history->stock_warehouse; ?></td>
                                                 <td>
                                                     <?php
-                                                        if($history->stock_input_type == 0){echo 'Input menggunakan fitur buku.';}
-                                                        elseif($history->stock_input_type == 1){echo 'Input menggunakan fitur printing.';}
-                                                        elseif($history->stock_input_type == 2){echo 'Input menggunakan fitur permintaan buku.';}
+                                                        if($history->stock_input_type == 'book'){echo 'Input menggunakan fitur buku.';}
+                                                        elseif($history->stock_input_type == 'print_order'){echo 'Input menggunakan fitur order cetak.';}
+                                                        elseif($history->stock_input_type == 'book_request'){echo 'Input menggunakan fitur permintaan buku.';}
                                                         else{echo '';}
                                                     ?>
                                                 </td>
