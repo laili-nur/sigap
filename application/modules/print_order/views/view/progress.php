@@ -1,5 +1,5 @@
 <?php
-if($print_order->mode != 'outsideprint') :
+if($print_order->category != 'outsideprint') :
     $progress_list = ['preprint', 'print', 'postprint', 'stock'];
 else :
     $progress_list = ['preprint', 'print', 'stock'];

@@ -134,23 +134,6 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="mode">
-                                <?= $this->lang->line('form_print_order_mode'); ?>
-                                <abbr title="Required">*</abbr>
-                            </label>
-                            <select
-                                class="custom-select"
-                                name="mode"
-                                id="mode"
-                            >
-                                <?php foreach (get_print_order_mode() as $key => $value) : ?>
-                                    <option value="<?= $key ?>"><?= $value ?></option>
-                                <?php endforeach ?>
-                            </select>
-                            <?= form_error('mode'); ?>
-                        </div>
-
-                        <div class="form-group">
                             <label for="total">
                                 <?= $this->lang->line('form_print_order_total'); ?>
                                 <abbr title="Required">*</abbr>

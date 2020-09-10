@@ -81,10 +81,6 @@
                                     <td><?= get_print_order_priority()[$print_order->priority] ?? '' ?> </td>
                                 </tr>
                                 <tr>
-                                    <td width="200px"> <?= $this->lang->line('form_print_order_mode') ?> </td>
-                                    <td><?= get_print_order_mode()[$print_order->mode] ?? '' ?> </td>
-                                </tr>
-                                <tr>
                                     <td width="140px"><?= $this->lang->line('form_print_order_file') ?></td>
                                     <td>
                                         <?= ($print_order->print_order_file) ? '<a data-toggle="tooltip" data-placement="right" title="' . $print_order->print_order_file . '" class="btn btn-success btn-xs m-0" href="' . base_url('print_order/download_file/printorderfile/' . $print_order->print_order_file) . '" target="_blank"><i class="fa fa-download"></i> Download</a>' : ''; ?>
@@ -99,8 +95,8 @@
                                     <td><?= format_datetime($print_order->finish_date); ?> </td>
                                 </tr>
                                 <tr>
-                                    <td width="200px"> <?= $this->lang->line('form_print_order_input_by') ?> </td>
-                                    <td><?= $print_order->input_by; ?> </td>
+                                    <td width="200px"> <?= $this->lang->line('form_print_order_user_id') ?> </td>
+                                    <td><?= $print_order->user_id; ?> </td>
                                 </tr>
                                 <tr>
                                     <td width="200px"> <?= $this->lang->line('form_print_order_status') ?> </td>

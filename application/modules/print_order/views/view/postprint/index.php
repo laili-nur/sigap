@@ -1,6 +1,6 @@
 <?php
     $is_postprint_started      = format_datetime($print_order->postprint_start_date);
-    if($print_order->mode != 'outsideprint') :
+    if($print_order->category != 'outsideprint') :
 ?>
 <section
     id="postprint-progress-wrapper"
@@ -80,12 +80,6 @@
                     <span class="text-muted">Deadline</span>
                 <?php endif ?>
                 <strong><?= format_datetime($print_order->postprint_deadline); ?></strong>
-            </div>
-
-            <div class="list-group-item justify-content-between">
-                <span class="text-muted">User</span>
-                <strong>
-                    <?= $print_order->postprint_user ?></strong>
             </div>
 
             <div class="m-3">

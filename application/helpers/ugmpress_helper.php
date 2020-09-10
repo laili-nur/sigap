@@ -628,7 +628,8 @@ function get_print_order_category()
         'new' => 'Cetak Baru',
         'revise' => 'Cetak Ulang Revisi',
         'reprint' => 'Cetak Ulang Non Revisi',
-        'nonbook' => 'Cetak Non Buku'
+        'nonbook' => 'Cetak Non Buku',
+        'outsideprint' => 'Cetak Di Luar'
     ];
 }
 

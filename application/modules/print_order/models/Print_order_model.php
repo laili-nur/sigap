@@ -34,11 +34,6 @@ class Print_order_model extends MY_Model
                 'rules' => 'trim|required|integer',
             ],
             [
-                'field' => 'mode',
-                'label' => $this->lang->line('form_print_order_mode'),
-                'rules' => 'trim|required',
-            ],
-            [
                 'field' => 'total',
                 'label' => $this->lang->line('form_print_order_total'),
                 'rules' => 'trim|required|integer',
@@ -77,9 +72,9 @@ class Print_order_model extends MY_Model
             'paper_size'        => '',
             'type'              => 'pod',
             'priority'          => '',
-            'mode'              => '',
             'print_order_notes' => '',
-            'name'              => ''
+            'name'              => '',
+            'print_mode'              => 'book',
         ];
     }
 
@@ -99,7 +94,6 @@ class Print_order_model extends MY_Model
             ->when('category', $filters['category'])
             ->when('type', $filters['type'])
             ->when('priority', $filters['priority'])
-            ->when('mode', $filters['mode'])
             ->when('print_order_status', $filters['print_order_status'])
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
@@ -116,7 +110,6 @@ class Print_order_model extends MY_Model
             ->when('category', $filters['category'])
             ->when('type', $filters['type'])
             ->when('priority', $filters['priority'])
-            ->when('mode', $filters['mode'])
             ->when('print_order_status', $filters['print_order_status'])
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
@@ -157,10 +150,6 @@ class Print_order_model extends MY_Model
                 $this->where('priority', $data);
             }
 
-            if ($params == 'mode') {
-                $this->where('mode', $data);
-            }
-
             if ($params == 'keyword') {
                 $this->group_start();
                 $this->or_like('book_title', $data);
@@ -190,8 +179,7 @@ class Print_order_model extends MY_Model
 
         $input = [
             'print_order_status' => $progress,
-            "{$progress}_start_date" => date('Y-m-d H:i:s'),
-            "{$progress}_user" => $this->session->userdata('username')
+            "{$progress}_start_date" => date('Y-m-d H:i:s')
         ];
 
         $this->print_order->where('print_order_id', $print_order_id)->update($input);
@@ -209,8 +197,25 @@ class Print_order_model extends MY_Model
     {
         $input = [
             'print_order_status' => "{$progress}_approval",
-            "{$progress}_end_date" => date('Y-m-d H:i:s'),
-            "{$progress}_user" => $this->session->userdata('username')
+            "{$progress}_end_date" => date('Y-m-d H:i:s')
+        ];
+
+        $update_state = $this->print_order->where('print_order_id', $print_order_id)->update($input);
+
+        if ($update_state) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function finish_print_postprint($print_order_id)
+    {
+        $date   =   date('Y-m-d H:i:s');
+        $input = [
+            'print_order_status' => "print_approval",
+            "print_end_date" => $date,
+            "postprint_end_date" => $date
         ];
 
         $update_state = $this->print_order->where('print_order_id', $print_order_id)->update($input);
@@ -250,16 +255,56 @@ class Print_order_model extends MY_Model
         }
     }
 
-    public function upload_preprint_file($field_name, $file_name)
+    // public function upload_preprint_file($field_name, $file_name)
+    // {
+    //     $config = [
+    //         'upload_path'      => './preprintfile/',
+    //         'file_name'        => $file_name,
+    //         'allowed_types'    => get_allowed_file_types('preprint_file')['types'],
+    //         'max_size'         => 51200,                                           // 50MB
+    //         'overwrite'        => true,
+    //         'file_ext_tolower' => true,
+    //     ];
+    //     $this->load->library('upload', $config);
+    //     if ($this->upload->do_upload($field_name)) {
+    //         // Upload OK, return uploaded file info.
+    //         return $this->upload->data();
+    //     } else {
+    //         // Add error to $_error_array
+    //         $this->form_validation->add_to_error_array($field_name, $this->upload->display_errors('', ''));
+    //         return false;
+    //     }
+    // }
+
+    public function delete_preprint_file($preprint_file)
+    {
+        if ($preprint_file) {
+            if (file_exists("./preprintfile/$preprint_file")) {
+                unlink("./preprintfile/$preprint_file");
+                return true;
+            }
+            return false;
+        }
+    }
+
+    // public function delete_preprint_file($file)
+    // {
+    //     if ($file && file_exists("./preprintfile/$file")) {
+    //         unlink("./preprintfile/$file");
+    //     }
+    // }
+
+    public function upload_file($field_name, $print_order_file_name)
     {
         $config = [
             'upload_path'      => './preprintfile/',
-            'file_name'        => $file_name,
+            'file_name'        => $print_order_file_name,
             'allowed_types'    => get_allowed_file_types('preprint_file')['types'],
             'max_size'         => 51200,                                           // 50MB
             'overwrite'        => true,
             'file_ext_tolower' => true,
         ];
+
         $this->load->library('upload', $config);
         if ($this->upload->do_upload($field_name)) {
             // Upload OK, return uploaded file info.
@@ -268,13 +313,6 @@ class Print_order_model extends MY_Model
             // Add error to $_error_array
             $this->form_validation->add_to_error_array($field_name, $this->upload->display_errors('', ''));
             return false;
-        }
-    }
-
-    public function delete_preprint_file($file)
-    {
-        if ($file && file_exists("./preprintfile/$file")) {
-            unlink("./preprintfile/$file");
         }
     }
 }

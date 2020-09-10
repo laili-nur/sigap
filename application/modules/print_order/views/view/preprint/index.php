@@ -81,12 +81,6 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
                 <strong><?= format_datetime($print_order->preprint_deadline); ?></strong>
             </div>
 
-            <div class="list-group-item justify-content-between">
-                <span class="text-muted">User</span>
-                <strong>
-                    <?= $print_order->preprint_user ?></strong>
-            </div>
-
             <div class="m-3">
                 <div class="text-muted pb-1">Catatan Admin</div>
                 <?= $print_order->preprint_notes_admin ?>
@@ -116,111 +110,253 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
                     data-target="#modal-preprint-notes"
                 >Catatan</button>
 
-                <?php if($print_order->mode == "outsideprint") : ?>
-                    <?php if(empty($print_order->preprint_file) == TRUE) : ?>
-                        <!-- button modal preprint upload -->
-                        <button
-                            type="button"
-                            class="btn btn-outline-dark"
-                            data-toggle="modal"
-                            data-target="#modal-preprint-upload"
-                        >Upload File Approval</button>
-                        <!-- modal preprint upload -->
-                        <div
-                            class="modal modal-warning fade"
-                            id="modal-preprint-upload"
-                            tabindex="-1"
-                            role="dialog"
-                            aria-labelledby="modal-preprint-upload"
-                            aria-hidden="true"
-                        >
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title"><i class="fa fa-bullhorn text-yellow mr-1"></i>Upload File Approval</h5>
-                                    </div>
-                                    <div class="modal-body">
-                                        <?= form_open_multipart($form_action, 'novalidate="" id="form-print-order-preprint-file"'); ?>
-                                            <fielsdet>
-                                                <div class="form-group">
-                                                    <label for="preprint-file"><?= $this->lang->line('form_print_order_preprint_file'); ?></label>
-                                                    <div class="custom-file">
-                                                        <?= form_upload('preprint_file', '', 'class="custom-file-input" id="preprint-file"'); ?>
-                                                        <label
-                                                            class="custom-file-label"
-                                                            for="preprint-file"
-                                                        >Pilih file</label>
-                                                    </div>
-                                                    <small class="form-text text-muted">Menerima tipe file :
-                                                        <?= get_allowed_file_types('preprint_file')['to_text']; ?></small>
-                                                    <small class="text-danger"><?= $this->session->flashdata('preprint_file_no_data'); ?></small>
-                                                    <?= file_form_error('preprint_file', '<p class="small text-danger">', '</p>'); ?>
+                <?php if($print_order->category == "outsideprint") : ?>
+                    <!-- button modal preprint file info -->
+                    <button
+                        type="button"
+                        class="btn btn-outline-dark"
+                        data-toggle="modal"
+                        data-target="#modal-preprint-file-info"
+                        <?= !$is_preprint_started ? 'disabled' : ''; ?>
+                    >File Approval</button>
+                    <!-- modal preprint file info -->
+                    <div
+                        class="modal fade"
+                        id="modal-preprint-file-info"
+                        tabindex="-1"
+                        role="dialog"
+                        aria-labelledby="modal-preprint-file-info"
+                        aria-hidden="true"
+                    >
+                        <div class="modal-dialog modal-lg modal-dialog-overflow">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title"> File Approval</h5>
+                                    <button
+                                        type="button"
+                                        class="close"
+                                        data-dismiss="modal"
+                                        aria-label="Close"
+                                    >
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <div class="modal-body py-3">
+                                    <div
+                                        class="tab-content"
+                                        id="layout-tab-content-wrapper"
+                                    >
+                                        <div id="preprint-file-info">
+                                            <?php if ($print_order->preprint_file_link || $print_order->preprint_file) : ?>
+                                                <div class="alert alert-info m-0">
+                                                    <?php if ($print_order->preprint_file) : ?>
+                                                        <div>
+                                                            <p class="alert-heading font-weight-bold">File Tersimpan</p>
+                                                            <a
+                                                                href="<?= base_url("print_order/download_file/preprintfile/".$print_order->preprint_file) ?>"
+                                                                class="d-block mb-3"
+                                                            ><i class="fa fa-download"></i> <?= $print_order->preprint_file ?></a>
+                                                            <!-- ?? -->
+                                                            <?php if (is_staff() && !$is_final) : ?>
+                                                                <button
+                                                                    type="button"
+                                                                    data-type="file"
+                                                                    class="btn btn-outline-danger btn-sm preprint-delete-file"
+                                                                ><i class="fa fa-trash"></i> Hapus file</button>
+                                                            <?php endif ?>
+                                                            <!-- ?? -->
+                                                            <hr>
+                                                        </div>
+                                                    <?php endif ?>
+
+                                                    <?php if ($print_order->preprint_file_link) : ?>
+                                                        <div>
+                                                            <p class="alert-heading font-weight-bold">File External</p>
+                                                            <a
+                                                                href="<?= $print_order->preprint_file_link ?>"
+                                                                target="_blank"
+                                                                class="d-block mb-3"
+                                                            ><i class="fa fa-external-link-alt"></i> <?= $print_order->preprint_file_link ?></a>
+                                                            <!-- ?? -->
+                                                            <?php if (is_staff() && !$is_final) : ?>
+                                                                <button
+                                                                    type="button"
+                                                                    data-type="link"
+                                                                    class="btn btn-outline-danger btn-sm preprint-delete-file"
+                                                                ><i class="fa fa-trash"></i> Hapus link</button>
+                                                            <?php endif ?>
+                                                            <!-- ?? -->
+                                                            <hr>
+                                                        </div>
+                                                    <?php endif ?>
+                                                    <div class="text-muted">Terakhir diubah: <span><?= $print_order->preprint_upload_date ?></span></div>
+                                                    <div class="text-muted">Oleh: <span><?= $print_order->preprint_upload_by ?></span></div>
                                                 </div>
-                                            </fieldset>
-                                    </div>
-                                    <div class="modal-footer">
-                                            <div class="form-actions">
-                                                <button
-                                                    class="btn btn-primary ml-auto"
-                                                    type="submit"
-                                                    value="Submit"
-                                                    id="btn-submit"
-                                                >Submit</button>
-                                            </div>
-                                        <?= form_close(); ?>
-                                        <button
-                                            type="button"
-                                            class="btn btn-light"
-                                            data-dismiss="modal"
-                                        >Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <?php else : ?>
-                        <!-- button modal preprint file -->
-                        <button
-                            type="button"
-                            class="btn btn-outline-success"
-                            data-toggle="modal"
-                            data-target="#modal-preprint-file"
-                        >Lihat File Approval</button>
-                        <!-- modal view uploaded -->
-                        <div
-                            class="modal modal-warning fade"
-                            id="modal-preprint-file"
-                            tabindex="-1"
-                            role="dialog"
-                            aria-labelledby="modal-preprint-file"
-                            aria-hidden="true"
-                        >
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title"><i class="fa fa-bullhorn text-yellow mr-1"></i>Upload File Approval</h5>
-                                    </div>
-                                    <div class="modal-body">
-                                        <?php if(empty($print_order->preprint_file) == FALSE) : ?>
-                                            <?php if(strpos($print_order->preprint_file, '.pdf') == TRUE) : ?>
-                                                <a href="<?= base_url('print_order/download_preprint_file/'.$print_order->preprint_file);?>"><span class="badge badge-success"><?= base_url('preprintfile/'.$print_order->preprint_file);?></span></a>
-                                                <iframe src="<?= base_url('preprintfile/'.$print_order->preprint_file);?>" style="width: 100%;height: 500px;border: none;"></iframe>
                                             <?php else : ?>
-                                                <a href="<?= base_url('print_order/download_preprint_file/'.$print_order->preprint_file);?>"><span class="badge badge-success"><?= base_url('preprintfile/'.$print_order->preprint_file);?></span></a>
-                                                <p>File not supported, download to view this file.</p>
-                                            <?php endif ; ?>
-                                        <?php endif; ?>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button
-                                            type="button"
-                                            class="btn btn-light"
-                                            data-dismiss="modal"
-                                        >Close</button>
+                                                <div class="alert alert-secondary m-0">
+                                                    File/Link progress belum tersimpan di server
+                                                </div>
+                                            <?php endif ?>
+
+                                            
+                                            <?php if (is_staff() && !$is_final) : ?>
+                                                <hr class="my-4">
+                                                <div class="alert alert-warning">Upload dan hapus file hanya dapat dilakukan oleh staff. Selain staff hanya bisa melihat file saja.</div>
+                                                <form
+                                                    id="preprint-upload-form"
+                                                    method="post"
+                                                    enctype="multipart/form-data"
+                                                >
+                                                    <?= isset($print_order->print_order_id) ? form_hidden('print_order_id', $print_order->print_order_id) : ''; ?>
+                                                    <div class="form-group">
+                                                        <label for="preprint-file">Upload File Approval</label>
+                                                        <div class="custom-file">
+                                                            <?= form_upload("preprint_file", '', "class='custom-file-input document' id='preprint-file'"); ?>
+                                                            <label
+                                                                class="custom-file-label"
+                                                                for="preprint-file"
+                                                            >Pilih file</label>
+                                                        </div>
+                                                        <small class="form-text text-muted">Tipe file upload bertype : <?= get_allowed_file_types('preprint_file')['to_text']; ?></small>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="preprint-file-link">Link Naskah</label>
+                                                        <div>
+                                                            <?= form_input("preprint_file_link", $print_order->preprint_file_link, "class='form-control document' id='preprint-file-link'"); ?>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex justify-content-end mt-3">
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-light ml-auto"
+                                                            data-dismiss="modal"
+                                                        >Close</button>
+                                                        <button
+                                                            id="btn-upload-preprint"
+                                                            class="btn btn-primary"
+                                                            type="submit"
+                                                        > Update</button>
+                                                    </div>
+                                                </form>
+                                            <?php else : ?>
+                                                <div class="d-flex justify-content-end mt-3">
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-light ml-auto"
+                                                        data-dismiss="modal"
+                                                    >Close</button>
+                                                </div>
+                                            <?php endif ?>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    <?php endif; ?>
+                    </div>
+                    <!-- modal preprint outsideprint -->
+
+
+
+<script>
+$(document).ready(function() {
+    // identifier adalah 'review1','review2,'edit','layout','cover','proofread'
+    const identifier = 'preprint'
+    // progress adalah 'review','edit','layout','proofread'
+    let progress;
+    progress = identifier
+    const printorderId = '<?= $print_order->print_order_id ?>'
+
+    // upload progress
+    $(`#${progress}-progress-wrapper`).on('submit', `#${identifier}-upload-form`, function(e) {
+        e.preventDefault()
+
+        // validasi form
+        $(this).validate({
+            debug: true,
+            rules: {
+                // [`${identifier}_file`]: {
+                //     require_from_group: [1, ".document"],
+                //     extension: "<?= get_allowed_file_types('preprint_file')['types']; ?>",
+                // },
+                // [`${identifier}_file_link`]: {
+                //     curl: true,
+                //     require_from_group: [1, ".document"]
+                // }
+            },
+            errorElement: "span",
+            errorClass: "none",
+            validClass: "none",
+            errorPlacement: validateErrorPlacement,
+            submitHandler: function(form) {
+                const $this = $(`#btn-upload-${identifier}`);
+                $this.attr("disabled", "disabled").html('<i class="fa fa-spinner fa-spin "></i>');
+
+                // prepare form data
+                const formData = new FormData(form);
+                formData.append('progress', identifier)
+
+                // send data
+                $.ajax({
+                    url: "<?= base_url('print_order/api_upload_progress/'); ?>" + printorderId,
+                    type: "post",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function(res) {
+                        console.log(res);
+                        showToast(true, res.data);
+                        // $(`#${identifier}-file-tab-content`).load(` #${identifier}-file-info`)
+                        $(`#${identifier}-file-info`).load(` #${identifier}-file-info`)//???
+                    },
+                    error: function(err) {
+                        console.log(err);
+                        showToast(false, err.responseJSON.message);
+                        $resetform = $(`#${identifier}-file`);
+                        $resetform.val('');
+                        $resetform.next('label.custom-file-label').html('');
+                        $this.removeAttr("disabled").html("Update");
+                    },
+                });
+            }
+        });
+
+        // trigger submit handler
+        $(this).submit()
+    })
+
+    // delete file
+    $(`#${progress}-progress-wrapper`).on('click', `.${identifier}-delete-file`, function(e) {
+        const $this = $(this)
+
+        if (confirm(`Apakah anda yakin akan menghapus ${$this.data().type} ini?`)) {
+            $this.attr("disabled", "disabled").html('<i class="fa fa-spinner fa-spin "></i>');
+            // send data
+            $.ajax({
+                url: "<?= base_url('print_order/api_delete_progress/'); ?>" + printorderId,
+                type: "post",
+                data: {
+                    progress: identifier,
+                    file_type: $this.data().type // 'link' or 'file'
+                },
+                success: function(res) {
+                    console.log(res);
+                    showToast(true, res.data);
+                    // $(`#${identifier}-file-tab-content`).load(` #${identifier}-file-info`)
+                    $(`#${identifier}-file-info`).load(` #${identifier}-file-info`)//???
+                },
+                error: function(err) {
+                    console.log(err);
+                    showToast(false, err.responseJSON.message);
+                    $this.removeAttr("disabled").html("<i class='fa fa-trash'></i> Hapus file");
+                },
+            });
+        }
+    })
+})
+</script>
+
                 <?php endif; ?>
             </div>
         </div>

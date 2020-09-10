@@ -408,6 +408,20 @@ class MY_Model extends CI_Model
         }
     }
 
+    public function edit_print_order_date($id, $column, $date = '')
+    {
+        if ($date == "") {
+            $date = date('Y-m-d H:i:s');
+        }
+
+        $data = array($column => $date);
+        if ($this->where('print_order_id', $id)->update($data, 'print_order')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Mencari reviewer_id atau author_id berdasarkan user_id dan tipe role
      *

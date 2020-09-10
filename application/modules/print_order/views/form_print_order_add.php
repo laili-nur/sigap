@@ -25,12 +25,11 @@
                         <?= isset($input->print_order_id) ? form_hidden('print_order_id', $input->print_order_id) : ''; ?>
 
                         <div class="form-group">
-                            <label for="mode">
-                                <?= $this->lang->line('form_print_order_mode'); ?>
-                                <abbr title="Required">*</abbr>
+                            <label for="print-mode">
+                                Mode Cetak
                             </label>
-                            <?= form_dropdown('mode', get_print_order_mode(), $input->mode, 'id="mode" class="form-control custom-select d-block"'); ?>
-                            <?= form_error('mode'); ?>
+                            <?= form_dropdown('print_mode', ['book' => 'Buku', 'nonbook' => 'Non Buku', 'outsideprint' => 'Cetak Di Luar'], $input->print_mode, 'id="print-mode" class="form-control custom-select d-block"'); ?>
+                            <?= form_error('print_mode'); ?>
                         </div>
 
                         <div
