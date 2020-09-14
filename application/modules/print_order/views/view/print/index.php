@@ -289,6 +289,15 @@ $(document).ready(function() {
                     data-toggle="modal"
                     data-target="#modal-print-notes"
                 >Catatan</button>
+
+                <!-- Modal Set Stok untuk Outside -->
+                <?php
+                    if($print_order->category == "outsideprint"){
+                        $this->load->view('print_order/view/common/stock_modal',[
+                            'progress' => 'print',
+                        ]);
+                    }
+                ?>
             </div>
         </div>
 

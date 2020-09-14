@@ -110,6 +110,14 @@
                     data-toggle="modal"
                     data-target="#modal-postprint-notes"
                 >Catatan</button>
+                <!-- Modal Set Stok untuk Outside -->
+                <?php
+                    if($print_order->category != "outsideprint"){
+                        $this->load->view('print_order/view/common/stock_modal',[
+                            'progress' => 'postprint',
+                        ]);
+                    }
+                ?>
             </div>
         </div>
 

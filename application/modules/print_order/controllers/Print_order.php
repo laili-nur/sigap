@@ -702,6 +702,23 @@ class Print_order extends Admin_Controller
         force_download('./preprintfile/'.$filename, NULL);
     }
 
+    public function api_set_stock($print_order_id){
+        // cek data
+        $print_order = $this->print_order->where('print_order_id', $print_order_id)->get();
+        if (!$print_order) {
+            $message = $this->lang->line('toast_data_not_available');
+            return $this->send_json_output(false, $message, 404);
+        }
+
+        $input = (object) $this->input->post(null, false);
+
+        if ($this->print_order->where('print_order_id', $print_order_id)->update($input)) {
+            return $this->send_json_output(true, $this->lang->line('toast_edit_success'));
+        } else {
+            return $this->send_json_output(false, $this->lang->line('toast_edit_fail'));
+        }
+    }
+
     private function _generate_print_order_file_name($print_order_file_name, $print_order_title, $progress = null)
     {
         $get_extension = explode(".", $print_order_file_name)[1];
