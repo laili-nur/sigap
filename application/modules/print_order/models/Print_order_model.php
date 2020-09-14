@@ -80,7 +80,7 @@ class Print_order_model extends MY_Model
 
     public function get_print_order($print_order_id)
     {
-        return $this->select(['print_order.book_id', 'book.draft_id', 'book_title', 'book_file', 'book_file_link', 'cover_file', 'cover_file_link', 'book_notes',  'is_reprint', 'book_edition', 'nomor_hak_cipta', 'status_hak_cipta', 'file_hak_cipta', 'file_hak_cipta_link', 'print_order.*'])
+        return $this->select(['print_order.book_id', 'book.draft_id', 'stock_warehouse', 'book_title', 'book_file', 'book_file_link', 'cover_file', 'cover_file_link', 'book_notes',  'is_reprint', 'book_edition', 'nomor_hak_cipta', 'status_hak_cipta', 'file_hak_cipta', 'file_hak_cipta_link', 'print_order.*'])
             ->join('book')
             ->join_table('draft', 'book', 'draft')
             ->where('print_order_id', $print_order_id)
@@ -98,9 +98,10 @@ class Print_order_model extends MY_Model
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
             ->join_table('category', 'draft', 'category')
+            ->order_by('name','ASC')
+            ->order_by('book_title','ASC')
             ->order_by('status_hak_cipta')
-            ->order_by('published_date')
-            ->order_by('book_title')
+            ->order_by('published_date')          
             ->order_by('UNIX_TIMESTAMP(print_order.entry_date)', 'DESC')
             ->paginate($page)
             ->get_all();
@@ -114,9 +115,10 @@ class Print_order_model extends MY_Model
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
             ->join_table('category', 'draft', 'category')
+            ->order_by('name','ASC')
+            ->order_by('book_title','ASC')
             ->order_by('status_hak_cipta')
             ->order_by('published_date')
-            ->order_by('book_title')
             ->count();
 
         // get authors

@@ -254,6 +254,22 @@ class Print_order extends Admin_Controller
             'finish_date' => $action == 'finish' ? now() : null
         ]);
 
+        //  ambil data print order
+        $print_order = $this->print_order->get_print_order($print_order_id);
+
+        // update data stok buku, tabel buku
+        $stock_final = $print_order->total_success + $print_order->stock_warehouse;
+        $this->print_order->where('book_id', $print_order->book_id)->update(['stock_warehouse' => $stock_final],'book');
+        // insert data stok buku, tabel stok buku
+        $this->print_order->insert('book_stock', [
+            'book_id'           => $print_order->book_id,
+            'stock_warehouse'   => $print_order->stock_warehouse.' + '.$print_order->total_success,
+            'stock_input_type'  => 'print_order',
+            'stock_input_user'  => $_SESSION['user_id'],
+            'stock_input_date'  => date('Y-m-d H:i:s'),
+            'stock_input_notes' => 'Input otomatis menggunakan fitur finalisasi pada order cetak'
+        ]);
+
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();
             $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));

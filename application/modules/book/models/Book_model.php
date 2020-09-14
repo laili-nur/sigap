@@ -354,10 +354,11 @@ class Book_model extends MY_Model
 
         $add    =   [
             'book_id'               => $book_id,
-            'stock_warehouse'    => $initial_warehouse.$modifier_warehouse,
+            'stock_warehouse'       => $initial_warehouse.$modifier_warehouse,
             'stock_input_notes'     => $this->input->post('stock_input_notes'),
             'stock_input_type'      => 'book',
-            'stock_input_user'      => $_SESSION['username']
+            'stock_input_user'      => $_SESSION['username'],
+            'stock_input_date'      => date('Y-m-d H:i:s')
         ];
 
         $this->db->set($edit)->where('book_id',$book_id)->update('book');
