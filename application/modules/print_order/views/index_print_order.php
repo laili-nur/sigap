@@ -164,6 +164,10 @@ $print_order_status_options = [
                                     >Tanggal Selesai</th>
                                     <th
                                         scope="col"
+                                        style="min-width:100px;"
+                                    >Deadline</th>
+                                    <th
+                                        scope="col"
                                         style="min-width:70px;"
                                     >Status</th>
                                     <?php if ($level == 'superadmin') : ?>
@@ -192,6 +196,19 @@ $print_order_status_options = [
                                         </td>
                                         <td class="align-middle"><?= $print_order->entry_date; ?></td>
                                         <td class="align-middle"><?= $print_order->finish_date; ?></td>
+                                        <td class="align-middle">
+                                            <?php
+                                            if (!$print_order->deadline_date) {
+                                                echo '-';
+                                            } elseif (strtotime($print_order->deadline_date) <= strtotime("+3 day")) {
+                                                echo '<div class="text-danger">' . $print_order->deadline_date . '</div>';
+                                            } elseif (strtotime($print_order->deadline_date) <= strtotime("+7 day")) {
+                                                echo '<div class="text-warning">' . $print_order->deadline_date . '</div>';
+                                            } elseif (strtotime($print_order->deadline_date) >= strtotime("+7 day")) {
+                                                echo '<div>' . $print_order->deadline_date . '</div>';
+                                            }
+                                            ?>
+                                        </td>
                                         <td class="align-middle"><?= get_print_order_status()[$print_order->print_order_status] ?? $print_order->print_order_status; ?></td>
                                         <td class="align-middle text-right">
                                             <a

@@ -142,7 +142,7 @@ function konversiID($table, $vars, $id)
 function get_dropdown_listBook($table, $columns)
 {
     $CI    = &get_instance();
-    $query = $CI->db->select($columns)->from($table)->get();
+    $query = $CI->db->select($columns)->from($table)->order_by('book_title','ASC')->get();
 
     if ($query->num_rows() >= 1) {
         $options1 = ['' => '-- Pilih --'];
@@ -658,4 +658,9 @@ function get_print_order_status()
         'reject' => 'Ditolak',
         'finish' => 'Selesai',
     ];
+}
+
+function get_username($user_id){
+    $CI     = &get_instance();
+    return $CI->db->get_where('user',['user_id'=>$user_id])->row()->username;
 }

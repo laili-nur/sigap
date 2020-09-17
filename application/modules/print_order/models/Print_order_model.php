@@ -87,6 +87,13 @@ class Print_order_model extends MY_Model
             ->get();
     }
 
+    public function get_book($book_id)
+    {
+        return $this->select('book.*')
+            ->where('book_id', $book_id)
+            ->get('book');
+    }
+
     public function filter_print_order($filters, $page)
     {
         $print_orders = $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'category_name', 'draft.is_reprint', 'print_order.*'])
@@ -98,13 +105,22 @@ class Print_order_model extends MY_Model
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
             ->join_table('category', 'draft', 'category')
-            ->order_by('name','ASC')
-            ->order_by('book_title','ASC')
-            ->order_by('status_hak_cipta')
-            ->order_by('published_date')          
-            ->order_by('UNIX_TIMESTAMP(print_order.entry_date)', 'DESC')
+            ->order_by('UNIX_TIMESTAMP(print_order.deadline_date)', 'ASC')
+            ->order_by('priority', 'DESC')
+            ->order_by('book_title', 'ASC')
+            ->order_by('name', 'ASC')
+            // ->order_by('name','ASC')
+            // ->order_by('book_title','ASC')
+            // ->order_by('status_hak_cipta')
+            // ->order_by('published_date')          
+            // ->order_by('UNIX_TIMESTAMP(print_order.entry_date)', 'DESC')
             ->paginate($page)
             ->get_all();
+
+        // pengennya order by
+        // 1. deadline yg mendekati, berarti asc
+        // 2. prioritas tinggi ke rendah, desc
+        // 3. judul dan name sesuai alpabet, asc
 
         $total = $this->select('draft.draft_id')
             ->when('keyword', $filters['keyword'])
@@ -115,10 +131,10 @@ class Print_order_model extends MY_Model
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
             ->join_table('category', 'draft', 'category')
-            ->order_by('name','ASC')
-            ->order_by('book_title','ASC')
-            ->order_by('status_hak_cipta')
-            ->order_by('published_date')
+            // ->order_by('name','ASC')
+            // ->order_by('book_title','ASC')
+            // ->order_by('status_hak_cipta')
+            // ->order_by('published_date')
             ->count();
 
         // get authors

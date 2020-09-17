@@ -229,7 +229,7 @@ $level              = check_level();
                                         >
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title">Tambah Stok</h5>
+                                                    <h5 class="modal-title">Ubah Stok</h5>
                                                     <button
                                                         type="button"
                                                         class="close"
@@ -247,18 +247,49 @@ $level              = check_level();
                                                         <input type="text" class="form-control" value="<?= $input->book_title; ?>" disabled/>
                                                         <input type="hidden" class="form-control" id="book_id" name="book_id" value="<?= $input->book_id;?>"/>
                                                     </div>
+<div class="form-group">
+    <label
+        for="type"
+        class="d-block font-weight-bold"
+    >
+        Tipe Operasi <abbr title="Required">*</abbr>
+    </label>
+    <div
+        class="btn-group btn-group-toggle"
+        data-toggle="buttons"
+    >
+        <label class="btn btn-secondary active">
+            <input
+                type="radio"
+                name="warehouse_operator"
+                value="+"
+                checked="checked"
+                class="custom-control-input"
+            />
+            Tambah</label>
+
+        <label class="btn btn-secondary ">
+            <input
+                type="radio"
+                name="warehouse_operator"
+                value="-"
+                class="custom-control-input"
+            />
+            Kurang</label>
+    </div>
+</div>
                                                     <div class="form-group">
-                                                        <label class="font-weight-bold" for="modifier_warehouse">Stok Gudang</label>
-                                                        <input type="number" class="form-control" name="modifier_warehouse" id="modifier_warehouse"/>
-                                                        <input type="hidden" name="initial_warehouse" id="initial_warehouse"  value="<?= $input->stock_warehouse; ?>">
+                                                        <label class="font-weight-bold" for="warehouse_modifier">Stok Gudang<abbr title="Required">*</abbr></label>
+                                                        <input type="number" class="form-control" name="warehouse_modifier" id="warehouse_modifier"/>
+                                                        <input type="hidden" name="warehouse_past" id="warehouse_past"  value="<?= $input->stock_warehouse; ?>">
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class="font-weight-bold" for="stock_input_notes">Catatan</label>
+                                                        <label class="font-weight-bold" for="notes">Catatan</label>
                                                         <textarea
                                                             rows="6"
                                                             class="form-control summernote-basic"
-                                                            id="stock_input_notes"
-                                                            name="stock_input_notes"
+                                                            id="notes"
+                                                            name="notes"
                                                         ></textarea>
                                                     </div>
                                                 </div>
@@ -295,7 +326,7 @@ $level              = check_level();
                                         </tr>
                                         <tr>
                                             <td width="160px">Perubahan Terakhir</td>
-                                            <td><?php if(empty($stock_last) == FALSE){ echo date('d F Y H:i:s',strtotime($stock_last->stock_input_date));}else{echo "-";} ?></td>
+                                            <td><?php if(empty($stock_last) == FALSE){ echo date('d F Y H:i:s',strtotime($stock_last->date));}else{echo "-";} ?></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -323,18 +354,26 @@ $level              = check_level();
                                         <?php foreach ($stock_history as $history) : ?>
                                             <tr class="text-center">
                                                 <td><?= $i++; ?></td>
-                                                <td><?= $history->stock_warehouse; ?></td>
                                                 <td>
                                                     <?php
-                                                        if($history->stock_input_type == 'book'){echo 'Input menggunakan fitur buku.';}
-                                                        elseif($history->stock_input_type == 'print_order'){echo 'Input menggunakan fitur order cetak.';}
-                                                        elseif($history->stock_input_type == 'book_request'){echo 'Input menggunakan fitur permintaan buku.';}
+                                                        if($history->warehouse_operator == "+"){
+                                                            echo $history->warehouse_past.'<div class="text-success"> '.$history->warehouse_operator.' '.$history->warehouse_modifier.'</div>';
+                                                        }elseif($history->warehouse_operator == "-"){
+                                                            echo $history->warehouse_past.'<div class="text-danger"> '.$history->warehouse_operator.' '.$history->warehouse_modifier.'</div>';
+                                                        }
+                                                    ?>
+                                                </td>
+                                                <td>
+                                                    <?php
+                                                        if($history->type == 'book'){echo 'Input menggunakan fitur buku.';}
+                                                        elseif($history->type == 'print_order'){echo 'Input menggunakan fitur order cetak.';}
+                                                        elseif($history->type == 'book_request'){echo 'Input menggunakan fitur permintaan buku.';}
                                                         else{echo '';}
                                                     ?>
                                                 </td>
-                                                <td><?= $history->stock_input_user; ?></td>
-                                                <td><?= date('d F Y H:i:s',strtotime($history->stock_input_date)); ?></td>
-                                                <td><?= $history->stock_input_notes; ?></td>
+                                                <td><?= get_username($history->user_id); ?></td>
+                                                <td><?= date('d F Y H:i:s',strtotime($history->date)); ?></td>
+                                                <td><?= $history->notes; ?></td>
                                                 <?php if($level == 'superadmin' || $level == 'admin_gudang'): ?>
                                                 <td>
                                                     <button

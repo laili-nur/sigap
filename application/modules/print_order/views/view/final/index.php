@@ -91,8 +91,6 @@ if (!$is_final) :
             </div>
         </div>
     </div>
-<?php endif ?>
-
 <script>
 $(document).ready(function() {
     const printOrderId = '<?= $print_order->print_order_id ?>';
@@ -111,3 +109,10 @@ $(document).ready(function() {
     });
 })
 </script>
+<?php else: ?>
+    <div>Print Order telah selesai.&nbsp;
+        <span>
+            <a href="<?= base_url('book/view/'.$print_order->book_id); ?>" target="_blank"><i class="fa fa-external-link-alt"></i> Link buku</a>
+        </span>
+    </div>
+<?php endif; ?>

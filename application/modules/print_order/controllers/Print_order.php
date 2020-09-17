@@ -70,10 +70,10 @@ class Print_order extends Admin_Controller
         if ($input->print_mode == 'nonbook') {
             $input->category = 'nonbook';
             $this->form_validation->set_rules('name', $this->lang->line('form_print_order_name'), 'required');
-        } elseif($input->print_mode == 'book') {
+        } elseif ($input->print_mode == 'book') {
             $input->category = $this->_check_book($input->book_id);
             $this->form_validation->set_rules('book_id', $this->lang->line('form_book_title'), 'required');
-        } elseif($input->print_mode == 'outsideprint') {
+        } elseif ($input->print_mode == 'outsideprint') {
             $input->category = 'outsideprint';
             $this->form_validation->set_rules('book_id', $this->lang->line('form_book_title'), 'required');
         }
@@ -255,20 +255,33 @@ class Print_order extends Admin_Controller
         ]);
 
         //  ambil data print order
-        $print_order = $this->print_order->get_print_order($print_order_id);
+        $print_order         =   $this->print_order->get_print_order($print_order_id);
 
-        // update data stok buku, tabel buku
-        $stock_final = $print_order->total_success + $print_order->stock_warehouse;
-        $this->print_order->where('book_id', $print_order->book_id)->update(['stock_warehouse' => $stock_final],'book');
-        // insert data stok buku, tabel stok buku
-        $this->print_order->insert('book_stock', [
-            'book_id'           => $print_order->book_id,
-            'stock_warehouse'   => $print_order->stock_warehouse.' + '.$print_order->total_success,
-            'stock_input_type'  => 'print_order',
-            'stock_input_user'  => $_SESSION['user_id'],
-            'stock_input_date'  => date('Y-m-d H:i:s'),
-            'stock_input_notes' => 'Input otomatis menggunakan fitur finalisasi pada order cetak'
-        ]);
+        // Mekanisme input stok
+        $book_id             =   $print_order->book_id;
+        $warehouse_past      =   intval($print_order->stock_warehouse);
+        $warehouse_modifier  =   abs($print_order->total_success);
+        $warehouse_operator  =   "+";
+        $warehouse_present   =   $warehouse_past + $warehouse_modifier;
+
+        $edit   =   [
+            'stock_warehouse'    => $warehouse_present,
+        ];
+
+        $add    =   [
+            'book_id'               => $book_id,
+            'user_id'               => $_SESSION['user_id'],
+            'type'                  => 'print_order',
+            'date'                  => date('Y-m-d H:i:s'),
+            'notes'                 => '<a href="' . base_url('print_order/view/' . $print_order->print_order_id) . '" target="_blank"> <i class="fa fa-external-link-alt"></i> Link Order Cetak</a>',
+            'warehouse_past'        => $warehouse_past,
+            'warehouse_modifier'    => $warehouse_modifier,
+            'warehouse_present'     => $warehouse_present,
+            'warehouse_operator'    => $warehouse_operator
+        ];
+
+        $this->db->set($edit)->where('book_id', $book_id)->update('book');
+        $this->db->insert('book_stock', $add);
 
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();
@@ -493,7 +506,8 @@ class Print_order extends Admin_Controller
         return $this->send_json_output(true, $this->_check_book($book_id));
     }
 
-    public function action_print_postprint($print_order_id){
+    public function action_print_postprint($print_order_id)
+    {
         // cek data
         $print_order = $this->print_order->where('print_order_id', $print_order_id)->get();
         if (!$print_order) {
@@ -541,7 +555,7 @@ class Print_order extends Admin_Controller
         }
 
         // jika end date kosong, maka isikan nilai now
-        if (empty($print_order->print_end_date)==TRUE || empty($print_order->postprint_end_date)==TRUE) {
+        if (empty($print_order->print_end_date) == TRUE || empty($print_order->postprint_end_date) == TRUE) {
             // $input->{"{$input->progress}_end_date"} = now();
             $input->print_end_date = now();
             $input->postprint_end_date = now();
@@ -559,7 +573,8 @@ class Print_order extends Admin_Controller
         }
     }
 
-    public function finish_print_postprint($print_order_id){
+    public function finish_print_postprint($print_order_id)
+    {
         // apakah order cetak tersedia
         $print_order = $this->print_order->where('print_order_id', $print_order_id)->get();
         if (!$print_order) {
@@ -585,7 +600,8 @@ class Print_order extends Admin_Controller
         }
     }
 
-    public function api_upload_preprint_file(){
+    public function api_upload_preprint_file()
+    {
         if (!$this->_is_printing_admin()) {
             redirect($this->pages);
         }
@@ -621,7 +637,7 @@ class Print_order extends Admin_Controller
             $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
         }
 
-        redirect('print_order/view/' . $print_order_id.'#preprint-progress');
+        redirect('print_order/view/' . $print_order_id . '#preprint-progress');
     }
 
     public function api_upload_progress($print_order_id)
@@ -713,12 +729,14 @@ class Print_order extends Admin_Controller
         }
     }
 
-    public function download_preprint_file($filename){
+    public function download_preprint_file($filename)
+    {
         $this->load->helper('download');
-        force_download('./preprintfile/'.$filename, NULL);
+        force_download('./preprintfile/' . $filename, NULL);
     }
 
-    public function api_set_stock($print_order_id){
+    public function api_set_stock($print_order_id)
+    {
         // cek data
         $print_order = $this->print_order->where('print_order_id', $print_order_id)->get();
         if (!$print_order) {
@@ -733,6 +751,11 @@ class Print_order extends Admin_Controller
         } else {
             return $this->send_json_output(false, $this->lang->line('toast_edit_fail'));
         }
+    }
+
+    public function api_get_book($book_id)
+    {
+        return $this->send_json_output(true, $this->print_order->get_book($book_id));
     }
 
     private function _generate_print_order_file_name($print_order_file_name, $print_order_title, $progress = null)

@@ -95,8 +95,24 @@
                                     <td><?= format_datetime($print_order->finish_date); ?> </td>
                                 </tr>
                                 <tr>
-                                    <td width="200px"> <?= $this->lang->line('form_print_order_user_id') ?> </td>
-                                    <td><?= $print_order->user_id; ?> </td>
+                                    <td width="200px"> Deadline</td>
+                                    <td>
+                                        <?php
+                                        if (!$print_order->deadline_date) {
+                                            echo '-';
+                                        } elseif (strtotime($print_order->deadline_date) <= strtotime("+3 day")) {
+                                            echo '<div class="text-danger">' . $print_order->deadline_date . '</div>';
+                                        } elseif (strtotime($print_order->deadline_date) <= strtotime("+7 day")) {
+                                            echo '<div class="text-warning">' . $print_order->deadline_date . '</div>';
+                                        } elseif (strtotime($print_order->deadline_date) >= strtotime("+7 day")) {
+                                            echo '<div>' . $print_order->deadline_date . '</div>';
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="200px"> <?= $this->lang->line('form_print_order_input_by') ?> </td>
+                                    <td><?= get_username($print_order->user_id); ?> </td>
                                 </tr>
                                 <tr>
                                     <td width="200px"> <?= $this->lang->line('form_print_order_status') ?> </td>

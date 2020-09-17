@@ -44,6 +44,67 @@
 
                             <?= form_error('book_id'); ?>
                         </div>
+
+                        <div
+                            id="book-info"
+                            style="display:none"
+                        >
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered mb-0">
+                                    <tbody>
+                                        <tr>
+                                            <td width="175px"> Judul Buku </td>
+                                            <td><a
+                                                    href=""
+                                                    id="info-book-title"
+                                                ></a></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="175px"> Halaman Buku </td>
+                                            <td id="info-book-pages"></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="175px"> ISBN </td>
+                                            <td id="info-isbn"></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="175px"> File Buku </td>
+                                            <td>
+                                                <a
+                                                    data-toggle="tooltip"
+                                                    data-placement="right"
+                                                    title=""
+                                                    class="btn btn-success btn-xs my-0"
+                                                    target="_blank"
+                                                    href=""
+                                                    id="info-book-file-link"
+                                                ><i class="fa fa-external-link-alt"></i> File Buku</a>
+                                            </td>
+                                        </tr>
+                                        <!-- <tr>
+                                            <td width="175px"> Nomor Hak Cipta </td>
+                                            <td id="info-nomor-hak-cipta"></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="175px"> File Hak Cipta </td>
+                                            <td>
+                                                <a
+                                                    data-toggle="tooltip"
+                                                    data-placement="right"
+                                                    title=""
+                                                    class="btn btn-success btn-xs my-0"
+                                                    target="_blank"
+                                                    href=""
+                                                    id="info-file-hak-cipta-link"
+                                                ><i class="fa fa-external-link-alt"></i> File Hak Cipta</a>
+                                            </td>
+                                        </tr> -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <br>
+
                         <!-- <div
                             class="alert alert-info"
                             id="reprint-notice"
@@ -60,6 +121,21 @@
                             <?= form_dropdown('category', get_print_order_category(), $input->category, 'id="category" class="form-control custom-select d-block" disabled'); ?>
                             <?= form_error('category'); ?>
                         </div> -->
+
+                        <div class="form-group">
+                            <label for="priority">
+                                Deadline Percetakan
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <div>
+                                <input
+                                    type="text"
+                                    name="deadline_date"
+                                    id="deadline_date"
+                                    class="form-control d-none"
+                                />
+                            </div>
+                        </div>
 
                         <div
                             class="form-group"
@@ -274,32 +350,49 @@ $(document).ready(function() {
         }
     }
 
-    // $('#book-id').change(function(e) {
-    //     const bookId = e.target.value
-    //     if (!bookId) return
+    $('#book-id').change(function(e) {
+        const bookId = e.target.value
+        console.log(bookId)
 
-    //     $.ajax({
-    //         type: "GET",
-    //         url: "<?= base_url('print_order/api_check_book/'); ?>" + bookId,
-    //         datatype: "JSON",
-    //         success: function(res) {
-    //             console.log(res);
-    //             $('#category').val(res.data)
+        $.ajax({
+            type: "GET",
+            url: "<?= base_url('print_order/api_get_book/'); ?>" + bookId,
+            datatype: "JSON",
+            success: function(res) {
+                console.log(res);
+                $('#book-info').show()
+                $('#info-book-title').html(res.data.book_title)
+                $('#info-book-title').attr("href", "<?= base_url('book/view/'); ?>" + res.data.book_id)
+                $('#info-book-pages').html(res.data.book_pages)
+                $('#info-isbn').html(res.data.isbn)
+                $('#info-book-file-link').attr("href", "" + res.data.book_file_link)
+                $('#info-book-file-link').attr("title", "" + res.data.book_file_link)
+                // $('#info-nomor-hak-cipta').html(res.data.nomor_hak_cipta)
+                // $('#info-file-hak-cipta-link').attr("href", "" + res.data.book_file_link)
+                // $('#info-file-hak-cipta-link').attr("title", "" + res.data.book_file_link)
+            },
+            error: function(err) {
+                console.log(err);
+            },
+        });
+    })
 
-    //             $('#reprint-notice').show()
+    // $("#book-info").click(function() {
+    //     $("#book-info").hide();
+    // });
 
-    //             $('#category-text').html(res.data)
+    initFlatpickr()
 
-    //             // if (res.data == 'reprint') {
-    //             //     $('#reprint-notice').show()
-    //             // } else {
-    //             //     $('#reprint-notice').hide()
-    //             // }
-    //         },
-    //         error: function(err) {
-    //             console.log(err);
-    //         },
-    //     });
-    // })
+    function initFlatpickr() {
+        return flatpickr('#deadline_date', {
+            disableMobile: true,
+            altInput: true,
+            altFormat: 'j F Y',
+            dateFormat: 'Y-m-d H:i',
+            inline: true,
+            enableTime: true,
+            time_24hr: true,
+        });
+    }
 })
 </script>
