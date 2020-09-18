@@ -30,11 +30,6 @@ class Print_order extends Admin_Controller
 
         $get_data = $this->print_order->filter_print_order($filters, $page);
 
-        // echo '<pre>';
-        // print_r($get_data['print_orders']);
-        // echo '</pre>';
-        // die();
-
         $print_orders = $get_data['print_orders'];
         $total        = $get_data['total'];
         $pagination   = $this->print_order->make_pagination(site_url('print_order'), 2, $total);
@@ -311,6 +306,7 @@ class Print_order extends Admin_Controller
 
         if ($this->print_order->where('print_order_id', $print_order_id)->delete()) {
             $this->print_order->delete_print_order_file($print_order->print_order_file);
+            $this->print_order->delete_preprint_file($print_order->delete_preprint_file);
         }
 
         if ($this->db->trans_status() === false) {
@@ -387,13 +383,6 @@ class Print_order extends Admin_Controller
             $message = $this->lang->line('toast_data_not_available');
             return $this->send_json_output(false, $message, 404);
         }
-
-        // // hanya untuk admin
-        // if (!$this->_is_printing_admin()) {
-        //     $message = $this->lang->line('toast_error_not_authorized');
-        //     return $this->send_json_output(false, $message);
-        // }
-
 
         $input = (object) $this->input->post(null, false);
 
@@ -528,35 +517,14 @@ class Print_order extends Admin_Controller
             $input->is_print = 0;
             $input->is_postprint = 0;
             $input->print_order_status = 'print';
-            // $input->{"is_$input->progress"} = 0;
-
-            // kembali ke status 'sedang diproses'
-            // if ($input->progress == 'preprint') {
-            //     $input->print_order_status = 'preprint';
-            // } elseif ($input->progress == 'print') {
-            //     $input->print_order_status = 'print';
-            // } elseif ($input->progress == 'postprint') {
-            //     $input->print_order_status = 'posprint';
-            // }
         } else {
             $input->is_print = $input->accept;
             $input->is_postprint = $input->accept;
             $input->print_order_status = $input->accept ? 'print_finish' : 'reject';
-            // $input->{"is_$input->progress"} = $input->accept;
-
-            // update print_order status ketika selesai progress
-            // if ($input->progress == 'preprint') {
-            //     $input->print_order_status = $input->accept ? 'preprint_finish' : 'reject';
-            // } elseif ($input->progress == 'print') {
-            //     $input->print_order_status = $input->accept ? 'print_finish' : 'reject';
-            // } elseif ($input->progress == 'postprint') {
-            //     $input->print_order_status = $input->accept ? 'postprint_finish' : 'reject';
-            // }
         }
 
         // jika end date kosong, maka isikan nilai now
         if (empty($print_order->print_end_date) == TRUE || empty($print_order->postprint_end_date) == TRUE) {
-            // $input->{"{$input->progress}_end_date"} = now();
             $input->print_end_date = now();
             $input->postprint_end_date = now();
         }
@@ -600,63 +568,14 @@ class Print_order extends Admin_Controller
         }
     }
 
-    public function api_upload_preprint_file()
+    public function api_upload_preprint_file($print_order_id)
     {
-        if (!$this->_is_printing_admin()) {
-            redirect($this->pages);
-        }
-
-        if (!$_POST) {
-            $input = (object) $this->print_order->get_default_values();
-        } else {
-            $input = (object) $this->input->post(null, true);
-
-            // repopulate preprint_file ketika validasi form gagal
-            if (!isset($input->preprint_file)) {
-                $input->preprint_file = null;
-                $this->session->set_flashdata('preprint_file_no_data', $this->lang->line('form_error_file_no_data'));
-            }
-        }
-
-        if ($this->print_order->validate()) {
-            if (!empty($_FILES) && $file_name = $_FILES['preprint_file']['name']) {
-                $generated_name = $this->_generate_file_name($file_name);
-                $upload          = $this->print_order->upload_preprint_file('preprint_file', $generated_name);
-                if ($upload) {
-                    $input->preprint_file = $generated_name;
-                }
-            }
-        }
-
-        // insert print order
-        $print_order_id = $this->print_order->insert($input);
-
-        if ($print_order_id) {
-            $this->session->set_flashdata('success', $this->lang->line('toast_add_success'));
-        } else {
-            $this->session->set_flashdata('error', $this->lang->line('toast_add_fail'));
-        }
-
-        redirect('print_order/view/' . $print_order_id . '#preprint-progress');
-    }
-
-    public function api_upload_progress($print_order_id)
-    {
-        // apakah draft tersedia
+        // apakah print_order tersedia
         $print_order = $this->print_order->join('book')->where('print_order_id', $print_order_id)->get();
         if (!$print_order) {
             $message = $this->lang->line('toast_data_not_available');
             return $this->send_json_output(false, $message, 404);
         }
-
-        // hanya untuk author pertama
-        // if ($this->level == 'author') {
-        //     $draft_author_status = $this->_get_author_permission($this->role_id, $draft_id);
-        //     if ($draft_author_status == 0) {
-        //         $message = $this->lang->line('toast_error_not_authorized');
-        //         return $this->send_json_output(false, $message);
-        //     }
-        // }
 
         $input = (object) $this->input->post(null, true);
         $progress = 'preprint';
@@ -670,10 +589,10 @@ class Print_order extends Admin_Controller
 
         if (!empty($_FILES) && $file_name = $_FILES[$column]['name']) {
             $print_order_file_name = $this->_generate_print_order_file_name($file_name, $print_order->book_title, $column);
-            $upload = $this->print_order->upload_file($column, $print_order_file_name);
+            $upload = $this->print_order->upload_preprint_file($column, $print_order_file_name);
             if ($upload) {
                 $input->$column = $print_order_file_name;
-                // Delete old draft file
+                // Delete old preprint file
                 if ($print_order->$column) {
                     $this->print_order->delete_preprint_file($print_order->$column);
                 }
@@ -696,7 +615,7 @@ class Print_order extends Admin_Controller
     }
 
     // hapus progress draft
-    public function api_delete_progress($print_order_id)
+    public function api_delete_preprint_file($print_order_id)
     {
         // apakah draft tersedia
         $print_order = $this->print_order->where('print_order_id', $print_order_id)->get();
@@ -756,6 +675,46 @@ class Print_order extends Admin_Controller
     public function api_get_book($book_id)
     {
         return $this->send_json_output(true, $this->print_order->get_book($book_id));
+    }
+
+    public function api_get_admin_percetakan()
+    {
+        $admin_percetakan = $this->print_order->get_admin_percetakan();
+        return $this->send_json_output(true, $admin_percetakan);
+    }
+
+    public function api_add_admin_percetakan()
+    {
+        $input = (object) $this->input->post(null, true);
+
+        if (!$input->print_order_id || !$input->user_id || !$input->progress) {
+            return $this->send_json_output(false, $this->lang->line('toast_data_not_available'));
+        }
+
+        if ($this->print_order->check_row_admin_percetakan($input->print_order_id, $input->user_id, $input->progress) > 0) {
+            return $this->send_json_output(false, $this->lang->line('toast_data_duplicate'), 422);
+        }
+
+        if ($this->db->insert('print_order_user', $input)) {
+            return $this->send_json_output(true, $this->lang->line('toast_add_success'));
+        } else {
+            return $this->send_json_output(false, $this->lang->line('toast_add_fail'));
+        }
+    }
+
+    public function api_delete_admin_percetakan($id = null)
+    {
+        $admin_percetakan = $this->db->where('print_order_user_id', $id)->get('print_order_user')->result();
+        if (!$admin_percetakan) {
+            $message = $this->lang->line('toast_data_not_available');
+            return $this->send_json_output(false, $message, 404);
+        }
+
+        if ($this->db->delete('print_order_user', ['print_order_user_id' => $id])) {
+            return $this->send_json_output(true, $this->lang->line('toast_delete_success'));
+        } else {
+            return $this->send_json_output(false, $this->lang->line('toast_delete_fail'));
+        }
     }
 
     private function _generate_print_order_file_name($print_order_file_name, $print_order_title, $progress = null)

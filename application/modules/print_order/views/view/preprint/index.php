@@ -8,6 +8,12 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
     <div id="preprint-progress">
         <header class="card-header">
             <div class="d-flex align-items-center"><span class="mr-auto">Pra Cetak</span>
+                <?php if (is_admin() && !$is_final) {
+                    //modal select
+                    $this->load->view('print_order/view/common/select_modal', [
+                        'progress' => 'preprint',
+                    ]);
+                } ?>
                 <?php if (!$is_final) : ?>
                     <div class="card-header-control">
                         <button
@@ -110,7 +116,7 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
                     data-target="#modal-preprint-notes"
                 >Catatan</button>
 
-                <?php if($print_order->category == "outsideprint") : ?>
+                <?php if ($print_order->category == "outsideprint") : ?>
                     <!-- button modal preprint file info -->
                     <button
                         type="button"
@@ -154,7 +160,7 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
                                                         <div>
                                                             <p class="alert-heading font-weight-bold">File Tersimpan</p>
                                                             <a
-                                                                href="<?= base_url("print_order/download_file/preprintfile/".$print_order->preprint_file) ?>"
+                                                                href="<?= base_url("print_order/download_file/preprintfile/" . $print_order->preprint_file) ?>"
                                                                 class="d-block mb-3"
                                                             ><i class="fa fa-download"></i> <?= $print_order->preprint_file ?></a>
                                                             <!-- ?? -->
@@ -199,7 +205,7 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
                                                 </div>
                                             <?php endif ?>
 
-                                            
+
                                             <?php if (is_staff() && !$is_final) : ?>
                                                 <hr class="my-4">
                                                 <div class="alert alert-warning">Upload dan hapus file hanya dapat dilakukan oleh staff. Selain staff hanya bisa melihat file saja.</div>
@@ -258,104 +264,104 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
 
 
 
-<script>
-$(document).ready(function() {
-    // identifier adalah 'review1','review2,'edit','layout','cover','proofread'
-    const identifier = 'preprint'
-    // progress adalah 'review','edit','layout','proofread'
-    let progress;
-    progress = identifier
-    const printorderId = '<?= $print_order->print_order_id ?>'
+                    <script>
+                    $(document).ready(function() {
+                        // identifier adalah 'review1','review2,'edit','layout','cover','proofread'
+                        const identifier = 'preprint'
+                        // progress adalah 'review','edit','layout','proofread'
+                        let progress;
+                        progress = identifier
+                        const printorderId = '<?= $print_order->print_order_id ?>'
 
-    // upload progress
-    $(`#${progress}-progress-wrapper`).on('submit', `#${identifier}-upload-form`, function(e) {
-        e.preventDefault()
+                        // upload progress
+                        $(`#${progress}-progress-wrapper`).on('submit', `#${identifier}-upload-form`, function(e) {
+                            e.preventDefault()
 
-        // validasi form
-        $(this).validate({
-            debug: true,
-            rules: {
-                // [`${identifier}_file`]: {
-                //     require_from_group: [1, ".document"],
-                //     extension: "<?= get_allowed_file_types('preprint_file')['types']; ?>",
-                // },
-                // [`${identifier}_file_link`]: {
-                //     curl: true,
-                //     require_from_group: [1, ".document"]
-                // }
-            },
-            errorElement: "span",
-            errorClass: "none",
-            validClass: "none",
-            errorPlacement: validateErrorPlacement,
-            submitHandler: function(form) {
-                const $this = $(`#btn-upload-${identifier}`);
-                $this.attr("disabled", "disabled").html('<i class="fa fa-spinner fa-spin "></i>');
+                            // validasi form
+                            $(this).validate({
+                                debug: true,
+                                rules: {
+                                    // [`${identifier}_file`]: {
+                                    //     require_from_group: [1, ".document"],
+                                    //     extension: "<?= get_allowed_file_types('preprint_file')['types']; ?>",
+                                    // },
+                                    // [`${identifier}_file_link`]: {
+                                    //     curl: true,
+                                    //     require_from_group: [1, ".document"]
+                                    // }
+                                },
+                                errorElement: "span",
+                                errorClass: "none",
+                                validClass: "none",
+                                errorPlacement: validateErrorPlacement,
+                                submitHandler: function(form) {
+                                    const $this = $(`#btn-upload-${identifier}`);
+                                    $this.attr("disabled", "disabled").html('<i class="fa fa-spinner fa-spin "></i>');
 
-                // prepare form data
-                const formData = new FormData(form);
-                formData.append('progress', identifier)
+                                    // prepare form data
+                                    const formData = new FormData(form);
+                                    formData.append('progress', identifier)
 
-                // send data
-                $.ajax({
-                    url: "<?= base_url('print_order/api_upload_progress/'); ?>" + printorderId,
-                    type: "post",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    success: function(res) {
-                        console.log(res);
-                        showToast(true, res.data);
-                        // $(`#${identifier}-file-tab-content`).load(` #${identifier}-file-info`)
-                        $(`#${identifier}-file-info`).load(` #${identifier}-file-info`)//???
-                    },
-                    error: function(err) {
-                        console.log(err);
-                        showToast(false, err.responseJSON.message);
-                        $resetform = $(`#${identifier}-file`);
-                        $resetform.val('');
-                        $resetform.next('label.custom-file-label').html('');
-                        $this.removeAttr("disabled").html("Update");
-                    },
-                });
-            }
-        });
+                                    // send data
+                                    $.ajax({
+                                        url: "<?= base_url('print_order/api_upload_preprint_file/'); ?>" + printorderId,
+                                        type: "post",
+                                        data: formData,
+                                        processData: false,
+                                        contentType: false,
+                                        cache: false,
+                                        success: function(res) {
+                                            console.log(res);
+                                            showToast(true, res.data);
+                                            // $(`#${identifier}-file-tab-content`).load(` #${identifier}-file-info`)
+                                            $(`#${identifier}-file-info`).load(` #${identifier}-file-info`) //???
+                                        },
+                                        error: function(err) {
+                                            console.log(err);
+                                            showToast(false, err.responseJSON.message);
+                                            $resetform = $(`#${identifier}-file`);
+                                            $resetform.val('');
+                                            $resetform.next('label.custom-file-label').html('');
+                                            $this.removeAttr("disabled").html("Update");
+                                        },
+                                    });
+                                }
+                            });
 
-        // trigger submit handler
-        $(this).submit()
-    })
+                            // trigger submit handler
+                            $(this).submit()
+                        })
 
-    // delete file
-    $(`#${progress}-progress-wrapper`).on('click', `.${identifier}-delete-file`, function(e) {
-        const $this = $(this)
+                        // delete file
+                        $(`#${progress}-progress-wrapper`).on('click', `.${identifier}-delete-file`, function(e) {
+                            const $this = $(this)
 
-        if (confirm(`Apakah anda yakin akan menghapus ${$this.data().type} ini?`)) {
-            $this.attr("disabled", "disabled").html('<i class="fa fa-spinner fa-spin "></i>');
-            // send data
-            $.ajax({
-                url: "<?= base_url('print_order/api_delete_progress/'); ?>" + printorderId,
-                type: "post",
-                data: {
-                    progress: identifier,
-                    file_type: $this.data().type // 'link' or 'file'
-                },
-                success: function(res) {
-                    console.log(res);
-                    showToast(true, res.data);
-                    // $(`#${identifier}-file-tab-content`).load(` #${identifier}-file-info`)
-                    $(`#${identifier}-file-info`).load(` #${identifier}-file-info`)//???
-                },
-                error: function(err) {
-                    console.log(err);
-                    showToast(false, err.responseJSON.message);
-                    $this.removeAttr("disabled").html("<i class='fa fa-trash'></i> Hapus file");
-                },
-            });
-        }
-    })
-})
-</script>
+                            if (confirm(`Apakah anda yakin akan menghapus ${$this.data().type} ini?`)) {
+                                $this.attr("disabled", "disabled").html('<i class="fa fa-spinner fa-spin "></i>');
+                                // send data
+                                $.ajax({
+                                    url: "<?= base_url('print_order/api_delete_preprint_file/'); ?>" + printorderId,
+                                    type: "post",
+                                    data: {
+                                        progress: identifier,
+                                        file_type: $this.data().type // 'link' or 'file'
+                                    },
+                                    success: function(res) {
+                                        console.log(res);
+                                        showToast(true, res.data);
+                                        // $(`#${identifier}-file-tab-content`).load(` #${identifier}-file-info`)
+                                        $(`#${identifier}-file-info`).load(` #${identifier}-file-info`) //???
+                                    },
+                                    error: function(err) {
+                                        console.log(err);
+                                        showToast(false, err.responseJSON.message);
+                                        $this.removeAttr("disabled").html("<i class='fa fa-trash'></i> Hapus file");
+                                    },
+                                });
+                            }
+                        })
+                    })
+                    </script>
 
                 <?php endif; ?>
             </div>

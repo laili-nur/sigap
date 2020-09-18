@@ -273,27 +273,6 @@ class Print_order_model extends MY_Model
         }
     }
 
-    // public function upload_preprint_file($field_name, $file_name)
-    // {
-    //     $config = [
-    //         'upload_path'      => './preprintfile/',
-    //         'file_name'        => $file_name,
-    //         'allowed_types'    => get_allowed_file_types('preprint_file')['types'],
-    //         'max_size'         => 51200,                                           // 50MB
-    //         'overwrite'        => true,
-    //         'file_ext_tolower' => true,
-    //     ];
-    //     $this->load->library('upload', $config);
-    //     if ($this->upload->do_upload($field_name)) {
-    //         // Upload OK, return uploaded file info.
-    //         return $this->upload->data();
-    //     } else {
-    //         // Add error to $_error_array
-    //         $this->form_validation->add_to_error_array($field_name, $this->upload->display_errors('', ''));
-    //         return false;
-    //     }
-    // }
-
     public function delete_preprint_file($preprint_file)
     {
         if ($preprint_file) {
@@ -305,14 +284,7 @@ class Print_order_model extends MY_Model
         }
     }
 
-    // public function delete_preprint_file($file)
-    // {
-    //     if ($file && file_exists("./preprintfile/$file")) {
-    //         unlink("./preprintfile/$file");
-    //     }
-    // }
-
-    public function upload_file($field_name, $print_order_file_name)
+    public function upload_preprint_file($field_name, $print_order_file_name)
     {
         $config = [
             'upload_path'      => './preprintfile/',
@@ -332,6 +304,33 @@ class Print_order_model extends MY_Model
             $this->form_validation->add_to_error_array($field_name, $this->upload->display_errors('', ''));
             return false;
         }
+    }
+
+    public function get_admin_percetakan()
+    {
+        return $this->select(['user_id', 'username', 'level', 'email'])
+            ->where('level', 'admin_percetakan')
+            ->where('is_blocked', 'n')
+            ->order_by('username', 'ASC')
+            ->get_all('user');
+    }
+
+    public function get_admin_percetakan_by_progress($progress, $print_order_id)
+    {
+        return $this->db->select(['print_order_user_id', 'print_order_user.user_id', 'print_order_id', 'progress', 'username', 'email'])
+            ->from('user')
+            ->join('print_order_user', 'user.user_id = print_order_user.user_id')
+            ->where('print_order_id', $print_order_id)
+            ->where('progress', $progress)
+            ->get()->result();
+    }
+
+    public function check_row_admin_percetakan($print_order_id, $user_id, $progress)
+    {
+        return $this->db
+            ->where(['print_order_id' => $print_order_id, 'user_id' => $user_id, 'progress' => $progress])
+            ->get('print_order_user')
+            ->num_rows();
     }
 }
 
