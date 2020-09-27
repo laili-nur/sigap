@@ -197,118 +197,146 @@ $level              = check_level();
                     id="stock-data"
                 >
                     <div id="reload-stock">
-                        <?php if($level == 'superadmin' || $level == 'admin_penerbitan' || $level == 'admin_percetakan' || $level == 'admin_gudang' || $level == 'admin_pemasaran'): ?>
+                        <?php if ($level == 'superadmin' || $level == 'admin_penerbitan' || $level == 'admin_percetakan' || $level == 'admin_gudang' || $level == 'admin_pemasaran') : ?>
                             <?php $i = 1; ?>
                             <div class="row">
                                 <div class="col-6 text-left">
                                     <strong>Stok Buku</strong>
                                 </div>
                                 <div class="col-6 text-right">
-                                    <?php if($level == 'superadmin' || $level == 'admin_gudang'): ?>
-                                    <button
-                                        class="btn btn-primary btn-sm "
-                                        title="Ubah Stok"
-                                        class="btn btn-primary btn-sm"
-                                        data-toggle="modal"
-                                        data-target="#modal_add_stock"
-                                    >
-                                        <i class="fa fa-plus fa-fw"></i> Tambah
-                                    </button>
-                                    <!-- Modal add stock -->
-                                    <div
-                                        class="modal fade"
-                                        id="modal_add_stock"
-                                        tabindex="-1"
-                                        role="dialog"
-                                        aria-labelledby="modal_add_stock"
-                                        aria-hidden="true"
-                                    >
+                                    <?php if ($level == 'superadmin' || $level == 'admin_gudang') : ?>
+                                        <button
+                                            class="btn btn-primary btn-sm "
+                                            title="Ubah Stok"
+                                            class="btn btn-primary btn-sm"
+                                            data-toggle="modal"
+                                            data-target="#modal_add_stock"
+                                        >Ubah</button>
+                                        <!-- Modal add stock -->
                                         <div
-                                            class="modal-dialog modal-dialog-centered"
-                                            role="document"
+                                            class="modal fade"
+                                            id="modal_add_stock"
+                                            tabindex="-1"
+                                            role="dialog"
+                                            aria-labelledby="modal_add_stock"
+                                            aria-hidden="true"
                                         >
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Ubah Stok</h5>
-                                                    <button
-                                                        type="button"
-                                                        class="close"
-                                                        data-dismiss="modal"
-                                                        aria-label="Close"
-                                                    >
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body text-left">
-                                                    <div class="alert alert-warning"><strong>PERHATIAN!</strong> Fitur ini berfungsi untuk mengubah stok buku.</div>
-                                                <form action="<?= base_url('book/add_book_stock');?>" method="post">
-                                                    <div class="form-group">
-                                                        <label class="font-weight-bold">Judul Buku</label>
-                                                        <input type="text" class="form-control" value="<?= $input->book_title; ?>" disabled/>
-                                                        <input type="hidden" class="form-control" id="book_id" name="book_id" value="<?= $input->book_id;?>"/>
+                                            <div
+                                                class="modal-dialog modal-dialog-centered"
+                                                role="document"
+                                            >
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Ubah Stok</h5>
+                                                        <button
+                                                            type="button"
+                                                            class="close"
+                                                            data-dismiss="modal"
+                                                            aria-label="Close"
+                                                        >
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
                                                     </div>
-<div class="form-group">
-    <label
-        for="type"
-        class="d-block font-weight-bold"
-    >
-        Tipe Operasi <abbr title="Required">*</abbr>
-    </label>
-    <div
-        class="btn-group btn-group-toggle"
-        data-toggle="buttons"
-    >
-        <label class="btn btn-secondary active">
-            <input
-                type="radio"
-                name="warehouse_operator"
-                value="+"
-                checked="checked"
-                class="custom-control-input"
-            />
-            Tambah</label>
+                                                    <div class="modal-body text-left">
+                                                        <div class="alert alert-warning"><strong>PERHATIAN!</strong> Fitur ini berfungsi untuk mengubah stok buku.</div>
+                                                        <form
+                                                            action="<?= base_url('book/add_book_stock'); ?>"
+                                                            method="post"
+                                                        >
+                                                            <div class="form-group">
+                                                                <label class="font-weight-bold">Judul Buku</label>
+                                                                <input
+                                                                    type="text"
+                                                                    class="form-control"
+                                                                    value="<?= $input->book_title; ?>"
+                                                                    disabled
+                                                                />
+                                                                <input
+                                                                    type="hidden"
+                                                                    class="form-control"
+                                                                    id="book_id"
+                                                                    name="book_id"
+                                                                    value="<?= $input->book_id; ?>"
+                                                                />
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label
+                                                                    for="type"
+                                                                    class="d-block font-weight-bold"
+                                                                >
+                                                                    Tipe Operasi <abbr title="Required">*</abbr>
+                                                                </label>
+                                                                <div
+                                                                    class="btn-group btn-group-toggle"
+                                                                    data-toggle="buttons"
+                                                                >
+                                                                    <label class="btn btn-secondary active">
+                                                                        <input
+                                                                            type="radio"
+                                                                            name="warehouse_operator"
+                                                                            value="+"
+                                                                            checked="checked"
+                                                                            class="custom-control-input"
+                                                                        />
+                                                                        Tambah</label>
 
-        <label class="btn btn-secondary ">
-            <input
-                type="radio"
-                name="warehouse_operator"
-                value="-"
-                class="custom-control-input"
-            />
-            Kurang</label>
-    </div>
-</div>
-                                                    <div class="form-group">
-                                                        <label class="font-weight-bold" for="warehouse_modifier">Stok Gudang<abbr title="Required">*</abbr></label>
-                                                        <input type="number" class="form-control" name="warehouse_modifier" id="warehouse_modifier"/>
-                                                        <input type="hidden" name="warehouse_past" id="warehouse_past"  value="<?= $input->stock_warehouse; ?>">
+                                                                    <label class="btn btn-secondary ">
+                                                                        <input
+                                                                            type="radio"
+                                                                            name="warehouse_operator"
+                                                                            value="-"
+                                                                            class="custom-control-input"
+                                                                        />
+                                                                        Kurang</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label
+                                                                    class="font-weight-bold"
+                                                                    for="warehouse_modifier"
+                                                                >Stok Gudang<abbr title="Required">*</abbr></label>
+                                                                <input
+                                                                    type="number"
+                                                                    class="form-control"
+                                                                    name="warehouse_modifier"
+                                                                    id="warehouse_modifier"
+                                                                />
+                                                                <input
+                                                                    type="hidden"
+                                                                    name="warehouse_past"
+                                                                    id="warehouse_past"
+                                                                    value="<?= $input->stock_warehouse; ?>"
+                                                                >
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label
+                                                                    class="font-weight-bold"
+                                                                    for="notes"
+                                                                >Catatan</label>
+                                                                <textarea
+                                                                    rows="6"
+                                                                    class="form-control summernote-basic"
+                                                                    id="notes"
+                                                                    name="notes"
+                                                                ></textarea>
+                                                            </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label class="font-weight-bold" for="notes">Catatan</label>
-                                                        <textarea
-                                                            rows="6"
-                                                            class="form-control summernote-basic"
-                                                            id="notes"
-                                                            name="notes"
-                                                        ></textarea>
+                                                    <div class="modal-footer">
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-light ml-auto"
+                                                            data-dismiss="modal"
+                                                        >Close</button>
+                                                        <button
+                                                            class="btn btn-primary"
+                                                            type="submit"
+                                                        >Submit</button>
+                                                        </form>
                                                     </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button
-                                                        type="button"
-                                                        class="btn btn-light ml-auto"
-                                                        data-dismiss="modal"
-                                                    >Close</button>
-                                                    <button
-                                                        class="btn btn-primary"
-                                                        type="submit"
-                                                    >Submit</button>
-                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <!-- Modal Add Stok -->
+                                        <!-- Modal Add Stok -->
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -326,118 +354,130 @@ $level              = check_level();
                                         </tr>
                                         <tr>
                                             <td width="160px">Perubahan Terakhir</td>
-                                            <td><?php if(empty($stock_last) == FALSE){ echo date('d F Y H:i:s',strtotime($stock_last->date));}else{echo "-";} ?></td>
+                                            <td><?php if (empty($stock_last) == FALSE) {
+                                                    echo date('d F Y H:i:s', strtotime($stock_last->date));
+                                                } else {
+                                                    echo "-";
+                                                } ?></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <?php if(empty($stock_history) == FALSE) : ?>
-                            <hr>
-                            <!-- Log Perubahan Stok -->
-                            <p class="font-weight-bold">Log Perubahan Stok</p>
-                            <div class="table-responsive" style="max-height:500px;">
-                                <table class="table table-striped table-bordered mb-0">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th scope="col">No</th>
-                                            <th scope="col">Stok Gudang</th>
-                                            <th scope="col">Tipe Input</th>
-                                            <th scope="col">User Input</th>
-                                            <th scope="col">Tanggal Input</th>
-                                            <th scope="col">Catatan</th>
-                                            <?php if($level == 'superadmin' || $level == 'admin_gudang'): ?>
-                                            <th scope="col"></th>
-                                            <?php endif; ?>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($stock_history as $history) : ?>
+                            <?php if (empty($stock_history) == FALSE) : ?>
+                                <hr>
+                                <!-- Log Perubahan Stok -->
+                                <p class="font-weight-bold">Log Perubahan Stok</p>
+                                <div
+                                    class="table-responsive"
+                                    style="max-height:500px;"
+                                >
+                                    <table class="table table-striped table-bordered mb-0">
+                                        <thead>
                                             <tr class="text-center">
-                                                <td><?= $i++; ?></td>
-                                                <td>
-                                                    <?php
-                                                        if($history->warehouse_operator == "+"){
-                                                            echo $history->warehouse_past.'<div class="text-success"> '.$history->warehouse_operator.' '.$history->warehouse_modifier.'</div>';
-                                                        }elseif($history->warehouse_operator == "-"){
-                                                            echo $history->warehouse_past.'<div class="text-danger"> '.$history->warehouse_operator.' '.$history->warehouse_modifier.'</div>';
-                                                        }
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?php
-                                                        if($history->type == 'book'){echo 'Input menggunakan fitur buku.';}
-                                                        elseif($history->type == 'print_order'){echo 'Input menggunakan fitur order cetak.';}
-                                                        elseif($history->type == 'book_request'){echo 'Input menggunakan fitur permintaan buku.';}
-                                                        else{echo '';}
-                                                    ?>
-                                                </td>
-                                                <td><?= get_username($history->user_id); ?></td>
-                                                <td><?= date('d F Y H:i:s',strtotime($history->date)); ?></td>
-                                                <td><?= $history->notes; ?></td>
-                                                <?php if($level == 'superadmin' || $level == 'admin_gudang'): ?>
-                                                <td>
-                                                    <button
-                                                        title="Delete"
-                                                        type="button"
-                                                        class="btn btn-sm btn-danger"
-                                                        data-toggle="modal"
-                                                        data-target="#modal_delete_stock<?= $history->book_stock_id; ?>"
-                                                    >
-                                                        <i class="fa fa-trash-alt"></i>
-                                                        <span class="sr-only">Delete</span>
-                                                    </button>
-                                                    <!-- Modal Hapus -->
-                                                    <div
-                                                        class="modal modal-alert fade"
-                                                        id="modal_delete_stock<?= $history->book_stock_id; ?>"
-                                                        tabindex="-1"
-                                                        role="dialog"
-                                                        aria-labelledby="modal_delete_stock<?= $history->book_stock_id; ?>"
-                                                        aria-hidden="true"
-                                                    >
-                                                        <div
-                                                            class="modal-dialog"
-                                                            role="document"
-                                                        >
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title">
-                                                                        <i class="fa fa-exclamation-triangle text-red mr-1"></i> Konfirmasi
-                                                                        Hapus</h5>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <p>Apakah anda yakin akan menghapus data stok buku dari buku <span class="font-weight-bold"><?= $input->book_title; ?></span> ?</p>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button
-                                                                        type="button"
-                                                                        class="btn btn-light"
-                                                                        data-dismiss="modal"
-                                                                    >Close</button>
-                                                                    <a
-                                                                        href="<?= base_url('book/delete_book_stock/'.$history->book_stock_id); ?>"
-                                                                        type="button"
-                                                                        class="btn btn-danger"
-                                                                    >
-                                                                        Hapus
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Modal Hapus -->
-                                                </td>
+                                                <th scope="col">No</th>
+                                                <th scope="col">Stok Gudang</th>
+                                                <th scope="col">Tipe Input</th>
+                                                <th scope="col">User Input</th>
+                                                <th scope="col">Tanggal Input</th>
+                                                <th scope="col">Catatan</th>
+                                                <?php if ($level == 'superadmin' || $level == 'admin_gudang') : ?>
+                                                    <th scope="col"></th>
                                                 <?php endif; ?>
                                             </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            </div>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($stock_history as $history) : ?>
+                                                <tr class="text-center">
+                                                    <td><?= $i++; ?></td>
+                                                    <td>
+                                                        <?php
+                                                        if ($history->warehouse_operator == "+") {
+                                                            echo $history->warehouse_past . '<div class="text-success"> ' . $history->warehouse_operator . ' ' . $history->warehouse_modifier . '</div>';
+                                                        } elseif ($history->warehouse_operator == "-") {
+                                                            echo $history->warehouse_past . '<div class="text-danger"> ' . $history->warehouse_operator . ' ' . $history->warehouse_modifier . '</div>';
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php
+                                                        if ($history->type == 'book') {
+                                                            echo 'Input menggunakan fitur buku.';
+                                                        } elseif ($history->type == 'print_order') {
+                                                            echo 'Input menggunakan fitur order cetak.';
+                                                        } elseif ($history->type == 'book_request') {
+                                                            echo 'Input menggunakan fitur permintaan buku.';
+                                                        } else {
+                                                            echo '';
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td><?= $history->user_id; ?></td>
+                                                    <td><?= date('d F Y H:i:s', strtotime($history->date)); ?></td>
+                                                    <td><?= $history->notes; ?></td>
+                                                    <?php if ($level == 'superadmin' || $level == 'admin_gudang') : ?>
+                                                        <td>
+                                                            <button
+                                                                title="Delete"
+                                                                type="button"
+                                                                class="btn btn-sm btn-danger"
+                                                                data-toggle="modal"
+                                                                data-target="#modal_delete_stock<?= $history->book_stock_id; ?>"
+                                                            >
+                                                                <i class="fa fa-trash-alt"></i>
+                                                                <span class="sr-only">Delete</span>
+                                                            </button>
+                                                            <!-- Modal Hapus -->
+                                                            <div
+                                                                class="modal modal-alert fade"
+                                                                id="modal_delete_stock<?= $history->book_stock_id; ?>"
+                                                                tabindex="-1"
+                                                                role="dialog"
+                                                                aria-labelledby="modal_delete_stock<?= $history->book_stock_id; ?>"
+                                                                aria-hidden="true"
+                                                            >
+                                                                <div
+                                                                    class="modal-dialog modal-dialog-centered"
+                                                                    role="document"
+                                                                >
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title">
+                                                                                <i class="fa fa-exclamation-triangle text-red mr-1"></i> Konfirmasi
+                                                                                Hapus</h5>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <p>Apakah anda yakin akan menghapus data stok buku dari buku <span class="font-weight-bold"><?= $input->book_title; ?></span> ?</p>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button
+                                                                                type="button"
+                                                                                class="btn btn-light"
+                                                                                data-dismiss="modal"
+                                                                            >Close</button>
+                                                                            <a
+                                                                                href="<?= base_url('book/delete_book_stock/' . $history->book_stock_id); ?>"
+                                                                                type="button"
+                                                                                class="btn btn-danger"
+                                                                            >
+                                                                                Hapus
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- Modal Hapus -->
+                                                        </td>
+                                                    <?php endif; ?>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
                             <?php endif; ?>
                             <!-- Log perubahan Stok -->
-                            <?php else : ?>
+                        <?php else : ?>
                             <p>Data hanya dapat dilihat oleh Superadmin, Admin Penerbitan, Admin Percetakan, Admin Gudang, dan Admin Pemasaran</p>
-                            <?php endif; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <!-- stock-data -->

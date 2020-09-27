@@ -22,7 +22,9 @@ class Print_order extends Admin_Controller
             'type'               => $this->input->get('type', true),
             'priority'           => $this->input->get('priority', true),
             'mode'           => $this->input->get('mode', true),
-            'print_order_status' => $this->input->get('print_order_status', true)
+            'print_order_status' => $this->input->get('print_order_status', true),
+            'date_year' => $this->input->get('date_year', true),
+            'date_month' => $this->input->get('date_month', true)
         ];
 
         // custom per page
@@ -40,7 +42,7 @@ class Print_order extends Admin_Controller
 
     public function add()
     {
-        if (!$this->_is_printing_admin()) {
+        if (!$this->_is_superadmin()) {
             redirect($this->pages);
         }
 
@@ -104,6 +106,10 @@ class Print_order extends Admin_Controller
 
         unset($input->print_mode);
 
+        if (empty($input->deadline_date)) {
+            $input->deadline_date = empty_to_null($input->deadline_date);
+        }
+
         // insert print order
         $print_order_id = $this->print_order->insert($input);
 
@@ -118,7 +124,7 @@ class Print_order extends Admin_Controller
 
     public function edit($print_order_id)
     {
-        if (!$this->_is_printing_admin()) {
+        if (!$this->_is_superadmin()) {
             redirect($this->pages);
         }
 
@@ -188,6 +194,10 @@ class Print_order extends Admin_Controller
             unset($input->delete_file);
         }
 
+        if (empty($input->deadline_date)) {
+            $input->deadline_date = empty_to_null($input->deadline_date);
+        }
+
         // update print order
         $this->print_order->where('print_order_id', $print_order_id)->update($input);
 
@@ -234,6 +244,10 @@ class Print_order extends Admin_Controller
             redirect($this->pages);
         }
 
+        if (!$this->_is_superadmin()) {
+            redirect($_SERVER['HTTP_REFERER']);
+        }
+
         // memastikan konsistensi data
         $this->db->trans_begin();
 
@@ -252,31 +266,33 @@ class Print_order extends Admin_Controller
         //  ambil data print order
         $print_order         =   $this->print_order->get_print_order($print_order_id);
 
-        // Mekanisme input stok
-        $book_id             =   $print_order->book_id;
-        $warehouse_past      =   intval($print_order->stock_warehouse);
-        $warehouse_modifier  =   abs($print_order->total_success);
-        $warehouse_operator  =   "+";
-        $warehouse_present   =   $warehouse_past + $warehouse_modifier;
+        if ($print_order->category != 'nonbook') {
+            // Mekanisme input stok
+            $book_id             =   $print_order->book_id;
+            $warehouse_past      =   intval($print_order->stock_warehouse);
+            $warehouse_modifier  =   abs($print_order->total_success);
+            $warehouse_operator  =   "+";
+            $warehouse_present   =   $warehouse_past + $warehouse_modifier;
 
-        $edit   =   [
-            'stock_warehouse'    => $warehouse_present,
-        ];
+            $edit   =   [
+                'stock_warehouse'    => $warehouse_present,
+            ];
 
-        $add    =   [
-            'book_id'               => $book_id,
-            'user_id'               => $_SESSION['user_id'],
-            'type'                  => 'print_order',
-            'date'                  => date('Y-m-d H:i:s'),
-            'notes'                 => '<a href="' . base_url('print_order/view/' . $print_order->print_order_id) . '" target="_blank"> <i class="fa fa-external-link-alt"></i> Link Order Cetak</a>',
-            'warehouse_past'        => $warehouse_past,
-            'warehouse_modifier'    => $warehouse_modifier,
-            'warehouse_present'     => $warehouse_present,
-            'warehouse_operator'    => $warehouse_operator
-        ];
+            $add    =   [
+                'book_id'               => $book_id,
+                'user_id'               => $_SESSION['user_id'],
+                'type'                  => 'print_order',
+                'date'                  => date('Y-m-d H:i:s'),
+                'notes'                 => '<a href="' . base_url('print_order/view/' . $print_order->print_order_id) . '" target="_blank"> <i class="fa fa-external-link-alt"></i> Link Order Cetak</a>',
+                'warehouse_past'        => $warehouse_past,
+                'warehouse_modifier'    => $warehouse_modifier,
+                'warehouse_present'     => $warehouse_present,
+                'warehouse_operator'    => $warehouse_operator
+            ];
 
-        $this->db->set($edit)->where('book_id', $book_id)->update('book');
-        $this->db->insert('book_stock', $add);
+            $this->db->set($edit)->where('book_id', $book_id)->update('book');
+            $this->db->insert('book_stock', $add);
+        }
 
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();
@@ -291,7 +307,7 @@ class Print_order extends Admin_Controller
 
     public function delete($print_order_id = null)
     {
-        if (!$this->_is_printing_admin()) {
+        if (!$this->_is_superadmin()) {
             redirect($this->pages);
         }
 
@@ -329,14 +345,14 @@ class Print_order extends Admin_Controller
             return $this->send_json_output(false, $message, 404);
         }
 
+        // berisi 'progress' untuk conditional dibawah
+        $input = (object) $this->input->post(null, false);
+
         // hanya untuk user yang berkaitan dengan print_order ini
-        if (!$this->_is_printing_admin()) {
+        if (!$this->_is_assigned_printing_admin($print_order_id, $input->progress)) {
             $message = $this->lang->line('toast_error_not_authorized');
             return $this->send_json_output(false, $message);
         }
-
-        // berisi 'progress' untuk conditional dibawah
-        $input = (object) $this->input->post(null, false);
 
         $is_start_progress = $this->print_order->start_progress($print_order_id, $input->progress);
 
@@ -356,14 +372,14 @@ class Print_order extends Admin_Controller
             return $this->send_json_output(false, $message, 404);
         }
 
-        // hanya untuk admin
-        if (!$this->_is_printing_admin()) {
+        // berisi 'progress' untuk conditional dibawah
+        $input = (object) $this->input->post(null, false);
+
+        // hanya untuk user yang berkaitan dengan print_order ini
+        if (!$this->_is_assigned_printing_admin($print_order_id, $input->progress)) {
             $message = $this->lang->line('toast_error_not_authorized');
             return $this->send_json_output(false, $message);
         }
-
-        // berisi 'progress' untuk conditional dibawah
-        $input = (object) $this->input->post(null, false);
 
         $is_finish_progress = $this->print_order->finish_progress($print_order_id, $input->progress);
 
@@ -384,7 +400,19 @@ class Print_order extends Admin_Controller
             return $this->send_json_output(false, $message, 404);
         }
 
+        // // hanya untuk user yang berkaitan dengan print_order ini
+        // if (!$this->_is_printing_admin()) {
+        //     $message = $this->lang->line('toast_error_not_authorized');
+        //     return $this->send_json_output(false, $message);
+        // }
+
         $input = (object) $this->input->post(null, false);
+
+        // hanya untuk user yang berkaitan dengan print_order ini
+        if (!$this->_is_assigned_printing_admin($print_order_id, $input->progress)) {
+            $message = $this->lang->line('toast_error_not_authorized');
+            return $this->send_json_output(false, $message);
+        }
 
         // untuk reset deadline
         if (isset($input->preprint_deadline)) {
@@ -396,6 +424,9 @@ class Print_order extends Admin_Controller
         if (isset($input->postprint_deadline)) {
             $input->postprint_deadline = empty_to_null($input->postprint_deadline);
         }
+
+        // hilangkan property pembantu yang tidak ada di db
+        unset($input->progress);
 
         if ($this->print_order->where('print_order_id', $print_order_id)->update($input)) {
             return $this->send_json_output(true, $this->lang->line('toast_edit_success'));
@@ -414,8 +445,8 @@ class Print_order extends Admin_Controller
             return $this->send_json_output(false, $message, 404);
         }
 
-        // hanya untuk admin
-        if (!$this->_is_printing_admin()) {
+        // hanya untuk superadmin
+        if (!$this->_is_superadmin()) {
             $message = $this->lang->line('toast_error_not_authorized');
             return $this->send_json_output(false, $message);
         }
@@ -504,8 +535,8 @@ class Print_order extends Admin_Controller
             return $this->send_json_output(false, $message, 404);
         }
 
-        // hanya untuk admin
-        if (!$this->_is_printing_admin()) {
+        // hanya untuk superadmin
+        if (!$this->_is_superadmin()) {
             $message = $this->lang->line('toast_error_not_authorized');
             return $this->send_json_output(false, $message);
         }
@@ -550,14 +581,14 @@ class Print_order extends Admin_Controller
             return $this->send_json_output(false, $message, 404);
         }
 
-        // hanya untuk admin
-        if (!$this->_is_printing_admin()) {
+        // berisi 'progress' untuk conditional dibawah
+        $input = (object) $this->input->post(null, false);
+
+        // hanya untuk user yang berkaitan dengan print_order ini
+        if (!$this->_is_assigned_printing_admin($print_order_id, $input->progress)) {
             $message = $this->lang->line('toast_error_not_authorized');
             return $this->send_json_output(false, $message);
         }
-
-        // berisi 'progress' untuk conditional dibawah
-        $input = (object) $this->input->post(null, false);
 
         $is_finish_progress = $this->print_order->finish_print_postprint($print_order_id);
 
@@ -578,7 +609,14 @@ class Print_order extends Admin_Controller
         }
 
         $input = (object) $this->input->post(null, true);
-        $progress = 'preprint';
+
+        // hanya untuk user yang berkaitan dengan print_order ini
+        if (!$this->_is_assigned_printing_admin($print_order_id, $input->progress)) {
+            $message = $this->lang->line('toast_error_not_authorized');
+            return $this->send_json_output(false, $message);
+        }
+
+        $progress = $input->progress;
 
         // tiap upload, update upload date
         $this->print_order->edit_print_order_date($print_order_id, $progress . '_upload_date');
@@ -625,6 +663,13 @@ class Print_order extends Admin_Controller
         }
 
         $input = (object) $this->input->post(null, true);
+
+        // hanya untuk user yang berkaitan dengan print_order ini
+        if (!$this->_is_assigned_printing_admin($print_order_id, $input->progress)) {
+            $message = $this->lang->line('toast_error_not_authorized');
+            return $this->send_json_output(false, $message);
+        }
+
         $progress = $input->progress;
         $file_type = $input->file_type;
         if ($file_type == 'file') {
@@ -641,6 +686,9 @@ class Print_order extends Admin_Controller
         $upload_by_field         = $progress . '_upload_by';
         $print_order->$upload_by_field = $this->username;
 
+        // unset unnecesary data
+        unset($input->progress);
+
         if ($this->print_order->where('print_order_id', $print_order_id)->update($print_order)) {
             return $this->send_json_output(true, $this->lang->line('toast_delete_success'));
         } else {
@@ -650,6 +698,10 @@ class Print_order extends Admin_Controller
 
     public function download_preprint_file($filename)
     {
+        if (!$this->_is_printing_admin()) {
+            redirect($_SERVER['HTTP_REFERER']);
+        }
+
         $this->load->helper('download');
         force_download('./preprintfile/' . $filename, NULL);
     }
@@ -664,6 +716,14 @@ class Print_order extends Admin_Controller
         }
 
         $input = (object) $this->input->post(null, false);
+
+        // hanya untuk user yang berkaitan dengan print_order ini
+        if (!$this->_is_assigned_printing_admin($print_order_id, $input->progress)) {
+            return $this->send_json_output(false, $this->lang->line('toast_error_not_authorized'));
+        }
+
+        // hilangkan property pembantu yang tidak ada di db
+        unset($input->progress);
 
         if ($this->print_order->where('print_order_id', $print_order_id)->update($input)) {
             return $this->send_json_output(true, $this->lang->line('toast_edit_success'));
@@ -691,6 +751,11 @@ class Print_order extends Admin_Controller
             return $this->send_json_output(false, $this->lang->line('toast_data_not_available'));
         }
 
+        if (!$this->_is_superadmin()) {
+            $message = $this->lang->line('toast_error_not_authorized');
+            return $this->send_json_output(false, $message);
+        }
+
         if ($this->print_order->check_row_admin_percetakan($input->print_order_id, $input->user_id, $input->progress) > 0) {
             return $this->send_json_output(false, $this->lang->line('toast_data_duplicate'), 422);
         }
@@ -708,6 +773,11 @@ class Print_order extends Admin_Controller
         if (!$admin_percetakan) {
             $message = $this->lang->line('toast_data_not_available');
             return $this->send_json_output(false, $message, 404);
+        }
+
+        if (!$this->_is_superadmin()) {
+            $message = $this->lang->line('toast_error_not_authorized');
+            return $this->send_json_output(false, $message);
         }
 
         if ($this->db->delete('print_order_user', ['print_order_user_id' => $id])) {
@@ -743,7 +813,18 @@ class Print_order extends Admin_Controller
             return TRUE;
         } else {
             $this->session->set_flashdata('error', 'Hanya superadmin yang dapat mengakses.');
-            redirect(base_url(), 'refresh');
+            return false;
+            // redirect(base_url(), 'refresh');
+        }
+    }
+
+    private function _is_assigned_printing_admin($print_order_id, $progress)
+    {
+        if ($this->level == 'superadmin' || $this->print_order->check_row_admin_percetakan($print_order_id, $this->user_id, $progress) > 0) {
+            return true;
+        } else {
+            $this->session->set_flashdata('error', 'Hanya admin percetakan dan superadmin yang dapat mengakses.');
+            return false;
         }
     }
 

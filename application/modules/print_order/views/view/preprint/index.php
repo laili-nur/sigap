@@ -1,5 +1,7 @@
 <?php
 $is_preprint_started      = format_datetime($print_order->preprint_start_date);
+$is_preprint_finished      = format_datetime($print_order->preprint_end_date);
+$admin_percetakan = $this->print_order->get_admin_percetakan_by_progress('preprint', $print_order->print_order_id);
 ?>
 <section
     id="preprint-progress-wrapper"
@@ -8,13 +10,13 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
     <div id="preprint-progress">
         <header class="card-header">
             <div class="d-flex align-items-center"><span class="mr-auto">Pra Cetak</span>
-                <?php if (is_admin() && !$is_final) {
+                <?php if (!$is_final) :
                     //modal select
                     $this->load->view('print_order/view/common/select_modal', [
                         'progress' => 'preprint',
+                        'admin_percetakan' => $admin_percetakan
                     ]);
-                } ?>
-                <?php if (!$is_final) : ?>
+                ?>
                     <div class="card-header-control">
                         <button
                             id="btn-start-preprint"
@@ -34,6 +36,34 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
                 <?php endif ?>
             </div>
         </header>
+
+        <!-- ALERT -->
+        <?php if ($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_percetakan') : ?>
+            <!-- all -->
+            <?php if ($print_order->is_preprint == 1) : ?>
+                <div class="alert alert-success mb-1">Progress telah selesai.</div>
+            <?php endif; ?>
+            <?php if ($_SESSION['level'] == 'superadmin' && $print_order->is_preprint == 0) : ?>
+                <!-- superadmin -->
+                <?php if (!$admin_percetakan) : ?>
+                    <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Belum ada admin percetakan yang dipilih.</div>
+                <?php endif; ?>
+                <?php if (!$print_order->preprint_deadline) : ?>
+                    <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Belum menetapkan deadline progress.</div>
+                <?php endif; ?>
+                <?php if ($print_order->preprint_end_date) : ?>
+                    <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Progress telah selesai. Mohon untuk melakukan aksi.</div>
+                <?php endif; ?>
+            <?php elseif ($_SESSION['level'] == 'admin_percetakan' && $print_order->is_preprint == 0) : ?>
+                <!-- admin -->
+                <?php if ($is_preprint_started) : ?>
+                    <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Pastikan mengisi catatan dan data lainnya sebelum menyelesaikan progress.</div>
+                <?php endif; ?>
+                <?php if ($is_preprint_finished) : ?>
+                    <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Progress telah selesai. Mohon tunggu superadmin memproses aksi</div>
+                <?php endif; ?>
+            <?php endif; ?>
+        <?php endif; ?>
 
         <div
             class="list-group list-group-flush list-group-bordered"
@@ -73,7 +103,7 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
             </div>
 
             <div class="list-group-item justify-content-between">
-                <?php if (is_admin() && !$is_final) : ?>
+                <?php if (is_superadmin() && !$is_final) : ?>
                     <a
                         href="#"
                         id="btn-modal-deadline-preprint"
@@ -92,13 +122,24 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
                 <?= $print_order->preprint_notes_admin ?>
             </div>
 
+            <?php if ($admin_percetakan) : ?>
+                <div class="list-group-item justify-content-between">
+                    <span class="text-muted">Staff Bertugas</span>
+                    <strong>
+                        <?php foreach ($admin_percetakan as $admin) : ?>
+                            <span class="badge badge-info p-1"><?= $admin->username; ?></span>
+                        <?php endforeach; ?>
+                    </strong>
+                </div>
+            <?php endif; ?>
+
             <hr class="m-0">
         </div>
 
         <div class="card-body">
             <div class="card-button">
                 <!-- button aksi -->
-                <?php if (is_admin() && !$is_final) : ?>
+                <?php if (is_superadmin() && !$is_final) : ?>
                     <button
                         title="Aksi admin"
                         class="btn btn-outline-dark <?= !$is_preprint_started ? 'btn-disabled' : ''; ?>"
@@ -164,7 +205,7 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
                                                                 class="d-block mb-3"
                                                             ><i class="fa fa-download"></i> <?= $print_order->preprint_file ?></a>
                                                             <!-- ?? -->
-                                                            <?php if (is_staff() && !$is_final) : ?>
+                                                            <?php if (!$is_final) : ?>
                                                                 <button
                                                                     type="button"
                                                                     data-type="file"
@@ -185,7 +226,7 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
                                                                 class="d-block mb-3"
                                                             ><i class="fa fa-external-link-alt"></i> <?= $print_order->preprint_file_link ?></a>
                                                             <!-- ?? -->
-                                                            <?php if (is_staff() && !$is_final) : ?>
+                                                            <?php if (!$is_final) : ?>
                                                                 <button
                                                                     type="button"
                                                                     data-type="link"
@@ -206,7 +247,7 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
                                             <?php endif ?>
 
 
-                                            <?php if (is_staff() && !$is_final) : ?>
+                                            <?php if (!$is_final) : ?>
                                                 <hr class="my-4">
                                                 <div class="alert alert-warning">Upload dan hapus file hanya dapat dilakukan oleh staff. Selain staff hanya bisa melihat file saja.</div>
                                                 <form
@@ -227,7 +268,7 @@ $is_preprint_started      = format_datetime($print_order->preprint_start_date);
                                                         <small class="form-text text-muted">Tipe file upload bertype : <?= get_allowed_file_types('preprint_file')['to_text']; ?></small>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="preprint-file-link">Link Naskah</label>
+                                                        <label for="preprint-file-link">Link File Approval</label>
                                                         <div>
                                                             <?= form_input("preprint_file_link", $print_order->preprint_file_link, "class='form-control document' id='preprint-file-link'"); ?>
                                                         </div>

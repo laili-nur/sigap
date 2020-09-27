@@ -72,6 +72,8 @@ class Print_order_model extends MY_Model
             'paper_size'        => '',
             'type'              => 'pod',
             'priority'          => '',
+            'date_year'          => '',
+            'date_month'          => '',
             'print_order_notes' => '',
             'name'              => '',
             'print_mode'              => 'book',
@@ -102,6 +104,8 @@ class Print_order_model extends MY_Model
             ->when('type', $filters['type'])
             ->when('priority', $filters['priority'])
             ->when('print_order_status', $filters['print_order_status'])
+            ->when('date_year', $filters['date_year'])
+            ->when('date_month', $filters['date_month'])
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
             ->join_table('category', 'draft', 'category')
@@ -128,6 +132,8 @@ class Print_order_model extends MY_Model
             ->when('type', $filters['type'])
             ->when('priority', $filters['priority'])
             ->when('print_order_status', $filters['print_order_status'])
+            ->when('date_year', $filters['date_year'])
+            ->when('date_month', $filters['date_month'])
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
             ->join_table('category', 'draft', 'category')
@@ -166,6 +172,50 @@ class Print_order_model extends MY_Model
 
             if ($params == 'priority') {
                 $this->where('priority', $data);
+            }
+
+            if ($params == 'date_year') {
+                if ($data == '2020') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2020"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2020"));
+                } elseif ($data == '2019') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2019"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2019"));
+                } elseif ($data == '2018') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2018"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2018"));
+                } elseif ($data == '2017') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2017"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2017"));
+                } elseif ($data == '2016') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2016"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2016"));
+                } elseif ($data == '2015') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2015"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2015"));
+                }
+            }
+
+            if ($params == 'date_month') {
+                if ($data == '0') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 December 2020"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2020"));
+                } elseif ($data == '1') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 November 2020"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("30 November 2020"));
+                } elseif ($data == '2') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 October 2020"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 October 2020"));
+                } elseif ($data == '3') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 September 2020"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("30 September 2020"));
+                } elseif ($data == '4') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 August 2020"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 August 2020"));
+                } elseif ($data == '5') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 July 2020"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 July 2020"));
+                }
             }
 
             if ($params == 'keyword') {
@@ -332,6 +382,19 @@ class Print_order_model extends MY_Model
             ->get('print_order_user')
             ->num_rows();
     }
+
+    // if(check_row_admin_percetakan($print_order_id, $user_id, $progress) > 0){
+    //     jalanin fungsi
+    // } else {
+    //     tidak diijinkan toastr
+    // }
+
+    // cekin admin cetak
+    // 1. Cek session(user_id)
+    // 2. cek print_order_id
+    // 3. cek progress
+    // 4. cek row, misal > 0, return true, misal ! > 0  =, return false
+    // 5. di controller misal true dia bisa lakuin fungsi, misal ngga dia gabisa lakuin fungsi
 }
 
 /* End of file Print_order_model.php */

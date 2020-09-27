@@ -3,7 +3,11 @@
     class="btn btn-outline-dark"
     data-toggle="modal"
     data-target="#modal-set-stock"
-> Set Stok
+> <?php if (!$is_final) {
+        echo 'Set Stok';
+    } else {
+        echo 'Hasil Cetak';
+    } ?>
 </button>
 <!-- Modal Set Stok -->
 <div
@@ -20,7 +24,11 @@
     >
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Set Stok</h5>
+                <h5 class="modal-title"><?php if (!$is_final) {
+                                            echo 'Set Stok';
+                                        } else {
+                                            echo 'Hasil Cetak';
+                                        } ?></h5>
                 <button
                     type="button"
                     class="close"
@@ -32,24 +40,45 @@
             </div>
             <div class="modal-body text-left">
                 <fielsdet>
-                    <?php if($print_order->category == 'nonbook') : ?>
-                    <!-- Nama Pesanan utk nonbook -->
-                    <div class="form-group">
-                        <label for="disabled_name">Nama Pesanan</label>
-                        <input type="text" class="form-control" id="disabled_name" name="disabled_name" value="<?= $print_order->name; ?>" disabled>
-                    </div>
-                    <?php else: ?>
-                    <!-- Nama Buku utk cetak biasa, cetak diluar -->
-                    <div class="form-group">
-                        <label for="disabled_book_title">Judul Buku</label>
-                        <input type="text" class="form-control" id="disabled_book_title" name="disabled_book_title" value="<?= $print_order->book_title; ?>" disabled>
-                    </div>
+                    <?php if ($print_order->category == 'nonbook') : ?>
+                        <!-- Nama Pesanan utk nonbook -->
+                        <div class="form-group">
+                            <label for="disabled_name">Nama Pesanan</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="disabled_name"
+                                name="disabled_name"
+                                value="<?= $print_order->name; ?>"
+                                disabled
+                            >
+                        </div>
+                    <?php else : ?>
+                        <!-- Nama Buku utk cetak biasa, cetak diluar -->
+                        <div class="form-group">
+                            <label for="disabled_book_title">Judul Buku</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="disabled_book_title"
+                                name="disabled_book_title"
+                                value="<?= $print_order->book_title; ?>"
+                                disabled
+                            >
+                        </div>
                     <?php endif; ?>
 
                     <!-- total permintaan tipe hidden -->
                     <div class="form-group">
                         <label for="disabled_total">Jumlah Pesanan</label>
-                        <input type="number" class="form-control" id="disabled_total" name="disabled_total" value="<?= $print_order->total; ?>" disabled>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="disabled_total"
+                            name="disabled_total"
+                            value="<?= $print_order->total; ?>"
+                            disabled
+                        >
                     </div>
 
                     <!-- total sukses dicetak -->
@@ -62,33 +91,34 @@
                             $data = array(
                                 'name' => 'total_success',
                                 'id'   => 'total_success',
-                                'class'=> 'form-control',
+                                'class' => 'form-control',
                                 'type' => 'number',
-                                'value'=> $print_order->total_success
-                              );
-                              
-                              echo form_input($data);
+                                'value' => $print_order->total_success
+                            );
+
+                            echo form_input($data);
                         }
                         ?>
                     </div>
 
-                </fieldset>
-                <hr>
-                <div class="form-actions">
-                    <button
-                        type="button"
-                        class="close"
-                        data-dismiss="modal"
-                        aria-label="Close"
-                    >
-                    <button
-                        class="btn btn-primary ml-auto"
-                        type="submit"
-                        value="Submit"
-                        id="btn-submit-set-stock"
-                    >Submit</button>
-                </div>
-                <p></p>
+                    </fieldset>
+                    <hr>
+                    <div class="form-actions">
+                        <button
+                            type="button"
+                            class="btn btn-light ml-auto"
+                            data-dismiss="modal"
+                        >Close</button>
+                        <?php if (!$is_final) : ?>
+                            <button
+                                class="btn btn-primary"
+                                type="submit"
+                                value="Submit"
+                                id="btn-submit-set-stock"
+                            >Submit</button>
+                        <?php endif; ?>
+                    </div>
+                    <p></p>
             </div>
         </div>
     </div>
@@ -109,6 +139,7 @@ $(document).ready(function() {
             url: "<?php echo base_url('print_order/api_set_stock/'); ?>" + printOrderId,
             datatype: "JSON",
             data: {
+                progress,
                 [`total_success`]: $(`#total_success`).val(),
             },
             success: function(res) {

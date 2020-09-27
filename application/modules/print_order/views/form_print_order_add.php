@@ -71,8 +71,6 @@
                                             <td width="175px"> File Buku </td>
                                             <td>
                                                 <a
-                                                    data-toggle="tooltip"
-                                                    data-placement="right"
                                                     title=""
                                                     class="btn btn-success btn-xs my-0"
                                                     target="_blank"
@@ -81,51 +79,15 @@
                                                 ><i class="fa fa-external-link-alt"></i> File Buku</a>
                                             </td>
                                         </tr>
-                                        <!-- <tr>
-                                            <td width="175px"> Nomor Hak Cipta </td>
-                                            <td id="info-nomor-hak-cipta"></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="175px"> File Hak Cipta </td>
-                                            <td>
-                                                <a
-                                                    data-toggle="tooltip"
-                                                    data-placement="right"
-                                                    title=""
-                                                    class="btn btn-success btn-xs my-0"
-                                                    target="_blank"
-                                                    href=""
-                                                    id="info-file-hak-cipta-link"
-                                                ><i class="fa fa-external-link-alt"></i> File Hak Cipta</a>
-                                            </td>
-                                        </tr> -->
                                     </tbody>
                                 </table>
                             </div>
+                            <br>
                         </div>
-                        <br>
-
-                        <!-- <div
-                            class="alert alert-info"
-                            id="reprint-notice"
-                            style="display:none"
-                        >
-                            Kategori cetak : <span id="category-text"></span>
-                        </div> -->
-
-                        <!-- <div class="form-group">
-                            <label for="category">
-                                <?= $this->lang->line('form_print_order_category'); ?>
-                                <abbr title="Required">*</abbr>
-                            </label>
-                            <?= form_dropdown('category', get_print_order_category(), $input->category, 'id="category" class="form-control custom-select d-block" disabled'); ?>
-                            <?= form_error('category'); ?>
-                        </div> -->
 
                         <div class="form-group">
                             <label for="priority">
                                 Deadline Percetakan
-                                <abbr title="Required">*</abbr>
                             </label>
                             <div>
                                 <input
@@ -244,6 +206,27 @@
                             <?= form_error('total'); ?>
                         </div>
 
+                        <div
+                            id="info-paper-required"
+                            style="display:none"
+                        >
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered mb-0">
+                                    <tbody>
+                                        <tr>
+                                            <td width="175px"> Halaman Buku </td>
+                                            <td id="paper-required-book-pages"></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="175px"> Jumlah Kertas Yang Dibutuhkan </td>
+                                            <td id="paper-required-td"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <br>
+                        </div>
+
                         <div class="form-group">
                             <label for="paper-content">
                                 <?= $this->lang->line('form_print_order_paper_content'); ?>
@@ -334,9 +317,9 @@ $(document).ready(function() {
         validateSelect2()
     );
 
-    handleCategoryChange($('#mode').val())
+    handleCategoryChange($('#print-mode').val())
 
-    $('#mode').change(function(e) {
+    $('#print-mode').change(function(e) {
         handleCategoryChange(e.target.value)
     })
 
@@ -362,14 +345,15 @@ $(document).ready(function() {
                 console.log(res);
                 $('#book-info').show()
                 $('#info-book-title').html(res.data.book_title)
-                $('#info-book-title').attr("href", "<?= base_url('book/view/'); ?>" + res.data.book_id)
+                $('#info-book-title').attr("href", "<?= base_url('book/view/'); ?>" + bookId)
                 $('#info-book-pages').html(res.data.book_pages)
                 $('#info-isbn').html(res.data.isbn)
                 $('#info-book-file-link').attr("href", "" + res.data.book_file_link)
-                $('#info-book-file-link').attr("title", "" + res.data.book_file_link)
-                // $('#info-nomor-hak-cipta').html(res.data.nomor_hak_cipta)
-                // $('#info-file-hak-cipta-link').attr("href", "" + res.data.book_file_link)
-                // $('#info-file-hak-cipta-link').attr("title", "" + res.data.book_file_link)
+                $('#info-book-file-link').attr("title", "" + res.data.book_title)
+                $('#total').change(function(e) {
+                    calculate_total(e, res)
+                })
+                calculate_total(e, res)
             },
             error: function(err) {
                 console.log(err);
@@ -377,9 +361,31 @@ $(document).ready(function() {
         });
     })
 
-    // $("#book-info").click(function() {
-    //     $("#book-info").hide();
-    // });
+
+    function calculate_total(e, res) {
+        const total = e.target.value
+        console.log(total)
+        $('#info-paper-required').show()
+        if (res.data.book_pages) {
+            $('#paper-required-td').html(res.data.book_pages * total)
+        } else {
+            $('#paper-required-td').html(`
+            Buku belum memiliki jumlah halaman, silahkan ubah data buku : <a
+                title="${res.data.book_title}"
+                class="btn btn-success btn-xs my-0"
+                target="_blank"
+                href="<?= base_url('book/edit/') ?>${res.data.book_id}"
+                id="paper-required-a"
+            ><i class="fa fa-edit"></i> File Buku</a>
+                                                `);
+        }
+
+        if (res.data.book_pages) {
+            $('#paper-required-book-pages').html(res.data.book_pages)
+        } else {
+            $('#paper-required-book-pages').html('-')
+        }
+    }
 
     initFlatpickr()
 

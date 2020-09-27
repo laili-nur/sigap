@@ -1,5 +1,7 @@
 <?php
 $is_postprint_started      = format_datetime($print_order->postprint_start_date);
+$is_postprint_finished      = format_datetime($print_order->postprint_end_date);
+$admin_percetakan = $this->print_order->get_admin_percetakan_by_progress('postprint', $print_order->print_order_id);
 if ($print_order->category != 'outsideprint') :
 ?>
     <section
@@ -9,13 +11,13 @@ if ($print_order->category != 'outsideprint') :
         <div id="postprint-progress">
             <header class="card-header">
                 <div class="d-flex align-items-center"><span class="mr-auto">Jilid</span>
-                    <?php if (is_admin() && !$is_final) {
+                    <?php if (!$is_final) :
                         //modal select
                         $this->load->view('print_order/view/common/select_modal', [
                             'progress' => 'postprint',
+                            'admin_percetakan' => $admin_percetakan
                         ]);
-                    } ?>
-                    <?php if (!$is_final) : ?>
+                    ?>
                         <div class="card-header-control">
                             <button
                                 id="btn-start-postprint"
@@ -35,6 +37,35 @@ if ($print_order->category != 'outsideprint') :
                     <?php endif ?>
                 </div>
             </header>
+
+            <!-- ALERT -->
+            <?php if ($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_percetakan') : ?>
+                <!-- all -->
+                <?php if ($print_order->is_postprint == 1) : ?>
+                    <div class="alert alert-success mb-1">Progress telah selesai.</div>
+                <?php endif; ?>
+                <?php if ($_SESSION['level'] == 'superadmin' && $print_order->is_postprint == 0) : ?>
+                    <!-- superadmin -->
+                    <?php if (!$admin_percetakan) : ?>
+                        <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Belum ada admin percetakan yang dipilih.</div>
+                    <?php endif; ?>
+                    <?php if (!$print_order->postprint_deadline) : ?>
+                        <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Belum menetapkan deadline progress.</div>
+                    <?php endif; ?>
+                    <?php if ($print_order->postprint_end_date) : ?>
+                        <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Progress telah selesai. Mohon untuk melakukan aksi.</div>
+                    <?php endif; ?>
+                <?php elseif ($_SESSION['level'] == 'admin_percetakan' && $print_order->is_postprint == 0) : ?>
+                    <!-- admin -->
+                    <?php if ($is_postprint_started) : ?>
+                        <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Pastikan mengisi catatan dan data lainnya sebelum menyelesaikan progress.</div>
+                    <?php endif; ?>
+                    <?php if ($is_postprint_finished) : ?>
+                        <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Progress telah selesai. Mohon tunggu superadmin memproses aksi</div>
+                    <?php endif; ?>
+                <?php endif; ?>
+            <?php endif; ?>
+
 
             <div
                 class="list-group list-group-flush list-group-bordered"
@@ -74,7 +105,7 @@ if ($print_order->category != 'outsideprint') :
                 </div>
 
                 <div class="list-group-item justify-content-between">
-                    <?php if (is_admin() && !$is_final) : ?>
+                    <?php if (is_superadmin() && !$is_final) : ?>
                         <a
                             href="#"
                             id="btn-modal-deadline-postprint"
@@ -93,13 +124,24 @@ if ($print_order->category != 'outsideprint') :
                     <?= $print_order->postprint_notes_admin ?>
                 </div>
 
+                <?php if ($admin_percetakan) : ?>
+                    <div class="list-group-item justify-content-between">
+                        <span class="text-muted">Staff Bertugas</span>
+                        <strong>
+                            <?php foreach ($admin_percetakan as $admin) : ?>
+                                <span class="badge badge-info p-1"><?= $admin->username; ?></span>
+                            <?php endforeach; ?>
+                        </strong>
+                    </div>
+                <?php endif; ?>
+
                 <hr class="m-0">
             </div>
 
             <div class="card-body">
                 <div class="card-button">
                     <!-- button aksi -->
-                    <?php if (is_admin() && !$is_final) : ?>
+                    <?php if (is_superadmin() && !$is_final) : ?>
                         <button
                             title="Aksi admin"
                             class="btn btn-outline-dark <?= !$is_postprint_started ? 'btn-disabled' : ''; ?>"
@@ -118,7 +160,7 @@ if ($print_order->category != 'outsideprint') :
                     >Catatan</button>
                     <!-- Modal Set Stok untuk Outside -->
                     <?php
-                    if ($print_order->category != "outsideprint") {
+                    if ($print_order->category != "outsideprint" && $print_order->category != "nonbook") {
                         $this->load->view('print_order/view/common/stock_modal', [
                             'progress' => 'postprint',
                         ]);
