@@ -327,8 +327,8 @@ class Book_model extends MY_Model
     public function fetch_stock_by_id($book_id)
     {
 
-        $stock_history    = $this->db->select('*')->from('book_stock')->where('book_id', $book_id)->order_by("UNIX_TIMESTAMP(stock_input_date)", "ASC")->get()->result();
-        $stock_last       = $this->db->select('*')->from('book_stock')->where('book_id', $book_id)->order_by("UNIX_TIMESTAMP(stock_input_date)", "DESC")->limit(1)->get()->row();
+        $stock_history    = $this->db->select('*')->from('book_stock')->where('book_id', $book_id)->order_by("UNIX_TIMESTAMP(date)", "DESC")->get()->result();
+        $stock_last       = $this->db->select('*')->from('book_stock')->where('book_id', $book_id)->order_by("UNIX_TIMESTAMP(date)", "DESC")->limit(1)->get()->row();
         return [
             'stock_history' => $stock_history,
             'stock_last'    => $stock_last
@@ -337,17 +337,34 @@ class Book_model extends MY_Model
 
     public function add_book_stock()
     {
-        $add    =   [
-            'book_id'               => $this->input->post('book_id'),
-            'stock_in_warehouse'    => $this->input->post('stock_in_warehouse'),
-            'stock_out_warehouse'   => $this->input->post('stock_out_warehouse'),
-            'stock_marketing'       => $this->input->post('stock_marketing'),
-            'stock_input_notes'     => $this->input->post('stock_input_notes'),
-            'stock_input_type'      => 0,
-            'stock_input_user'      => $_SESSION['username'],
-            'stock_input_date'      => date('Y-m-d H:i:s')
+        $book_id             =   $this->input->post('book_id');
+        $warehouse_past      =   intval($this->input->post('warehouse_past'));
+        $warehouse_modifier  =   abs($this->input->post('warehouse_modifier'));
+        $warehouse_operator  =   $this->input->post('warehouse_operator');
+
+        if($warehouse_operator == "+"){
+            $warehouse_present = $warehouse_past+$warehouse_modifier;
+        }elseif($warehouse_operator == "-"){
+            $warehouse_present = $warehouse_past-$warehouse_modifier;
+        }
+
+        $edit   =   [
+            'stock_warehouse'    => $warehouse_present,
         ];
 
+        $add    =   [
+            'book_id'               => $book_id,
+            'user_id'               => $_SESSION['user_id'],
+            'type'                  => 'book',
+            'date'                  => date('Y-m-d H:i:s'),
+            'notes'                 => $this->input->post('notes'),
+            'warehouse_past'        => $warehouse_past,
+            'warehouse_modifier'    => $warehouse_modifier,
+            'warehouse_present'     => $warehouse_present,
+            'warehouse_operator'    => $warehouse_operator
+        ];
+
+        $this->db->set($edit)->where('book_id',$book_id)->update('book');
         $this->db->insert('book_stock', $add);
         return TRUE;
     }

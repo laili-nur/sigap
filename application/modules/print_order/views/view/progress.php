@@ -1,5 +1,9 @@
 <?php
-$progress_list = ['preprint', 'print', 'postprint'];
+if($print_order->category == 'outsideprint' ){
+    $progress_list = ['preprint', 'print'];
+}else{
+    $progress_list = ['preprint', 'print', 'postprint'];
+}
 
 function get_print_order_progress($progress = null, $print_order, $progress_list)
 {

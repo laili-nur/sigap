@@ -37,6 +37,18 @@
                                 <label for="notes" class="font-weight-bold">Catatan</label>
                                 <textarea name="notes"  id="notes" cols="20" rows="5" class="form-control summernote-basic" ></textarea>
                             </div>
+                            <div class="form-group">
+                                <label class="font-weight-bold" for="stock_warehouse">Stok Gudang</label>
+                                <input type="number" class="form-control" name="stock_warehouse" id="stock_warehouse"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="font-weight-bold" for="stock_production">Stok Produksi</label>
+                                <input type="number" class="form-control" name="stock_production" id="stock_production"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="font-weight-bold" for="stock_other">Stok Lainnya</label>
+                                <input type="number" class="form-control" name="stock_other" id="stock_other"/>
+                            </div>
                         </fieldset>
                         <hr>
                         <!-- button -->

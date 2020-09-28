@@ -81,6 +81,7 @@ $(document).ready(function() {
             datatype: "JSON",
             data: {
                 [`${progress}_notes`]: $(`#${progress}-notes`).val(),
+                progress
             },
             success: function(res) {
                 showToast(true, res.data);

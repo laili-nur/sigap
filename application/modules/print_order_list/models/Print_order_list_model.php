@@ -1,20 +1,10 @@
 <?php
-class MY_Model extends CI_Model
+defined('BASEPATH') or exit('No direct script access allowed');
+
+class Print_order_list_model extends CI_Model
 {
-    protected $table    = '';
-    protected $per_page = 0;
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        if (!$this->table) {
-            $this->table = strtolower(str_replace('_model', '', get_class($this)));
-        }
-
-        // load form text
-        $this->lang->load('form', 'indonesian');
-    }
+    public $per_page = 10;
+    public $table    = 'print_order';
 
     public function check_table($table)
     {
@@ -519,5 +509,227 @@ class MY_Model extends CI_Model
                 'message' => $this->email->print_debugger(),
             ];
         }
+    }
+
+
+
+
+    public function get_validation_rules()
+    {
+        $validation_rules = [
+            [
+                'field' => 'order_number',
+                'label' => $this->lang->line('form_print_order_number'),
+                'rules' => 'trim|required',
+            ],
+            // [
+            //     'field' => 'category',
+            //     'label' => $this->lang->line('form_print_order_category'),
+            //     'rules' => 'trim|required',
+            // ],
+            [
+                'field' => 'order_code',
+                'label' => $this->lang->line('form_print_order_code'),
+                'rules' => 'trim|required',
+            ],
+            [
+                'field' => 'type',
+                'label' => $this->lang->line('form_print_order_type'),
+                'rules' => 'trim|required',
+            ],
+            [
+                'field' => 'priority',
+                'label' => $this->lang->line('form_print_order_priority'),
+                'rules' => 'trim|required|integer',
+            ],
+            [
+                'field' => 'total',
+                'label' => $this->lang->line('form_print_order_total'),
+                'rules' => 'trim|required|integer',
+            ],
+            [
+                'field' => 'paper_content',
+                'label' => $this->lang->line('form_print_order_paper_content'),
+                'rules' => 'trim|required',
+            ],
+            [
+                'field' => 'paper_cover',
+                'label' => $this->lang->line('form_print_order_paper_cover'),
+                'rules' => 'trim|required',
+            ],
+            [
+                'field' => 'paper_size',
+                'label' => $this->lang->line('form_print_order_paper_size'),
+                'rules' => 'trim|required',
+            ],
+        ];
+
+        return $validation_rules;
+    }
+
+    public function get_default_values()
+    {
+        return [
+            'book_id'           => '',
+            'category'          => '',
+            'order_number'      => '',
+            'order_code'        => '',
+            'total'             => '',
+            'print_number'      => '',
+            'paper_content'     => '',
+            'paper_cover'       => '',
+            'paper_size'        => '',
+            'type'              => 'pod',
+            'priority'          => '',
+            'date_year'          => '',
+            'date_month'          => '',
+            'print_order_notes' => '',
+            'name'              => '',
+            'print_mode'              => 'book',
+        ];
+    }
+
+    public function filter_print_order($filters, $page)
+    {
+        $print_orders = $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'category_name', 'draft.is_reprint', 'print_order.*'])
+            ->when('keyword', $filters['keyword'])
+            ->when('category', $filters['category'])
+            ->when('type', $filters['type'])
+            ->when('priority', $filters['priority'])
+            ->when('print_order_status', $filters['print_order_status'])
+            ->when('date_year', $filters['date_year'])
+            ->when('date_month', $filters['date_month'])
+            ->join_table('book', 'print_order', 'book')
+            ->join_table('draft', 'book', 'draft')
+            ->join_table('category', 'draft', 'category')
+            ->order_by('UNIX_TIMESTAMP(print_order.deadline_date)', 'ASC')
+            ->order_by('priority', 'DESC')
+            ->order_by('book_title', 'ASC')
+            ->order_by('name', 'ASC')
+            // ->order_by('name','ASC')
+            // ->order_by('book_title','ASC')
+            // ->order_by('status_hak_cipta')
+            // ->order_by('published_date')          
+            // ->order_by('UNIX_TIMESTAMP(print_order.entry_date)', 'DESC')
+            ->paginate($page)
+            ->get_all();
+
+        // pengennya order by
+        // 1. deadline yg mendekati, berarti asc
+        // 2. prioritas tinggi ke rendah, desc
+        // 3. judul dan name sesuai alpabet, asc
+
+        $total = $this->select('draft.draft_id')
+            ->when('keyword', $filters['keyword'])
+            ->when('category', $filters['category'])
+            ->when('type', $filters['type'])
+            ->when('priority', $filters['priority'])
+            ->when('print_order_status', $filters['print_order_status'])
+            ->when('date_year', $filters['date_year'])
+            ->when('date_month', $filters['date_month'])
+            ->join_table('book', 'print_order', 'book')
+            ->join_table('draft', 'book', 'draft')
+            ->join_table('category', 'draft', 'category')
+            // ->order_by('name','ASC')
+            // ->order_by('book_title','ASC')
+            // ->order_by('status_hak_cipta')
+            // ->order_by('published_date')
+            ->count();
+
+        // get authors
+        // foreach ($print_orders as $b) {
+        //     if ($b->draft_id) {
+        //         $b->authors = $this->get_id_and_name('author', 'draft_author', $b->draft_id, 'draft');
+        //     } else {
+        //         $b->authors = [];
+        //     }
+        // }
+
+        return [
+            'print_orders' => $print_orders,
+            'total'        => $total,
+        ];
+    }
+
+    public function when($params, $data)
+    {
+        // jika data null, maka skip
+        if ($data) {
+            if ($params == 'category') {
+                $this->where('category', $data);
+            }
+
+            if ($params == 'type') {
+                $this->where('type', $data);
+            }
+
+            if ($params == 'priority') {
+                $this->where('priority', $data);
+            }
+
+            if ($params == 'date_year') {
+                if ($data == '2020') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2020"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2020"));
+                } elseif ($data == '2019') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2019"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2019"));
+                } elseif ($data == '2018') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2018"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2018"));
+                } elseif ($data == '2017') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2017"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2017"));
+                } elseif ($data == '2016') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2016"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2016"));
+                } elseif ($data == '2015') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2015"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2015"));
+                }
+            }
+
+            if ($params == 'date_month') {
+                if ($data == '0') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 December 2020"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2020"));
+                } elseif ($data == '1') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 November 2020"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("30 November 2020"));
+                } elseif ($data == '2') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 October 2020"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 October 2020"));
+                } elseif ($data == '3') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 September 2020"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("30 September 2020"));
+                } elseif ($data == '4') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 August 2020"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 August 2020"));
+                } elseif ($data == '5') {
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 July 2020"));
+                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 July 2020"));
+                }
+            }
+
+            if ($params == 'keyword') {
+                $this->group_start();
+                $this->or_like('book_title', $data);
+                $this->or_like('order_number', $data);
+                $this->or_like('order_code', $data);
+                $this->or_like('name', $data);
+                $this->group_end();
+            }
+
+            if ($params == 'print_order_status') {
+                if ($data == 'preprint' || $data == 'print' || $data == 'postprint') {
+                    $this->where('print_order_status', $data);
+                    $this->or_where('print_order_status', "{$data}_approval");
+                    $this->or_where('print_order_status', "{$data}_finish");
+                } else {
+                    $this->where('print_order_status', $data);
+                }
+            }
+        }
+        return $this;
     }
 }

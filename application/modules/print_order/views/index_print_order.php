@@ -2,10 +2,12 @@
 $level              = check_level();
 $per_page           = 10;
 $keyword            = $this->input->get('keyword');
-$category            = $this->input->get('category');
+$category           = $this->input->get('category');
 $type               = $this->input->get('type');
 $priority           = $this->input->get('priority');
 $print_order_status = $this->input->get('print_order_status');
+$date_year          = $this->input->get('date_year');
+$date_month         = $this->input->get('date_month');
 $page               = $this->uri->segment(2);
 $i                  = isset($page) ? $page * $per_page - $per_page : 0;
 
@@ -15,6 +17,7 @@ $category_options = [
     'revise' => 'Cetak Ulang Revisi',
     'reprint' => 'Cetak Ulang Non Revisi',
     'nonbook' => 'Cetak Non Buku',
+    'outsideprint' => 'Cetak Di Luar'
 ];
 
 $type_options = [
@@ -29,6 +32,24 @@ $priority_options = [
     '2' => 'Prioritas Sedang',
     '3' => 'Prioritas Tinggi'
 ];
+
+$date_year_options = [
+    ''  => '- Filter Tahun Cetak -',
+];
+
+for ($dy = intval(date('Y')); $dy >= 2015; $dy--) {
+    $date_year_options[$dy] = 'Tahun ' . $dy;
+}
+
+$date_month_options = [
+    ''  => '- Filter Bulan Cetak -',
+];
+
+for ($y = intval(date('Y')); $y >= 2015; $y--) {
+    for ($m = 12; $m >= 1; --$m) {
+        $date_month_options[] = date('F', mktime(0, 0, 0, $m, 1)) . ' ' . $y;
+    }
+}
 
 $print_order_status_options = [
     ''  => '- Filter Status Cetak -',
@@ -91,6 +112,14 @@ $print_order_status_options = [
                                 <label for="print_order_status">Status</label>
                                 <?= form_dropdown('print_order_status', $print_order_status_options, $print_order_status, 'id="print_order_status" class="form-control custom-select d-block" title="Filter Status Cetak"'); ?>
                             </div>
+                            <!-- <div class="col-12 col-md-3">
+                                <label for="date_year">Tahun</label>
+                                <?= form_dropdown('date_year', $date_year_options, $date_year, 'id="date_year" class="form-control custom-select d-block" title="Filter Tahun Cetak"'); ?>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label for="date_month">Bulan</label>
+                                <?= form_dropdown('date_month', $date_month_options, $date_month, 'id="date_month" class="form-control custom-select d-block" title="Filter Bulan Cetak"'); ?>
+                            </div> -->
                             <div class="col-12 col-md-6">
                                 <label for="status">Pencarian</label>
                                 <?= form_input('keyword', $keyword, 'placeholder="Cari berdasarkan Judul, Nomor, Kode, Nama Pesanan" class="form-control"'); ?>
@@ -163,6 +192,10 @@ $print_order_status_options = [
                                     >Tanggal Selesai</th>
                                     <th
                                         scope="col"
+                                        style="min-width:100px;"
+                                    >Deadline</th>
+                                    <th
+                                        scope="col"
                                         style="min-width:70px;"
                                     >Status</th>
                                     <?php if ($level == 'superadmin') : ?>
@@ -191,6 +224,19 @@ $print_order_status_options = [
                                         </td>
                                         <td class="align-middle"><?= $print_order->entry_date; ?></td>
                                         <td class="align-middle"><?= $print_order->finish_date; ?></td>
+                                        <td class="align-middle">
+                                            <?php
+                                            if (!$print_order->deadline_date) {
+                                                echo '-';
+                                            } elseif (strtotime($print_order->deadline_date) <= strtotime("+3 day")) {
+                                                echo '<div class="text-danger">' . $print_order->deadline_date . '</div>';
+                                            } elseif (strtotime($print_order->deadline_date) <= strtotime("+7 day")) {
+                                                echo '<div class="text-warning">' . $print_order->deadline_date . '</div>';
+                                            } elseif (strtotime($print_order->deadline_date) >= strtotime("+7 day")) {
+                                                echo '<div>' . $print_order->deadline_date . '</div>';
+                                            }
+                                            ?>
+                                        </td>
                                         <td class="align-middle"><?= get_print_order_status()[$print_order->print_order_status] ?? $print_order->print_order_status; ?></td>
                                         <td class="align-middle text-right">
                                             <a
@@ -216,7 +262,7 @@ $print_order_status_options = [
                                                     aria-hidden="true"
                                                 >
                                                     <div
-                                                        class="modal-dialog"
+                                                        class="modal-dialog modal-dialog-centered"
                                                         role="document"
                                                     >
                                                         <div class="modal-content">

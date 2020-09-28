@@ -142,7 +142,7 @@ function konversiID($table, $vars, $id)
 function get_dropdown_listBook($table, $columns)
 {
     $CI    = &get_instance();
-    $query = $CI->db->select($columns)->from($table)->get();
+    $query = $CI->db->select($columns)->from($table)->order_by('book_title', 'ASC')->get();
 
     if ($query->num_rows() >= 1) {
         $options1 = ['' => '-- Pilih --'];
@@ -469,6 +469,10 @@ function get_allowed_file_types($field_name = null)
         $types = 'txt|docx|doc|pdf|jpeg|jpg|png|xls|xlsx|zip|rar';
     }
 
+    if ($field_name == 'preprint_file') {
+        $types = 'docx|doc|pdf|zip|rar';
+    }
+
     return [
         'types'   => $types,
         'to_text' => str_replace("|", ", ", $types),
@@ -624,7 +628,17 @@ function get_print_order_category()
         'new' => 'Cetak Baru',
         'revise' => 'Cetak Ulang Revisi',
         'reprint' => 'Cetak Ulang Non Revisi',
-        'nonbook' => 'Cetak Non Buku'
+        'nonbook' => 'Cetak Non Buku',
+        'outsideprint' => 'Cetak Di Luar'
+    ];
+}
+
+function get_print_order_mode()
+{
+    return [
+        'book' => 'Cetak Buku',
+        'nonbook' => 'Cetak Non Buku',
+        'outsideprint' => 'Cetak di Luar'
     ];
 }
 
@@ -644,4 +658,68 @@ function get_print_order_status()
         'reject' => 'Ditolak',
         'finish' => 'Selesai',
     ];
+}
+
+function get_username($user_id)
+{
+    $CI     = &get_instance();
+    return $CI->db->get_where('user', ['user_id' => $user_id])->row()->username;
+}
+
+function processing_time($date1, $date2)
+{
+    // Formulate the Difference between two dates 
+    $diff = abs($date2 - $date1);
+
+
+    // To get the year divide the resultant date into 
+    // total seconds in a year (365*60*60*24) 
+    $years = floor($diff / (365 * 60 * 60 * 24));
+
+
+    // To get the month, subtract it with years and 
+    // divide the resultant date into 
+    // total seconds in a month (30*60*60*24) 
+    $months = floor(($diff - $years * 365 * 60 * 60 * 24)
+        / (30 * 60 * 60 * 24));
+
+
+    // To get the day, subtract it with years and  
+    // months and divide the resultant date into 
+    // total seconds in a days (60*60*24) 
+    $days = floor(($diff - $years * 365 * 60 * 60 * 24 -
+        $months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
+
+
+    // To get the hour, subtract it with years,  
+    // months & seconds and divide the resultant 
+    // date into total seconds in a hours (60*60) 
+    $hours = floor(($diff - $years * 365 * 60 * 60 * 24
+        - $months * 30 * 60 * 60 * 24 - $days * 60 * 60 * 24)
+        / (60 * 60));
+
+
+    // To get the minutes, subtract it with years, 
+    // months, seconds and hours and divide the  
+    // resultant date into total seconds i.e. 60 
+    $minutes = floor(($diff - $years * 365 * 60 * 60 * 24
+        - $months * 30 * 60 * 60 * 24 - $days * 60 * 60 * 24
+        - $hours * 60 * 60) / 60);
+
+
+    // To get the minutes, subtract it with years, 
+    // months, seconds, hours and minutes  
+    $seconds = floor(($diff - $years * 365 * 60 * 60 * 24
+        - $months * 30 * 60 * 60 * 24 - $days * 60 * 60 * 24
+        - $hours * 60 * 60 - $minutes * 60));
+
+    // Print the result 
+    return printf(
+        "%d Hari %d Jam "
+            . "%d Menit %d Detik",
+        $days,
+        $hours,
+        $minutes,
+        $seconds
+    );
 }
