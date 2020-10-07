@@ -40,7 +40,7 @@
                                 <?= $this->lang->line('form_book_title'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <?= form_dropdown('book_id', get_dropdown_listBook('book', ['book_id', 'book_title']), $input->book_id, 'id="book-id" class="form-control custom-select d-block"'); ?>
+                            <?= form_dropdown('book_id', get_dropdown_list_book(), $input->book_id, 'id="book-id" class="form-control custom-select d-block"'); ?>
 
                             <?= form_error('book_id'); ?>
                         </div>
