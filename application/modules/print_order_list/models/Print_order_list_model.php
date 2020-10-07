@@ -3,7 +3,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Print_order_list_model extends CI_Model
 {
-    public $per_page = 10;
     public $table    = 'print_order';
 
     public function check_table($table)
@@ -78,23 +77,6 @@ class Print_order_list_model extends CI_Model
     {
         $table = $this->check_table($table);
         return $this->db->get_where($table, $data)->result();
-    }
-
-    public function paginate($page)
-    {
-        $this->db->limit($this->per_page, $this->calculate_real_offset($page));
-        return $this;
-    }
-
-    public function calculate_real_offset($page)
-    {
-        if (is_null($page) || empty($page)) {
-            $offset = 0;
-        } else {
-            $offset = ($page * $this->per_page) - $this->per_page;
-        }
-
-        return $offset;
     }
 
     public function select($columns)
@@ -283,52 +265,6 @@ class Print_order_list_model extends CI_Model
     {
         $this->db->limit($limit);
         return $this;
-    }
-
-    public function make_pagination($baseURL, $uriSegment, $totalRows = null)
-    {
-        $args = func_get_args();
-
-        $this->load->library('pagination');
-
-        $config = [
-            'base_url'         => $baseURL,
-            'uri_segment'      => $uriSegment,
-            'per_page'         => $this->per_page,
-            'total_rows'       => $totalRows,
-            'use_page_numbers' => true,
-            'num_links'        => 2,
-            'attributes'       => array('class' => 'page-link'),
-            'first_link'       => 'First',
-            'last_link'        => 'Last',
-            'next_link'        => '<i class="fa fa-lg fa-angle-right"></i>',
-            'prev_link'        => '<i class="fa fa-lg fa-angle-left"></i>',
-            'full_tag_open'    => '<ul class="pagination justify-content-center mt-4">',
-            'full_tag_close'   => '</ul>',
-            'num_tag_open'     => '<li class="page-item">',
-            'num_tag_close'    => '</li>',
-            'cur_tag_open'     => '<li class="page-item active"><span class="page-link">',
-            'cur_tag_close'    => '</span></li>',
-            'next_tag_open'    => '<li class="page-item">',
-            'next_tagl_close'  => '</li>',
-            'prev_tag_open'    => '<li class="page-item">',
-            'prev_tagl_close'  => 'Next</li>',
-            'first_tag_open'   => '<li class="page-item">',
-            'first_tag_close'  => '</li>',
-            'last_tag_open'    => '<li class="page-item">',
-            'last_tagl_close'  => '</li>',
-        ];
-
-        if (count($_GET) > 0) {
-            $config['suffix']    = '?' . http_build_query($_GET, '', "&");
-            $config['first_url'] = $config['base_url'] . '?' . http_build_query($_GET);
-        } else {
-            $config['suffix']    = http_build_query($_GET, '', "&");
-            $config['first_url'] = $config['base_url'];
-        }
-
-        $this->pagination->initialize($config);
-        return $this->pagination->create_links();
     }
 
     /**
@@ -538,11 +474,6 @@ class Print_order_list_model extends CI_Model
                 'rules' => 'trim|required',
             ],
             [
-                'field' => 'priority',
-                'label' => $this->lang->line('form_print_order_priority'),
-                'rules' => 'trim|required|integer',
-            ],
-            [
                 'field' => 'total',
                 'label' => $this->lang->line('form_print_order_total'),
                 'rules' => 'trim|required|integer',
@@ -580,7 +511,6 @@ class Print_order_list_model extends CI_Model
             'paper_cover'       => '',
             'paper_size'        => '',
             'type'              => 'pod',
-            'priority'          => '',
             'date_year'          => '',
             'date_month'          => '',
             'print_order_notes' => '',
@@ -589,66 +519,31 @@ class Print_order_list_model extends CI_Model
         ];
     }
 
-    public function filter_print_order($filters, $page)
+    public function filter_print_order($filters)
     {
-        $print_orders = $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'category_name', 'draft.is_reprint', 'print_order.*'])
+        return $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'category_name', 'draft.is_reprint', 'print_order.*'])
             ->when('keyword', $filters['keyword'])
             ->when('category', $filters['category'])
             ->when('type', $filters['type'])
-            ->when('priority', $filters['priority'])
             ->when('print_order_status', $filters['print_order_status'])
             ->when('date_year', $filters['date_year'])
             ->when('date_month', $filters['date_month'])
+            ->where('print_order_status !=', 'finish')
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
             ->join_table('category', 'draft', 'category')
+            ->order_by("CASE WHEN print_order.print_order_status = 'finish' THEN 1 ELSE 2 END, print_order.print_order_status", "DESC")
+            ->order_by('UNIX_TIMESTAMP(print_order.entry_date)', 'ASC')
             ->order_by('UNIX_TIMESTAMP(print_order.deadline_date)', 'ASC')
-            ->order_by('priority', 'DESC')
             ->order_by('book_title', 'ASC')
             ->order_by('name', 'ASC')
+            ->limit(10)
             // ->order_by('name','ASC')
             // ->order_by('book_title','ASC')
             // ->order_by('status_hak_cipta')
             // ->order_by('published_date')          
             // ->order_by('UNIX_TIMESTAMP(print_order.entry_date)', 'DESC')
-            ->paginate($page)
             ->get_all();
-
-        // pengennya order by
-        // 1. deadline yg mendekati, berarti asc
-        // 2. prioritas tinggi ke rendah, desc
-        // 3. judul dan name sesuai alpabet, asc
-
-        $total = $this->select('draft.draft_id')
-            ->when('keyword', $filters['keyword'])
-            ->when('category', $filters['category'])
-            ->when('type', $filters['type'])
-            ->when('priority', $filters['priority'])
-            ->when('print_order_status', $filters['print_order_status'])
-            ->when('date_year', $filters['date_year'])
-            ->when('date_month', $filters['date_month'])
-            ->join_table('book', 'print_order', 'book')
-            ->join_table('draft', 'book', 'draft')
-            ->join_table('category', 'draft', 'category')
-            // ->order_by('name','ASC')
-            // ->order_by('book_title','ASC')
-            // ->order_by('status_hak_cipta')
-            // ->order_by('published_date')
-            ->count();
-
-        // get authors
-        // foreach ($print_orders as $b) {
-        //     if ($b->draft_id) {
-        //         $b->authors = $this->get_id_and_name('author', 'draft_author', $b->draft_id, 'draft');
-        //     } else {
-        //         $b->authors = [];
-        //     }
-        // }
-
-        return [
-            'print_orders' => $print_orders,
-            'total'        => $total,
-        ];
     }
 
     public function when($params, $data)
@@ -661,10 +556,6 @@ class Print_order_list_model extends CI_Model
 
             if ($params == 'type') {
                 $this->where('type', $data);
-            }
-
-            if ($params == 'priority') {
-                $this->where('priority', $data);
             }
 
             if ($params == 'date_year') {

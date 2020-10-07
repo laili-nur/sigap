@@ -20,11 +20,11 @@ class Print_order extends Admin_Controller
             'keyword'            => $this->input->get('keyword', true),
             'category'            => $this->input->get('category', true),
             'type'               => $this->input->get('type', true),
-            'priority'           => $this->input->get('priority', true),
             'mode'           => $this->input->get('mode', true),
             'print_order_status' => $this->input->get('print_order_status', true),
             'date_year' => $this->input->get('date_year', true),
-            'date_month' => $this->input->get('date_month', true)
+            'date_month' => $this->input->get('date_month', true),
+            'hide' => $this->input->get('hide', true)
         ];
 
         // custom per page
@@ -60,8 +60,6 @@ class Print_order extends Admin_Controller
                 $this->session->set_flashdata('print_order_file_no_data', $this->lang->line('form_error_file_no_data'));
             }
         }
-
-
 
         // conditional rules, untuk book dan nonbook
         if ($input->print_mode == 'nonbook') {
@@ -109,6 +107,20 @@ class Print_order extends Admin_Controller
         if (empty($input->deadline_date)) {
             $input->deadline_date = empty_to_null($input->deadline_date);
         }
+
+        // $this->load->library('pdf');
+        // $data_format['a']   =   $input->book_title;
+        // $format = $this->load->view('print_order/letter_format', $data_format, true);
+        // $this->pdf->loadHtml($format);
+
+        // // (Optional) Setup the paper size and orientation
+        // $this->pdf->setPaper('A4', 'landscape');
+
+        // // Render the HTML as PDF
+        // $this->pdf->render();
+
+        // // Output the generated PDF to Browser
+        // $this->pdf->stream();
 
         // insert print order
         $print_order_id = $this->print_order->insert($input);

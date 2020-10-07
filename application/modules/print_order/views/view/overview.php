@@ -16,7 +16,7 @@
     <div class="d-flex justify-content-between align-items-center my-3">
         <div class="page-title mb-0 pb-0 h1"> Order Cetak </div>
         <div>
-            <?php if (is_admin()) : ?>
+            <?php if ($_SESSION['level'] == 'superadmin') : ?>
                 <a
                     href="<?= base_url('print_order/edit/' . $print_order->print_order_id) ?>"
                     class="btn btn-secondary btn-sm"

@@ -29,11 +29,6 @@ class Print_order_model extends MY_Model
                 'rules' => 'trim|required',
             ],
             [
-                'field' => 'priority',
-                'label' => $this->lang->line('form_print_order_priority'),
-                'rules' => 'trim|required|integer',
-            ],
-            [
                 'field' => 'total',
                 'label' => $this->lang->line('form_print_order_total'),
                 'rules' => 'trim|required|integer',
@@ -71,12 +66,11 @@ class Print_order_model extends MY_Model
             'paper_cover'       => '',
             'paper_size'        => '',
             'type'              => 'pod',
-            'priority'          => '',
-            'date_year'          => '',
-            'date_month'          => '',
+            'date_year'         => '',
+            'date_month'        => '',
             'print_order_notes' => '',
             'name'              => '',
-            'print_mode'              => 'book',
+            'print_mode'        => 'book',
         ];
     }
 
@@ -102,15 +96,16 @@ class Print_order_model extends MY_Model
             ->when('keyword', $filters['keyword'])
             ->when('category', $filters['category'])
             ->when('type', $filters['type'])
-            ->when('priority', $filters['priority'])
             ->when('print_order_status', $filters['print_order_status'])
             ->when('date_year', $filters['date_year'])
             ->when('date_month', $filters['date_month'])
+            ->when('hide', $filters['hide'])
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
             ->join_table('category', 'draft', 'category')
+            ->order_by("CASE WHEN print_order.print_order_status = 'finish' THEN 1 ELSE 2 END, print_order.print_order_status", "DESC")
+            ->order_by('UNIX_TIMESTAMP(print_order.entry_date)', 'ASC')
             ->order_by('UNIX_TIMESTAMP(print_order.deadline_date)', 'ASC')
-            ->order_by('priority', 'DESC')
             ->order_by('book_title', 'ASC')
             ->order_by('name', 'ASC')
             // ->order_by('name','ASC')
@@ -130,10 +125,10 @@ class Print_order_model extends MY_Model
             ->when('keyword', $filters['keyword'])
             ->when('category', $filters['category'])
             ->when('type', $filters['type'])
-            ->when('priority', $filters['priority'])
             ->when('print_order_status', $filters['print_order_status'])
             ->when('date_year', $filters['date_year'])
             ->when('date_month', $filters['date_month'])
+            ->when('hide', $filters['hide'])
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
             ->join_table('category', 'draft', 'category')
@@ -170,8 +165,12 @@ class Print_order_model extends MY_Model
                 $this->where('type', $data);
             }
 
-            if ($params == 'priority') {
-                $this->where('priority', $data);
+            if ($params == 'hide') {
+                if ($data == 1) {
+                    $this->where('print_order_status !=', 'finish');
+                } elseif ($data == 0) {
+                    // gadiapa2in
+                }
             }
 
             if ($params == 'date_year') {

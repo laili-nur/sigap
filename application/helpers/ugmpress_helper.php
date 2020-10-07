@@ -138,20 +138,37 @@ function konversiID($table, $vars, $id)
     }
 }
 
-// Get list of option for dropdown.
-function get_dropdown_listBook($table, $columns)
+/**
+ * Membuat array buku
+ *
+ * @return array
+ */
+function get_dropdown_list_book()
 {
-    $CI    = &get_instance();
-    $query = $CI->db->select($columns)->from($table)->order_by('book_title', 'ASC')->get();
+    $condition = function () {
+        $CI = &get_instance();
+        $CI->db->order_by('book_title', 'asc');
+        return $CI;
+    };
 
-    if ($query->num_rows() >= 1) {
-        $options1 = ['' => '-- Pilih --'];
-        $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
-        $options  = $options1 + $options2;
-        return $options;
-    }
+    return get_dropdown_list('book', ['book_id', 'book_title'], $condition);
+}
 
-    return $options = ['' => '- Empty -'];
+/**
+ * Membuat array draft yang final (draft_status = 14)
+ *
+ * @return array
+ */
+function get_dropdown_list_draft_final()
+{
+    $condition = function () {
+        $CI = &get_instance();
+        $CI->db->where('draft_status', 14);
+        $CI->db->order_by('draft_title', 'asc');
+        return $CI;
+    };
+
+    return get_dropdown_list('draft', ['draft_id', 'draft_title'], $condition);
 }
 
 // Get list of editor
@@ -205,39 +222,6 @@ function get_dropdown_listLayouter($table, $columns)
 
     return $options = ['' => '- Empty -'];
 }
-
-/**
- * Membuat array category
- *
- * @param string $table
- * @param string $columns
- * @param boolean $all
- * @return array
- */
-// function get_dropdown_list_category($table, $columns, $all = false)
-// {
-//     $CI = &get_instance();
-//     if ($all == true) {
-//         // ambil semua kategori
-//         $CI->db->select($columns);
-//         $CI->db->from($table);
-//         where('category_status', 'n');
-//         $CI->db->order_by('category_name', 'asc');
-//         $query = $CI->db->get();
-//     } else {
-//         // ambil karegori yang aktif
-//         $query = $CI->db->select($columns)->from($table)->where('category_status', 'y')->get();
-//     }
-
-//     if ($query->num_rows() >= 1) {
-//         $options1 = ['' => '-- Semua --'];
-//         $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
-//         $options  = $options1 + $options2;
-//         return $options;
-//     }
-
-//     return $options = ['' => '- Empty -'];
-// }
 
 /**
  * Membuat array category
@@ -305,22 +289,6 @@ function get_dropdown_list(string $table, array $columns, callable $condition = 
 
     return $options = ['' => '- Kosong -'];
 }
-
-// Get list of option for dropdown.
-// function get_dropdown_list($table, $columns)
-// {
-//     $CI    = &get_instance();
-//     $query = $CI->db->select($columns)->from($table)->get();
-
-//     if ($query->num_rows() >= 1) {
-//         $options1 = ['' => '-- Pilih --'];
-//         $options2 = array_column($query->result_array(), $columns[1], $columns[0]);
-//         $options  = $options1 + $options2;
-//         return $options;
-//     }
-
-//     return $options = ['' => '- Empty -'];
-// }
 
 // Get list of option for dropdown untuk multi kolom
 function get_dropdown_list_multi_column($table, $columns)
@@ -612,15 +580,6 @@ function expand($authors)
     return $authors_list;
 }
 
-function get_print_order_priority()
-{
-    return [
-        1 => 'rendah',
-        2 => 'sedang',
-        3 => 'tinggi'
-    ];
-}
-
 function get_print_order_category()
 {
     return [
@@ -668,58 +627,96 @@ function get_username($user_id)
 
 function processing_time($date1, $date2)
 {
-    // Formulate the Difference between two dates 
+    // Formulate the Difference between two dates
     $diff = abs($date2 - $date1);
 
 
-    // To get the year divide the resultant date into 
-    // total seconds in a year (365*60*60*24) 
+    // To get the year divide the resultant date into
+    // total seconds in a year (365*60*60*24)
     $years = floor($diff / (365 * 60 * 60 * 24));
 
 
-    // To get the month, subtract it with years and 
-    // divide the resultant date into 
-    // total seconds in a month (30*60*60*24) 
+    // To get the month, subtract it with years and
+    // divide the resultant date into
+    // total seconds in a month (30*60*60*24)
     $months = floor(($diff - $years * 365 * 60 * 60 * 24)
         / (30 * 60 * 60 * 24));
 
 
-    // To get the day, subtract it with years and  
-    // months and divide the resultant date into 
-    // total seconds in a days (60*60*24) 
+    // To get the day, subtract it with years and
+    // months and divide the resultant date into
+    // total seconds in a days (60*60*24)
     $days = floor(($diff - $years * 365 * 60 * 60 * 24 -
         $months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
 
 
-    // To get the hour, subtract it with years,  
-    // months & seconds and divide the resultant 
-    // date into total seconds in a hours (60*60) 
+    // To get the hour, subtract it with years,
+    // months & seconds and divide the resultant
+    // date into total seconds in a hours (60*60)
     $hours = floor(($diff - $years * 365 * 60 * 60 * 24
         - $months * 30 * 60 * 60 * 24 - $days * 60 * 60 * 24)
         / (60 * 60));
 
 
-    // To get the minutes, subtract it with years, 
-    // months, seconds and hours and divide the  
-    // resultant date into total seconds i.e. 60 
+    // To get the minutes, subtract it with years,
+    // months, seconds and hours and divide the
+    // resultant date into total seconds i.e. 60
     $minutes = floor(($diff - $years * 365 * 60 * 60 * 24
         - $months * 30 * 60 * 60 * 24 - $days * 60 * 60 * 24
         - $hours * 60 * 60) / 60);
 
 
-    // To get the minutes, subtract it with years, 
-    // months, seconds, hours and minutes  
+    // To get the minutes, subtract it with years,
+    // months, seconds, hours and minutes
     $seconds = floor(($diff - $years * 365 * 60 * 60 * 24
         - $months * 30 * 60 * 60 * 24 - $days * 60 * 60 * 24
         - $hours * 60 * 60 - $minutes * 60));
 
-    // Print the result 
-    return printf(
-        "%d Hari %d Jam "
-            . "%d Menit %d Detik",
-        $days,
-        $hours,
-        $minutes,
-        $seconds
-    );
+    // Print the result
+    if (empty($years) && empty($months) && empty($days) && empty($hours) && empty($minutes)) {
+        return printf(
+            "%d Detik",
+            $seconds
+        );
+    } elseif (empty($years) && empty($months) && empty($days) && empty($hours)) {
+        return printf(
+            "%d Menit %d Detik",
+            $minutes,
+            $seconds
+        );
+    } elseif (empty($years) && empty($months) && empty($days)) {
+        return printf(
+            "%d Jam %d Menit %d Detik",
+            $hours,
+            $minutes,
+            $seconds
+        );
+    } elseif (empty($years) && empty($months)) {
+        return printf(
+            "%d Hari %d Jam %d Menit %d Detik",
+            $days,
+            $hours,
+            $minutes,
+            $seconds
+        );
+    } elseif (empty($years)) {
+        return printf(
+            "%d Bulan %d Hari %d Jam %d Menit %d Detik",
+            $months,
+            $days,
+            $hours,
+            $minutes,
+            $seconds
+        );
+    } else {
+        return printf(
+            "%d Tahun %d Bulan %d Hari %d Jam %d Menit %d Detik",
+            $years,
+            $months,
+            $days,
+            $hours,
+            $minutes,
+            $seconds
+        );
+    }
 }

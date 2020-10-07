@@ -40,7 +40,7 @@
                                 <?= $this->lang->line('form_book_title'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <?= form_dropdown('book_id', get_dropdown_listBook('book', ['book_id', 'book_title']), $input->book_id, 'id="book-id" class="form-control custom-select d-block"'); ?>
+                            <?= form_dropdown('book_id', get_dropdown_list_book(), $input->book_id, 'id="book-id" class="form-control custom-select d-block"'); ?>
 
                             <?= form_error('book_id'); ?>
                         </div>
@@ -86,7 +86,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="priority">
+                            <label for="deadline_date">
                                 Deadline Percetakan
                             </label>
                             <div>
@@ -169,23 +169,6 @@
                                     Offset</label>
                             </div>
                             <?= form_error('type'); ?>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="priority">
-                                <?= $this->lang->line('form_print_order_priority'); ?>
-                                <abbr title="Required">*</abbr>
-                            </label>
-                            <select
-                                class="custom-select"
-                                name="priority"
-                                id="priority"
-                            >
-                                <?php foreach (get_print_order_priority() as $key => $value) : ?>
-                                    <option value="<?= $key ?>"><?= $value ?></option>
-                                <?php endforeach ?>
-                            </select>
-                            <?= form_error('priority'); ?>
                         </div>
 
                         <div class="form-group">
@@ -301,7 +284,6 @@ $(document).ready(function() {
                 order_number: "crequired",
                 order_code: "crequired",
                 type: "crequired",
-                priority: "crequired",
                 mode: "crequired",
                 total: {
                     crequired: true,

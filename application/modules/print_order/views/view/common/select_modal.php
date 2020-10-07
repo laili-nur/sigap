@@ -138,7 +138,7 @@ if ($level == 'superadmin') :
                 // location.reload()
                 $(`#${progress}-progress-wrapper`).load(` #${progress}-progress`, function() {
                     // reinitiate flatpickr modal after load
-                    // initFlatpickrModal()
+                    initFlatpickrModal()
                 });
             })
 
