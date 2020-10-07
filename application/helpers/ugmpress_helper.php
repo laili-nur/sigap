@@ -612,15 +612,6 @@ function expand($authors)
     return $authors_list;
 }
 
-function get_print_order_priority()
-{
-    return [
-        1 => 'rendah',
-        2 => 'sedang',
-        3 => 'tinggi'
-    ];
-}
-
 function get_print_order_category()
 {
     return [
@@ -713,13 +704,51 @@ function processing_time($date1, $date2)
         - $months * 30 * 60 * 60 * 24 - $days * 60 * 60 * 24
         - $hours * 60 * 60 - $minutes * 60));
 
-    // Print the result 
-    return printf(
-        "%d Hari %d Jam "
-            . "%d Menit %d Detik",
-        $days,
-        $hours,
-        $minutes,
-        $seconds
-    );
+    // Print the result
+    if (empty($years) && empty($months) && empty($days) && empty($hours) && empty($minutes)) {
+        return printf(
+            "%d Detik",
+            $seconds
+        );
+    } elseif (empty($years) && empty($months) && empty($days) && empty($hours)) {
+        return printf(
+            "%d Menit %d Detik",
+            $minutes,
+            $seconds
+        );
+    } elseif (empty($years) && empty($months) && empty($days)) {
+        return printf(
+            "%d Jam %d Menit %d Detik",
+            $hours,
+            $minutes,
+            $seconds
+        );
+    } elseif (empty($years) && empty($months)) {
+        return printf(
+            "%d Hari %d Jam %d Menit %d Detik",
+            $days,
+            $hours,
+            $minutes,
+            $seconds
+        );
+    } elseif (empty($years)) {
+        return printf(
+            "%d Bulan %d Hari %d Jam %d Menit %d Detik",
+            $months,
+            $days,
+            $hours,
+            $minutes,
+            $seconds
+        );
+    } else {
+        return printf(
+            "%d Tahun %d Bulan %d Hari %d Jam %d Menit %d Detik",
+            $years,
+            $months,
+            $days,
+            $hours,
+            $minutes,
+            $seconds
+        );
+    }
 }

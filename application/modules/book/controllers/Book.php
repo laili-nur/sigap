@@ -362,6 +362,16 @@ class Book extends Admin_Controller
     public function delete_book_stock($book_stock_id)
     {
         if ($this->check_level_gudang() == TRUE) :
+            $book_stock = $this->book->fetch_book_stock_by_id($book_stock_id);
+
+            if ($book_stock->warehouse_operator == "+") {
+                $stock_warehouse = intval($book_stock->warehouse_present) - intval($book_stock->warehouse_modifier);
+            } elseif ($book_stock->warehouse_operator == "-") {
+                $stock_warehouse = intval($book_stock->warehouse_present) + intval($book_stock->warehouse_modifier);
+            }
+
+            $this->db->set('stock_warehouse', $stock_warehouse)->where('book_id', $book_stock->book_id)->update('book');
+
             $isDeleted  = $this->book->delete_book_stock($book_stock_id);
             if ($isDeleted   ==  TRUE) {
                 $this->session->set_flashdata('success', 'Berhasil menghapus data stok buku.');

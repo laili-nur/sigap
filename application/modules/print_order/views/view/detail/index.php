@@ -77,10 +77,6 @@
                                     </tr>
                                 <?php endif ?>
                                 <tr>
-                                    <td width="200px"> <?= $this->lang->line('form_print_order_priority') ?> </td>
-                                    <td><?= get_print_order_priority()[$print_order->priority] ?? '' ?> </td>
-                                </tr>
-                                <tr>
                                     <td width="140px"><?= $this->lang->line('form_print_order_file') ?></td>
                                     <td>
                                         <?= ($print_order->print_order_file) ? '<a data-toggle="tooltip" data-placement="right" title="' . $print_order->print_order_file . '" class="btn btn-success btn-xs m-0" href="' . base_url('print_order/download_file/printorderfile/' . $print_order->print_order_file) . '" target="_blank"><i class="fa fa-download"></i> Download</a>' : ''; ?>

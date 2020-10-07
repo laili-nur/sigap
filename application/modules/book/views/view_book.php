@@ -294,7 +294,7 @@ $level              = check_level();
                                                                 <label
                                                                     class="font-weight-bold"
                                                                     for="warehouse_modifier"
-                                                                >Stok Gudang<abbr title="Required">*</abbr></label>
+                                                                >Perubahan<abbr title="Required">*</abbr></label>
                                                                 <input
                                                                     type="number"
                                                                     class="form-control"
@@ -375,10 +375,9 @@ $level              = check_level();
                                         <thead>
                                             <tr class="text-center">
                                                 <th scope="col">No</th>
-                                                <th scope="col">Stok Gudang</th>
-                                                <th scope="col">Tipe Input</th>
-                                                <th scope="col">User Input</th>
-                                                <th scope="col">Tanggal Input</th>
+                                                <th scope="col">Perubahan</th>
+                                                <th scope="col">User</th>
+                                                <th scope="col">Tanggal</th>
                                                 <th scope="col">Catatan</th>
                                                 <?php if ($level == 'superadmin' || $level == 'admin_gudang') : ?>
                                                     <th scope="col"></th>
@@ -392,26 +391,13 @@ $level              = check_level();
                                                     <td>
                                                         <?php
                                                         if ($history->warehouse_operator == "+") {
-                                                            echo $history->warehouse_past . '<div class="text-success"> ' . $history->warehouse_operator . ' ' . $history->warehouse_modifier . '</div>';
+                                                            echo /*$history->warehouse_past . */ '<div class="text-success"> ' . $history->warehouse_operator . ' ' . $history->warehouse_modifier . '</div>';
                                                         } elseif ($history->warehouse_operator == "-") {
-                                                            echo $history->warehouse_past . '<div class="text-danger"> ' . $history->warehouse_operator . ' ' . $history->warehouse_modifier . '</div>';
+                                                            echo /*$history->warehouse_past . */ '<div class="text-danger"> ' . $history->warehouse_operator . ' ' . $history->warehouse_modifier . '</div>';
                                                         }
                                                         ?>
                                                     </td>
-                                                    <td>
-                                                        <?php
-                                                        if ($history->type == 'book') {
-                                                            echo 'Input menggunakan fitur buku.';
-                                                        } elseif ($history->type == 'print_order') {
-                                                            echo 'Input menggunakan fitur order cetak.';
-                                                        } elseif ($history->type == 'book_request') {
-                                                            echo 'Input menggunakan fitur permintaan buku.';
-                                                        } else {
-                                                            echo '';
-                                                        }
-                                                        ?>
-                                                    </td>
-                                                    <td><?= $history->user_id; ?></td>
+                                                    <td><?= get_username($history->user_id); ?></td>
                                                     <td><?= date('d F Y H:i:s', strtotime($history->date)); ?></td>
                                                     <td><?= $history->notes; ?></td>
                                                     <?php if ($level == 'superadmin' || $level == 'admin_gudang') : ?>
@@ -446,7 +432,7 @@ $level              = check_level();
                                                                                 Hapus</h5>
                                                                         </div>
                                                                         <div class="modal-body">
-                                                                            <p>Apakah anda yakin akan menghapus data stok buku dari buku <span class="font-weight-bold"><?= $input->book_title; ?></span> ?</p>
+                                                                            <p>Apakah anda yakin akan menghapus data stok buku dari buku <span class="font-weight-bold"><?= $input->book_title; ?></span> ?<br>Menghapus riwayat akan mengubah jumlah stok di gudang.</p>
                                                                         </div>
                                                                         <div class="modal-footer">
                                                                             <button

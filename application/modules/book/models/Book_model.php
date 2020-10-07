@@ -335,6 +335,11 @@ class Book_model extends MY_Model
         ];
     }
 
+    public function fetch_book_stock_by_id($book_stock_id)
+    {
+        return $this->db->select('*')->from('book_stock')->where('book_stock_id', $book_stock_id)->get()->row();
+    }
+
     public function add_book_stock()
     {
         $book_id             =   $this->input->post('book_id');
@@ -342,10 +347,10 @@ class Book_model extends MY_Model
         $warehouse_modifier  =   abs($this->input->post('warehouse_modifier'));
         $warehouse_operator  =   $this->input->post('warehouse_operator');
 
-        if($warehouse_operator == "+"){
-            $warehouse_present = $warehouse_past+$warehouse_modifier;
-        }elseif($warehouse_operator == "-"){
-            $warehouse_present = $warehouse_past-$warehouse_modifier;
+        if ($warehouse_operator == "+") {
+            $warehouse_present = $warehouse_past + $warehouse_modifier;
+        } elseif ($warehouse_operator == "-") {
+            $warehouse_present = $warehouse_past - $warehouse_modifier;
         }
 
         $edit   =   [
@@ -364,7 +369,7 @@ class Book_model extends MY_Model
             'warehouse_operator'    => $warehouse_operator
         ];
 
-        $this->db->set($edit)->where('book_id',$book_id)->update('book');
+        $this->db->set($edit)->where('book_id', $book_id)->update('book');
         $this->db->insert('book_stock', $add);
         return TRUE;
     }

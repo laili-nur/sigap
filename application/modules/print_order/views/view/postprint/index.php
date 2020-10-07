@@ -39,33 +39,11 @@ if ($print_order->category != 'outsideprint') :
             </header>
 
             <!-- ALERT -->
-            <?php if ($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_percetakan') : ?>
-                <!-- all -->
-                <?php if ($print_order->is_postprint == 1) : ?>
-                    <div class="alert alert-success mb-1">Progress telah selesai.</div>
-                <?php endif; ?>
-                <?php if ($_SESSION['level'] == 'superadmin' && $print_order->is_postprint == 0) : ?>
-                    <!-- superadmin -->
-                    <?php if (!$admin_percetakan) : ?>
-                        <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Belum ada admin percetakan yang dipilih.</div>
-                    <?php endif; ?>
-                    <?php if (!$print_order->postprint_deadline) : ?>
-                        <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Belum menetapkan deadline progress.</div>
-                    <?php endif; ?>
-                    <?php if ($print_order->postprint_end_date) : ?>
-                        <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Progress telah selesai. Mohon untuk melakukan aksi.</div>
-                    <?php endif; ?>
-                <?php elseif ($_SESSION['level'] == 'admin_percetakan' && $print_order->is_postprint == 0) : ?>
-                    <!-- admin -->
-                    <?php if ($is_postprint_started) : ?>
-                        <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Pastikan mengisi catatan dan data lainnya sebelum menyelesaikan progress.</div>
-                    <?php endif; ?>
-                    <?php if ($is_postprint_finished) : ?>
-                        <div class="alert alert-warning mb-1"><strong>PERHATIAN!</strong> Progress telah selesai. Mohon tunggu superadmin memproses aksi</div>
-                    <?php endif; ?>
-                <?php endif; ?>
-            <?php endif; ?>
-
+            <?php
+            $this->load->view('print_order/view/common/progress_alert', [
+                'progress' => 'postprint',
+            ]);
+            ?>
 
             <div
                 class="list-group list-group-flush list-group-bordered"
