@@ -103,11 +103,24 @@ class Print_order_model extends MY_Model
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
             ->join_table('category', 'draft', 'category')
-            ->order_by("CASE WHEN print_order.print_order_status = 'finish' THEN 1 ELSE 2 END, print_order.print_order_status", "DESC")
             ->order_by('UNIX_TIMESTAMP(print_order.entry_date)', 'ASC')
-            ->order_by('UNIX_TIMESTAMP(print_order.deadline_date)', 'ASC')
-            ->order_by('book_title', 'ASC')
-            ->order_by('name', 'ASC')
+            // ->order_by("CASE WHEN print_order.print_order_status = 'finish' THEN 1 ELSE 2 END, print_order.print_order_status", "DESC")
+            ->order_by("CASE WHEN print_order.print_order_status = 'waiting' THEN 1
+                             WHEN print_order.print_order_status = 'preprint' THEN 2
+                             WHEN print_order.print_order_status = 'preprint_approval' THEN 3
+                             WHEN print_order.print_order_status = 'preprint_finish' THEN 4
+                             WHEN print_order.print_order_status = 'print' THEN 5
+                             WHEN print_order.print_order_status = 'print_approval' THEN 6
+                             WHEN print_order.print_order_status = 'print_finish' THEN 7
+                             WHEN print_order.print_order_status = 'postprint' THEN 8
+                             WHEN print_order.print_order_status = 'postprint_approval' THEN 9
+                             WHEN print_order.print_order_status = 'postprint_finish' THEN 10
+                             WHEN print_order.print_order_status = 'reject' THEN 11
+                             WHEN print_order.print_order_status = 'finish' THEN 12
+                             ELSE 13 END, print_order.print_order_status", "ASC")
+            // ->order_by("CASE WHEN print_order.category = 'nonbook' THEN 1 ELSE 2 END, print_order.category", "DESC")
+            // ->order_by('UNIX_TIMESTAMP(print_order.deadline_date)', 'ASC')
+            // ->order_by('book_title', 'ASC')
             // ->order_by('name','ASC')
             // ->order_by('book_title','ASC')
             // ->order_by('status_hak_cipta')
@@ -315,10 +328,25 @@ class Print_order_model extends MY_Model
         }
     }
 
-    public function delete_print_order_file($file)
+    public function delete_print_order_file($print_order_file)
     {
-        if ($file && file_exists("./printorderfile/$file")) {
-            unlink("./printorderfile/$file");
+        if ($print_order_file) {
+            if (file_exists("./printorderfile/$print_order_file")) {
+                unlink("./printorderfile/$print_order_file");
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public function delete_letter_file($letter_file)
+    {
+        if ($letter_file) {
+            if (file_exists("./printorderletter/$letter_file")) {
+                unlink("./printorderletter/$letter_file");
+                return true;
+            }
+            return false;
         }
     }
 
