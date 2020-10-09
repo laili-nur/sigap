@@ -68,6 +68,10 @@
                                             <td id="info-isbn"></td>
                                         </tr>
                                         <tr>
+                                            <td width="175px"> Tahun Terbit </td>
+                                            <td id="info-year"></td>
+                                        </tr>
+                                        <tr>
                                             <td width="175px"> File Buku </td>
                                             <td>
                                                 <a
@@ -325,11 +329,13 @@ $(document).ready(function() {
             datatype: "JSON",
             success: function(res) {
                 console.log(res);
+                var published_date = new Date(res.data.published_date);
                 $('#book-info').show()
                 $('#info-book-title').html(res.data.book_title)
                 $('#info-book-title').attr("href", "<?= base_url('book/view/'); ?>" + bookId)
                 $('#info-book-pages').html(res.data.book_pages)
                 $('#info-isbn').html(res.data.isbn)
+                $('#info-year').html(published_date.getFullYear())
                 $('#info-book-file-link').attr("href", "" + res.data.book_file_link)
                 $('#info-book-file-link').attr("title", "" + res.data.book_title)
                 $('#total').change(function(e) {

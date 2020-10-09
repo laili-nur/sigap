@@ -311,6 +311,10 @@
                                                                 scope="col"
                                                                 class="text-center"
                                                             >Keterangan</th>
+                                                            <th
+                                                                scope="col"
+                                                                class="text-center"
+                                                            >Detail</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -347,17 +351,24 @@
                                                                 </td>
                                                                 <td class="align-middle text-center">
                                                                     <?php if (!$print_order->deadline_date) : ?>
-                                                                        <span class="badge badge-danger">Tidak ada deadline</span>
+                                                                        <span class="badge badge-info">Tidak ada deadline</span>
                                                                     <?php else : ?>
                                                                         <?php if (strtotime("now") >= strtotime($print_order->deadline_date)) : ?>
-                                                                            <span class="badge badge-dark">Telat<br><?php processing_time(strtotime($print_order->deadline_date), strtotime("now")); ?></span>
-                                                                        <?php elseif (strtotime("+3 day") >= strtotime($print_order->deadline_date)) : ?>
-                                                                            <span class="badge badge-danger">Mendekati deadline<br><?php processing_time(strtotime($print_order->deadline_date), strtotime("now")); ?></span>
-                                                                        <?php elseif (strtotime("+7 day") >= strtotime($print_order->deadline_date)) : ?>
-                                                                            <span class="badge badge-warning">Mendekati deadline<br><?php processing_time(strtotime($print_order->deadline_date), strtotime("now")); ?></span>
-                                                                        <?php elseif (strtotime("+7 day") <= strtotime($print_order->deadline_date)) : ?>
-                                                                            <span class="badge badge-success">Masih lama<br><?php processing_time(strtotime($print_order->deadline_date), strtotime("now")); ?></span>
+                                                                            <span class="badge badge-dark">Terlambat</span>
+                                                                        <?php elseif (strtotime('+3 day') >= strtotime($print_order->deadline_date)) : ?>
+                                                                            <span class="badge badge-danger">Mendekati deadline</span>
+                                                                        <?php elseif (strtotime('+7 day') <= strtotime($print_order->deadline_date)) : ?>
+                                                                            <span class="badge badge-success">Belum terlambat</span>
                                                                         <?php endif; ?>
+                                                                    <?php endif; ?>
+                                                                </td>
+                                                                <td class="align-middle text-center">
+                                                                    <?php if (!$print_order->deadline_date) : ?>
+                                                                        -
+                                                                    <?php elseif (strtotime('now') >= strtotime($print_order->deadline_date)) : ?>
+                                                                        <div class="text-danger">Terlambat, <?php processing_time(strtotime($print_order->deadline_date), strtotime("now")); ?></div>
+                                                                    <?php elseif (strtotime('now') <= strtotime($print_order->deadline_date)) : ?>
+                                                                        <div>Sisa, <?php processing_time(strtotime($print_order->deadline_date), strtotime("now")); ?></div>
                                                                     <?php endif; ?>
                                                                 </td>
                                                             </tr>
@@ -373,12 +384,6 @@
                             </div>
                         </div>
                     </div>
-
-
-
-
-
-
                 </div>
             </div>
         </div>

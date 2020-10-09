@@ -108,19 +108,36 @@ class Print_order extends Admin_Controller
             $input->deadline_date = empty_to_null($input->deadline_date);
         }
 
-        // $this->load->library('pdf');
-        // $data_format['a']   =   $input->book_title;
-        // $format = $this->load->view('print_order/letter_format', $data_format, true);
-        // $this->pdf->loadHtml($format);
+        if ($input->category != 'nonbook') {
+            // Get Book data
+            $book_data = $this->print_order->get_book($input->book_id);
 
-        // // (Optional) Setup the paper size and orientation
-        // $this->pdf->setPaper('A4', 'landscape');
+            // PDF
+            $this->load->library('pdf');
+            $data_format['category']            = strtoupper(get_print_order_category()[$input->category]);
+            $data_format['paper_content']       = strtoupper($input->paper_content);
+            $data_format['paper_cover']         = strtoupper($input->paper_cover);
+            $data_format['total']               = $input->total;
+            $data_format['type']                = strtoupper($input->type);
+            $data_format['print_order_notes']   = $input->print_order_notes;
+            $data_format['book_title']          = strtoupper($book_data->book_title);
+            $data_format['book_pages']          = $book_data->book_pages;
+            $data_format['book_edition']        = strtoupper($book_data->book_edition);
+            $data_format['harga']               = $book_data->harga;
+            $format = $this->load->view('print_order/letter_format', $data_format, true);
+            $this->pdf->loadHtml($format);
 
-        // // Render the HTML as PDF
-        // $this->pdf->render();
+            // (Optional) Setup the paper size and orientation
+            $this->pdf->set_paper('A4', 'potrait');
 
-        // // Output the generated PDF to Browser
-        // $this->pdf->stream();
+            // Render the HTML as PDF
+            $this->pdf->render();
+            // $this->pdf->stream();
+
+            $output = $this->pdf->output();
+            $input->letter_file = str_replace(['<', '>', ':', '"', '/', '\\', '|', '?', '*', ' '], '_', 'Surat_Tugas_Order_Cetak_' . $book_data->book_title . '_' . $input->order_number . '.pdf');
+            file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/sigap/printorderletter/' . $input->letter_file, $output);
+        }
 
         // insert print order
         $print_order_id = $this->print_order->insert($input);
@@ -334,6 +351,7 @@ class Print_order extends Admin_Controller
 
         if ($this->print_order->where('print_order_id', $print_order_id)->delete()) {
             $this->print_order->delete_print_order_file($print_order->print_order_file);
+            $this->print_order->delete_letter_file($print_order->letter_file);
             $this->print_order->delete_preprint_file($print_order->delete_preprint_file);
         }
 
