@@ -135,7 +135,7 @@ class Print_order extends Admin_Controller
             // $this->pdf->stream();
 
             $output = $this->pdf->output();
-            $input->letter_file = str_replace(['<', '>', ':', '"', '/', '\\', '|', '?', '*', ' '], '_', 'Surat_Tugas_Order_Cetak_' . $book_data->book_title . '_' . $input->order_number . '.pdf');
+            $input->letter_file = str_replace([' ', ',', '.', '/', '<', '>', '?', ';', ':', '"', '[', ']', '\\', '{', '}', '|', '`', '-', '=', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '+'], '_', 'Surat_Tugas_Cetak_' . $book_data->book_title . '_' . $input->order_number) . '.pdf';
             file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/sigap/printorderletter/' . $input->letter_file, $output);
         }
 
