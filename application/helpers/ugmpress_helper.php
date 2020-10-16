@@ -534,7 +534,7 @@ function get_per_page_options()
 
 function get_user_levels()
 {
-    return ['superadmin', 'admin_penerbitan', 'author', 'reviewer', 'editor', 'layouter', 'author_reviewer', 'admin_percetakan', 'admin_gudang', 'admin_pemasaran', 'admin_keuangan'];
+    return ['superadmin', 'admin_penerbitan', 'author', 'reviewer', 'editor', 'layouter', 'author_reviewer', 'admin_percetakan', 'staff_percetakan', 'admin_gudang', 'admin_pemasaran', 'admin_keuangan'];
 }
 
 function filter_boolean($data)
@@ -588,7 +588,8 @@ function get_print_order_category()
         'revise' => 'Cetak Ulang Revisi',
         'reprint' => 'Cetak Ulang Non Revisi',
         'nonbook' => 'Cetak Non Buku',
-        'outsideprint' => 'Cetak Di Luar'
+        'outsideprint' => 'Cetak Di Luar',
+        'from_outside' => 'Cetak Dari Luar'
     ];
 }
 

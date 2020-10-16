@@ -13,6 +13,7 @@
         </ol>
     </nav>
 </header>
+<pre><?php print_r($input); ?></pre>
 <div class="page-section">
     <?= validation_errors() ?>
     <div class="row">
@@ -24,6 +25,17 @@
                         <legend>Form Buku</legend>
                         <?= isset($input->book_id) ? form_hidden('book_id', $input->book_id) : ''; ?>
                         <div class="form-group">
+                            <label for="from_outside">Asal Buku
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <?= form_dropdown('from_outside', [0 => 'Buku UGM Press', 1 => 'Buku dari luar'], $input->from_outside, 'id="from_outside" class="form-control custom-select d-block"'); ?>
+                            <?= form_error('from_outside'); ?>
+                        </div>
+                        <hr>
+                        <div
+                            class="form-group"
+                            id="draft-id-wrapper"
+                        >
                             <label for="category">Draft
                                 <abbr title="Required">*</abbr>
                             </label>
@@ -165,6 +177,32 @@ $(document).ready(function() {
         const data = $("#draft_id option:selected").text();
         $('#book_title').val(data);
     })
+
+    // hide onchange
+    $('#from_outside').on('change', function() {
+        var fromOutside = $('#from_outside option:selected').val();
+
+        if (fromOutside == 0) {
+            $("#draft-id-wrapper").show();
+            $('#from_outside').val() = 0;
+        } else {
+            $("#draft-id-wrapper").hide();
+            $('#from_outside').val() = 1;
+            $('#draft_id').val() = 'test';
+        }
+    });
+
+    // hide on refresh
+    var fromOutside = $('#from_outside option:selected').val();
+
+    if (fromOutside == 0) {
+        $("#draft-id-wrapper").show();
+        $('#from_outside').val() = 0;
+    } else {
+        $("#draft-id-wrapper").hide();
+        $('#from_outside').val() = 1;
+        $('#draft_id').val() = 'test';
+    }
 
     // fix summernote validate error
     jQuery.validator.setDefaults({

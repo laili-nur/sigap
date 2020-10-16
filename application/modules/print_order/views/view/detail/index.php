@@ -35,23 +35,22 @@
                                     <td width="200px"> <?= $this->lang->line('form_print_order_category') ?> </td>
                                     <td><?= get_print_order_category()[$print_order->category]; ?> </td>
                                 </tr>
-                                <tr>
-                                    <td width="140px">File Surat Tugas</td>
-                                    <td>
-                                        <?= ($print_order->letter_file) ? '<a data-toggle="tooltip" data-placement="right" title="' . $print_order->letter_file . '" class="btn btn-success btn-xs m-0" href="' . base_url('print_order/download_file/printorderletter/' . $print_order->letter_file) . '" target="_blank"><i class="fa fa-download"></i> Download</a>' : ''; ?>
-                                    </td>
-                                </tr>
-                                <?php if ($print_order->book_id) : ?>
+                                <?php if ($print_order->book_id && !$print_order->name) : ?>
                                     <tr>
                                         <td width="200px"> <?= $this->lang->line('form_book_title') ?> </td>
                                         <td><strong><?= $print_order->book_title; ?></strong> </td>
                                     </tr>
-                                <?php else : ?>
+                                <?php elseif (!$print_order->book_id && $print_order->name) : ?>
                                     <tr>
                                         <td width="200px"> <?= $this->lang->line('form_print_order_name') ?> </td>
                                         <td><strong><?= $print_order->name; ?></strong> </td>
                                     </tr>
-                                <?php endif ?>
+                                <?php else : ?>
+                                    <tr>
+                                        <td width="200px"> <?= $this->lang->line('form_print_order_name') ?> </td>
+                                        <td><strong><?= $print_order->title; ?></strong> </td>
+                                    </tr>
+                                <?php endif; ?>
                                 <tr>
                                     <td width="200px"> <?= $this->lang->line('form_print_order_notes') ?> </td>
                                     <td><?= $print_order->print_order_notes; ?> </td>

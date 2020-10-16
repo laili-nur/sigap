@@ -1,7 +1,8 @@
 <?php
-$is_print_started      = format_datetime($print_order->print_start_date);
+$is_print_started       = format_datetime($print_order->print_start_date);
 $is_print_finished      = format_datetime($print_order->print_end_date);
-$admin_percetakan = $this->print_order->get_admin_percetakan_by_progress('print', $print_order->print_order_id);
+$is_print_deadline_set  = format_datetime($print_order->print_deadline);
+$staff_percetakan       = $this->print_order->get_staff_percetakan_by_progress('print', $print_order->print_order_id);
 ?>
 <section
     id="print-progress-wrapper"
@@ -14,7 +15,7 @@ $admin_percetakan = $this->print_order->get_admin_percetakan_by_progress('print'
                     //modal select
                     $this->load->view('print_order/view/common/select_modal', [
                         'progress' => 'print',
-                        'admin_percetakan' => $admin_percetakan
+                        'staff_percetakan' => $staff_percetakan
                     ]);
                 ?>
                     <div class="card-header-control">
@@ -22,8 +23,8 @@ $admin_percetakan = $this->print_order->get_admin_percetakan_by_progress('print'
                             id="btn-start-print"
                             title="Mulai proses cetak"
                             type="button"
-                            class="d-inline btn <?= !$is_print_started ? 'btn-warning' : 'btn-secondary'; ?> <?= $is_print_started ? 'btn-disabled' : ''; ?>"
-                            <?= $is_print_started ? 'disabled' : ''; ?>
+                            class="d-inline btn <?= !$is_print_started ? 'btn-warning' : 'btn-secondary'; ?> <?= ($is_print_started || !$staff_percetakan || !$is_print_deadline_set) ? 'btn-disabled' : ''; ?>"
+                            <?= ($is_print_started || !$staff_percetakan || !$is_print_deadline_set) ? 'disabled' : ''; ?>
                         ><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
                         <?php if ($print_order->category == 'outsideprint') : ?>
                             <button
@@ -50,7 +51,8 @@ $admin_percetakan = $this->print_order->get_admin_percetakan_by_progress('print'
         <!-- ALERT -->
         <?php
         $this->load->view('print_order/view/common/progress_alert', [
-            'progress' => 'print',
+            'progress'          => 'print',
+            'staff_percetakan'  => $staff_percetakan
         ]);
         ?>
 
@@ -92,7 +94,7 @@ $admin_percetakan = $this->print_order->get_admin_percetakan_by_progress('print'
             </div>
 
             <div class="list-group-item justify-content-between">
-                <?php if (is_superadmin() && !$is_final) : ?>
+                <?php if (($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_percetakan') && !$is_final) : ?>
                     <a
                         href="#"
                         id="btn-modal-deadline-print"
@@ -106,21 +108,28 @@ $admin_percetakan = $this->print_order->get_admin_percetakan_by_progress('print'
                 <strong><?= format_datetime($print_order->print_deadline); ?></strong>
             </div>
 
-            <div class="m-3">
-                <div class="text-muted pb-1">Catatan Admin</div>
-                <?= $print_order->print_notes_admin ?>
-            </div>
-
-            <?php if ($admin_percetakan) : ?>
+            <?php if ($staff_percetakan) : ?>
                 <div class="list-group-item justify-content-between">
                     <span class="text-muted">Staff Bertugas</span>
                     <strong>
-                        <?php foreach ($admin_percetakan as $admin) : ?>
-                            <span class="badge badge-info p-1"><?= $admin->username; ?></span>
+                        <?php foreach ($staff_percetakan as $staff) : ?>
+                            <span class="badge badge-info p-1"><?= $staff->username; ?></span>
                         <?php endforeach; ?>
                     </strong>
                 </div>
             <?php endif; ?>
+
+            <?php if ($print_order->total_print) : ?>
+                <div class="list-group-item justify-content-between">
+                    <span class="text-muted">Hasil Cetak</span>
+                    <strong id="total-print"><?= $print_order->total_print; ?></strong>
+                </div>
+            <?php endif; ?>
+
+            <div class="m-3">
+                <div class="text-muted pb-1">Catatan Admin</div>
+                <?= $print_order->print_notes_admin ?>
+            </div>
 
             <hr class="m-0">
         </div>
@@ -128,7 +137,7 @@ $admin_percetakan = $this->print_order->get_admin_percetakan_by_progress('print'
         <div class="card-body">
             <div class="card-button">
                 <!-- button aksi -->
-                <?php if (is_superadmin() && !$is_final) : ?>
+                <?php if (($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_percetakan') && !$is_final) : ?>
                     <?php if ($print_order->category != "outsideprint") : ?>
                         <button
                             title="Aksi admin"
@@ -318,12 +327,19 @@ $admin_percetakan = $this->print_order->get_admin_percetakan_by_progress('print'
 
                 <!-- Modal Set Stok untuk Outside -->
                 <?php
-                if ($print_order->category == "outsideprint") {
-                    $this->load->view('print_order/view/common/stock_modal', [
-                        'progress' => 'print',
-                    ]);
-                }
+                $this->load->view('print_order/view/common/stock_modal', [
+                    'progress' => 'print',
+                    'is_print_started' => $is_print_started,
+                ]);
                 ?>
+                <?php if (!$is_final) : ?>
+                    <a
+                        href="<?= base_url('print_order/generate_pdf/' . $print_order->print_order_id . "/print") ?>"
+                        class="btn btn-outline-danger <?= (!$is_print_started || !$staff_percetakan || !$is_print_deadline_set) ? 'disabled' : ''; ?>"
+                        id="btn-generate-pdf-print"
+                        title="Generate PDF"
+                    >Generate PDF <i class="fas fa-file-pdf fa-fw"></i></a>
+                <?php endif ?>
             </div>
         </div>
 

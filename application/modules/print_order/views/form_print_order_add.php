@@ -41,7 +41,6 @@
                                 <abbr title="Required">*</abbr>
                             </label>
                             <?= form_dropdown('book_id', get_dropdown_list_book(), $input->book_id, 'id="book-id" class="form-control custom-select d-block"'); ?>
-
                             <?= form_error('book_id'); ?>
                         </div>
 
@@ -109,7 +108,6 @@
                         >
                             <label for="name">
                                 <?= $this->lang->line('form_print_order_name'); ?>
-                                <abbr title="Required">*</abbr>
                             </label>
                             <?= form_input('name', $input->name, 'class="form-control" id="name"'); ?>
                             <?= form_error('name'); ?>
@@ -242,6 +240,22 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="location-binding">
+                                Lokasi Jilid
+                            </label>
+                            <?= form_dropdown('location_binding', ['inside' => 'Jilid di Dalam', 'outside' => 'Jilid di Luar', 'partial' => 'Jilid Parsial'], $input->location_binding, 'id="location-binding" class="form-control custom-select d-block"'); ?>
+                            <?= form_error('location_binding'); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location-laminate">
+                                Lokasi Laminasi
+                            </label>
+                            <?= form_dropdown('location_laminate', ['inside' => 'Laminasi di Dalam', 'outside' => 'Laminasi di Luar', 'partial' => 'Laminasi Parsial'], $input->location_laminate, 'id="location-laminate" class="form-control custom-select d-block"'); ?>
+                            <?= form_error('location_laminate'); ?>
+                        </div>
+
+                        <div class="form-group">
                             <label for="print-order-file"><?= $this->lang->line('form_print_order_file'); ?></label>
                             <div class="custom-file">
                                 <?= form_upload('print_order_file', '', 'class="custom-file-input" id="print-order-file"'); ?>
@@ -315,7 +329,6 @@ $(document).ready(function() {
             $('#name-wrapper').show()
         } else {
             $('#book-id-wrapper').show()
-            $('#name-wrapper').hide()
         }
     }
 

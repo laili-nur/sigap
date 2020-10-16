@@ -17,14 +17,13 @@ class Print_order extends Admin_Controller
     {
         // all filter
         $filters = [
-            'keyword'            => $this->input->get('keyword', true),
-            'category'            => $this->input->get('category', true),
-            'type'               => $this->input->get('type', true),
-            'mode'           => $this->input->get('mode', true),
-            'print_order_status' => $this->input->get('print_order_status', true),
-            'date_year' => $this->input->get('date_year', true),
-            'date_month' => $this->input->get('date_month', true),
-            'hide' => $this->input->get('hide', true)
+            'keyword'               => $this->input->get('keyword', true),
+            'category'              => $this->input->get('category', true),
+            'type'                  => $this->input->get('type', true),
+            'mode'                  => $this->input->get('mode', true),
+            'print_order_status'    => $this->input->get('print_order_status', true),
+            'date_year'             => $this->input->get('date_year', true),
+            'date_month'            => $this->input->get('date_month', true)
         ];
 
         // custom per page
@@ -42,7 +41,7 @@ class Print_order extends Admin_Controller
 
     public function add()
     {
-        if (!$this->_is_superadmin()) {
+        if (!$this->_is_printing_admin()) {
             redirect($this->pages);
         }
 
@@ -68,6 +67,7 @@ class Print_order extends Admin_Controller
         } elseif ($input->print_mode == 'book') {
             $input->category = $this->_check_book($input->book_id);
             $this->form_validation->set_rules('book_id', $this->lang->line('form_book_title'), 'required');
+            $this->form_validation->set_rules('name', $this->lang->line('form_print_order_name'), '');
         } elseif ($input->print_mode == 'outsideprint') {
             $input->category = 'outsideprint';
             $this->form_validation->set_rules('book_id', $this->lang->line('form_book_title'), 'required');
@@ -95,8 +95,6 @@ class Print_order extends Admin_Controller
         // handle book dan nonbook
         if ($input->category == 'nonbook') {
             $input->book_id = null;
-        } else {
-            $input->name = null;
         }
 
         // set status awal
@@ -106,37 +104,6 @@ class Print_order extends Admin_Controller
 
         if (empty($input->deadline_date)) {
             $input->deadline_date = empty_to_null($input->deadline_date);
-        }
-
-        if ($input->category != 'nonbook') {
-            // Get Book data
-            $book_data = $this->print_order->get_book($input->book_id);
-
-            // PDF
-            $this->load->library('pdf');
-            $data_format['category']            = strtoupper(get_print_order_category()[$input->category]);
-            $data_format['paper_content']       = strtoupper($input->paper_content);
-            $data_format['paper_cover']         = strtoupper($input->paper_cover);
-            $data_format['total']               = $input->total;
-            $data_format['type']                = strtoupper($input->type);
-            $data_format['print_order_notes']   = $input->print_order_notes;
-            $data_format['book_title']          = strtoupper($book_data->book_title);
-            $data_format['book_pages']          = $book_data->book_pages;
-            $data_format['book_edition']        = strtoupper($book_data->book_edition);
-            $data_format['harga']               = $book_data->harga;
-            $format = $this->load->view('print_order/letter_format', $data_format, true);
-            $this->pdf->loadHtml($format);
-
-            // (Optional) Setup the paper size and orientation
-            $this->pdf->set_paper('A4', 'potrait');
-
-            // Render the HTML as PDF
-            $this->pdf->render();
-            // $this->pdf->stream();
-
-            $output = $this->pdf->output();
-            $input->letter_file = str_replace([' ', ',', '.', '/', '<', '>', '?', ';', ':', '"', '[', ']', '\\', '{', '}', '|', '`', '-', '=', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '+'], '_', 'Surat_Tugas_Cetak_' . $book_data->book_title . '_' . $input->order_number) . '.pdf';
-            file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/sigap/printorderletter/' . $input->letter_file, $output);
         }
 
         // insert print order
@@ -153,7 +120,7 @@ class Print_order extends Admin_Controller
 
     public function edit($print_order_id)
     {
-        if (!$this->_is_superadmin()) {
+        if (!$this->_is_printing_admin()) {
             redirect($this->pages);
         }
 
@@ -243,7 +210,7 @@ class Print_order extends Admin_Controller
 
     public function view($print_order_id = null)
     {
-        if (!$this->_is_printing_admin()) {
+        if (!$this->_is_print_order_user()) {
             redirect($this->pages);
         }
 
@@ -273,8 +240,46 @@ class Print_order extends Admin_Controller
             redirect($this->pages);
         }
 
-        if (!$this->_is_superadmin()) {
+        if (!$this->_is_printing_admin()) {
             redirect($_SERVER['HTTP_REFERER']);
+        }
+
+        //  ambil data print order
+        $data       = $this->print_order->get_print_order($print_order_id);
+        $category   = $data->category;
+
+        if ($category !== 'nonbook' && $category !== 'from_outside') {
+            // Mekanisme input stok
+            $book_id             =   $data->book_id;
+            $warehouse_past      =   intval($data->stock_warehouse);
+
+            if ($data->total_postprint) {
+                $warehouse_modifier  =   abs($data->total_postprint);
+            } else {
+                $warehouse_modifier  =   abs($data->total_print);
+            }
+
+            $warehouse_operator  =   "+";
+            $warehouse_present   =   $warehouse_past + $warehouse_modifier;
+
+            $edit   =   [
+                'stock_warehouse'    => $warehouse_present,
+            ];
+
+            $add    =   [
+                'book_id'               => $book_id,
+                'user_id'               => $_SESSION['user_id'],
+                'type'                  => 'print_order',
+                'date'                  => date('Y-m-d H:i:s'),
+                'notes'                 => '<a href="' . base_url('print_order/view/' . $data->print_order_id) . '" target="_blank"> <i class="fa fa-external-link-alt"></i> Link Order Cetak</a>',
+                'warehouse_past'        => $warehouse_past,
+                'warehouse_modifier'    => $warehouse_modifier,
+                'warehouse_present'     => $warehouse_present,
+                'warehouse_operator'    => $warehouse_operator
+            ];
+
+            $this->db->set($edit)->where('book_id', $book_id)->update('book');
+            $this->db->insert('book_stock', $add);
         }
 
         // memastikan konsistensi data
@@ -292,37 +297,6 @@ class Print_order extends Admin_Controller
             'finish_date' => $action == 'finish' ? now() : null
         ]);
 
-        //  ambil data print order
-        $print_order         =   $this->print_order->get_print_order($print_order_id);
-
-        if ($print_order->category != 'nonbook') {
-            // Mekanisme input stok
-            $book_id             =   $print_order->book_id;
-            $warehouse_past      =   intval($print_order->stock_warehouse);
-            $warehouse_modifier  =   abs($print_order->total_success);
-            $warehouse_operator  =   "+";
-            $warehouse_present   =   $warehouse_past + $warehouse_modifier;
-
-            $edit   =   [
-                'stock_warehouse'    => $warehouse_present,
-            ];
-
-            $add    =   [
-                'book_id'               => $book_id,
-                'user_id'               => $_SESSION['user_id'],
-                'type'                  => 'print_order',
-                'date'                  => date('Y-m-d H:i:s'),
-                'notes'                 => '<a href="' . base_url('print_order/view/' . $print_order->print_order_id) . '" target="_blank"> <i class="fa fa-external-link-alt"></i> Link Order Cetak</a>',
-                'warehouse_past'        => $warehouse_past,
-                'warehouse_modifier'    => $warehouse_modifier,
-                'warehouse_present'     => $warehouse_present,
-                'warehouse_operator'    => $warehouse_operator
-            ];
-
-            $this->db->set($edit)->where('book_id', $book_id)->update('book');
-            $this->db->insert('book_stock', $add);
-        }
-
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();
             $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
@@ -336,7 +310,7 @@ class Print_order extends Admin_Controller
 
     public function delete($print_order_id = null)
     {
-        if (!$this->_is_superadmin()) {
+        if (!$this->_is_printing_admin()) {
             redirect($this->pages);
         }
 
@@ -379,7 +353,7 @@ class Print_order extends Admin_Controller
         $input = (object) $this->input->post(null, false);
 
         // hanya untuk user yang berkaitan dengan print_order ini
-        if (!$this->_is_assigned_printing_admin($print_order_id, $input->progress)) {
+        if (!$this->_is_printing_admin()) {
             $message = $this->lang->line('toast_error_not_authorized');
             return $this->send_json_output(false, $message);
         }
@@ -406,7 +380,7 @@ class Print_order extends Admin_Controller
         $input = (object) $this->input->post(null, false);
 
         // hanya untuk user yang berkaitan dengan print_order ini
-        if (!$this->_is_assigned_printing_admin($print_order_id, $input->progress)) {
+        if (!$this->_is_printing_admin()) {
             $message = $this->lang->line('toast_error_not_authorized');
             return $this->send_json_output(false, $message);
         }
@@ -430,16 +404,10 @@ class Print_order extends Admin_Controller
             return $this->send_json_output(false, $message, 404);
         }
 
-        // // hanya untuk user yang berkaitan dengan print_order ini
-        // if (!$this->_is_printing_admin()) {
-        //     $message = $this->lang->line('toast_error_not_authorized');
-        //     return $this->send_json_output(false, $message);
-        // }
-
         $input = (object) $this->input->post(null, false);
 
         // hanya untuk user yang berkaitan dengan print_order ini
-        if (!$this->_is_assigned_printing_admin($print_order_id, $input->progress)) {
+        if (!$this->_is_printing_admin()) {
             $message = $this->lang->line('toast_error_not_authorized');
             return $this->send_json_output(false, $message);
         }
@@ -476,7 +444,7 @@ class Print_order extends Admin_Controller
         }
 
         // hanya untuk superadmin
-        if (!$this->_is_superadmin()) {
+        if (!$this->_is_printing_admin()) {
             $message = $this->lang->line('toast_error_not_authorized');
             return $this->send_json_output(false, $message);
         }
@@ -531,20 +499,25 @@ class Print_order extends Admin_Controller
 
         $book = $this->book->join('draft')->get_where(['book_id' => $book_id]);
         $is_reprint_book = $book->is_reprint ?? null;
+        $is_outside_book = $this->db->select('*')->from('book')->where('book_id', $book_id)->get()->row()->from_outside ?? null;
 
         // cek buku apakah pernah order cetak
         $book_order = $this->print_order->get_where(['book_id' => $book_id]);
 
-        if ($book_order) {
-            return 'reprint';
+        if ($is_outside_book) {
+            return 'from_outside'; //Cetak dari luar
+        }
+
+        if ($book_order && !$is_outside_book) {
+            return 'reprint'; //Cetak ulang non revisi
         }
 
         if (!$book_order) {
-            if ($is_reprint_book == 'n') {
-                return 'new';
+            if ($is_reprint_book == 'n' && !$is_outside_book) {
+                return 'new'; //Cetak baru
             }
-            if ($is_reprint_book == 'y') {
-                return 'revise';
+            if ($is_reprint_book == 'y' && !$is_outside_book) {
+                return 'revise'; //Cetak ulang revisi
             }
         }
 
@@ -566,7 +539,7 @@ class Print_order extends Admin_Controller
         }
 
         // hanya untuk superadmin
-        if (!$this->_is_superadmin()) {
+        if (!$this->_is_printing_admin()) {
             $message = $this->lang->line('toast_error_not_authorized');
             return $this->send_json_output(false, $message);
         }
@@ -615,7 +588,7 @@ class Print_order extends Admin_Controller
         $input = (object) $this->input->post(null, false);
 
         // hanya untuk user yang berkaitan dengan print_order ini
-        if (!$this->_is_assigned_printing_admin($print_order_id, $input->progress)) {
+        if (!$this->_is_printing_admin()) {
             $message = $this->lang->line('toast_error_not_authorized');
             return $this->send_json_output(false, $message);
         }
@@ -641,7 +614,7 @@ class Print_order extends Admin_Controller
         $input = (object) $this->input->post(null, true);
 
         // hanya untuk user yang berkaitan dengan print_order ini
-        if (!$this->_is_assigned_printing_admin($print_order_id, $input->progress)) {
+        if (!$this->_is_printing_admin()) {
             $message = $this->lang->line('toast_error_not_authorized');
             return $this->send_json_output(false, $message);
         }
@@ -695,7 +668,7 @@ class Print_order extends Admin_Controller
         $input = (object) $this->input->post(null, true);
 
         // hanya untuk user yang berkaitan dengan print_order ini
-        if (!$this->_is_assigned_printing_admin($print_order_id, $input->progress)) {
+        if (!$this->_is_printing_admin()) {
             $message = $this->lang->line('toast_error_not_authorized');
             return $this->send_json_output(false, $message);
         }
@@ -728,7 +701,7 @@ class Print_order extends Admin_Controller
 
     public function download_preprint_file($filename)
     {
-        if (!$this->_is_printing_admin()) {
+        if (!$this->_is_print_order_user()) {
             redirect($_SERVER['HTTP_REFERER']);
         }
 
@@ -748,7 +721,7 @@ class Print_order extends Admin_Controller
         $input = (object) $this->input->post(null, false);
 
         // hanya untuk user yang berkaitan dengan print_order ini
-        if (!$this->_is_assigned_printing_admin($print_order_id, $input->progress)) {
+        if (!$this->_is_printing_admin()) {
             return $this->send_json_output(false, $this->lang->line('toast_error_not_authorized'));
         }
 
@@ -767,13 +740,13 @@ class Print_order extends Admin_Controller
         return $this->send_json_output(true, $this->print_order->get_book($book_id));
     }
 
-    public function api_get_admin_percetakan()
+    public function api_get_staff_percetakan()
     {
-        $admin_percetakan = $this->print_order->get_admin_percetakan();
-        return $this->send_json_output(true, $admin_percetakan);
+        $staff_percetakan = $this->print_order->get_staff_percetakan();
+        return $this->send_json_output(true, $staff_percetakan);
     }
 
-    public function api_add_admin_percetakan()
+    public function api_add_staff_percetakan()
     {
         $input = (object) $this->input->post(null, true);
 
@@ -781,12 +754,12 @@ class Print_order extends Admin_Controller
             return $this->send_json_output(false, $this->lang->line('toast_data_not_available'));
         }
 
-        if (!$this->_is_superadmin()) {
+        if (!$this->_is_printing_admin()) {
             $message = $this->lang->line('toast_error_not_authorized');
             return $this->send_json_output(false, $message);
         }
 
-        if ($this->print_order->check_row_admin_percetakan($input->print_order_id, $input->user_id, $input->progress) > 0) {
+        if ($this->print_order->check_row_staff_percetakan($input->print_order_id, $input->user_id, $input->progress) > 0) {
             return $this->send_json_output(false, $this->lang->line('toast_data_duplicate'), 422);
         }
 
@@ -797,15 +770,15 @@ class Print_order extends Admin_Controller
         }
     }
 
-    public function api_delete_admin_percetakan($id = null)
+    public function api_delete_staff_percetakan($id = null)
     {
-        $admin_percetakan = $this->db->where('print_order_user_id', $id)->get('print_order_user')->result();
-        if (!$admin_percetakan) {
+        $staff_percetakan = $this->db->where('print_order_user_id', $id)->get('print_order_user')->result();
+        if (!$staff_percetakan) {
             $message = $this->lang->line('toast_data_not_available');
             return $this->send_json_output(false, $message, 404);
         }
 
-        if (!$this->_is_superadmin()) {
+        if (!$this->_is_printing_admin()) {
             $message = $this->lang->line('toast_error_not_authorized');
             return $this->send_json_output(false, $message);
         }
@@ -817,6 +790,54 @@ class Print_order extends Admin_Controller
         }
     }
 
+    public function generate_pdf($print_order_id, $progress)
+    {
+        $print_order        = $this->print_order->get_print_order($print_order_id);
+        $staff_percetakan   = $this->print_order->get_staff_percetakan_by_progress($progress, $print_order_id);
+        $staff = '';
+        foreach ($staff_percetakan as $val) {
+            $staff .= $val->username . ", ";
+        }
+        // PDF
+        $this->load->library('pdf');
+
+        // FORMAT DATA
+        $data_format['title'] = $print_order->title ?? '';
+        $data_format['category'] = get_print_order_category()[$print_order->category] ?? '';
+        if ($progress == 'print') {
+            $data_format['jobtype'] = 'Cetak';
+        } elseif ($progress == 'postprint') {
+            $data_format['jobtype'] = 'Jilid';
+        } else {
+            $data_format['jobtype'] = '';
+        }
+        // $data_format['finishinglocation'] = 'a';
+        $data_format['ordernumber'] = $print_order->order_number ?? '';
+        $data_format['total'] = $print_order->total ?? '';
+        $data_format['entrydate'] = date('d m Y H:i:s', strtotime($print_order->entry_date)) ?? '';
+        $data_format['deadline'] = date('d m Y H:i:s', strtotime($print_order->{"{$progress}_deadline"})) ?? '';
+        $data_format['startdate'] = date('d m Y H:i:s', strtotime($print_order->{"{$progress}_start_date"})) ?? '';
+        $data_format['enddate'] = date('d m Y H:i:s', strtotime($print_order->{"{$progress}_end_date"})) ?? '';
+        $data_format['staff'] = $staff;
+        if (strtotime($print_order->{"{$progress}_end_date"}) < strtotime($print_order->{"{$progress}_deadline"})) {
+            $data_format['status'] = 'TEPAT WAKTU';
+        } elseif (strtotime($print_order->{"{$progress}_end_date"}) > strtotime($print_order->{"{$progress}_deadline"})) {
+            $data_format['status'] = 'TERLAMBAT';
+        } else {
+            $data_format['status'] = '';
+        }
+        $data_format['notes'] = $print_order->{"{$progress}_notes"} ?? '';
+        $format = $this->load->view('print_order/format_pdf', $data_format, true);
+        $this->pdf->loadHtml($format);
+
+        // (Optional) Setup the paper size and orientation
+        $this->pdf->set_paper('A4', 'potrait');
+
+        // Render the HTML as PDF
+        $this->pdf->render();
+        $this->pdf->stream();
+    }
+
     private function _generate_print_order_file_name($print_order_file_name, $print_order_title, $progress = null)
     {
         $get_extension = explode(".", $print_order_file_name)[1];
@@ -824,6 +845,16 @@ class Print_order extends Admin_Controller
             return str_replace(" ", "_", $print_order_title . '_' . $progress . '_' . date('YmdHis') . '.' . $get_extension); // progress file name
         } else {
             return str_replace(" ", "_", $print_order_title . '_' . date('YmdHis') . '.' . $get_extension); // draft file name
+        }
+    }
+
+    private function _is_print_order_user()
+    {
+        if ($this->level == 'superadmin' || $this->level == 'admin_percetakan' || $this->level == 'staff_percetakan') {
+            return true;
+        } else {
+            $this->session->set_flashdata('error', 'Hanya admin percetakan dan superadmin yang dapat mengakses.');
+            return false;
         }
     }
 
@@ -845,16 +876,6 @@ class Print_order extends Admin_Controller
             $this->session->set_flashdata('error', 'Hanya superadmin yang dapat mengakses.');
             return false;
             // redirect(base_url(), 'refresh');
-        }
-    }
-
-    private function _is_assigned_printing_admin($print_order_id, $progress)
-    {
-        if ($this->level == 'superadmin' || $this->print_order->check_row_admin_percetakan($print_order_id, $this->user_id, $progress) > 0) {
-            return true;
-        } else {
-            $this->session->set_flashdata('error', 'Hanya admin percetakan dan superadmin yang dapat mengakses.');
-            return false;
         }
     }
 

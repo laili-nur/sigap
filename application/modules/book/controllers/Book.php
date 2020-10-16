@@ -63,6 +63,12 @@ class Book extends Admin_Controller
         } else {
             $input = (object) $this->input->post(null, false);
 
+            if (!isset($input->book_file)) {
+                $input->book_file = null;
+            }
+
+            $this->session->set_flashdata('draft_file_no_data', $this->lang->line('form_error_file_no_data'));
+
             if (!$input->published_date) {
                 $input->published_date = empty_to_null($input->published_date);
             }
@@ -96,6 +102,11 @@ class Book extends Admin_Controller
             $form_action = 'book/add';
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
+        }
+
+        // jika buku dari luar
+        if ($input->from_outside == 1) {
+            $input->draft_id = empty_to_null($input->draft_id);
         }
 
         if ($this->book->insert($input)) {
@@ -317,6 +328,17 @@ class Book extends Admin_Controller
 
         if ($book) {
             $this->form_validation->set_message('unique_data', $this->lang->line('toast_data_duplicate'));
+            return false;
+        }
+        return true;
+    }
+
+    public function required_draft_id()
+    {
+        $from_outside = $this->input->post('from_outside');
+
+        if ($from_outside == 0) {
+            $this->form_validation->set_message('required_draft_id', "Draft is required.");
             return false;
         }
         return true;

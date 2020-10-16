@@ -8,9 +8,14 @@ class Book_model extends MY_Model
     {
         $validation_rules = [
             [
+                'field' => 'from_outside',
+                'label' => 'Asal Buku',
+                'rules' => 'trim|required',
+            ],
+            [
                 'field' => 'draft_id',
                 'label' => 'Draft ID',
-                'rules' => 'trim|required|callback_unique_data[draft_id]',
+                'rules' => 'trim|callback_unique_data[draft_id]|callback_required_draft_id',
             ],
             [
                 'field' => 'book_code',
@@ -81,6 +86,7 @@ class Book_model extends MY_Model
     public function get_default_values()
     {
         return [
+            'from_outside'        => 0,
             'draft_id'            => '',
             'book_code'           => '',
             'book_title'          => '',
@@ -102,7 +108,7 @@ class Book_model extends MY_Model
 
     public function filter_book($filters, $page)
     {
-        $books = $this->select(['book_id', 'book.draft_id', 'book_title', 'category_name', 'published_date', 'work_unit_name', 'book_code', 'isbn', 'status_hak_cipta', 'is_reprint', 'author_name'])
+        $books = $this->select(['book_id', 'book.draft_id', 'book_title', 'category_name', 'published_date', 'work_unit_name', 'book_code', 'isbn', 'status_hak_cipta', 'is_reprint', 'author_name', 'from_outside'])
             ->when('keyword', $filters['keyword'])
             ->join('draft')
             ->join_table('category', 'draft', 'category')
@@ -195,7 +201,7 @@ class Book_model extends MY_Model
 
     public function get_book_from_draft($draft_id)
     {
-        return $this->select('book_id,book_title,nomor_hak_cipta,status_hak_cipta,file_hak_cipta,file_hak_cipta_link')
+        return $this->select('book_id,book_title,nomor_hak_cipta,status_hak_cipta,file_hak_cipta,file_hak_cipta_link,from_outside')
             ->where('book.draft_id', $draft_id)
             ->join_table('draft', 'book', 'draft')
             ->get();
