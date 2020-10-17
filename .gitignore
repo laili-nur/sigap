@@ -40,12 +40,6 @@ preprintfile/*
 !preprintfile/.htaccess
 !preprintfile/index.html
 
-# printorderletter file
-printorderletter/*
-!printorderletter/.gitkeep
-!printorderletter/.htaccess
-!printorderletter/index.html
-
 .env
 .env.development
 .env.production
