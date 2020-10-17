@@ -27,13 +27,13 @@ $menu_list = [
     ],
     [
         'title' => 'Produksi',
-        'level' => 'superadmin|admin_percetakan'
+        'level' => 'superadmin|admin_percetakan|staff_percetakan'
     ],
     [
         'name' => 'Order Cetak',
         'url'  => 'print_order',
         'icon' => 'fa fa-print',
-        'level' => 'superadmin|admin_percetakan'
+        'level' => 'superadmin|admin_percetakan|staff_percetakan'
     ],
     [
         'title' => 'Pasca Produksi',
@@ -126,6 +126,12 @@ $menu_list = [
     [
         'title' => 'Laporan',
         'level' => 'superadmin|admin_penerbitan'
+    ],
+    [
+        'name'  => 'Laporan Produksi',
+        'url'   => 'production_report',
+        'icon'  => 'fa fa-chart-bar',
+        'level' => 'superadmin'
     ],
     [
         'name'  => 'Grafik',

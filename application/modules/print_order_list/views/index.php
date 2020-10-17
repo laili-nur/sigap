@@ -137,7 +137,8 @@
                         'revise' => 'Cetak Ulang Revisi',
                         'reprint' => 'Cetak Ulang Non Revisi',
                         'nonbook' => 'Cetak Non Buku',
-                        'outsideprint' => 'Cetak Di Luar'
+                        'outsideprint' => 'Cetak Di Luar',
+                        'from_outside' => 'Cetak Dari Luar'
                     ];
 
                     $type_options = [
@@ -151,17 +152,15 @@
                     ];
 
                     for ($dy = intval(date('Y')); $dy >= 2015; $dy--) {
-                        $date_year_options[$dy] = 'Tahun ' . $dy;
+                        $date_year_options[$dy] = $dy;
                     }
 
                     $date_month_options = [
                         ''  => '- Filter Bulan Cetak -',
                     ];
 
-                    for ($y = intval(date('Y')); $y >= 2015; $y--) {
-                        for ($m = 12; $m >= 1; --$m) {
-                            $date_month_options[] = date('F', mktime(0, 0, 0, $m, 1)) . ' ' . $y;
-                        }
+                    for ($m = 1; $m <= 12; $m++) {
+                        $date_month_options[$m] = date('F', mktime(0, 0, 0, $m, 1));
                     }
 
                     $print_order_status_options = [
@@ -169,9 +168,7 @@
                         'waiting' => 'Belum diproses',
                         'preprint' => 'Proses Pracetak',
                         'print' => 'Proses Cetak',
-                        'postprint' => 'Proses Jilid',
-                        'reject' => 'Ditolak',
-                        'finish' => 'Selesai'
+                        'postprint' => 'Proses Jilid'
                     ];
                     ?>
 
@@ -213,31 +210,31 @@
                                             <div class="p-3">
                                                 <?= form_open($pages, ['method' => 'GET']); ?>
                                                 <div class="row">
-                                                    <div class="col-12 col-md-4 mb-3">
+                                                    <div class="col-12 col-md-3 mb-3">
                                                         <label for="category">Kategori Cetak</label>
                                                         <?= form_dropdown('category', $category_options, $category, 'id="category" class="form-control custom-select d-block" title="Filter Kategori Cetak"'); ?>
                                                     </div>
-                                                    <div class="col-12 col-md-4 mb-3">
+                                                    <div class="col-12 col-md-3 mb-3">
                                                         <label for="type">Tipe Cetak</label>
                                                         <?= form_dropdown('type', $type_options, $type, 'id="type" class="form-control custom-select d-block" title="Filter Tipe Cetak"'); ?>
                                                     </div>
-                                                    <div class="col-12 col-md-4">
+                                                    <div class="col-12 col-md-3">
+                                                        <label for="date_year">Tahun</label>
+                                                        <?= form_dropdown('date_year', $date_year_options, $date_year, 'id="date_year" class="form-control custom-select d-block" title="Filter Tahun Cetak"'); ?>
+                                                    </div>
+                                                    <div class="col-12 col-md-3">
+                                                        <label for="date_month">Bulan</label>
+                                                        <?= form_dropdown('date_month', $date_month_options, $date_month, 'id="date_month" class="form-control custom-select d-block" title="Filter Bulan Cetak"'); ?>
+                                                    </div>
+                                                    <div class="col-12 col-md-3">
                                                         <label for="print_order_status">Status</label>
                                                         <?= form_dropdown('print_order_status', $print_order_status_options, $print_order_status, 'id="print_order_status" class="form-control custom-select d-block" title="Filter Status Cetak"'); ?>
                                                     </div>
-                                                    <!-- <div class="col-12 col-md-3">
-                                <label for="date_year">Tahun</label>
-                                <?= form_dropdown('date_year', $date_year_options, $date_year, 'id="date_year" class="form-control custom-select d-block" title="Filter Tahun Cetak"'); ?>
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label for="date_month">Bulan</label>
-                                <?= form_dropdown('date_month', $date_month_options, $date_month, 'id="date_month" class="form-control custom-select d-block" title="Filter Bulan Cetak"'); ?>
-                            </div> -->
-                                                    <div class="col-12 col-md-8 col-lg-4">
+                                                    <div class="col-12 col-md-6">
                                                         <label for="status">Pencarian</label>
                                                         <?= form_input('keyword', $keyword, 'placeholder="Cari berdasarkan Judul, Nomor, Kode, Nama Pesanan" class="form-control"'); ?>
                                                     </div>
-                                                    <div class="col-12 col-lg-4">
+                                                    <div class="col-12 col-lg-3">
                                                         <label>&nbsp;</label>
                                                         <div
                                                             class="btn-group btn-block"
@@ -273,47 +270,47 @@
                                                         <tr>
                                                             <th
                                                                 scope="col"
-                                                                class="pl-4 text-center"
+                                                                class="pl-4 align-middle text-center"
                                                             >No</th>
                                                             <th
                                                                 scope="col"
-                                                                class="text-center"
+                                                                class="align-middle text-center"
                                                             >Judul</th>
                                                             <th
                                                                 scope="col"
-                                                                class="text-center"
+                                                                class="align-middle text-center"
                                                             >Nomor Order</th>
                                                             <th
                                                                 scope="col"
-                                                                class="text-center"
+                                                                class="align-middle text-center"
                                                             >Jumlah Cetak</th>
                                                             <th
                                                                 scope="col"
-                                                                class="text-center"
+                                                                class="align-middle text-center"
                                                             >Tipe Cetak</th>
                                                             <th
                                                                 scope="col"
-                                                                class="text-center"
+                                                                class="align-middle text-center"
                                                             >Tanggal Masuk</th>
                                                             <th
                                                                 scope="col"
-                                                                class="text-center"
+                                                                class="align-middle text-center"
                                                             >Deadline</th>
                                                             <th
                                                                 scope="col"
-                                                                class="text-center"
+                                                                class="align-middle text-center"
                                                             >Status</th>
                                                             <th
                                                                 scope="col"
-                                                                class="text-center"
+                                                                class="align-middle text-center"
                                                             >Lama Cetak</th>
                                                             <th
                                                                 scope="col"
-                                                                class="text-center"
+                                                                class="align-middle text-center"
                                                             >Keterangan</th>
                                                             <th
                                                                 scope="col"
-                                                                class="text-center"
+                                                                class="align-middle text-center"
                                                             >Detail</th>
                                                         </tr>
                                                     </thead>
@@ -323,7 +320,7 @@
                                                                 <td class="align-middle text-center pl-4"><?= ++$i; ?></td>
                                                                 </td>
                                                                 <td class="align-middle font-weight-bold">
-                                                                    <?= highlight_keyword($print_order->book_id ? $print_order->book_title : $print_order->name, $keyword); ?>
+                                                                    <?= highlight_keyword($print_order->title, $keyword); ?>
                                                                 </td>
                                                                 <td class="align-middle text-center"><?= highlight_keyword($print_order->order_number, $keyword); ?></td>
                                                                 <td class="align-middle text-center"><?= $print_order->total; ?></td>

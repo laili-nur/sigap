@@ -2,7 +2,7 @@
 $is_ready = $print_order->is_preprint && $print_order->is_print && $print_order->is_postprint;
 
 if (!$is_final) :
-    if ($_SESSION['level'] == 'superadmin') :
+    if (($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_percetakan')) :
 ?>
         <div
             id="final-progress-wrapper"

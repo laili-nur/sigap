@@ -46,99 +46,94 @@
     <table>
         <tr>
             <td style="width:150px">
-                <div style="display: flex;justify-content: space-between;">
-                    <span>Judul Buku</span>
-                    <span style="margin-left: auto;">:</span>
+                <div>
+                    <span style="float:left;">Judul Buku</span>
+                    <span style="float:right;">:</span>
                 </div>
             </td>
-            <td><?= $book_title; ?></td>
+            <td><span><?= $book_title; ?></span></td>
         </tr>
         <tr>
             <td style="width:150px">
-                <div style="display: flex;justify-content: space-between;">
-                    <span>Jumlah Halaman</span>
-                    <span style="margin-left: auto;">:</span>
+                <div>
+                    <span style="float:left;">Jumlah Halaman</span>
+                    <span style="float:right;">:</span>
                 </div>
             </td>
-            <td><?= $book_pages; ?></td>
+            <td><span><?= $book_pages; ?></span></td>
         </tr>
         <tr>
             <td style="width:150px">
-                <div style="display: flex;justify-content: space-between;">
-                    <span>Kertas Isi</span>
-                    <span>:</span>
+                <div>
+                    <span style="float:left;">Kertas Isi</span>
+                    <span style="float:right;">:</span>
                 </div>
             </td>
-            <td><?= $paper_content; ?></td>
+            <td><span><?= $paper_content; ?></span></td>
         </tr>
         <tr>
             <td style="width:150px">
-                <div style="display: flex;justify-content: space-between;">
-                    <span>Kertas Cover</span>
-                    <span>:</span>
+                <div>
+                    <span style="float:left;">Kertas Cover</span>
+                    <span style="float:right;">:</span>
                 </div>
             </td>
-            <td><?= $paper_cover; ?></td>
+            <td><span><?= $paper_cover; ?></span></td>
         </tr>
         <tr>
             <td style="width:150px">
-                <div style="display: flex;justify-content: space-between;">
-                    <span>Jumlah Cetak</span>
-                    <span>:</span>
+                <div>
+                    <span style="float:left;">Jumlah Cetak</span>
+                    <span style="float:right;">:</span>
                 </div>
             </td>
-            <td><?= $total . " EKS"; ?></td>
+            <td><span><?= $total . " EKS"; ?></span></td>
         </tr>
         <tr>
             <td style="width:150px">
-                <div style="display: flex;justify-content: space-between;">
-                    <span>Cetakan Ke</span>
-                    <span>:</span>
+                <div>
+                    <span style="float:left;">Cetakan Ke</span>
+                    <span style="float:right;">:</span>
                 </div>
             </td>
-            <td><?= $book_edition; ?></td>
+            <td><span><?= $book_edition; ?></span></td>
         </tr>
         <tr>
             <td style="width:150px">
-                <div style="display: flex;justify-content: space-between;">
-                    <span>Revisi</span>
-                    <span>:</span>
+                <div>
+                    <span style="float:left;">Revisi</span>
+                    <span style="float:right;">:</span>
                 </div>
             </td>
-            <td><?php if ($category != 'revise') {
-                    echo 'YA';
-                } else {
-                    echo 'TIDAK';
-                }; ?></td>
-        </tr>
-        <!-- <tr>
-            <td>Tipe Cetak</td>
-            <td>:</td>
-        </tr>
-        <tr>
-            <td>Tahun Terbit</td>
-            <td>:</td>
-        </tr> -->
-        <tr>
-            <td style="width:150px">
-                <div style="display: flex;justify-content: space-between;">
-                    <span>Harga</span>
-                    <span>:</span>
-                </div>
-            </td>
-            <td><?= $harga; ?></td>
+            <td><span><?php if ($category != 'revise') {
+                            echo 'YA';
+                        } else {
+                            echo 'TIDAK';
+                        }; ?></span></td>
         </tr>
         <tr>
             <td style="width:150px">
-                <div style="display: flex;justify-content: space-between;">
-                    <span>Tipe Cetak</span>
-                    <span>:</span>
+                <div>
+                    <span style="float:left;">Harga</span>
+                    <span style="float:right;">:</span>
                 </div>
             </td>
-            <td><?= $type; ?></td>
+            <td><span><?= $harga; ?></span></td>
         </tr>
         <tr>
-            <td>Catatan :<br><?= $print_order_notes; ?></td>
+            <td style="width:150px">
+                <div>
+                    <span style="float:left;">Tipe Cetak</span>
+                    <span style="float:right;">:</span>
+                </div>
+            </td>
+            <td><span><?= $type; ?></span></td>
+        </tr>
+        <tr>
+            <td style="width:150px">Catatan :</td>
+        </tr>
+        <tr>
+            <td><span><?= $print_order_notes; ?></span></td>
         </tr>
     </table><br><br><br>
     <h2>Koordinasi Pemasaran</h2><br><br><br>

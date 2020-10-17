@@ -1,7 +1,8 @@
 <?php
-$is_preprint_started      = format_datetime($print_order->preprint_start_date);
-$is_preprint_finished      = format_datetime($print_order->preprint_end_date);
-$admin_percetakan = $this->print_order->get_admin_percetakan_by_progress('preprint', $print_order->print_order_id);
+$is_preprint_started        = format_datetime($print_order->preprint_start_date);
+$is_preprint_finished       = format_datetime($print_order->preprint_end_date);
+$is_preprint_deadline_set   = format_datetime($print_order->preprint_deadline);
+$staff_percetakan           = $this->print_order->get_staff_percetakan_by_progress('preprint', $print_order->print_order_id);
 ?>
 <section
     id="preprint-progress-wrapper"
@@ -14,7 +15,7 @@ $admin_percetakan = $this->print_order->get_admin_percetakan_by_progress('prepri
                     //modal select
                     $this->load->view('print_order/view/common/select_modal', [
                         'progress' => 'preprint',
-                        'admin_percetakan' => $admin_percetakan
+                        'staff_percetakan' => $staff_percetakan
                     ]);
                 ?>
                     <div class="card-header-control">
@@ -22,8 +23,8 @@ $admin_percetakan = $this->print_order->get_admin_percetakan_by_progress('prepri
                             id="btn-start-preprint"
                             title="Mulai proses pra cetak"
                             type="button"
-                            class="d-inline btn <?= !$is_preprint_started ? 'btn-warning' : 'btn-secondary'; ?> <?= $is_preprint_started ? 'btn-disabled' : ''; ?>"
-                            <?= $is_preprint_started ? 'disabled' : ''; ?>
+                            class="d-inline btn <?= !$is_preprint_started ? 'btn-warning' : 'btn-secondary'; ?> <?= ($is_preprint_started || !$staff_percetakan || !$is_preprint_deadline_set) ? 'btn-disabled' : ''; ?>"
+                            <?= ($is_preprint_started || !$staff_percetakan || !$is_preprint_deadline_set) ? 'btn-disabled' : ''; ?>
                         ><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
                         <button
                             id="btn-finish-preprint"
@@ -37,27 +38,11 @@ $admin_percetakan = $this->print_order->get_admin_percetakan_by_progress('prepri
             </div>
         </header>
 
-
-        <!-- <div
-            class="alert alert-warning alert-dismissible fade show"
-            role="alert"
-        >
-            <i class="fa fa-exclamation-triangle"></i>
-            <strong>Order cetak telah selesai</strong>, data progress tidak dapat diubah.
-            <button
-                type="button"
-                class="close"
-                data-dismiss="alert"
-                aria-label="Close"
-            >
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div> -->
-
         <!-- ALERT -->
         <?php
         $this->load->view('print_order/view/common/progress_alert', [
-            'progress' => 'preprint',
+            'progress'          => 'preprint',
+            'staff_percetakan'  => $staff_percetakan
         ]);
         ?>
 
@@ -99,7 +84,7 @@ $admin_percetakan = $this->print_order->get_admin_percetakan_by_progress('prepri
             </div>
 
             <div class="list-group-item justify-content-between">
-                <?php if (is_superadmin() && !$is_final) : ?>
+                <?php if (($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_percetakan') && !$is_final) : ?>
                     <a
                         href="#"
                         id="btn-modal-deadline-preprint"
@@ -113,21 +98,22 @@ $admin_percetakan = $this->print_order->get_admin_percetakan_by_progress('prepri
                 <strong><?= format_datetime($print_order->preprint_deadline); ?></strong>
             </div>
 
-            <div class="m-3">
-                <div class="text-muted pb-1">Catatan Admin</div>
-                <?= $print_order->preprint_notes_admin ?>
-            </div>
-
-            <?php if ($admin_percetakan) : ?>
+            <?php if ($staff_percetakan) : ?>
                 <div class="list-group-item justify-content-between">
                     <span class="text-muted">Staff Bertugas</span>
                     <strong>
-                        <?php foreach ($admin_percetakan as $admin) : ?>
-                            <span class="badge badge-info p-1"><?= $admin->username; ?></span>
+                        <?php foreach ($staff_percetakan as $staff) : ?>
+                            <span class="badge badge-info p-1"><?= $staff->username; ?></span>
                         <?php endforeach; ?>
                     </strong>
                 </div>
             <?php endif; ?>
+
+
+            <div class="m-3">
+                <div class="text-muted pb-1">Catatan Admin</div>
+                <?= $print_order->preprint_notes_admin ?>
+            </div>
 
             <hr class="m-0">
         </div>
@@ -135,7 +121,7 @@ $admin_percetakan = $this->print_order->get_admin_percetakan_by_progress('prepri
         <div class="card-body">
             <div class="card-button">
                 <!-- button aksi -->
-                <?php if (is_superadmin() && !$is_final) : ?>
+                <?php if (($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_percetakan') && !$is_final) : ?>
                     <button
                         title="Aksi admin"
                         class="btn btn-outline-dark <?= !$is_preprint_started ? 'btn-disabled' : ''; ?>"
@@ -157,7 +143,7 @@ $admin_percetakan = $this->print_order->get_admin_percetakan_by_progress('prepri
                     <!-- button modal preprint file info -->
                     <button
                         type="button"
-                        class="btn btn-outline-dark"
+                        class="btn btn-outline-dark <?= !$is_preprint_started ? 'btn-disabled' : ''; ?>"
                         data-toggle="modal"
                         data-target="#modal-preprint-file-info"
                         <?= !$is_preprint_started ? 'disabled' : ''; ?>

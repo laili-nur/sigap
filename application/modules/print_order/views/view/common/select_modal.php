@@ -4,28 +4,25 @@ if ($level == 'superadmin') :
     $progress_text = '';
     if ($progress == 'preprint') {
         $progress_text = 'pracetak';
-        // $admin_percetakan = $this->print_order->get_admin_percetakan_by_progress($progress, $print_order->print_order_id);
     } elseif ($progress == 'print') {
         $progress_text = 'cetak';
-        // $admin_percetakan = $this->print_order->get_admin_percetakan_by_progress($progress, $print_order->print_order_id);
     } elseif ($progress == 'postprint') {
         $progress_text = 'jilid';
-        // $admin_percetakan = $this->print_order->get_admin_percetakan_by_progress($progress, $print_order->print_order_id);
     }
 ?>
     <button
-        id="btn-modal-select-admin-<?= $progress; ?>"
+        id="btn-modal-select-staff-<?= $progress; ?>"
         type="button"
-        class="d-inline btn mr-1 <?= empty($admin_percetakan) ? 'btn-warning' : 'btn-secondary'; ?>"
-        title="Pilih Admin"
-    ><i class="fas fa-user-plus fa-fw"></i><span class="d-none d-lg-inline"> Pilih Admin</span></button>
+        class="d-inline btn mr-1 <?= empty($staff_percetakan) ? 'btn-warning' : 'btn-secondary'; ?>"
+        title="Pilih Staff"
+    ><i class="fas fa-user-plus fa-fw"></i><span class="d-none d-lg-inline"> Pilih Staff</span></button>
 
     <div
         class="modal fade"
-        id="modal-select-admin-<?= $progress; ?>"
+        id="modal-select-staff-<?= $progress; ?>"
         tabindex="-1"
         role="dialog"
-        aria-labelledby="modal-select-admin-<?= $progress; ?>"
+        aria-labelledby="modal-select-staff-<?= $progress; ?>"
         aria-hidden="true"
     >
         <div
@@ -34,26 +31,26 @@ if ($level == 'superadmin') :
         >
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"> Pilih admin untuk progress <?= $progress_text; ?> </h5>
+                    <h5 class="modal-title"> Pilih staff untuk progress <?= $progress_text; ?> </h5>
                 </div>
                 <div class="modal-body">
                     <form>
                         <fieldset>
                             <div
                                 class="form-group"
-                                id="form-admin-percetakan-<?= $progress; ?>"
+                                id="form-staff-percetakan-<?= $progress; ?>"
                             >
-                                <label for="admin-percetakan-id-<?= $progress; ?>">Nama Admin Cetak</label>
+                                <label for="staff-percetakan-id-<?= $progress; ?>">Nama Staff Cetak</label>
                                 <select
-                                    id="admin-percetakan-id-<?= $progress; ?>"
-                                    name="admin-percetakan-id-<?= $progress; ?>"
+                                    id="staff-percetakan-id-<?= $progress; ?>"
+                                    name="staff-percetakan-id-<?= $progress; ?>"
                                     class="form-control custom-select d-block"
                                 ></select>
                             </div>
                         </fieldset>
                         <div class="d-flex justify-content-end">
                             <button
-                                id="btn-select-admin-percetakan-<?= $progress; ?>"
+                                id="btn-select-staff-percetakan-<?= $progress; ?>"
                                 class="btn btn-primary"
                                 type="button"
                             >Pilih</button>
@@ -61,10 +58,10 @@ if ($level == 'superadmin') :
                     </form>
                     <hr>
 
-                    <div id="admin-percetakan-list-wrapper-<?= $progress; ?>">
-                        <div id="admin-percetakan-list-<?= $progress; ?>">
-                            <p>Daftar Admin Percetakan</p>
-                            <?php if ($admin_percetakan) : ?>
+                    <div id="staff-percetakan-list-wrapper-<?= $progress; ?>">
+                        <div id="staff-percetakan-list-<?= $progress; ?>">
+                            <p>Daftar Staff Percetakan</p>
+                            <?php if ($staff_percetakan) : ?>
                                 <?php $i = 1; ?>
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered mb-0 nowrap">
@@ -79,23 +76,23 @@ if ($level == 'superadmin') :
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($admin_percetakan as $admin) : ?>
+                                            <?php foreach ($staff_percetakan as $staff) : ?>
                                                 <tr>
                                                     <td class="align-middle">
                                                         <?= $i++; ?>
                                                     </td>
                                                     <td class="align-middle">
-                                                        <?= $admin->username; ?>
+                                                        <?= $staff->username; ?>
                                                     </td>
                                                     <td class="align-middle">
-                                                        <?= $admin->email; ?>
+                                                        <?= $staff->email; ?>
                                                     </td>
                                                     <?php if ($level == 'superadmin') : ?>
                                                         <td class="align-middle text-center">
                                                             <button
                                                                 title="Hapus"
-                                                                class="btn btn-sm btn-danger btn-delete-admin-percetakan-<?= $progress; ?>"
-                                                                data="<?= $admin->print_order_user_id; ?>"
+                                                                class="btn btn-sm btn-danger btn-delete-staff-percetakan-<?= $progress; ?>"
+                                                                data="<?= $staff->print_order_user_id; ?>"
                                                             >
                                                                 <i class="fa fa-trash-alt"></i>
                                                                 <span class="sr-only">Delete</span>
@@ -108,7 +105,7 @@ if ($level == 'superadmin') :
                                     </table>
                                 </div>
                             <?php else : ?>
-                                <p class="text-center text-muted my-3">Admin percetakan belum dipilih</p>
+                                <p class="text-center text-muted my-3">Staff percetakan belum dipilih</p>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -131,10 +128,10 @@ if ($level == 'superadmin') :
         const progress = '<?= $progress ?>'
 
         // get data ketika buka modal pilih penulis
-        $(`#${progress}-progress-wrapper`).on('click', `#btn-modal-select-admin-${progress}`, function() {
+        $(`#${progress}-progress-wrapper`).on('click', `#btn-modal-select-staff-${progress}`, function() {
 
             // reload segmen ketika modal diclose
-            $(`#modal-select-admin-${progress}`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
+            $(`#modal-select-staff-${progress}`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
                 // location.reload()
                 $(`#${progress}-progress-wrapper`).load(` #${progress}-progress`, function() {
                     // reinitiate flatpickr modal after load
@@ -143,16 +140,16 @@ if ($level == 'superadmin') :
             })
 
             //  open modal
-            $(`#modal-select-admin-${progress}`).modal('toggle')
+            $(`#modal-select-staff-${progress}`).modal('toggle')
 
 
             // get data semua reviewer
-            $.get("<?= base_url('print_order/api_get_admin_percetakan'); ?>",
+            $.get("<?= base_url('print_order/api_get_staff_percetakan'); ?>",
                 function(res) {
                     //  inisialisasi select2
-                    $(`#admin-percetakan-id-${progress}`).select2({
+                    $(`#staff-percetakan-id-${progress}`).select2({
                         placeholder: '-- Pilih --',
-                        dropdownParent: $(`#modal-select-admin-${progress}`),
+                        dropdownParent: $(`#modal-select-staff-${progress}`),
                         allowClear: true,
                         data: res.data.map(r => {
                             return {
@@ -163,10 +160,10 @@ if ($level == 'superadmin') :
                     });
 
                     //  reset selected data
-                    $(`[name=admin-percetakan-id-${progress}]`).val(null).trigger('change');
+                    $(`[name=staff-percetakan-id-${progress}]`).val(null).trigger('change');
 
                     //  event ketika data di select
-                    $(`#admin-percetakan-id-${progress}`).off('select2:select').on('select2:select', function(e) {
+                    $(`#staff-percetakan-id-${progress}`).off('select2:select').on('select2:select', function(e) {
                         var data = e.params.data;
                         console.log(data);
                     });
@@ -175,19 +172,19 @@ if ($level == 'superadmin') :
         })
 
         // pilih reviewer
-        $(`#${progress}-progress-wrapper`).on('click', `#btn-select-admin-percetakan-${progress}`, function() {
+        $(`#${progress}-progress-wrapper`).on('click', `#btn-select-staff-percetakan-${progress}`, function() {
             const $this = $(this);
-            const user_id = $(`#admin-percetakan-id-${progress}`).val();
+            const user_id = $(`#staff-percetakan-id-${progress}`).val();
 
             if (!user_id) {
-                showToast(false, 'Pilih admin percetakan dahulu');
+                showToast(false, 'Pilih staff percetakan dahulu');
                 return
             }
 
             $this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
             $.ajax({
                 type: "POST",
-                url: "<?= base_url('print_order/api_add_admin_percetakan'); ?>",
+                url: "<?= base_url('print_order/api_add_staff_percetakan'); ?>",
                 datatype: "JSON",
                 data: {
                     print_order_id,
@@ -201,9 +198,9 @@ if ($level == 'superadmin') :
                     showToast(false, err.responseJSON.message);
                 },
                 complete: function() {
-                    $(`[name=admin-percetakan-id-${progress}]`).val(null).trigger('change');
+                    $(`[name=staff-percetakan-id-${progress}]`).val(null).trigger('change');
                     // reload segemen daftar reviewer
-                    $(`#admin-percetakan-list-wrapper-${progress}`).load(` #admin-percetakan-list-${progress}`);
+                    $(`#staff-percetakan-list-wrapper-${progress}`).load(` #staff-percetakan-list-${progress}`);
 
                     $this.removeAttr("disabled").html("Submit");
                 },
@@ -211,12 +208,12 @@ if ($level == 'superadmin') :
         });
 
         // hapus reviewer
-        $(`#${progress}-progress-wrapper`).on('click', `.btn-delete-admin-percetakan-${progress}`, function() {
+        $(`#${progress}-progress-wrapper`).on('click', `.btn-delete-staff-percetakan-${progress}`, function() {
             $(this).attr('disabled', 'disabled').html("<i class='fa fa-spinner fa-spin '></i>");
             let id = $(this).attr('data');
 
             $.ajax({
-                url: "<?= base_url('print_order/api_delete_admin_percetakan/'); ?>" + id,
+                url: "<?= base_url('print_order/api_delete_staff_percetakan/'); ?>" + id,
                 success: function(res) {
                     showToast(true, res.data);
                 },
@@ -225,7 +222,7 @@ if ($level == 'superadmin') :
                 },
                 complete: function() {
                     // reload segemen daftar reviewer
-                    $(`#admin-percetakan-list-wrapper-${progress}`).load(` #admin-percetakan-list-${progress}`);
+                    $(`#staff-percetakan-list-wrapper-${progress}`).load(` #staff-percetakan-list-${progress}`);
                 },
             })
         });

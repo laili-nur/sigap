@@ -13,11 +13,6 @@ class Print_order_model extends MY_Model
                 'label' => $this->lang->line('form_print_order_number'),
                 'rules' => 'trim|required',
             ],
-            // [
-            //     'field' => 'category',
-            //     'label' => $this->lang->line('form_print_order_category'),
-            //     'rules' => 'trim|required',
-            // ],
             [
                 'field' => 'order_code',
                 'label' => $this->lang->line('form_print_order_code'),
@@ -70,13 +65,15 @@ class Print_order_model extends MY_Model
             'date_month'        => '',
             'print_order_notes' => '',
             'name'              => '',
+            'location_binding'  => 'inside',
+            'location_laminate' => 'inside',
             'print_mode'        => 'book',
         ];
     }
 
     public function get_print_order($print_order_id)
     {
-        return $this->select(['print_order.book_id', 'book.draft_id', 'stock_warehouse', 'book_title', 'book_file', 'book_file_link', 'cover_file', 'cover_file_link', 'book_notes',  'is_reprint', 'book_edition', 'nomor_hak_cipta', 'status_hak_cipta', 'file_hak_cipta', 'file_hak_cipta_link', 'print_order.*'])
+        return $this->select(['CONCAT_WS(" - ", print_order.name, book.book_title) AS title', 'print_order.book_id', 'book.draft_id', 'stock_warehouse', 'book_title', 'book_file', 'book_file_link', 'cover_file', 'cover_file_link', 'book_notes',  'is_reprint', 'book_edition', 'nomor_hak_cipta', 'status_hak_cipta', 'file_hak_cipta', 'file_hak_cipta_link', 'print_order.*'])
             ->join('book')
             ->join_table('draft', 'book', 'draft')
             ->where('print_order_id', $print_order_id)
@@ -92,19 +89,16 @@ class Print_order_model extends MY_Model
 
     public function filter_print_order($filters, $page)
     {
-        $print_orders = $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'category_name', 'draft.is_reprint', 'print_order.*'])
+        $print_orders = $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'CONCAT_WS(" - ", print_order.name, book.book_title) AS title', 'category_name', 'draft.is_reprint', 'print_order.*'])
             ->when('keyword', $filters['keyword'])
             ->when('category', $filters['category'])
             ->when('type', $filters['type'])
             ->when('print_order_status', $filters['print_order_status'])
             ->when('date_year', $filters['date_year'])
             ->when('date_month', $filters['date_month'])
-            ->when('hide', $filters['hide'])
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
             ->join_table('category', 'draft', 'category')
-            ->order_by('UNIX_TIMESTAMP(print_order.entry_date)', 'ASC')
-            // ->order_by("CASE WHEN print_order.print_order_status = 'finish' THEN 1 ELSE 2 END, print_order.print_order_status", "DESC")
             ->order_by("CASE WHEN print_order.print_order_status = 'waiting' THEN 1
                              WHEN print_order.print_order_status = 'preprint' THEN 2
                              WHEN print_order.print_order_status = 'preprint_approval' THEN 3
@@ -118,21 +112,10 @@ class Print_order_model extends MY_Model
                              WHEN print_order.print_order_status = 'reject' THEN 11
                              WHEN print_order.print_order_status = 'finish' THEN 12
                              ELSE 13 END, print_order.print_order_status", "ASC")
-            // ->order_by("CASE WHEN print_order.category = 'nonbook' THEN 1 ELSE 2 END, print_order.category", "DESC")
-            // ->order_by('UNIX_TIMESTAMP(print_order.deadline_date)', 'ASC')
-            // ->order_by('book_title', 'ASC')
-            // ->order_by('name','ASC')
-            // ->order_by('book_title','ASC')
-            // ->order_by('status_hak_cipta')
-            // ->order_by('published_date')          
-            // ->order_by('UNIX_TIMESTAMP(print_order.entry_date)', 'DESC')
+            ->order_by('UNIX_TIMESTAMP(print_order.entry_date)', 'ASC')
+            ->order_by('title', 'ASC')
             ->paginate($page)
             ->get_all();
-
-        // pengennya order by
-        // 1. deadline yg mendekati, berarti asc
-        // 2. prioritas tinggi ke rendah, desc
-        // 3. judul dan name sesuai alpabet, asc
 
         $total = $this->select('draft.draft_id')
             ->when('keyword', $filters['keyword'])
@@ -141,24 +124,10 @@ class Print_order_model extends MY_Model
             ->when('print_order_status', $filters['print_order_status'])
             ->when('date_year', $filters['date_year'])
             ->when('date_month', $filters['date_month'])
-            ->when('hide', $filters['hide'])
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
             ->join_table('category', 'draft', 'category')
-            // ->order_by('name','ASC')
-            // ->order_by('book_title','ASC')
-            // ->order_by('status_hak_cipta')
-            // ->order_by('published_date')
             ->count();
-
-        // get authors
-        // foreach ($print_orders as $b) {
-        //     if ($b->draft_id) {
-        //         $b->authors = $this->get_id_and_name('author', 'draft_author', $b->draft_id, 'draft');
-        //     } else {
-        //         $b->authors = [];
-        //     }
-        // }
 
         return [
             'print_orders' => $print_orders,
@@ -178,64 +147,19 @@ class Print_order_model extends MY_Model
                 $this->where('type', $data);
             }
 
-            if ($params == 'hide') {
-                if ($data == 1) {
-                    $this->where('print_order_status !=', 'finish');
-                } elseif ($data == 0) {
-                    // gadiapa2in
-                }
-            }
-
             if ($params == 'date_year') {
-                if ($data == '2020') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2020"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2020"));
-                } elseif ($data == '2019') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2019"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2019"));
-                } elseif ($data == '2018') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2018"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2018"));
-                } elseif ($data == '2017') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2017"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2017"));
-                } elseif ($data == '2016') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2016"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2016"));
-                } elseif ($data == '2015') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2015"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2015"));
-                }
+                $this->where('YEAR(print_order.entry_date)', $data);
             }
 
             if ($params == 'date_month') {
-                if ($data == '0') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 December 2020"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2020"));
-                } elseif ($data == '1') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 November 2020"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("30 November 2020"));
-                } elseif ($data == '2') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 October 2020"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 October 2020"));
-                } elseif ($data == '3') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 September 2020"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("30 September 2020"));
-                } elseif ($data == '4') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 August 2020"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 August 2020"));
-                } elseif ($data == '5') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 July 2020"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 July 2020"));
-                }
+                $this->where('MONTH(print_order.entry_date)', $data);
             }
 
             if ($params == 'keyword') {
                 $this->group_start();
-                $this->or_like('book_title', $data);
+                $this->or_like('title', $data);
                 $this->or_like('order_number', $data);
                 $this->or_like('order_code', $data);
-                $this->or_like('name', $data);
                 $this->group_end();
             }
 
@@ -383,16 +307,16 @@ class Print_order_model extends MY_Model
         }
     }
 
-    public function get_admin_percetakan()
+    public function get_staff_percetakan()
     {
         return $this->select(['user_id', 'username', 'level', 'email'])
-            ->where('level', 'admin_percetakan')
+            ->where('level', 'staff_percetakan')
             ->where('is_blocked', 'n')
             ->order_by('username', 'ASC')
             ->get_all('user');
     }
 
-    public function get_admin_percetakan_by_progress($progress, $print_order_id)
+    public function get_staff_percetakan_by_progress($progress, $print_order_id)
     {
         return $this->db->select(['print_order_user_id', 'print_order_user.user_id', 'print_order_id', 'progress', 'username', 'email'])
             ->from('user')
@@ -402,7 +326,7 @@ class Print_order_model extends MY_Model
             ->get()->result();
     }
 
-    public function check_row_admin_percetakan($print_order_id, $user_id, $progress)
+    public function check_row_staff_percetakan($print_order_id, $user_id, $progress)
     {
         return $this->db
             ->where(['print_order_id' => $print_order_id, 'user_id' => $user_id, 'progress' => $progress])
@@ -410,18 +334,8 @@ class Print_order_model extends MY_Model
             ->num_rows();
     }
 
-    // if(check_row_admin_percetakan($print_order_id, $user_id, $progress) > 0){
-    //     jalanin fungsi
-    // } else {
-    //     tidak diijinkan toastr
-    // }
-
-    // cekin admin cetak
-    // 1. Cek session(user_id)
-    // 2. cek print_order_id
-    // 3. cek progress
-    // 4. cek row, misal > 0, return true, misal ! > 0  =, return false
-    // 5. di controller misal true dia bisa lakuin fungsi, misal ngga dia gabisa lakuin fungsi
+    // catatan
+    // where('YEAR(entry_date)', $year)->get_all('draft')
 }
 
 /* End of file Print_order_model.php */

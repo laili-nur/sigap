@@ -521,7 +521,7 @@ class Print_order_list_model extends CI_Model
 
     public function filter_print_order($filters)
     {
-        return $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'book_title', 'category_name', 'draft.is_reprint', 'print_order.*'])
+        return $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'CONCAT_WS("", book.book_title, print_order.name) AS title', 'category_name', 'draft.is_reprint', 'print_order.*'])
             ->when('keyword', $filters['keyword'])
             ->when('category', $filters['category'])
             ->when('type', $filters['type'])
@@ -532,17 +532,9 @@ class Print_order_list_model extends CI_Model
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')
             ->join_table('category', 'draft', 'category')
-            ->order_by("CASE WHEN print_order.print_order_status = 'finish' THEN 1 ELSE 2 END, print_order.print_order_status", "DESC")
             ->order_by('UNIX_TIMESTAMP(print_order.entry_date)', 'ASC')
-            ->order_by('UNIX_TIMESTAMP(print_order.deadline_date)', 'ASC')
-            ->order_by('book_title', 'ASC')
-            ->order_by('name', 'ASC')
+            ->order_by('title', 'ASC')
             ->limit(10)
-            // ->order_by('name','ASC')
-            // ->order_by('book_title','ASC')
-            // ->order_by('status_hak_cipta')
-            // ->order_by('published_date')          
-            // ->order_by('UNIX_TIMESTAMP(print_order.entry_date)', 'DESC')
             ->get_all();
     }
 
@@ -559,55 +551,18 @@ class Print_order_list_model extends CI_Model
             }
 
             if ($params == 'date_year') {
-                if ($data == '2020') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2020"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2020"));
-                } elseif ($data == '2019') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2019"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2019"));
-                } elseif ($data == '2018') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2018"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2018"));
-                } elseif ($data == '2017') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2017"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2017"));
-                } elseif ($data == '2016') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2016"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2016"));
-                } elseif ($data == '2015') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 January 2015"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2015"));
-                }
+                $this->where('YEAR(print_order.entry_date)', $data);
             }
 
             if ($params == 'date_month') {
-                if ($data == '0') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 December 2020"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 December 2020"));
-                } elseif ($data == '1') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 November 2020"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("30 November 2020"));
-                } elseif ($data == '2') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 October 2020"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 October 2020"));
-                } elseif ($data == '3') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 September 2020"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("30 September 2020"));
-                } elseif ($data == '4') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 August 2020"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 August 2020"));
-                } elseif ($data == '5') {
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) >=', strtotime("01 July 2020"));
-                    $this->where('UNIX_TIMESTAMP(print_order.entry_date) <=', strtotime("31 July 2020"));
-                }
+                $this->where('MONTH(print_order.entry_date)', $data);
             }
 
             if ($params == 'keyword') {
                 $this->group_start();
-                $this->or_like('book_title', $data);
+                $this->or_like('title', $data);
                 $this->or_like('order_number', $data);
                 $this->or_like('order_code', $data);
-                $this->or_like('name', $data);
                 $this->group_end();
             }
 
