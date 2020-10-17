@@ -15,19 +15,10 @@ class Production_report extends Admin_Controller
 
     public function index()
     {
-        $filters = [
-            'date_year'             => $this->input->get('date_year', true),
-            'date_month'            => $this->input->get('date_month', true)
-        ];
-
-        // $get_data = $this->print_order->filter_print_order($filters, $page);
-
-        $pages        = $this->pages;
-        $main_view  = 'production_report/index';
-        $this->load->view('template', compact('main_view', 'pages'));
+        $this->total();
     }
 
-    public function coba()
+    public function total()
     {
         $filters = [
             'date_year'             => $this->input->get('date_year', true),
@@ -37,7 +28,21 @@ class Production_report extends Admin_Controller
         // $get_data = $this->print_order->filter_print_order($filters, $page);
 
         $pages        = $this->pages;
-        $main_view  = 'print_order/chartjs';
+        $main_view  = 'production_report/total';
+        $this->load->view('template', compact('main_view', 'pages'));
+    }
+
+    public function detail()
+    {
+        $filters = [
+            'date_year'             => $this->input->get('date_year', true),
+            'date_month'            => $this->input->get('date_month', true)
+        ];
+
+        // $get_data = $this->print_order->filter_print_order($filters, $page);
+
+        $pages        = $this->pages;
+        $main_view  = 'production_report/detail';
         $this->load->view('template', compact('main_view', 'pages'));
     }
 }
