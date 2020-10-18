@@ -177,6 +177,15 @@ for ($m = 1; $m <= 12; $m++) {
 
 <script>
 $(".laporan").hide();
+var categories = {
+    '' : null,
+    'new' : 'Cetak Baru',
+    'revise' : 'Cetak Ulang Revisi',
+    'reprint' : 'Cetak Ulang Non Revisi',
+    'nonbook' : 'Cetak Non Buku',
+    'outsideprint' : 'Cetak Di Luar',
+    'from_outside' : 'Cetak Dari Luar'
+};
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -347,13 +356,14 @@ chart2.onclick = function(evt) {
             for (i in detail_data) {
                 console.log(detail_data[i]);
                 var detail_row = "<tr>";
+                var base_url = "<?= base_url('print_order/view/'); ?>/";
                 var no = Number(i) + 1
                 detail_row += "<td class='align-middle text-center pl-4'>" + no + "</td>";
                 detail_row += "<td class='align-middle text-center4'>" + detail_data[i].book_title + "</td>";
-                detail_row += "<td class='align-middle text-center4'>"+ detail_data[i].category + " </td>";
+                detail_row += "<td class='align-middle text-center4'>"+ categories[detail_data[i].category] + " </td>";
                 detail_row += "<td class='align-middle text-center4'>" + detail_data[i].total + "</td>";
                 detail_row += "<td class='align-middle text-center4'>" + detail_data[i].total_postprint + "</td>";
-                detail_row += "<td class='align-middle text-center4'> saih </td></tr>";
+                detail_row += "<td class='align-middle text-center4'> <a href='" + base_url + detail_data[i].print_order_id + "'> Link Order Cetak </a></td></tr>";
                 detail_table += detail_row;
             }
             $("tbody").hide();
