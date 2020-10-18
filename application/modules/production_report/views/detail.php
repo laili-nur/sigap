@@ -21,10 +21,8 @@ for ($m = 1; $m <= 12; $m++) {
 
 <link
     rel="stylesheet"
-    href="<?= base_url('assets/vendor/chart.js/Chart.min.css'); ?>"
+    href="<?= base_url('assets/vendor/chart.js/new/Chart.min.css'); ?>"
 >
-
-
 <header class="page-title-bar">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -105,20 +103,40 @@ for ($m = 1; $m <= 12; $m++) {
                     <div class="container">
                         <div style="text-align: center;">
                             <b>
-                                <h5>LAPORAN JUDUL BUKU YANG BERHASIL DI CETAK</h5>
+                                <h5>DETAIL JUDUL TERCETAK</h5>
+                            </b>
+                            <b>
+                                <p><?php
+                                    if ($this->input->get('date_month')) {
+                                        echo date('F', mktime(0, 0, 0, $this->input->get('date_month')));
+                                    } else {
+                                        echo '';
+                                    }
+                                    echo ' ' . $this->input->get('date_year');
+                                    ?>
+                                </p>
                             </b>
                         </div>
-                        <div>
-                            <canvas id="myChart"></canvas>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <canvas id="chart_category"></canvas>
+                            </div>
+                            <div class="col-md-6">
+                                <canvas id="chart_type"></canvas>
+                            </div>
+                            <div class="col-md-6">
+                                <canvas id="chart_laminate"></canvas>
+                            </div>
+                            <div class="col-md-6">
+                                <canvas id="chart_binding"></canvas>
+                            </div>
                         </div>
                         <div style="text-align: center;">
                             <b>
-                                <h5>HASIL CETAK PRODUKSI BUKU</h5>
+                                <p>TOTAL JUMLAH JUDUL TERCETAK = <?= $total; ?></p>
                             </b>
                         </div>
-                        <div>
-                            <canvas id="myChart2"></canvas>
-                        </div>
+                        <!-- <hr>
                         <div style="text-align: left;">
                             <b>
                                 <p>DETAIL HASIL CETAK PRODUKSI BUKU</p>
@@ -172,161 +190,172 @@ for ($m = 1; $m <= 12; $m++) {
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </section>
         </div>
     </div>
 </div>
-<script src="<?= base_url('assets/vendor/chart.js/Chart.min.js'); ?>"></script>
+<script src="<?= base_url('assets/vendor/chart.js/new/Chart.bundle.min.js'); ?>"></script>
 
 <script>
-var ctx = document.getElementById("myChart").getContext('2d');
-var myChart = new Chart(ctx, {
+var ctx = document.getElementById("chart_category").getContext('2d');
+var chart_category = new Chart(ctx, {
     type: 'pie',
     data: {
-        labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+        labels: ["Cetak Baru", "Cetak Ulang Revisi", "Cetak Ulang Non Revisi", "Cetak Non Buku", "Cetak Di Luar", "Cetak Dari Luar"],
         datasets: [{
-            label: 'Jumlah Judul Buku Tercetak',
-            data: [12, 19, 3, 23, 2, 3, 12, 19, 3, 23, 2, 3],
+            data: [<?= $new; ?>, <?= $revise; ?>, <?= $reprint; ?>, <?= $nonbook; ?>, <?= $outsideprint; ?>, <?= $from_outside; ?>],
             backgroundColor: [
-                'rgba(255, 153, 0, 0.2)',
-                'rgba(255, 153, 0, 0.2)',
-                'rgba(255, 153, 0, 0.2)',
-                'rgba(255, 153, 0, 0.2)',
-                'rgba(255, 153, 0, 0.2)',
-                'rgba(255, 153, 0, 0.2)',
-                'rgba(255, 153, 0, 0.2)',
-                'rgba(255, 153, 0, 0.2)',
-                'rgba(255, 153, 0, 0.2)',
-                'rgba(255, 153, 0, 0.2)',
-                'rgba(255, 153, 0, 0.2)',
-                'rgba(255, 153, 0, 0.2)'
+                'rgba(0, 0, 150, 0.8)',
+                'rgba(102, 51, 0, 0.8)',
+                'rgba(0, 102, 0, 0.8)',
+                'rgba(255, 102, 0, 0.8)',
+                'rgba(255, 0, 102, 0.8)',
+                'rgba(255, 255, 0, 0.8)'
             ],
             borderColor: [
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)'
+                'rgba(0, 0, 150, 0.2)',
+                'rgba(102, 51, 0, 0.2)',
+                'rgba(0, 102, 0, 0.2)',
+                'rgba(255, 102, 0, 0.2)',
+                'rgba(255, 0, 102, 0.2)',
+                'rgba(255, 255, 0, 0.2)'
             ],
             borderWidth: 1
         }]
     },
     options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        },
         layout: {
             padding: {
-                left: 50,
-                right: 50,
+                left: 0,
+                right: 0,
                 top: 0,
-                bottom: 50
+                bottom: 0
             }
+        },
+        legend: {
+            position: 'bottom'
+        },
+        title: {
+            display: true,
+            text: 'Kategori Cetak'
         }
     }
 });
 
-var ctx = document.getElementById("myChart2").getContext('2d');
-var myChart2 = new Chart(ctx, {
+var ctx = document.getElementById("chart_type").getContext('2d');
+var chart_type = new Chart(ctx, {
     type: 'pie',
     data: {
-        labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+        labels: ["POD", "Offset"],
         datasets: [{
-            label: 'Jumlah Eks Pesanan',
+            data: [<?= $pod; ?>, <?= $offset; ?>],
             backgroundColor: [
-                'rgba(51, 51, 204, 0.2)',
-                'rgba(51, 51, 204, 0.2)',
-                'rgba(51, 51, 204, 0.2)',
-                'rgba(51, 51, 204, 0.2)',
-                'rgba(51, 51, 204, 0.2)',
-                'rgba(51, 51, 204, 0.2)',
-                'rgba(51, 51, 204, 0.2)',
-                'rgba(51, 51, 204, 0.2)',
-                'rgba(51, 51, 204, 0.2)',
-                'rgba(51, 51, 204, 0.2)',
-                'rgba(51, 51, 204, 0.2)',
-                'rgba(51, 51, 204, 0.2)'
+                'rgba(0, 153, 51, 0.8)',
+                'rgba(255, 153, 0, 0.8)'
             ],
             borderColor: [
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)'
+                'rgba(0, 153, 51, 0.2)',
+                'rgba(255, 153, 0, 0.2)'
             ],
-            borderWidth: 1,
-            data: [12, 19, 3, 23, 2, 3, 12, 19, 3, 23, 2, 3],
-        }, {
-            label: 'Jumlah Eks Hasil Cetak',
-            backgroundColor: [
-                'rgba(0, 102, 0, 0.2)',
-                'rgba(0, 102, 0, 0.2)',
-                'rgba(0, 102, 0, 0.2)',
-                'rgba(0, 102, 0, 0.2)',
-                'rgba(0, 102, 0, 0.2)',
-                'rgba(0, 102, 0, 0.2)',
-                'rgba(0, 102, 0, 0.2)',
-                'rgba(0, 102, 0, 0.2)',
-                'rgba(0, 102, 0, 0.2)',
-                'rgba(0, 102, 0, 0.2)',
-                'rgba(0, 102, 0, 0.2)',
-                'rgba(0, 102, 0, 0.2)'
-            ],
-            borderColor: [
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)'
-            ],
-            borderWidth: 1,
-            data: [12, 19, 3, 23, 2, 3, 12, 19, 3, 23, 2, 3],
+            borderWidth: 1
         }]
-
     },
     options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        },
         layout: {
             padding: {
-                left: 50,
-                right: 50,
+                left: 0,
+                right: 0,
                 top: 0,
-                bottom: 50
+                bottom: 0
             }
+        },
+        legend: {
+            position: 'bottom'
+        },
+        title: {
+            display: true,
+            text: 'Tipe Cetak'
+        }
+    }
+});
+
+var ctx = document.getElementById("chart_laminate").getContext('2d');
+var chart_laminate = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: ["Laminasi di Dalam", "Laminasi di Luar", "Parsial"],
+        datasets: [{
+            data: [<?= $laminate_inside; ?>, <?= $laminate_outside; ?>, <?= $laminate_partial; ?>],
+            backgroundColor: [
+                'rgba(51, 204, 255, 0.8)',
+                'rgba(153, 153, 102, 0.8)',
+                'rgba(255, 51, 153, 0.8)'
+            ],
+            borderColor: [
+                'rgba(51, 204, 255, 0.2)',
+                'rgba(153, 153, 102, 0.2)',
+                'rgba(255, 51, 153, 0.2)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        layout: {
+            padding: {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }
+        },
+        legend: {
+            position: 'bottom'
+        },
+        title: {
+            display: true,
+            text: 'Tipe Laminasi'
+        }
+    }
+});
+
+var ctx = document.getElementById("chart_binding").getContext('2d');
+var chart_binding = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: ["Jilid di Dalam", "Jilid di Luar", "Parsial"],
+        datasets: [{
+            data: [<?= $binding_inside; ?>, <?= $binding_outside; ?>, <?= $binding_partial; ?>],
+            backgroundColor: [
+                'rgba(51, 204, 255, 0.8)',
+                'rgba(153, 153, 102, 0.8)',
+                'rgba(255, 51, 153, 0.8)'
+            ],
+            borderColor: [
+                'rgba(51, 204, 255, 0.2)',
+                'rgba(153, 153, 102, 0.2)',
+                'rgba(255, 51, 153, 0.2)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        layout: {
+            padding: {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }
+        },
+        legend: {
+            position: 'bottom'
+        },
+        title: {
+            display: true,
+            text: 'Tipe Jilid'
         }
     }
 });

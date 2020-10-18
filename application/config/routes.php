@@ -79,3 +79,8 @@ $route['draftauthor/delete/(:num)'] = 'draft_author/delete/$1';
 $route['draftreviewer/add']           = 'draft_reviewer/add';
 $route['draftreviewer/edit/(:num)']   = 'draft_reviewer/edit/$1';
 $route['draftreviewer/delete/(:num)'] = 'draft_reviewer/delete/$1';
+
+// BUAT JAGA2
+$route['production_report/(:any)'] = 'production_report/total/$1';
+$route['production_report/total/(:any)'] = 'production_report/total/$1';
+$route['production_report/detail/(:any)'] = 'production_report/detail/$1';

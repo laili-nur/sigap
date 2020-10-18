@@ -23,6 +23,8 @@ for ($m = 1; $m <= 12; $m++) {
     rel="stylesheet"
     href="<?= base_url('assets/vendor/chart.js/Chart.min.css'); ?>"
 >
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-url/2.5.3/url.js"></script>
+
 
 
 <header class="page-title-bar">
@@ -119,12 +121,15 @@ for ($m = 1; $m <= 12; $m++) {
                         <div>
                             <canvas id="myChart2"></canvas>
                         </div>
-                        <div style="text-align: left;">
+                        <div
+                            class="laporan"
+                            style="text-align: left;"
+                        >
                             <b>
                                 <p>LAPORAN JUDUL BUKU YANG BERHASIL DI CETAK</p>
                             </b>
                         </div>
-                        <div>
+                        <div class="laporan">
                             <table
                                 class="table table-striped mb-0 table-responsive"
                                 style="width:100%;"
@@ -162,14 +167,6 @@ for ($m = 1; $m <= 12; $m++) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="align-middle text-center pl-4">1</td>
-                                        <td class="align-middle text-center">saih</td>
-                                        <td class="align-middle text-center">saih</td>
-                                        <td class="align-middle text-center">saih</td>
-                                        <td class="align-middle text-center">saih</td>
-                                        <td class="align-middle text-center">saih</td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -182,6 +179,11 @@ for ($m = 1; $m <= 12; $m++) {
 <script src="<?= base_url('assets/vendor/chart.js/Chart.min.js'); ?>"></script>
 
 <script>
+$(".laporan").hide();
+
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+console.log(urlParams.get('date_month'));
 var ctx = document.getElementById("myChart").getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
@@ -240,7 +242,8 @@ var myChart = new Chart(ctx, {
     }
 });
 
-var ctx = document.getElementById("myChart2").getContext('2d');
+var chart2 = document.getElementById("myChart2");
+var ctx = chart2.getContext('2d');
 var myChart2 = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -329,5 +332,50 @@ var myChart2 = new Chart(ctx, {
             }
         }
     }
+});
+
+chart2.onclick = function(evt) {
+    // console.log("preparasi");
+    $.ajax({
+        type: "POST",
+        url: "http://localhost/sigap/production_report/coba",
+        data: {
+            year: urlParams.get('year'),
+            month: urlParams.get('date_month')
+        },
+        success: function(result) {
+            // console.log(JSON.parse(result));
+            var detail_data = JSON.parse(result);
+            var detail_table = "";
+            for (i in detail_data) {
+                // console.log(detail_data[i].total);
+                var detail_row = "<tr>";
+                var no = Number(i) + 1
+                detail_row += "<td class='align-middle text-center pl-4'>" + no + "</td>";
+                detail_row += "<td class='align-middle text-center4'>" + detail_data[i].book_title + "</td>";
+                detail_row += "<td class='align-middle text-center4'> kategori </td>";
+                detail_row += "<td class='align-middle text-center4'>" + detail_data[i].total + "</td>";
+                detail_row += "<td class='align-middle text-center4'>" + detail_data[i].total_postprint + "</td>";
+                detail_row += "<td class='align-middle text-center4'> saih </td> </tr>";
+                detail_table += detail_row;
+            }
+            $("tbody").hide();
+            $("tbody").html(detail_table);
+            $(".laporan").fadeIn("slow");
+            $("tbody").fadeIn("slow");
+        }
+    });
+}
+</script>
+<script>
+$(document).ready(function() {
+    $("#coba_ajax").click(function() {
+        $.ajax({
+            url: "http://localhost/sigap/production_report/coba",
+            success: function(result) {
+                console.log(result);
+            }
+        });
+    });
 });
 </script>
