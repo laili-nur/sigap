@@ -1,4 +1,8 @@
 <?php
+Header('Access-Control-Allow-Origin: *'); //for allow any domain, insecure
+Header('Access-Control-Allow-Headers: *'); //for allow any headers, insecure
+Header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Production_report extends Admin_Controller
@@ -44,6 +48,18 @@ class Production_report extends Admin_Controller
         $pages        = $this->pages;
         $main_view  = 'production_report/detail';
         $this->load->view('template', compact('main_view', 'pages'));
+    }
+    
+    public function coba(){
+        // $filters = [
+        //     'date_year'             => '2020',
+        //     'date_month'            => '1',
+        // ];
+
+        // return $this->production_report->detail_data($filters, $this->pages);
+        $year = $this->input->post('year');
+        $month = $this->input->post('month');
+        echo json_encode($this->production_report->detail_data($year, $month), JSON_PRETTY_PRINT);
     }
 }
 

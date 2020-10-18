@@ -31,6 +31,7 @@ class Production_report_model extends MY_Model
             ->order_by('UNIX_TIMESTAMP(print_order.entry_date)', 'ASC')
             ->order_by('title', 'ASC')
             ->paginate($page)
+
             ->get_all();
 
         $total = $this->select('draft.draft_id')
@@ -65,6 +66,27 @@ class Production_report_model extends MY_Model
         }
         return $this;
     }
+
+    public function detail_data($year, $month) {
+        // $this->db->select('book.book_title', 'print_order.total', 'print_order.total_postprint');
+        // $this->db->from('print_order');
+        // $this->db->join('book', 'print_order.book_id = book.book_id', 'left');
+        $query = $this->db->query("SELECT b.book_title, po.total, po.total_postprint from print_order po left join book b on po.book_id = b.book_id WHERE YEAR(po.entry_date) = " . $year . " AND MONTH(po.entry_date) = ". $month);
+
+        //$query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
+
 /* End of file Production_report_model.php */
+
+
+// <tr>
+//      <td class="align-middle text-center pl-4">1</td>
+//      <td class="align-middle text-center">judul</td>
+//      <td class="align-middle text-center">kategorir</td>
+//      <td class="align-middle text-center">jumlah pesanan</td>
+//      <td class="align-middle text-center">jumlah hasil</td>
+//      <td class="align-middle text-center">saih</td>
+//  </tr>

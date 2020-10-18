@@ -105,6 +105,7 @@ for ($m = 1; $m <= 12; $m++) {
                     <div class="container">
                         <div style="text-align: center;">
                             <b>
+                                <pre id="div1">ini kalo ada berarti gagal</pre>
                                 <h5>LAPORAN JUDUL BUKU YANG BERHASIL DI CETAK</h5>
                             </b>
                         </div>
