@@ -59,7 +59,7 @@ class Production_report extends Admin_Controller
         // return $this->production_report->detail_data($filters, $this->pages);
         $year = $this->input->post('year');
         $month = $this->input->post('month');
-        echo json_encode($this->production_report->detail_data($year, $month), JSON_PRETTY_PRINT);
+        echo json_encode($this->production_report->detail_data($year, $month));
     }
 }
 

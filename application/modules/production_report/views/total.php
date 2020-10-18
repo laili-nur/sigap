@@ -337,23 +337,23 @@ chart2.onclick = function(evt) {
         type: "POST",
         url: "http://localhost/sigap/production_report/coba", 
         data: {
-            year: urlParams.get('year'),
+            year: urlParams.get('date_year'),
             month: urlParams.get('date_month')
         },
         success: function(result){
-            // console.log(JSON.parse(result));
+            //console.log(JSON.parse(result));
             var detail_data = JSON.parse(result);
             var detail_table = "";
             for (i in detail_data) {
-                // console.log(detail_data[i].total);
+                console.log(detail_data[i]);
                 var detail_row = "<tr>";
                 var no = Number(i) + 1
                 detail_row += "<td class='align-middle text-center pl-4'>" + no + "</td>";
                 detail_row += "<td class='align-middle text-center4'>" + detail_data[i].book_title + "</td>";
-                detail_row += "<td class='align-middle text-center4'> kategori </td>";
+                detail_row += "<td class='align-middle text-center4'>"+ detail_data[i].category + " </td>";
                 detail_row += "<td class='align-middle text-center4'>" + detail_data[i].total + "</td>";
                 detail_row += "<td class='align-middle text-center4'>" + detail_data[i].total_postprint + "</td>";
-                detail_row += "<td class='align-middle text-center4'> saih </td> </tr>";
+                detail_row += "<td class='align-middle text-center4'> saih </td></tr>";
                 detail_table += detail_row;
             }
             $("tbody").hide();
