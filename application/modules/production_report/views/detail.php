@@ -106,7 +106,8 @@ for ($m = 1; $m <= 12; $m++) {
                                 <h5>DETAIL JUDUL TERCETAK</h5>
                             </b>
                             <b>
-                                <p><?php
+                                <p>
+                                    <?php
                                     if ($this->input->get('date_month')) {
                                         echo date('F', mktime(0, 0, 0, $this->input->get('date_month')));
                                     } else {
@@ -136,61 +137,6 @@ for ($m = 1; $m <= 12; $m++) {
                                 <p>TOTAL JUMLAH JUDUL TERCETAK = <?= $total; ?></p>
                             </b>
                         </div>
-                        <!-- <hr>
-                        <div style="text-align: left;">
-                            <b>
-                                <p>DETAIL HASIL CETAK PRODUKSI BUKU</p>
-                            </b>
-                        </div>
-                        <div>
-                            <table
-                                class="table table-striped mb-0 table-responsive"
-                                style="width:100%;"
-                            >
-                                <thead>
-                                    <tr>
-                                        <th
-                                            scope="col"
-                                            class="pl-4 align-middle text-center"
-                                        >No</th>
-                                        <th
-                                            scope="col"
-                                            style="min-width:70px;"
-                                            class="align-middle text-center"
-                                        >Judul Buku</th>
-                                        <th
-                                            scope="col"
-                                            style="min-width:70px;"
-                                            class="align-middle text-center"
-                                        >Kategori Cetak</th>
-                                        <th
-                                            scope="col"
-                                            style="min-width:70px;"
-                                            class="align-middle text-center"
-                                        >Jumlah Pesanan</th>
-                                        <th
-                                            scope="col"
-                                            style="min-width:70px;"
-                                            class="align-middle text-center"
-                                        >Jumlah Hasil Cetak</th>
-                                        <th
-                                            style="min-width:150px;"
-                                            class="align-middle text-center"
-                                        > &nbsp; </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="align-middle text-center pl-4">1</td>
-                                        <td class="align-middle text-center">saih</td>
-                                        <td class="align-middle text-center">saih</td>
-                                        <td class="align-middle text-center">saih</td>
-                                        <td class="align-middle text-center">saih</td>
-                                        <td class="align-middle text-center">saih</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div> -->
                     </div>
                 </div>
             </section>

@@ -1,6 +1,6 @@
 <?php
+$this->load->helper('ugmpress_helper');
 $date_year          = $this->input->get('date_year');
-$date_month         = $this->input->get('date_month');
 
 $date_year_options = [
     ''  => '- Filter Tahun Cetak -',
@@ -10,23 +10,133 @@ for ($dy = intval(date('Y')); $dy >= 2015; $dy--) {
     $date_year_options[$dy] = $dy;
 }
 
-$date_month_options = [
-    ''  => '- Filter Bulan Cetak -',
-];
-
-for ($m = 1; $m <= 12; $m++) {
-    $date_month_options[$m] = date('F', mktime(0, 0, 0, $m, 1));
+$jan_order = 0;
+foreach ($jan as $key => $value) {
+    if (isset($value->total))
+        $jan_order += $value->total;
+}
+$jan_new = 0;
+foreach ($jan as $key => $value) {
+    if (isset($value->total_new))
+        $jan_new += $value->total_new;
+}
+$feb_order = 0;
+foreach ($feb as $key => $value) {
+    if (isset($value->total))
+        $feb_order += $value->total;
+}
+$feb_new = 0;
+foreach ($feb as $key => $value) {
+    if (isset($value->total_new))
+        $feb_new += $value->total_new;
+}
+$mar_order = 0;
+foreach ($mar as $key => $value) {
+    if (isset($value->total))
+        $mar_order += $value->total;
+}
+$mar_new = 0;
+foreach ($mar as $key => $value) {
+    if (isset($value->total_new))
+        $mar_new += $value->total_new;
+}
+$apr_order = 0;
+foreach ($apr as $key => $value) {
+    if (isset($value->total))
+        $apr_order += $value->total;
+}
+$apr_new = 0;
+foreach ($apr as $key => $value) {
+    if (isset($value->total_new))
+        $apr_new += $value->total_new;
+}
+$may_order = 0;
+foreach ($may as $key => $value) {
+    if (isset($value->total))
+        $may_order += $value->total;
+}
+$may_new = 0;
+foreach ($may as $key => $value) {
+    if (isset($value->total_new))
+        $may_new += $value->total_new;
+}
+$jun_order = 0;
+foreach ($jun as $key => $value) {
+    if (isset($value->total))
+        $jun_order += $value->total;
+}
+$jun_new = 0;
+foreach ($jun as $key => $value) {
+    if (isset($value->total_new))
+        $jun_new += $value->total_new;
+}
+$jul_order = 0;
+foreach ($jul as $key => $value) {
+    if (isset($value->total))
+        $jul_order += $value->total;
+}
+$jul_new = 0;
+foreach ($jul as $key => $value) {
+    if (isset($value->total_new))
+        $jul_new += $value->total_new;
+}
+$aug_order = 0;
+foreach ($aug as $key => $value) {
+    if (isset($value->total))
+        $aug_order += $value->total;
+}
+$aug_new = 0;
+foreach ($aug as $key => $value) {
+    if (isset($value->total_new))
+        $aug_new += $value->total_new;
+}
+$sep_order = 0;
+foreach ($sep as $key => $value) {
+    if (isset($value->total))
+        $sep_order += $value->total;
+}
+$sep_new = 0;
+foreach ($sep as $key => $value) {
+    if (isset($value->total_new))
+        $sep_new += $value->total_new;
+}
+$oct_order = 0;
+foreach ($oct as $key => $value) {
+    if (isset($value->total))
+        $oct_order += $value->total;
+}
+$oct_new = 0;
+foreach ($oct as $key => $value) {
+    if (isset($value->total_new))
+        $oct_new += $value->total_new;
+}
+$nov_order = 0;
+foreach ($nov as $key => $value) {
+    if (isset($value->total))
+        $nov_order += $value->total;
+}
+$nov_new = 0;
+foreach ($nov as $key => $value) {
+    if (isset($value->total_new))
+        $nov_new += $value->total_new;
+}
+$dec_order = 0;
+foreach ($dec as $key => $value) {
+    if (isset($value->total))
+        $dec_order += $value->total;
+}
+$dec_new = 0;
+foreach ($dec as $key => $value) {
+    if (isset($value->total_new))
+        $dec_new += $value->total_new;
 }
 ?>
 
 <link
     rel="stylesheet"
-    href="<?= base_url('assets/vendor/chart.js/Chart.min.css'); ?>"
+    href="<?= base_url('assets/vendor/chart.js/new/Chart.min.css'); ?>"
 >
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-url/2.5.3/url.js"></script>
-
-
-
 <header class="page-title-bar">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -74,13 +184,10 @@ for ($m = 1; $m <= 12; $m++) {
                             <div class="col-md">
                                 <div class="float-right">
                                     <div class="row">
-                                        <div class="col-12 col-md-4">
+                                        <div class="col-12 col-md-6">
                                             <?= form_dropdown('date_year', $date_year_options, $date_year, 'id="date_year" class="form-control custom-select d-block" title="Filter Tahun Cetak"'); ?>
                                         </div>
-                                        <div class="col-12 col-md-4">
-                                            <?= form_dropdown('date_month', $date_month_options, $date_month, 'id="date_month" class="form-control custom-select d-block" title="Filter Bulan Cetak"'); ?>
-                                        </div>
-                                        <div class="col-12 col-lg-4">
+                                        <div class="col-12 col-lg-6">
                                             <div
                                                 class="btn-group btn-block"
                                                 role="group"
@@ -105,35 +212,65 @@ for ($m = 1; $m <= 12; $m++) {
                         <?= form_close(); ?>
                     </div>
                     <div class="container">
-                        <div style="text-align: center;">
-                            <b>
-                                <h5>LAPORAN JUDUL BUKU YANG BERHASIL DI CETAK</h5>
-                            </b>
-                        </div>
-                        <div>
-                            <canvas id="myChart"></canvas>
-                        </div>
-                        <div style="text-align: center;">
-                            <b>
-                                <h5>HASIL CETAK PRODUKSI BUKU</h5>
-                            </b>
-                        </div>
-                        <div>
-                            <canvas id="myChart2"></canvas>
-                        </div>
-                        <div
-                            class="laporan"
-                            style="text-align: left;"
-                        >
-                            <b>
-                                <p>LAPORAN JUDUL BUKU YANG BERHASIL DI CETAK</p>
-                            </b>
-                        </div>
-                        <div class="laporan">
-                            <table
-                                class="table table-striped mb-0 table-responsive"
-                                style="width:100%;"
+                        <div class="row">
+                            <div
+                                class="col-md-12"
+                                style="text-align: center;"
                             >
+                                <b>
+                                    <h5>LAPORAN JUDUL BUKU YANG BERHASIL DI CETAK</h5>
+                                </b>
+                                <b>
+                                    <p><?= $this->input->get('date_year'); ?></p>
+                                </b>
+                            </div>
+                            <div class="col-md-12">
+                                <canvas id="total_year"></canvas>
+                            </div>
+                            <div
+                                class="col-md-12"
+                                style="text-align: center;"
+                            >
+                                <b>
+                                    <h5>HASIL CETAK PRODUKSI BUKU</h5>
+                                </b>
+                            </div>
+                            <div class="col-md-12">
+                                <canvas id="total_production"></canvas>
+                            </div>
+                        </div>
+
+                        <pre>
+                            <?php //print_r($data); 
+                            ?>
+                        </pre>
+
+                        <div
+                            id="table_laporan"
+                            name="table_laporan"
+                            style="display:none;"
+                        >
+                            <hr>
+                            <div style="text-align: center;">
+                                <b>
+                                    <p>
+                                        <?php
+                                        if ($this->input->get('date_month')) {
+                                            echo date('F', mktime(0, 0, 0, $this->input->get('date_month')));
+                                        } else {
+                                            echo '';
+                                        }
+                                        echo ' ' . $this->input->get('date_year');
+                                        ?>
+                                    </p>
+                                </b>
+                            </div>
+                            <div style="text-align: left;">
+                                <b>
+                                    <p>LAPORAN JUDUL BUKU YANG BERHASIL DI CETAK</p>
+                                </b>
+                            </div>
+                            <table class="table table-striped mb-0 table-responsive">
                                 <thead>
                                     <tr>
                                         <th
@@ -142,31 +279,25 @@ for ($m = 1; $m <= 12; $m++) {
                                         >No</th>
                                         <th
                                             scope="col"
-                                            style="min-width:70px;"
                                             class="align-middle text-center"
                                         >Judul Buku</th>
                                         <th
                                             scope="col"
-                                            style="min-width:70px;"
                                             class="align-middle text-center"
                                         >Kategori Cetak</th>
                                         <th
                                             scope="col"
-                                            style="min-width:70px;"
                                             class="align-middle text-center"
                                         >Jumlah Pesanan</th>
                                         <th
                                             scope="col"
-                                            style="min-width:70px;"
                                             class="align-middle text-center"
                                         >Jumlah Hasil Cetak</th>
-                                        <th
-                                            style="min-width:150px;"
-                                            class="align-middle text-center"
-                                        > &nbsp; </th>
+                                        <th class="align-middle text-center">Ref</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+
                                 </tbody>
                             </table>
                         </div>
@@ -176,23 +307,32 @@ for ($m = 1; $m <= 12; $m++) {
         </div>
     </div>
 </div>
-<script src="<?= base_url('assets/vendor/chart.js/Chart.min.js'); ?>"></script>
+<script src="<?= base_url('assets/vendor/chart.js/new/Chart.bundle.min.js'); ?>"></script>
 
 <script>
-$(".laporan").hide();
-
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
-console.log(urlParams.get('date_month'));
-var ctx = document.getElementById("myChart").getContext('2d');
-var myChart = new Chart(ctx, {
+var ctx = document.getElementById("total_year").getContext('2d');
+var total_year = new Chart(ctx, {
     type: 'bar',
     data: {
         labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
         datasets: [{
             label: 'Jumlah Judul Buku Tercetak',
-            data: [12, 19, 3, 23, 2, 3, 12, 19, 3, 23, 2, 3],
+            data: [<?= $jan_total; ?>, <?= $feb_total; ?>, <?= $mar_total; ?>, <?= $apr_total; ?>, <?= $may_total; ?>, <?= $jun_total; ?>, <?= $jul_total; ?>, <?= $aug_total; ?>, <?= $sep_total; ?>, <?= $oct_total; ?>, <?= $nov_total; ?>, <?= $dec_total; ?>],
             backgroundColor: [
+                'rgba(255, 153, 0, 0.8)',
+                'rgba(255, 153, 0, 0.8)',
+                'rgba(255, 153, 0, 0.8)',
+                'rgba(255, 153, 0, 0.8)',
+                'rgba(255, 153, 0, 0.8)',
+                'rgba(255, 153, 0, 0.8)',
+                'rgba(255, 153, 0, 0.8)',
+                'rgba(255, 153, 0, 0.8)',
+                'rgba(255, 153, 0, 0.8)',
+                'rgba(255, 153, 0, 0.8)',
+                'rgba(255, 153, 0, 0.8)',
+                'rgba(255, 153, 0, 0.8)'
+            ],
+            borderColor: [
                 'rgba(255, 153, 0, 0.2)',
                 'rgba(255, 153, 0, 0.2)',
                 'rgba(255, 153, 0, 0.2)',
@@ -206,26 +346,19 @@ var myChart = new Chart(ctx, {
                 'rgba(255, 153, 0, 0.2)',
                 'rgba(255, 153, 0, 0.2)'
             ],
-            borderColor: [
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)',
-                'rgba(255, 153, 0,1)'
-            ],
             borderWidth: 1
         }]
     },
     options: {
         scales: {
             yAxes: [{
+                display: true,
+                ticks: {
+                    beginAtZero: true
+                }
+            }],
+            xAxes: [{
+                display: true,
                 ticks: {
                     beginAtZero: true
                 }
@@ -233,24 +366,40 @@ var myChart = new Chart(ctx, {
         },
         layout: {
             padding: {
-                left: 50,
-                right: 50,
+                left: 0,
+                right: 0,
                 top: 0,
-                bottom: 50
+                bottom: 0
             }
+        },
+        legend: {
+            position: 'bottom'
         }
     }
 });
 
-var chart2 = document.getElementById("myChart2");
-var ctx = chart2.getContext('2d');
-var myChart2 = new Chart(ctx, {
+var ctx = document.getElementById("total_production").getContext('2d');
+var total_production = new Chart(ctx, {
     type: 'bar',
     data: {
         labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
         datasets: [{
             label: 'Jumlah Eks Pesanan',
             backgroundColor: [
+                'rgba(51, 51, 204, 0.8)',
+                'rgba(51, 51, 204, 0.8)',
+                'rgba(51, 51, 204, 0.8)',
+                'rgba(51, 51, 204, 0.8)',
+                'rgba(51, 51, 204, 0.8)',
+                'rgba(51, 51, 204, 0.8)',
+                'rgba(51, 51, 204, 0.8)',
+                'rgba(51, 51, 204, 0.8)',
+                'rgba(51, 51, 204, 0.8)',
+                'rgba(51, 51, 204, 0.8)',
+                'rgba(51, 51, 204, 0.8)',
+                'rgba(51, 51, 204, 0.8)'
+            ],
+            borderColor: [
                 'rgba(51, 51, 204, 0.2)',
                 'rgba(51, 51, 204, 0.2)',
                 'rgba(51, 51, 204, 0.2)',
@@ -264,25 +413,25 @@ var myChart2 = new Chart(ctx, {
                 'rgba(51, 51, 204, 0.2)',
                 'rgba(51, 51, 204, 0.2)'
             ],
-            borderColor: [
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)',
-                'rgba(51, 51, 204, 1)'
-            ],
             borderWidth: 1,
-            data: [12, 19, 3, 23, 2, 3, 12, 19, 3, 23, 2, 3],
+            data: [<?= $jan_order; ?>, <?= $feb_order; ?>, <?= $mar_order; ?>, <?= $apr_order; ?>, <?= $may_order; ?>, <?= $jun_order; ?>, <?= $jul_order; ?>, <?= $aug_order; ?>, <?= $sep_order; ?>, <?= $oct_order; ?>, <?= $nov_order; ?>, <?= $dec_order; ?>],
         }, {
             label: 'Jumlah Eks Hasil Cetak',
             backgroundColor: [
+                'rgba(0, 102, 0, 0.8)',
+                'rgba(0, 102, 0, 0.8)',
+                'rgba(0, 102, 0, 0.8)',
+                'rgba(0, 102, 0, 0.8)',
+                'rgba(0, 102, 0, 0.8)',
+                'rgba(0, 102, 0, 0.8)',
+                'rgba(0, 102, 0, 0.8)',
+                'rgba(0, 102, 0, 0.8)',
+                'rgba(0, 102, 0, 0.8)',
+                'rgba(0, 102, 0, 0.8)',
+                'rgba(0, 102, 0, 0.8)',
+                'rgba(0, 102, 0, 0.8)'
+            ],
+            borderColor: [
                 'rgba(0, 102, 0, 0.2)',
                 'rgba(0, 102, 0, 0.2)',
                 'rgba(0, 102, 0, 0.2)',
@@ -296,28 +445,21 @@ var myChart2 = new Chart(ctx, {
                 'rgba(0, 102, 0, 0.2)',
                 'rgba(0, 102, 0, 0.2)'
             ],
-            borderColor: [
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)',
-                'rgba(0, 102, 0,1)'
-            ],
             borderWidth: 1,
-            data: [12, 19, 3, 23, 2, 3, 12, 19, 3, 23, 2, 3],
+            data: [<?= $jan_new; ?>, <?= $feb_new; ?>, <?= $mar_new; ?>, <?= $apr_new; ?>, <?= $may_new; ?>, <?= $jun_new; ?>, <?= $jul_new; ?>, <?= $aug_new; ?>, <?= $sep_new; ?>, <?= $oct_new; ?>, <?= $nov_new; ?>, <?= $dec_new; ?>],
         }]
 
     },
     options: {
         scales: {
             yAxes: [{
+                display: true,
+                ticks: {
+                    beginAtZero: true
+                }
+            }],
+            xAxes: [{
+                display: true,
                 ticks: {
                     beginAtZero: true
                 }
@@ -325,57 +467,113 @@ var myChart2 = new Chart(ctx, {
         },
         layout: {
             padding: {
-                left: 50,
-                right: 50,
+                left: 0,
+                right: 0,
                 top: 0,
-                bottom: 50
+                bottom: 0
+            }
+        },
+        legend: {
+            position: 'bottom'
+        },
+        onClick: function(e) {
+            var bar = this.getElementAtEvent(e)[0];
+            var index = bar._index;
+            var datasetIndex = bar._datasetIndex;
+
+
+            if (index == 0) {
+                $('#table_laporan').toggle();
+                // $.ajax({
+                //     url: '<?= base_url('get_data_by_month/' . $this->input->get('date_year') . '/1'); ?>',
+                //     dataType: 'json',
+                //     success: function(data) {
+                //         var $tr = $('<tr>').addClass('header');
+                //         var base_url = "<?= base_url('print_order/view/'); ?>";
+                //         $.each(data.headers, function(i, header) {
+                //             $tr.append($('<th>').append($('a').addClass('sort').attr('href', '#').append($('span').text(header))));
+                //         });
+                //         $tr.appendTo('table.data');
+                //         $.each(data.rows, function(i, row) {
+                //             $('<tr>').attr('id', i).
+                //             append($('<td>').text(row.category)).
+                //             append($('<td>').text(row.total)).
+                //             append($('<td>').text(row.total_new)).
+                //             append($('<td>').text("<a href='" + base_url + row.print_order_id + "'> Link Order Cetak </a>")).appendTo('table.data');
+                //         });
+                //     }
+                // });
+            } else if (index == 1) {
+                // TAMBAH KODE UNTUK KASIH DATA DI TABEL
+                $('#table_laporan').toggle();
+            } else if (index == 2) {
+                // TAMBAH KODE UNTUK KASIH DATA DI TABEL
+                $('#table_laporan').toggle();
+            } else if (index == 3) {
+                // TAMBAH KODE UNTUK KASIH DATA DI TABEL
+                $('#table_laporan').toggle();
+            } else if (index == 4) {
+                // TAMBAH KODE UNTUK KASIH DATA DI TABEL
+                $('#table_laporan').toggle();
+            } else if (index == 5) {
+                // TAMBAH KODE UNTUK KASIH DATA DI TABEL
+                $('#table_laporan').toggle();
+            } else if (index == 6) {
+                // TAMBAH KODE UNTUK KASIH DATA DI TABEL
+                $('#table_laporan').toggle();
+            } else if (index == 7) {
+                // TAMBAH KODE UNTUK KASIH DATA DI TABEL
+                $('#table_laporan').toggle();
+            } else if (index == 8) {
+                $('#table_laporan').toggle();
+                // $.ajax({
+                //     url: '<?= base_url('get_data_by_month/2020/9'); ?>',
+                //     dataType: 'json',
+                //     success: function(data) {
+                //         var $tr = $('<tr>').addClass('header');
+                //         var base_url = "<?= base_url('print_order/view/'); ?>";
+                //         $.each(data.headers, function(i, header) {
+                //             $tr.append($('<th>').append($('a').addClass('sort').attr('href', '#').append($('span').text(header))));
+                //         });
+                //         $tr.appendTo('table.data');
+                //         $.each(data.rows, function(i, row) {
+                //             $('<tr>').attr('id', i).
+                //             append($('<td>').text(row.category)).
+                //             append($('<td>').text(row.total)).
+                //             append($('<td>').text(row.total_new)).
+                //             append($('<td>').text("<a href='" + base_url + row.print_order_id + "'> Link Order Cetak </a>")).appendTo('table.data');
+                //         });
+                //     }
+                // });
+            } else if (index == 9) {
+                $('#table_laporan').toggle();
+                // $.ajax({
+                //     url: '<?= base_url('get_data_by_month/2020/10'); ?>',
+                //     dataType: 'json',
+                //     success: function(data) {
+                //         var $tr = $('<tr>').addClass('header');
+                //         var base_url = "<?= base_url('print_order/view/'); ?>";
+                //         $.each(data.headers, function(i, header) {
+                //             $tr.append($('<th>').append($('a').addClass('sort').attr('href', '#').append($('span').text(header))));
+                //         });
+                //         $tr.appendTo('table.data');
+                //         $.each(data.rows, function(i, row) {
+                //             $('<tr>').attr('id', i).
+                //             append($('<td>').text(row.category)).
+                //             append($('<td>').text(row.total)).
+                //             append($('<td>').text(row.total_new)).
+                //             append($('<td>').text("<a href='" + base_url + row.print_order_id + "'> Link Order Cetak </a>")).appendTo('table.data');
+                //         });
+                //     }
+                // });
+            } else if (index == 10) {
+                // TAMBAH KODE UNTUK KASIH DATA DI TABEL
+                $('#table_laporan').toggle();
+            } else if (index == 11) {
+                // TAMBAH KODE UNTUK KASIH DATA DI TABEL
+                $('#table_laporan').toggle();
             }
         }
     }
-});
-
-chart2.onclick = function(evt) {
-    // console.log("preparasi");
-    $.ajax({
-        type: "POST",
-        url: "http://localhost/sigap/production_report/coba",
-        data: {
-            year: urlParams.get('year'),
-            month: urlParams.get('date_month')
-        },
-        success: function(result) {
-            // console.log(JSON.parse(result));
-            var detail_data = JSON.parse(result);
-            var detail_table = "";
-            for (i in detail_data) {
-                // console.log(detail_data[i].total);
-                var detail_row = "<tr>";
-                var no = Number(i) + 1
-                detail_row += "<td class='align-middle text-center pl-4'>" + no + "</td>";
-                detail_row += "<td class='align-middle text-center4'>" + detail_data[i].book_title + "</td>";
-                detail_row += "<td class='align-middle text-center4'> kategori </td>";
-                detail_row += "<td class='align-middle text-center4'>" + detail_data[i].total + "</td>";
-                detail_row += "<td class='align-middle text-center4'>" + detail_data[i].total_postprint + "</td>";
-                detail_row += "<td class='align-middle text-center4'> saih </td> </tr>";
-                detail_table += detail_row;
-            }
-            $("tbody").hide();
-            $("tbody").html(detail_table);
-            $(".laporan").fadeIn("slow");
-            $("tbody").fadeIn("slow");
-        }
-    });
-}
-</script>
-<script>
-$(document).ready(function() {
-    $("#coba_ajax").click(function() {
-        $.ajax({
-            url: "http://localhost/sigap/production_report/coba",
-            success: function(result) {
-                console.log(result);
-            }
-        });
-    });
 });
 </script>
