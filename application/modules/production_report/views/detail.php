@@ -134,7 +134,7 @@ for ($m = 1; $m <= 12; $m++) {
                         </div>
                         <div style="text-align: center;">
                             <b>
-                                <p>TOTAL JUMLAH JUDUL TERCETAK = <?= $total; ?></p>
+                                <p>TOTAL JUMLAH JUDUL TERCETAK = <?= $model[0]['total'] ?></p>
                             </b>
                         </div>
                     </div>
@@ -146,13 +146,28 @@ for ($m = 1; $m <= 12; $m++) {
 <script src="<?= base_url('assets/vendor/chart.js/new/Chart.bundle.min.js'); ?>"></script>
 
 <script>
+var new_ = "<?= $model[0]['new'] ?>";
+var revise = "<?= $model[0]['revise'] ?>";
+var reprint = "<?= $model[0]['reprint'] ?>";
+var nonbook = "<?= $model[0]['nonbook'] ?>";
+var outsideprint = "<?= $model[0]['outsideprint'] ?>";
+var from_outside = "<?= $model[0]['from_outside'] ?>";
+var pod = "<?= $model[0]['pod'] ?>";
+var offset = "<?= $model[0]['offset'] ?>";
+var laminate_inside = "<?= $model[0]['laminate_inside'] ?>";
+var laminate_outside = "<?= $model[0]['laminate_outside'] ?>";
+var laminate_partial = "<?= $model[0]['laminate_partial'] ?>";
+var binding_inside = "<?= $model[0]['binding_inside'] ?>";
+var binding_outside = "<?= $model[0]['binding_outside'] ?>";
+var binding_partial = "<?= $model[0]['binding_partial'] ?>";
+
 var ctx = document.getElementById("chart_category").getContext('2d');
 var chart_category = new Chart(ctx, {
     type: 'pie',
     data: {
         labels: ["Cetak Baru", "Cetak Ulang Revisi", "Cetak Ulang Non Revisi", "Cetak Non Buku", "Cetak Di Luar", "Cetak Dari Luar"],
         datasets: [{
-            data: [<?= $new; ?>, <?= $revise; ?>, <?= $reprint; ?>, <?= $nonbook; ?>, <?= $outsideprint; ?>, <?= $from_outside; ?>],
+            data: [new_, revise, reprint, nonbook, outsideprint, from_outside],
             backgroundColor: [
                 'rgba(0, 0, 150, 0.8)',
                 'rgba(102, 51, 0, 0.8)',
@@ -197,7 +212,7 @@ var chart_type = new Chart(ctx, {
     data: {
         labels: ["POD", "Offset"],
         datasets: [{
-            data: [<?= $pod; ?>, <?= $offset; ?>],
+            data: [pod, offset],
             backgroundColor: [
                 'rgba(0, 153, 51, 0.8)',
                 'rgba(255, 153, 0, 0.8)'
@@ -234,7 +249,7 @@ var chart_laminate = new Chart(ctx, {
     data: {
         labels: ["Laminasi di Dalam", "Laminasi di Luar", "Parsial"],
         datasets: [{
-            data: [<?= $laminate_inside; ?>, <?= $laminate_outside; ?>, <?= $laminate_partial; ?>],
+            data: [laminate_inside, laminate_outside, laminate_partial],
             backgroundColor: [
                 'rgba(51, 204, 255, 0.8)',
                 'rgba(153, 153, 102, 0.8)',
@@ -273,7 +288,7 @@ var chart_binding = new Chart(ctx, {
     data: {
         labels: ["Jilid di Dalam", "Jilid di Luar", "Parsial"],
         datasets: [{
-            data: [<?= $binding_inside; ?>, <?= $binding_outside; ?>, <?= $binding_partial; ?>],
+            data: [binding_inside, binding_outside, binding_partial],
             backgroundColor: [
                 'rgba(51, 204, 255, 0.8)',
                 'rgba(153, 153, 102, 0.8)',
