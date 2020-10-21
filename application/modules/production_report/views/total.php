@@ -9,127 +9,6 @@ $date_year_options = [
 for ($dy = intval(date('Y')); $dy >= 2015; $dy--) {
     $date_year_options[$dy] = $dy;
 }
-
-$jan_order = 0;
-foreach ($jan as $key => $value) {
-    if (isset($value->total))
-        $jan_order += $value->total;
-}
-$jan_new = 0;
-foreach ($jan as $key => $value) {
-    if (isset($value->total_new))
-        $jan_new += $value->total_new;
-}
-$feb_order = 0;
-foreach ($feb as $key => $value) {
-    if (isset($value->total))
-        $feb_order += $value->total;
-}
-$feb_new = 0;
-foreach ($feb as $key => $value) {
-    if (isset($value->total_new))
-        $feb_new += $value->total_new;
-}
-$mar_order = 0;
-foreach ($mar as $key => $value) {
-    if (isset($value->total))
-        $mar_order += $value->total;
-}
-$mar_new = 0;
-foreach ($mar as $key => $value) {
-    if (isset($value->total_new))
-        $mar_new += $value->total_new;
-}
-$apr_order = 0;
-foreach ($apr as $key => $value) {
-    if (isset($value->total))
-        $apr_order += $value->total;
-}
-$apr_new = 0;
-foreach ($apr as $key => $value) {
-    if (isset($value->total_new))
-        $apr_new += $value->total_new;
-}
-$may_order = 0;
-foreach ($may as $key => $value) {
-    if (isset($value->total))
-        $may_order += $value->total;
-}
-$may_new = 0;
-foreach ($may as $key => $value) {
-    if (isset($value->total_new))
-        $may_new += $value->total_new;
-}
-$jun_order = 0;
-foreach ($jun as $key => $value) {
-    if (isset($value->total))
-        $jun_order += $value->total;
-}
-$jun_new = 0;
-foreach ($jun as $key => $value) {
-    if (isset($value->total_new))
-        $jun_new += $value->total_new;
-}
-$jul_order = 0;
-foreach ($jul as $key => $value) {
-    if (isset($value->total))
-        $jul_order += $value->total;
-}
-$jul_new = 0;
-foreach ($jul as $key => $value) {
-    if (isset($value->total_new))
-        $jul_new += $value->total_new;
-}
-$aug_order = 0;
-foreach ($aug as $key => $value) {
-    if (isset($value->total))
-        $aug_order += $value->total;
-}
-$aug_new = 0;
-foreach ($aug as $key => $value) {
-    if (isset($value->total_new))
-        $aug_new += $value->total_new;
-}
-$sep_order = 0;
-foreach ($sep as $key => $value) {
-    if (isset($value->total))
-        $sep_order += $value->total;
-}
-$sep_new = 0;
-foreach ($sep as $key => $value) {
-    if (isset($value->total_new))
-        $sep_new += $value->total_new;
-}
-$oct_order = 0;
-foreach ($oct as $key => $value) {
-    if (isset($value->total))
-        $oct_order += $value->total;
-}
-$oct_new = 0;
-foreach ($oct as $key => $value) {
-    if (isset($value->total_new))
-        $oct_new += $value->total_new;
-}
-$nov_order = 0;
-foreach ($nov as $key => $value) {
-    if (isset($value->total))
-        $nov_order += $value->total;
-}
-$nov_new = 0;
-foreach ($nov as $key => $value) {
-    if (isset($value->total_new))
-        $nov_new += $value->total_new;
-}
-$dec_order = 0;
-foreach ($dec as $key => $value) {
-    if (isset($value->total))
-        $dec_order += $value->total;
-}
-$dec_new = 0;
-foreach ($dec as $key => $value) {
-    if (isset($value->total_new))
-        $dec_new += $value->total_new;
-}
 ?>
 
 <link
@@ -240,11 +119,6 @@ foreach ($dec as $key => $value) {
                             </div>
                         </div>
 
-                        <pre>
-                            <?php //print_r($data); 
-                            ?>
-                        </pre>
-
                         <div
                             id="table_laporan"
                             name="table_laporan"
@@ -253,15 +127,8 @@ foreach ($dec as $key => $value) {
                             <hr>
                             <div style="text-align: center;">
                                 <b>
-                                    <p>
-                                        <?php
-                                        if ($this->input->get('date_month')) {
-                                            echo date('F', mktime(0, 0, 0, $this->input->get('date_month')));
-                                        } else {
-                                            echo '';
-                                        }
-                                        echo ' ' . $this->input->get('date_year');
-                                        ?>
+                                    <p id="month_year">
+
                                     </p>
                                 </b>
                             </div>
@@ -270,6 +137,7 @@ foreach ($dec as $key => $value) {
                                     <p>LAPORAN JUDUL BUKU YANG BERHASIL DI CETAK</p>
                                 </b>
                             </div>
+
                             <table class="table table-striped mb-0 table-responsive">
                                 <thead>
                                     <tr>
@@ -296,7 +164,10 @@ foreach ($dec as $key => $value) {
                                         <th class="align-middle text-center">Ref</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody
+                                    id="to_fill"
+                                    class="align-middle text-center"
+                                >
 
                                 </tbody>
                             </table>
@@ -310,6 +181,97 @@ foreach ($dec as $key => $value) {
 <script src="<?= base_url('assets/vendor/chart.js/new/Chart.bundle.min.js'); ?>"></script>
 
 <script>
+var jan_data = <?= json_encode($yearly[0]['data']) ?>;
+var jan_total_order = <?= $yearly[0]['count_order'] ?>;
+var jan_total_old = <?= $yearly[0]['count_total'] ?>;
+var jan_total_new = <?= $yearly[0]['count_total_new'] ?>;
+var feb_data = <?= json_encode($yearly[1]['data']) ?>;
+var feb_total_order = <?= $yearly[1]['count_order'] ?>;
+var feb_total_old = <?= $yearly[1]['count_total'] ?>;
+var feb_total_new = <?= $yearly[1]['count_total_new'] ?>;
+var mar_data = <?= json_encode($yearly[2]['data']) ?>;
+var mar_total_order = <?= $yearly[2]['count_order'] ?>;
+var mar_total_old = <?= $yearly[2]['count_total'] ?>;
+var mar_total_new = <?= $yearly[2]['count_total_new'] ?>;
+var apr_data = <?= json_encode($yearly[3]['data']) ?>;
+var apr_total_order = <?= $yearly[3]['count_order'] ?>;
+var apr_total_old = <?= $yearly[3]['count_total'] ?>;
+var apr_total_new = <?= $yearly[3]['count_total_new'] ?>;
+var may_data = <?= json_encode($yearly[4]['data']) ?>;
+var may_total_order = <?= $yearly[4]['count_order'] ?>;
+var may_total_old = <?= $yearly[4]['count_total'] ?>;
+var may_total_new = <?= $yearly[4]['count_total_new'] ?>;
+var jun_data = <?= json_encode($yearly[5]['data']) ?>;
+var jun_total_order = <?= $yearly[5]['count_order'] ?>;
+var jun_total_old = <?= $yearly[5]['count_total'] ?>;
+var jun_total_new = <?= $yearly[5]['count_total_new'] ?>;
+var jul_data = <?= json_encode($yearly[6]['data']) ?>;
+var jul_total_order = <?= $yearly[6]['count_order'] ?>;
+var jul_total_old = <?= $yearly[6]['count_total'] ?>;
+var jul_total_new = <?= $yearly[6]['count_total_new'] ?>;
+var aug_data = <?= json_encode($yearly[7]['data']) ?>;
+var aug_total_order = <?= $yearly[7]['count_order'] ?>;
+var aug_total_old = <?= $yearly[7]['count_total'] ?>;
+var aug_total_new = <?= $yearly[7]['count_total_new'] ?>;
+var sep_data = <?= json_encode($yearly[8]['data']) ?>;
+var sep_total_order = <?= $yearly[8]['count_order'] ?>;
+var sep_total_old = <?= $yearly[8]['count_total'] ?>;
+var sep_total_new = <?= $yearly[8]['count_total_new'] ?>;
+var oct_data = <?= json_encode($yearly[9]['data']) ?>;
+var oct_total_order = <?= $yearly[9]['count_order'] ?>;
+var oct_total_old = <?= $yearly[9]['count_total'] ?>;
+var oct_total_new = <?= $yearly[9]['count_total_new'] ?>;
+var nov_data = <?= json_encode($yearly[10]['data']) ?>;
+var nov_total_order = <?= $yearly[10]['count_order'] ?>;
+var nov_total_old = <?= $yearly[10]['count_total'] ?>;
+var nov_total_new = <?= $yearly[10]['count_total_new'] ?>;
+var dec_data = <?= json_encode($yearly[11]['data']) ?>;
+var dec_total_order = <?= $yearly[11]['count_order'] ?>;
+var dec_total_old = <?= $yearly[11]['count_total'] ?>;
+var dec_total_new = <?= $yearly[11]['count_total_new'] ?>;
+var base_url = '<?= base_url('print_order/view/'); ?>';
+var date_year = '<?= $this->input->get('date_year') ?>';
+
+function get_category(category) {
+    if (category == 'new') {
+        return "Cetak Baru";
+    } else if (category == 'revise') {
+        return "Cetak Ulang Revisi";
+    } else if (category == 'reprint') {
+        return "Cetak Ulang Non Revisi";
+    } else if (category == 'nonbook') {
+        return "Cetak Non Buku";
+    } else if (category == 'outsideprint') {
+        return "Cetak Di Luar";
+    } else if (category == 'from_outside') {
+        return "Cetak Dari Luar";
+    } else {
+        return null;
+    }
+}
+
+function populateTable(items, date_month) {
+    $('#month_year').html(date_month + ' ' + date_year);
+    var i = 1;
+    const table = document.getElementById("to_fill");
+    items.forEach(item => {
+        let row = table.insertRow();
+        let no = row.insertCell(0);
+        no.innerHTML = i++;
+        let title = row.insertCell(1);
+        title.innerHTML = item.title;
+        let category = row.insertCell(2);
+        category.innerHTML = get_category(item.category);
+        let total = row.insertCell(3);
+        total.innerHTML = item.total;
+        let total_new = row.insertCell(4);
+        total_new.innerHTML = item.total_new;
+        let id = row.insertCell(5);
+        id.innerHTML = "<a href='" + base_url + item.id + "'> Link Order Cetak </a>";
+    });
+
+}
+
 var ctx = document.getElementById("total_year").getContext('2d');
 var total_year = new Chart(ctx, {
     type: 'bar',
@@ -317,7 +279,20 @@ var total_year = new Chart(ctx, {
         labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
         datasets: [{
             label: 'Jumlah Judul Buku Tercetak',
-            data: [<?= $jan_total; ?>, <?= $feb_total; ?>, <?= $mar_total; ?>, <?= $apr_total; ?>, <?= $may_total; ?>, <?= $jun_total; ?>, <?= $jul_total; ?>, <?= $aug_total; ?>, <?= $sep_total; ?>, <?= $oct_total; ?>, <?= $nov_total; ?>, <?= $dec_total; ?>],
+            data: [
+                jan_total_order,
+                feb_total_order,
+                mar_total_order,
+                apr_total_order,
+                may_total_order,
+                jun_total_order,
+                jul_total_order,
+                aug_total_order,
+                sep_total_order,
+                oct_total_order,
+                nov_total_order,
+                dec_total_order
+            ],
             backgroundColor: [
                 'rgba(255, 153, 0, 0.8)',
                 'rgba(255, 153, 0, 0.8)',
@@ -414,7 +389,20 @@ var total_production = new Chart(ctx, {
                 'rgba(51, 51, 204, 0.2)'
             ],
             borderWidth: 1,
-            data: [<?= $jan_order; ?>, <?= $feb_order; ?>, <?= $mar_order; ?>, <?= $apr_order; ?>, <?= $may_order; ?>, <?= $jun_order; ?>, <?= $jul_order; ?>, <?= $aug_order; ?>, <?= $sep_order; ?>, <?= $oct_order; ?>, <?= $nov_order; ?>, <?= $dec_order; ?>],
+            data: [
+                jan_total_old,
+                feb_total_old,
+                mar_total_old,
+                apr_total_old,
+                may_total_old,
+                jun_total_old,
+                jul_total_old,
+                aug_total_old,
+                sep_total_old,
+                oct_total_old,
+                nov_total_old,
+                dec_total_old
+            ],
         }, {
             label: 'Jumlah Eks Hasil Cetak',
             backgroundColor: [
@@ -446,7 +434,20 @@ var total_production = new Chart(ctx, {
                 'rgba(0, 102, 0, 0.2)'
             ],
             borderWidth: 1,
-            data: [<?= $jan_new; ?>, <?= $feb_new; ?>, <?= $mar_new; ?>, <?= $apr_new; ?>, <?= $may_new; ?>, <?= $jun_new; ?>, <?= $jul_new; ?>, <?= $aug_new; ?>, <?= $sep_new; ?>, <?= $oct_new; ?>, <?= $nov_new; ?>, <?= $dec_new; ?>],
+            data: [
+                jan_total_new,
+                feb_total_new,
+                mar_total_new,
+                apr_total_new,
+                may_total_new,
+                jun_total_new,
+                jul_total_new,
+                aug_total_new,
+                sep_total_new,
+                oct_total_new,
+                nov_total_new,
+                dec_total_new
+            ],
         }]
 
     },
@@ -480,98 +481,54 @@ var total_production = new Chart(ctx, {
             var bar = this.getElementAtEvent(e)[0];
             var index = bar._index;
             var datasetIndex = bar._datasetIndex;
-
-
             if (index == 0) {
                 $('#table_laporan').toggle();
-                // $.ajax({
-                //     url: '<?= base_url('get_data_by_month/' . $this->input->get('date_year') . '/1'); ?>',
-                //     dataType: 'json',
-                //     success: function(data) {
-                //         var $tr = $('<tr>').addClass('header');
-                //         var base_url = "<?= base_url('print_order/view/'); ?>";
-                //         $.each(data.headers, function(i, header) {
-                //             $tr.append($('<th>').append($('a').addClass('sort').attr('href', '#').append($('span').text(header))));
-                //         });
-                //         $tr.appendTo('table.data');
-                //         $.each(data.rows, function(i, row) {
-                //             $('<tr>').attr('id', i).
-                //             append($('<td>').text(row.category)).
-                //             append($('<td>').text(row.total)).
-                //             append($('<td>').text(row.total_new)).
-                //             append($('<td>').text("<a href='" + base_url + row.print_order_id + "'> Link Order Cetak </a>")).appendTo('table.data');
-                //         });
-                //     }
-                // });
+                $("#to_fill").empty();
+                populateTable(jan_data, "January");
             } else if (index == 1) {
-                // TAMBAH KODE UNTUK KASIH DATA DI TABEL
                 $('#table_laporan').toggle();
+                $("#to_fill").empty();
+                populateTable(feb_data, "February");
             } else if (index == 2) {
-                // TAMBAH KODE UNTUK KASIH DATA DI TABEL
                 $('#table_laporan').toggle();
+                $("#to_fill").empty();
+                populateTable(mar_data, "March");
             } else if (index == 3) {
-                // TAMBAH KODE UNTUK KASIH DATA DI TABEL
                 $('#table_laporan').toggle();
+                $("#to_fill").empty();
+                populateTable(apr_data, "April");
             } else if (index == 4) {
-                // TAMBAH KODE UNTUK KASIH DATA DI TABEL
                 $('#table_laporan').toggle();
+                $("#to_fill").empty();
+                populateTable(may_data, "May");
             } else if (index == 5) {
-                // TAMBAH KODE UNTUK KASIH DATA DI TABEL
                 $('#table_laporan').toggle();
+                $("#to_fill").empty();
+                populateTable(jun_data, "June");
             } else if (index == 6) {
-                // TAMBAH KODE UNTUK KASIH DATA DI TABEL
                 $('#table_laporan').toggle();
+                $("#to_fill").empty();
+                populateTable(jul_data, "July");
             } else if (index == 7) {
-                // TAMBAH KODE UNTUK KASIH DATA DI TABEL
                 $('#table_laporan').toggle();
+                $("#to_fill").empty();
+                populateTable(aug_data, "August");
             } else if (index == 8) {
                 $('#table_laporan').toggle();
-                // $.ajax({
-                //     url: '<?= base_url('get_data_by_month/2020/9'); ?>',
-                //     dataType: 'json',
-                //     success: function(data) {
-                //         var $tr = $('<tr>').addClass('header');
-                //         var base_url = "<?= base_url('print_order/view/'); ?>";
-                //         $.each(data.headers, function(i, header) {
-                //             $tr.append($('<th>').append($('a').addClass('sort').attr('href', '#').append($('span').text(header))));
-                //         });
-                //         $tr.appendTo('table.data');
-                //         $.each(data.rows, function(i, row) {
-                //             $('<tr>').attr('id', i).
-                //             append($('<td>').text(row.category)).
-                //             append($('<td>').text(row.total)).
-                //             append($('<td>').text(row.total_new)).
-                //             append($('<td>').text("<a href='" + base_url + row.print_order_id + "'> Link Order Cetak </a>")).appendTo('table.data');
-                //         });
-                //     }
-                // });
+                $("#to_fill").empty();
+                populateTable(sep_data, "September");
             } else if (index == 9) {
                 $('#table_laporan').toggle();
-                // $.ajax({
-                //     url: '<?= base_url('get_data_by_month/2020/10'); ?>',
-                //     dataType: 'json',
-                //     success: function(data) {
-                //         var $tr = $('<tr>').addClass('header');
-                //         var base_url = "<?= base_url('print_order/view/'); ?>";
-                //         $.each(data.headers, function(i, header) {
-                //             $tr.append($('<th>').append($('a').addClass('sort').attr('href', '#').append($('span').text(header))));
-                //         });
-                //         $tr.appendTo('table.data');
-                //         $.each(data.rows, function(i, row) {
-                //             $('<tr>').attr('id', i).
-                //             append($('<td>').text(row.category)).
-                //             append($('<td>').text(row.total)).
-                //             append($('<td>').text(row.total_new)).
-                //             append($('<td>').text("<a href='" + base_url + row.print_order_id + "'> Link Order Cetak </a>")).appendTo('table.data');
-                //         });
-                //     }
-                // });
+                $("#to_fill").empty();
+                populateTable(oct_data, "October");
             } else if (index == 10) {
-                // TAMBAH KODE UNTUK KASIH DATA DI TABEL
                 $('#table_laporan').toggle();
+                $("#to_fill").empty();
+                populateTable(nov_data, "November");
             } else if (index == 11) {
-                // TAMBAH KODE UNTUK KASIH DATA DI TABEL
                 $('#table_laporan').toggle();
+                $("#to_fill").empty();
+                populateTable(dec_data, "December");
             }
         }
     }

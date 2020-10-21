@@ -21,68 +21,46 @@ class Production_report extends Admin_Controller
     public function total()
     {
         $filters['date_year'] = $this->input->get('date_year', true);
+        $yearly = [];
+        for ($month = 1; $month <= 12; $month++) {
+            # code...
+            $filters['date_month'] = $month;
+            $monthly = $this->production_report->total_by_month($filters);
 
-        // GET DATA
-        $model              = $this->production_report->filter_total($filters);
-        $by_month           = $this->production_report->total_exemplar($filters);
-        $by_month2          = $this->production_report->total_exemplar2($filters);
-        $by_month3          = $this->production_report->total_exemplar3($filters);
-        $jan_total          = $model['jan_total'];
-        $feb_total          = $model['feb_total'];
-        $mar_total          = $model['mar_total'];
-        $apr_total          = $model['apr_total'];
-        $may_total          = $model['may_total'];
-        $jun_total          = $model['jun_total'];
-        $jul_total          = $model['jul_total'];
-        $aug_total          = $model['aug_total'];
-        $sep_total          = $model['sep_total'];
-        $oct_total          = $model['oct_total'];
-        $nov_total          = $model['nov_total'];
-        $dec_total          = $model['dec_total'];
-        $jan                = $by_month['jan'];
-        $feb                = $by_month['feb'];
-        $mar                = $by_month['mar'];
-        $apr                = $by_month['apr'];
-        $may                = $by_month2['may'];
-        $jun                = $by_month2['jun'];
-        $jul                = $by_month2['jul'];
-        $aug                = $by_month2['aug'];
-        $sep                = $by_month3['sep'];
-        $oct                = $by_month3['oct'];
-        $nov                = $by_month3['nov'];
-        $dec                = $by_month3['dec'];
+            $count_total = 0;
+            foreach ($monthly as $value) {
+                if (isset($value->total)) {
+                    $count_total += $value->total;
+                }
+            }
 
+            $count_total_new = 0;
+            foreach ($monthly as $value) {
+                if (isset($value->total_new)) {
+                    $count_total_new += $value->total_new;
+                }
+            }
+
+            $count_order = count($monthly);
+
+            array_push($yearly, [
+                'month' => $month,
+                'data' => $monthly,
+                'count_total' => $count_total,
+                'count_total_new' => $count_total_new,
+                'count_order' => $count_order
+            ]);
+        }
+
+        // echo '<pre>';
+        // // print_r($yearly[9]['data']);->data di bulan oktober
+        // print_r($yearly[9]['count_month']);
+        // echo '</pre>';
+        // die();
 
         $pages              = 'production_report/total';
         $main_view          = 'production_report/total';
-        $this->load->view('template', compact(
-            'main_view',
-            'pages',
-            'jan_total',
-            'feb_total',
-            'mar_total',
-            'apr_total',
-            'may_total',
-            'jun_total',
-            'jul_total',
-            'aug_total',
-            'sep_total',
-            'oct_total',
-            'nov_total',
-            'dec_total',
-            'jan',
-            'feb',
-            'mar',
-            'apr',
-            'may',
-            'jun',
-            'jul',
-            'aug',
-            'sep',
-            'oct',
-            'nov',
-            'dec'
-        ));
+        $this->load->view('template', compact('main_view', 'pages', 'yearly'));
     }
 
     public function detail()
@@ -91,6 +69,8 @@ class Production_report extends Admin_Controller
             'date_year'     => $this->input->get('date_year', true),
             'date_month'    => $this->input->get('date_month', true)
         ];
+
+        // GET 1 DATA TRS DIOLAH DIPHP
 
         // GET DATA
         $model              = $this->production_report->filter_detail($filters);
@@ -142,8 +122,9 @@ class Production_report extends Admin_Controller
             'date_year'     => $date_year,
             'date_month'    => $date_month
         ];
-
-        return json_encode($this->production_report->total_by_month($filters));
+        echo '<pre>';
+        print_r(json_encode($this->production_report->total_by_month($filters)));
+        echo '</pre>';
     }
 }
 
