@@ -38,5 +38,15 @@ class Production_report_model extends MY_Model
         }
         return $this;
     }
+
+    public function detail_data($year, $month) {
+        // $this->db->select('book.book_title', 'print_order.total', 'print_order.total_postprint');
+        // $this->db->from('print_order');
+        // $this->db->join('book', 'print_order.book_id = book.book_id', 'left');
+        $query = $this->db->query("SELECT po.print_order_id, b.book_title, po.category ,po.total , po.total_postprint from print_order po left join book b on po.book_id = b.book_id WHERE YEAR(po.entry_date) = '" . $year . "' AND MONTH(po.entry_date) = '". $month . "'");
+
+        //$query = $this->db->get();
+        return $query->result_array();
+    }
 }
 /* End of file Production_report_model.php */

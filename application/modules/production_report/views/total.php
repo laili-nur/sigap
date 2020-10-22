@@ -168,7 +168,6 @@ for ($dy = intval(date('Y')); $dy >= 2015; $dy--) {
                                     id="to_fill"
                                     class="align-middle text-center"
                                 >
-
                                 </tbody>
                             </table>
                         </div>
@@ -532,5 +531,48 @@ var total_production = new Chart(ctx, {
             }
         }
     }
+});
+
+chart2.onclick = function(evt) {
+    // console.log("preparasi");
+    $.ajax({
+        type: "POST",
+        url: "http://localhost/sigap/production_report/coba", 
+        data: {
+            year: urlParams.get('date_year'),
+            month: urlParams.get('date_month')
+        },
+        success: function(result){
+            //console.log(JSON.parse(result));
+            var detail_data = JSON.parse(result);
+            var detail_table = "";
+            for (i in detail_data) {
+                console.log(detail_data[i]);
+                var detail_row = "<tr>";
+                var base_url = "<?= base_url('print_order/view/'); ?>/";
+                var no = Number(i) + 1
+                detail_row += "<td class='align-middle text-center pl-4'>" + no + "</td>";
+                detail_row += "<td class='align-middle text-center4'>" + detail_data[i].book_title + "</td>";
+                detail_row += "<td class='align-middle text-center4'>"+ categories[detail_data[i].category] + " </td>";
+                detail_row += "<td class='align-middle text-center4'>" + detail_data[i].total + "</td>";
+                detail_row += "<td class='align-middle text-center4'>" + detail_data[i].total_postprint + "</td>";
+                detail_row += "<td class='align-middle text-center4'> <a href='" + base_url + detail_data[i].print_order_id + "'> Link Order Cetak </a></td></tr>";
+                detail_table += detail_row;
+            }
+            $("tbody").hide();
+            $("tbody").html(detail_table);
+            $(".laporan").fadeIn("slow");
+            $("tbody").fadeIn("slow");
+        }
+    });
+}
+</script>
+<script>
+    $(document).ready(function(){
+  $("#coba_ajax").click(function(){
+    $.ajax({url: "http://localhost/sigap/production_report/coba", success: function(result){
+      console.log(result);
+    }});
+  });
 });
 </script>
