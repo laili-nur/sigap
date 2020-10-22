@@ -157,7 +157,8 @@ class Print_order_model extends MY_Model
 
             if ($params == 'keyword') {
                 $this->group_start();
-                $this->or_like('title', $data);
+                $this->or_like('name', $data);
+                $this->or_like('book_title', $data);
                 $this->or_like('order_number', $data);
                 $this->or_like('order_code', $data);
                 $this->group_end();
