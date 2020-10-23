@@ -84,7 +84,7 @@ $staff_percetakan           = $this->print_order->get_staff_percetakan_by_progre
             </div>
 
             <div class="list-group-item justify-content-between">
-                <?php if (($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_percetakan') && !$is_final) : ?>
+                <?php if (($_SESSION['level'] == 'superadmin' || ($_SESSION['level'] == 'admin_percetakan' && empty($print_order->preprint_deadline))) && !$is_final) : ?>
                     <a
                         href="#"
                         id="btn-modal-deadline-preprint"

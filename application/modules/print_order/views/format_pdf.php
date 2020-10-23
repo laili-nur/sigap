@@ -75,7 +75,8 @@
                 <?= $jobtype; ?>
             </td>
         </tr>
-        <!-- <tr>
+
+        <tr>
             <td>
                 FINISHING
             </td>
@@ -83,10 +84,22 @@
                 :
             </td>
             <td>
-                <?php //echo $finishinglocation; 
-                ?>
+                <?= $finishing; ?>
             </td>
-        </tr> -->
+        </tr>
+        <?php if ($finishing == 'Di Luar' || $finishing == 'Di Luar') : ?>
+            <tr>
+                <td>
+                    LOKASI
+                </td>
+                <td>
+                    :
+                </td>
+                <td>
+                    <?= $finishinglocation; ?>
+                </td>
+            </tr>
+        <?php endif; ?>
         <tr>
             <td>
                 NOMOR ORDER
@@ -139,7 +152,7 @@
                 :
             </td>
             <td>
-                <?= $startdate; ?>
+
             </td>
         </tr>
         <tr>
@@ -150,7 +163,7 @@
                 :
             </td>
             <td>
-                <?= $enddate; ?>
+
             </td>
         </tr>
         <tr>
@@ -172,7 +185,7 @@
                 :
             </td>
             <td>
-                <?= $status; ?>
+
             </td>
         </tr>
         <tr>
@@ -183,23 +196,15 @@
                 :
             </td>
             <td>
-                <?= $notes; ?>
+
             </td>
         </tr>
     </table>
-    <br>
-    <div
-        class="row"
-        style="margin-left: 100px;
-        margin-right: 100px;"
-    >
-        <div class="col-6 text-left">
-            <h2>Mengetahui,<br>Kepala BPP<br><br><br>Widodo, M.Sc, Ph.D</h2>
-        </div>
-        <div class="col-6 text-right">
-            <h2>Manajer UGM Press<br><br><br>Dr. I Wayan Mustika, S.T., M.Eng</h2>
-        </div>
+    <br><br><br>
+    <div style="text-align: center;">
+        <h2>Manajer UGM Press<br><br><br><br><br><br><br>Dr. I Wayan Mustika, S.T., M.Eng</h2>
     </div>
+
 </body>
 
 </html>

@@ -5,6 +5,7 @@ $category       = $this->input->get('category');
 $status         = $this->input->get('status');
 $reprint        = $this->input->get('reprint');
 $published_year = $this->input->get('published_year');
+$from_outside   = $this->input->get('from_outside');
 $page           = $this->uri->segment(2);
 // data table series number
 $i = isset($page) ? $page * $per_page - $per_page : 0;
@@ -20,6 +21,7 @@ $reprint_options = [
     'n' => ' Buku Baru',
     'y' => ' Buku Cetak Ulang',
 ];
+echo $this->db->last_query();
 ?>
 
 <header class="page-title-bar">
@@ -73,10 +75,16 @@ $reprint_options = [
                                 <label for="hakcipta_status">Status Hak Cipta</label>
                                 <?= form_dropdown('hakcipta_status', $hakcipta_status_options, $status, 'id="hakcipta_status" class="form-control custom-select d-block" title="Filter Status Hak Cipta"'); ?>
                             </div>
-                            <div class="col-12 col-lg-9 mb-3">
+                            <div class="col-12 col-lg-2 mb-3">
+                                <label for="from_outside">Asal Buku</label>
+                                <?= form_dropdown('from_outside', ['' => '-- Pilih --', 0 => 'Buku UGM Press', 1 => 'Buku dari Luar'], $from_outside, 'id="from_outside" class="form-control custom-select d-block" title="List per page"'); ?>
+                            </div>
+                            <div class="col-12 col-lg-7 mb-3">
+                                <label>&nbsp;</label>
                                 <?= form_input('keyword', $keyword, 'id="keyword" placeholder="Cari berdasarkan Judul Buku, Kode Buku, Penulis, atau ISBN" class="form-control"'); ?>
                             </div>
                             <div class="col-12 col-lg-3">
+                                <label>&nbsp;</label>
                                 <div
                                     class="btn-group btn-block"
                                     role="group"

@@ -119,6 +119,7 @@ class Book_model extends MY_Model
             ->when('status', $filters['status'])
             ->when('reprint', $filters['reprint'])
             ->when('published_year', $filters['published_year'])
+            ->when('from_outside', $filters['from_outside'])
             ->order_by('status_hak_cipta')
             ->order_by('published_date')
             ->order_by('book_title')
@@ -137,6 +138,7 @@ class Book_model extends MY_Model
             ->when('status', $filters['status'])
             ->when('reprint', $filters['reprint'])
             ->when('published_year', $filters['published_year'])
+            ->when('from_outside', $filters['from_outside'])
             ->order_by('status_hak_cipta')
             ->order_by('published_date')
             ->order_by('book_title')
@@ -186,6 +188,10 @@ class Book_model extends MY_Model
                 $this->or_like('author_name', $data);
                 // }
                 $this->group_end();
+            }
+
+            if ($params == 'from_outside') {
+                $this->where('from_outside', $data);
             }
 
             // if ($params == 'status') {

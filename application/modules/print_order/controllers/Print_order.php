@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Print_order extends Admin_Controller
 {
 
@@ -104,6 +107,13 @@ class Print_order extends Admin_Controller
 
         if (empty($input->deadline_date)) {
             $input->deadline_date = empty_to_null($input->deadline_date);
+        }
+
+        if (empty($input->location_binding_outside)) {
+            $input->location_binding_outside = empty_to_null($input->location_binding_outside);
+        }
+        if (empty($input->location_laminate_outside)) {
+            $input->location_laminate_outside = empty_to_null($input->location_laminate_outside);
         }
 
         // insert print order
@@ -790,6 +800,64 @@ class Print_order extends Admin_Controller
         }
     }
 
+    public function generate_excel()
+    {
+        // // all filter
+        // $filters = [
+        //     'keyword'               => $excel['keyword'],
+        //     'category'              => $excel['category'],
+        //     'type'                  => $excel['type'],
+        //     'mode'                  => $excel['mode'],
+        //     'print_order_status'    => $excel['print_order_status'],
+        //     'date_year'             => $excel['date_year'],
+        //     'date_month'            => $excel['date_month']
+        // ];
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $get_data = $this->print_order->filter_excel();
+        $i = 2;
+        $no = 1;
+        foreach ($get_data as $data) {
+            foreach (range('A', 'D') as $v) {
+                switch ($v) {
+                    case 'A': {
+                            $value = $no++;
+                            break;
+                        }
+                    case 'B': {
+                            $value = $data->title;
+                            break;
+                        }
+                    case 'C': {
+                            $value = get_print_order_category()[$data->category];
+                            break;
+                        }
+                    case 'D': {
+                            $value = date('d F Y H:i:s', strtotime($data->entry_date));
+                            break;
+                        }
+                }
+                $sheet->setCellValue($v . $i, $value);
+            }
+            $i++;
+        }
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Judul');
+        $sheet->setCellValue('C1', 'Kategori');
+        $sheet->setCellValue('D1', 'Tanggal Mulai');
+
+        $writer = new Xlsx($spreadsheet);
+
+        $filename = 'data_order_cetak';
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+    }
+
     public function generate_pdf($print_order_id, $progress)
     {
         $print_order        = $this->print_order->get_print_order($print_order_id);
@@ -802,30 +870,39 @@ class Print_order extends Admin_Controller
         $this->load->library('pdf');
 
         // FORMAT DATA
-        $data_format['title'] = $print_order->title ?? '';
-        $data_format['category'] = get_print_order_category()[$print_order->category] ?? '';
         if ($progress == 'print') {
             $data_format['jobtype'] = 'Cetak';
+            if ($print_order->category != 'outsideprint') {
+                $data_format['finishing'] = 'Di Dalam';
+                $data_format['finishinglocation'] = '';
+            } else {
+                $data_format['finishing'] = 'Di Luar';
+                $data_format['finishinglocation'] = '';
+            }
         } elseif ($progress == 'postprint') {
             $data_format['jobtype'] = 'Jilid';
+            if ($print_order->location_binding == 'inside') {
+                $data_format['finishing'] = 'Di Dalam';
+                $data_format['finishinglocation'] = '';
+            } elseif ($print_order->location_binding == 'outside') {
+                $data_format['finishing'] = 'Di Luar';
+                $data_format['finishinglocation'] = $print_order->location_binding_outside;
+            } else {
+                $data_format['finishing'] = 'Parsial';
+                $data_format['finishinglocation'] = '';
+            }
         } else {
             $data_format['jobtype'] = '';
+            $data_format['finishing'] = '';
+            $data_format['finishinglocation'] = '';
         }
-        // $data_format['finishinglocation'] = 'a';
+        $data_format['title'] = $print_order->title ?? '';
+        $data_format['category'] = get_print_order_category()[$print_order->category] ?? '';
         $data_format['ordernumber'] = $print_order->order_number ?? '';
         $data_format['total'] = $print_order->total ?? '';
-        $data_format['entrydate'] = date('d m Y H:i:s', strtotime($print_order->entry_date)) ?? '';
-        $data_format['deadline'] = date('d m Y H:i:s', strtotime($print_order->{"{$progress}_deadline"})) ?? '';
-        $data_format['startdate'] = date('d m Y H:i:s', strtotime($print_order->{"{$progress}_start_date"})) ?? '';
-        $data_format['enddate'] = date('d m Y H:i:s', strtotime($print_order->{"{$progress}_end_date"})) ?? '';
+        $data_format['entrydate'] = date('d F Y H:i', strtotime($print_order->entry_date)) ?? '';
+        $data_format['deadline'] = date('d F Y H:i', strtotime($print_order->{"{$progress}_deadline"})) ?? '';
         $data_format['staff'] = $staff;
-        if (strtotime($print_order->{"{$progress}_end_date"}) < strtotime($print_order->{"{$progress}_deadline"})) {
-            $data_format['status'] = 'TEPAT WAKTU';
-        } elseif (strtotime($print_order->{"{$progress}_end_date"}) > strtotime($print_order->{"{$progress}_deadline"})) {
-            $data_format['status'] = 'TERLAMBAT';
-        } else {
-            $data_format['status'] = '';
-        }
         $data_format['notes'] = $print_order->{"{$progress}_notes"} ?? '';
         $format = $this->load->view('print_order/format_pdf', $data_format, true);
         $this->pdf->loadHtml($format);
@@ -835,7 +912,22 @@ class Print_order extends Admin_Controller
 
         // Render the HTML as PDF
         $this->pdf->render();
-        $this->pdf->stream();
+        $this->pdf->stream($data_format['ordernumber']);
+    }
+
+    public function add_additional_notes($print_order_id)
+    {
+        if (!$this->_is_printing_admin()) {
+            redirect($this->pages);
+        }
+
+        if ($this->print_order->where('print_order_id', $print_order_id)->update(['additional_notes' => $_POST['additional_notes']])) {
+            $this->session->set_flashdata('success', $this->lang->line('toast_edit_success'));
+        } else {
+            $this->session->set_flashdata('error', $this->lang->line('toast_edit_fail'));
+        }
+
+        redirect('print_order/view/' . $print_order_id);
     }
 
     private function _generate_print_order_file_name($print_order_file_name, $print_order_title, $progress = null)

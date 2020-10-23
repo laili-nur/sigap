@@ -94,7 +94,7 @@ $staff_percetakan       = $this->print_order->get_staff_percetakan_by_progress('
             </div>
 
             <div class="list-group-item justify-content-between">
-                <?php if (($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_percetakan') && !$is_final) : ?>
+                <?php if (($_SESSION['level'] == 'superadmin' || ($_SESSION['level'] == 'admin_percetakan' && empty($print_order->print_deadline))) && !$is_final) : ?>
                     <a
                         href="#"
                         id="btn-modal-deadline-print"
@@ -335,7 +335,7 @@ $staff_percetakan       = $this->print_order->get_staff_percetakan_by_progress('
                 <?php if (!$is_final) : ?>
                     <a
                         href="<?= base_url('print_order/generate_pdf/' . $print_order->print_order_id . "/print") ?>"
-                        class="btn btn-outline-danger <?= (!$is_print_started || !$staff_percetakan || !$is_print_deadline_set) ? 'disabled' : ''; ?>"
+                        class="btn btn-outline-danger <?= (!$is_print_deadline_set) ? 'disabled' : ''; ?>"
                         id="btn-generate-pdf-print"
                         title="Generate PDF"
                     >Generate PDF <i class="fas fa-file-pdf fa-fw"></i></a>

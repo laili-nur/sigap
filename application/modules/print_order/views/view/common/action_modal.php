@@ -75,20 +75,20 @@ if ($progress == 'preprint') {
             </div>
             <div class="modal-footer">
                 <button
+                    id="btn-<?= $progress ?>-accept"
+                    class="btn btn-success"
                     type="button"
-                    class="btn btn-light"
-                    data-dismiss="modal"
-                >Close</button>
+                >Setuju</button>
                 <button
                     id="btn-<?= $progress ?>-decline"
                     class="btn btn-danger"
                     type="button"
                 >Tolak</button>
                 <button
-                    id="btn-<?= $progress ?>-accept"
-                    class="btn btn-success"
                     type="button"
-                >Setuju</button>
+                    class="btn btn-light"
+                    data-dismiss="modal"
+                >Close</button>
             </div>
         </div>
     </div>

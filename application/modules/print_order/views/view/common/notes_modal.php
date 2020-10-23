@@ -53,6 +53,7 @@
                         class="btn btn-primary"
                         type="button"
                         id="btn-submit-<?= $progress ?>-notes"
+                        data-dismiss="modal"
                     >Submit</button>
                 <?php endif ?>
             </div>

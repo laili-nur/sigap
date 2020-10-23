@@ -1,6 +1,6 @@
 <?php
 $level = check_level();
-if ($level == 'superadmin') :
+if ($level == 'superadmin' || $level == 'admin_percetakan') :
     $progress_text = '';
     if ($progress == 'preprint') {
         $progress_text = 'pracetak';
@@ -70,7 +70,7 @@ if ($level == 'superadmin') :
                                                 <th scope="col">No</th>
                                                 <th scope="col">Nama</th>
                                                 <th scope="col">Email</th>
-                                                <?php if ($level == 'superadmin') : ?>
+                                                <?php if ($level == 'superadmin' || $level == 'admin_percetakan') : ?>
                                                     <th style="width:100px; min-width:100px;"> &nbsp; </th>
                                                 <?php endif; ?>
                                             </tr>
@@ -87,7 +87,7 @@ if ($level == 'superadmin') :
                                                     <td class="align-middle">
                                                         <?= $staff->email; ?>
                                                     </td>
-                                                    <?php if ($level == 'superadmin') : ?>
+                                                    <?php if ($level == 'superadmin' || $level == 'admin_percetakan') : ?>
                                                         <td class="align-middle text-center">
                                                             <button
                                                                 title="Hapus"

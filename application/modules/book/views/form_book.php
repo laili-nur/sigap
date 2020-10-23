@@ -13,7 +13,7 @@
         </ol>
     </nav>
 </header>
-<pre><?php print_r($input); ?></pre>
+
 <div class="page-section">
     <?= validation_errors() ?>
     <div class="row">

@@ -79,6 +79,14 @@ $level              = check_level();
                                     <td><strong><?= $input->book_title; ?></strong> </td>
                                 </tr>
                                 <tr>
+                                    <td width="200px"> Asal Buku </td>
+                                    <td><?php if ($input->from_outside == 0) {
+                                            echo 'Buku UGM Press';
+                                        } else {
+                                            echo 'Buku dari Luar';
+                                        } ?></td>
+                                </tr>
+                                <tr>
                                     <td width="200px"> Kode Buku </td>
                                     <td><?= $input->book_code; ?> </td>
                                 </tr>

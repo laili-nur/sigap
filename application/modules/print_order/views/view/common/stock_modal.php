@@ -128,6 +128,7 @@ if ($level == 'superadmin' || $level == 'admin_percetakan') :
                                     type="submit"
                                     value="Submit"
                                     id="btn-submit-set-stock-<?= $progress; ?>"
+                                    data-dismiss="modal"
                                 >Submit</button>
                             <?php endif; ?>
                         </div>

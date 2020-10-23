@@ -247,12 +247,36 @@
                             <?= form_error('location_binding'); ?>
                         </div>
 
+                        <div
+                            class="form-group"
+                            style="display:none"
+                            id="location-binding-outside-wrapper"
+                        >
+                            <label for="location-binding-outside">
+                                Lokasi Jilid Di Luar
+                            </label>
+                            <?= form_input('location_binding_outside', $input->location_binding_outside, 'class="form-control" id="location-binding-outside"'); ?>
+                            <?= form_error('location_binding_outside'); ?>
+                        </div>
+
                         <div class="form-group">
                             <label for="location-laminate">
                                 Lokasi Laminasi
                             </label>
                             <?= form_dropdown('location_laminate', ['inside' => 'Laminasi di Dalam', 'outside' => 'Laminasi di Luar', 'partial' => 'Laminasi Parsial'], $input->location_laminate, 'id="location-laminate" class="form-control custom-select d-block"'); ?>
                             <?= form_error('location_laminate'); ?>
+                        </div>
+
+                        <div
+                            class="form-group"
+                            style="display:none"
+                            id="location-laminate-outside-wrapper"
+                        >
+                            <label for="location-laminate-outside">
+                                Lokasi Laminasi Di Luar
+                            </label>
+                            <?= form_input('location_laminate_outside', $input->location_laminate_outside, 'class="form-control" id="location-laminate-outside"'); ?>
+                            <?= form_error('location_laminate_outside'); ?>
                         </div>
 
                         <div class="form-group">
@@ -401,5 +425,21 @@ $(document).ready(function() {
             time_24hr: true,
         });
     }
+
+    $('#location-binding').change(function(e) {
+        if ($('#location-binding').val() == 'outside') {
+            $('#location-binding-outside-wrapper').show();
+        } else {
+            $('#location-binding-outside-wrapper').hide();
+        }
+    })
+
+    $('#location-laminate').change(function(e) {
+        if ($('#location-laminate').val() == 'outside') {
+            $('#location-laminate-outside-wrapper').show();
+        } else {
+            $('#location-laminate-outside-wrapper').hide();
+        }
+    })
 })
 </script>

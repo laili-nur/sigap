@@ -127,6 +127,11 @@ $print_order_status_options = [
                                         onclick="location.href = '<?= base_url($pages); ?>'"
                                     > Reset</button>
                                     <button
+                                        class="btn btn-success"
+                                        type="button"
+                                        onclick="location.href = '<?= base_url('print_order/generate_excel/'); ?>'"
+                                    >Excel</button>
+                                    <button
                                         class="btn btn-primary"
                                         type="submit"
                                         value="Submit"
@@ -189,7 +194,7 @@ $print_order_status_options = [
                                         style="min-width:70px;"
                                         class="align-middle text-center"
                                     >Status</th>
-                                    <?php if ($level == 'superadmin' || $level == 'admin_percetakan') : ?>
+                                    <?php if ($level == 'superadmin') : ?>
                                         <th
                                             style="min-width:150px;"
                                             class="align-middle text-center"
@@ -213,23 +218,23 @@ $print_order_status_options = [
                                         <td class="align-middle text-center"><?= highlight_keyword($print_order->order_number, $keyword); ?></td>
                                         <td class="align-middle text-center"><?= $print_order->total; ?></td>
                                         <td class="align-middle text-center"><?= $print_order->type; ?></td>
-                                        <td class="align-middle text-center"><?= $print_order->entry_date; ?></td>
-                                        <td class="align-middle text-center"><?= $print_order->finish_date; ?></td>
+                                        <td class="align-middle text-center"><?= format_datetime($print_order->entry_date); ?></td>
+                                        <td class="align-middle text-center"><?= format_datetime($print_order->finish_date); ?></td>
                                         <td class="align-middle text-center">
                                             <?php
                                             if (!$print_order->deadline_date) {
                                                 echo '-';
                                             } elseif (strtotime($print_order->deadline_date) <= strtotime("+3 day")) {
-                                                echo '<div class="text-danger">' . $print_order->deadline_date . '</div>';
+                                                echo '<div class="text-danger">' . format_datetime($print_order->deadline_date) . '</div>';
                                             } elseif (strtotime($print_order->deadline_date) <= strtotime("+7 day")) {
-                                                echo '<div class="text-warning">' . $print_order->deadline_date . '</div>';
+                                                echo '<div class="text-warning">' . format_datetime($print_order->deadline_date) . '</div>';
                                             } elseif (strtotime($print_order->deadline_date) >= strtotime("+7 day")) {
-                                                echo '<div>' . $print_order->deadline_date . '</div>';
+                                                echo '<div>' . format_datetime($print_order->deadline_date) . '</div>';
                                             }
                                             ?>
                                         </td>
                                         <td class="align-middle text-center"><?= get_print_order_status()[$print_order->print_order_status] ?? $print_order->print_order_status; ?></td>
-                                        <?php if ($level == 'superadmin' || $level == 'admin_percetakan') : ?>
+                                        <?php if ($level == 'superadmin') : ?>
                                             <td class="align-middle text-center">
                                                 <a
                                                     href="<?= base_url('print_order/edit/' . $print_order->print_order_id . ''); ?>"

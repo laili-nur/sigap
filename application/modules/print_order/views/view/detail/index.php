@@ -102,11 +102,11 @@
                                         if (!$print_order->deadline_date) {
                                             echo '-';
                                         } elseif (strtotime($print_order->deadline_date) <= strtotime("+3 day")) {
-                                            echo '<div class="text-danger">' . $print_order->deadline_date . '</div>';
+                                            echo '<div class="text-danger">' . format_datetime($print_order->deadline_date) . '</div>';
                                         } elseif (strtotime($print_order->deadline_date) <= strtotime("+7 day")) {
-                                            echo '<div class="text-warning">' . $print_order->deadline_date . '</div>';
+                                            echo '<div class="text-warning">' . format_datetime($print_order->deadline_date) . '</div>';
                                         } elseif (strtotime($print_order->deadline_date) >= strtotime("+7 day")) {
-                                            echo '<div>' . $print_order->deadline_date . '</div>';
+                                            echo '<div>' . format_datetime($print_order->deadline_date) . '</div>';
                                         }
                                         ?>
                                     </td>

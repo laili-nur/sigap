@@ -28,6 +28,7 @@ class Book extends Admin_Controller
             'status'  => $this->input->get('status', true),
             'reprint'  => $this->input->get('reprint', true),
             'published_year'  => $this->input->get('published_year', true),
+            'from_outside'  => intval($this->input->get('from_outside', true)),
         ];
 
         // custom per page

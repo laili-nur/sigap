@@ -105,22 +105,12 @@
 
 <body>
     <div class="app">
-        <?php //$this->load->view('navbar'); 
-        ?>
-        <!-- sidebar consume data 'pages' dari controller -->
-        <?php //$this->load->view('sidebar'); 
-        ?>
-
         <div class="wrapper">
             <div class="page">
                 <div class="page-inner">
                     <!-- flash message -->
                     <?php $this->load->view('_partial/flash_message'); ?>
                     <!-- tampilan utama -->
-
-
-
-
                     <?php
                     $level              = check_level();
                     $keyword            = $this->input->get('keyword');
@@ -194,15 +184,6 @@
                             <div class="col-12">
                                 <section class="card card-fluid">
                                     <div class="card-body p-0">
-
-
-
-
-
-
-
-
-
                                         <div
                                             class="collapse"
                                             id="filter-collapse"
@@ -257,12 +238,6 @@
                                                 <?= form_close(); ?>
                                             </div>
                                         </div>
-
-
-
-
-
-
                                         <?php if ($print_orders) : ?>
                                             <div class="table-responsive">
                                                 <table class="table table-striped mb-0">
@@ -406,9 +381,6 @@
     <script src="<?= base_url('assets/vendor/select2/js/select2.min.js'); ?>"></script>
     <script src="<?= base_url('assets/vendor/summernote/summernote-bs4.min.js'); ?>"></script>
     <script src="<?= base_url('assets/vendor/toastr/toastr.min.js'); ?>"></script>
-    <!--
-   <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script> -->
     <!-- END PLUGINS JS -->
 
     <!-- BEGIN THEME JS -->
