@@ -21,7 +21,6 @@ $reprint_options = [
     'n' => ' Buku Baru',
     'y' => ' Buku Cetak Ulang',
 ];
-echo $this->db->last_query();
 ?>
 
 <header class="page-title-bar">

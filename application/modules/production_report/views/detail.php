@@ -2,9 +2,7 @@
 $date_year          = $this->input->get('date_year');
 $date_month         = $this->input->get('date_month');
 
-$date_year_options = [
-    ''  => '- Filter Tahun Cetak -',
-];
+$date_year_options = [];
 
 for ($dy = intval(date('Y')); $dy >= 2015; $dy--) {
     $date_year_options[$dy] = $dy;
@@ -52,13 +50,13 @@ for ($m = 1; $m <= 12; $m++) {
                             <li class="nav-item">
                                 <a
                                     class="nav-link"
-                                    href="<?= base_url('production_report/total'); ?>"
+                                    href="<?= base_url('production_report/total?date_year=' . date('Y')); ?>"
                                 >Hasil Cetak Produksi</a>
                             </li>
                             <li class="nav-item">
                                 <a
                                     class="nav-link active"
-                                    href="<?= base_url('production_report/detail'); ?>"
+                                    href="<?= base_url('production_report/detail?date_year=' . date('Y')); ?>"
                                 >Detail Cetak</a>
                             </li>
                         </ul>
@@ -68,34 +66,33 @@ for ($m = 1; $m <= 12; $m++) {
                         <div class="row">
                             <div class="col-md"></div>
                             <div class="col-md">
-                                <div class="float-right">
-                                    <div class="row">
-                                        <div class="col-12 col-md-4">
-                                            <?= form_dropdown('date_year', $date_year_options, $date_year, 'id="date_year" class="form-control custom-select d-block" title="Filter Tahun Cetak"'); ?>
-                                        </div>
-                                        <div class="col-12 col-md-4">
-                                            <?= form_dropdown('date_month', $date_month_options, $date_month, 'id="date_month" class="form-control custom-select d-block" title="Filter Bulan Cetak"'); ?>
-                                        </div>
-                                        <div class="col-12 col-lg-4">
-                                            <div
-                                                class="btn-group btn-block"
-                                                role="group"
-                                                aria-label="Filter button"
-                                            >
-                                                <button
-                                                    class="btn btn-secondary"
-                                                    type="button"
-                                                    onclick="location.href = '<?= base_url($pages); ?>'"
-                                                > Reset</button>
-                                                <button
-                                                    class="btn btn-primary"
-                                                    type="submit"
-                                                    value="Submit"
-                                                ><i class="fa fa-filter"></i> Filter</button>
-                                            </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <?= form_dropdown('date_year', $date_year_options, $date_year, 'id="date_year" class="form-control custom-select d-block" title="Filter Tahun Cetak"'); ?>
+                                    </div>
+                                    <div class="col-4">
+                                        <?= form_dropdown('date_month', $date_month_options, $date_month, 'id="date_month" class="form-control custom-select d-block" title="Filter Bulan Cetak"'); ?>
+                                    </div>
+                                    <div class="col-4">
+                                        <div
+                                            class="btn-group btn-block"
+                                            role="group"
+                                            aria-label="Filter button"
+                                        >
+                                            <button
+                                                class="btn btn-secondary"
+                                                type="button"
+                                                onclick="location.href = '<?= base_url('production_report/detail?date_year=' . date('Y')); ?>'"
+                                            > Reset</button>
+                                            <button
+                                                class="btn btn-primary"
+                                                type="submit"
+                                                value="Submit"
+                                            ><i class="fa fa-filter"></i> Filter</button>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                         <?= form_close(); ?>

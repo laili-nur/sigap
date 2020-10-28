@@ -92,14 +92,17 @@
                             <label for="deadline_date">
                                 Deadline Percetakan
                             </label>
-                            <div>
-                                <input
-                                    type="text"
-                                    name="deadline_date"
-                                    id="deadline_date"
-                                    class="form-control d-none"
-                                />
+                            <div class="input-group mb-3">
+                                <?= form_input('deadline_date', $input->deadline_date, 'class="form-control dates"'); ?>
+                                <div class="input-group-append">
+                                    <button
+                                        class="btn btn-outline-secondary"
+                                        type="button"
+                                        id="deadline_clear"
+                                    >Clear</button>
+                                </div>
                             </div>
+                            <?= form_error('deadline_date'); ?>
                         </div>
 
                         <div
@@ -412,34 +415,33 @@ $(document).ready(function() {
         }
     }
 
-    initFlatpickr()
-
-    function initFlatpickr() {
-        return flatpickr('#deadline_date', {
-            disableMobile: true,
-            altInput: true,
-            altFormat: 'j F Y',
-            dateFormat: 'Y-m-d H:i',
-            inline: true,
-            enableTime: true,
-            time_24hr: true,
-        });
-    }
-
     $('#location-binding').change(function(e) {
-        if ($('#location-binding').val() == 'outside') {
+        if ($('#location-binding').val() != 'inside') {
             $('#location-binding-outside-wrapper').show();
         } else {
+            $('#location-binding-outside').val('');
             $('#location-binding-outside-wrapper').hide();
         }
     })
 
     $('#location-laminate').change(function(e) {
-        if ($('#location-laminate').val() == 'outside') {
+        if ($('#location-laminate').val() != 'inside') {
             $('#location-laminate-outside-wrapper').show();
         } else {
+            $('#location-laminate-outside').val('');
             $('#location-laminate-outside-wrapper').hide();
         }
+    })
+
+    const $flatpickr = $('.dates').flatpickr({
+        altInput: true,
+        altFormat: 'j F Y H:i:S',
+        dateFormat: 'Y-m-d H:i:S',
+        enableTime: true
+    });
+
+    $("#deadline_clear").click(function() {
+        $flatpickr.clear();
     })
 })
 </script>

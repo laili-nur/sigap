@@ -108,15 +108,8 @@
                             <label for="deadline_date">
                                 Deadline Percetakan
                             </label>
-                            <div>
-                                <input
-                                    type="text"
-                                    name="deadline_date"
-                                    id="deadline_date"
-                                    class="form-control d-none"
-                                    value="<?= $input->deadline_date; ?>"
-                                />
-                            </div>
+                            <?= form_input('deadline_date', $input->deadline_date, 'class="form-control dates"'); ?>
+                            <?= form_error('deadline_date'); ?>
                         </div>
 
                         <div

@@ -2,9 +2,7 @@
 $this->load->helper('ugmpress_helper');
 $date_year          = $this->input->get('date_year');
 
-$date_year_options = [
-    ''  => '- Filter Tahun Cetak -',
-];
+$date_year_options = [];
 
 for ($dy = intval(date('Y')); $dy >= 2015; $dy--) {
     $date_year_options[$dy] = $dy;
@@ -45,13 +43,13 @@ for ($dy = intval(date('Y')); $dy >= 2015; $dy--) {
                             <li class="nav-item">
                                 <a
                                     class="nav-link active"
-                                    href="<?= base_url('production_report/total'); ?>"
+                                    href="<?= base_url('production_report/total?date_year=' . date('Y')); ?>"
                                 >Hasil Cetak Produksi</a>
                             </li>
                             <li class="nav-item">
                                 <a
                                     class="nav-link"
-                                    href="<?= base_url('production_report/detail'); ?>"
+                                    href="<?= base_url('production_report/detail?date_year=' . date('Y')); ?>"
                                 >Detail Cetak</a>
                             </li>
                         </ul>
@@ -61,28 +59,26 @@ for ($dy = intval(date('Y')); $dy >= 2015; $dy--) {
                         <div class="row">
                             <div class="col-md"></div>
                             <div class="col-md">
-                                <div class="float-right">
-                                    <div class="row">
-                                        <div class="col-12 col-md-6">
-                                            <?= form_dropdown('date_year', $date_year_options, $date_year, 'id="date_year" class="form-control custom-select d-block" title="Filter Tahun Cetak"'); ?>
-                                        </div>
-                                        <div class="col-12 col-lg-6">
-                                            <div
-                                                class="btn-group btn-block"
-                                                role="group"
-                                                aria-label="Filter button"
-                                            >
-                                                <button
-                                                    class="btn btn-secondary"
-                                                    type="button"
-                                                    onclick="location.href = '<?= base_url($pages); ?>'"
-                                                > Reset</button>
-                                                <button
-                                                    class="btn btn-primary"
-                                                    type="submit"
-                                                    value="Submit"
-                                                ><i class="fa fa-filter"></i> Filter</button>
-                                            </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <?= form_dropdown('date_year', $date_year_options, $date_year, 'id="date_year" class="form-control custom-select d-block" title="Filter Tahun Cetak"'); ?>
+                                    </div>
+                                    <div class="col-6">
+                                        <div
+                                            class="btn-group btn-block"
+                                            role="group"
+                                            aria-label="Filter button"
+                                        >
+                                            <button
+                                                class="btn btn-secondary"
+                                                type="button"
+                                                onclick="location.href = '<?= base_url('production_report/'); ?>'"
+                                            > Reset</button>
+                                            <button
+                                                class="btn btn-primary"
+                                                type="submit"
+                                                value="Submit"
+                                            ><i class="fa fa-filter"></i> Filter</button>
                                         </div>
                                     </div>
                                 </div>
@@ -137,39 +133,40 @@ for ($dy = intval(date('Y')); $dy >= 2015; $dy--) {
                                     <p>LAPORAN JUDUL BUKU YANG BERHASIL DI CETAK</p>
                                 </b>
                             </div>
-
-                            <table class="table table-striped mb-0 table-responsive">
-                                <thead>
-                                    <tr>
-                                        <th
-                                            scope="col"
-                                            class="pl-4 align-middle text-center"
-                                        >No</th>
-                                        <th
-                                            scope="col"
-                                            class="align-middle text-center"
-                                        >Judul Buku</th>
-                                        <th
-                                            scope="col"
-                                            class="align-middle text-center"
-                                        >Kategori Cetak</th>
-                                        <th
-                                            scope="col"
-                                            class="align-middle text-center"
-                                        >Jumlah Pesanan</th>
-                                        <th
-                                            scope="col"
-                                            class="align-middle text-center"
-                                        >Jumlah Hasil Cetak</th>
-                                        <th class="align-middle text-center">Ref</th>
-                                    </tr>
-                                </thead>
-                                <tbody
-                                    id="to_fill"
-                                    class="align-middle text-center"
-                                >
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-striped mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th
+                                                scope="col"
+                                                class="pl-4 align-middle text-center"
+                                            >No</th>
+                                            <th
+                                                scope="col"
+                                                class="align-middle text-center"
+                                            >Judul Buku</th>
+                                            <th
+                                                scope="col"
+                                                class="align-middle text-center"
+                                            >Kategori Cetak</th>
+                                            <th
+                                                scope="col"
+                                                class="align-middle text-center"
+                                            >Jumlah Pesanan</th>
+                                            <th
+                                                scope="col"
+                                                class="align-middle text-center"
+                                            >Jumlah Hasil Cetak</th>
+                                            <th class="align-middle text-center">Ref</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody
+                                        id="to_fill"
+                                        class="align-middle text-center"
+                                    >
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -537,12 +534,12 @@ chart2.onclick = function(evt) {
     // console.log("preparasi");
     $.ajax({
         type: "POST",
-        url: "http://localhost/sigap/production_report/coba", 
+        url: "http://localhost/sigap/production_report/coba",
         data: {
             year: urlParams.get('date_year'),
             month: urlParams.get('date_month')
         },
-        success: function(result){
+        success: function(result) {
             //console.log(JSON.parse(result));
             var detail_data = JSON.parse(result);
             var detail_table = "";
@@ -553,7 +550,7 @@ chart2.onclick = function(evt) {
                 var no = Number(i) + 1
                 detail_row += "<td class='align-middle text-center pl-4'>" + no + "</td>";
                 detail_row += "<td class='align-middle text-center4'>" + detail_data[i].book_title + "</td>";
-                detail_row += "<td class='align-middle text-center4'>"+ categories[detail_data[i].category] + " </td>";
+                detail_row += "<td class='align-middle text-center4'>" + categories[detail_data[i].category] + " </td>";
                 detail_row += "<td class='align-middle text-center4'>" + detail_data[i].total + "</td>";
                 detail_row += "<td class='align-middle text-center4'>" + detail_data[i].total_postprint + "</td>";
                 detail_row += "<td class='align-middle text-center4'> <a href='" + base_url + detail_data[i].print_order_id + "'> Link Order Cetak </a></td></tr>";
@@ -568,11 +565,14 @@ chart2.onclick = function(evt) {
 }
 </script>
 <script>
-    $(document).ready(function(){
-  $("#coba_ajax").click(function(){
-    $.ajax({url: "http://localhost/sigap/production_report/coba", success: function(result){
-      console.log(result);
-    }});
-  });
+$(document).ready(function() {
+    $("#coba_ajax").click(function() {
+        $.ajax({
+            url: "http://localhost/sigap/production_report/coba",
+            success: function(result) {
+                console.log(result);
+            }
+        });
+    });
 });
 </script>

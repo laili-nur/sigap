@@ -19,9 +19,7 @@ class Production_report extends Admin_Controller
 
     public function index()
     {
-        // date('Y');
-        redirect('production_report/total?date_year=2020');
-        // $this->total();
+        redirect('production_report/total?date_year=' . date('Y'));
     }
 
     public function total()
@@ -132,19 +130,6 @@ class Production_report extends Admin_Controller
         $pages      = 'production_report/detail';
         $main_view  = 'production_report/detail';
         $this->load->view('template', compact('main_view', 'pages', 'model'));
-    }
-
-    public function coba()
-    {
-        // $filters = [
-        //     'date_year'             => '2020',
-        //     'date_month'            => '1',
-        // ];
-
-        // return $this->production_report->detail_data($filters, $this->pages);
-        $year = $this->input->post('year');
-        $month = $this->input->post('month');
-        echo json_encode($this->production_report->detail_data($year, $month));
     }
 }
 /* End of file Production_report.php */

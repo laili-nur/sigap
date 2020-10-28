@@ -70,6 +70,7 @@ class Print_order_model extends MY_Model
             'location_laminate' => 'inside',
             'location_laminate_outside'  => '',
             'print_mode'        => 'book',
+            'deadline_date'     => ''
         ];
     }
 

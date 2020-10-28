@@ -322,17 +322,63 @@
 
                                                                 </td>
                                                                 <td class="align-middle text-center">
-                                                                    <?php if (!$print_order->deadline_date) : ?>
-                                                                        <span class="badge badge-info">Tidak ada deadline</span>
-                                                                    <?php else : ?>
-                                                                        <?php if (strtotime("now") >= strtotime($print_order->deadline_date)) : ?>
-                                                                            <span class="badge badge-dark">Terlambat</span>
-                                                                        <?php elseif (strtotime('+3 day') >= strtotime($print_order->deadline_date)) : ?>
-                                                                            <span class="badge badge-danger">Mendekati deadline</span>
-                                                                        <?php elseif (strtotime('+7 day') <= strtotime($print_order->deadline_date)) : ?>
-                                                                            <span class="badge badge-success">Belum terlambat</span>
+                                                                    <div
+                                                                        data-toggle="modal"
+                                                                        data-target="#notesModal<?= $print_order->print_order_id; ?>"
+                                                                    >
+                                                                        <?php if (!$print_order->deadline_date) : ?>
+                                                                            <span class="badge badge-info">Tidak ada deadline</span>
+                                                                        <?php else : ?>
+                                                                            <?php if (strtotime("now") >= strtotime($print_order->deadline_date)) : ?>
+                                                                                <span class="badge badge-dark">Terlambat</span>
+                                                                            <?php elseif (strtotime('+3 day') >= strtotime($print_order->deadline_date)) : ?>
+                                                                                <span class="badge badge-danger">Mendekati deadline</span>
+                                                                            <?php elseif (strtotime('+7 day') <= strtotime($print_order->deadline_date)) : ?>
+                                                                                <span class="badge badge-success">Belum terlambat</span>
+                                                                            <?php endif; ?>
                                                                         <?php endif; ?>
-                                                                    <?php endif; ?>
+                                                                    </div>
+                                                                    <!-- Modal -->
+                                                                    <div
+                                                                        class="modal fade"
+                                                                        id="notesModal<?= $print_order->print_order_id; ?>"
+                                                                        tabindex="-1"
+                                                                        role="dialog"
+                                                                        aria-labelledby="notesModal<?= $print_order->print_order_id; ?>"
+                                                                        aria-hidden="true"
+                                                                    >
+                                                                        <div
+                                                                            class="modal-dialog"
+                                                                            role="document"
+                                                                        >
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header">
+                                                                                    <h5
+                                                                                        class="modal-title"
+                                                                                        id="notesModal<?= $print_order->print_order_id; ?>Label"
+                                                                                    >Catatan Tambahan</h5>
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        class="close"
+                                                                                        data-dismiss="modal"
+                                                                                        aria-label="Close"
+                                                                                    >
+                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                    </button>
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                    <?= $print_order->additional_notes ? $print_order->additional_notes : 'Tidak ada catatan.'; ?>
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        class="btn btn-secondary"
+                                                                                        data-dismiss="modal"
+                                                                                    >Close</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </td>
                                                                 <td class="align-middle text-center">
                                                                     <?php if (!$print_order->deadline_date) : ?>
