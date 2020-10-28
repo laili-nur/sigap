@@ -19,7 +19,9 @@ class Production_report extends Admin_Controller
 
     public function index()
     {
-        $this->total();
+        // date('Y');
+        redirect('production_report/total?date_year=2020');
+        // $this->total();
     }
 
     public function total()
@@ -131,8 +133,9 @@ class Production_report extends Admin_Controller
         $main_view  = 'production_report/detail';
         $this->load->view('template', compact('main_view', 'pages', 'model'));
     }
-    
-    public function coba(){
+
+    public function coba()
+    {
         // $filters = [
         //     'date_year'             => '2020',
         //     'date_month'            => '1',

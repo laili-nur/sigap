@@ -23,8 +23,8 @@ $staff_percetakan           = $this->print_order->get_staff_percetakan_by_progre
                             id="btn-start-preprint"
                             title="Mulai proses pra cetak"
                             type="button"
-                            class="d-inline btn <?= !$is_preprint_started ? 'btn-warning' : 'btn-secondary'; ?> <?= ($is_preprint_started || !$staff_percetakan || !$is_preprint_deadline_set) ? 'btn-disabled' : ''; ?>"
-                            <?= ($is_preprint_started || !$staff_percetakan || !$is_preprint_deadline_set) ? 'btn-disabled' : ''; ?>
+                            class="d-inline btn <?= !$is_preprint_started ? 'btn-warning' : 'btn-secondary'; ?> <?= ($is_preprint_started || !$is_preprint_deadline_set) ? 'btn-disabled' : ''; ?>"
+                            <?= ($is_preprint_started || !$is_preprint_deadline_set) ? 'disabled' : ''; ?>
                         ><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
                         <button
                             id="btn-finish-preprint"
@@ -84,7 +84,7 @@ $staff_percetakan           = $this->print_order->get_staff_percetakan_by_progre
             </div>
 
             <div class="list-group-item justify-content-between">
-                <?php if (($_SESSION['level'] == 'superadmin' || ($_SESSION['level'] == 'admin_percetakan' && empty($print_order->preprint_deadline))) && !$is_final) : ?>
+                <?php if (($_SESSION['level'] == 'superadmin' || ($_SESSION['level'] == 'admin_percetakan' && empty($print_order->preprint_deadline))) && $staff_percetakan && !$is_final) : ?>
                     <a
                         href="#"
                         id="btn-modal-deadline-preprint"
@@ -121,13 +121,13 @@ $staff_percetakan           = $this->print_order->get_staff_percetakan_by_progre
         <div class="card-body">
             <div class="card-button">
                 <!-- button aksi -->
-                <?php if (($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_percetakan') && !$is_final) : ?>
+                <?php if (!$is_final) : ?>
                     <button
                         title="Aksi admin"
-                        class="btn btn-outline-dark <?= !$is_preprint_started ? 'btn-disabled' : ''; ?>"
+                        class="btn btn-outline-dark <?= ($print_order->category == "outsideprint" && !$print_order->preprint_file) || !$is_preprint_finished ? 'btn-disabled' : ''; ?>"
                         data-toggle="modal"
                         data-target="#modal-action-preprint"
-                        <?= !$is_preprint_started ? 'disabled' : ''; ?>
+                        <?= ($print_order->category == "outsideprint" && !$print_order->preprint_file) || !$is_preprint_finished ? 'disabled' : ''; ?>
                     >Aksi</button>
                 <?php endif; ?>
 
@@ -139,14 +139,13 @@ $staff_percetakan           = $this->print_order->get_staff_percetakan_by_progre
                     data-target="#modal-preprint-notes"
                 >Catatan</button>
 
-                <?php if ($print_order->category == "outsideprint") : ?>
+                <?php if ($print_order->category == "outsideprint" && !$is_final) : ?>
                     <!-- button modal preprint file info -->
                     <button
                         type="button"
-                        class="btn btn-outline-dark <?= !$is_preprint_started ? 'btn-disabled' : ''; ?>"
+                        class="btn btn-outline-dark"
                         data-toggle="modal"
                         data-target="#modal-preprint-file-info"
-                        <?= !$is_preprint_started ? 'disabled' : ''; ?>
                     >File Approval</button>
                     <!-- modal preprint file info -->
                     <div
@@ -296,6 +295,25 @@ $staff_percetakan           = $this->print_order->get_staff_percetakan_by_progre
                         progress = identifier
                         const printorderId = '<?= $print_order->print_order_id ?>'
 
+                        // reload segmen ketika modal diclose
+                        $(`#modal-${identifier}-file-info`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
+                            // location.reload()
+                            // $(`#staff-percetakan-list-wrapper-${identifier}`).load(` #staff-percetakan-list-${identifier}`, function() {
+                            //     // reinitiate flatpickr modal after load
+                            //     initFlatpickrModal()
+                            // });
+                            $(`#${identifier}-progress-wrapper`).load(` #${identifier}-progress`);
+                        })
+
+                        // reload segmen ketika modal diclose
+                        $("#modal-preprint-file-info").off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
+                            // location.reload()
+                            $("#preprint-progress-wrapper").load(" #preprint-progress", function() {
+                                // reinitiate flatpickr modal after load
+                                initFlatpickrModal()
+                            });
+                        })
+
                         // upload progress
                         $(`#${progress}-progress-wrapper`).on('submit', `#${identifier}-upload-form`, function(e) {
                             e.preventDefault()
@@ -336,8 +354,7 @@ $staff_percetakan           = $this->print_order->get_staff_percetakan_by_progre
                                         success: function(res) {
                                             console.log(res);
                                             showToast(true, res.data);
-                                            // $(`#${identifier}-file-tab-content`).load(` #${identifier}-file-info`)
-                                            $(`#${identifier}-file-info`).load(` #${identifier}-file-info`) //???
+                                            $(`#${identifier}-file-info`).load(` #${identifier}-file-info`); //???
                                         },
                                         error: function(err) {
                                             console.log(err);
@@ -347,6 +364,9 @@ $staff_percetakan           = $this->print_order->get_staff_percetakan_by_progre
                                             $resetform.next('label.custom-file-label').html('');
                                             $this.removeAttr("disabled").html("Update");
                                         },
+                                        // complete: function() {
+                                        //     $(`#staff-percetakan-list-wrapper-${progress}`).load(` #staff-percetakan-list-${progress}`);
+                                        // }
                                     });
                                 }
                             });
@@ -373,13 +393,16 @@ $staff_percetakan           = $this->print_order->get_staff_percetakan_by_progre
                                         console.log(res);
                                         showToast(true, res.data);
                                         // $(`#${identifier}-file-tab-content`).load(` #${identifier}-file-info`)
-                                        $(`#${identifier}-file-info`).load(` #${identifier}-file-info`) //???
+                                        $(`#${identifier}-file-info`).load(` #${identifier}-file-info`);
                                     },
                                     error: function(err) {
                                         console.log(err);
                                         showToast(false, err.responseJSON.message);
                                         $this.removeAttr("disabled").html("<i class='fa fa-trash'></i> Hapus file");
                                     },
+                                    // complete: function() {
+                                    //     $(`#staff-percetakan-list-wrapper-${progress}`).load(` #staff-percetakan-list-${progress}`);
+                                    // }
                                 });
                             }
                         })

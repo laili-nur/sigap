@@ -24,8 +24,8 @@ if ($print_order->category != 'outsideprint') :
                                 id="btn-start-postprint"
                                 title="Mulai proses pra cetak"
                                 type="button"
-                                class="d-inline btn <?= !$is_postprint_started ? 'btn-warning' : 'btn-secondary'; ?> <?= ($is_postprint_started || !$staff_percetakan || !$is_postprint_deadline_set) ? 'btn-disabled' : ''; ?>"
-                                <?= ($is_postprint_started || !$staff_percetakan || !$is_postprint_deadline_set) ? 'disabled' : ''; ?>
+                                class="d-inline btn <?= !$is_postprint_started ? 'btn-warning' : 'btn-secondary'; ?> <?= ($is_postprint_started || !$is_postprint_deadline_set) ? 'btn-disabled' : ''; ?>"
+                                <?= ($is_postprint_started || !$is_postprint_deadline_set) ? 'disabled' : ''; ?>
                             ><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
                             <button
                                 id="btn-finish-postprint"
@@ -85,7 +85,7 @@ if ($print_order->category != 'outsideprint') :
                 </div>
 
                 <div class="list-group-item justify-content-between">
-                    <?php if (($_SESSION['level'] == 'superadmin' || ($_SESSION['level'] == 'admin_percetakan' && empty($print_order->postprint_deadline))) && !$is_final) : ?>
+                    <?php if (($_SESSION['level'] == 'superadmin' || ($_SESSION['level'] == 'admin_percetakan' && empty($print_order->postprint_deadline))) && $staff_percetakan && !$is_final) : ?>
                         <a
                             href="#"
                             id="btn-modal-deadline-postprint"
@@ -131,10 +131,10 @@ if ($print_order->category != 'outsideprint') :
                     <?php if (($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_percetakan') && !$is_final) : ?>
                         <button
                             title="Aksi admin"
-                            class="btn btn-outline-dark <?= !$is_postprint_started ? 'btn-disabled' : ''; ?>"
+                            class="btn btn-outline-dark <?= !$print_order->total_postprint ? 'btn-disabled' : ''; ?>"
                             data-toggle="modal"
                             data-target="#modal-action-postprint"
-                            <?= !$is_postprint_started ? 'disabled' : ''; ?>
+                            <?= !$print_order->total_postprint ? 'disabled' : ''; ?>
                         >Aksi</button>
                     <?php endif; ?>
 
@@ -149,7 +149,7 @@ if ($print_order->category != 'outsideprint') :
                     <?php
                     $this->load->view('print_order/view/common/stock_modal', [
                         'progress' => 'postprint',
-                        'is_postprint_started' => $is_postprint_started
+                        'is_postprint_finished' => $is_postprint_finished
                     ]);
                     ?>
                     <?php if (!$is_final) : ?>

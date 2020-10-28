@@ -23,8 +23,8 @@ $staff_percetakan       = $this->print_order->get_staff_percetakan_by_progress('
                             id="btn-start-print"
                             title="Mulai proses cetak"
                             type="button"
-                            class="d-inline btn <?= !$is_print_started ? 'btn-warning' : 'btn-secondary'; ?> <?= ($is_print_started || !$staff_percetakan || !$is_print_deadline_set) ? 'btn-disabled' : ''; ?>"
-                            <?= ($is_print_started || !$staff_percetakan || !$is_print_deadline_set) ? 'disabled' : ''; ?>
+                            class="d-inline btn <?= !$is_print_started ? 'btn-warning' : 'btn-secondary'; ?> <?= ($is_print_started || !$is_print_deadline_set) ? 'btn-disabled' : ''; ?>"
+                            <?= ($is_print_started || !$is_print_deadline_set) ? 'disabled' : ''; ?>
                         ><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
                         <?php if ($print_order->category == 'outsideprint') : ?>
                             <button
@@ -94,7 +94,7 @@ $staff_percetakan       = $this->print_order->get_staff_percetakan_by_progress('
             </div>
 
             <div class="list-group-item justify-content-between">
-                <?php if (($_SESSION['level'] == 'superadmin' || ($_SESSION['level'] == 'admin_percetakan' && empty($print_order->print_deadline))) && !$is_final) : ?>
+                <?php if (($_SESSION['level'] == 'superadmin' || ($_SESSION['level'] == 'admin_percetakan' && empty($print_order->print_deadline))) && $staff_percetakan && !$is_final) : ?>
                     <a
                         href="#"
                         id="btn-modal-deadline-print"
@@ -141,10 +141,10 @@ $staff_percetakan       = $this->print_order->get_staff_percetakan_by_progress('
                     <?php if ($print_order->category != "outsideprint") : ?>
                         <button
                             title="Aksi admin"
-                            class="btn btn-outline-dark <?= !$is_print_started ? 'btn-disabled' : ''; ?>"
+                            class="btn btn-outline-dark <?= !$print_order->total_print ? 'btn-disabled' : ''; ?>"
                             data-toggle="modal"
                             data-target="#modal-action-print"
-                            <?= !$is_print_started ? 'disabled' : ''; ?>
+                            <?= !$print_order->total_print ? 'disabled' : ''; ?>
                         >Aksi</button>
                         <?php
                         // modal action
@@ -159,10 +159,10 @@ $staff_percetakan       = $this->print_order->get_staff_percetakan_by_progress('
                         ?>
                         <button
                             title="Aksi admin"
-                            class="btn btn-outline-dark <?= !$is_print_started ? 'btn-disabled' : ''; ?>"
+                            class="btn btn-outline-dark <?= !$print_order->total_print ? 'btn-disabled' : ''; ?>"
                             data-toggle="modal"
                             data-target="#modal-action-print-postprint"
-                            <?= !$is_print_started ? 'disabled' : ''; ?>
+                            <?= !$print_order->total_print ? 'disabled' : ''; ?>
                         >Aksi</button>
                         <!-- modal aksi print-postprint -->
 
@@ -329,10 +329,10 @@ $staff_percetakan       = $this->print_order->get_staff_percetakan_by_progress('
                 <?php
                 $this->load->view('print_order/view/common/stock_modal', [
                     'progress' => 'print',
-                    'is_print_started' => $is_print_started,
+                    'is_print_finished' => $is_print_finished,
                 ]);
                 ?>
-                <?php if (!$is_final) : ?>
+                <?php if ($print_order->category != "outsideprint" && !$is_final) : ?>
                     <a
                         href="<?= base_url('print_order/generate_pdf/' . $print_order->print_order_id . "/print") ?>"
                         class="btn btn-outline-danger <?= (!$is_print_deadline_set) ? 'disabled' : ''; ?>"

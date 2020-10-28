@@ -12,10 +12,10 @@ if ($level == 'superadmin' || $level == 'admin_percetakan') :
 ?>
     <button
         title="Set Stok"
-        class="btn btn-outline-dark <?= !${"is_" . $progress . "_started"} ? 'btn-disabled' : ''; ?>"
+        class="btn btn-outline-dark <?= !${"is_" . $progress . "_finished"} ? 'btn-disabled' : ''; ?>"
         data-toggle="modal"
         data-target="#modal-set-stock-<?= $progress; ?>"
-        <?= !${"is_" . $progress . "_started"} ? 'disabled' : ''; ?>
+        <?= !${"is_" . $progress . "_finished"} ? 'disabled' : ''; ?>
     > <?php if (!$is_final) {
             echo 'Set Stok ' . $progress_text;
         } else {
@@ -165,7 +165,7 @@ if ($level == 'superadmin' || $level == 'admin_percetakan') :
                 },
                 complete: function() {
                     $this.removeAttr("disabled").html("Submit");
-                    $(`#total-${progress}`).html($(`#total_${progress}`).val());
+                    $(`#${progress}-progress-wrapper`).load(` #${progress}-progress`);
                 }
             });
         });
