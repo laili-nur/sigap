@@ -24,6 +24,27 @@ class Production_report_model extends MY_Model
             ->get_all();
     }
 
+    public function filter_excel_total($filters)
+    {
+        return $this->select(['print_order_id AS id', 'category', 'total', 'CONCAT_WS(" - ", print_order.name, book.book_title) AS title', '(CASE WHEN total_postprint IS NOT NULL THEN total_postprint ELSE total_print END) AS total_new', 'entry_date', 'finish_date'])
+            ->when('date_year', $filters['date_year'])
+            ->where('print_order.print_order_status', 'finish')
+            ->join_table('book', 'print_order', 'book')
+            ->order_by('CASE WHEN UNIX_TIMESTAMP(finish_date) IS NOT NULL THEN UNIX_TIMESTAMP(finish_date) ELSE "str" END', 'ASC')
+            ->get_all();
+    }
+
+    public function filter_excel_detail($filters)
+    {
+        return $this->select(['print_order_id AS id', 'category', 'total', 'CONCAT_WS(" - ", print_order.name, book.book_title) AS title', '(CASE WHEN total_postprint IS NOT NULL THEN total_postprint ELSE total_print END) AS total_new', 'entry_date', 'finish_date'])
+            ->when('date_year', $filters['date_year'])
+            ->when('date_month', $filters['date_month'])
+            ->where('print_order.print_order_status', 'finish')
+            ->join_table('book', 'print_order', 'book')
+            ->order_by('CASE WHEN UNIX_TIMESTAMP(finish_date) IS NOT NULL THEN UNIX_TIMESTAMP(finish_date) ELSE "str" END', 'ASC')
+            ->get_all();
+    }
+
     public function when($params, $data)
     {
         // jika data null, maka skip
@@ -37,16 +58,6 @@ class Production_report_model extends MY_Model
             }
         }
         return $this;
-    }
-
-    public function detail_data($year, $month) {
-        // $this->db->select('book.book_title', 'print_order.total', 'print_order.total_postprint');
-        // $this->db->from('print_order');
-        // $this->db->join('book', 'print_order.book_id = book.book_id', 'left');
-        $query = $this->db->query("SELECT po.print_order_id, b.book_title, po.category ,po.total , po.total_postprint from print_order po left join book b on po.book_id = b.book_id WHERE YEAR(po.entry_date) = '" . $year . "' AND MONTH(po.entry_date) = '". $month . "'");
-
-        //$query = $this->db->get();
-        return $query->result_array();
     }
 }
 /* End of file Production_report_model.php */

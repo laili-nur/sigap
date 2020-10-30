@@ -221,17 +221,7 @@ $print_order_status_options = [
                                         <td class="align-middle text-center"><?= format_datetime($print_order->entry_date); ?></td>
                                         <td class="align-middle text-center"><?= format_datetime($print_order->finish_date); ?></td>
                                         <td class="align-middle text-center">
-                                            <?php
-                                            if (!$print_order->deadline_date) {
-                                                echo '-';
-                                            } elseif (strtotime($print_order->deadline_date) <= strtotime("+3 day")) {
-                                                echo '<div class="text-danger">' . format_datetime($print_order->deadline_date) . '</div>';
-                                            } elseif (strtotime($print_order->deadline_date) <= strtotime("+7 day")) {
-                                                echo '<div class="text-warning">' . format_datetime($print_order->deadline_date) . '</div>';
-                                            } elseif (strtotime($print_order->deadline_date) >= strtotime("+7 day")) {
-                                                echo '<div>' . format_datetime($print_order->deadline_date) . '</div>';
-                                            }
-                                            ?>
+                                            <?= deadline_color($print_order->deadline_date, $print_order->print_order_status); ?>
                                         </td>
                                         <td class="align-middle text-center"><?= get_print_order_status()[$print_order->print_order_status] ?? $print_order->print_order_status; ?></td>
                                         <?php if ($level == 'superadmin') : ?>

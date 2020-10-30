@@ -64,38 +64,39 @@ for ($m = 1; $m <= 12; $m++) {
                     <div class="p-3">
                         <?= form_open($pages, ['method' => 'GET']); ?>
                         <div class="row">
-                            <div class="col-md"></div>
-                            <div class="col-md">
-                                <div class="row">
-                                    <div class="col-4">
-                                        <?= form_dropdown('date_year', $date_year_options, $date_year, 'id="date_year" class="form-control custom-select d-block" title="Filter Tahun Cetak"'); ?>
-                                    </div>
-                                    <div class="col-4">
-                                        <?= form_dropdown('date_month', $date_month_options, $date_month, 'id="date_month" class="form-control custom-select d-block" title="Filter Bulan Cetak"'); ?>
-                                    </div>
-                                    <div class="col-4">
-                                        <div
-                                            class="btn-group btn-block"
-                                            role="group"
-                                            aria-label="Filter button"
-                                        >
-                                            <button
-                                                class="btn btn-secondary"
-                                                type="button"
-                                                onclick="location.href = '<?= base_url('production_report/detail?date_year=' . date('Y')); ?>'"
-                                            > Reset</button>
-                                            <button
-                                                class="btn btn-primary"
-                                                type="submit"
-                                                value="Submit"
-                                            ><i class="fa fa-filter"></i> Filter</button>
-                                        </div>
-                                    </div>
+                            <div class="col">
+                                <?= form_dropdown('date_year', $date_year_options, $date_year, 'id="date_year" class="form-control custom-select d-block" title="Filter Tahun Cetak"'); ?>
+                            </div>
+                            <div class="col">
+                                <?= form_dropdown('date_month', $date_month_options, $date_month, 'id="date_month" class="form-control custom-select d-block" title="Filter Bulan Cetak"'); ?>
+                            </div>
+                            <div class="col">
+                                <div
+                                    class="btn-group btn-block"
+                                    role="group"
+                                    aria-label="Filter button"
+                                >
+                                    <button
+                                        class="btn btn-secondary"
+                                        type="button"
+                                        onclick="location.href = '<?= base_url('production_report/detail?date_year=' . date('Y')); ?>'"
+                                    > Reset</button>
+                                    <button
+                                        class="btn btn-success"
+                                        id="excel"
+                                        name="excel"
+                                        value="1"
+                                    >Excel</button>
+                                    <button
+                                        class="btn btn-primary"
+                                        type="submit"
+                                        value="Submit"
+                                    ><i class="fa fa-filter"></i> Filter</button>
                                 </div>
-
                             </div>
                         </div>
                         <?= form_close(); ?>
+                        <hr>
                     </div>
                     <div class="container">
                         <div style="text-align: center;">

@@ -98,17 +98,7 @@
                                 <tr>
                                     <td width="200px"> Deadline</td>
                                     <td>
-                                        <?php
-                                        if (!$print_order->deadline_date) {
-                                            echo '-';
-                                        } elseif (strtotime($print_order->deadline_date) <= strtotime("+3 day")) {
-                                            echo '<div class="text-danger">' . format_datetime($print_order->deadline_date) . '</div>';
-                                        } elseif (strtotime($print_order->deadline_date) <= strtotime("+7 day")) {
-                                            echo '<div class="text-warning">' . format_datetime($print_order->deadline_date) . '</div>';
-                                        } elseif (strtotime($print_order->deadline_date) >= strtotime("+7 day")) {
-                                            echo '<div>' . format_datetime($print_order->deadline_date) . '</div>';
-                                        }
-                                        ?>
+                                        <?= deadline_color($print_order->deadline_date, $print_order->print_order_status); ?>
                                     </td>
                                 </tr>
                                 <tr>

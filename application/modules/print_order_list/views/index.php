@@ -111,133 +111,14 @@
                     <!-- flash message -->
                     <?php $this->load->view('_partial/flash_message'); ?>
                     <!-- tampilan utama -->
-                    <?php
-                    $level              = check_level();
-                    $keyword            = $this->input->get('keyword');
-                    $category           = $this->input->get('category');
-                    $type               = $this->input->get('type');
-                    $print_order_status = $this->input->get('print_order_status');
-                    $date_year          = $this->input->get('date_year');
-                    $date_month         = $this->input->get('date_month');
-                    $i                  = 0;
-
-                    $category_options = [
-                        ''  => '- Filter Kategori Cetak -',
-                        'new' => 'Cetak Baru',
-                        'revise' => 'Cetak Ulang Revisi',
-                        'reprint' => 'Cetak Ulang Non Revisi',
-                        'nonbook' => 'Cetak Non Buku',
-                        'outsideprint' => 'Cetak Di Luar',
-                        'from_outside' => 'Cetak Dari Luar'
-                    ];
-
-                    $type_options = [
-                        ''  => '- Filter Tipe Cetak -',
-                        'pod' => 'Cetak POD',
-                        'offset' => 'Cetak Offset'
-                    ];
-
-                    $date_year_options = [
-                        ''  => '- Filter Tahun Cetak -',
-                    ];
-
-                    for ($dy = intval(date('Y')); $dy >= 2015; $dy--) {
-                        $date_year_options[$dy] = $dy;
-                    }
-
-                    $date_month_options = [
-                        ''  => '- Filter Bulan Cetak -',
-                    ];
-
-                    for ($m = 1; $m <= 12; $m++) {
-                        $date_month_options[$m] = date('F', mktime(0, 0, 0, $m, 1));
-                    }
-
-                    $print_order_status_options = [
-                        ''  => '- Filter Status Cetak -',
-                        'waiting' => 'Belum diproses',
-                        'preprint' => 'Proses Pracetak',
-                        'print' => 'Proses Cetak',
-                        'postprint' => 'Proses Jilid'
-                    ];
-                    ?>
-
-                    <header class="page-title-bar">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h1 class="page-title"> Daftar Order Cetak </h1>
-                            </div>
-                            <a
-                                class="btn btn-primary"
-                                data-toggle="collapse"
-                                href="#filter-collapse"
-                                role="button"
-                                aria-expanded="false"
-                                aria-controls="filter-collapse"
-                            >
-                                Filter
-                            </a>
-                        </div>
+                    <header class="page-title-bar text-center">
+                        <h1 class="page-title"> Daftar Order Cetak </h1>
                     </header>
                     <div class="page-section">
                         <div class="row">
                             <div class="col-12">
                                 <section class="card card-fluid">
                                     <div class="card-body p-0">
-                                        <div
-                                            class="collapse"
-                                            id="filter-collapse"
-                                        >
-                                            <div class="p-3">
-                                                <?= form_open($pages, ['method' => 'GET']); ?>
-                                                <div class="row">
-                                                    <div class="col-12 col-md-3 mb-3">
-                                                        <label for="category">Kategori Cetak</label>
-                                                        <?= form_dropdown('category', $category_options, $category, 'id="category" class="form-control custom-select d-block" title="Filter Kategori Cetak"'); ?>
-                                                    </div>
-                                                    <div class="col-12 col-md-3 mb-3">
-                                                        <label for="type">Tipe Cetak</label>
-                                                        <?= form_dropdown('type', $type_options, $type, 'id="type" class="form-control custom-select d-block" title="Filter Tipe Cetak"'); ?>
-                                                    </div>
-                                                    <div class="col-12 col-md-3">
-                                                        <label for="date_year">Tahun</label>
-                                                        <?= form_dropdown('date_year', $date_year_options, $date_year, 'id="date_year" class="form-control custom-select d-block" title="Filter Tahun Cetak"'); ?>
-                                                    </div>
-                                                    <div class="col-12 col-md-3">
-                                                        <label for="date_month">Bulan</label>
-                                                        <?= form_dropdown('date_month', $date_month_options, $date_month, 'id="date_month" class="form-control custom-select d-block" title="Filter Bulan Cetak"'); ?>
-                                                    </div>
-                                                    <div class="col-12 col-md-3">
-                                                        <label for="print_order_status">Status</label>
-                                                        <?= form_dropdown('print_order_status', $print_order_status_options, $print_order_status, 'id="print_order_status" class="form-control custom-select d-block" title="Filter Status Cetak"'); ?>
-                                                    </div>
-                                                    <div class="col-12 col-md-6">
-                                                        <label for="status">Pencarian</label>
-                                                        <?= form_input('keyword', $keyword, 'placeholder="Cari berdasarkan Judul, Nomor, Kode, Nama Pesanan" class="form-control"'); ?>
-                                                    </div>
-                                                    <div class="col-12 col-lg-3">
-                                                        <label>&nbsp;</label>
-                                                        <div
-                                                            class="btn-group btn-block"
-                                                            role="group"
-                                                            aria-label="Filter button"
-                                                        >
-                                                            <button
-                                                                class="btn btn-secondary"
-                                                                type="button"
-                                                                onclick="location.href = '<?= base_url($pages); ?>'"
-                                                            > Reset</button>
-                                                            <button
-                                                                class="btn btn-primary"
-                                                                type="submit"
-                                                                value="Submit"
-                                                            ><i class="fa fa-filter"></i> Filter</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <?= form_close(); ?>
-                                            </div>
-                                        </div>
                                         <?php if ($print_orders) : ?>
                                             <div class="table-responsive">
                                                 <table class="table table-striped mb-0">
@@ -250,42 +131,52 @@
                                                             <th
                                                                 scope="col"
                                                                 class="align-middle text-center"
+                                                                style="min-width:200px"
                                                             >Judul</th>
                                                             <th
                                                                 scope="col"
                                                                 class="align-middle text-center"
+                                                                style="min-width:100px"
                                                             >Nomor Order</th>
                                                             <th
                                                                 scope="col"
                                                                 class="align-middle text-center"
+                                                                style="min-width:100px"
                                                             >Jumlah Cetak</th>
                                                             <th
                                                                 scope="col"
                                                                 class="align-middle text-center"
+                                                                style="min-width:100px"
                                                             >Tipe Cetak</th>
                                                             <th
                                                                 scope="col"
                                                                 class="align-middle text-center"
+                                                                style="min-width:150px"
                                                             >Tanggal Masuk</th>
                                                             <th
                                                                 scope="col"
                                                                 class="align-middle text-center"
+                                                                style="min-width:150px"
                                                             >Deadline</th>
                                                             <th
                                                                 scope="col"
                                                                 class="align-middle text-center"
+                                                                style="min-width:150px"
                                                             >Status</th>
                                                             <th
                                                                 scope="col"
                                                                 class="align-middle text-center"
+                                                                style="min-width:150px"
                                                             >Lama Cetak</th>
                                                             <th
                                                                 scope="col"
                                                                 class="align-middle text-center"
+                                                                style="min-width:100px"
                                                             >Keterangan</th>
                                                             <th
                                                                 scope="col"
                                                                 class="align-middle text-center"
+                                                                style="min-width:150px"
                                                             >Detail</th>
                                                         </tr>
                                                     </thead>
@@ -295,20 +186,14 @@
                                                                 <td class="align-middle text-center pl-4"><?= ++$i; ?></td>
                                                                 </td>
                                                                 <td class="align-middle font-weight-bold">
-                                                                    <?= highlight_keyword($print_order->title, $keyword); ?>
+                                                                    <?= $print_order->title; ?>
                                                                 </td>
-                                                                <td class="align-middle text-center"><?= highlight_keyword($print_order->order_number, $keyword); ?></td>
+                                                                <td class="align-middle text-center"><?= $print_order->order_number; ?></td>
                                                                 <td class="align-middle text-center"><?= $print_order->total; ?></td>
                                                                 <td class="align-middle text-center"><?= $print_order->type; ?></td>
-                                                                <td class="align-middle text-center"><?= $print_order->entry_date; ?></td>
+                                                                <td class="align-middle text-center"><?= format_datetime($print_order->entry_date); ?></td>
                                                                 <td class="align-middle text-center">
-                                                                    <?php
-                                                                    if (!$print_order->deadline_date) {
-                                                                        echo '-';
-                                                                    } else {
-                                                                        echo $print_order->deadline_date;
-                                                                    }
-                                                                    ?>
+                                                                    <?= deadline_color($print_order->deadline_date, $print_order->print_order_status); ?>
                                                                 </td>
                                                                 <td class="align-middle text-center"><?= get_print_order_status()[$print_order->print_order_status] ?? $print_order->print_order_status; ?></td>
                                                                 <td class="align-middle text-center">
@@ -322,22 +207,8 @@
 
                                                                 </td>
                                                                 <td class="align-middle text-center">
-                                                                    <div
-                                                                        data-toggle="modal"
-                                                                        data-target="#notesModal<?= $print_order->print_order_id; ?>"
-                                                                    >
-                                                                        <?php if (!$print_order->deadline_date) : ?>
-                                                                            <span class="badge badge-info">Tidak ada deadline</span>
-                                                                        <?php else : ?>
-                                                                            <?php if (strtotime("now") >= strtotime($print_order->deadline_date)) : ?>
-                                                                                <span class="badge badge-dark">Terlambat</span>
-                                                                            <?php elseif (strtotime('+3 day') >= strtotime($print_order->deadline_date)) : ?>
-                                                                                <span class="badge badge-danger">Mendekati deadline</span>
-                                                                            <?php elseif (strtotime('+7 day') <= strtotime($print_order->deadline_date)) : ?>
-                                                                                <span class="badge badge-success">Belum terlambat</span>
-                                                                            <?php endif; ?>
-                                                                        <?php endif; ?>
-                                                                    </div>
+
+                                                                    <?= deadline_detail($print_order->deadline_date, $print_order->print_order_id, $print_order->print_order_status); ?>
                                                                     <!-- Modal -->
                                                                     <div
                                                                         class="modal fade"

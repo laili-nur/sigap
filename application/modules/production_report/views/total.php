@@ -1,5 +1,4 @@
 <?php
-$this->load->helper('ugmpress_helper');
 $date_year          = $this->input->get('date_year');
 
 $date_year_options = [];
@@ -57,34 +56,37 @@ for ($dy = intval(date('Y')); $dy >= 2015; $dy--) {
                     <div class="p-3">
                         <?= form_open($pages, ['method' => 'GET']); ?>
                         <div class="row">
-                            <div class="col-md"></div>
-                            <div class="col-md">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <?= form_dropdown('date_year', $date_year_options, $date_year, 'id="date_year" class="form-control custom-select d-block" title="Filter Tahun Cetak"'); ?>
-                                    </div>
-                                    <div class="col-6">
-                                        <div
-                                            class="btn-group btn-block"
-                                            role="group"
-                                            aria-label="Filter button"
-                                        >
-                                            <button
-                                                class="btn btn-secondary"
-                                                type="button"
-                                                onclick="location.href = '<?= base_url('production_report/'); ?>'"
-                                            > Reset</button>
-                                            <button
-                                                class="btn btn-primary"
-                                                type="submit"
-                                                value="Submit"
-                                            ><i class="fa fa-filter"></i> Filter</button>
-                                        </div>
-                                    </div>
+                            <div class="col">
+                                <?= form_dropdown('date_year', $date_year_options, $date_year, 'id="date_year" class="form-control custom-select d-block" title="Filter Tahun Cetak"'); ?>
+                            </div>
+                            <div class="col">
+                                <div
+                                    class="btn-group btn-block"
+                                    role="group"
+                                    aria-label="Filter button"
+                                >
+                                    <button
+                                        class="btn btn-secondary"
+                                        type="button"
+                                        onclick="location.href = '<?= base_url('production_report/'); ?>'"
+                                    > Reset</button>
+                                    <button
+                                        class="btn btn-success"
+                                        type="submit"
+                                        id="excel"
+                                        name="excel"
+                                        value="1"
+                                    >Excel</button>
+                                    <button
+                                        class="btn btn-primary"
+                                        type="submit"
+                                        value="Submit"
+                                    ><i class="fa fa-filter"></i> Filter</button>
                                 </div>
                             </div>
                         </div>
                         <?= form_close(); ?>
+                        <hr>
                     </div>
                     <div class="container">
                         <div class="row">

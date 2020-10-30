@@ -133,12 +133,12 @@ $menu_list = [
         'icon'  => 'fa fa-chart-bar',
         'level' => 'superadmin'
     ],
-    [
-        'name'  => 'Grafik',
-        'url'   => 'reporting',
-        'icon'  => 'fa fa-chart-bar',
-        'level' => 'superadmin|admin_penerbitan'
-    ],
+    // [
+    //     'name'  => 'Grafik',
+    //     'url'   => 'reporting',
+    //     'icon'  => 'fa fa-chart-bar',
+    //     'level' => 'superadmin|admin_penerbitan'
+    // ],
     [
         'name'  => 'Performa Staff',
         'url'   => 'performance',
