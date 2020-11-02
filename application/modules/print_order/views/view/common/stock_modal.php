@@ -106,7 +106,8 @@ if ($level == 'superadmin' || $level == 'admin_percetakan') :
                                     'id'   => 'total_' . $progress,
                                     'class' => 'form-control',
                                     'type' => 'number',
-                                    'value' => $print_order->{"total_{$progress}"}
+                                    'value' => $print_order->{"total_{$progress}"},
+                                    'min'   => '0'
                                 );
 
                                 echo form_input($data);
@@ -155,7 +156,7 @@ if ($level == 'superadmin' || $level == 'admin_percetakan') :
                 datatype: "JSON",
                 data: {
                     progress,
-                    [`total_${progress}`]: $(`#total_${progress}`).val(),
+                    [`total_${progress}`]: Math.abs($(`#total_${progress}`).val()),
                 },
                 success: function(res) {
                     showToast(true, res.data);

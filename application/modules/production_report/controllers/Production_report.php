@@ -143,6 +143,18 @@ class Production_report extends Admin_Controller
         }
     }
 
+    // public function coba()
+    // {
+    //     $filters['date_year'] = "2020";
+    //     $data = $this->production_report->filter_excel_total($filters);
+    //     echo "<pre>";
+    //     foreach ($data as $da) {
+    //         processing_time(strtotime($da->entry_date), strtotime($da->finish_date));
+    //         echo "<br>";
+    //     }
+    //     echo "</pre>";
+    // }
+
     public function generate_excel($filters, $menu)
     {
         $spreadsheet = new Spreadsheet();
@@ -156,8 +168,9 @@ class Production_report extends Admin_Controller
         }
         $i = 2;
         $no = 1;
+        // Column Content
         foreach ($get_data as $data) {
-            foreach (range('A', 'E') as $v) {
+            foreach (range('A', 'U') as $v) {
                 switch ($v) {
                     case 'A': {
                             $value = $no++;
@@ -172,11 +185,90 @@ class Production_report extends Admin_Controller
                             break;
                         }
                     case 'D': {
-                            $value = date('d F Y H:i:s', strtotime($data->entry_date));
+                            $value = strtoupper($data->type);
                             break;
                         }
                     case 'E': {
+                            $value = date('d F Y H:i:s', strtotime($data->entry_date));
+                            break;
+                        }
+                    case 'F': {
                             $value = date('d F Y H:i:s', strtotime($data->finish_date));
+                            break;
+                        }
+                    case 'G': {
+                            $value = '';
+                            break;
+                        }
+                    case 'H': {
+                            $value = $data->total;
+                            break;
+                        }
+                    case 'I': {
+                            $value = $data->total_new;
+                            break;
+                        }
+                    case 'J': {
+                            $staff = "";
+                            $staff_percetakan   = $this->production_report->get_staff_percetakan_by_progress("preprint", $data->id);
+                            foreach ($staff_percetakan as $val) {
+                                $staff .= $val->username . ", ";
+                            }
+                            $value = $staff;
+                            break;
+                        }
+                    case 'K': {
+                            $value = date('d F Y H:i:s', strtotime($data->preprint_start_date));
+                            break;
+                        }
+                    case 'L': {
+                            $value = date('d F Y H:i:s', strtotime($data->preprint_end_date));
+                            break;
+                        }
+                    case 'M': {
+                            $value = '';
+                            break;
+                        }
+                    case 'N': {
+                            $staff = "";
+                            $staff_percetakan   = $this->production_report->get_staff_percetakan_by_progress("print", $data->id);
+                            foreach ($staff_percetakan as $val) {
+                                $staff .= $val->username . ", ";
+                            }
+                            $value = $staff;
+                            break;
+                        }
+                    case 'O': {
+                            $value = date('d F Y H:i:s', strtotime($data->print_start_date));
+                            break;
+                        }
+                    case 'P': {
+                            $value = date('d F Y H:i:s', strtotime($data->print_end_date));
+                            break;
+                        }
+                    case 'Q': {
+                            $value = '';
+                            break;
+                        }
+                    case 'R': {
+                            $staff = "";
+                            $staff_percetakan   = $this->production_report->get_staff_percetakan_by_progress("postprint", $data->id);
+                            foreach ($staff_percetakan as $val) {
+                                $staff .= $val->username . ", ";
+                            }
+                            $value = $staff;
+                            break;
+                        }
+                    case 'S': {
+                            $value = date('d F Y H:i:s', strtotime($data->postprint_start_date));
+                            break;
+                        }
+                    case 'T': {
+                            $value = date('d F Y H:i:s', strtotime($data->postprint_end_date));
+                            break;
+                        }
+                    case 'U': {
+                            $value = '';
                             break;
                         }
                 }
@@ -184,17 +276,55 @@ class Production_report extends Admin_Controller
             }
             $i++;
         }
+        // Column Title
         $sheet->setCellValue('A1', 'No');
         $sheet->setCellValue('B1', 'Judul');
         $sheet->setCellValue('C1', 'Kategori');
-        $sheet->setCellValue('D1', 'Tanggal Mulai');
-        $sheet->setCellValue('E1', 'Tanggal Selesai');
+        $sheet->setCellValue('D1', 'Tipe Cetak');
+        $sheet->setCellValue('E1', 'Tanggal Mulai');
+        $sheet->setCellValue('F1', 'Tanggal Selesai');
+        $sheet->setCellValue('G1', 'Waktu Pengerjaan');
+        $sheet->setCellValue('H1', 'Jumlah Pesanan');
+        $sheet->setCellValue('I1', 'Jumlah Hasil Cetak');
+        $sheet->setCellValue('J1', 'PIC Pracetak');
+        $sheet->setCellValue('K1', 'Tanggal Mulai Pracetak');
+        $sheet->setCellValue('L1', 'Tanggal Selesai Pracetak');
+        $sheet->setCellValue('M1', 'Waktu Pengerjaan Pracetak');
+        $sheet->setCellValue('N1', 'PIC Cetak');
+        $sheet->setCellValue('O1', 'Tanggal Mulai Cetak');
+        $sheet->setCellValue('P1', 'Tanggal Selesai Cetak');
+        $sheet->setCellValue('Q1', 'Waktu Pengerjaan Cetak');
+        $sheet->setCellValue('R1', 'PIC Jilid');
+        $sheet->setCellValue('S1', 'Tanggal Mulai Jilid');
+        $sheet->setCellValue('T1', 'Tanggal Selesai Jilid');
+        $sheet->setCellValue('U1', 'Waktu Pengerjaan Jilid');
+        // Auto width
+        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('B')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setAutoSize(true);
+        $sheet->getColumnDimension('G')->setAutoSize(true);
+        $sheet->getColumnDimension('H')->setAutoSize(true);
+        $sheet->getColumnDimension('I')->setAutoSize(true);
+        $sheet->getColumnDimension('J')->setAutoSize(true);
+        $sheet->getColumnDimension('K')->setAutoSize(true);
+        $sheet->getColumnDimension('L')->setAutoSize(true);
+        $sheet->getColumnDimension('M')->setAutoSize(true);
+        $sheet->getColumnDimension('N')->setAutoSize(true);
+        $sheet->getColumnDimension('O')->setAutoSize(true);
+        $sheet->getColumnDimension('P')->setAutoSize(true);
+        $sheet->getColumnDimension('Q')->setAutoSize(true);
+        $sheet->getColumnDimension('R')->setAutoSize(true);
+        $sheet->getColumnDimension('S')->setAutoSize(true);
+        $sheet->getColumnDimension('T')->setAutoSize(true);
+        $sheet->getColumnDimension('U')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
-
         $writer->save('php://output');
         die();
     }

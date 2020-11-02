@@ -113,11 +113,13 @@ if (!$is_final) :
     <?php endif; ?>
 <?php else : ?>
     <div>Print Order telah selesai.&nbsp;
-        <span>
-            <a
-                href="<?= base_url('book/view/' . $print_order->book_id); ?>"
-                target="_blank"
-            ><i class="fa fa-external-link-alt"></i> Link buku</a>
-        </span>
+        <?php if ($print_order->category != "nonbook" && $print_order->category != "from_outside") : ?>
+            <span>
+                <a
+                    href="<?= base_url('book/view/' . $print_order->book_id); ?>"
+                    target="_blank"
+                ><i class="fa fa-external-link-alt"></i> Link buku</a>
+            </span>
+        <?php endif; ?>
     </div>
 <?php endif; ?>

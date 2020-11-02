@@ -195,11 +195,50 @@
                                 'name'  => 'total',
                                 'id'    => 'total',
                                 'value' => $input->total,
-                                'class' => 'form-control'
+                                'class' => 'form-control',
+                                'min'   => '0'
                             );
                             ?>
                             <?= form_input($form_total); ?>
                             <?= form_error('total'); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="total-print">
+                                Jumlah Cetak
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <?php
+                            $form_total_print = array(
+                                'type'  => 'number',
+                                'name'  => 'total_print',
+                                'id'    => 'total_print',
+                                'value' => $input->total_print,
+                                'class' => 'form-control',
+                                'min'   => '0'
+                            );
+                            ?>
+                            <?= form_input($form_total_print); ?>
+                            <?= form_error('total_print'); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="total-postprint">
+                                Jumlah Jilid
+                                <abbr title="Required">*</abbr>
+                            </label>
+                            <?php
+                            $form_total_postprint = array(
+                                'type'  => 'number',
+                                'name'  => 'total_postprint',
+                                'id'    => 'total_postprint',
+                                'value' => $input->total_postprint,
+                                'class' => 'form-control',
+                                'min'   => '0'
+                            );
+                            ?>
+                            <?= form_input($form_total_postprint); ?>
+                            <?= form_error('total_postprint'); ?>
                         </div>
 
                         <div
@@ -248,6 +287,46 @@
                             </label>
                             <?= form_input('paper_size', $input->paper_size, 'class="form-control" id="paper-size"'); ?>
                             <?= form_error('paper_size'); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location-binding">
+                                Lokasi Jilid
+                            </label>
+                            <?= form_dropdown('location_binding', ['inside' => 'Di Dalam', 'outside' => 'Di Luar', 'partial' => 'Parsial'], $input->location_binding, 'id="location-binding" class="form-control custom-select d-block"'); ?>
+                            <?= form_error('location_binding'); ?>
+                        </div>
+
+                        <div
+                            class="form-group"
+                            style="display:none"
+                            id="location-binding-outside-wrapper"
+                        >
+                            <label for="location-binding-outside">
+                                Lokasi Jilid Di Luar
+                            </label>
+                            <?= form_input('location_binding_outside', $input->location_binding_outside, 'class="form-control" id="location-binding-outside"'); ?>
+                            <?= form_error('location_binding_outside'); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location-laminate">
+                                Lokasi Laminasi
+                            </label>
+                            <?= form_dropdown('location_laminate', ['inside' => 'Di Dalam', 'outside' => 'Di Luar', 'partial' => 'Parsial'], $input->location_laminate, 'id="location-laminate" class="form-control custom-select d-block"'); ?>
+                            <?= form_error('location_laminate'); ?>
+                        </div>
+
+                        <div
+                            class="form-group"
+                            style="display:none"
+                            id="location-laminate-outside-wrapper"
+                        >
+                            <label for="location-laminate-outside">
+                                Lokasi Laminasi Di Luar
+                            </label>
+                            <?= form_input('location_laminate_outside', $input->location_laminate_outside, 'class="form-control" id="location-laminate-outside"'); ?>
+                            <?= form_error('location_laminate_outside'); ?>
                         </div>
 
                         <div class="form-group">
@@ -466,6 +545,20 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label for="print-order-notes">
+                                Catatan Tambahan
+                            </label>
+                            <?= form_textarea([
+                                'name'  => "additional_notes",
+                                'class' => 'form-control',
+                                'id'    => "additional-notes",
+                                'rows'  => '6',
+                                'value' => $input->additional_notes
+                            ]); ?>
+                            <?= form_error('print_order_notes'); ?>
+                        </div>
+
                         </fieldset>
                         <hr>
                         <div class="form-actions">
@@ -599,6 +692,24 @@ $(document).ready(function() {
             $('#paper-required-book-pages').html('-')
         }
     }
+
+    $('#location-binding').change(function(e) {
+        if ($('#location-binding').val() != 'inside') {
+            $('#location-binding-outside-wrapper').show();
+        } else {
+            $('#location-binding-outside').val('');
+            $('#location-binding-outside-wrapper').hide();
+        }
+    })
+
+    $('#location-laminate').change(function(e) {
+        if ($('#location-laminate').val() != 'inside') {
+            $('#location-laminate-outside-wrapper').show();
+        } else {
+            $('#location-laminate-outside').val('');
+            $('#location-laminate-outside-wrapper').hide();
+        }
+    })
 
     initFlatpickr()
 

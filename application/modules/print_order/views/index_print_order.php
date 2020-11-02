@@ -128,8 +128,10 @@ $print_order_status_options = [
                                     > Reset</button>
                                     <button
                                         class="btn btn-success"
-                                        type="button"
-                                        onclick="location.href = '<?= base_url('print_order/generate_excel/'); ?>'"
+                                        type="submit"
+                                        id="excel"
+                                        name="excel"
+                                        value="1"
                                     >Excel</button>
                                     <button
                                         class="btn btn-primary"

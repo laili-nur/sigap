@@ -141,33 +141,16 @@ class Print_order_model extends MY_Model
         ];
     }
 
-    public function filter_excel()
+    public function filter_excel($filters)
     {
-        return $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'CONCAT_WS(" - ", print_order.name, book.book_title) AS title', 'category_name', 'draft.is_reprint', 'print_order.*'])
-            // ->when('keyword', $filters['keyword'])
-            // ->when('category', $filters['category'])
-            // ->when('type', $filters['type'])
-            // ->when('print_order_status', $filters['print_order_status'])
-            // ->when('date_year', $filters['date_year'])
-            // ->when('date_month', $filters['date_month'])
+        return $this->select(['print_order_id AS id', 'category', 'total', 'CONCAT_WS(" - ", print_order.name, book.book_title) AS title', '(CASE WHEN total_postprint IS NOT NULL THEN total_postprint ELSE total_print END) AS total_new', 'entry_date', 'finish_date', 'type', 'preprint_start_date', 'preprint_end_date', 'print_start_date', 'print_end_date', 'postprint_start_date', 'postprint_end_date'])
+            ->when('category', $filters['category'])
+            ->when('type', $filters['type'])
+            ->when('date_year', $filters['date_year'])
+            ->when('date_month', $filters['date_month'])
+            ->where('print_order.print_order_status', 'finish')
             ->join_table('book', 'print_order', 'book')
-            ->join_table('draft', 'book', 'draft')
-            ->join_table('category', 'draft', 'category')
-            // ->order_by("CASE WHEN print_order.print_order_status = 'waiting' THEN 1
-            //                  WHEN print_order.print_order_status = 'preprint' THEN 2
-            //                  WHEN print_order.print_order_status = 'preprint_approval' THEN 3
-            //                  WHEN print_order.print_order_status = 'preprint_finish' THEN 4
-            //                  WHEN print_order.print_order_status = 'print' THEN 5
-            //                  WHEN print_order.print_order_status = 'print_approval' THEN 6
-            //                  WHEN print_order.print_order_status = 'print_finish' THEN 7
-            //                  WHEN print_order.print_order_status = 'postprint' THEN 8
-            //                  WHEN print_order.print_order_status = 'postprint_approval' THEN 9
-            //                  WHEN print_order.print_order_status = 'postprint_finish' THEN 10
-            //                  WHEN print_order.print_order_status = 'reject' THEN 11
-            //                  WHEN print_order.print_order_status = 'finish' THEN 12
-            //                  ELSE 13 END, print_order.print_order_status", "ASC")
-            // ->order_by('CASE WHEN UNIX_TIMESTAMP(deadline_date) IS NOT NULL THEN UNIX_TIMESTAMP(deadline_date) ELSE "str" END', 'ASC')
-            ->order_by('UNIX_TIMESTAMP(print_order.entry_date)', 'ASC')
+            ->order_by('CASE WHEN UNIX_TIMESTAMP(finish_date) IS NOT NULL THEN UNIX_TIMESTAMP(finish_date) ELSE "str" END', 'ASC')
             ->get_all();
     }
 
