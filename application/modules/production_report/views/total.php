@@ -71,17 +71,17 @@ for ($dy = intval(date('Y')); $dy >= 2015; $dy--) {
                                         onclick="location.href = '<?= base_url('production_report/'); ?>'"
                                     > Reset</button>
                                     <button
+                                        class="btn btn-primary"
+                                        type="submit"
+                                        value="Submit"
+                                    ><i class="fa fa-filter"></i> Filter</button>
+                                    <button
                                         class="btn btn-success"
                                         type="submit"
                                         id="excel"
                                         name="excel"
                                         value="1"
                                     >Excel</button>
-                                    <button
-                                        class="btn btn-primary"
-                                        type="submit"
-                                        value="Submit"
-                                    ><i class="fa fa-filter"></i> Filter</button>
                                 </div>
                             </div>
                         </div>

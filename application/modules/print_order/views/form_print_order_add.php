@@ -152,6 +152,26 @@
                             <?= form_error('type'); ?>
                         </div>
 
+
+
+                        <div class="form-group">
+                            <label for="paper-divider">
+                                Faktor Pembagi Kertas
+                            </label>
+                            <?php
+                            $form_paper_divider = array(
+                                'type'  => 'number',
+                                'name'  => 'paper_divider',
+                                'id'    => 'paper_divider',
+                                'value' => $input->paper_divider,
+                                'class' => 'form-control',
+                                'min'   => '1'
+                            );
+                            ?>
+                            <?= form_input($form_paper_divider); ?>
+                            <?= form_error('paper_divider'); ?>
+                        </div>
+
                         <div class="form-group">
                             <label for="total">
                                 <?= $this->lang->line('form_print_order_total'); ?>
@@ -171,6 +191,24 @@
                             <?= form_error('total'); ?>
                         </div>
 
+                        <div class="form-group">
+                            <label for="paper-estimation">
+                                Jumlah Kertas Yang Dibutuhkan (Halaman x Exemplar / Faktor Pembagi)
+                            </label>
+                            <?php
+                            $form_paper_estimation = array(
+                                'type'  => 'number',
+                                'name'  => 'paper_estimation',
+                                'id'    => 'paper_estimation',
+                                'value' => $input->paper_estimation,
+                                'class' => 'form-control',
+                                'min'   => '1'
+                            );
+                            ?>
+                            <?= form_input($form_paper_estimation); ?>
+                            <?= form_error('paper_estimation'); ?>
+                        </div>
+                        <!-- 
                         <div
                             id="info-paper-required"
                             style="display:none"
@@ -190,7 +228,7 @@
                                 </table>
                             </div>
                             <br>
-                        </div>
+                        </div> -->
 
                         <div class="form-group">
                             <label for="paper-content">
@@ -363,10 +401,7 @@ $(document).ready(function() {
                 $('#info-year').html(published_date.getFullYear())
                 $('#info-book-file-link').attr("href", "" + res.data.book_file_link)
                 $('#info-book-file-link').attr("title", "" + res.data.book_title)
-                $('#total').change(function(e) {
-                    calculate_total(e, res)
-                })
-                calculate_total(e, res)
+                estimate_paper(res.data.book_pages);
             },
             error: function(err) {
                 console.log(err);
@@ -374,30 +409,10 @@ $(document).ready(function() {
         });
     })
 
-
-    function calculate_total(e, res) {
-        const total = e.target.value
-        console.log(total)
-        $('#info-paper-required').show()
-        if (res.data.book_pages) {
-            $('#paper-required-td').html(res.data.book_pages * total)
-        } else {
-            $('#paper-required-td').html(`
-            Buku belum memiliki jumlah halaman, silahkan ubah data buku : <a
-                title="${res.data.book_title}"
-                class="btn btn-success btn-xs my-0"
-                target="_blank"
-                href="<?= base_url('book/edit/') ?>${res.data.book_id}"
-                id="paper-required-a"
-            ><i class="fa fa-edit"></i> File Buku</a>
-                                                `);
-        }
-
-        if (res.data.book_pages) {
-            $('#paper-required-book-pages').html(res.data.book_pages)
-        } else {
-            $('#paper-required-book-pages').html('-')
-        }
+    function estimate_paper(halaman) {
+        $("#paper-divider").change(function(halaman) {
+            $("#paper-estimation").val(($("#total").val() * halaman) / $("#paper-divider").val());
+        });
     }
 
     $('#location-binding').change(function(e) {

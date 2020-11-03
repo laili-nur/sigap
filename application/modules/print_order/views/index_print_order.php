@@ -127,17 +127,17 @@ $print_order_status_options = [
                                         onclick="location.href = '<?= base_url($pages); ?>'"
                                     > Reset</button>
                                     <button
+                                        class="btn btn-primary"
+                                        type="submit"
+                                        value="Submit"
+                                    ><i class="fa fa-filter"></i> Filter</button>
+                                    <button
                                         class="btn btn-success"
                                         type="submit"
                                         id="excel"
                                         name="excel"
                                         value="1"
                                     >Excel</button>
-                                    <button
-                                        class="btn btn-primary"
-                                        type="submit"
-                                        value="Submit"
-                                    ><i class="fa fa-filter"></i> Filter</button>
                                 </div>
                             </div>
                         </div>

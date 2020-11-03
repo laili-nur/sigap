@@ -160,6 +160,25 @@
                             <?= form_error('type'); ?>
                         </div>
 
+
+                        <div class="form-group">
+                            <label for="paper-divider">
+                                Faktor Pembagi Kertas
+                            </label>
+                            <?php
+                            $form_paper_divider = array(
+                                'type'  => 'number',
+                                'name'  => 'paper_divider',
+                                'id'    => 'paper_divider',
+                                'value' => $input->paper_divider,
+                                'class' => 'form-control',
+                                'min'   => '1'
+                            );
+                            ?>
+                            <?= form_input($form_paper_divider); ?>
+                            <?= form_error('paper_divider'); ?>
+                        </div>
+
                         <div class="form-group">
                             <label for="total">
                                 <?= $this->lang->line('form_print_order_total'); ?>
@@ -177,6 +196,24 @@
                             ?>
                             <?= form_input($form_total); ?>
                             <?= form_error('total'); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="paper-estimation">
+                                Jumlah Kertas Yang Dibutuhkan (Halaman x Exemplar / Faktor Pembagi)
+                            </label>
+                            <?php
+                            $form_paper_estimation = array(
+                                'type'  => 'number',
+                                'name'  => 'paper_estimation',
+                                'id'    => 'paper_estimation',
+                                'value' => $input->paper_estimation,
+                                'class' => 'form-control',
+                                'min'   => '1'
+                            );
+                            ?>
+                            <?= form_input($form_paper_estimation); ?>
+                            <?= form_error('paper_estimation'); ?>
                         </div>
 
                         <div class="form-group">

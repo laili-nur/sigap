@@ -71,6 +71,14 @@
                                     <td width="200px"> <?= $this->lang->line('form_print_order_total') ?> </td>
                                     <td><?= $print_order->total; ?> </td>
                                 </tr>
+                                <tr>
+                                    <td width="200px"> Faktor Pembagi Kertas </td>
+                                    <td><?= $print_order->paper_divider; ?> </td>
+                                </tr>
+                                <tr>
+                                    <td width="200px"> Estimasi Jumlah Kertas </td>
+                                    <td><?= $print_order->paper_estimation; ?> </td>
+                                </tr>
                                 <?php if ($print_order->book_id) : ?>
                                     <tr>
                                         <td width="200px"> Kategori Cetak (data draft)</td>

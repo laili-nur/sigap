@@ -56,6 +56,8 @@ class Print_order_model extends MY_Model
             'order_number'      => '',
             'order_code'        => '',
             'total'             => '',
+            'paper_divider'     => '',
+            'paper_estimation'  => '',
             'print_number'      => '',
             'paper_content'     => '',
             'paper_cover'       => '',

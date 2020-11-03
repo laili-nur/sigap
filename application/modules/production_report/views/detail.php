@@ -82,16 +82,16 @@ for ($m = 1; $m <= 12; $m++) {
                                         onclick="location.href = '<?= base_url('production_report/detail?date_year=' . date('Y')); ?>'"
                                     > Reset</button>
                                     <button
+                                        class="btn btn-primary"
+                                        type="submit"
+                                        value="Submit"
+                                    ><i class="fa fa-filter"></i> Filter</button>
+                                    <button
                                         class="btn btn-success"
                                         id="excel"
                                         name="excel"
                                         value="1"
                                     >Excel</button>
-                                    <button
-                                        class="btn btn-primary"
-                                        type="submit"
-                                        value="Submit"
-                                    ><i class="fa fa-filter"></i> Filter</button>
                                 </div>
                             </div>
                         </div>
