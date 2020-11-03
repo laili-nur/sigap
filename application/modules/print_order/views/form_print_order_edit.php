@@ -152,35 +152,11 @@
                         </div>
 
                         <div class="form-group">
-                            <label
-                                for="type"
-                                class="d-block"
-                            >
+                            <label for="type">
                                 <?= $this->lang->line('form_print_order_type'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <div
-                                class="btn-group btn-group-toggle"
-                                data-toggle="buttons"
-                            >
-                                <label class="btn btn-secondary <?= ($input->type == 'pod') ? 'active' : ''; ?>">
-                                    <?= form_radio(
-                                        'type',
-                                        'pod',
-                                        isset($input->type) && ($input->type == 'pod') ? true : false,
-                                        'class="custom-control-input"'
-                                    ); ?>
-                                    POD</label>
-
-                                <label class="btn btn-secondary <?= ($input->type == 'offset') ? 'active' : ''; ?>">
-                                    <?= form_radio(
-                                        'type',
-                                        'offset',
-                                        isset($input->type) && ($input->type == 'offset') ? true : false,
-                                        'class="custom-control-input"'
-                                    ); ?>
-                                    Offset</label>
-                            </div>
+                            <?= form_dropdown('type', ['pod' => 'POD', 'offset' => 'Offset'], $input->type, 'id="type" class="form-control custom-select d-block"'); ?>
                             <?= form_error('type'); ?>
                         </div>
 
@@ -624,12 +600,9 @@ $(document).ready(function() {
     }
 
     $('.dates').flatpickr({
-        disableMobile: true,
         altInput: true,
-        altFormat: 'j F Y H:i:S',
-        dateFormat: 'Y-m-d H:i:S',
-        minDate: "2000-01-01",
-        enableTime: true
+        altFormat: 'j F Y',
+        dateFormat: 'Y-m-d'
     });
 
     $('#delete-file').change(function() {
@@ -710,19 +683,5 @@ $(document).ready(function() {
             $('#location-laminate-outside-wrapper').hide();
         }
     })
-
-    initFlatpickr()
-
-    function initFlatpickr() {
-        return flatpickr('#deadline_date', {
-            disableMobile: true,
-            altInput: true,
-            altFormat: 'j F Y',
-            dateFormat: 'Y-m-d H:i',
-            inline: true,
-            enableTime: true,
-            time_24hr: true,
-        });
-    }
 })
 </script>

@@ -144,35 +144,11 @@
                         </div>
 
                         <div class="form-group">
-                            <label
-                                for="type"
-                                class="d-block"
-                            >
+                            <label for="type">
                                 <?= $this->lang->line('form_print_order_type'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <div
-                                class="btn-group btn-group-toggle"
-                                data-toggle="buttons"
-                            >
-                                <label class="btn btn-secondary <?= ($input->type == 'pod') ? 'active' : ''; ?>">
-                                    <?= form_radio(
-                                        'type',
-                                        'pod',
-                                        isset($input->type) && ($input->type == 'pod') ? true : false,
-                                        'class="custom-control-input"'
-                                    ); ?>
-                                    POD</label>
-
-                                <label class="btn btn-secondary <?= ($input->type == 'offset') ? 'active' : ''; ?>">
-                                    <?= form_radio(
-                                        'type',
-                                        'offset',
-                                        isset($input->type) && ($input->type == 'offset') ? true : false,
-                                        'class="custom-control-input"'
-                                    ); ?>
-                                    Offset</label>
-                            </div>
+                            <?= form_dropdown('type', ['pod' => 'POD', 'offset' => 'Offset'], $input->type, 'id="type" class="form-control custom-select d-block"'); ?>
                             <?= form_error('type'); ?>
                         </div>
 
@@ -371,6 +347,14 @@ $(document).ready(function() {
             success: function(res) {
                 console.log(res);
                 var published_date = new Date(res.data.published_date);
+                $('#print-mode').change(function(e) {
+                    if ($('#print-mode').val() == 'nonbook') {
+                        $('#book-info').hide();
+                        $('#info-paper-required').hide();
+                    } else {
+                        $('#book-info').show();
+                    }
+                });
                 $('#book-info').show()
                 $('#info-book-title').html(res.data.book_title)
                 $('#info-book-title').attr("href", "<?= base_url('book/view/'); ?>" + bookId)

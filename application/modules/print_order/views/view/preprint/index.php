@@ -295,21 +295,9 @@ $staff_percetakan           = $this->print_order->get_staff_percetakan_by_progre
                         progress = identifier
                         const printorderId = '<?= $print_order->print_order_id ?>'
 
-                        // reload segmen ketika modal diclose
-                        $(`#modal-${identifier}-file-info`).off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
-                            // location.reload()
-                            // $(`#staff-percetakan-list-wrapper-${identifier}`).load(` #staff-percetakan-list-${identifier}`, function() {
-                            //     // reinitiate flatpickr modal after load
-                            //     initFlatpickrModal()
-                            // });
-                            $(`#${identifier}-progress-wrapper`).load(` #${identifier}-progress`);
-                        })
-
-                        // reload segmen ketika modal diclose
-                        $("#modal-preprint-file-info").off('hidden.bs.modal').on('hidden.bs.modal', function(e) {
-                            // location.reload()
-                            $("#preprint-progress-wrapper").load(" #preprint-progress", function() {
-                                // reinitiate flatpickr modal after load
+                        // RELOAD MODAL
+                        $('#modal-preprint-file-info').on('hidden.bs.modal', function() {
+                            $('#preprint-progress-wrapper').load(' #preprint-progress', function() {
                                 initFlatpickrModal()
                             });
                         })
@@ -354,7 +342,7 @@ $staff_percetakan           = $this->print_order->get_staff_percetakan_by_progre
                                         success: function(res) {
                                             console.log(res);
                                             showToast(true, res.data);
-                                            $(`#${identifier}-file-info`).load(` #${identifier}-file-info`); //???
+                                            $(`#${identifier}-file-info`).load(` #${identifier}-file-info`);
                                         },
                                         error: function(err) {
                                             console.log(err);
@@ -363,10 +351,7 @@ $staff_percetakan           = $this->print_order->get_staff_percetakan_by_progre
                                             $resetform.val('');
                                             $resetform.next('label.custom-file-label').html('');
                                             $this.removeAttr("disabled").html("Update");
-                                        },
-                                        // complete: function() {
-                                        //     $(`#staff-percetakan-list-wrapper-${progress}`).load(` #staff-percetakan-list-${progress}`);
-                                        // }
+                                        }
                                     });
                                 }
                             });
@@ -392,7 +377,6 @@ $staff_percetakan           = $this->print_order->get_staff_percetakan_by_progre
                                     success: function(res) {
                                         console.log(res);
                                         showToast(true, res.data);
-                                        // $(`#${identifier}-file-tab-content`).load(` #${identifier}-file-info`)
                                         $(`#${identifier}-file-info`).load(` #${identifier}-file-info`);
                                     },
                                     error: function(err) {
