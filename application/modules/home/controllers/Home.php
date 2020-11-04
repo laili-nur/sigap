@@ -54,6 +54,34 @@ class Home extends Operator_Controller
             //$count['draft_approved'] = $count['draft_desk_lolos']+$count['draft_review_lolos'];
             $count['draft_in_progress']    = $count['draft_edit'] + $count['draft_layout'] + $count['draft_proofread'];
             $count['draft_rejected_total'] = $this->home->count_progress('reject');
+
+            // PRINT ORDER
+            $print_order = $this->home->print_order();
+
+            $status = [];
+            foreach ($print_order as $value) {
+                if (isset($value->category)) {
+                    array_push($status, $value->print_order_status);
+                }
+            }
+
+            $category = [];
+            foreach ($print_order as $value) {
+                if (isset($value->category)) {
+                    array_push($category, $value->category);
+                }
+            }
+
+            $count["total_print_order"] = count($print_order);
+            $count["total_preprint"] = ((array_count_values($status)['preprint'] ?? 0) + (array_count_values($status)['preprint_approval'] ?? 0) + (array_count_values($status)['preprint_finish'] ?? 0)) ?? 0;
+            $count["total_print"] = ((array_count_values($status)['print'] ?? 0) + (array_count_values($status)['print_approval'] ?? 0) + (array_count_values($status)['print_finish'] ?? 0)) ?? 0;
+            $count["total_postprint"] = ((array_count_values($status)['postprint'] ?? 0) + (array_count_values($status)['postprint_approval'] ?? 0) + (array_count_values($status)['postprint_finish'] ?? 0)) ?? 0;
+            $count["total_new"] = array_count_values($category)['new'] ?? 0;
+            $count["total_revise"] = array_count_values($category)['revise'] ?? 0;
+            $count["total_reprint"] = array_count_values($category)['reprint'] ?? 0;
+            $count["total_nonbook"] = array_count_values($category)['nonbook'] ?? 0;
+            $count["total_outsideprint"] = array_count_values($category)['outsideprint'] ?? 0;
+            $count["total_from_outside"] = array_count_values($category)['from_outside'] ?? 0;
         } elseif ($this->level == 'reviewer') {
             $drafts        = $this->home->join_table('draft_reviewer', 'draft', 'draft')->join_table('reviewer', 'draft_reviewer', 'reviewer')->join_table('user', 'reviewer', 'user')->where('user.username', $this->username)->get_all('draft');
             $drafts_newest = $this->home->join_table('draft_reviewer', 'draft', 'draft')->join_table('reviewer', 'draft_reviewer', 'reviewer')->join_table('user', 'reviewer', 'user')->where('user.username', $this->username)->limit(5)->order_by('entry_date', 'desc')->get_all('draft');
@@ -141,6 +169,22 @@ class Home extends Operator_Controller
             $count['wait']    = $this->home->count_progress_staff('wait');
             $count['approve'] = $this->home->count_progress_staff('approve');
             $count['reject'] = $this->home->count_progress_staff('reject');
+        } elseif ($this->level == 'staff_percetakan') {
+            // PRINT ORDER
+            $print_order = $this->home->print_order();
+
+            $status = [];
+            foreach ($print_order as $value) {
+                if (isset($value->category)) {
+                    array_push($status, $value->print_order_status);
+                }
+            }
+
+            $count["total_print_order"] = count($print_order);
+            $count["total_ongoing"] = ((array_count_values($status)['preprint'] ?? 0) + (array_count_values($status)['preprint_approval'] ?? 0) + (array_count_values($status)['preprint_finish'] ?? 0) + (array_count_values($status)['preprint'] ?? 0) + (array_count_values($status)['preprint_approval'] ?? 0) + (array_count_values($status)['preprint_finish'] ?? 0) + (array_count_values($status)['preprint'] ?? 0) + (array_count_values($status)['preprint_approval'] ?? 0) + (array_count_values($status)['preprint_finish'] ?? 0)) ?? 0;
+            $count["total_waiting"] = array_count_values($status)['waiting'] ?? 0;
+            $count["total_finish"] = array_count_values($status)['reject'] ?? 0;
+            $count["total_reject"] = array_count_values($status)['finish'] ?? 0;
         }
 
         $pages     = $this->pages;

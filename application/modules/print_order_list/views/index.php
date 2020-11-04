@@ -178,6 +178,11 @@
                                                                 class="align-middle text-center"
                                                                 style="min-width:150px"
                                                             >Detail</th>
+                                                            <th
+                                                                scope="col"
+                                                                class="align-middle text-center"
+                                                                style="min-width:200px"
+                                                            >Catatan</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -207,49 +212,7 @@
 
                                                                 </td>
                                                                 <td class="align-middle text-center">
-
-                                                                    <?= deadline_detail($print_order->deadline_date, $print_order->print_order_id, $print_order->print_order_status); ?>
-                                                                    <!-- Modal -->
-                                                                    <div
-                                                                        class="modal fade"
-                                                                        id="notesModal<?= $print_order->print_order_id; ?>"
-                                                                        tabindex="-1"
-                                                                        role="dialog"
-                                                                        aria-labelledby="notesModal<?= $print_order->print_order_id; ?>"
-                                                                        aria-hidden="true"
-                                                                    >
-                                                                        <div
-                                                                            class="modal-dialog"
-                                                                            role="document"
-                                                                        >
-                                                                            <div class="modal-content">
-                                                                                <div class="modal-header">
-                                                                                    <h5
-                                                                                        class="modal-title"
-                                                                                        id="notesModal<?= $print_order->print_order_id; ?>Label"
-                                                                                    >Catatan Tambahan</h5>
-                                                                                    <button
-                                                                                        type="button"
-                                                                                        class="close"
-                                                                                        data-dismiss="modal"
-                                                                                        aria-label="Close"
-                                                                                    >
-                                                                                        <span aria-hidden="true">&times;</span>
-                                                                                    </button>
-                                                                                </div>
-                                                                                <div class="modal-body">
-                                                                                    <?= $print_order->additional_notes ? $print_order->additional_notes : 'Tidak ada catatan.'; ?>
-                                                                                </div>
-                                                                                <div class="modal-footer">
-                                                                                    <button
-                                                                                        type="button"
-                                                                                        class="btn btn-secondary"
-                                                                                        data-dismiss="modal"
-                                                                                    >Close</button>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
+                                                                    <?= deadline_detail(strtotime($print_order->deadline_date), $print_order->print_order_status); ?>
                                                                 </td>
                                                                 <td class="align-middle text-center">
                                                                     <?php if (!$print_order->deadline_date) : ?>
@@ -260,6 +223,7 @@
                                                                         <div>Sisa, <?php processing_time(strtotime($print_order->deadline_date), strtotime("now")); ?></div>
                                                                     <?php endif; ?>
                                                                 </td>
+                                                                <?= $print_order->additional_notes != null ? "<td class='align-middle text-left'>" . $print_order->additional_notes . "</td>" : "<td class='align-middle text-center'>-</td>"; ?>
                                                             </tr>
                                                         <?php endforeach; ?>
                                                     </tbody>

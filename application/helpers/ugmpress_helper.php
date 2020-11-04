@@ -726,18 +726,15 @@ function deadline_color($deadline = null, $status)
 {
     $now        = strtotime('now');
     $day3       = strtotime('+3 days');
-    $day7       = strtotime('+7 days');
 
     if (empty($deadline)) {
         return '-';
     } else {
         if ($status != 'finish') {
-            if ($deadline < $now) {
+            if (strtotime($deadline) < $now) {
                 return '<div class="text-danger">' . format_datetime($deadline) . '</div>';
-            } else if ($deadline <= $day3) {
+            } else if (strtotime($deadline) <= $day3) {
                 return '<div class="text-warning">' . format_datetime($deadline) . '</div>';
-            } else if ($deadline <= $day7) {
-                return '<div class="text-secondary">' . format_datetime($deadline) . '</div>';
             } else {
                 return '<div class="text-success">' . format_datetime($deadline) . '</div>';
             }
@@ -747,27 +744,24 @@ function deadline_color($deadline = null, $status)
     }
 }
 
-function deadline_detail($deadline = null, $id, $status)
+function deadline_detail($deadline = null, $status)
 {
     $now        = strtotime('now');
     $day3       = strtotime('+3 days');
-    $day7       = strtotime('+7 days');
 
     if (empty($deadline)) {
-        return '<span class="badge badge-info" data-toggle="modal" data-target="#notesModal' . $id . '">Tidak ada deadline</span>';
+        return '<span class="badge badge-info">Tidak ada deadline</span>';
     } else {
         if ($status != 'finish') {
             if ($deadline < $now) {
-                return '<span class="badge badge-danger" data-toggle="modal" data-target="#notesModal' . $id . '">Terlambat</span>';
+                return '<span class="badge badge-danger">Terlambat</span>';
             } else if ($deadline <= $day3) {
-                return '<span class="badge badge-warning" data-toggle="modal" data-target="#notesModal' . $id . '">Mendekati</span>';
-            } else if ($deadline <= $day7) {
-                return '<span class="badge badge-secondary" data-toggle="modal" data-target="#notesModal' . $id . '">Mendekati</span>';
+                return '<span class="badge badge-warning">Hampir Terlambat</span>';
             } else {
-                return '<span class="badge badge-secondary" data-toggle="modal" data-target="#notesModal' . $id . '">Belum Terlambat</span>';
+                return '<span class="badge badge-success">Belum Terlambat</span>';
             }
         } else {
-            return '<span class="badge badge-secondary" data-toggle="modal" data-target="#notesModal' . $id . '">Selesai</span>';
+            return '<span class="badge badge-secondary">Selesai</span>';
         }
     }
 }

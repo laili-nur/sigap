@@ -131,13 +131,15 @@ $print_order_status_options = [
                                         type="submit"
                                         value="Submit"
                                     ><i class="fa fa-filter"></i> Filter</button>
-                                    <button
-                                        class="btn btn-success"
-                                        type="submit"
-                                        id="excel"
-                                        name="excel"
-                                        value="1"
-                                    >Excel</button>
+                                    <?php if ($level == "superadmin" || $level == "admin_percetakan") : ?>
+                                        <button
+                                            class="btn btn-success"
+                                            type="submit"
+                                            id="excel"
+                                            name="excel"
+                                            value="1"
+                                        >Excel</button>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
