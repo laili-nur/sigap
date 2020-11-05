@@ -2,6 +2,7 @@
 
 class Migration_Update_logistic_stock extends CI_Migration
 {
+
     public function up()
     {
         $this->dbforge->modify_column('logistic_stock', [

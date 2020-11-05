@@ -10,6 +10,11 @@ class Migration_Update_book extends CI_Migration
                 'type' => 'INT',
                 'constraint' => 10,
                 'null' => true
+            ],
+            'from_outside' => [
+                'type' => 'INT',
+                'constraint' => 1,
+                'default' => 0
             ]
         ]);
     }
@@ -17,5 +22,6 @@ class Migration_Update_book extends CI_Migration
     public function down()
     {
         $this->dbforge->drop_column('book', 'stock_warehouse');
+        $this->dbforge->drop_column('book',  'from_outside');
     }
 }

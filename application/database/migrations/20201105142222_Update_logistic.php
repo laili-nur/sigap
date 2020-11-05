@@ -2,6 +2,7 @@
 
 class Migration_Update_logistic extends CI_Migration
 {
+
     public function up()
     {
         $this->dbforge->add_column('logistic', [

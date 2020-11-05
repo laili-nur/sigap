@@ -1,11 +1,15 @@
 <?php
 
-class Migration_Update_book_stock_mekanisme extends CI_Migration
+class Migration_Update_book_stock extends CI_Migration
 {
 
     public function up()
     {
         $this->dbforge->add_column('book_stock', [
+            // 'stock_warehouse' => [
+            //     'type' => 'VARCHAR',
+            //     'constraint' => 25
+            // ],
             'user_id' => [
                 'type' => 'INT',
                 'constraint' => 10
@@ -39,14 +43,26 @@ class Migration_Update_book_stock_mekanisme extends CI_Migration
             ],
         ]);
 
-        $this->dbforge->add_column('print_order', [
-            'deadline_date' => [
-                'type' => 'TIMESTAMP',
-                'null' => TRUE
-            ]
+        $this->dbforge->modify_column('book_stock', [
+            'stock_input_type' => [
+                'name' => 'stock_input_type',
+                'type' => 'VARCHAR',
+                'constraint' => 15
+            ],
+            'stock_input_date' => [
+                'name' => 'stock_input_date',
+                'type' => 'TIMESTAMP'
+            ],
+            'stock_input_notes' => [
+                'name' => 'stock_input_notes',
+                'type' => 'TEXT'
+            ],
         ]);
 
-        $this->dbforge->drop_column('book_stock', 'stock_warehouse');
+        $this->dbforge->drop_column('book_stock',  'stock_in_warehouse');
+        $this->dbforge->drop_column('book_stock',  'stock_out_warehouse');
+        $this->dbforge->drop_column('book_stock',  'stock_marketing');
+        // $this->dbforge->drop_column('book_stock', 'stock_warehouse');
         $this->dbforge->drop_column('book_stock', 'stock_input_type');
         $this->dbforge->drop_column('book_stock', 'stock_input_user');
         $this->dbforge->drop_column('book_stock', 'stock_input_date');
@@ -56,10 +72,22 @@ class Migration_Update_book_stock_mekanisme extends CI_Migration
     public function down()
     {
         $this->dbforge->add_column('book_stock', [
-            'stock_warehouse' => [
+            'stock_in_warehouse' => [
                 'type' => 'VARCHAR',
                 'constraint' => 25
             ],
+            'stock_out_warehouse' => [
+                'type' => 'VARCHAR',
+                'constraint' => 25
+            ],
+            'stock_marketing' => [
+                'type' => 'VARCHAR',
+                'constraint' => 25
+            ],
+            // 'stock_warehouse' => [
+            //     'type' => 'VARCHAR',
+            //     'constraint' => 25
+            // ],
             'stock_input_type' => [
                 'type' => 'VARCHAR',
                 'constraint' => 15
@@ -77,6 +105,25 @@ class Migration_Update_book_stock_mekanisme extends CI_Migration
             ]
         ]);
 
+        $this->dbforge->modify_column('book_stock', [
+            'stock_input_type' => [
+                'name' => 'stock_input_type',
+                'type' => 'INT',
+                'constraint' => 1
+            ],
+            'stock_input_date' => [
+                'name' => 'stock_input_date',
+                'type' => 'VARCHAR',
+                'constraint' => 25
+            ],
+            'stock_input_notes' => [
+                'name' => 'stock_input_notes',
+                'type' => 'VARCHAR',
+                'constraint' => 255
+            ],
+        ]);
+
+        // $this->dbforge->drop_column('book_stock', 'stock_warehouse');
         $this->dbforge->drop_column('book_stock', 'user_id');
         $this->dbforge->drop_column('book_stock', 'type');
         $this->dbforge->drop_column('book_stock', 'date');
@@ -85,6 +132,5 @@ class Migration_Update_book_stock_mekanisme extends CI_Migration
         $this->dbforge->drop_column('book_stock', 'warehouse_modifier');
         $this->dbforge->drop_column('book_stock', 'warehouse_present');
         $this->dbforge->drop_column('book_stock', 'warehouse_operator');
-        $this->dbforge->drop_column('print_order', 'deadline_date');
     }
 }
