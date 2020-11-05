@@ -822,7 +822,7 @@ class Print_order extends MY_Controller
         $no = 1;
         // Column Content
         foreach ($get_data as $data) {
-            foreach (range('A', 'U') as $v) {
+            foreach (range('A', 'Q') as $v) {
                 switch ($v) {
                     case 'A': {
                             $value = $no++;
@@ -849,18 +849,14 @@ class Print_order extends MY_Controller
                             break;
                         }
                     case 'G': {
-                            $value = '';
-                            break;
-                        }
-                    case 'H': {
                             $value = $data->total;
                             break;
                         }
-                    case 'I': {
+                    case 'H': {
                             $value = $data->total_new;
                             break;
                         }
-                    case 'J': {
+                    case 'I': {
                             $staff = "";
                             $staff_percetakan   = $this->print_order->get_staff_percetakan_by_progress("preprint", $data->id);
                             foreach ($staff_percetakan as $val) {
@@ -869,19 +865,15 @@ class Print_order extends MY_Controller
                             $value = $staff;
                             break;
                         }
-                    case 'K': {
+                    case 'J': {
                             $value = date('d F Y H:i:s', strtotime($data->preprint_start_date));
                             break;
                         }
-                    case 'L': {
+                    case 'K': {
                             $value = date('d F Y H:i:s', strtotime($data->preprint_end_date));
                             break;
                         }
-                    case 'M': {
-                            $value = '';
-                            break;
-                        }
-                    case 'N': {
+                    case 'L': {
                             $staff = "";
                             $staff_percetakan   = $this->print_order->get_staff_percetakan_by_progress("print", $data->id);
                             foreach ($staff_percetakan as $val) {
@@ -890,19 +882,15 @@ class Print_order extends MY_Controller
                             $value = $staff;
                             break;
                         }
-                    case 'O': {
+                    case 'M': {
                             $value = date('d F Y H:i:s', strtotime($data->print_start_date));
                             break;
                         }
-                    case 'P': {
+                    case 'N': {
                             $value = date('d F Y H:i:s', strtotime($data->print_end_date));
                             break;
                         }
-                    case 'Q': {
-                            $value = '';
-                            break;
-                        }
-                    case 'R': {
+                    case 'O': {
                             $staff = "";
                             $staff_percetakan   = $this->print_order->get_staff_percetakan_by_progress("postprint", $data->id);
                             foreach ($staff_percetakan as $val) {
@@ -911,16 +899,12 @@ class Print_order extends MY_Controller
                             $value = $staff;
                             break;
                         }
-                    case 'S': {
+                    case 'P': {
                             $value = date('d F Y H:i:s', strtotime($data->postprint_start_date));
                             break;
                         }
-                    case 'T': {
+                    case 'Q': {
                             $value = date('d F Y H:i:s', strtotime($data->postprint_end_date));
-                            break;
-                        }
-                    case 'U': {
-                            $value = '';
                             break;
                         }
                 }
@@ -935,21 +919,17 @@ class Print_order extends MY_Controller
         $sheet->setCellValue('D1', 'Tipe Cetak');
         $sheet->setCellValue('E1', 'Tanggal Mulai');
         $sheet->setCellValue('F1', 'Tanggal Selesai');
-        $sheet->setCellValue('G1', 'Waktu Pengerjaan');
-        $sheet->setCellValue('H1', 'Jumlah Pesanan');
-        $sheet->setCellValue('I1', 'Jumlah Hasil Cetak');
-        $sheet->setCellValue('J1', 'PIC Pracetak');
-        $sheet->setCellValue('K1', 'Tanggal Mulai Pracetak');
-        $sheet->setCellValue('L1', 'Tanggal Selesai Pracetak');
-        $sheet->setCellValue('M1', 'Waktu Pengerjaan Pracetak');
-        $sheet->setCellValue('N1', 'PIC Cetak');
-        $sheet->setCellValue('O1', 'Tanggal Mulai Cetak');
-        $sheet->setCellValue('P1', 'Tanggal Selesai Cetak');
-        $sheet->setCellValue('Q1', 'Waktu Pengerjaan Cetak');
-        $sheet->setCellValue('R1', 'PIC Jilid');
-        $sheet->setCellValue('S1', 'Tanggal Mulai Jilid');
-        $sheet->setCellValue('T1', 'Tanggal Selesai Jilid');
-        $sheet->setCellValue('U1', 'Waktu Pengerjaan Jilid');
+        $sheet->setCellValue('G1', 'Jumlah Pesanan');
+        $sheet->setCellValue('H1', 'Jumlah Hasil Cetak');
+        $sheet->setCellValue('I1', 'PIC Pracetak');
+        $sheet->setCellValue('J1', 'Tanggal Mulai Pracetak');
+        $sheet->setCellValue('K1', 'Tanggal Selesai Pracetak');
+        $sheet->setCellValue('L1', 'PIC Cetak');
+        $sheet->setCellValue('M1', 'Tanggal Mulai Cetak');
+        $sheet->setCellValue('N1', 'Tanggal Selesai Cetak');
+        $sheet->setCellValue('O1', 'PIC Jilid');
+        $sheet->setCellValue('P1', 'Tanggal Mulai Jilid');
+        $sheet->setCellValue('Q1', 'Tanggal Selesai Jilid');
         // Auto width
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -968,10 +948,6 @@ class Print_order extends MY_Controller
         $sheet->getColumnDimension('O')->setAutoSize(true);
         $sheet->getColumnDimension('P')->setAutoSize(true);
         $sheet->getColumnDimension('Q')->setAutoSize(true);
-        $sheet->getColumnDimension('R')->setAutoSize(true);
-        $sheet->getColumnDimension('S')->setAutoSize(true);
-        $sheet->getColumnDimension('T')->setAutoSize(true);
-        $sheet->getColumnDimension('U')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         header('Content-Type: application/vnd.ms-excel');

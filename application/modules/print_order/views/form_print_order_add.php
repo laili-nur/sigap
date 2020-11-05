@@ -119,7 +119,6 @@
                         <div class="form-group">
                             <label for="print-order-notes">
                                 <?= $this->lang->line('form_print_order_notes'); ?>
-                                <!-- <abbr title="Required">*</abbr> -->
                             </label>
                             <?= form_textarea('print_order_notes', $input->print_order_notes, 'class="form-control" id="print-order-notes"'); ?>
                             <?= form_error('print_order_notes'); ?>
@@ -152,8 +151,6 @@
                             <?= form_error('type'); ?>
                         </div>
 
-
-
                         <div class="form-group">
                             <label for="paper-divider">
                                 Faktor Pembagi Kertas
@@ -162,7 +159,7 @@
                             $form_paper_divider = array(
                                 'type'  => 'number',
                                 'name'  => 'paper_divider',
-                                'id'    => 'paper_divider',
+                                'id'    => 'paper-divider',
                                 'value' => $input->paper_divider,
                                 'class' => 'form-control',
                                 'min'   => '1'
@@ -199,7 +196,7 @@
                             $form_paper_estimation = array(
                                 'type'  => 'number',
                                 'name'  => 'paper_estimation',
-                                'id'    => 'paper_estimation',
+                                'id'    => 'paper-estimation',
                                 'value' => $input->paper_estimation,
                                 'class' => 'form-control',
                                 'min'   => '1'
@@ -208,27 +205,6 @@
                             <?= form_input($form_paper_estimation); ?>
                             <?= form_error('paper_estimation'); ?>
                         </div>
-                        <!-- 
-                        <div
-                            id="info-paper-required"
-                            style="display:none"
-                        >
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered mb-0">
-                                    <tbody>
-                                        <tr>
-                                            <td width="175px"> Halaman Buku </td>
-                                            <td id="paper-required-book-pages"></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="175px"> Jumlah Kertas Yang Dibutuhkan </td>
-                                            <td id="paper-required-td"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <br>
-                        </div> -->
 
                         <div class="form-group">
                             <label for="paper-content">
@@ -401,7 +377,14 @@ $(document).ready(function() {
                 $('#info-year').html(published_date.getFullYear())
                 $('#info-book-file-link').attr("href", "" + res.data.book_file_link)
                 $('#info-book-file-link').attr("title", "" + res.data.book_title)
-                estimate_paper(res.data.book_pages);
+
+                if (res.data.from_outside == 0) {
+                    $('#name-wrapper').val('');
+                    $('#name-wrapper').hide()
+                } else {
+                    $('#name-wrapper').val('');
+                    $('#name-wrapper').show()
+                }
             },
             error: function(err) {
                 console.log(err);
@@ -409,11 +392,10 @@ $(document).ready(function() {
         });
     })
 
-    function estimate_paper(halaman) {
-        $("#paper-divider").change(function(halaman) {
-            $("#paper-estimation").val(($("#total").val() * halaman) / $("#paper-divider").val());
-        });
-    }
+    $("#total,#paper-divider,#book-id").change(function(halaman) {
+        $("#paper-estimation").val(($("#total").val() * $("#info-book-pages").text()) / $("#paper-divider").val());
+    });
+
 
     $('#location-binding').change(function(e) {
         if ($('#location-binding').val() != 'inside') {

@@ -127,7 +127,6 @@
                         <div class="form-group">
                             <label for="print-order-notes">
                                 <?= $this->lang->line('form_print_order_notes'); ?>
-                                <!-- <abbr title="Required">*</abbr> -->
                             </label>
                             <?= form_textarea('print_order_notes', $input->print_order_notes, 'class="form-control" id="print-order-notes"'); ?>
                             <?= form_error('print_order_notes'); ?>
@@ -169,7 +168,7 @@
                             $form_paper_divider = array(
                                 'type'  => 'number',
                                 'name'  => 'paper_divider',
-                                'id'    => 'paper_divider',
+                                'id'    => 'paper-divider',
                                 'value' => $input->paper_divider,
                                 'class' => 'form-control',
                                 'min'   => '1'
@@ -206,7 +205,7 @@
                             $form_paper_estimation = array(
                                 'type'  => 'number',
                                 'name'  => 'paper_estimation',
-                                'id'    => 'paper_estimation',
+                                'id'    => 'paper-estimation',
                                 'value' => $input->paper_estimation,
                                 'class' => 'form-control',
                                 'min'   => '1'
@@ -559,7 +558,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="print-order-notes">
+                            <label for="additional-notes">
                                 Catatan Tambahan
                             </label>
                             <?= form_textarea([
@@ -569,7 +568,7 @@
                                 'rows'  => '6',
                                 'value' => $input->additional_notes
                             ]); ?>
-                            <?= form_error('print_order_notes'); ?>
+                            <?= form_error('additional_notes'); ?>
                         </div>
 
                         </fieldset>
@@ -667,41 +666,20 @@ $(document).ready(function() {
                 $('#info-isbn').html(res.data.isbn)
                 $('#info-book-file-link').attr("href", "" + res.data.book_file_link)
                 $('#info-book-file-link').attr("title", "" + res.data.book_title)
-                $('#total').change(function(e) {
-                    calculate_total(e, res)
-                })
-                calculate_total(e, res)
+
+                if (res.data.from_outside == 0) {
+                    $('#name-wrapper').val('');
+                    $('#name-wrapper').hide()
+                } else {
+                    $('#name-wrapper').val('');
+                    $('#name-wrapper').show()
+                }
             },
             error: function(err) {
                 console.log(err);
             },
         });
     })
-
-    function calculate_total(e, res) {
-        const total = e.target.value
-        console.log(total)
-        $('#info-paper-required').show()
-        if (res.data.book_pages) {
-            $('#paper-required-td').html(res.data.book_pages * total)
-        } else {
-            $('#paper-required-td').html(`
-            Buku belum memiliki jumlah halaman, silahkan ubah data buku : <a
-                title="${res.data.book_title}"
-                class="btn btn-success btn-xs my-0"
-                target="_blank"
-                href="<?= base_url('book/edit/') ?>${res.data.book_id}"
-                id="paper-required-a"
-            ><i class="fa fa-edit"></i> File Buku</a>
-                                                `);
-        }
-
-        if (res.data.book_pages) {
-            $('#paper-required-book-pages').html(res.data.book_pages)
-        } else {
-            $('#paper-required-book-pages').html('-')
-        }
-    }
 
     $('#location-binding').change(function(e) {
         if ($('#location-binding').val() != 'inside') {
