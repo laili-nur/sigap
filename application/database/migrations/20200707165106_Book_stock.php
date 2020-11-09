@@ -16,7 +16,7 @@ class Migration_Book_stock extends CI_Migration
                 'type' => 'INT',
                 'constraint' => 10,
             ],
-            'stock_' => [
+            'stock_in_warehouse' => [
                 'type' => 'INT',
                 'constraint' => 10,
             ],
