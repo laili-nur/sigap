@@ -52,7 +52,7 @@ class MY_Controller extends MX_Controller
 
     public function download_file($folder, $file_name)
     {
-        $file = realpath($folder) . "\\" . $file_name;
+        $file = realpath($folder) . "/" . $file_name;
         if (file_exists($file)) {
             $data = file_get_contents($file);
             force_download($file_name, $data);
