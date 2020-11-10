@@ -8,9 +8,14 @@ class Book_model extends MY_Model
     {
         $validation_rules = [
             [
+                'field' => 'from_outside',
+                'label' => 'Asal Buku',
+                'rules' => 'trim|required',
+            ],
+            [
                 'field' => 'draft_id',
                 'label' => 'Draft ID',
-                'rules' => 'trim|required|callback_unique_data[draft_id]',
+                'rules' => 'trim|callback_unique_data[draft_id]|callback_required_draft_id',
             ],
             [
                 'field' => 'book_code',
@@ -81,6 +86,7 @@ class Book_model extends MY_Model
     public function get_default_values()
     {
         return [
+            'from_outside'        => 0,
             'draft_id'            => '',
             'book_code'           => '',
             'book_title'          => '',
@@ -102,7 +108,7 @@ class Book_model extends MY_Model
 
     public function filter_book($filters, $page)
     {
-        $books = $this->select(['book_id', 'book.draft_id', 'book_title', 'category_name', 'published_date', 'work_unit_name', 'book_code', 'isbn', 'status_hak_cipta', 'is_reprint', 'author_name'])
+        $books = $this->select(['book_id', 'book.draft_id', 'book_title', 'category_name', 'published_date', 'work_unit_name', 'book_code', 'isbn', 'status_hak_cipta', 'is_reprint', 'author_name', 'from_outside'])
             ->when('keyword', $filters['keyword'])
             ->join('draft')
             ->join_table('category', 'draft', 'category')
@@ -113,6 +119,7 @@ class Book_model extends MY_Model
             ->when('status', $filters['status'])
             ->when('reprint', $filters['reprint'])
             ->when('published_year', $filters['published_year'])
+            ->when('from_outside', $filters['from_outside'])
             ->order_by('status_hak_cipta')
             ->order_by('published_date')
             ->order_by('book_title')
@@ -131,6 +138,7 @@ class Book_model extends MY_Model
             ->when('status', $filters['status'])
             ->when('reprint', $filters['reprint'])
             ->when('published_year', $filters['published_year'])
+            ->when('from_outside', $filters['from_outside'])
             ->order_by('status_hak_cipta')
             ->order_by('published_date')
             ->order_by('book_title')
@@ -182,6 +190,10 @@ class Book_model extends MY_Model
                 $this->group_end();
             }
 
+            if ($params == 'from_outside') {
+                $this->where('from_outside', $data);
+            }
+
             // if ($params == 'status') {
             //     if ($data == 'y') {
             //         $this->where_not('edit_notes', '');
@@ -195,7 +207,7 @@ class Book_model extends MY_Model
 
     public function get_book_from_draft($draft_id)
     {
-        return $this->select('book_id,book_title,nomor_hak_cipta,status_hak_cipta,file_hak_cipta,file_hak_cipta_link')
+        return $this->select('book_id,book_title,nomor_hak_cipta,status_hak_cipta,file_hak_cipta,file_hak_cipta_link,from_outside')
             ->where('book.draft_id', $draft_id)
             ->join_table('draft', 'book', 'draft')
             ->get();
@@ -327,27 +339,49 @@ class Book_model extends MY_Model
     public function fetch_stock_by_id($book_id)
     {
 
-        $stock_history    = $this->db->select('*')->from('book_stock')->where('book_id', $book_id)->order_by("UNIX_TIMESTAMP(stock_input_date)", "ASC")->get()->result();
-        $stock_last       = $this->db->select('*')->from('book_stock')->where('book_id', $book_id)->order_by("UNIX_TIMESTAMP(stock_input_date)", "DESC")->limit(1)->get()->row();
+        $stock_history    = $this->db->select('*')->from('book_stock')->where('book_id', $book_id)->order_by("UNIX_TIMESTAMP(date)", "DESC")->get()->result();
+        $stock_last       = $this->db->select('*')->from('book_stock')->where('book_id', $book_id)->order_by("UNIX_TIMESTAMP(date)", "DESC")->limit(1)->get()->row();
         return [
             'stock_history' => $stock_history,
             'stock_last'    => $stock_last
         ];
     }
 
+    public function fetch_book_stock_by_id($book_stock_id)
+    {
+        return $this->db->select('*')->from('book_stock')->where('book_stock_id', $book_stock_id)->get()->row();
+    }
+
     public function add_book_stock()
     {
-        $add    =   [
-            'book_id'               => $this->input->post('book_id'),
-            'stock_in_warehouse'    => $this->input->post('stock_in_warehouse'),
-            'stock_out_warehouse'   => $this->input->post('stock_out_warehouse'),
-            'stock_marketing'       => $this->input->post('stock_marketing'),
-            'stock_input_notes'     => $this->input->post('stock_input_notes'),
-            'stock_input_type'      => 0,
-            'stock_input_user'      => $_SESSION['username'],
-            'stock_input_date'      => date('Y-m-d H:i:s')
+        $book_id             =   $this->input->post('book_id');
+        $warehouse_past      =   intval($this->input->post('warehouse_past'));
+        $warehouse_modifier  =   abs($this->input->post('warehouse_modifier'));
+        $warehouse_operator  =   $this->input->post('warehouse_operator');
+
+        if ($warehouse_operator == "+") {
+            $warehouse_present = $warehouse_past + $warehouse_modifier;
+        } elseif ($warehouse_operator == "-") {
+            $warehouse_present = $warehouse_past - $warehouse_modifier;
+        }
+
+        $edit   =   [
+            'stock_warehouse'    => $warehouse_present,
         ];
 
+        $add    =   [
+            'book_id'               => $book_id,
+            'user_id'               => $_SESSION['user_id'],
+            'type'                  => 'book',
+            'date'                  => date('Y-m-d H:i:s'),
+            'notes'                 => $this->input->post('notes'),
+            'warehouse_past'        => $warehouse_past,
+            'warehouse_modifier'    => $warehouse_modifier,
+            'warehouse_present'     => $warehouse_present,
+            'warehouse_operator'    => $warehouse_operator
+        ];
+
+        $this->db->set($edit)->where('book_id', $book_id)->update('book');
         $this->db->insert('book_stock', $add);
         return TRUE;
     }

@@ -55,6 +55,13 @@ class Home_model extends MY_Model
         $filter_draft_for_staff = $this->draft->filter_draft_for_staff($filters, $username, 1);
         return $filter_draft_for_staff['total'];
     }
+
+    public function print_order()
+    {
+        return $this->select(['CONCAT_WS(" - ", print_order.name, book.book_title) AS title', 'print_order.*'])
+            ->join_table('book', 'print_order', 'book')
+            ->get_all('print_order');
+    }
 }
 
 /* End of file Home_model.php */

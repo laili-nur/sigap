@@ -28,6 +28,7 @@ class Book extends Admin_Controller
             'status'  => $this->input->get('status', true),
             'reprint'  => $this->input->get('reprint', true),
             'published_year'  => $this->input->get('published_year', true),
+            'from_outside'  => intval($this->input->get('from_outside', true)),
         ];
 
         // custom per page
@@ -63,6 +64,12 @@ class Book extends Admin_Controller
         } else {
             $input = (object) $this->input->post(null, false);
 
+            if (!isset($input->book_file)) {
+                $input->book_file = null;
+            }
+
+            $this->session->set_flashdata('draft_file_no_data', $this->lang->line('form_error_file_no_data'));
+
             if (!$input->published_date) {
                 $input->published_date = empty_to_null($input->published_date);
             }
@@ -96,6 +103,11 @@ class Book extends Admin_Controller
             $form_action = 'book/add';
             $this->load->view('template', compact('pages', 'main_view', 'form_action', 'input'));
             return;
+        }
+
+        // jika buku dari luar
+        if ($input->from_outside == 1) {
+            $input->draft_id = empty_to_null($input->draft_id);
         }
 
         if ($this->book->insert($input)) {
@@ -322,6 +334,17 @@ class Book extends Admin_Controller
         return true;
     }
 
+    public function required_draft_id()
+    {
+        $from_outside = $this->input->post('from_outside');
+
+        if ($from_outside == 0) {
+            $this->form_validation->set_message('required_draft_id', "Draft is required.");
+            return false;
+        }
+        return true;
+    }
+
     // validasi format tanggal
     public function is_date_format_valid($str)
     {
@@ -340,10 +363,8 @@ class Book extends Admin_Controller
     {
         if ($this->check_level_gudang() == TRUE) :
             $this->load->library('form_validation');
-            $this->form_validation->set_rules('stock_in_warehouse', 'Stok dalam gudang', 'required|max_length[10]');
-            $this->form_validation->set_rules('stock_out_warehouse', 'Stok luar gudang', 'required|max_length[10]');
-            $this->form_validation->set_rules('stock_marketing', 'Stok pemasaran', 'required|max_length[10]');
-            $this->form_validation->set_rules('stock_input_notes', 'Catatan', 'required|max_length[256]');
+            $this->form_validation->set_rules('warehouse_modifier', 'Stok Gudang', 'required|max_length[10]');
+            $this->form_validation->set_rules('notes', 'Catatan', 'required|max_length[256]');
 
             if ($this->form_validation->run() == FALSE) {
                 $this->session->set_flashdata('error', 'Gagal mengubah data stok buku.');
@@ -364,6 +385,16 @@ class Book extends Admin_Controller
     public function delete_book_stock($book_stock_id)
     {
         if ($this->check_level_gudang() == TRUE) :
+            $book_stock = $this->book->fetch_book_stock_by_id($book_stock_id);
+
+            if ($book_stock->warehouse_operator == "+") {
+                $stock_warehouse = intval($book_stock->warehouse_present) - intval($book_stock->warehouse_modifier);
+            } elseif ($book_stock->warehouse_operator == "-") {
+                $stock_warehouse = intval($book_stock->warehouse_present) + intval($book_stock->warehouse_modifier);
+            }
+
+            $this->db->set('stock_warehouse', $stock_warehouse)->where('book_id', $book_stock->book_id)->update('book');
+
             $isDeleted  = $this->book->delete_book_stock($book_stock_id);
             if ($isDeleted   ==  TRUE) {
                 $this->session->set_flashdata('success', 'Berhasil menghapus data stok buku.');

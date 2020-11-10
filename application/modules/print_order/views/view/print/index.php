@@ -1,5 +1,8 @@
 <?php
-$is_print_started      = format_datetime($print_order->print_start_date);
+$is_print_started       = format_datetime($print_order->print_start_date);
+$is_print_finished      = format_datetime($print_order->print_end_date);
+$is_print_deadline_set  = format_datetime($print_order->print_deadline);
+$staff_percetakan       = $this->print_order->get_staff_percetakan_by_progress('print', $print_order->print_order_id);
 ?>
 <section
     id="print-progress-wrapper"
@@ -8,26 +11,50 @@ $is_print_started      = format_datetime($print_order->print_start_date);
     <div id="print-progress">
         <header class="card-header">
             <div class="d-flex align-items-center"><span class="mr-auto">Cetak</span>
-                <?php if (!$is_final) : ?>
+                <?php if (!$is_final) :
+                    //modal select
+                    $this->load->view('print_order/view/common/select_modal', [
+                        'progress' => 'print',
+                        'staff_percetakan' => $staff_percetakan
+                    ]);
+                ?>
                     <div class="card-header-control">
                         <button
                             id="btn-start-print"
                             title="Mulai proses cetak"
                             type="button"
-                            class="d-inline btn <?= !$is_print_started ? 'btn-warning' : 'btn-secondary'; ?> <?= $is_print_started ? 'btn-disabled' : ''; ?>"
-                            <?= $is_print_started ? 'disabled' : ''; ?>
+                            class="d-inline btn <?= !$is_print_started ? 'btn-warning' : 'btn-secondary'; ?> <?= ($is_print_started || !$is_print_deadline_set) ? 'btn-disabled' : ''; ?>"
+                            <?= ($is_print_started || !$is_print_deadline_set) ? 'disabled' : ''; ?>
                         ><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
-                        <button
-                            id="btn-finish-print"
-                            title="Selesai proses cetak"
-                            type="button"
-                            class="d-inline btn btn-secondary <?= !$is_print_started ? 'btn-disabled' : '' ?>"
-                            <?= !$is_print_started ? 'disabled' : '' ?>
-                        ><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
+                        <?php if ($print_order->category == 'outsideprint') : ?>
+                            <button
+                                id="btn-finish-print-postprint"
+                                title="Selesai proses cetak"
+                                type="button"
+                                class="d-inline btn btn-secondary <?= !$is_print_started ? 'btn-disabled' : '' ?>"
+                                <?= !$is_print_started ? 'disabled' : '' ?>
+                            ><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
+                        <?php else : ?>
+                            <button
+                                id="btn-finish-print"
+                                title="Selesai proses cetak"
+                                type="button"
+                                class="d-inline btn btn-secondary <?= !$is_print_started ? 'btn-disabled' : '' ?>"
+                                <?= !$is_print_started ? 'disabled' : '' ?>
+                            ><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
+                        <?php endif; ?>
                     </div>
                 <?php endif ?>
             </div>
         </header>
+
+        <!-- ALERT -->
+        <?php
+        $this->load->view('print_order/view/common/progress_alert', [
+            'progress'          => 'print',
+            'staff_percetakan'  => $staff_percetakan
+        ]);
+        ?>
 
         <div
             class="list-group list-group-flush list-group-bordered"
@@ -67,7 +94,7 @@ $is_print_started      = format_datetime($print_order->print_start_date);
             </div>
 
             <div class="list-group-item justify-content-between">
-                <?php if (is_admin() && !$is_final) : ?>
+                <?php if (($_SESSION['level'] == 'superadmin' || ($_SESSION['level'] == 'admin_percetakan' && empty($print_order->print_deadline))) && $staff_percetakan && !$is_final) : ?>
                     <a
                         href="#"
                         id="btn-modal-deadline-print"
@@ -81,11 +108,23 @@ $is_print_started      = format_datetime($print_order->print_start_date);
                 <strong><?= format_datetime($print_order->print_deadline); ?></strong>
             </div>
 
-            <div class="list-group-item justify-content-between">
-                <span class="text-muted">User</span>
-                <strong>
-                    <?= $print_order->print_user ?></strong>
-            </div>
+            <?php if ($staff_percetakan) : ?>
+                <div class="list-group-item justify-content-between">
+                    <span class="text-muted">Staff Bertugas</span>
+                    <strong>
+                        <?php foreach ($staff_percetakan as $staff) : ?>
+                            <span class="badge badge-info p-1"><?= $staff->username; ?></span>
+                        <?php endforeach; ?>
+                    </strong>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($print_order->total_print) : ?>
+                <div class="list-group-item justify-content-between">
+                    <span class="text-muted">Hasil Cetak</span>
+                    <strong id="total-print"><?= $print_order->total_print; ?></strong>
+                </div>
+            <?php endif; ?>
 
             <div class="m-3">
                 <div class="text-muted pb-1">Catatan Admin</div>
@@ -98,14 +137,184 @@ $is_print_started      = format_datetime($print_order->print_start_date);
         <div class="card-body">
             <div class="card-button">
                 <!-- button aksi -->
-                <?php if (is_admin() && !$is_final) : ?>
-                    <button
-                        title="Aksi admin"
-                        class="btn btn-outline-dark <?= !$is_print_started ? 'btn-disabled' : ''; ?>"
-                        data-toggle="modal"
-                        data-target="#modal-action-print"
-                        <?= !$is_print_started ? 'disabled' : ''; ?>
-                    >Aksi</button>
+                <?php if (($_SESSION['level'] == 'superadmin' || $_SESSION['level'] == 'admin_percetakan') && !$is_final) : ?>
+                    <?php if ($print_order->category != "outsideprint") : ?>
+                        <button
+                            title="Aksi admin"
+                            class="btn btn-outline-dark <?= !$print_order->total_print ? 'btn-disabled' : ''; ?>"
+                            data-toggle="modal"
+                            data-target="#modal-action-print"
+                            <?= !$print_order->total_print ? 'disabled' : ''; ?>
+                        >Aksi</button>
+                        <?php
+                        // modal action
+                        $this->load->view('print_order/view/common/action_modal', [
+                            'progress' => 'print',
+                        ]);
+                        ?>
+                    <?php else : ?>
+                        <?php
+                        $progress = 'print';
+                        $progress_text = 'cetak';
+                        ?>
+                        <button
+                            title="Aksi admin"
+                            class="btn btn-outline-dark <?= !$print_order->total_print ? 'btn-disabled' : ''; ?>"
+                            data-toggle="modal"
+                            data-target="#modal-action-print-postprint"
+                            <?= !$print_order->total_print ? 'disabled' : ''; ?>
+                        >Aksi</button>
+                        <!-- modal aksi print-postprint -->
+
+                        <div
+                            class="modal fade"
+                            id="modal-action-print-postprint"
+                            tabindex="-1"
+                            role="dialog"
+                            aria-labelledby="modal-action-print-postprint"
+                            aria-hidden="true"
+                        >
+                            <div
+                                class="modal-dialog modal-dialog-centered"
+                                role="document"
+                            >
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Aksi <?= $progress_text ?></h5>
+                                        <button
+                                            type="button"
+                                            class="close"
+                                            data-dismiss="modal"
+                                            aria-label="Close"
+                                        >
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <fieldset>
+                                            <?= form_hidden('progress', $progress) ?>
+                                            <div class="form-group">
+                                                <label
+                                                    for="action_notes_admin"
+                                                    class="font-weight-bold"
+                                                >Catatan Admin</label>
+                                                <div class="alert alert-info">
+                                                    Catatan admin dapat dilihat oleh semua user yang terkait dengan draft ini.
+                                                </div>
+                                                <?php
+                                                if (!is_admin()) {
+                                                    echo '<div class="font-italic">' . nl2br($print_order->{"{$progress}_notes_admin"}) . '</div>';
+                                                } else {
+                                                    echo form_textarea([
+                                                        'name'  => "{$progress}_notes_admin",
+                                                        'class' => 'form-control',
+                                                        'id'    => "{$progress}_notes_admin",
+                                                        'rows'  => '6',
+                                                        'value' => $print_order->{"{$progress}_notes_admin"},
+                                                    ]);
+                                                }
+                                                ?>
+                                                <hr class="my-3">
+                                                <div class="alert alert-info">
+                                                    Pilih aksi dibawah ini: <br>
+                                                    Jika <strong class="text-success">Setuju</strong>, maka tahap <?= $progress_text ?> akan
+                                                    diakhiri
+                                                    dan tanggal selesai <?= $progress_text ?> akan dicatat <br>
+                                                    Jika <strong class="text-danger">Tolak</strong> maka proses draft akan diakhiri
+                                                    sampai tahap ini.<br>
+                                                    Pilih <strong class="text-primary">Reset</strong> jika ingin mengembalikan status progress.
+                                                </div>
+                                                <button
+                                                    class="btn btn-link"
+                                                    id="btn-<?= $progress ?>-revert"
+                                                ><i class="fa fa-history"></i> Reset Aksi</button>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button
+                                            type="button"
+                                            class="btn btn-light"
+                                            data-dismiss="modal"
+                                        >Close</button>
+                                        <button
+                                            id="btn-<?= $progress ?>-decline"
+                                            class="btn btn-danger"
+                                            type="button"
+                                        >Tolak</button>
+                                        <button
+                                            id="btn-<?= $progress ?>-accept"
+                                            class="btn btn-success"
+                                            type="button"
+                                        >Setuju</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                        $(document).ready(function() {
+                            const progress = '<?= $progress ?>'
+                            const url = "<?= base_url('print_order/action_print_postprint'); ?>"
+
+                            const printOrderId = '<?= $print_order->print_order_id ?>'
+
+                            function send_action_data({
+                                isAccept,
+                                isRevert
+                            }) {
+                                this.attr("disabled", "disabled").html("<i class='fa fa-spinner fa-spin '></i>");
+
+                                $.ajax({
+                                    type: "POST",
+                                    url: `${url}/${printOrderId}`,
+                                    data: {
+                                        progress,
+                                        accept: isAccept,
+                                        revert: isRevert,
+                                        [`${progress}_notes_admin`]: $(`#${progress}_notes_admin`).val()
+                                    },
+                                    success: function(res) {
+                                        console.log(res);
+                                        showToast(true, res.data);
+                                    },
+                                    error: function(err) {
+                                        console.log(err);
+                                        showToast(false, err.responseJSON.message);
+                                    },
+                                    complete: function() {
+                                        location.reload()
+                                    },
+                                });
+                            }
+
+                            // aksi setuju
+                            $(`#${progress}-progress-wrapper`).on('click', `#btn-${progress}-accept`, function() {
+                                send_action_data.call($(this), {
+                                    isAccept: 1,
+                                    isRevert: 0
+                                })
+                            });
+
+                            // aksi tolak
+                            $(`#${progress}-progress-wrapper`).on('click', `#btn-${progress}-decline`, function() {
+                                send_action_data.call($(this), {
+                                    isAccept: 0,
+                                    isRevert: 0
+                                })
+                            });
+
+                            // aksi revert
+                            $(`#${progress}-progress-wrapper`).on('click', `#btn-${progress}-revert`, function() {
+                                send_action_data.call($(this), {
+                                    isAccept: null,
+                                    isRevert: 1
+                                })
+                            })
+                        })
+                        </script>
+
+                    <?php endif; ?>
                 <?php endif; ?>
 
                 <!-- button tanggapan print -->
@@ -115,17 +324,28 @@ $is_print_started      = format_datetime($print_order->print_start_date);
                     data-toggle="modal"
                     data-target="#modal-print-notes"
                 >Catatan</button>
+
+                <!-- Modal Set Stok untuk Outside -->
+                <?php
+                $this->load->view('print_order/view/common/stock_modal', [
+                    'progress' => 'print',
+                    'is_print_finished' => $is_print_finished,
+                ]);
+                ?>
+                <?php if ($print_order->category != "outsideprint" && !$is_final) : ?>
+                    <a
+                        href="<?= base_url('print_order/generate_pdf/' . $print_order->print_order_id . "/print") ?>"
+                        class="btn btn-outline-danger <?= (!$is_print_deadline_set) ? 'disabled' : ''; ?>"
+                        id="btn-generate-pdf-print"
+                        title="Generate PDF"
+                    >Generate PDF <i class="fas fa-file-pdf fa-fw"></i></a>
+                <?php endif ?>
             </div>
         </div>
 
         <?php
         // modal deadline
         $this->load->view('print_order/view/common/deadline_modal', [
-            'progress' => 'print',
-        ]);
-
-        // modal action
-        $this->load->view('print_order/view/common/action_modal', [
             'progress' => 'print',
         ]);
 
@@ -183,6 +403,33 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: "<?= base_url('print_order/api_finish_progress/'); ?>" + print_order_id,
+            datatype: "JSON",
+            data: {
+                progress: 'print'
+            },
+            success: function(res) {
+                showToast(true, res.data);
+            },
+            error: function(err) {
+                showToast(false, err.responseJSON.message);
+            },
+            complete: function() {
+                // reload segmen print
+                reload_print_segment()
+                // reload progress
+                $('#progress-list-wrapper').load(' #progress-list');
+                // reload data draft
+                $('#print-data-wrapper').load(' #print-data');
+            },
+        })
+    })
+
+    // print-postprint
+    // selesai cetak dan jilid
+    $('#print-progress-wrapper').on('click', '#btn-finish-print-postprint', function() {
+        $.ajax({
+            type: "POST",
+            url: "<?= base_url('print_order/finish_print_postprint/'); ?>" + print_order_id,
             datatype: "JSON",
             data: {
                 progress: 'print'

@@ -178,16 +178,19 @@ $level              = check_level();
                                         <input type="hidden" class="form-control" id="logistic_id" name="logistic_id" value="<?= $lData->logistic_id;?>"/>
                                     </div>
                                     <div class="form-group">
-                                        <label class="font-weight-bold" for="stock_warehouse">Stok Gudang</label>
-                                        <input type="number" class="form-control" name="stock_warehouse" id="stock_warehouse" value="<td><?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_warehouse;}else{echo "-";} ?></td>"/>
+                                        <label class="font-weight-bold" for="modifier_warehouse">Stok Gudang</label>
+                                        <input type="number" class="form-control" name="modifier_warehouse" id="modifier_warehouse"/>
+                                        <input type="hidden" class="form-control" name="initial_warehouse" id="initial_warehouse" value="<?= $lData->stock_warehouse;?>"/>
                                     </div>
                                     <div class="form-group">
-                                        <label class="font-weight-bold" for="stock_production">Stok Produksi</label>
-                                        <input type="number" class="form-control" name="stock_production" id="stock_production" value="<?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_production;}else{echo "-";} ?>"/>
+                                        <label class="font-weight-bold" for="modifier_production">Stok Produksi</label>
+                                        <input type="number" class="form-control" name="modifier_production" id="modifier_production"/>
+                                        <input type="hidden" class="form-control" name="initial_production" id="initial_production" value="<?= $lData->stock_production;?>"/>
                                     </div>
                                     <div class="form-group">
-                                        <label class="font-weight-bold" for="stock_other">Stok Lainnya</label>
-                                        <input type="number" class="form-control" name="stock_other" id="stock_other" value="<?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_other;}else{echo "-";} ?>"/>
+                                        <label class="font-weight-bold" for="modifier_other">Stok Lainnya</label>
+                                        <input type="number" class="form-control" name="modifier_other" id="modifier_other"/>
+                                        <input type="hidden" class="form-control" name="initial_other" id="initial_other" value="<?= $lData->stock_other;?>"/>
                                     </div>
                                     <div class="form-group">
                                         <label class="font-weight-bold" for="input_notes">Catatan</label>
@@ -228,15 +231,15 @@ $level              = check_level();
                         </tr>
                         <tr>
                             <td width="160px">Stok Gudang</td>
-                            <td><?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_warehouse;}else{echo "-";} ?></td>
+                            <td><?= $lData->stock_warehouse; ?></td>
                         </tr>
                         <tr>
                             <td width="160px">Stok Produksi</td>
-                            <td><?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_production;}else{echo "-";} ?></td>
+                            <td><?= $lData->stock_production; ?></td>
                         </tr>
                         <tr>
                             <td width="160px">Stok Lainnya</td>
-                            <td><?php if(empty($stock_last) == FALSE){ echo $stock_last->stock_other;}else{echo "-";} ?></td>
+                            <td><?= $lData->stock_other; ?></td>
                         </tr>
                         <tr>
                             <td width="160px">Perubahan Terakhir</td>
@@ -275,8 +278,9 @@ $level              = check_level();
                                 <td><?= $history->stock_other; ?></td>
                                 <td>
                                     <?php
-                                        if($history->input_type == 0){echo 'Input menggunakan fitur logistik.';}
-                                        elseif($history->input_type == 1){echo 'Input menggunakan fitur permintaan logistik.';}
+                                        if($history->input_type == 'logistic'){echo 'Input menggunakan fitur logistik.';}
+                                        elseif($history->input_type == 'logistic_stock'){echo 'Input menggunakan fitur stok logistik.';}
+                                        elseif($history->input_type == 'logistic_request'){echo 'Input menggunakan fitur permintaan logistik.';}
                                         else{echo '';}
                                     ?>
                                 </td>

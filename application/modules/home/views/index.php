@@ -60,5 +60,9 @@ $semua = $this->session->userdata();
       if ($level == 'editor' || $level == 'layouter') {
          $this->load->view('home/home_staff');
       }
+
+      if ($level == 'staff_percetakan') {
+         $this->load->view('home/home_staff_cetak');
+      }
       ?>
 </div>

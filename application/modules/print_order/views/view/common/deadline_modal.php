@@ -92,6 +92,7 @@ $(document).ready(function() {
             url: "<?= base_url('print_order/api_update/'); ?>" + printOrderId,
             data: {
                 [`${progress}_deadline`]: deadline,
+                progress
             },
             success: function(res) {
                 showToast(true, res.data);

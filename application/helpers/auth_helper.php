@@ -4,7 +4,7 @@ function is_admin()
 {
     $CI    = &get_instance();
     $level = $CI->session->userdata('level');
-    if ($level === 'author' || $level === 'reviewer' || $level === 'editor' || $level === 'layouter') {
+    if ($level === 'author' || $level === 'reviewer' || $level === 'editor' || $level === 'layouter' || $level === "staff_percetakan") {
         return false;
     }
     return true;

@@ -34,6 +34,12 @@ printorderfile/*
 !printorderfile/.htaccess
 !printorderfile/index.html
 
+# document file
+preprintfile/*
+!preprintfile/.gitkeep
+!preprintfile/.htaccess
+!preprintfile/index.html
+
 .env
 .env.development
 .env.production

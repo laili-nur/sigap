@@ -35,17 +35,22 @@
                                     <td width="200px"> <?= $this->lang->line('form_print_order_category') ?> </td>
                                     <td><?= get_print_order_category()[$print_order->category]; ?> </td>
                                 </tr>
-                                <?php if ($print_order->book_id) : ?>
+                                <?php if ($print_order->book_id && !$print_order->name) : ?>
                                     <tr>
                                         <td width="200px"> <?= $this->lang->line('form_book_title') ?> </td>
                                         <td><strong><?= $print_order->book_title; ?></strong> </td>
                                     </tr>
-                                <?php else : ?>
+                                <?php elseif (!$print_order->book_id && $print_order->name) : ?>
                                     <tr>
                                         <td width="200px"> <?= $this->lang->line('form_print_order_name') ?> </td>
                                         <td><strong><?= $print_order->name; ?></strong> </td>
                                     </tr>
-                                <?php endif ?>
+                                <?php else : ?>
+                                    <tr>
+                                        <td width="200px"> <?= $this->lang->line('form_print_order_name') ?> </td>
+                                        <td><strong><?= $print_order->title; ?></strong> </td>
+                                    </tr>
+                                <?php endif; ?>
                                 <tr>
                                     <td width="200px"> <?= $this->lang->line('form_print_order_notes') ?> </td>
                                     <td><?= $print_order->print_order_notes; ?> </td>
@@ -66,6 +71,14 @@
                                     <td width="200px"> <?= $this->lang->line('form_print_order_total') ?> </td>
                                     <td><?= $print_order->total; ?> </td>
                                 </tr>
+                                <tr>
+                                    <td width="200px"> Faktor Pembagi Kertas </td>
+                                    <td><?= $print_order->paper_divider; ?> </td>
+                                </tr>
+                                <tr>
+                                    <td width="200px"> Estimasi Jumlah Kertas </td>
+                                    <td><?= $print_order->paper_estimation; ?> </td>
+                                </tr>
                                 <?php if ($print_order->book_id) : ?>
                                     <tr>
                                         <td width="200px"> Kategori Cetak (data draft)</td>
@@ -76,10 +89,6 @@
                                         <td><?= $print_order->book_edition  ?> </td>
                                     </tr>
                                 <?php endif ?>
-                                <tr>
-                                    <td width="200px"> <?= $this->lang->line('form_print_order_priority') ?> </td>
-                                    <td><?= get_print_order_priority()[$print_order->priority] ?? '' ?> </td>
-                                </tr>
                                 <tr>
                                     <td width="140px"><?= $this->lang->line('form_print_order_file') ?></td>
                                     <td>
@@ -95,8 +104,14 @@
                                     <td><?= format_datetime($print_order->finish_date); ?> </td>
                                 </tr>
                                 <tr>
+                                    <td width="200px"> Deadline</td>
+                                    <td>
+                                        <?= deadline_color($print_order->deadline_date, $print_order->print_order_status); ?>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td width="200px"> <?= $this->lang->line('form_print_order_input_by') ?> </td>
-                                    <td><?= $print_order->input_by; ?> </td>
+                                    <td><?= get_username($print_order->user_id); ?> </td>
                                 </tr>
                                 <tr>
                                     <td width="200px"> <?= $this->lang->line('form_print_order_status') ?> </td>
@@ -105,6 +120,51 @@
                             </tbody>
                         </table>
                     </div>
+                    <hr>
+
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered mb-0">
+                            <tbody>
+                                <tr>
+                                    <td width="200px"> Waktu Pengerjaan Order Cetak </td>
+                                    <?php if ($print_order->finish_date) : ?>
+                                        <td> <?php processing_time(strtotime($print_order->finish_date), strtotime($print_order->entry_date)) ?> </td>
+                                    <?php else : ?>
+                                        <td>Order Cetak belum selesai.</td>
+                                    <?php endif; ?>
+                                </tr>
+                                <tr>
+                                    <td width="200px"> Waktu Pengerjaan Progress Pracetak </td>
+                                    <?php if ($print_order->preprint_end_date) : ?>
+                                        <td> <?php processing_time(strtotime($print_order->preprint_end_date), strtotime($print_order->preprint_start_date)) ?> </td>
+                                    <?php else : ?>
+                                        <td>Progress pracetak belum selesai.</td>
+                                    <?php endif; ?>
+                                </tr>
+                                <tr>
+                                    <td width="200px"> Waktu Pengerjaan Progress Cetak </td>
+                                    <?php if ($print_order->print_end_date) : ?>
+                                        <td> <?php processing_time(strtotime($print_order->print_end_date), strtotime($print_order->print_start_date)) ?> </td>
+                                    <?php else : ?>
+                                        <td>Progress cetak belum selesai.</td>
+                                    <?php endif; ?>
+                                </tr>
+                                <?php if ($print_order->category != 'outsideprint') : ?>
+                                    <tr>
+                                        <td width="200px"> Waktu Pengerjaan Progress Jilid </td>
+                                        <?php if ($print_order->postprint_end_date) : ?>
+                                            <td> <?php processing_time(strtotime($print_order->postprint_end_date), strtotime($print_order->postprint_start_date)) ?> </td>
+                                        <?php else : ?>
+                                            <td>Progress jilid belum selesai.</td>
+                                        <?php endif; ?>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+
                 </div>
             </div>
 

@@ -28,7 +28,7 @@
                             <label for="print-mode">
                                 Mode Cetak
                             </label>
-                            <?= form_dropdown('print_mode', ['book' => 'Buku', 'nonbook' => 'Non Buku'], $input->print_mode, 'id="print-mode" class="form-control custom-select d-block"'); ?>
+                            <?= form_dropdown('print_mode', ['book' => 'Buku', 'nonbook' => 'Non Buku', 'outsideprint' => 'Cetak Di Luar'], $input->print_mode, 'id="print-mode" class="form-control custom-select d-block"'); ?>
                             <?= form_error('print_mode'); ?>
                         </div>
 
@@ -40,26 +40,70 @@
                                 <?= $this->lang->line('form_book_title'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <?= form_dropdown('book_id', get_dropdown_listBook('book', ['book_id', 'book_title']), $input->book_id, 'id="book-id" class="form-control custom-select d-block"'); ?>
-
+                            <?= form_dropdown('book_id', get_dropdown_list_book(), $input->book_id, 'id="book-id" class="form-control custom-select d-block"'); ?>
                             <?= form_error('book_id'); ?>
                         </div>
-                        <!-- <div
-                            class="alert alert-info"
-                            id="reprint-notice"
+
+                        <div
+                            id="book-info"
                             style="display:none"
                         >
-                            Kategori cetak : <span id="category-text"></span>
-                        </div> -->
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered mb-0">
+                                    <tbody>
+                                        <tr>
+                                            <td width="175px"> Judul Buku </td>
+                                            <td><a
+                                                    href=""
+                                                    id="info-book-title"
+                                                ></a></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="175px"> Halaman Buku </td>
+                                            <td id="info-book-pages"></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="175px"> ISBN </td>
+                                            <td id="info-isbn"></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="175px"> Tahun Terbit </td>
+                                            <td id="info-year"></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="175px"> File Buku </td>
+                                            <td>
+                                                <a
+                                                    title=""
+                                                    class="btn btn-success btn-xs my-0"
+                                                    target="_blank"
+                                                    href=""
+                                                    id="info-book-file-link"
+                                                ><i class="fa fa-external-link-alt"></i> File Buku</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <br>
+                        </div>
 
-                        <!-- <div class="form-group">
-                            <label for="category">
-                                <?= $this->lang->line('form_print_order_category'); ?>
-                                <abbr title="Required">*</abbr>
+                        <div class="form-group">
+                            <label for="deadline_date">
+                                Deadline Percetakan
                             </label>
-                            <?= form_dropdown('category', get_print_order_category(), $input->category, 'id="category" class="form-control custom-select d-block" disabled'); ?>
-                            <?= form_error('category'); ?>
-                        </div> -->
+                            <div class="input-group mb-3">
+                                <?= form_input('deadline_date', $input->deadline_date, 'class="form-control dates"'); ?>
+                                <div class="input-group-append">
+                                    <button
+                                        class="btn btn-outline-secondary"
+                                        type="button"
+                                        id="deadline_clear"
+                                    >Clear</button>
+                                </div>
+                            </div>
+                            <?= form_error('deadline_date'); ?>
+                        </div>
 
                         <div
                             class="form-group"
@@ -67,7 +111,6 @@
                         >
                             <label for="name">
                                 <?= $this->lang->line('form_print_order_name'); ?>
-                                <abbr title="Required">*</abbr>
                             </label>
                             <?= form_input('name', $input->name, 'class="form-control" id="name"'); ?>
                             <?= form_error('name'); ?>
@@ -76,7 +119,6 @@
                         <div class="form-group">
                             <label for="print-order-notes">
                                 <?= $this->lang->line('form_print_order_notes'); ?>
-                                <!-- <abbr title="Required">*</abbr> -->
                             </label>
                             <?= form_textarea('print_order_notes', $input->print_order_notes, 'class="form-control" id="print-order-notes"'); ?>
                             <?= form_error('print_order_notes'); ?>
@@ -101,53 +143,30 @@
                         </div>
 
                         <div class="form-group">
-                            <label
-                                for="type"
-                                class="d-block"
-                            >
+                            <label for="type">
                                 <?= $this->lang->line('form_print_order_type'); ?>
                                 <abbr title="Required">*</abbr>
                             </label>
-                            <div
-                                class="btn-group btn-group-toggle"
-                                data-toggle="buttons"
-                            >
-                                <label class="btn btn-secondary <?= ($input->type == 'pod') ? 'active' : ''; ?>">
-                                    <?= form_radio(
-                                        'type',
-                                        'pod',
-                                        isset($input->type) && ($input->type == 'pod') ? true : false,
-                                        'class="custom-control-input"'
-                                    ); ?>
-                                    POD</label>
-
-                                <label class="btn btn-secondary <?= ($input->type == 'offset') ? 'active' : ''; ?>">
-                                    <?= form_radio(
-                                        'type',
-                                        'offset',
-                                        isset($input->type) && ($input->type == 'offset') ? true : false,
-                                        'class="custom-control-input"'
-                                    ); ?>
-                                    Offset</label>
-                            </div>
+                            <?= form_dropdown('type', ['pod' => 'POD', 'offset' => 'Offset'], $input->type, 'id="type" class="form-control custom-select d-block"'); ?>
                             <?= form_error('type'); ?>
                         </div>
 
                         <div class="form-group">
-                            <label for="priority">
-                                <?= $this->lang->line('form_print_order_priority'); ?>
-                                <abbr title="Required">*</abbr>
+                            <label for="paper-divider">
+                                Faktor Pembagi Kertas
                             </label>
-                            <select
-                                class="custom-select"
-                                name="priority"
-                                id="priority"
-                            >
-                                <?php foreach (get_print_order_priority() as $key => $value) : ?>
-                                    <option value="<?= $key ?>"><?= $value ?></option>
-                                <?php endforeach ?>
-                            </select>
-                            <?= form_error('priority'); ?>
+                            <?php
+                            $form_paper_divider = array(
+                                'type'  => 'number',
+                                'name'  => 'paper_divider',
+                                'id'    => 'paper-divider',
+                                'value' => $input->paper_divider,
+                                'class' => 'form-control',
+                                'min'   => '1'
+                            );
+                            ?>
+                            <?= form_input($form_paper_divider); ?>
+                            <?= form_error('paper_divider'); ?>
                         </div>
 
                         <div class="form-group">
@@ -161,11 +180,30 @@
                                 'name'  => 'total',
                                 'id'    => 'total',
                                 'value' => $input->total,
-                                'class' => 'form-control'
+                                'class' => 'form-control',
+                                'min'   => '0'
                             );
                             ?>
                             <?= form_input($form_total); ?>
                             <?= form_error('total'); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="paper-estimation">
+                                Jumlah Kertas Yang Dibutuhkan (Halaman x Exemplar / Faktor Pembagi)
+                            </label>
+                            <?php
+                            $form_paper_estimation = array(
+                                'type'  => 'number',
+                                'name'  => 'paper_estimation',
+                                'id'    => 'paper-estimation',
+                                'value' => $input->paper_estimation,
+                                'class' => 'form-control',
+                                'min'   => '1'
+                            );
+                            ?>
+                            <?= form_input($form_paper_estimation); ?>
+                            <?= form_error('paper_estimation'); ?>
                         </div>
 
                         <div class="form-group">
@@ -193,6 +231,46 @@
                             </label>
                             <?= form_input('paper_size', $input->paper_size, 'class="form-control" id="paper-size"'); ?>
                             <?= form_error('paper_size'); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location-binding">
+                                Lokasi Jilid
+                            </label>
+                            <?= form_dropdown('location_binding', ['inside' => 'Di Dalam', 'outside' => 'Di Luar', 'partial' => 'Parsial'], $input->location_binding, 'id="location-binding" class="form-control custom-select d-block"'); ?>
+                            <?= form_error('location_binding'); ?>
+                        </div>
+
+                        <div
+                            class="form-group"
+                            style="display:none"
+                            id="location-binding-outside-wrapper"
+                        >
+                            <label for="location-binding-outside">
+                                Lokasi Jilid Di Luar
+                            </label>
+                            <?= form_input('location_binding_outside', $input->location_binding_outside, 'class="form-control" id="location-binding-outside"'); ?>
+                            <?= form_error('location_binding_outside'); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location-laminate">
+                                Lokasi Laminasi
+                            </label>
+                            <?= form_dropdown('location_laminate', ['inside' => 'Di Dalam', 'outside' => 'Di Luar', 'partial' => 'Parsial'], $input->location_laminate, 'id="location-laminate" class="form-control custom-select d-block"'); ?>
+                            <?= form_error('location_laminate'); ?>
+                        </div>
+
+                        <div
+                            class="form-group"
+                            style="display:none"
+                            id="location-laminate-outside-wrapper"
+                        >
+                            <label for="location-laminate-outside">
+                                Lokasi Laminasi Di Luar
+                            </label>
+                            <?= form_input('location_laminate_outside', $input->location_laminate_outside, 'class="form-control" id="location-laminate-outside"'); ?>
+                            <?= form_error('location_laminate_outside'); ?>
                         </div>
 
                         <div class="form-group">
@@ -242,7 +320,7 @@ $(document).ready(function() {
                 order_number: "crequired",
                 order_code: "crequired",
                 type: "crequired",
-                priority: "crequired",
+                mode: "crequired",
                 total: {
                     crequired: true,
                     cnumber: true
@@ -269,36 +347,83 @@ $(document).ready(function() {
             $('#name-wrapper').show()
         } else {
             $('#book-id-wrapper').show()
-            $('#name-wrapper').hide()
         }
     }
 
-    // $('#book-id').change(function(e) {
-    //     const bookId = e.target.value
-    //     if (!bookId) return
+    $('#book-id').change(function(e) {
+        const bookId = e.target.value
+        console.log(bookId)
 
-    //     $.ajax({
-    //         type: "GET",
-    //         url: "<?= base_url('print_order/api_check_book/'); ?>" + bookId,
-    //         datatype: "JSON",
-    //         success: function(res) {
-    //             console.log(res);
-    //             $('#category').val(res.data)
+        $.ajax({
+            type: "GET",
+            url: "<?= base_url('print_order/api_get_book/'); ?>" + bookId,
+            datatype: "JSON",
+            success: function(res) {
+                console.log(res);
+                var published_date = new Date(res.data.published_date);
+                $('#print-mode').change(function(e) {
+                    if ($('#print-mode').val() == 'nonbook') {
+                        $('#book-info').hide();
+                        $('#info-paper-required').hide();
+                    } else {
+                        $('#book-info').show();
+                    }
+                });
+                $('#book-info').show()
+                $('#info-book-title').html(res.data.book_title)
+                $('#info-book-title').attr("href", "<?= base_url('book/view/'); ?>" + bookId)
+                $('#info-book-pages').html(res.data.book_pages)
+                $('#info-isbn').html(res.data.isbn)
+                $('#info-year').html(published_date.getFullYear())
+                $('#info-book-file-link').attr("href", "" + res.data.book_file_link)
+                $('#info-book-file-link').attr("title", "" + res.data.book_title)
 
-    //             $('#reprint-notice').show()
+                if (res.data.from_outside == 0) {
+                    $('#name-wrapper').val('');
+                    $('#name-wrapper').hide()
+                } else {
+                    $('#name-wrapper').val('');
+                    $('#name-wrapper').show()
+                }
+            },
+            error: function(err) {
+                console.log(err);
+            },
+        });
+    })
 
-    //             $('#category-text').html(res.data)
+    $("#total,#paper-divider,#book-id").change(function(halaman) {
+        $("#paper-estimation").val(($("#total").val() * $("#info-book-pages").text()) / $("#paper-divider").val());
+    });
 
-    //             // if (res.data == 'reprint') {
-    //             //     $('#reprint-notice').show()
-    //             // } else {
-    //             //     $('#reprint-notice').hide()
-    //             // }
-    //         },
-    //         error: function(err) {
-    //             console.log(err);
-    //         },
-    //     });
-    // })
+
+    $('#location-binding').change(function(e) {
+        if ($('#location-binding').val() != 'inside') {
+            $('#location-binding-outside-wrapper').show();
+        } else {
+            $('#location-binding-outside').val('');
+            $('#location-binding-outside-wrapper').hide();
+        }
+    })
+
+    $('#location-laminate').change(function(e) {
+        if ($('#location-laminate').val() != 'inside') {
+            $('#location-laminate-outside-wrapper').show();
+        } else {
+            $('#location-laminate-outside').val('');
+            $('#location-laminate-outside-wrapper').hide();
+        }
+    })
+
+    const $flatpickr = $('.dates').flatpickr({
+        altInput: true,
+        altFormat: 'j F Y H:i:S',
+        dateFormat: 'Y-m-d H:i:S',
+        enableTime: true
+    });
+
+    $("#deadline_clear").click(function() {
+        $flatpickr.clear();
+    })
 })
 </script>
