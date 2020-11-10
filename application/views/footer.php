@@ -2,7 +2,7 @@
     <hr>
     <ul class="list-inline">
         <li class="list-inline-item">
-            <span class="text-muted">Version 2.0.0-alpha</span>
+            <span class="text-muted">Version 2.0.0-beta</span>
         </li>
         <li class="list-inline-item">
             <a

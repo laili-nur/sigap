@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CodeIgniter
  *
@@ -53,7 +54,16 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
-define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+$dev_servers = array('localhost', 'sigapdev.com');
+$is_dev_server = in_array($_SERVER['SERVER_NAME'], $dev_servers);
+
+if ($is_dev_server) {
+    $env = 'development';
+} else {
+    $env = 'production';
+}
+
+define('ENVIRONMENT', $env);
 
 /*
  *---------------------------------------------------------------
