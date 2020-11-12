@@ -36,6 +36,13 @@ $is_review2_files_populated = $input->review2_file || $input->review2_file_link 
                             class="d-inline btn <?= !$is_review_started ? 'btn-warning' : 'btn-secondary'; ?> <?= empty($reviewers) || $is_review_started ? 'btn-disabled' : ''; ?>"
                             <?= empty($reviewers) || $is_review_started ? 'disabled' : ''; ?>
                         ><i class="fas fa-play"></i><span class="d-none d-lg-inline"> Mulai</span></button>
+                        <button
+                            id="btn-finish-review"
+                            title="Selesai proses review"
+                            type="button"
+                            class="d-inline btn btn-secondary  <?= !$is_review_started ? 'btn-disabled' : '' ?>"
+                            <?= !$is_review_started ? 'disabled' : '' ?>
+                        ><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
                     <?php endif; ?>
                 </div>
         </header>
@@ -291,6 +298,31 @@ $(document).ready(function() {
                 $('#progress-list-wrapper').load(' #progress-list');
                 // reload data draft
                 $('#draft-data-wrapper').load(' #draft-data');
+            },
+        })
+    })
+
+    // selesai review
+    $('#review-progress-wrapper').on('click', '#btn-finish-review', function() {
+        $.ajax({
+            type: "POST",
+            url: "<?= base_url('draft/api_finish_progress/'); ?>" + draft_id,
+            data: {
+                progress: 'review'
+            },
+            success: function(res) {
+                showToast(true, res.data);
+            },
+            error: function(err) {
+                showToast(false, err.responseJSON.message);
+            },
+            complete: function() {
+                $('#review-progress-wrapper').load(' #review-progress', function() {
+                    // reinitiate modal after load
+                    initFlatpickrModal()
+                });
+                // reload progress
+                $('#progress-list-wrapper').load(' #progress-list');
             },
         })
     })

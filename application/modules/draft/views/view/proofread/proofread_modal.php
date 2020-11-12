@@ -10,7 +10,7 @@
     <div class="modal-dialog modal-lg modal-dialog-overflow">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> Progress Layout</h5>
+                <h5 class="modal-title"> Progress Proofread</h5>
                 <button
                     type="button"
                     class="close"

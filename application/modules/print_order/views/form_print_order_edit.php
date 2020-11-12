@@ -106,7 +106,7 @@
 
                         <div class="form-group">
                             <label for="deadline_date">
-                                Deadline Percetakan
+                                Deadline Produksi
                             </label>
                             <?= form_input('deadline_date', $input->deadline_date, 'class="form-control dates"'); ?>
                             <?= form_error('deadline_date'); ?>
@@ -199,7 +199,7 @@
 
                         <div class="form-group">
                             <label for="paper-estimation">
-                                Jumlah Kertas Yang Dibutuhkan (Halaman x Exemplar / Faktor Pembagi)
+                                Jumlah Kertas
                             </label>
                             <?php
                             $form_paper_estimation = array(
