@@ -186,6 +186,9 @@ class Book extends Admin_Controller
 
             // forced to null, instead empty string/ 0000-00-00
             $input->published_date = empty_to_null($input->published_date);
+            if ($input->from_outside == 1) {
+                $input->draft_id = empty_to_null($input->draft_id);
+            }
         }
 
         if ($this->book->validate()) {
