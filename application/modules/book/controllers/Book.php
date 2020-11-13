@@ -337,8 +337,9 @@ class Book extends Admin_Controller
     public function required_draft_id()
     {
         $from_outside = $this->input->post('from_outside');
+        $draft_id = $this->input->post('draft_id');
 
-        if ($from_outside == 0) {
+        if ($from_outside == 0 && !$draft_id) {
             $this->form_validation->set_message('required_draft_id', "Draft is required.");
             return false;
         }
