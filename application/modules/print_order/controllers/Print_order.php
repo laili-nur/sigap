@@ -121,6 +121,14 @@ class Print_order extends Percetakan_Controller
             $input->location_laminate_outside = empty_to_null($input->location_laminate_outside);
         }
 
+        if (empty($input->name)) {
+            $input->name = empty_to_null($input->name);
+        }
+
+        if (empty($input->book_id)) {
+            $input->book_id = empty_to_null($input->book_id);
+        }
+
         // insert print order
         $print_order_id = $this->print_order->insert($input);
 
@@ -207,6 +215,21 @@ class Print_order extends Percetakan_Controller
 
         if (empty($input->deadline_date)) {
             $input->deadline_date = empty_to_null($input->deadline_date);
+        }
+
+        if (empty($input->location_binding_outside)) {
+            $input->location_binding_outside = empty_to_null($input->location_binding_outside);
+        }
+        if (empty($input->location_laminate_outside)) {
+            $input->location_laminate_outside = empty_to_null($input->location_laminate_outside);
+        }
+
+        if (empty($input->name)) {
+            $input->name = empty_to_null($input->name);
+        }
+
+        if (empty($input->book_id)) {
+            $input->book_id = empty_to_null($input->book_id);
         }
 
         // update print order

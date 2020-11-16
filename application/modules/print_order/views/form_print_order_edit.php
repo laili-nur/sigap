@@ -164,17 +164,13 @@
                             <label for="paper-divider">
                                 Faktor Pembagi Kertas
                             </label>
-                            <?php
-                            $form_paper_divider = array(
-                                'type'  => 'number',
-                                'name'  => 'paper_divider',
-                                'id'    => 'paper-divider',
-                                'value' => $input->paper_divider,
-                                'class' => 'form-control',
-                                'min'   => '1'
-                            );
-                            ?>
-                            <?= form_input($form_paper_divider); ?>
+                            <?= form_input('paper_divider', $input->order_number, 'class="form-control" id="paper-divider" list="paper-divider-list"'); ?>
+                            <datalist id="paper-divider-list">
+                                <option value="1">
+                                <option value="2">
+                                <option value="4">
+                                <option value="8">
+                            </datalist>
                             <?= form_error('paper_divider'); ?>
                         </div>
 
@@ -629,11 +625,17 @@ $(document).ready(function() {
         if (category === 'nonbook') {
             $('#book-id-wrapper').hide()
             $('#name-wrapper').show()
+            $('#book-id').val('');
         } else {
             $('#book-id-wrapper').show()
             $('#name-wrapper').hide()
+            $('#name').val('');
         }
     }
+
+    $("#total,#paper-divider,#book-id").change(function(halaman) {
+        $("#paper-estimation").val(($("#total").val() * $("#info-book-pages").text()) / $("#paper-divider").val());
+    });
 
     $('.dates').flatpickr({
         altInput: true,

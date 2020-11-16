@@ -161,6 +161,7 @@
                                 <option value="1">
                                 <option value="2">
                                 <option value="4">
+                                <option value="8">
                             </datalist>
                             <?= form_error('paper_divider'); ?>
                         </div>
@@ -341,6 +342,7 @@ $(document).ready(function() {
         if (category === 'nonbook') {
             $('#book-id-wrapper').hide()
             $('#name-wrapper').show()
+            $('#book-id').val('');
         } else {
             $('#book-id-wrapper').show()
             $('#name-wrapper').hide()
