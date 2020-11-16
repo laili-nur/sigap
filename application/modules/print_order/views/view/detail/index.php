@@ -79,16 +79,6 @@
                                     <td width="200px"> Estimasi Jumlah Kertas </td>
                                     <td><?= $print_order->paper_estimation; ?> </td>
                                 </tr>
-                                <?php if ($print_order->book_id) : ?>
-                                    <tr>
-                                        <td width="200px"> Kategori Cetak (data draft)</td>
-                                        <td><?= $print_order->is_reprint == 'y' ? 'Cetak ulang' : 'Cetak baru'; ?> </td>
-                                    </tr>
-                                    <tr>
-                                        <td width="200px"> Edisi Cetak (data buku)</td>
-                                        <td><?= $print_order->book_edition  ?> </td>
-                                    </tr>
-                                <?php endif ?>
                                 <tr>
                                     <td width="140px"><?= $this->lang->line('form_print_order_file') ?></td>
                                     <td>
@@ -120,49 +110,8 @@
                             </tbody>
                         </table>
                     </div>
-                    <hr>
 
-
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered mb-0">
-                            <tbody>
-                                <tr>
-                                    <td width="200px"> Waktu Pengerjaan Order Cetak </td>
-                                    <?php if ($print_order->finish_date) : ?>
-                                        <td> <?php processing_time(strtotime($print_order->finish_date), strtotime($print_order->entry_date)) ?> </td>
-                                    <?php else : ?>
-                                        <td>Order Cetak belum selesai.</td>
-                                    <?php endif; ?>
-                                </tr>
-                                <tr>
-                                    <td width="200px"> Waktu Pengerjaan Progress Pracetak </td>
-                                    <?php if ($print_order->preprint_end_date) : ?>
-                                        <td> <?php processing_time(strtotime($print_order->preprint_end_date), strtotime($print_order->preprint_start_date)) ?> </td>
-                                    <?php else : ?>
-                                        <td>Progress pracetak belum selesai.</td>
-                                    <?php endif; ?>
-                                </tr>
-                                <tr>
-                                    <td width="200px"> Waktu Pengerjaan Progress Cetak </td>
-                                    <?php if ($print_order->print_end_date) : ?>
-                                        <td> <?php processing_time(strtotime($print_order->print_end_date), strtotime($print_order->print_start_date)) ?> </td>
-                                    <?php else : ?>
-                                        <td>Progress cetak belum selesai.</td>
-                                    <?php endif; ?>
-                                </tr>
-                                <?php if ($print_order->category != 'outsideprint') : ?>
-                                    <tr>
-                                        <td width="200px"> Waktu Pengerjaan Progress Jilid </td>
-                                        <?php if ($print_order->postprint_end_date) : ?>
-                                            <td> <?php processing_time(strtotime($print_order->postprint_end_date), strtotime($print_order->postprint_start_date)) ?> </td>
-                                        <?php else : ?>
-                                            <td>Progress jilid belum selesai.</td>
-                                        <?php endif; ?>
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
+                    <!-- Waktu pengerjaan dihide dulu -->
 
 
                 </div>

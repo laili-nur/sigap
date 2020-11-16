@@ -8,7 +8,7 @@
         content="width=device-width, initial-scale=1, shrink-to-fit=no"
     >
 
-    <title> SIGAP LOGIN CEK</title>
+    <title> SIGAP - Sistem Informasi Gama Press</title>
     <meta
         property="og:title"
         content="Log In SIGAP"

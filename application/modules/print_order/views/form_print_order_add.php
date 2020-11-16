@@ -90,7 +90,7 @@
 
                         <div class="form-group">
                             <label for="deadline_date">
-                                Deadline Percetakan
+                                Deadline Produksi
                             </label>
                             <div class="input-group mb-3">
                                 <?= form_input('deadline_date', $input->deadline_date, 'class="form-control dates"'); ?>
@@ -108,6 +108,7 @@
                         <div
                             class="form-group"
                             id="name-wrapper"
+                            style="display:none"
                         >
                             <label for="name">
                                 <?= $this->lang->line('form_print_order_name'); ?>
@@ -155,17 +156,13 @@
                             <label for="paper-divider">
                                 Faktor Pembagi Kertas
                             </label>
-                            <?php
-                            $form_paper_divider = array(
-                                'type'  => 'number',
-                                'name'  => 'paper_divider',
-                                'id'    => 'paper-divider',
-                                'value' => $input->paper_divider,
-                                'class' => 'form-control',
-                                'min'   => '1'
-                            );
-                            ?>
-                            <?= form_input($form_paper_divider); ?>
+                            <?= form_input('paper_divider', $input->order_number, 'class="form-control" id="paper-divider" list="paper-divider-list"'); ?>
+                            <datalist id="paper-divider-list">
+                                <option value="1">
+                                <option value="2">
+                                <option value="4">
+                                <option value="8">
+                            </datalist>
                             <?= form_error('paper_divider'); ?>
                         </div>
 
@@ -188,23 +185,23 @@
                             <?= form_error('total'); ?>
                         </div>
 
-                        <div class="form-group">
-                            <label for="paper-estimation">
-                                Jumlah Kertas Yang Dibutuhkan (Halaman x Exemplar / Faktor Pembagi)
-                            </label>
-                            <?php
-                            $form_paper_estimation = array(
-                                'type'  => 'number',
-                                'name'  => 'paper_estimation',
-                                'id'    => 'paper-estimation',
-                                'value' => $input->paper_estimation,
-                                'class' => 'form-control',
-                                'min'   => '1'
-                            );
-                            ?>
-                            <?= form_input($form_paper_estimation); ?>
-                            <?= form_error('paper_estimation'); ?>
+                        <input
+                            type="hidden"
+                            id="paper-estimation"
+                            value=""
+                        >
+
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered mb-0">
+                                <tbody>
+                                    <tr>
+                                        <td width="175px"> Jumlah Kertas </td>
+                                        <td id="paper-estimation-info"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
+                        <br>
 
                         <div class="form-group">
                             <label for="paper-content">
@@ -345,8 +342,11 @@ $(document).ready(function() {
         if (category === 'nonbook') {
             $('#book-id-wrapper').hide()
             $('#name-wrapper').show()
+            $('#book-id').val('');
         } else {
             $('#book-id-wrapper').show()
+            $('#name-wrapper').hide()
+            $('#name').val('');
         }
     }
 
@@ -379,10 +379,9 @@ $(document).ready(function() {
                 $('#info-book-file-link').attr("title", "" + res.data.book_title)
 
                 if (res.data.from_outside == 0) {
-                    $('#name-wrapper').val('');
+                    $('#name').val('');
                     $('#name-wrapper').hide()
                 } else {
-                    $('#name-wrapper').val('');
                     $('#name-wrapper').show()
                 }
             },
@@ -394,6 +393,7 @@ $(document).ready(function() {
 
     $("#total,#paper-divider,#book-id").change(function(halaman) {
         $("#paper-estimation").val(($("#total").val() * $("#info-book-pages").text()) / $("#paper-divider").val());
+        $("#paper-estimation-info").html($("#paper-estimation").val());
     });
 
 

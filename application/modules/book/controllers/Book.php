@@ -186,6 +186,9 @@ class Book extends Admin_Controller
 
             // forced to null, instead empty string/ 0000-00-00
             $input->published_date = empty_to_null($input->published_date);
+            if ($input->from_outside == 1) {
+                $input->draft_id = empty_to_null($input->draft_id);
+            }
         }
 
         if ($this->book->validate()) {
@@ -337,8 +340,9 @@ class Book extends Admin_Controller
     public function required_draft_id()
     {
         $from_outside = $this->input->post('from_outside');
+        $draft_id = $this->input->post('draft_id');
 
-        if ($from_outside == 0) {
+        if ($from_outside == 0 && !$draft_id) {
             $this->form_validation->set_message('required_draft_id', "Draft is required.");
             return false;
         }
@@ -364,7 +368,7 @@ class Book extends Admin_Controller
         if ($this->check_level_gudang() == TRUE) :
             $this->load->library('form_validation');
             $this->form_validation->set_rules('warehouse_modifier', 'Stok Gudang', 'required|max_length[10]');
-            $this->form_validation->set_rules('notes', 'Catatan', 'required|max_length[256]');
+            $this->form_validation->set_rules('notes', 'Catatan', 'max_length[256]');
 
             if ($this->form_validation->run() == FALSE) {
                 $this->session->set_flashdata('error', 'Gagal mengubah data stok buku.');
