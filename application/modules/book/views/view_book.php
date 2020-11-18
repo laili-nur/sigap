@@ -386,6 +386,7 @@ $level              = check_level();
                                             <thead>
                                                 <tr class="text-center">
                                                     <th scope="col">No</th>
+                                                    <th scope="col">Awal</th>
                                                     <th scope="col">Perubahan</th>
                                                     <th scope="col">User</th>
                                                     <th scope="col">Tanggal</th>
@@ -399,6 +400,7 @@ $level              = check_level();
                                                 <?php foreach ($stock_history as $history) : ?>
                                                     <tr class="text-center">
                                                         <td><?= $i++; ?></td>
+                                                        <td><?= $history->warehouse_past; ?></td>
                                                         <td>
                                                             <?php
                                                             if ($history->warehouse_operator == "+") {
@@ -413,16 +415,145 @@ $level              = check_level();
                                                         <td><?= $history->notes; ?></td>
                                                         <?php if ($level == 'superadmin' || $level == 'admin_gudang') : ?>
                                                             <td>
-                                                                <button
-                                                                    title="Delete"
-                                                                    type="button"
-                                                                    class="btn btn-sm btn-danger"
-                                                                    data-toggle="modal"
-                                                                    data-target="#modal_delete_stock<?= $history->book_stock_id; ?>"
+                                                                <div
+                                                                    class="btn-group"
+                                                                    role="group"
+                                                                    aria-label="Basic example"
                                                                 >
-                                                                    <i class="fa fa-trash-alt"></i>
-                                                                    <span class="sr-only">Delete</span>
-                                                                </button>
+                                                                    <button
+                                                                        title="Edit"
+                                                                        type="button"
+                                                                        class="btn btn-sm btn-warning"
+                                                                        data-toggle="modal"
+                                                                        data-target="#modal_edit_stock<?= $history->book_stock_id; ?>"
+                                                                    >
+                                                                        <i class="fa fa-pencil-alt"></i>
+                                                                        <span class="sr-only">Edit</span>
+                                                                    </button>
+                                                                    <button
+                                                                        title="Delete"
+                                                                        type="button"
+                                                                        class="btn btn-sm btn-danger"
+                                                                        data-toggle="modal"
+                                                                        data-target="#modal_delete_stock<?= $history->book_stock_id; ?>"
+                                                                    >
+                                                                        <i class="fa fa-trash-alt"></i>
+                                                                        <span class="sr-only">Delete</span>
+                                                                    </button>
+                                                                </div>
+
+                                                                <!-- Modal Edit -->
+                                                                <div
+                                                                    class="modal modal-alert fade"
+                                                                    id="modal_edit_stock<?= $history->book_stock_id; ?>"
+                                                                    tabindex="-1"
+                                                                    role="dialog"
+                                                                    aria-labelledby="modal_edit_stock<?= $history->book_stock_id; ?>"
+                                                                    aria-hidden="true"
+                                                                >
+                                                                    <div
+                                                                        class="modal-dialog modal-dialog-centered"
+                                                                        role="document"
+                                                                    >
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title">
+                                                                                    <i class="fa fa-exclamation-triangle text-red mr-1"></i> Konfirmasi
+                                                                                    Edit</h5>
+                                                                            </div>
+                                                                            <div class="modal-body text-left">
+                                                                                <div class="alert alert-warning"><strong>PERHATIAN!</strong> Fitur ini berfungsi untuk mengubah riwayat buku.</div>
+                                                                                <form
+                                                                                    action="<?= base_url('book/edit_history_book/' . $history->book_stock_id); ?>"
+                                                                                    method="post"
+                                                                                >
+                                                                                    <div class="form-group">
+                                                                                        <label class="font-weight-bold">Judul Buku</label>
+                                                                                        <input
+                                                                                            type="text"
+                                                                                            class="form-control"
+                                                                                            value="<?= $input->book_title; ?>"
+                                                                                            disabled
+                                                                                        />
+                                                                                    </div>
+
+                                                                                    <div class="form-group">
+                                                                                        <label class="font-weight-bold">Awal</label>
+                                                                                        <input
+                                                                                            type="text"
+                                                                                            class="form-control"
+                                                                                            value="<?= $history->warehouse_past; ?>"
+                                                                                            disabled
+                                                                                        />
+                                                                                    </div>
+
+                                                                                    <div class="form-group">
+                                                                                        <label class="font-weight-bold">Perubahan</label>
+                                                                                        <input
+                                                                                            type="text"
+                                                                                            class="form-control"
+                                                                                            value="<?php
+                                                                                                    if ($history->warehouse_operator == "+") {
+                                                                                                        echo $history->warehouse_operator . ' ' . $history->warehouse_modifier;
+                                                                                                    } elseif ($history->warehouse_operator == "-") {
+                                                                                                        echo $history->warehouse_operator . ' ' . $history->warehouse_modifier;
+                                                                                                    }
+                                                                                                    ?>"
+                                                                                            disabled
+                                                                                        />
+                                                                                    </div>
+
+                                                                                    <div class="form-group">
+                                                                                        <label for="date">
+                                                                                            Tanggal Input
+                                                                                        </label>
+                                                                                        <div class="input-group mb-3">
+                                                                                            <input
+                                                                                                type="text"
+                                                                                                name="date"
+                                                                                                value="<?= $history->date ?>"
+                                                                                                class="form-control dates"
+                                                                                            />
+                                                                                            <div class="input-group-append">
+                                                                                                <button
+                                                                                                    class="btn btn-outline-secondary"
+                                                                                                    type="button"
+                                                                                                    id="date_clear"
+                                                                                                >Clear</button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    <div class="form-group">
+                                                                                        <label
+                                                                                            class="font-weight-bold"
+                                                                                            for="edit_notes"
+                                                                                        >Catatan</label>
+                                                                                        <textarea
+                                                                                            rows="6"
+                                                                                            class="form-control summernote-basic"
+                                                                                            id="edit_notes"
+                                                                                            name="edit_notes"
+                                                                                        ><?= $history->notes ?></textarea>
+                                                                                    </div>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button
+                                                                                    type="button"
+                                                                                    class="btn btn-light ml-auto"
+                                                                                    data-dismiss="modal"
+                                                                                >Close</button>
+                                                                                <button
+                                                                                    class="btn btn-primary"
+                                                                                    type="submit"
+                                                                                >Edit</button>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- Modal Edit -->
+
                                                                 <!-- Modal Hapus -->
                                                                 <div
                                                                     class="modal modal-alert fade"
@@ -523,3 +654,17 @@ $level              = check_level();
         </div>
     </section>
 </div>
+<script>
+$(document).ready(function() {
+    $('.dates').flatpickr({
+        altInput: true,
+        altFormat: 'j F Y H:i:S',
+        dateFormat: 'Y-m-d H:i:S',
+        enableTime: true
+    });
+
+    $("#date_clear").click(function() {
+        $('.dates').clear();
+    })
+})
+</script>

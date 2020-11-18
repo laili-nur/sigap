@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class Print_order extends Percetakan_Controller
+class Print_order extends Printing_Controller
 {
 
     public function __construct()

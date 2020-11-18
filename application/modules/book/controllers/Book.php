@@ -386,6 +386,29 @@ class Book extends Admin_Controller
         endif;
     }
 
+    public function edit_history_book($book_stock_id)
+    {
+        if ($this->check_level_gudang() == TRUE) :
+            $this->load->library('form_validation');
+            $this->form_validation->set_rules('date', 'Tanggal', '');
+            $this->form_validation->set_rules('notes', 'Catatan', 'max_length[256]');
+
+            if ($this->form_validation->run() == FALSE) {
+                $this->session->set_flashdata('error', 'Gagal mengubah data stok buku.');
+                redirect($_SERVER['HTTP_REFERER'], 'refresh');
+            } else {
+                $check  =   $this->book->edit_history_book($book_stock_id);
+                if ($check   ==  TRUE) {
+                    $this->session->set_flashdata('success', 'Berhasil mengubah data riwayat stok buku.');
+                    redirect($_SERVER['HTTP_REFERER'], 'refresh');
+                } else {
+                    $this->session->set_flashdata('error', 'Gagal mengubah data riwayat stok buku.');
+                    redirect($_SERVER['HTTP_REFERER'], 'refresh');
+                }
+            }
+        endif;
+    }
+
     public function delete_book_stock($book_stock_id)
     {
         if ($this->check_level_gudang() == TRUE) :
