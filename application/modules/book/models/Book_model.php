@@ -386,6 +386,19 @@ class Book_model extends MY_Model
         return TRUE;
     }
 
+    public function edit_history_book($book_stock_id)
+    {
+        $date   =   $this->input->post('date');
+        $notes  =   $this->input->post('edit_notes');
+
+        $edit   =   [
+            'date'    => $date,
+            'notes'   => $notes
+        ];
+        $this->db->set($edit)->where('book_stock_id', $book_stock_id)->update('book_stock');
+        return TRUE;
+    }
+
     public function delete_book_stock($book_stock_id)
     {
         $this->db->where('book_stock_id', $book_stock_id)->delete('book_stock');

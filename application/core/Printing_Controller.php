@@ -1,5 +1,5 @@
 <?php
-class Percetakan_Controller extends MY_Controller
+class Printing_Controller extends MY_Controller
 {
     public function __construct()
     {
