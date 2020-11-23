@@ -245,7 +245,7 @@ var ctx = document.getElementById("chart_laminate").getContext('2d');
 var chart_laminate = new Chart(ctx, {
     type: 'pie',
     data: {
-        labels: ["Laminasi di Dalam", "Laminasi di Luar", "Parsial"],
+        labels: ["Laminasi Internal", "Laminasi External", "Parsial"],
         datasets: [{
             data: [laminate_inside, laminate_outside, laminate_partial],
             backgroundColor: [
@@ -284,7 +284,7 @@ var ctx = document.getElementById("chart_binding").getContext('2d');
 var chart_binding = new Chart(ctx, {
     type: 'pie',
     data: {
-        labels: ["Jilid di Dalam", "Jilid di Luar", "Parsial"],
+        labels: ["Jilid Internal", "Jilid External", "Parsial"],
         datasets: [{
             data: [binding_inside, binding_outside, binding_partial],
             backgroundColor: [

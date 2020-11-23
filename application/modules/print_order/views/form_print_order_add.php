@@ -234,7 +234,7 @@
                             <label for="location-binding">
                                 Lokasi Jilid
                             </label>
-                            <?= form_dropdown('location_binding', ['inside' => 'Di Dalam', 'outside' => 'Di Luar', 'partial' => 'Parsial'], $input->location_binding, 'id="location-binding" class="form-control custom-select d-block"'); ?>
+                            <?= form_dropdown('location_binding', ['inside' => 'Internal', 'outside' => 'External', 'partial' => 'Parsial'], $input->location_binding, 'id="location-binding" class="form-control custom-select d-block"'); ?>
                             <?= form_error('location_binding'); ?>
                         </div>
 
@@ -254,7 +254,7 @@
                             <label for="location-laminate">
                                 Lokasi Laminasi
                             </label>
-                            <?= form_dropdown('location_laminate', ['inside' => 'Di Dalam', 'outside' => 'Di Luar', 'partial' => 'Parsial'], $input->location_laminate, 'id="location-laminate" class="form-control custom-select d-block"'); ?>
+                            <?= form_dropdown('location_laminate', ['inside' => 'Internal', 'outside' => 'External', 'partial' => 'Parsial'], $input->location_laminate, 'id="location-laminate" class="form-control custom-select d-block"'); ?>
                             <?= form_error('location_laminate'); ?>
                         </div>
 

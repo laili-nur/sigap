@@ -995,19 +995,19 @@ class Print_order extends Printing_Controller
         if ($progress == 'print') {
             $data_format['jobtype'] = 'Cetak';
             if ($print_order->category != 'outsideprint') {
-                $data_format['finishing'] = 'Di Dalam';
+                $data_format['finishing'] = 'Internal';
                 $data_format['finishinglocation'] = '';
             } else {
-                $data_format['finishing'] = 'Di Luar';
+                $data_format['finishing'] = 'External';
                 $data_format['finishinglocation'] = '';
             }
         } elseif ($progress == 'postprint') {
             $data_format['jobtype'] = 'Jilid';
             if ($print_order->location_binding == 'inside') {
-                $data_format['finishing'] = 'Di Dalam';
+                $data_format['finishing'] = 'Internal';
                 $data_format['finishinglocation'] = '';
             } elseif ($print_order->location_binding == 'outside') {
-                $data_format['finishing'] = 'Di Luar';
+                $data_format['finishing'] = 'External';
                 $data_format['finishinglocation'] = $print_order->location_binding_outside;
             } else {
                 $data_format['finishing'] = 'Parsial';

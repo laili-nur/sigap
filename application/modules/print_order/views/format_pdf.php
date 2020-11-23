@@ -196,7 +196,7 @@
                 :
             </td>
             <td>
-
+                <?= $notes; ?>
             </td>
         </tr>
     </table>
