@@ -765,3 +765,9 @@ function deadline_detail($deadline = null, $status)
         }
     }
 }
+
+function get_theme($theme_id)
+{
+    $CI = &get_instance();
+    return $CI->db->select('theme_name')->from('theme')->where('theme_id', $theme_id)->get()->row()->theme_name;
+}

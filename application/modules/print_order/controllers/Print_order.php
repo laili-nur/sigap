@@ -737,16 +737,6 @@ class Print_order extends Printing_Controller
         }
     }
 
-    public function download_preprint_file($filename)
-    {
-        if (!$this->_is_print_order_user()) {
-            redirect($_SERVER['HTTP_REFERER']);
-        }
-
-        $this->load->helper('download');
-        force_download('./preprintfile/' . $filename, NULL);
-    }
-
     public function api_set_stock($print_order_id)
     {
         // cek data
