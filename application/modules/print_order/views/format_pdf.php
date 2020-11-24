@@ -76,32 +76,17 @@
             </td>
         </tr>
 
-        <?php if ($jobtype != 'Pracetak') : ?>
-            <tr>
-                <td>
-                    FINISHING
-                </td>
-                <td>
-                    :
-                </td>
-                <td>
-                    <?= $finishing; ?>
-                </td>
-            </tr>
-            <?php if ($finishing == 'Di Luar' || $finishing == 'Di Luar') : ?>
-                <tr>
-                    <td>
-                        LOKASI
-                    </td>
-                    <td>
-                        :
-                    </td>
-                    <td>
-                        <?= $finishinglocation; ?>
-                    </td>
-                </tr>
-            <?php endif; ?>
-        <?php endif; ?>
+        <tr>
+            <td>
+                FINISHING
+            </td>
+            <td>
+                :
+            </td>
+            <td>
+                <?= $finishing; ?>
+            </td>
+        </tr>
         <tr>
             <td>
                 NOMOR ORDER

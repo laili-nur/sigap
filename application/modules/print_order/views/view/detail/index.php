@@ -86,6 +86,22 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td width="200px"> Finishing Jilid </td>
+                                    <td><?= get_print_order_finishing()[$print_order->location_binding]; ?> </td>
+                                </tr>
+                                <tr>
+                                    <td width="200px"> Lokasi Finishing Jilid </td>
+                                    <td><?= $print_order->location_binding_outside; ?> </td>
+                                </tr>
+                                <tr>
+                                    <td width="200px"> Finishing Laminasi </td>
+                                    <td><?= get_print_order_finishing()[$print_order->location_laminate]; ?> </td>
+                                </tr>
+                                <tr>
+                                    <td width="200px"> Lokasi Finishing Laminasi </td>
+                                    <td><?= $print_order->location_laminate_outside; ?> </td>
+                                </tr>
+                                <tr>
                                     <td width="200px"> <?= $this->lang->line('form_print_order_start_date') ?> </td>
                                     <td><?= format_datetime($print_order->entry_date); ?> </td>
                                 </tr>

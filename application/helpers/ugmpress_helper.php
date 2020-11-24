@@ -775,3 +775,13 @@ function get_theme($theme_id)
     $CI = &get_instance();
     return $CI->db->select('theme_name')->from('theme')->where('theme_id', $theme_id)->get()->row()->theme_name;
 }
+
+function get_print_order_finishing()
+{
+    return [
+        '' => null,
+        'inside' => 'Internal',
+        'outside' => 'External',
+        'partial' => 'Parsial'
+    ];
+}

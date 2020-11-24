@@ -984,26 +984,39 @@ class Print_order extends Printing_Controller
         // FORMAT DATA
         if ($progress == 'preprint') {
             $data_format['jobtype'] = 'Pracetak';
+            if ($print_order->location_binding == 'inside') {
+                $data_format['finishing'] = 'Internal';
+                // $data_format['finishinglocation'] = '';
+            } elseif ($print_order->location_binding == 'outside') {
+                $data_format['finishing'] = 'External';
+                // $data_format['finishinglocation'] = $print_order->location_binding_outside;
+            } else {
+                $data_format['finishing'] = 'Parsial';
+                // $data_format['finishinglocation'] = $print_order->location_binding_outside;
+            }
         } elseif ($progress == 'print') {
             $data_format['jobtype'] = 'Cetak';
-            if ($print_order->category != 'outsideprint') {
+            if ($print_order->location_binding == 'inside') {
                 $data_format['finishing'] = 'Internal';
-                $data_format['finishinglocation'] = '';
-            } else {
+                // $data_format['finishinglocation'] = '';
+            } elseif ($print_order->location_binding == 'outside') {
                 $data_format['finishing'] = 'External';
-                $data_format['finishinglocation'] = '';
+                // $data_format['finishinglocation'] = $print_order->location_binding_outside;
+            } else {
+                $data_format['finishing'] = 'Parsial';
+                // $data_format['finishinglocation'] = $print_order->location_binding_outside;
             }
         } elseif ($progress == 'postprint') {
             $data_format['jobtype'] = 'Jilid';
             if ($print_order->location_binding == 'inside') {
                 $data_format['finishing'] = 'Internal';
-                $data_format['finishinglocation'] = '';
+                // $data_format['finishinglocation'] = '';
             } elseif ($print_order->location_binding == 'outside') {
                 $data_format['finishing'] = 'External';
-                $data_format['finishinglocation'] = $print_order->location_binding_outside;
+                // $data_format['finishinglocation'] = $print_order->location_binding_outside;
             } else {
                 $data_format['finishing'] = 'Parsial';
-                $data_format['finishinglocation'] = '';
+                // $data_format['finishinglocation'] = $print_order->location_binding_outside;
             }
         } else {
             $data_format['jobtype'] = '';
