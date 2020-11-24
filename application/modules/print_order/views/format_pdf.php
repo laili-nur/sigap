@@ -76,29 +76,31 @@
             </td>
         </tr>
 
-        <tr>
-            <td>
-                FINISHING
-            </td>
-            <td>
-                :
-            </td>
-            <td>
-                <?= $finishing; ?>
-            </td>
-        </tr>
-        <?php if ($finishing == 'Di Luar' || $finishing == 'Di Luar') : ?>
+        <?php if ($jobtype != 'Pracetak') : ?>
             <tr>
                 <td>
-                    LOKASI
+                    FINISHING
                 </td>
                 <td>
                     :
                 </td>
                 <td>
-                    <?= $finishinglocation; ?>
+                    <?= $finishing; ?>
                 </td>
             </tr>
+            <?php if ($finishing == 'Di Luar' || $finishing == 'Di Luar') : ?>
+                <tr>
+                    <td>
+                        LOKASI
+                    </td>
+                    <td>
+                        :
+                    </td>
+                    <td>
+                        <?= $finishinglocation; ?>
+                    </td>
+                </tr>
+            <?php endif; ?>
         <?php endif; ?>
         <tr>
             <td>

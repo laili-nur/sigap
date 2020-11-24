@@ -441,6 +441,10 @@ function get_allowed_file_types($field_name = null)
         $types = 'docx|doc|pdf|zip|rar';
     }
 
+    if ($field_name == 'print_order_file') {
+        $types = 'docx|doc|pdf|zip|rar';
+    }
+
     return [
         'types'   => $types,
         'to_text' => str_replace("|", ", ", $types),

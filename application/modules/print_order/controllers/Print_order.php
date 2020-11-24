@@ -982,7 +982,9 @@ class Print_order extends Printing_Controller
         $this->load->library('pdf');
 
         // FORMAT DATA
-        if ($progress == 'print') {
+        if ($progress == 'preprint') {
+            $data_format['jobtype'] = 'Pracetak';
+        } elseif ($progress == 'print') {
             $data_format['jobtype'] = 'Cetak';
             if ($print_order->category != 'outsideprint') {
                 $data_format['finishing'] = 'Internal';
@@ -1024,7 +1026,7 @@ class Print_order extends Printing_Controller
 
         // Render the HTML as PDF
         $this->pdf->render();
-        $this->pdf->stream($data_format['ordernumber']);
+        $this->pdf->stream(strtolower($data_format['ordernumber'] . '_' . $data_format['jobtype']));
     }
 
     public function add_additional_notes($print_order_id)
