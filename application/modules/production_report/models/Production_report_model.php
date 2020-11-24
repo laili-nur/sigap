@@ -10,7 +10,7 @@ class Production_report_model extends MY_Model
             ->join_table('book', 'print_order', 'book')
             ->order_by('title', 'ASC')
             ->when('date_year', $filters['date_year'])
-            ->where('MONTH(print_order.entry_date)', $filters['date_month'])
+            ->where('MONTH(print_order.finish_date)', $filters['date_month'])
             ->where('print_order.print_order_status', 'finish')
             ->get_all();
     }
@@ -60,11 +60,11 @@ class Production_report_model extends MY_Model
         // jika data null, maka skip
         if ($data) {
             if ($params == 'date_year') {
-                $this->where('YEAR(print_order.entry_date)', $data);
+                $this->where('YEAR(print_order.finish_date)', $data);
             }
 
             if ($params == 'date_month') {
-                $this->where('MONTH(print_order.entry_date)', $data);
+                $this->where('MONTH(print_order.finish_date)', $data);
             }
         }
         return $this;

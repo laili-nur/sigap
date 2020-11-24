@@ -121,6 +121,11 @@
                                 <abbr title="Required">*</abbr>
                             </label>
                             <?= form_input('name', $input->name, 'class="form-control" id="name"'); ?>
+                            <small
+                                class="text-muted"
+                                id="nonbook_example"
+                                style="display:none;"
+                            >*Contoh : UGMPRESS - Cetak Non Buku</small>
                             <?= form_error('name'); ?>
                         </div>
 
@@ -625,10 +630,12 @@ $(document).ready(function() {
         if (category === 'nonbook') {
             $('#book-id-wrapper').hide()
             $('#name-wrapper').show()
+            $('#nonbook_example').show()
             $('#book-id').val('');
         } else {
             $('#book-id-wrapper').show()
             $('#name-wrapper').hide()
+            $('#nonbook_example').hide()
             $('#name').val('');
         }
     }

@@ -373,7 +373,7 @@ class Book_model extends MY_Model
             'book_id'               => $book_id,
             'user_id'               => $_SESSION['user_id'],
             'type'                  => 'book',
-            'date'                  => date('Y-m-d H:i:s'),
+            'date'                  => $this->input->post('date'), //date('Y-m-d H:i:s')
             'notes'                 => $this->input->post('notes'),
             'warehouse_past'        => $warehouse_past,
             'warehouse_modifier'    => $warehouse_modifier,
