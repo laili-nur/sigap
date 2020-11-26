@@ -210,7 +210,7 @@ $(document).ready(function() {
                     </div>
                     <div class="card-body">
                         <div class="form-group">${formRevision}</div>
-                        <div class="card-button" style="display:none">
+                        <div class="card-button">
                             <button title="Submit catatan" type="button" class="${saveBtnAttr} btn btn-primary btn-save-revision" data-id="${r.revision_id}"><i class="fas fa-save"></i><span class="d-none d-lg-inline"> Simpan</span></button>
 
                             <button title="Selesai revisi" type="button" class="btn btn-secondary btn-finish-revision ${finishBtnAttr}" data-id="${r.revision_id}"><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
@@ -236,6 +236,7 @@ $(document).ready(function() {
     // selesai revisi
     $('#proofread-progress-wrapper').on('click', '.btn-finish-revision', function() {
         const revisionId = $(this).data().id
+        const revisionNotes = $(`#revision-notes-${revisionId}`).val();
 
         $(this).attr("disabled", "disabled")
         $.ajax({
@@ -243,7 +244,8 @@ $(document).ready(function() {
             url: "<?= base_url('revision/finish_revision'); ?>",
             data: {
                 revision_id: revisionId,
-                draft_id: draftId
+                draft_id: draftId,
+                revision_notes: revisionNotes
             },
             success: (res) => {
                 showToast(true, res.data);

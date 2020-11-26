@@ -3,12 +3,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Revision extends MY_Controller
 {
-
-    public function index()
-    {
-        echo 'controller - revision';
-    }
-
     public function get_revision($draft_id, $progress)
     {
         if ($progress == 'edit') {
@@ -19,105 +13,6 @@ class Revision extends MY_Controller
         $revisions = $this->revision->where('revision_role', $role)->where('draft_id', $draft_id)->get_all();
 
         return $this->send_json_output(true, $revisions);
-
-        // $urutan   = 1;
-        // //flag menandai revisi yang belum selesai
-        // //flag 1 dan lebih artinya ada yg blm selese
-        // $flag = 0;
-        // if ($revisions) {
-        //     foreach ($revisions as $value) {
-        //         if ($value->revision_end_date != '0000-00-00 00:00:00' and $value->revision_end_date != null) {
-        //             $atribut_tombol_selesai = 'disabled';
-        //             $atribut_tombol_simpan  = 'd-none';
-        //             if (!empty($value->revision_notes)) {
-        //                 $form_revisi = '<div class="font-italic">' . nl2br($value->revision_notes) . '</div>';
-        //             } else {
-        //                 $form_revisi = '<div class="font-italic mb-3">Tidak ada Catatan</div>';
-        //             }
-        //             $badge_revisi = '<span class="badge badge-success">Selesai</span>';
-        //         } else {
-        //             $flag++;
-        //             $atribut_tombol_selesai = '';
-        //             $atribut_tombol_simpan  = 'd-inline';
-        //             if ($this->level != 'editor') {
-        //                 if (!empty($value->revision_notes)) {
-        //                     $form_revisi = '<div class="font-italic">' . nl2br($value->revision_notes) . '</div>';
-        //                 } else {
-        //                     $form_revisi = '<div class="font-italic mb-3">Tidak ada Catatan</div>';
-        //                 }
-        //             } else {
-        //                 $form_revisi = '<textarea rows="6" name="revisi' . $value->revision_id . '" class="form-control summernote-basic" id="revisi' . $value->revision_id . '">' . $value->revision_notes . '</textarea>';
-        //             }
-        //             $badge_revisi = '<span class="badge badge-info">Dalam Proses</span>';
-        //         }
-        //         if ($input->role == 'editor') {
-        //             $tahap = 'edit';
-        //             $role  = 'editor';
-        //         } else {
-        //             $tahap = 'layout';
-        //             $role  = 'layouter';
-        //         }
-
-        //         if ($this->level == 'superadmin' or $this->level == 'admin_penerbitan') {
-        //             $tombol_hapus = '<button title="Hapus revisi" type="button" class="d-inline btn btn-danger hapus-revisi" data="' . $value->revision_id . '"><i class="fa fa-trash"></i><span class="d-none d-lg-inline"> Hapus</span></button>';
-        //             $tombol_edit  = '<button type="button" class="d-inline btn btn-secondary btn-xs trigger-' . $tahap . '-revisi-deadline" data-toggle="modal" data-target="#' . $tahap . '-revisi-deadline" title="' . $tahap . ' Deadline" data="' . $value->revision_id . '">Edit</button>';
-        //         } else {
-        //             $tombol_hapus = '';
-        //             $tombol_edit  = '';
-        //         }
-
-        //         $data['revisi'][] = '<section class="card card-expansion-item">
-        //             <header class="card-header border-0" id="heading' . $value->revision_id . '">
-        //               <button class="btn btn-reset collapsed" data-toggle="collapse" data-target="#collapse' . $value->revision_id . '" aria-expanded="false" aria-controls="collapse' . $value->revision_id . '">
-        //                 <span class="collapse-indicator mr-2">
-        //                   <i class="fa fa-fw fa-caret-right"></i>
-        //                 </span>
-        //                 <span>Revisi #' . $urutan . '</span>
-        //                 ' . $badge_revisi . '
-        //               </button>
-        //             </header>
-        //             <div id="collapse' . $value->revision_id . '" class="collapse" aria-labelledby="heading' . $value->revision_id . '" data-parent="#accordion-' . $role . '">
-        //             <div class="list-group list-group-flush list-group-bordered">
-        //                 <div class="list-group-item justify-content-between">
-        //                   <span class="text-muted">Tanggal mulai</span>
-        //                   <strong>' . format_datetime($value->revision_start_date) . '</strong>
-        //                 </div>
-        //                 <div class="list-group-item justify-content-between">
-        //                   <span class="text-muted">Tanggal selesai</span>
-        //                   <strong>' . format_datetime($value->revision_end_date) . '</strong>
-        //                 </div>
-        //                 <div class="list-group-item justify-content-between">
-        //                   <span class="text-muted">Deadline ' . $tombol_edit . '</span>
-        //                   <strong>' . format_datetime($value->revision_deadline) . '</strong>
-        //                 </div>
-        //                 <div class="list-group-item mb-0 pb-0">
-        //                   <span class="text-muted">Catatan ' . $role . '</span>
-        //                 </div>
-        //             </div>
-        //             <div class="card-body">
-        //             <form>
-        //             ' . $form_revisi . '
-        //             </form>
-        //                 <div class="el-example">
-        //                     <button title="Submit catatan" type="button" class="' . $atribut_tombol_simpan . ' btn btn-primary submit-revisi" data="' . $value->revision_id . '"><i class="fas fa-save"></i><span class="d-none d-lg-inline"> Simpan</span></button>
-        //                     <button title="Selesai revisi" type="button" class="d-inline btn btn-secondary selesai-revisi" ' . $atribut_tombol_selesai . ' data="' . $value->revision_id . '"><i class="fas fa-stop"></i><span class="d-none d-lg-inline"> Selesai</span></button>
-        //                     ' . $tombol_hapus . '
-        //                 </div>
-        //             </div>
-        //             </div>
-        //           </section>';
-        //         $urutan++;
-        //     }
-        // } else {
-        //     $data['revisi'] = 'Tidak ada revisi';
-        // }
-
-        // if ($flag > 0) {
-        //     $data['flag'] = true;
-        // } else {
-        //     $data['flag'] = false;
-        // }
-        // echo json_encode($data);
     }
 
     public function insert_revision()
@@ -157,7 +52,12 @@ class Revision extends MY_Controller
         $this->db->trans_begin();
 
         // update tanggal end revisi
-        $this->revision->where('revision_id', $input->revision_id)->update(['revision_end_date' => now()]);
+        $this->revision
+            ->where('revision_id', $input->revision_id)
+            ->update([
+                'revision_end_date' => now(),
+                'revision_notes' => $input->revision_notes
+            ]);
 
         // update draft status
         $this->revision->update_draft_status($input->draft_id, ['draft_status' => 19]);
