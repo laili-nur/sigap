@@ -322,6 +322,19 @@ $level              = check_level();
                                                                 <div class="form-group">
                                                                     <label
                                                                         class="font-weight-bold"
+                                                                        for="date"
+                                                                    >Tanggal Input<abbr title="Required">*</abbr></label>
+                                                                    <input
+                                                                        type="text"
+                                                                        name="date"
+                                                                        id="date"
+                                                                        value=""
+                                                                        class="form-control dates"
+                                                                    />
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label
+                                                                        class="font-weight-bold"
                                                                         for="notes"
                                                                     >Catatan</label>
                                                                     <textarea

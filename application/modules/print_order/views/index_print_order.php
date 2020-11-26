@@ -263,7 +263,7 @@ $print_order_status_options = [
                                                                         Hapus</h5>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    <p>Apakah anda yakin akan menghapus print_order <span class="font-weight-bold"><?= $print_order->book_title; ?></span>?</p>
+                                                                    <p>Apakah anda yakin akan menghapus print_order <span class="font-weight-bold"><?= $print_order->title; ?></span>?</p>
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button

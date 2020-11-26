@@ -110,7 +110,7 @@
                         </tr>
                         <tr>
                             <td width="140px">
-                                <?php if (is_admin()) : ?>
+                                <?php if (is_admin() || $level == "layouter" || $level == "editor") : ?>
                                     <a
                                         href="#"
                                         title="Ubah catatan draft"

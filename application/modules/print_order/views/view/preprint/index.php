@@ -394,6 +394,15 @@ $staff_percetakan           = $this->print_order->get_staff_percetakan_by_progre
                     </script>
 
                 <?php endif; ?>
+
+                <?php if (!$is_final) : ?>
+                    <a
+                        href="<?= base_url('print_order/generate_pdf/' . $print_order->print_order_id . "/preprint") ?>"
+                        class="btn btn-outline-danger <?= (!$is_preprint_deadline_set) ? 'disabled' : ''; ?>"
+                        id="btn-generate-pdf-preprint"
+                        title="Generate PDF"
+                    >Generate PDF <i class="fas fa-file-pdf fa-fw"></i></a>
+                <?php endif; ?>
             </div>
         </div>
 

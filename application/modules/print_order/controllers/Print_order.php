@@ -737,16 +737,6 @@ class Print_order extends Printing_Controller
         }
     }
 
-    public function download_preprint_file($filename)
-    {
-        if (!$this->_is_print_order_user()) {
-            redirect($_SERVER['HTTP_REFERER']);
-        }
-
-        $this->load->helper('download');
-        force_download('./preprintfile/' . $filename, NULL);
-    }
-
     public function api_set_stock($print_order_id)
     {
         // cek data
@@ -992,26 +982,41 @@ class Print_order extends Printing_Controller
         $this->load->library('pdf');
 
         // FORMAT DATA
-        if ($progress == 'print') {
-            $data_format['jobtype'] = 'Cetak';
-            if ($print_order->category != 'outsideprint') {
-                $data_format['finishing'] = 'Di Dalam';
-                $data_format['finishinglocation'] = '';
+        if ($progress == 'preprint') {
+            $data_format['jobtype'] = 'Pracetak';
+            if ($print_order->location_binding == 'inside') {
+                $data_format['finishing'] = 'Internal';
+                // $data_format['finishinglocation'] = '';
+            } elseif ($print_order->location_binding == 'outside') {
+                $data_format['finishing'] = 'External';
+                // $data_format['finishinglocation'] = $print_order->location_binding_outside;
             } else {
-                $data_format['finishing'] = 'Di Luar';
-                $data_format['finishinglocation'] = '';
+                $data_format['finishing'] = 'Parsial';
+                // $data_format['finishinglocation'] = $print_order->location_binding_outside;
+            }
+        } elseif ($progress == 'print') {
+            $data_format['jobtype'] = 'Cetak';
+            if ($print_order->location_binding == 'inside') {
+                $data_format['finishing'] = 'Internal';
+                // $data_format['finishinglocation'] = '';
+            } elseif ($print_order->location_binding == 'outside') {
+                $data_format['finishing'] = 'External';
+                // $data_format['finishinglocation'] = $print_order->location_binding_outside;
+            } else {
+                $data_format['finishing'] = 'Parsial';
+                // $data_format['finishinglocation'] = $print_order->location_binding_outside;
             }
         } elseif ($progress == 'postprint') {
             $data_format['jobtype'] = 'Jilid';
             if ($print_order->location_binding == 'inside') {
-                $data_format['finishing'] = 'Di Dalam';
-                $data_format['finishinglocation'] = '';
+                $data_format['finishing'] = 'Internal';
+                // $data_format['finishinglocation'] = '';
             } elseif ($print_order->location_binding == 'outside') {
-                $data_format['finishing'] = 'Di Luar';
-                $data_format['finishinglocation'] = $print_order->location_binding_outside;
+                $data_format['finishing'] = 'External';
+                // $data_format['finishinglocation'] = $print_order->location_binding_outside;
             } else {
                 $data_format['finishing'] = 'Parsial';
-                $data_format['finishinglocation'] = '';
+                // $data_format['finishinglocation'] = $print_order->location_binding_outside;
             }
         } else {
             $data_format['jobtype'] = '';
@@ -1034,7 +1039,7 @@ class Print_order extends Printing_Controller
 
         // Render the HTML as PDF
         $this->pdf->render();
-        $this->pdf->stream($data_format['ordernumber']);
+        $this->pdf->stream(strtolower($data_format['ordernumber'] . '_' . $data_format['jobtype']));
     }
 
     public function add_additional_notes($print_order_id)

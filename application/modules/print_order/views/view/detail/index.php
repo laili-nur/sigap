@@ -86,6 +86,22 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td width="200px"> Finishing Jilid </td>
+                                    <td><?= get_print_order_finishing()[$print_order->location_binding]; ?> </td>
+                                </tr>
+                                <tr>
+                                    <td width="200px"> Lokasi Finishing Jilid </td>
+                                    <td><?= $print_order->location_binding_outside; ?> </td>
+                                </tr>
+                                <tr>
+                                    <td width="200px"> Finishing Laminasi </td>
+                                    <td><?= get_print_order_finishing()[$print_order->location_laminate]; ?> </td>
+                                </tr>
+                                <tr>
+                                    <td width="200px"> Lokasi Finishing Laminasi </td>
+                                    <td><?= $print_order->location_laminate_outside; ?> </td>
+                                </tr>
+                                <tr>
                                     <td width="200px"> <?= $this->lang->line('form_print_order_start_date') ?> </td>
                                     <td><?= format_datetime($print_order->entry_date); ?> </td>
                                 </tr>
@@ -135,6 +151,14 @@
                                     <td><?= $print_order->book_edition  ?> </td>
                                 </tr>
                                 <tr>
+                                    <td width="200px"> Tema Buku </td>
+                                    <td><?= isset($print_order->theme_id) ? get_theme($print_order->theme_id) : ''; ?></td>
+                                </tr>
+                                <tr>
+                                    <td width="200px"> Harga Buku</td>
+                                    <td><?= $print_order->harga  ?> </td>
+                                </tr>
+                                <tr>
                                     <td width="200px"> File Buku </td>
                                     <td>
                                         <?php
@@ -144,14 +168,6 @@
                                         ?>
 
                                         <?= (!empty($print_order->book_file_link)) ? '<a data-toggle="tooltip" data-placement="right" title="' . $print_order->book_file_link . '" class="btn btn-success btn-xs my-0" target="_blank" href="' . $print_order->book_file_link . '"><i class="fa fa-external-link-alt"></i> External file</a>' : ''; ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="200px"> File Cover </td>
-                                    <td>
-                                        <?= (!empty($print_order->cover_file)) ? '<a data-toggle="tooltip" data-placement="right" title="' . $print_order->cover_file . '" class="btn btn-success btn-xs my-0" href="' . base_url('book/download_file/draftfile/' . urlencode($print_order->cover_file)) . '"><i class="fa fa-file-image"></i> File Cover</a>' : ''; ?>
-
-                                        <?= (!empty($print_order->cover_file_link)) ? '<a data-toggle="tooltip" data-placement="right" title="' . $print_order->cover_file_link . '" class="btn btn-success btn-xs my-0" target="_blank" href="' . $print_order->cover_file_link . '"><i class="fa fa-external-link-alt"></i> External file</a>' : ''; ?>
                                     </td>
                                 </tr>
                                 <tr>
@@ -173,6 +189,11 @@
                                 <tr>
                                     <td width="200px"> Referensi Buku </td>
                                     <td><a href="<?= base_url('book/view/' . $print_order->book_id); ?>"><?= $print_order->book_title; ?></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="200px"> Referensi Draft </td>
+                                    <td><a href="<?= base_url('draft/view/' . $print_order->draft_id); ?>"><?= $print_order->book_title; ?></a>
                                     </td>
                                 </tr>
                             </tbody>

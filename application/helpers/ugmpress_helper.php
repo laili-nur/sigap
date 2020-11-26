@@ -441,6 +441,10 @@ function get_allowed_file_types($field_name = null)
         $types = 'docx|doc|pdf|zip|rar';
     }
 
+    if ($field_name == 'print_order_file') {
+        $types = 'docx|doc|pdf|zip|rar';
+    }
+
     return [
         'types'   => $types,
         'to_text' => str_replace("|", ", ", $types),
@@ -764,4 +768,20 @@ function deadline_detail($deadline = null, $status)
             return '<span class="badge badge-secondary">Selesai</span>';
         }
     }
+}
+
+function get_theme($theme_id)
+{
+    $CI = &get_instance();
+    return $CI->db->select('theme_name')->from('theme')->where('theme_id', $theme_id)->get()->row()->theme_name;
+}
+
+function get_print_order_finishing()
+{
+    return [
+        '' => null,
+        'inside' => 'Internal',
+        'outside' => 'External',
+        'partial' => 'Parsial'
+    ];
 }

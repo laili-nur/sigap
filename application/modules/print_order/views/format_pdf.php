@@ -87,19 +87,6 @@
                 <?= $finishing; ?>
             </td>
         </tr>
-        <?php if ($finishing == 'Di Luar' || $finishing == 'Di Luar') : ?>
-            <tr>
-                <td>
-                    LOKASI
-                </td>
-                <td>
-                    :
-                </td>
-                <td>
-                    <?= $finishinglocation; ?>
-                </td>
-            </tr>
-        <?php endif; ?>
         <tr>
             <td>
                 NOMOR ORDER
@@ -196,7 +183,7 @@
                 :
             </td>
             <td>
-
+                <?= $notes; ?>
             </td>
         </tr>
     </table>

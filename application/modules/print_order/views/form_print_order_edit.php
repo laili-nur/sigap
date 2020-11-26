@@ -121,6 +121,11 @@
                                 <abbr title="Required">*</abbr>
                             </label>
                             <?= form_input('name', $input->name, 'class="form-control" id="name"'); ?>
+                            <small
+                                class="text-muted"
+                                id="nonbook_example"
+                                style="display:none;"
+                            >*Contoh : UGMPRESS - Cetak Non Buku</small>
                             <?= form_error('name'); ?>
                         </div>
 
@@ -301,7 +306,7 @@
                             <label for="location-binding">
                                 Lokasi Jilid
                             </label>
-                            <?= form_dropdown('location_binding', ['inside' => 'Di Dalam', 'outside' => 'Di Luar', 'partial' => 'Parsial'], $input->location_binding, 'id="location-binding" class="form-control custom-select d-block"'); ?>
+                            <?= form_dropdown('location_binding', ['inside' => 'Internal', 'outside' => 'External', 'partial' => 'Parsial'], $input->location_binding, 'id="location-binding" class="form-control custom-select d-block"'); ?>
                             <?= form_error('location_binding'); ?>
                         </div>
 
@@ -321,7 +326,7 @@
                             <label for="location-laminate">
                                 Lokasi Laminasi
                             </label>
-                            <?= form_dropdown('location_laminate', ['inside' => 'Di Dalam', 'outside' => 'Di Luar', 'partial' => 'Parsial'], $input->location_laminate, 'id="location-laminate" class="form-control custom-select d-block"'); ?>
+                            <?= form_dropdown('location_laminate', ['inside' => 'Internal', 'outside' => 'External', 'partial' => 'Parsial'], $input->location_laminate, 'id="location-laminate" class="form-control custom-select d-block"'); ?>
                             <?= form_error('location_laminate'); ?>
                         </div>
 
@@ -625,10 +630,12 @@ $(document).ready(function() {
         if (category === 'nonbook') {
             $('#book-id-wrapper').hide()
             $('#name-wrapper').show()
+            $('#nonbook_example').show()
             $('#book-id').val('');
         } else {
             $('#book-id-wrapper').show()
             $('#name-wrapper').hide()
+            $('#nonbook_example').hide()
             $('#name').val('');
         }
     }
