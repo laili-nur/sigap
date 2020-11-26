@@ -157,7 +157,12 @@ class Revision extends MY_Controller
         $this->db->trans_begin();
 
         // update tanggal end revisi
-        $this->revision->where('revision_id', $input->revision_id)->update(['revision_end_date' => now()]);
+        $this->revision
+            ->where('revision_id', $input->revision_id)
+            ->update([
+                'revision_end_date' => now(),
+                'revision_notes' => $input->revision_notes
+            ]);
 
         // update draft status
         $this->revision->update_draft_status($input->draft_id, ['draft_status' => 19]);
