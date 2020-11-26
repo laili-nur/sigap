@@ -54,8 +54,13 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
-$dev_servers = array('localhost', 'sigapdev.com');
-$is_dev_server = in_array($_SERVER['SERVER_NAME'], $dev_servers);
+
+if (php_sapi_name() === 'cli') {
+    $is_dev_server = true;
+} else {
+    $dev_servers = array('localhost', 'sigapdev.com', 'www.sigapdev.com');
+    $is_dev_server = in_array($_SERVER['SERVER_NAME'], $dev_servers);
+}
 
 if ($is_dev_server) {
     $env = 'development';
@@ -64,6 +69,8 @@ if ($is_dev_server) {
 }
 
 define('ENVIRONMENT', $env);
+
+
 
 /*
  *---------------------------------------------------------------
