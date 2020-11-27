@@ -1027,8 +1027,8 @@ class Print_order extends Printing_Controller
         $data_format['category'] = get_print_order_category()[$print_order->category] ?? '';
         $data_format['ordernumber'] = $print_order->order_number ?? '';
         $data_format['total'] = $print_order->total ?? '';
-        $data_format['entrydate'] = date('d F Y H:i', strtotime($print_order->entry_date)) ?? '';
-        $data_format['deadline'] = date('d F Y H:i', strtotime($print_order->{"{$progress}_deadline"})) ?? '';
+        $data_format['entrydate'] = date('d F Y', strtotime($print_order->entry_date)) ?? '';
+        $data_format['deadline'] = date('d F Y', strtotime($print_order->{"{$progress}_deadline"})) ?? '';
         $data_format['staff'] = $staff;
         $data_format['notes'] = $print_order->{"{$progress}_notes"} ?? '';
         $format = $this->load->view('print_order/format_pdf', $data_format, true);
