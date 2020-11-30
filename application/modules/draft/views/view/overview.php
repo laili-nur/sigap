@@ -90,17 +90,17 @@
             if ($input->is_review == 'y') {
                 $this->load->view('draft/view/edit/index');
                 // PROGRESS LAYOUT
-                if ($input->is_edit == 'y') {
-                    $this->load->view('draft/view/layout/index');
-                    // PROGRESS PROOFREAD
-                    if ($input->is_layout == 'y') {
-                        $this->load->view('draft/view/proofread/index');
-                        // PROGRESS FINAL
-                        if ($input->is_proofread == 'y' && is_staff()) {
-                            $this->load->view('draft/view/final/index');
-                        }
+                // if ($input->is_edit == 'y') {
+                $this->load->view('draft/view/layout/index');
+                // PROGRESS PROOFREAD
+                if ($input->is_layout == 'y') {
+                    $this->load->view('draft/view/proofread/index');
+                    // PROGRESS FINAL
+                    if ($input->is_proofread == 'y' && is_staff()) {
+                        $this->load->view('draft/view/final/index');
                     }
                 }
+                // }
             }
         }
     }

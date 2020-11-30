@@ -152,7 +152,7 @@ class Draft extends Operator_Controller
 
         if ($this->draft->validate()) {
             if (!empty($_FILES) && $df = $_FILES['draft_file']['name']) {
-                $draft_file_name = $this->_generate_draft_file_name($df, $input->draft_title);
+                $draft_file_name = strip_disallowed_char($this->_generate_draft_file_name($df, $input->draft_title));
                 $upload          = $this->draft->upload_draft_file('draft_file', $draft_file_name);
                 if ($upload) {
                     $input->draft_file = $draft_file_name;
@@ -399,7 +399,7 @@ class Draft extends Operator_Controller
         $column = "{$progress}_file";
 
         if (!empty($_FILES) && $file_name = $_FILES[$column]['name']) {
-            $draft_file_name = $this->_generate_draft_file_name($file_name, $draft->draft_title, $column);
+            $draft_file_name = strip_disallowed_char($this->_generate_draft_file_name($file_name, $draft->draft_title, $column));
             $upload = $this->draft->upload_file($column, $draft_file_name);
             if ($upload) {
                 $input->$column = $draft_file_name;
@@ -612,7 +612,7 @@ class Draft extends Operator_Controller
 
         if ($this->draft->validate()) {
             if (!empty($_FILES) && $df = $_FILES['draft_file']['name']) {
-                $draft_file_name = $this->_generate_draft_file_name($df, $input->draft_title);
+                $draft_file_name = strip_disallowed_char($this->_generate_draft_file_name($df, $input->draft_title));
                 $upload          = $this->draft->upload_draft_file('draft_file', $draft_file_name);
                 if ($upload) {
                     $input->draft_file = $draft_file_name;

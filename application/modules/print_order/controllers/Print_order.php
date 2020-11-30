@@ -34,6 +34,9 @@ class Print_order extends Printing_Controller
         $this->print_order->per_page = $this->input->get('per_page', true) ?? 10;
 
         $get_data = $this->print_order->filter_print_order($filters, $page);
+        // usort($get_data['print_orders'], function ($a, $b) {
+        //     return strcmp($b->print_order_status, $a->print_order_status);
+        // });
 
         $print_orders = $get_data['print_orders'];
         $total        = $get_data['total'];
@@ -83,7 +86,7 @@ class Print_order extends Printing_Controller
 
         if ($this->print_order->validate()) {
             if (!empty($_FILES) && $file_name = $_FILES['print_order_file']['name']) {
-                $generated_name = $this->_generate_file_name($file_name);
+                $generated_name = strip_disallowed_char($this->_generate_file_name($file_name));
                 $upload          = $this->print_order->upload_print_order_file('print_order_file', $generated_name);
                 if ($upload) {
                     $input->print_order_file = $generated_name;
@@ -176,7 +179,7 @@ class Print_order extends Printing_Controller
 
         if ($this->print_order->validate()) {
             if (!empty($_FILES) && $file_name = $_FILES['print_order_file']['name']) {
-                $generated_name = $this->_generate_file_name($file_name);
+                $generated_name = strip_disallowed_char($this->_generate_file_name($file_name));
                 $upload          = $this->print_order->upload_print_order_file('print_order_file', $generated_name);
                 if ($upload) {
                     $input->print_order_file = $generated_name;
@@ -667,7 +670,7 @@ class Print_order extends Printing_Controller
         $column = "{$progress}_file";
 
         if (!empty($_FILES) && $file_name = $_FILES[$column]['name']) {
-            $print_order_file_name = $this->_generate_print_order_file_name($file_name, $print_order->book_title, $column);
+            $print_order_file_name = strip_disallowed_char($this->_generate_print_order_file_name($file_name, $print_order->book_title, $column));
             $upload = $this->print_order->upload_preprint_file($column, $print_order_file_name);
             if ($upload) {
                 $input->$column = $print_order_file_name;
@@ -1027,8 +1030,8 @@ class Print_order extends Printing_Controller
         $data_format['category'] = get_print_order_category()[$print_order->category] ?? '';
         $data_format['ordernumber'] = $print_order->order_number ?? '';
         $data_format['total'] = $print_order->total ?? '';
-        $data_format['entrydate'] = date('d F Y H:i', strtotime($print_order->entry_date)) ?? '';
-        $data_format['deadline'] = date('d F Y H:i', strtotime($print_order->{"{$progress}_deadline"})) ?? '';
+        $data_format['entrydate'] = date('d F Y', strtotime($print_order->entry_date)) ?? '';
+        $data_format['deadline'] = date('d F Y', strtotime($print_order->{"{$progress}_deadline"})) ?? '';
         $data_format['staff'] = $staff;
         $data_format['notes'] = $print_order->{"{$progress}_notes"} ?? '';
         $format = $this->load->view('print_order/format_pdf', $data_format, true);

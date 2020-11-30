@@ -186,6 +186,17 @@
                 <?= $notes; ?>
             </td>
         </tr>
+        <tr>
+            <td>
+                TANGGAL MASUK ANTRIAN
+            </td>
+            <td>
+                :
+            </td>
+            <td>
+                <?= date('d F Y'); ?>
+            </td>
+        </tr>
     </table>
     <br><br><br>
     <div style="text-align: center;">
