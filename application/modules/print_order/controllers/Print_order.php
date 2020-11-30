@@ -86,7 +86,7 @@ class Print_order extends Printing_Controller
 
         if ($this->print_order->validate()) {
             if (!empty($_FILES) && $file_name = $_FILES['print_order_file']['name']) {
-                $generated_name = $this->_generate_file_name($file_name);
+                $generated_name = strip_disallowed_char($this->_generate_file_name($file_name));
                 $upload          = $this->print_order->upload_print_order_file('print_order_file', $generated_name);
                 if ($upload) {
                     $input->print_order_file = $generated_name;
@@ -179,7 +179,7 @@ class Print_order extends Printing_Controller
 
         if ($this->print_order->validate()) {
             if (!empty($_FILES) && $file_name = $_FILES['print_order_file']['name']) {
-                $generated_name = $this->_generate_file_name($file_name);
+                $generated_name = strip_disallowed_char($this->_generate_file_name($file_name));
                 $upload          = $this->print_order->upload_print_order_file('print_order_file', $generated_name);
                 if ($upload) {
                     $input->print_order_file = $generated_name;
@@ -670,7 +670,7 @@ class Print_order extends Printing_Controller
         $column = "{$progress}_file";
 
         if (!empty($_FILES) && $file_name = $_FILES[$column]['name']) {
-            $print_order_file_name = $this->_generate_print_order_file_name($file_name, $print_order->book_title, $column);
+            $print_order_file_name = strip_disallowed_char($this->_generate_print_order_file_name($file_name, $print_order->book_title, $column));
             $upload = $this->print_order->upload_preprint_file($column, $print_order_file_name);
             if ($upload) {
                 $input->$column = $print_order_file_name;

@@ -37,7 +37,7 @@ class Document extends Admin_Controller
         if ($this->document->validate()) {
             if (!empty($_FILES) && $_FILES['document_file']['size'] > 0) {
                 $getextension     = explode(".", $_FILES['document_file']['name']);
-                $document_file_name = str_replace(" ", "_", $input->document_name . '_' . date('YmdHis') . "." . $getextension[1]);  // document file name
+                $document_file_name = strip_disallowed_char(str_replace(" ", "_", $input->document_name . '_' . date('YmdHis') . "." . $getextension[1]));  // document file name
                 $upload           = $this->document->upload_document_file('document_file', $document_file_name);
                 if ($upload) {
                     $input->document_file = $document_file_name;  // Data for column "document".
@@ -76,7 +76,7 @@ class Document extends Admin_Controller
         if ($this->document->validate()) {
             if (!empty($_FILES) && $_FILES['document_file']['size'] > 0) {
                 $getextension     = explode(".", $_FILES['document_file']['name']);
-                $document_file_name = str_replace(" ", "_", $input->document_name . '_' . date('YmdHis') . "." . $getextension[1]);  // document file name
+                $document_file_name = strip_disallowed_char(str_replace(" ", "_", $input->document_name . '_' . date('YmdHis') . "." . $getextension[1]));  // document file name
                 $upload           = $this->document->upload_document_file('document_file', $document_file_name);
                 if ($upload) {
                     $input->document_file = $document_file_name;  // Data for column "document".

@@ -785,3 +785,13 @@ function get_print_order_finishing()
         'partial' => 'Parsial'
     ];
 }
+
+function strip_disallowed_char($string)
+{
+    $bad = array_merge(
+        array_map('chr', range(0, 31)),
+        array("<", ">", ":", '"', "/", "\\", "|", "?", "*", "(", ")", "@", "&", "!", ";", ",")
+    );
+    $string = str_replace($bad, "_", $string);
+    return $string;
+}

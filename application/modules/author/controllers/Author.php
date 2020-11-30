@@ -90,7 +90,7 @@ class Author extends Admin_Controller
         // upload file hanya ketika validasi lolos
         if ($this->author->validate()) {
             if (!empty($_FILES) && $ktp_file_name = $_FILES['author_ktp']['name']) {
-                $ktp_name = $this->_generate_ktp_name($ktp_file_name, $input->author_name);
+                $ktp_name = strip_disallowed_char($this->_generate_ktp_name($ktp_file_name, $input->author_name));
                 $upload   = $this->author->upload_author_ktp('author_ktp', $ktp_name);
                 if ($upload) {
                     $input->author_ktp = $ktp_name;
@@ -140,7 +140,7 @@ class Author extends Admin_Controller
 
         if ($this->author->validate()) {
             if (!empty($_FILES) && $ktp_file_name = $_FILES['author_ktp']['name']) {
-                $ktp_name = $this->_generate_ktp_name($ktp_file_name, $input->author_name);
+                $ktp_name = strip_disallowed_char($this->_generate_ktp_name($ktp_file_name, $input->author_name));
                 $upload   = $this->author->upload_author_ktp('author_ktp', $ktp_name);
                 if ($upload) {
                     $input->author_ktp = $ktp_name;
