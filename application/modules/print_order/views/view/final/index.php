@@ -44,8 +44,8 @@ if (!$is_final) :
                         <h5 class="modal-title"><i class="fa fa-bullhorn text-yellow mr-1"></i> Konfirmasi finalisasi order cetak</h5>
                     </div>
                     <div class="modal-body">
-                        <p>Apakah anda yakin akan menyelesaikan cetak ini?</p>
-                        <div class="alert alert-info">Tanggal selesai cetak akan tercatat ketika klik Submit</div>
+                        <p>Apakah anda yakin akan menyelesaikan order cetak ini?</p>
+                        <div class="alert alert-info">Tanggal selesai produksi akan tercatat ketika klik Submit</div>
                     </div>
                     <div class="modal-footer">
                         <button
