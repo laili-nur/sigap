@@ -260,7 +260,7 @@ class Book extends Admin_Controller
         if ($this->book->validate()) {
             // Upload new hakcipta (if any)
             if (!empty($_FILES) && $hakcipta_file_name = $_FILES['file_hak_cipta']['name']) {
-                $hakcipta_file_name = strip_disallowed_char(strip_disallowed_char($this->_generate_book_name($hakcipta_file_name, $input->book_title, 'hakcipta')));
+                $hakcipta_file_name = strip_disallowed_char($this->_generate_book_name($hakcipta_file_name, $input->book_title, 'hakcipta'));
                 $upload       = $this->book->uploadHCfile('file_hak_cipta', $hakcipta_file_name);
                 if ($upload) {
                     $input->file_hak_cipta = $hakcipta_file_name;
