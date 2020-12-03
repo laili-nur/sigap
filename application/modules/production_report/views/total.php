@@ -48,7 +48,7 @@ for ($dy = intval(date('Y')); $dy >= 2015; $dy--) {
                             <li class="nav-item">
                                 <a
                                     class="nav-link"
-                                    href="<?= base_url('production_report/detail?date_year=' . date('Y')); ?>"
+                                    href="<?= base_url('production_report/detail?date_year=' . date('Y')) . '&date_month=' . date('n'); ?>"
                                 >Detail Cetak</a>
                             </li>
                         </ul>
