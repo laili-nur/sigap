@@ -34,9 +34,6 @@ class Print_order extends Printing_Controller
         $this->print_order->per_page = $this->input->get('per_page', true) ?? 10;
 
         $get_data = $this->print_order->filter_print_order($filters, $page);
-        // usort($get_data['print_orders'], function ($a, $b) {
-        //     return strcmp($b->print_order_status, $a->print_order_status);
-        // });
 
         $print_orders = $get_data['print_orders'];
         $total        = $get_data['total'];
@@ -857,11 +854,11 @@ class Print_order extends Printing_Controller
                             break;
                         }
                     case 'E': {
-                            $value = date('d F Y H:i:s', strtotime($data->entry_date));
+                            $value = date('d/m/Y H:i:s', strtotime($data->entry_date));
                             break;
                         }
                     case 'F': {
-                            $value = date('d F Y H:i:s', strtotime($data->finish_date));
+                            $value = date('d/m/Y H:i:s', strtotime($data->finish_date));
                             break;
                         }
                     case 'G': {
@@ -882,11 +879,11 @@ class Print_order extends Printing_Controller
                             break;
                         }
                     case 'J': {
-                            $value = date('d F Y H:i:s', strtotime($data->preprint_start_date));
+                            $value = date('d/m/Y H:i:s', strtotime($data->preprint_start_date));
                             break;
                         }
                     case 'K': {
-                            $value = date('d F Y H:i:s', strtotime($data->preprint_end_date));
+                            $value = date('d/m/Y H:i:s', strtotime($data->preprint_end_date));
                             break;
                         }
                     case 'L': {
@@ -899,11 +896,11 @@ class Print_order extends Printing_Controller
                             break;
                         }
                     case 'M': {
-                            $value = date('d F Y H:i:s', strtotime($data->print_start_date));
+                            $value = date('d/m/Y H:i:s', strtotime($data->print_start_date));
                             break;
                         }
                     case 'N': {
-                            $value = date('d F Y H:i:s', strtotime($data->print_end_date));
+                            $value = date('d/m/Y H:i:s', strtotime($data->print_end_date));
                             break;
                         }
                     case 'O': {
@@ -916,11 +913,11 @@ class Print_order extends Printing_Controller
                             break;
                         }
                     case 'P': {
-                            $value = date('d F Y H:i:s', strtotime($data->postprint_start_date));
+                            $value = date('d/m/Y H:i:s', strtotime($data->postprint_start_date));
                             break;
                         }
                     case 'Q': {
-                            $value = date('d F Y H:i:s', strtotime($data->postprint_end_date));
+                            $value = date('d/m/Y H:i:s', strtotime($data->postprint_end_date));
                             break;
                         }
                 }
@@ -1030,8 +1027,8 @@ class Print_order extends Printing_Controller
         $data_format['category'] = get_print_order_category()[$print_order->category] ?? '';
         $data_format['ordernumber'] = $print_order->order_number ?? '';
         $data_format['total'] = $print_order->total ?? '';
-        $data_format['entrydate'] = date('d F Y', strtotime($print_order->entry_date)) ?? '';
-        $data_format['deadline'] = date('d F Y', strtotime($print_order->{"{$progress}_deadline"})) ?? '';
+        $data_format['entrydate'] = date('d/m/Y', strtotime($print_order->entry_date)) ?? '';
+        $data_format['deadline'] = date('d/m/Y', strtotime($print_order->{"{$progress}_deadline"})) ?? '';
         $data_format['staff'] = $staff;
         $data_format['notes'] = $print_order->{"{$progress}_notes"} ?? '';
         $format = $this->load->view('print_order/format_pdf', $data_format, true);

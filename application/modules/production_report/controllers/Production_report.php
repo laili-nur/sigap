@@ -71,7 +71,7 @@ class Production_report extends Admin_Controller
             'excel'         => $this->input->get('excel', true),
         ];
         if (empty($this->input->get('date_month', true))) {
-            $filters['date_month'] = date('n');
+            $filters['date_month'] = NULL;
         }
         $model = [];
         $data = $this->production_report->filter_detail($filters);

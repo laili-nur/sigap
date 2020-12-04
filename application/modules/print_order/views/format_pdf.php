@@ -194,7 +194,7 @@
                 :
             </td>
             <td>
-                <?= date('d F Y'); ?>
+                <?= date('d/m/Y'); ?>
             </td>
         </tr>
     </table>

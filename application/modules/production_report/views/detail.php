@@ -56,7 +56,7 @@ for ($m = 1; $m <= 12; $m++) {
                             <li class="nav-item">
                                 <a
                                     class="nav-link active"
-                                    href="<?= base_url('production_report/detail?date_year=' . date('Y')); ?>"
+                                    href="<?= base_url('production_report/detail?date_year=' . date('Y')) . '&date_month=' . date('n'); ?>"
                                 >Detail Cetak</a>
                             </li>
                         </ul>
