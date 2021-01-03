@@ -6,7 +6,7 @@ class Print_order_list_model extends CI_Model
     public $table    = 'print_order';
     public function get_print_order_list()
     {
-        return $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'CONCAT_WS("", book.book_title, print_order.name) AS title', 'category_name', 'draft.is_reprint', 'print_order.*'])
+        return $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'CONCAT_WS(" - ", NULLIF(print_order.name,""), book.book_title) AS title', 'category_name', 'draft.is_reprint', 'print_order.*'])
             ->where('print_order_status !=', 'finish')
             ->join_table('book', 'print_order', 'book')
             ->join_table('draft', 'book', 'draft')

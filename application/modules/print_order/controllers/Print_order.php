@@ -129,6 +129,19 @@ class Print_order extends Printing_Controller
             $input->book_id = empty_to_null($input->book_id);
         }
 
+        if (empty($input->paper_estimation)) {
+            if (empty($input->book_id)) {
+                $input->paper_estimation = empty_to_null($input->paper_estimation);
+            } else {
+                $book_pages = $this->print_order->get_book($input->book_id)->book_pages;
+                if (empty($input->total) || empty($book_pages) || empty($input->paper_divider)) {
+                    $input->paper_estimation = empty_to_null($input->paper_estimation);
+                } else {
+                    $input->paper_estimation = ($input->total * $book_pages) / $input->paper_divider;
+                }
+            }
+        }
+
         // insert print order
         $print_order_id = $this->print_order->insert($input);
 
@@ -230,6 +243,19 @@ class Print_order extends Printing_Controller
 
         if (empty($input->book_id)) {
             $input->book_id = empty_to_null($input->book_id);
+        }
+
+        if (empty($input->paper_estimation)) {
+            if (empty($input->book_id)) {
+                $input->paper_estimation = empty_to_null($input->paper_estimation);
+            } else {
+                $book_pages = $this->print_order->get_book($input->book_id)->book_pages;
+                if (empty($input->total) || empty($book_pages) || empty($input->paper_divider)) {
+                    $input->paper_estimation = empty_to_null($input->paper_estimation);
+                } else {
+                    $input->paper_estimation = ($input->total * $book_pages) / $input->paper_divider;
+                }
+            }
         }
 
         // update print order
@@ -1055,6 +1081,24 @@ class Print_order extends Printing_Controller
         }
 
         redirect('print_order/view/' . $print_order_id);
+    }
+
+    public function download_book_file($file_name)
+    {
+        if (!$this->_is_print_order_user()) {
+            redirect($this->pages);
+        }
+
+        $folder = "bookfile";
+        $file = realpath($folder) . "/" . $file_name;
+        if (file_exists($file)) {
+            $data = file_get_contents($file);
+            force_download($file_name, $data);
+        } else {
+            echo $this->lang->line('toast_error_file_not_found');
+            // $this->session->set_flashdata('warning', $this->lang->line('toast_error_file_not_found'));
+            // redirect($redirect ?? $this->pages);
+        }
     }
 
     private function _generate_print_order_file_name($print_order_file_name, $print_order_title, $progress = null)

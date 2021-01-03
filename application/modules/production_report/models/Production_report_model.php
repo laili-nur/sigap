@@ -6,7 +6,7 @@ class Production_report_model extends MY_Model
     protected $table    = 'print_order';
     public function filter_total($filters)
     {
-        return $this->select(['print_order_id AS id', 'category', 'total', 'CONCAT_WS(" - ", print_order.name, book.book_title) AS title', '(CASE WHEN total_postprint IS NOT NULL THEN total_postprint ELSE total_print END) AS total_new'])
+        return $this->select(['print_order_id AS id', 'category', 'total', 'CONCAT_WS(" - ", NULLIF(print_order.name,""), book.book_title) AS title', '(CASE WHEN total_postprint IS NOT NULL THEN total_postprint ELSE total_print END) AS total_new'])
             ->join_table('book', 'print_order', 'book')
             ->order_by('title', 'ASC')
             ->when('date_year', $filters['date_year'])
@@ -26,7 +26,7 @@ class Production_report_model extends MY_Model
 
     public function filter_excel_total($filters)
     {
-        return $this->select(['print_order_id AS id', 'category', 'total', 'CONCAT_WS(" - ", print_order.name, book.book_title) AS title', '(CASE WHEN total_postprint IS NOT NULL THEN total_postprint ELSE total_print END) AS total_new', 'entry_date', 'finish_date', 'type', 'preprint_start_date', 'preprint_end_date', 'print_start_date', 'print_end_date', 'postprint_start_date', 'postprint_end_date'])
+        return $this->select(['print_order_id AS id', 'category', 'total', 'CONCAT_WS(" - ", NULLIF(print_order.name,""), book.book_title) AS title', '(CASE WHEN total_postprint IS NOT NULL THEN total_postprint ELSE total_print END) AS total_new', 'entry_date', 'finish_date', 'type', 'preprint_start_date', 'preprint_end_date', 'print_start_date', 'print_end_date', 'postprint_start_date', 'postprint_end_date'])
             ->when('date_year', $filters['date_year'])
             ->where('print_order.print_order_status', 'finish')
             ->join_table('book', 'print_order', 'book')
@@ -36,7 +36,7 @@ class Production_report_model extends MY_Model
 
     public function filter_excel_detail($filters)
     {
-        return $this->select(['print_order_id AS id', 'category', 'total', 'CONCAT_WS(" - ", print_order.name, book.book_title) AS title', '(CASE WHEN total_postprint IS NOT NULL THEN total_postprint ELSE total_print END) AS total_new', 'entry_date', 'finish_date', 'type', 'preprint_start_date', 'preprint_end_date', 'print_start_date', 'print_end_date', 'postprint_start_date', 'postprint_end_date'])
+        return $this->select(['print_order_id AS id', 'category', 'total', 'CONCAT_WS(" - ", NULLIF(print_order.name,""), book.book_title) AS title', '(CASE WHEN total_postprint IS NOT NULL THEN total_postprint ELSE total_print END) AS total_new', 'entry_date', 'finish_date', 'type', 'preprint_start_date', 'preprint_end_date', 'print_start_date', 'print_end_date', 'postprint_start_date', 'postprint_end_date'])
             ->when('date_year', $filters['date_year'])
             ->when('date_month', $filters['date_month'])
             ->where('print_order.print_order_status', 'finish')
