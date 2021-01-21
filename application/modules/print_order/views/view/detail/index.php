@@ -163,7 +163,7 @@
                                     <td>
                                         <?php
                                         if (!empty($print_order->book_file)) {
-                                            echo '<a data-toggle="tooltip" data-placement="right" title="' . $print_order->book_file . '" class="btn btn-success btn-xs my-0" href="' . base_url('book/download_file/bookfile/' . $print_order->book_file) . '"><i class="fa fa-book"></i> File Buku</a>';
+                                            echo '<a data-toggle="tooltip" data-placement="right" title="' . $print_order->book_file . '" class="btn btn-success btn-xs my-0" href="' . base_url('print_order/download_book_file/' . $print_order->book_file) . '"><i class="fa fa-book"></i> File Buku</a>';
                                         }
                                         ?>
 

@@ -78,7 +78,7 @@ class Print_order_model extends MY_Model
 
     public function get_print_order($print_order_id)
     {
-        return $this->select(['CONCAT_WS(" - ", print_order.name, book.book_title) AS title', 'print_order.book_id', 'book.draft_id', 'stock_warehouse', 'book_title', 'book_file', 'book_file_link', 'cover_file', 'cover_file_link', 'book_notes',  'is_reprint', 'book_edition', 'nomor_hak_cipta', 'status_hak_cipta', 'file_hak_cipta', 'file_hak_cipta_link', 'harga', 'theme_id', 'book.draft_id', 'print_order.*'])
+        return $this->select(['CONCAT_WS(" - ", NULLIF(print_order.name,""), book.book_title) AS title', 'print_order.book_id', 'book.draft_id', 'stock_warehouse', 'book_title', 'book_file', 'book_file_link', 'cover_file', 'cover_file_link', 'book_notes',  'is_reprint', 'book_edition', 'nomor_hak_cipta', 'status_hak_cipta', 'file_hak_cipta', 'file_hak_cipta_link', 'harga', 'theme_id', 'book.draft_id', 'print_order.*'])
             ->join('book')
             ->join_table('draft', 'book', 'draft')
             ->where('print_order_id', $print_order_id)
@@ -94,7 +94,7 @@ class Print_order_model extends MY_Model
 
     public function filter_print_order($filters, $page)
     {
-        $print_orders = $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'CONCAT_WS(" - ", print_order.name, book.book_title) AS title', 'category_name', 'draft.is_reprint', 'print_order.*'])
+        $print_orders = $this->select(['print_order_id', 'print_order.book_id', 'book.draft_id', 'CONCAT_WS(" - ", NULLIF(print_order.name,""), book.book_title) AS title', 'category_name', 'draft.is_reprint', 'print_order.*'])
             ->when('keyword', $filters['keyword'])
             ->when('category', $filters['category'])
             ->when('type', $filters['type'])
@@ -144,7 +144,7 @@ class Print_order_model extends MY_Model
 
     public function filter_excel($filters)
     {
-        return $this->select(['print_order_id AS id', 'category', 'total', 'CONCAT_WS(" - ", print_order.name, book.book_title) AS title', '(CASE WHEN total_postprint IS NOT NULL THEN total_postprint ELSE total_print END) AS total_new', 'entry_date', 'finish_date', 'type', 'preprint_start_date', 'preprint_end_date', 'print_start_date', 'print_end_date', 'postprint_start_date', 'postprint_end_date'])
+        return $this->select(['print_order_id AS id', 'category', 'total', 'CONCAT_WS(" - ", NULLIF(print_order.name,""), book.book_title) AS title', '(CASE WHEN total_postprint IS NOT NULL THEN total_postprint ELSE total_print END) AS total_new', 'entry_date', 'finish_date', 'type', 'preprint_start_date', 'preprint_end_date', 'print_start_date', 'print_end_date', 'postprint_start_date', 'postprint_end_date'])
             ->when('category', $filters['category'])
             ->when('type', $filters['type'])
             ->when('date_year', $filters['date_year'])

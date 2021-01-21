@@ -58,7 +58,7 @@ class Home_model extends MY_Model
 
     public function print_order()
     {
-        return $this->select(['CONCAT_WS(" - ", print_order.name, book.book_title) AS title', 'print_order.*'])
+        return $this->select(['CONCAT_WS(" - ", NULLIF(print_order.name,""), book.book_title) AS title', 'print_order.*'])
             ->join_table('book', 'print_order', 'book')
             ->get_all('print_order');
     }
