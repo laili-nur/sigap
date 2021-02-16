@@ -85,3 +85,6 @@ $route['production_report/'] = 'production_report/total';
 $route['production_report/index/'] = 'production_report/total';
 $route['production_report/total/'] = 'production_report/total';
 $route['production_report/detail/'] = 'production_report/detail';
+
+//stok buku
+$route['book_stock'] = 'book_stock';

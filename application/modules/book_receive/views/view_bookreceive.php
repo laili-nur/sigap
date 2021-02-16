@@ -1,0 +1,1 @@
+<h2>detail book receive</h2>

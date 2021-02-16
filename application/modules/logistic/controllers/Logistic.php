@@ -30,6 +30,14 @@ class Logistic extends MY_Controller
         endif;
     }
 
+    public function test(){
+        if($this->check_level() == TRUE):
+        $pages = $this->pages;
+        $main_view = 'logistic/test';
+        $this->load->view('template', compact('pages','main_view'));
+        endif;
+    }
+
     public function add(){
         if($this->check_level_gudang() == TRUE):
         $pages       = $this->pages;

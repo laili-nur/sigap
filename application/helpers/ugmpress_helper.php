@@ -795,3 +795,34 @@ function strip_disallowed_char($string)
     $string = str_replace($bad, "_", $string);
     return $string;
 }
+
+//coba2 gatau bener apa engga??
+function get_bookshelf_location(){
+    return[
+        '' => 'Semua',
+        'a1' => 'A1',
+        'a2' => 'A2',
+        'a3' => 'A3',
+        'b1' => 'B1',
+        'b2' => 'B2',
+        'b3' => 'B3',
+    ];
+}
+
+function get_book_stock_total(){
+    return[
+        '' => '--Pilih--',
+        'kritis' => '<= 50',
+        'normal' => '> 50',
+    ];
+}
+
+// function get_per_page_options()
+// {
+//     return [
+//         '10'  => '10',
+//         '25'  => '25',
+//         '50'  => '50',
+//         '100' => '100',
+//     ];
+// }
