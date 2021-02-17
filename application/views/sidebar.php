@@ -94,39 +94,6 @@ $menu_list = [
         ]
     ],
     [
-        'title' => 'Aset',
-        'level' => 'superadmin|admin_gudang|admin_pemasaran|admin_keuangan'
-    ],
-    [
-        'name'  => 'Bangunan',
-        'icon'  => 'fa fa-building',
-        'url'   => 'building',
-        'level' => 'superadmin|admin_gudang|admin_pemasaran|admin_keuangan',
-    ],
-    [
-        'name'  => 'Ruangan',
-        'icon'  => 'fa fa-warehouse',
-        'url'   => 'room',
-        'level' => 'superadmin|admin_gudang|admin_pemasaran|admin_keuangan',
-    ],
-    [
-        'name'  => 'Fasilitas',
-        'icon'  => 'fa fa-dice-d6',
-        'level' => 'superadmin|admin_gudang|admin_pemasaran|admin_keuangan',
-        'child' => [
-            [
-                'name'  => 'Fasilitas',
-                'url'   => 'facility',
-                'level' => 'superadmin|admin_gudang|admin_pemasaran|admin_keuangan'
-            ],
-            [
-                'name'  => 'Mutasi Fasilitas',
-                'url'   => 'facility_transfer',
-                'level' => 'superadmin|admin_gudang'
-            ],
-        ]
-    ],
-    [
         'title' => 'Data',
         'level' => 'superadmin|admin_penerbitan|editor|layouter'
     ],
