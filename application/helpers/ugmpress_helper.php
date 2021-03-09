@@ -797,23 +797,58 @@ function strip_disallowed_char($string)
 }
 
 //coba2 gatau bener apa engga??
-function get_bookshelf_location(){
-    return[
-        '' => 'Semua',
-        'a1' => 'A1',
-        'a2' => 'A2',
-        'a3' => 'A3',
-        'b1' => 'B1',
-        'b2' => 'B2',
-        'b3' => 'B3',
+// function get_bookshelf_location(){
+//     return[
+//         '' => 'Semua',
+//         'a1' => 'A1',
+//         'a2' => 'A2',
+//         'a3' => 'A3',
+//         'b1' => 'B1',
+//         'b2' => 'B2',
+//         'b3' => 'B3',
+//     ];
+// }
+
+function get_selling_options()
+{
+    return [
+        '0' => 'Laris',
+        '1' => 'Semi Laris'
     ];
 }
 
-function get_book_stock_total(){
-    return[
+function get_warehouse_stock(){
+    $CI = get_instance();
+    $query = $CI->db->select('warehouse_present')->from('book_stock')->where('warehouse_present<=50')->get();
+
+    $warehouse_present=[
+        ''=>'Semua'
+    ];
+    // if($CI >=0 && $CI <= 50){
+    //     $col1=$CI->db->select('warehouse_present')->from('book_stock')->where('warehouse_present<=50')->get();
+    //     $warehouse_present[$col1] = '<= 50';
+    // }
+    // if($CI >50){
+    //     $col2=$CI->db->select('warehouse_present')->from('book_stock')->where('warehouse_present>50')->get();
+    //     $warehouse_present[$col2] = '<= 50';
+    // }
+    return [
+        '' => 'Semua',
+        '50' => '<= 50',
+        '100' => '> 50'
+    ];
+    // return $warehouse_present;
+}
+
+function get_book_receive_status(){
+    return [
         '' => '--Pilih--',
-        'kritis' => '<= 50',
-        'normal' => '> 50',
+        'reject' => 'Ditolak',
+        'revisi' => 'Butuh Revisi',
+        'serah_terima' => 'Serah Terima',
+        'wrapping' => 'Wrapping',
+        'finalisai' => 'Menunggu Finalisasi',
+        'finish' => 'Selesai',
     ];
 }
 

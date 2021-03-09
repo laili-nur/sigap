@@ -91,10 +91,10 @@
     <!-- BEGIN PLUGINS STYLES -->
     <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"> -->
     <!-- END PLUGINS STYLES -->
-
     <!-- JS -->
     <!-- jquery must load initially, because there is document ready in php scripts -->
     <script src="<?= base_url('assets/vendor/jquery/jquery.min.js'); ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
     <script>
     // global variable

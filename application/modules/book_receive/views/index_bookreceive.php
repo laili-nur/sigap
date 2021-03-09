@@ -5,6 +5,7 @@ $published_year     = $this->input->get('published_year');
 $bookshelf_location = $this->input->get('bookshelf_location');
 $book_stock_total   = $this->input->get('book_stock_total');
 $keyword            = $this->input->get('keyword');
+$book_receive_status = $this->input->get('book_receive_status');
 $page               = $this->uri->segment(2);
 $i                  = isset($page) ? $page * $per_page - $per_page : 0;
 
@@ -28,8 +29,7 @@ $i                  = isset($page) ? $page * $per_page - $per_page : 0;
                 <?//= $total; ?>
             </span>
         </div>
-        <a  href="<?= base_url("$pages/add"); ?>"
-            class="btn btn-primary btn-sm">
+        <a href="<?= base_url("$pages/add"); ?>" class="btn btn-primary btn-sm">
             <i class="fa fa-plus fa-fw"></i> Tambah
         </a>
     </div>
@@ -50,88 +50,54 @@ $i                  = isset($page) ? $page * $per_page - $per_page : 0;
                                 <label for="category">Tahun Terbit</label>
                                 <?= form_dropdown('published_year', get_published_date(), $published_year, 'id="published_year" class="form-control custom-select d-block" title="Filter Tahun Terbit"'); ?>
                             </div>
-                            <div class="col-12 col-md-3 mb-3">
+                            <!-- <div class="col-12 col-md-3 mb-3">
                                 <label for="category">Lokasi Rak</label>
-                                <?= form_dropdown('bookshelf_location', get_bookshelf_location(), $bookshelf_location, 'id="bookshelf_location" class="form-control custom-select d-block" title="Lokasi Rak"'); ?>
+                                <?//= form_dropdown('bookshelf_location', get_bookshelf_location(), $bookshelf_location, 'id="bookshelf_location" class="form-control custom-select d-block" title="Lokasi Rak"'); ?>
+                            </div> -->
+                            <div class="col-12 col-md-3 mb-3">
+                                <label for="category">Status</label>
+                                <?= form_dropdown('book_receive_status', get_book_receive_status(), $book_receive_status, 'id="book_receive_status" class="form-control custom-select d-block" title="Status"'); ?>
                             </div>
                             <div class="col-12 col-md-3 mb-3">
                                 <label for="category">Jumlah Dicetak</label>
-                                <?= form_dropdown('book_stock_total', get_book_stock_total(), $book_stock_total, 'id="book_stock_total" class="form-control custom-select d-block" title="Total Stok Buku"'); ?>
+                                <?//= form_dropdown('book_stock_total', get_book_stock_total(), $book_stock_total, 'id="book_stock_total" class="form-control custom-select d-block" title="Total Stok Buku"'); ?>
                             </div>
                             <div class="col-12 col-md-6">
                                 <label for="status">Pencarian</label>
-                                <?= form_input('keyword', $keyword, 'placeholder="Cari berdasarkan Nama, Tipe, Kategori" class="form-control"'); ?>
+                                <?= form_input('keyword', $keyword, 'placeholder="Cari berdasarkan Nama" class="form-control"'); ?>
                             </div>
                             <div class="col-12 col-lg-4">
                                 <label>&nbsp;</label>
-                                <div
-                                    class="btn-group btn-block"
-                                    role="group"
-                                    aria-label="Filter button"
-                                >
-                                    <button
-                                        class="btn btn-secondary"
-                                        type="button"
-                                        onclick="location.href = '<?= base_url($pages); ?>'"
-                                    > Reset</button>
-                                    <button
-                                        class="btn btn-primary"
-                                        type="submit"
-                                        value="Submit"
-                                    ><i class="fa fa-filter"></i> Filter</button>
+                                <div class="btn-group btn-block" role="group" aria-label="Filter button">
+                                    <button class="btn btn-secondary" type="button"
+                                        onclick="location.href = '<?= base_url($pages); ?>'"> Reset</button>
+                                    <button class="btn btn-primary" type="submit" value="Submit"><i
+                                            class="fa fa-filter"></i> Filter</button>
                                 </div>
                             </div>
                         </div>
                         <?= form_close(); ?>
                     </div>
+                    
                     <!-- hard code -->
                     <small class="ml-3">*tabelnya masih hard code</small>
                     <table class="table table-striped mb-0 table-responsive">
                         <thead>
                             <tr>
-                            <th
-                                    scope="col"
-                                    class="pl-4 align-middle text-center"
-                                >No</th>
-                                <th
-                                    scope="col"
-                                    style="min-width:400px;"
-                                    class="align-middle text-center"
-                                >Judul</th>
-                                <th
-                                    scope="col"
-                                    style="min-width:100px;"
-                                    class="align-middle text-center"
-                                >Nomor Order</th>
-                                <th
-                                    scope="col"
-                                    style="min-width:100px;"
-                                    class="align-middle text-center"
-                                >Tahun Terbit</th>
-                                <th
-                                    scope="col"
-                                    style="min-width:100px;"
-                                    class="align-middle text-center"
-                                >ISBN</th>
-                                <th
-                                    scope="col"
-                                    style="min-width:100px;"
-                                    class="align-middle text-center"
-                                >Tanggal Masuk Gudang</th>
-                                <th
-                                    scope="col"
-                                    style="min-width:100px;"
-                                    class="align-middle text-center"
-                                >Jumlah Dicetak</th>
-                                <th
-                                    scope="col"
-                                    style="min-width:100px;"
-                                    class="align-middle text-center"
-                                >Lokasi Rak</th>
-                                <th
-                                    style="min-width:100px"
-                                    class="align-middle text-center"
-                                >
+                                <th scope="col" class="pl-4 align-middle text-center">No</th>
+                                <th scope="col" style="min-width:400px;" class="align-middle text-center">Judul</th>
+                                <th scope="col" style="min-width:100px;" class="align-middle text-center">Tahun Terbit
+                                </th>
+                                <th scope="col" style="min-width:100px;" class="align-middle text-center">Nomor Order
+                                </th>
+                                <th scope="col" style="min-width:100px;" class="align-middle text-center">Tanggal Masuk
+                                    Gudang</th>
+                                <th scope="col" style="min-width:100px;" class="align-middle text-center">Jumlah Dicetak
+                                </th>
+                                <th scope="col" style="min-width:100px;" class="align-middle text-center">Status</th>
+                                <th scope="col" style="min-width:100px;" class="align-middle text-center">Lokasi Rak
+                                </th>
+                                <th style="min-width:100px" class="align-middle text-center">
                                     &nbsp; </th>
                             </tr>
                         </thead>
@@ -139,25 +105,18 @@ $i                  = isset($page) ? $page * $per_page - $per_page : 0;
                             <tr>
                                 <td class="align-middle text-center pl-4">1</td>
                                 <td class="align-middle text-left">
-                                    <a
-                                        href="detailbuku.html"
-                                        class="font-weight-bold"
-                                    >
+                                    <a href="detailbuku.html" class="font-weight-bold">
                                         Sistem Pengendalian Manajemen </a>
                                 </td>
                                 <td class="align-middle text-center">2019</td>
                                 <td class="align-middle text-center">2019-12-182</td>
-                                <td class="align-middle text-center">457-324-744-348-2</td>
                                 <td class="align-middle text-center">27/11/2020 10:02:43</td>
                                 <td class="align-middle text-center">554</td>
+                                <td class="align-middle text-center">Selesai</td>
                                 <td class="align-middle text-center">R12B</td>
                                 <td class="align-middle text-center">
-                                    <button
-                                        title="Edit Stok"
-                                        data-toggle="modal"
-                                        data-target="#modal_add_stock"
-                                        class="btn btn-sm btn-secondary"
-                                    >
+                                    <button title="Edit Stok" data-toggle="modal" data-target="#modal_add_stock"
+                                        class="btn btn-sm btn-secondary">
                                         <i class="fa fa-pencil-alt"></i>
                                         <span class="sr-only">Edit</span>
                                     </button>
@@ -304,25 +263,13 @@ $i                  = isset($page) ? $page * $per_page - $per_page : 0;
                                         </div>
                                     </div> -->
                                     <!-- Modal Add Stok -->
-                                    <button
-                                        type="button"
-                                        class="btn btn-sm btn-danger"
-                                        data-toggle="modal"
-                                        data-target="#modal-hapus-11"
-                                    ><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
+                                    <button type="button" class="btn btn-sm btn-danger" data-toggle="modal"
+                                        data-target="#modal-hapus-11"><i class="fa fa-trash-alt"></i><span
+                                            class="sr-only">Delete</span></button>
                                     <div class="text-left">
-                                        <div
-                                            class="modal modal-alert fade"
-                                            id="modal-hapus-11"
-                                            tabindex="-1"
-                                            role="dialog"
-                                            aria-labelledby="modal-hapus"
-                                            aria-hidden="true"
-                                        >
-                                            <div
-                                                class="modal-dialog modal-dialog-centered"
-                                                role="document"
-                                            >
+                                        <div class="modal modal-alert fade" id="modal-hapus-11" tabindex="-1"
+                                            role="dialog" aria-labelledby="modal-hapus" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title">
@@ -337,17 +284,11 @@ $i                  = isset($page) ? $page * $per_page - $per_page : 0;
                                                                 Lingkungan</span>?</p>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button
-                                                            type="button"
-                                                            class="btn btn-danger"
+                                                        <button type="button" class="btn btn-danger"
                                                             onclick="location.href='https://sigapdev.com/print_order/delete/11'"
-                                                            data-dismiss="modal"
-                                                        >Hapus</button>
-                                                        <button
-                                                            type="button"
-                                                            class="btn btn-light"
-                                                            data-dismiss="modal"
-                                                        >Close</button>
+                                                            data-dismiss="modal">Hapus</button>
+                                                        <button type="button" class="btn btn-light"
+                                                            data-dismiss="modal">Close</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -358,45 +299,27 @@ $i                  = isset($page) ? $page * $per_page - $per_page : 0;
                             <tr>
                                 <td class="align-middle text-center pl-4">2</td>
                                 <td class="align-middle text-left">
-                                    <a
-                                        href="#"
-                                        class="font-weight-bold"
-                                    >
+                                    <a href="#" class="font-weight-bold">
                                         Toksikologi Lingkungan </a>
                                 </td>
                                 <td class="align-middle text-center">2018</td>
                                 <td class="align-middle text-center">2018-11-328</td>
-                                <td class="align-middle text-center">978-602-386-124-8</td>
                                 <td class="align-middle text-center">27/11/2020 09:05:15</td>
                                 <td class="align-middle text-center">503</td>
+                                <td class="align-middle text-center">Selesai</td>
                                 <td class="align-middle text-center">R10A</td>
                                 <td class="align-middle text-center">
-                                    <a
-                                        href="https://sigapdev.com/print_order/edit/11"
-                                        class="btn btn-sm btn-secondary"
-                                    >
+                                    <a href="https://sigapdev.com/print_order/edit/11" class="btn btn-sm btn-secondary">
                                         <i class="fa fa-pencil-alt"></i>
                                         <span class="sr-only">Edit</span>
                                     </a>
-                                    <button
-                                        type="button"
-                                        class="btn btn-sm btn-danger"
-                                        data-toggle="modal"
-                                        data-target="#modal-hapus-11"
-                                    ><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
+                                    <button type="button" class="btn btn-sm btn-danger" data-toggle="modal"
+                                        data-target="#modal-hapus-11"><i class="fa fa-trash-alt"></i><span
+                                            class="sr-only">Delete</span></button>
                                     <div class="text-left">
-                                        <div
-                                            class="modal modal-alert fade"
-                                            id="modal-hapus-11"
-                                            tabindex="-1"
-                                            role="dialog"
-                                            aria-labelledby="modal-hapus"
-                                            aria-hidden="true"
-                                        >
-                                            <div
-                                                class="modal-dialog modal-dialog-centered"
-                                                role="document"
-                                            >
+                                        <div class="modal modal-alert fade" id="modal-hapus-11" tabindex="-1"
+                                            role="dialog" aria-labelledby="modal-hapus" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title">
@@ -411,17 +334,11 @@ $i                  = isset($page) ? $page * $per_page - $per_page : 0;
                                                                 Lingkungan</span>?</p>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button
-                                                            type="button"
-                                                            class="btn btn-danger"
+                                                        <button type="button" class="btn btn-danger"
                                                             onclick="location.href='https://sigapdev.com/print_order/delete/11'"
-                                                            data-dismiss="modal"
-                                                        >Hapus</button>
-                                                        <button
-                                                            type="button"
-                                                            class="btn btn-light"
-                                                            data-dismiss="modal"
-                                                        >Close</button>
+                                                            data-dismiss="modal">Hapus</button>
+                                                        <button type="button" class="btn btn-light"
+                                                            data-dismiss="modal">Close</button>
                                                     </div>
                                                 </div>
                                             </div>

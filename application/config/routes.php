@@ -68,6 +68,7 @@ $route['theme/(:num)']            = 'theme/index/$1';
 $route['book/(:num)']             = 'book/index/$1';
 $route['document/(:num)']         = 'document/index/$1';
 $route['print_order/(:num)']      = 'print_order/index/$1';
+$route['book_stock/(:num)']       = 'book_stock/index/$1';
 $route['book_request/(:num)']     = 'book_request/index/$1';
 $route['logistic/(:num)']         = 'logistic/index/$1';
 $route['logistic_request/(:num)'] = 'logistic_request/index/$1';

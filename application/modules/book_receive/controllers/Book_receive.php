@@ -18,11 +18,10 @@ class Book_receive extends MY_Controller
         // endif;
     }
 
-    public function view(){
-        
+    public function view(){ 
         // if ($this->check_level() == TRUE):
         $pages      = $this->pages;
-        $main_view  = 'book_receive/view_bookreceive';
+        $main_view  = 'book_receive/view/view_bookreceive';
         $this->load->view('template', compact('pages', 'main_view'));
         // endif;
     }
