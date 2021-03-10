@@ -103,5 +103,9 @@ class Book_stock_model extends MY_Model
         return $this->db->select('*')->from('book_stock')->where('book_stock_id', $book_stock_id)->get()->row();
     }
 
+    public function delete_book_stock($where){
+        $this->db->where('book_stock_id', $where);
+        $this->db->delete('book_stock');
+    }
 
 }

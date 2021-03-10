@@ -82,6 +82,38 @@ class Book_stock extends MY_Controller
         // }
     }
 
+    public function delete($book_stock_id = null)
+    {
+        if (!$this->_is_warehouse_admin()) {
+            redirect($this->pages);
+        }
+
+        $book_stock = $this->book_stock->where('book_stock_id', $book_stock_id)->get();
+        if (!$book_stock) {
+            $this->session->set_flashdata('warning', $this->lang->line('toast_data_not_available'));
+            redirect($this->pages);
+        }
+
+        // memastikan konsistensi data
+        $this->db->trans_begin();
+
+        $this->book_stock->where('book_stock_id', $book_stock_id)->delete();
+            // $this->book_stock->delete_book_stock($book_stock_id);
+            // $this->print_order->delete_print_order_file($print_order->print_order_file);
+            // $this->print_order->delete_letter_file($print_order->letter_file);
+            // $this->print_order->delete_preprint_file($print_order->delete_preprint_file);
+
+        if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
+            $this->session->set_flashdata('error', $this->lang->line('toast_delete_fail'));
+        } else {
+            $this->db->trans_commit();
+            $this->session->set_flashdata('success', $this->lang->line('toast_delete_success'));
+        }
+
+        redirect($this->pages);
+    }
+
     private function _is_warehouse_admin()
     {
         if ($this->level == 'superadmin' || $this->level == 'admin_gudang') {

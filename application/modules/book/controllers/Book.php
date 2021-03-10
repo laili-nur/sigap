@@ -144,17 +144,19 @@ class Book extends Admin_Controller
         // get draft
         // $draft = $this->book->where('draft_id', $input->draft_id)->get('draft');
 
-        $get_stock      = $this->book->fetch_stock_by_id($book_id);
+        // $get_stock      = $this->book->fetch_stock_by_id($book_id);
 
-        $stock_history  = $get_stock['stock_history'];
-        $stock_last     = $get_stock['stock_last'];
+        // $stock_history  = $get_stock['stock_history'];
+        // $stock_last     = $get_stock['stock_last'];
 
         // If something wrong
         // if (!$this->book->validate() || $this->form_validation->error_array()) {
         $pages       = $this->pages;
         $main_view   = 'book/view_book';
         // $form_action = "book/edit/$book_id";
-        $this->load->view('template', compact('authors', 'pages', 'main_view', 'input', 'stock_history', 'stock_last'));
+        $this->load->view('template', compact('authors', 'pages', 'main_view', 'input', 
+        // 'stock_history', 'stock_last'
+    ));
         return;
         // }
 
@@ -363,53 +365,53 @@ class Book extends Admin_Controller
         return true;
     }
 
-    public function add_book_stock()
-    {
-        if ($this->check_level_gudang() == TRUE) :
-            $this->load->library('form_validation');
-            $this->form_validation->set_rules('warehouse_modifier', 'Stok Gudang', 'required|max_length[10]');
-            $this->form_validation->set_rules('notes', 'Catatan', 'max_length[256]');
-            $this->form_validation->set_rules('date', 'Tanggal Input', 'required');
+    // public function add_book_stock()
+    // {
+    //     if ($this->check_level_gudang() == TRUE) :
+    //         $this->load->library('form_validation');
+    //         $this->form_validation->set_rules('warehouse_modifier', 'Stok Gudang', 'required|max_length[10]');
+    //         $this->form_validation->set_rules('notes', 'Catatan', 'max_length[256]');
+    //         $this->form_validation->set_rules('date', 'Tanggal Input', 'required');
 
-            if ($this->form_validation->run() == FALSE) {
-                $this->session->set_flashdata('error', 'Gagal mengubah data stok buku.');
-                redirect($_SERVER['HTTP_REFERER'], 'refresh');
-            } else {
-                $check  =   $this->book->add_book_stock();
-                if ($check   ==  TRUE) {
-                    $this->session->set_flashdata('success', 'Berhasil mengubah data stok buku.');
-                    redirect($_SERVER['HTTP_REFERER'], 'refresh');
-                } else {
-                    $this->session->set_flashdata('error', 'Gagal mengubah data stok buku.');
-                    redirect($_SERVER['HTTP_REFERER'], 'refresh');
-                }
-            }
-        endif;
-    }
+    //         if ($this->form_validation->run() == FALSE) {
+    //             $this->session->set_flashdata('error', 'Gagal mengubah data stok buku.');
+    //             redirect($_SERVER['HTTP_REFERER'], 'refresh');
+    //         } else {
+    //             $check  =   $this->book->add_book_stock();
+    //             if ($check   ==  TRUE) {
+    //                 $this->session->set_flashdata('success', 'Berhasil mengubah data stok buku.');
+    //                 redirect($_SERVER['HTTP_REFERER'], 'refresh');
+    //             } else {
+    //                 $this->session->set_flashdata('error', 'Gagal mengubah data stok buku.');
+    //                 redirect($_SERVER['HTTP_REFERER'], 'refresh');
+    //             }
+    //         }
+    //     endif;
+    // }
 
-    public function delete_book_stock($book_stock_id)
-    {
-        if ($this->check_level_gudang() == TRUE) :
-            $book_stock = $this->book->fetch_book_stock_by_id($book_stock_id);
+    // public function delete_book_stock($book_stock_id)
+    // {
+    //     if ($this->check_level_gudang() == TRUE) :
+    //         $book_stock = $this->book->fetch_book_stock_by_id($book_stock_id);
 
-            if ($book_stock->warehouse_operator == "+") {
-                $stock_warehouse = intval($book_stock->warehouse_present) - intval($book_stock->warehouse_modifier);
-            } elseif ($book_stock->warehouse_operator == "-") {
-                $stock_warehouse = intval($book_stock->warehouse_present) + intval($book_stock->warehouse_modifier);
-            }
+    //         if ($book_stock->warehouse_operator == "+") {
+    //             $stock_warehouse = intval($book_stock->warehouse_present) - intval($book_stock->warehouse_modifier);
+    //         } elseif ($book_stock->warehouse_operator == "-") {
+    //             $stock_warehouse = intval($book_stock->warehouse_present) + intval($book_stock->warehouse_modifier);
+    //         }
 
-            $this->db->set('stock_warehouse', $stock_warehouse)->where('book_id', $book_stock->book_id)->update('book');
+    //         $this->db->set('stock_warehouse', $stock_warehouse)->where('book_id', $book_stock->book_id)->update('book');
 
-            $isDeleted  = $this->book->delete_book_stock($book_stock_id);
-            if ($isDeleted   ==  TRUE) {
-                $this->session->set_flashdata('success', 'Berhasil menghapus data stok buku.');
-                redirect($_SERVER['HTTP_REFERER'], 'refresh');
-            } else {
-                $this->session->set_flashdata('error', 'Gagal menghapus data stok buku.');
-                redirect($_SERVER['HTTP_REFERER'], 'refresh');
-            }
-        endif;
-    }
+    //         $isDeleted  = $this->book->delete_book_stock($book_stock_id);
+    //         if ($isDeleted   ==  TRUE) {
+    //             $this->session->set_flashdata('success', 'Berhasil menghapus data stok buku.');
+    //             redirect($_SERVER['HTTP_REFERER'], 'refresh');
+    //         } else {
+    //             $this->session->set_flashdata('error', 'Gagal menghapus data stok buku.');
+    //             redirect($_SERVER['HTTP_REFERER'], 'refresh');
+    //         }
+    //     endif;
+    // }
 
     public function check_level_gudang()
     {

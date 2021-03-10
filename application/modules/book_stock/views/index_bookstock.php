@@ -24,7 +24,7 @@ $i                  = isset($page) ? $page * $per_page - $per_page : 0;
     <div class="d-flex justify-content-between align-items-center">
         <div>
             <h1 class="page-title"> Stok Buku </h1>
-            <span class="badge badge-info">Total Stok:
+            <span class="badge badge-info">Total:
                 <?= $total; ?>
             </span>
         </div>
@@ -164,11 +164,11 @@ $i                  = isset($page) ? $page * $per_page - $per_page : 0;
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-light"
                                                             data-dismiss="modal">Close</button>
-                                                        <button type="button" class="btn btn-danger"
-                                                            data-dismiss="modal">Hapus</button>
                                                         <!-- <button type="button" class="btn btn-danger"
-                                                            onclick="location.href='<?//= base_url('book/delete/' . $book->book_id . ''); ?>'"
                                                             data-dismiss="modal">Hapus</button> -->
+                                                        <button type="button" class="btn btn-danger"
+                                                            onclick="location.href='<?= base_url('book_stock/delete/' . $book_stock->book_stock_id . ''); ?>'"
+                                                            data-dismiss="modal">Hapus</button>
                                                     </div>
                                                 </div>
                                             </div>
