@@ -43,6 +43,18 @@ class Book_stock_model extends MY_Model
         ];
     }
 
+    public function filter_excel()
+    {
+        return $this->select(['book.book_title', 'book.isbn', 'book.published_date', 'book_stock.*'])
+            // ->when('keyword', $filters['keyword'])
+            // ->when('published_year', $filters['published_year'])
+            // ->when('warehouse_present', $filters['warehouse_present'])
+            // ->where('print_order.print_order_status', 'finish')
+            ->join_table('book', 'book_stock', 'book')
+            ->order_by('book.book_title')
+            ->get_all();
+    }
+
     public function when($params, $data)
     {
         //jika data null, maka skip

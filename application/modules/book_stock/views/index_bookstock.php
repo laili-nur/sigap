@@ -70,8 +70,11 @@ $i                  = isset($page) ? $page * $per_page - $per_page : 0;
                                     <button class="btn btn-primary" type="submit" value="Submit"><i
                                             class="fa fa-filter"></i> Filter</button>
                                     <?php if ($level == "superadmin" || $level == "admin_gudang") : ?>
-                                    <button class="btn btn-success" type="submit" id="excel" name="excel"
-                                        value="1">Excel</button>
+                                    <!-- <button class="btn btn-success" type="submit" id="excel" name="excel"
+                                        value="1">Excel</button> -->
+                                    <a class="btn btn-success" id="excel" name="excel"
+                                        href = '<?= base_url('/book_stock/generate_excel'); ?>'>Excel</a>
+
                                     <?php endif; ?>
                                 </div>
                             </div>

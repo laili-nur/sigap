@@ -71,10 +71,8 @@ $print_order_status_options = [
             <span class="badge badge-info">Total : <?= $total; ?></span>
         </div>
         <?php if ($level == 'superadmin' || $level == 'admin_percetakan') : ?>
-            <a
-                href="<?= base_url("$pages/add"); ?>"
-                class="btn btn-primary btn-sm"
-            ><i class="fa fa-plus fa-fw"></i> Tambah</a>
+        <a href="<?= base_url("$pages/add"); ?>" class="btn btn-primary btn-sm"><i class="fa fa-plus fa-fw"></i>
+            Tambah</a>
         <?php endif; ?>
     </div>
 </header>
@@ -116,29 +114,14 @@ $print_order_status_options = [
                             </div>
                             <div class="col-12 col-lg-3">
                                 <label>&nbsp;</label>
-                                <div
-                                    class="btn-group btn-block"
-                                    role="group"
-                                    aria-label="Filter button"
-                                >
-                                    <button
-                                        class="btn btn-secondary"
-                                        type="button"
-                                        onclick="location.href = '<?= base_url($pages); ?>'"
-                                    > Reset</button>
-                                    <button
-                                        class="btn btn-primary"
-                                        type="submit"
-                                        value="Submit"
-                                    ><i class="fa fa-filter"></i> Filter</button>
+                                <div class="btn-group btn-block" role="group" aria-label="Filter button">
+                                    <button class="btn btn-secondary" type="button"
+                                        onclick="location.href = '<?= base_url($pages); ?>'"> Reset</button>
+                                    <button class="btn btn-primary" type="submit" value="Submit"><i
+                                            class="fa fa-filter"></i> Filter</button>
                                     <?php if ($level == "superadmin" || $level == "admin_percetakan") : ?>
-                                        <button
-                                            class="btn btn-success"
-                                            type="submit"
-                                            id="excel"
-                                            name="excel"
-                                            value="1"
-                                        >Excel</button>
+                                    <button class="btn btn-success" type="submit" id="excel" name="excel"
+                                        value="1">Excel</button>
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -146,150 +129,102 @@ $print_order_status_options = [
                         <?= form_close(); ?>
                     </div>
                     <?php if ($print_orders) : ?>
-                        <table class="table table-striped mb-0 table-responsive">
-                            <thead>
-                                <tr>
-                                    <th
-                                        scope="col"
-                                        class="pl-4 align-middle text-center"
-                                    >No</th>
-                                    <th
-                                        scope="col"
-                                        style="min-width:400px;"
-                                        class="align-middle text-center"
-                                    >Judul</th>
-                                    <th
-                                        scope="col"
-                                        style="min-width:150px;"
-                                        class="align-middle text-center"
-                                    >Kategori</th>
-                                    <th
-                                        scope="col"
-                                        style="min-width:100px;"
-                                        class="align-middle text-center"
-                                    >Nomor Order</th>
-                                    <th
-                                        scope="col"
-                                        style="min-width:100px;"
-                                        class="align-middle text-center"
-                                    >Jumlah Cetak</th>
-                                    <th
-                                        scope="col"
-                                        style="min-width:100px;"
-                                        class="align-middle text-center"
-                                    >Tipe Cetak</th>
-                                    <th
-                                        scope="col"
-                                        style="min-width:100px;"
-                                        class="align-middle text-center"
-                                    >Tanggal Masuk</th>
-                                    <th
-                                        scope="col"
-                                        style="min-width:100px;"
-                                        class="align-middle text-center"
-                                    >Tanggal Selesai</th>
-                                    <th
-                                        scope="col"
-                                        style="min-width:100px;"
-                                        class="align-middle text-center"
-                                    >Deadline</th>
-                                    <th
-                                        scope="col"
-                                        style="min-width:70px;"
-                                        class="align-middle text-center"
-                                    >Status</th>
-                                    <?php if ($level == 'superadmin') : ?>
-                                        <th
-                                            style="min-width:150px;"
-                                            class="align-middle text-center"
-                                        > &nbsp; </th>
-                                    <?php endif; ?>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($print_orders as $print_order) : ?>
-                                    <tr>
-                                        <td class="align-middle text-center pl-4"><?= ++$i; ?></td>
-                                        <td class="align-middle text-left">
-                                            <a
-                                                href="<?= base_url('print_order/view/' . $print_order->print_order_id . ''); ?>"
-                                                class="font-weight-bold"
-                                            >
-                                                <?= highlight_keyword($print_order->title, $keyword); ?>
-                                            </a>
-                                        </td>
-                                        <td class="align-middle text-center"><?= get_print_order_category()[$print_order->category]; ?></td>
-                                        <td class="align-middle text-center"><?= highlight_keyword($print_order->order_number, $keyword); ?></td>
-                                        <td class="align-middle text-center"><?= $print_order->total; ?></td>
-                                        <td class="align-middle text-center"><?= $print_order->type; ?></td>
-                                        <td class="align-middle text-center"><?= format_datetime($print_order->entry_date); ?></td>
-                                        <td class="align-middle text-center"><?= format_datetime($print_order->finish_date); ?></td>
-                                        <td class="align-middle text-center">
-                                            <?= deadline_color($print_order->deadline_date, $print_order->print_order_status); ?>
-                                        </td>
-                                        <td class="align-middle text-center"><?= get_print_order_status()[$print_order->print_order_status] ?? $print_order->print_order_status; ?></td>
-                                        <?php if ($level == 'superadmin') : ?>
-                                            <td class="align-middle text-center">
-                                                <a
-                                                    href="<?= base_url('print_order/edit/' . $print_order->print_order_id . ''); ?>"
-                                                    class="btn btn-sm btn-secondary"
-                                                >
-                                                    <i class="fa fa-pencil-alt"></i>
-                                                    <span class="sr-only">Edit</span>
-                                                </a>
-                                                <button
-                                                    type="button"
-                                                    class="btn btn-sm btn-danger"
-                                                    data-toggle="modal"
-                                                    data-target="#modal-hapus-<?= $print_order->print_order_id; ?>"
-                                                ><i class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
-                                                <div class="text-left">
-                                                    <div
-                                                        class="modal modal-alert fade"
-                                                        id="modal-hapus-<?= $print_order->print_order_id; ?>"
-                                                        tabindex="-1"
-                                                        role="dialog"
-                                                        aria-labelledby="modal-hapus"
-                                                        aria-hidden="true"
-                                                    >
-                                                        <div
-                                                            class="modal-dialog modal-dialog-centered"
-                                                            role="document"
-                                                        >
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title">
-                                                                        <i class="fa fa-exclamation-triangle text-red mr-1"></i> Konfirmasi
-                                                                        Hapus</h5>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <p>Apakah anda yakin akan menghapus print_order <span class="font-weight-bold"><?= $print_order->title; ?></span>?</p>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button
-                                                                        type="button"
-                                                                        class="btn btn-danger"
-                                                                        onclick="location.href='<?= base_url('print_order/delete/' . $print_order->print_order_id . ''); ?>'"
-                                                                        data-dismiss="modal"
-                                                                    >Hapus</button>
-                                                                    <button
-                                                                        type="button"
-                                                                        class="btn btn-light"
-                                                                        data-dismiss="modal"
-                                                                    >Close</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                    <table class="table table-striped mb-0 table-responsive">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="pl-4 align-middle text-center">No</th>
+                                <th scope="col" style="min-width:400px;" class="align-middle text-center">Judul</th>
+                                <th scope="col" style="min-width:150px;" class="align-middle text-center">Kategori</th>
+                                <th scope="col" style="min-width:100px;" class="align-middle text-center">Nomor Order
+                                </th>
+                                <th scope="col" style="min-width:100px;" class="align-middle text-center">Jumlah Cetak
+                                </th>
+                                <th scope="col" style="min-width:100px;" class="align-middle text-center">Tipe Cetak
+                                </th>
+                                <th scope="col" style="min-width:100px;" class="align-middle text-center">Tanggal Masuk
+                                </th>
+                                <th scope="col" style="min-width:100px;" class="align-middle text-center">Tanggal
+                                    Selesai</th>
+                                <th scope="col" style="min-width:100px;" class="align-middle text-center">Deadline</th>
+                                <th scope="col" style="min-width:70px;" class="align-middle text-center">Status</th>
+                                <?php if ($level == 'superadmin') : ?>
+                                <th style="min-width:150px;" class="align-middle text-center"> &nbsp; </th>
+                                <?php endif; ?>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($print_orders as $print_order) : ?>
+                            <tr>
+                                <td class="align-middle text-center pl-4"><?= ++$i; ?></td>
+                                <td class="align-middle text-left">
+                                    <a href="<?= base_url('print_order/view/' . $print_order->print_order_id . ''); ?>"
+                                        class="font-weight-bold">
+                                        <?= highlight_keyword($print_order->title, $keyword); ?>
+                                    </a>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <?= get_print_order_category()[$print_order->category]; ?></td>
+                                <td class="align-middle text-center">
+                                    <?= highlight_keyword($print_order->order_number, $keyword); ?></td>
+                                <td class="align-middle text-center"><?= $print_order->total; ?></td>
+                                <td class="align-middle text-center"><?= $print_order->type; ?></td>
+                                <td class="align-middle text-center"><?= format_datetime($print_order->entry_date); ?>
+                                </td>
+                                <td class="align-middle text-center"><?= format_datetime($print_order->finish_date); ?>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <?= deadline_color($print_order->deadline_date, $print_order->print_order_status); ?>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <?= get_print_order_status()[$print_order->print_order_status] ?? $print_order->print_order_status; ?>
+                                </td>
+                                <?php if ($level == 'superadmin') : ?>
+                                <td class="align-middle text-center">
+                                    <a href="<?= base_url('print_order/edit/' . $print_order->print_order_id . ''); ?>"
+                                        class="btn btn-sm btn-secondary">
+                                        <i class="fa fa-pencil-alt"></i>
+                                        <span class="sr-only">Edit</span>
+                                    </a>
+                                    <button type="button" class="btn btn-sm btn-danger" data-toggle="modal"
+                                        data-target="#modal-hapus-<?= $print_order->print_order_id; ?>"><i
+                                            class="fa fa-trash-alt"></i><span class="sr-only">Delete</span></button>
+                                    <div class="text-left">
+                                        <div class="modal modal-alert fade"
+                                            id="modal-hapus-<?= $print_order->print_order_id; ?>" tabindex="-1"
+                                            role="dialog" aria-labelledby="modal-hapus" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">
+                                                            <i class="fa fa-exclamation-triangle text-red mr-1"></i>
+                                                            Konfirmasi
+                                                            Hapus
+                                                        </h5>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Apakah anda yakin akan menghapus print_order <span
+                                                                class="font-weight-bold"><?= $print_order->title; ?></span>?
+                                                        </p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger"
+                                                            onclick="location.href='<?= base_url('print_order/delete/' . $print_order->print_order_id . ''); ?>'"
+                                                            data-dismiss="modal">Hapus</button>
+                                                        <button type="button" class="btn btn-light"
+                                                            data-dismiss="modal">Close</button>
                                                     </div>
                                                 </div>
-                                            </td>
-                                        <?php endif; ?>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <?php endif; ?>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                     <?php else : ?>
-                        <p class="text-center my-5">Data tidak tersedia</p>
+                    <p class="text-center my-5">Data tidak tersedia</p>
                     <?php endif; ?>
                     <?= $pagination ?? null; ?>
                 </div>

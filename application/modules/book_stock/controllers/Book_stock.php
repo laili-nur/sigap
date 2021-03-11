@@ -1,4 +1,6 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Book_stock extends MY_Controller
 {
@@ -17,7 +19,8 @@ class Book_stock extends MY_Controller
         $filters = [
             'keyword'           => $this->input->get('keyword', true),
             'published_year'    => $this->input->get('published_year', true),
-            'warehouse_present' => $this->input->get('warehouse_present', true)
+            'warehouse_present' => $this->input->get('warehouse_present', true),
+            'excel'             => $this->input->get('excel', true)
         ];
         //custom per page
         $this->book_stock->per_page = $this->input->get('per_page', true) ?? 10;
@@ -112,6 +115,78 @@ class Book_stock extends MY_Controller
         }
 
         redirect($this->pages);
+    }
+
+    public function generate_excel()
+    {
+        $get_data = $this->book_stock->filter_excel();
+        $spreadsheet = new Spreadsheet;
+        $sheet = $spreadsheet->getActiveSheet();
+        $filename = 'STOK BUKU GUDANG';
+
+        // Column Title
+        $sheet->setCellValue('A1', 'STOK BUKU GUDANG');
+        $spreadsheet->getActiveSheet()
+                    ->getStyle('A1')
+                    ->getFont()
+                    ->setBold(true);
+        $sheet->setCellValue('A3', 'No');
+        $sheet->setCellValue('B3', 'Judul');
+        $sheet->setCellValue('C3', 'Stok Gudang');
+        $spreadsheet->getActiveSheet()
+                    ->getStyle('A3:C3')
+                    ->getFill()
+                    ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                    ->getStartColor()
+                    ->setARGB('A6A6A6');
+        $spreadsheet->getActiveSheet()
+                    ->getStyle('A3:C3')
+                    ->getFont()
+                    ->setBold(true);
+
+        // Auto width
+        // $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('B')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setAutoSize(true);
+
+        $get_data = $this->book_stock->filter_excel();
+        $no = 1;
+        $i = 4;
+        // Column Content
+        foreach ($get_data as $data) {
+            foreach (range('A', 'C') as $v) {
+                switch ($v) {
+                    case 'A': {
+                            $value = $no++;
+                            break;
+                        }
+                    case 'B': {
+                            $value = $data->book_title;
+                            break;
+                        }
+                    case 'C': {
+                            $value = $data->warehouse_present;
+                            if($value <=50){
+                                $spreadsheet->getActiveSheet()
+                                ->getStyle('C'.$i)
+                                ->getFill()
+                                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                                ->getStartColor()
+                                ->setARGB('FFC000');            
+                            }
+                            break;
+                        }
+                }
+                $sheet->setCellValue($v . $i, $value);
+            }
+            $i++;
+        }
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+        $writer->save('php://output');
+        die();
     }
 
     private function _is_warehouse_admin()
