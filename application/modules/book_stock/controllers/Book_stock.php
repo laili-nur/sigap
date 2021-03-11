@@ -32,6 +32,10 @@ class Book_stock extends MY_Controller
         $pages      = $this->pages;
         $main_view  = 'book_stock/index_bookstock';
         $this->load->view('template', compact('pages', 'main_view', 'book_stocks', 'pagination', 'total'));
+
+        if ($filters['excel'] == 1) {
+            $this->generate_excel($filters);
+        }
     }
 
 
@@ -117,9 +121,9 @@ class Book_stock extends MY_Controller
         redirect($this->pages);
     }
 
-    public function generate_excel()
+    public function generate_excel($filters)
     {
-        $get_data = $this->book_stock->filter_excel();
+        // $get_data = $this->book_stock->filter_excel($filters);
         $spreadsheet = new Spreadsheet;
         $sheet = $spreadsheet->getActiveSheet();
         $filename = 'STOK BUKU GUDANG';
@@ -149,7 +153,7 @@ class Book_stock extends MY_Controller
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
 
-        $get_data = $this->book_stock->filter_excel();
+        $get_data = $this->book_stock->filter_excel($filters);
         $no = 1;
         $i = 4;
         // Column Content
